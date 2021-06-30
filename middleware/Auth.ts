@@ -21,6 +21,9 @@ const Auth = (handler:any) => {
             const user = await prisma.usuario.findUnique({
                 where: {
                     id: verify.id
+                },
+                include: {
+                    perfil: true
                 }
             })
 

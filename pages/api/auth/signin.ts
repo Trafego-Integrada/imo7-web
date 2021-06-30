@@ -19,6 +19,10 @@ const handler = async (req: NextApiRequestWithFoo, res: NextApiResponse) => {
       where: {
         email: email
       },
+      include: {
+          perfil: true
+      }
+      
     })
 
     if(!user)
