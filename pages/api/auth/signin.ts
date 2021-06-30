@@ -26,14 +26,14 @@ const handler = async (req: NextApiRequestWithFoo, res: NextApiResponse) => {
     
     if(!bcrypt.compareSync(password, user.senhaHash))
       throw new Error("Senha inválida");
-    
+    // @ts-expect-error 
     delete user.senhaHash;
-    
+
     res.send({
       user: {...user, },
       token: jwt.sign({ 
         id: user.id
-      }, process.env.TOKEN_SECRET, {
+      }, process.env.TOKEN_SECRET as string, {
         expiresIn: '7d'
       })
     })

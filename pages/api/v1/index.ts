@@ -9,11 +9,11 @@ type IResponse = {
 
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
   res.status(200).json({
     name: "API Simob",
     version: "0.0.1",
     author: "Gabriel Ferreira",
-  });
+  } as IResponse);
 }

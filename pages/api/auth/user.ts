@@ -1,9 +1,8 @@
-import jwt from 'jsonwebtoken'
 import { NextApiRequest, NextApiResponse } from 'next'
-import Auth from '../../../middleware/auth'
+import Auth from '../../../middleware/Auth'
 
 type NextApiRequestWithFoo = NextApiRequest & {
-  foo: (bar: string) => void
+  user: any
 }
 
 const handler = (req: NextApiRequestWithFoo, res: NextApiResponse) => {

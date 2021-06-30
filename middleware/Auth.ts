@@ -1,15 +1,22 @@
 import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma'
+import { NextApiRequest, NextApiResponse } from 'next'
 
-const Auth = handler => {
-    return async (req, res) => {
+type NextApiRequestWithUser = NextApiRequest & {
+    user: any
+  }
+
+const Auth = (handler:any) => {
+    return async (req:NextApiRequestWithUser, res:NextApiResponse) => {
         try {
             const authHeader = req.headers['authorization']
         
             const token = authHeader && authHeader.split(' ')[1]
-            if (token == null) return res.status(401).send()
 
-            const verify = jwt.verify(token, process.env.TOKEN_SECRET as string)
+            if (token == null) throw new Error("Acesso negado.");
+            
+
+            const verify:any = jwt.verify(token, process.env.TOKEN_SECRET as string)
             
             const user = await prisma.usuario.findUnique({
                 where: {
@@ -19,6 +26,7 @@ const Auth = handler => {
 
             if (!user) throw new Error("Usuário não encontrado");
             
+            // @ts-expect-error 
             delete user?.senhaHash;
 
             req.user = user
@@ -26,7 +34,7 @@ const Auth = handler => {
             return handler(req, res)
 
         } catch (error) {
-            res.status(500).send({
+            res.status(401).send({
                 error: error.message
             })
         }
