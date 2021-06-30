@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("DATABASE_URL")
+}
+
+model Usuario {
+  id Int      @id @default(autoincrement())
+  nome    String?  @db.VarChar(255)
+  email   String   @unique @db.VarChar(255)
+  perfilId Int
+  senhaHash String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  perfil Perfil @relation(references: [id], fields:[perfilId])
+}
+
+model Perfil {
+  id Int      @id @default(autoincrement())
+  documento   String?  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  usuario Usuario?
+  contratosInquilino Contrato[]
+  contratosProprietario Contrato[] @relation("Proprietario")
+}
+
+model Imobiliaria {
+  id Int      @id @default(autoincrement())
+  idJb String
+  razaoSocial String 
+  nomeFantasia String?
+  cnpj String
+  ie String?
+  logo String?
+  email String?
+  site String?
+  telefone String?
+  cep String?
+  endereco String?
+  numero String?
+  bairro String?
+  cidade String?
+  estado String?
+  url String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contratos Contrato[]
+}
+
+model Imovel {
+  id Int      @id @default(autoincrement())
+  tipo String
+  descricao String?
+  cep String?
+  endereco String?
+  numero String?
+  complemento String?
+  pontoReferencia String?
+  bairro String?
+  cidade String?
+  estado String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contratos Contrato[]
+}
+
+model Contrato {
+  id Int      @id @default(autoincrement())
+  codigo String  
+  imovelId Int
+  imobiliariaId Int 
+  inquilinoId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  imobiliaria Imobiliaria @relation(fields: [imobiliariaId], references: [id])  
+  imovel Imovel @relation(fields: [imovelId], references: [id])
+  proprietarios Perfil[] @relation("Proprietario")
+  inquilino Perfil @relation(references: [id], fields: [inquilinoId])
+  boletos Boleto[]
+  extratos Extrato[]
+}
+
+model Boleto {
+  id Int      @id @default(autoincrement())
+  contratoId Int
+  bols_cpf_cnpj String?
+  bols_codl String?
+  envia_email String?
+  field_cod_banco String?
+  local_pgto1 String?
+  local_pgto2 String?
+  data_vencimen String?
+  beneficiario String?
+  ag_cod_beneficiar String?
+  data_doc String?
+  num_doc2 String?
+  num_doc String?
+  especie_doc String?
+  aceite String?
+  data_proces String?
+  nosso_numero2 String?
+  reservado String?
+  carteira String?
+  especie2 String?
+  qtd2 String?
+  xvalor String?
+  valor_doc2 String?
+  instrucoes1 String?
+  instrucoes2 String?
+  instrucoes3 String?
+  instrucoes4 String?
+  instrucoes5 String?
+  instrucoes6 String?
+  instrucoes7 String?
+  instrucoes8 String?
+  instrucoes9 String?
+  instrucoes10 String?
+  sacado2_nome String?
+  sacado2_endereco String?
+  sacado2_city_uf_cep String?
+  linha_digitavel String?
+  barcode String?
+  desconto2 String?
+  outras_deducoes2 String?
+  mora_multa2 String?
+  outros_acrescimos2 String?
+  valorcobrado2 String?
+  nao_receber_apos String?
+  email_sacado String?
+  nome_razao_sacado String?
+  endereco_sacado String?
+  numero_sacado String?
+  complemento_sacado String?
+  cep_sacado String?
+  bairro_sacado String?
+  cidade_sacado String?
+  telefone_sacado String?
+  uf_sacado String?
+  email_beneficiario String?
+  cpf_cnpj_beneficiario String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  contrato Contrato @relation(references: [id], fields:[contratoId])
+}
+
+model Extrato {
+  id Int      @id @default(autoincrement())
+  contratoId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  contrato Contrato @relation(references: [id], fields:[contratoId])
+}
