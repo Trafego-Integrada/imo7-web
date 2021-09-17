@@ -1,162 +1,288 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("DATABASE_URL")
+    provider          = "mysql"
+    url               = env("DATABASE_URL")
+    shadowDatabaseUrl = env("DATABASE_URL")
 }
 
 model Usuario {
-  id Int      @id @default(autoincrement())
-  nome    String?  @db.VarChar(255)
-  email   String   @unique @db.VarChar(255)
-  perfilId Int
-  senhaHash String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  perfil Perfil @relation(references: [id], fields:[perfilId])
+    id                    Int                      @id @default(autoincrement())
+    nome                  String?                  @db.VarChar(255)
+    email                 String                   @unique @db.VarChar(255)
+    cpf                   String                   @unique
+    perfilId              Int
+    senhaHash             String
+    createdAt             DateTime                 @default(now())
+    updatedAt             DateTime                 @updatedAt
+    deletedAt             DateTime?
+    Chamado               Chamado[]
+    chamadorCriados       Chamado[]                @relation("CriadorChamado")
+    Roles                 Roles?                   @relation(fields: [rolesId], references: [id])
+    rolesId               Int?
+    Permission            Permission?              @relation(fields: [permissionId], references: [id])
+    permissionId          Int?
+    token                 Token[]
+    contratosProprietario Contrato[]               @relation("Proprietarios")
+    contratosInquilino    Contrato[]               @relation("Inquilinos")
+    imoveis               ProprietariosOnImoveis[]
+    imobiliaria           Imobiliaria?             @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId         Int?
 }
 
-model Perfil {
-  id Int      @id @default(autoincrement())
-  documento   String?  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  usuario Usuario?
-  contratosInquilino Contrato[]
-  contratosProprietario Contrato[] @relation("Proprietario")
+model Roles {
+    id        Int       @id @default(autoincrement())
+    name      String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deleted   DateTime?
+    users     Usuario[]
+}
+
+model Permission {
+    id        Int       @id @default(autoincrement())
+    name      String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deleted   DateTime?
+    users     Usuario[]
+}
+
+model Token {
+    id        Int       @id @default(autoincrement())
+    token     String    @unique
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deleted   DateTime?
+    user      Usuario?  @relation(fields: [userId], references: [id])
+    userId    Int?
 }
 
 model Imobiliaria {
-  id Int      @id @default(autoincrement())
-  idJb String
-  razaoSocial String 
-  nomeFantasia String?
-  cnpj String
-  ie String?
-  logo String?
-  email String?
-  site String?
-  telefone String?
-  cep String?
-  endereco String?
-  numero String?
-  bairro String?
-  cidade String?
-  estado String?
-  url String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    id           Int        @id @default(autoincrement())
+    idJb         String?
+    razaoSocial  String
+    nomeFantasia String?
+    cnpj         String
+    ie           String?
+    logo         String?
+    email        String?
+    site         String?
+    telefone     String?
+    cep          String?
+    endereco     String?
+    numero       String?
+    bairro       String?
+    cidade       String?
+    estado       String?
+    url          String?
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+    deletedAt    DateTime?
+    contratos    Contrato[]
+    chamados     Chamado[]
+    imoveis      Imovel[]
+    usuarios     Usuario[]
 
-  contratos Contrato[]
 }
 
 model Imovel {
-  id Int      @id @default(autoincrement())
-  tipo String
-  descricao String?
-  cep String?
-  endereco String?
-  numero String?
-  complemento String?
-  pontoReferencia String?
-  bairro String?
-  cidade String?
-  estado String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    id              Int                      @id @default(autoincrement())
+    idJb            String?
+    tipo            String?
+    descricao       String?
+    cep             String?
+    endereco        String?
+    numero          String?
+    complemento     String?
+    pontoReferencia String?
+    bairro          String?
+    cidade          String?
+    estado          String?
+    caracteristicas Json?
+    valorVenda      Decimal?
+    valorAluguel    Decimal?
+    valorCondominio Decimal?
+    createdAt       DateTime                 @default(now())
+    updatedAt       DateTime                 @updatedAt
+    deletedAt       DateTime?
+    imobiliria      Imobiliaria              @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId   Int
+    contrato        Contrato?
+    proprietarios   ProprietariosOnImoveis[]
 
-  contratos Contrato[]
+}
+
+model ProprietariosOnImoveis {
+    imovel         Imovel  @relation(fields: [imovelId], references: [id])
+    imovelId       Int
+    proprietario   Usuario @relation(fields: [proprietarioId], references: [id])
+    proprietarioId Int
+    porcentagem    Float   @default(100)
+
+    @@id([imovelId, proprietarioId])
 }
 
 model Contrato {
-  id Int      @id @default(autoincrement())
-  codigo String  
-  imovelId Int
-  imobiliariaId Int 
-  inquilinoId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  imobiliaria Imobiliaria @relation(fields: [imobiliariaId], references: [id])  
-  imovel Imovel @relation(fields: [imovelId], references: [id])
-  proprietarios Perfil[] @relation("Proprietario")
-  inquilino Perfil @relation(references: [id], fields: [inquilinoId])
-  boletos Boleto[]
-  extratos Extrato[]
+    id             Int              @id @default(autoincrement())
+    codigo         String           @unique
+    imovelId       Int
+    imobiliariaId  Int
+    inquilinoId    Int
+    imobiliaria    Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
+    imovel         Imovel           @relation(fields: [imovelId], references: [id])
+    proprietarios  Usuario[]        @relation("Proprietarios")
+    inquilinos     Usuario[]        @relation("Inquilinos")
+    boletos        Boleto[]
+    extratos       Extrato[]
+    chamados       Chamado[]
+    createdAt      DateTime         @default(now())
+    updatedAt      DateTime         @updatedAt
+    deletedAt      DateTime?
+    AnexoInteracao AnexoInteracao[]
 }
 
 model Boleto {
-  id Int      @id @default(autoincrement())
-  contratoId Int
-  bols_cpf_cnpj String?
-  bols_codl String?
-  envia_email String?
-  field_cod_banco String?
-  local_pgto1 String?
-  local_pgto2 String?
-  data_vencimen String?
-  beneficiario String?
-  ag_cod_beneficiar String?
-  data_doc String?
-  num_doc2 String?
-  num_doc String?
-  especie_doc String?
-  aceite String?
-  data_proces String?
-  nosso_numero2 String?
-  reservado String?
-  carteira String?
-  especie2 String?
-  qtd2 String?
-  xvalor String?
-  valor_doc2 String?
-  instrucoes1 String?
-  instrucoes2 String?
-  instrucoes3 String?
-  instrucoes4 String?
-  instrucoes5 String?
-  instrucoes6 String?
-  instrucoes7 String?
-  instrucoes8 String?
-  instrucoes9 String?
-  instrucoes10 String?
-  sacado2_nome String?
-  sacado2_endereco String?
-  sacado2_city_uf_cep String?
-  linha_digitavel String?
-  barcode String?
-  desconto2 String?
-  outras_deducoes2 String?
-  mora_multa2 String?
-  outros_acrescimos2 String?
-  valorcobrado2 String?
-  nao_receber_apos String?
-  email_sacado String?
-  nome_razao_sacado String?
-  endereco_sacado String?
-  numero_sacado String?
-  complemento_sacado String?
-  cep_sacado String?
-  bairro_sacado String?
-  cidade_sacado String?
-  telefone_sacado String?
-  uf_sacado String?
-  email_beneficiario String?
-  cpf_cnpj_beneficiario String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  contrato Contrato @relation(references: [id], fields:[contratoId])
+    id                    Int       @id @default(autoincrement())
+    bols_cpf_cnpj         String?
+    bols_codl             String?
+    envia_email           String?
+    field_cod_banco       String?
+    local_pgto1           String?
+    local_pgto2           String?
+    data_vencimen         String?
+    beneficiario          String?
+    ag_cod_beneficiar     String?
+    data_doc              String?
+    num_doc2              String?
+    num_doc               String?
+    especie_doc           String?
+    aceite                String?
+    data_proces           String?
+    nosso_numero2         String?
+    reservado             String?
+    carteira              String?
+    especie2              String?
+    qtd2                  String?
+    xvalor                String?
+    valor_doc2            String?
+    instrucoes1           String?
+    instrucoes2           String?
+    instrucoes3           String?
+    instrucoes4           String?
+    instrucoes5           String?
+    instrucoes6           String?
+    instrucoes7           String?
+    instrucoes8           String?
+    instrucoes9           String?
+    instrucoes10          String?
+    sacado2_nome          String?
+    sacado2_endereco      String?
+    sacado2_city_uf_cep   String?
+    linha_digitavel       String?
+    barcode               String?
+    desconto2             String?
+    outras_deducoes2      String?
+    mora_multa2           String?
+    outros_acrescimos2    String?
+    valorcobrado2         String?
+    nao_receber_apos      String?
+    email_sacado          String?
+    nome_razao_sacado     String?
+    endereco_sacado       String?
+    numero_sacado         String?
+    complemento_sacado    String?
+    cep_sacado            String?
+    bairro_sacado         String?
+    cidade_sacado         String?
+    telefone_sacado       String?
+    uf_sacado             String?
+    email_beneficiario    String?
+    cpf_cnpj_beneficiario String?
+    createdAt             DateTime  @default(now())
+    updatedAt             DateTime  @updatedAt
+    deletedAt             DateTime?
+    contrato              Contrato  @relation(references: [id], fields: [contratoId])
+    contratoId            Int
 }
 
 model Extrato {
-  id Int      @id @default(autoincrement())
-  contratoId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  contrato Contrato @relation(references: [id], fields:[contratoId])
+    id         Int       @id @default(autoincrement())
+    contratoId Int
+    contrato   Contrato  @relation(references: [id], fields: [contratoId])
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    deletedAt  DateTime?
+}
+
+model DepartamentoChamado {
+    id             Int              @id @default(autoincrement())
+    titulo         String
+    ativo          Boolean          @default(true)
+    createdAt      DateTime         @default(now())
+    updatedAt      DateTime         @updatedAt
+    deletedAt      DateTime?
+    AssuntoChamado AssuntoChamado[]
+}
+
+model AssuntoChamado {
+    id             Int                 @id @default(autoincrement())
+    titulo         String
+    ativo          Boolean             @default(true)
+    departamentoId Int
+    departamento   DepartamentoChamado @relation(references: [id], fields: [departamentoId])
+    createdAt      DateTime            @default(now())
+    updatedAt      DateTime            @updatedAt
+    deletedAt      DateTime?
+    Chamado        Chamado[]
+}
+
+model Chamado {
+    id             Int                @id @default(autoincrement())
+    participantes  Usuario[]
+    titulo         String
+    assuntoId      Int
+    assunto        AssuntoChamado     @relation(references: [id], fields: [assuntoId])
+    createdAt      DateTime           @default(now())
+    updatedAt      DateTime           @updatedAt
+    deletedAt      DateTime?
+    contrato       Contrato?          @relation(fields: [contratoId], references: [id])
+    contratoId     Int?
+    criadorId      Int
+    criador        Usuario            @relation("CriadorChamado", references: [id], fields: [criadorId])
+    status         StatusChamado      @default(ABERTO)
+    interacoes     InteracaoChamado[]
+    AnexoInteracao AnexoInteracao[]
+    imobiliaria    Imobiliaria        @relation(references: [id], fields: [imobiliriaId])
+    imobiliriaId   Int
+}
+
+model InteracaoChamado {
+    id        Int       @id @default(autoincrement())
+    mensagem  String?   @db.LongText
+    chamadoId Int
+    chamado   Chamado   @relation(references: [id], fields: [chamadoId])
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+}
+
+model AnexoInteracao {
+    id         Int       @id @default(autoincrement())
+    anexo      String    @db.LongText
+    contratoId Int
+    contrato   Contrato  @relation(references: [id], fields: [contratoId])
+    chamadoId  Int
+    chamado    Chamado   @relation(references: [id], fields: [chamadoId])
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    deletedAt  DateTime?
+}
+
+enum StatusChamado {
+    ABERTO
+    FINALIZADO
+    ARQUIVADO
 }

@@ -1,17 +1,43 @@
 import { PrismaClient } from "@prisma/client";
+import moment from "moment";
 
-// add prisma to the NodeJS global type
-interface CustomNodeJsGlobal extends NodeJS.Global {
-  prisma: PrismaClient;
+let prisma: PrismaClient;
+
+if (process.env.NODE_ENV === "production") {
+    prisma = new PrismaClient();
+} else {
+    if (!global.prisma) {
+        global.prisma = new PrismaClient();
+    }
+    prisma = global.prisma;
 }
 
-// Prevent multiple instances of Prisma Client in development
-declare const global: CustomNodeJsGlobal;
+prisma.$use(async (params, next) => {
+    // Check incoming query type
 
-const prisma = global.prisma || new PrismaClient();
-
-if (process.env.NODE_ENV === "development") {
-  global.prisma = prisma
-}
+    if (params.action == "delete") {
+        // Delete queries
+        // Change action to an update
+        params.action = "update";
+        params.args["data"] = { deleted: moment().format() };
+    }
+    if (params.action == "deleteMany") {
+        // Delete many queries
+        params.action = "updateMany";
+        if (params.args.data != undefined) {
+            params.args.data["deleted"] = true;
+        } else {
+            params.args["data"] = { deleted: moment().format() };
+        }
+    }
+    if (params.action == "findFirst" || params.action == "findMany") {
+        if (params.args.where != undefined) {
+            params.args.where["deleted"] = null;
+        } else {
+            params.args["where"] = { deleted: null };
+        }
+    }
+    return next(params);
+});
 
 export default prisma;

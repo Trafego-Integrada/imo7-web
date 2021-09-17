@@ -1,19 +1,15 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { Head } from "../components/Head";
 
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>SIMOB</title>
-      </Head>
+    return (
+        <div>
+            <Head title="Imob"></Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Bem vindo ao <a href="https://nextjs.org">SIMOB!</a>
-        </h1>
-      </main>
-    </div>
-  )
+            <main>
+                <h1>
+                    Bem vindo ao <a href="https://nextjs.org">SIMOB!</a>
+                </h1>
+            </main>
+        </div>
+    );
 }
