@@ -64,7 +64,6 @@ handle.post(async (req, res) => {
         email_beneficiario,
         cpf_cnpj_beneficiario,
     } = req.body;
-    await prisma.
     await prisma.boleto.create({
         data: {
             bols_cpf_cnpj,
