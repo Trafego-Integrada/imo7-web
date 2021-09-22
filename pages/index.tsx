@@ -1,15 +1,21 @@
 import { Head } from "../components/Head";
 
+import { Flex, Heading } from "@chakra-ui/react";
+
 export default function Home() {
     return (
         <div>
-            <Head title="Imob"></Head>
+            <Head title="Imo7"></Head>
 
-            <main>
-                <h1>
-                    Bem vindo ao <a href="https://nextjs.org">SIMOB!</a>
-                </h1>
-            </main>
+            <Flex
+                w="100vw"
+                h="100vh"
+                bg="blue.500"
+                align="center"
+                justify="center"
+            >
+                <Heading color="white">Em breve novidades</Heading>
+            </Flex>
         </div>
     );
 }

@@ -8,13 +8,28 @@ datasource db {
     shadowDatabaseUrl = env("DATABASE_URL")
 }
 
+model Conta {
+    id           Int           @id @default(autoincrement())
+    codigo       Int?
+    nome         String?
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    deletedAt    DateTime?
+    usuarios     Usuario[]
+    imobiliarias Imobiliaria[]
+    ApiToken     ApiToken[]
+    Contrato     Contrato[]
+    Imovel       Imovel[]
+    Boleto       Boleto[]
+    Chamado      Chamado[]
+}
+
 model Usuario {
     id                    Int                      @id @default(autoincrement())
     nome                  String?                  @db.VarChar(255)
-    email                 String                   @unique @db.VarChar(255)
-    cpf                   String                   @unique
-    perfilId              Int
-    senhaHash             String
+    email                 String?                  @unique @db.VarChar(255)
+    documento             String                   @unique
+    senhaHash             String?
     createdAt             DateTime                 @default(now())
     updatedAt             DateTime                 @updatedAt
     deletedAt             DateTime?
@@ -30,6 +45,20 @@ model Usuario {
     imoveis               ProprietariosOnImoveis[]
     imobiliaria           Imobiliaria?             @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId         Int?
+    conta                 Conta[]
+    apiToken              ApiToken[]
+    Boleto                Boleto[]
+}
+
+model ApiToken {
+    id        Int       @id @default(autoincrement())
+    token     String    @unique
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    usuario   Usuario[]
+    conta     Conta?    @relation(fields: [contaId], references: [id])
+    contaId   Int?
 }
 
 model Roles {
@@ -37,7 +66,7 @@ model Roles {
     name      String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
-    deleted   DateTime?
+    deletedAt DateTime?
     users     Usuario[]
 }
 
@@ -46,7 +75,7 @@ model Permission {
     name      String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
-    deleted   DateTime?
+    deletedAt DateTime?
     users     Usuario[]
 }
 
@@ -55,17 +84,17 @@ model Token {
     token     String    @unique
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
-    deleted   DateTime?
+    deletedAt DateTime?
     user      Usuario?  @relation(fields: [userId], references: [id])
     userId    Int?
 }
 
 model Imobiliaria {
     id           Int        @id @default(autoincrement())
-    idJb         String?
+    codigo       String?
     razaoSocial  String
     nomeFantasia String?
-    cnpj         String
+    cnpj         String     @unique
     ie           String?
     logo         String?
     email        String?
@@ -85,12 +114,13 @@ model Imobiliaria {
     chamados     Chamado[]
     imoveis      Imovel[]
     usuarios     Usuario[]
-
+    conta        Conta?     @relation(fields: [contaId], references: [id])
+    contaId      Int?
 }
 
 model Imovel {
     id              Int                      @id @default(autoincrement())
-    idJb            String?
+    codigo          String?
     tipo            String?
     descricao       String?
     cep             String?
@@ -112,6 +142,8 @@ model Imovel {
     imobiliariaId   Int
     contrato        Contrato?
     proprietarios   ProprietariosOnImoveis[]
+    conta           Conta                    @relation(fields: [contaId], references: [id])
+    contaId         Int
 
 }
 
@@ -127,12 +159,11 @@ model ProprietariosOnImoveis {
 
 model Contrato {
     id             Int              @id @default(autoincrement())
-    codigo         String           @unique
-    imovelId       Int
-    imobiliariaId  Int
-    inquilinoId    Int
+    codigo         Int              @unique
     imobiliaria    Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
-    imovel         Imovel           @relation(fields: [imovelId], references: [id])
+    imobiliariaId  Int
+    imovel         Imovel?          @relation(fields: [imovelId], references: [id])
+    imovelId       Int?
     proprietarios  Usuario[]        @relation("Proprietarios")
     inquilinos     Usuario[]        @relation("Inquilinos")
     boletos        Boleto[]
@@ -142,11 +173,13 @@ model Contrato {
     updatedAt      DateTime         @updatedAt
     deletedAt      DateTime?
     AnexoInteracao AnexoInteracao[]
+    conta          Conta            @relation(fields: [contaId], references: [id])
+    contaId        Int
 }
 
 model Boleto {
     id                    Int       @id @default(autoincrement())
-    bols_cpf_cnpj         String?
+    bols_cpf_cnpj         String
     bols_codl             String?
     envia_email           String?
     field_cod_banco       String?
@@ -206,6 +239,9 @@ model Boleto {
     deletedAt             DateTime?
     contrato              Contrato  @relation(references: [id], fields: [contratoId])
     contratoId            Int
+    conta                 Conta     @relation(fields: [contaId], references: [id])
+    contaId               Int
+    inquilino             Usuario   @relation(fields: [bols_cpf_cnpj], references: [documento])
 }
 
 model Extrato {
@@ -257,6 +293,8 @@ model Chamado {
     AnexoInteracao AnexoInteracao[]
     imobiliaria    Imobiliaria        @relation(references: [id], fields: [imobiliriaId])
     imobiliriaId   Int
+    conta          Conta              @relation(fields: [contaId], references: [id])
+    contaId        Int
 }
 
 model InteracaoChamado {

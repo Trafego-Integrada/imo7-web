@@ -19,22 +19,22 @@ prisma.$use(async (params, next) => {
         // Delete queries
         // Change action to an update
         params.action = "update";
-        params.args["data"] = { deleted: moment().format() };
+        params.args["data"] = { deletedAt: moment().format() };
     }
     if (params.action == "deleteMany") {
         // Delete many queries
         params.action = "updateMany";
         if (params.args.data != undefined) {
-            params.args.data["deleted"] = true;
+            params.args.data["deletedAt"] = moment().format();
         } else {
-            params.args["data"] = { deleted: moment().format() };
+            params.args["data"] = { deletedAt: moment().format() };
         }
     }
     if (params.action == "findFirst" || params.action == "findMany") {
         if (params.args.where != undefined) {
-            params.args.where["deleted"] = null;
+            params.args.where["deletedAt"] = null;
         } else {
-            params.args["where"] = { deleted: null };
+            params.args["where"] = { deletedAt: null };
         }
     }
     return next(params);
