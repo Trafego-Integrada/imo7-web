@@ -135,6 +135,9 @@ model Imovel {
     valorVenda      Decimal?
     valorAluguel    Decimal?
     valorCondominio Decimal?
+    numeroIptu      String?
+    numeroAgua      String?
+    numeroEnergia   String?
     createdAt       DateTime                 @default(now())
     updatedAt       DateTime                 @updatedAt
     deletedAt       DateTime?
