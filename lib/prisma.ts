@@ -1,6 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import moment from "moment";
 
+interface CustomNodeJsGlobal extends NodeJS.Global {
+    prisma: PrismaClient;
+}
+
+declare const global: CustomNodeJsGlobal;
+
 let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === "production") {
