@@ -4,19 +4,24 @@ import prisma from "../../../../lib/prisma";
 const handle = nextConnect();
 
 handle.get(async (req, res) => {
-    const contratos = await prisma.contrato.findMany();
-    res.send(contratos);
+    const conta = await prisma.contrato.findMany({
+        where: {
+            contaId: 1,
+        },
+    });
+    res.send(conta);
 });
 
 handle.post(async (req, res) => {
-    const { codigo } = req.body;
-    const contrato = await prisma.contrato.create({
+    const { codigo, imobiliariaId } = req.body;
+    const conta = await prisma.contrato.create({
         data: {
             codigo,
+            imobiliariaId,
+            contaId: 1,
         },
     });
-
-    res.send(contrato);
+    res.send(conta);
 });
 
 export default handle;

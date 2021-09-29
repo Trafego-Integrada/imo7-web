@@ -25,6 +25,7 @@ handle.post(async (req, res) => {
         valorAluguel,
         valorCondominio,
         valorVenda,
+        imobiliariaId,
     } = req.body;
     const imovel = await prisma.imovel.create({
         data: {
@@ -43,6 +44,8 @@ handle.post(async (req, res) => {
             valorAluguel,
             valorCondominio,
             valorVenda,
+            imobiliariaId,
+            contaId: 1,
         },
     });
 

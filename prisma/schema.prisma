@@ -1,5 +1,5 @@
 generator client {
-    provider      = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
@@ -18,11 +18,11 @@ model Conta {
     deletedAt    DateTime?
     usuarios     Usuario[]
     imobiliarias Imobiliaria[]
-    ApiToken     ApiToken[]
-    Contrato     Contrato[]
-    Imovel       Imovel[]
-    Boleto       Boleto[]
-    Chamado      Chamado[]
+    tokens       ApiToken[]
+    contratos    Contrato[]
+    imoveis      Imovel[]
+    boletos      Boleto[]
+    chamados     Chamado[]
 }
 
 model Usuario {
@@ -34,13 +34,13 @@ model Usuario {
     createdAt             DateTime                 @default(now())
     updatedAt             DateTime                 @updatedAt
     deletedAt             DateTime?
-    Chamado               Chamado[]
+    chamados              Chamado[]
     chamadorCriados       Chamado[]                @relation("CriadorChamado")
-    Roles                 Roles?                   @relation(fields: [rolesId], references: [id])
+    roles                 Roles?                   @relation(fields: [rolesId], references: [id])
     rolesId               Int?
-    Permission            Permission?              @relation(fields: [permissionId], references: [id])
+    permission            Permission?              @relation(fields: [permissionId], references: [id])
     permissionId          Int?
-    token                 Token[]
+    tokens                Token[]
     contratosProprietario Contrato[]               @relation("Proprietarios")
     contratosInquilino    Contrato[]               @relation("Inquilinos")
     imoveis               ProprietariosOnImoveis[]
@@ -48,7 +48,7 @@ model Usuario {
     imobiliariaId         Int?
     conta                 Conta[]
     apiToken              ApiToken[]
-    Boleto                Boleto[]
+    boletos               Boleto[]
 }
 
 model ApiToken {
