@@ -31,7 +31,7 @@ handle.post(async (req, res) => {
     if (!imobiliariaId) {
         res.status(400).json({
             success: false,
-            errorCode: "I02",
+            errorCode: "IM02",
             message: "Informe o ID da Imobiliária",
         });
     }
@@ -44,7 +44,7 @@ handle.post(async (req, res) => {
     if (!existe) {
         res.status(400).json({
             success: false,
-            errorCode: "I03",
+            errorCode: "IM03",
             message: "Não há imobiliária cadastrada com este ID",
         });
     }
