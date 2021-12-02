@@ -21,7 +21,7 @@ export function withSSRAuth<P>(
         ctx: GetServerSidePropsContext
     ): Promise<GetServerSidePropsResult<P>> => {
         const cookies = parseCookies(ctx);
-        const token = cookies["patriota.token"];
+        const token = cookies["imo7.token"];
         if (!token) {
             return {
                 redirect: {
@@ -55,8 +55,8 @@ export function withSSRAuth<P>(
             return await fn(ctx);
         } catch (error) {
             if (error instanceof AuthTokenError) {
-                destroyCookie(ctx, "patriota.token");
-                destroyCookie(ctx, "patriota.refreshToken");
+                destroyCookie(ctx, "imo7.token");
+                destroyCookie(ctx, "imo7.refreshToken");
                 return {
                     redirect: {
                         destination: "/auth/signin",

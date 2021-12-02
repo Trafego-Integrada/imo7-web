@@ -5,7 +5,7 @@ import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/layout";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { NextPage } from "next";
 import { Input } from "../../../../components/Forms/Input";
-import { LayoutPainel } from "../../../../components/Layouts/Painel";
+import { LayoutPainel } from "../../../../components/Layouts/LayoutPainel";
 import { FiSend } from "react-icons/fi";
 const Chamado: NextPage = () => {
     return (

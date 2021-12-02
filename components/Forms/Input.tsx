@@ -17,12 +17,17 @@ interface Input extends InputProps {
     as?: ReactElement | null;
 }
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, Input> = (
-    { leftIcon, rightIcon, error, as, ...rest }: Input,
+    { leftIcon, rightIcon, error, as, label, ...rest }: Input,
     ref
 ) => {
     return (
-        <Stack maxW="full">
-            <InputGroup maxW="full" {...rest}>
+        <Stack maxW="full" gridGap={0}>
+            {label && (
+                <Text color="gray.600" fontSize="sm">
+                    {label}
+                </Text>
+            )}
+            <InputGroup mt="0 !important" maxW="full" {...rest}>
                 {leftIcon && (
                     <InputLeftElement pointerEvents="none">
                         {leftIcon}

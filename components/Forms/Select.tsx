@@ -20,12 +20,18 @@ interface Input extends InputProps {
     children?: ReactNode;
 }
 const SelectBase: ForwardRefRenderFunction<HTMLInputElement, Input> = (
-    { leftIcon, rightIcon, error, children, ...rest }: Input,
+    { leftIcon, rightIcon, error, children, label, ...rest }: Input,
     ref
 ) => {
     return (
         <Stack w="full">
+            {label && (
+                <Text color="gray.600" fontSize="sm">
+                    {label}
+                </Text>
+            )}
             <SelectChakra
+                mt="0 !important"
                 ref={ref}
                 maxW="full"
                 letterSpacing="wider"

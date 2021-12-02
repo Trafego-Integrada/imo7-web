@@ -1,4 +1,4 @@
 export interface GetUserProps {
-    document?: string;
+    documento?: string;
     id?: number;
 }

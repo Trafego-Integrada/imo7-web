@@ -30,8 +30,8 @@ handler.use(async (req, res, next) => {
     try {
         const decoded = jwtDecode(token as string) as DecodedToken;
 
-        const user = await prisma.user.findUnique({
-            where: { document: decoded.sub },
+        const user = await prisma.usuario.findUnique({
+            where: { documento: decoded.sub },
         });
 
         req.user = user;

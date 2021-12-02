@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 export type CreateSessionDTO = {
-    document: string;
+    documento: string;
     password: string;
 };
 
 type UserData = {
     email: string;
-    document: string;
-    name: string;
+    documento: string;
+    nome: string;
     avatar?: string;
     password: string;
     permissions: string[];

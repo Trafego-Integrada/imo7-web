@@ -4,7 +4,7 @@ import { Textarea } from "@chakra-ui/textarea";
 import { NextPage } from "next";
 import { Input } from "../../../components/Forms/Input";
 import { Select } from "../../../components/Forms/Select";
-import { LayoutPainel } from "../../../components/Layouts/Painel";
+import { LayoutPainel } from "../../../components/Layouts/LayoutPainel";
 
 const AbrirChamado: NextPage = () => {
     return (

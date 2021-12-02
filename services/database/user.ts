@@ -2,39 +2,39 @@ import prisma from "../../lib/prisma";
 import { GetUserProps } from "../../types/user";
 
 export async function getUsers() {
-    const users = await prisma.user.findMany();
+    const users = await prisma.usuario.findMany();
     return users;
 }
 
-export async function getUser({ document }: GetUserProps) {
-    const user = await prisma.user.findUnique({
-        where: { document },
+export async function getUser({ documento }: GetUserProps) {
+    const user = await prisma.usuario.findUnique({
+        where: { documento },
         include: {
-            permissions: {
+            permissoes: {
                 select: {
-                    name: true,
+                    nome: true,
                 },
             },
-            roles: {
+            cargos: {
                 select: {
-                    name: true,
+                    nome: true,
                 },
             },
             tokens: true,
         },
     });
     if (!user) return null;
-    let arrPermissions: string[] = [];
-    await user?.permissions.map((permission) => {
-        arrPermissions.push(permission.name);
+    let arrPermissoes: string[] = [];
+    await user?.permissoes.map((permissao) => {
+        arrPermissoes.push(permissao.nome);
     });
-    let arrRoles: string[] = [];
-    await user?.roles.map((role) => {
-        arrRoles.push(role.name);
+    let arrCargos: string[] = [];
+    await user?.cargos.map((cargo) => {
+        arrCargos.push(cargo.nome);
     });
     return {
         ...user,
-        permissions: arrPermissions,
-        roles: arrRoles,
+        permissoes: arrPermissoes,
+        cargos: arrCargos,
     };
 }

@@ -26,12 +26,12 @@ import { NextPage } from "next";
 import { Heading } from "@chakra-ui/layout";
 
 interface CredentialsProps {
-    document: string;
+    documento: string;
     password: string;
 }
 
 const schema = yup.object().shape({
-    document: yup.string().required("O CPF é obrigatório"),
+    documento: yup.string().required("O CPF é obrigatório"),
     password: yup.string().required("A senha é obrigatória"),
 });
 
@@ -39,6 +39,7 @@ const SignIn: NextPage = () => {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
@@ -46,6 +47,7 @@ const SignIn: NextPage = () => {
     const [error, setError] = useState(null);
     const { signIn } = useContext(AuthContext);
     const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
+        console.log(data);
         try {
             setError(null);
             await signIn(data);
@@ -53,7 +55,6 @@ const SignIn: NextPage = () => {
             setError(error.message);
         }
     };
-    console.log(error);
     return (
         <Stack bg="gray.50" w="100vw" h="100vh">
             <Grid templateColumns="repeat(2, 1fr)" w="full" h="full">
@@ -104,10 +105,11 @@ const SignIn: NextPage = () => {
                         )}
                         <Input
                             w={96}
+                            type="text"
                             leftIcon={<Icon as={MdFingerprint} w={6} h={6} />}
                             placeholder="Seu CPF"
-                            {...register("document")}
-                            error={errors.document?.message}
+                            {...register("documento")}
+                            error={errors.documento?.message}
                         />
                         <Input
                             type="password"

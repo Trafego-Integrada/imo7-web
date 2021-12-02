@@ -4,9 +4,27 @@ import prisma from "../../../../lib/prisma";
 const handle = nextConnect();
 
 handle.get(async (req, res) => {
+    const { query, contaId } = req.query;
     const imobiliarias = await prisma.imobiliaria.findMany({
         where: {
-            contaId: 1,
+            OR: [
+                {
+                    contaId: contaId ? contaId : null,
+                },
+                {
+                    nomeFantasia: {
+                        contains: query,
+                    },
+                },
+                {
+                    razaoSocial: {
+                        contains: query,
+                    },
+                },
+            ],
+        },
+        include: {
+            conta: true,
         },
     });
     res.send(imobiliarias);
@@ -29,6 +47,7 @@ handle.post(async (req, res) => {
         telefone,
         site,
         numero,
+        contaId,
     } = req.body;
     const imobiliaria = await prisma.imobiliaria.create({
         data: {
@@ -47,7 +66,7 @@ handle.post(async (req, res) => {
             telefone,
             site,
             numero,
-            contaId: 1,
+            contaId: contaId ? Number(contaId) : 1,
         },
     });
 

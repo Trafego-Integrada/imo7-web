@@ -6,7 +6,6 @@ datasource db {
     provider          = "mysql"
     url               = env("DATABASE_URL")
     shadowDatabaseUrl = env("DATABASE_URL")
-
 }
 
 model Conta {
@@ -36,10 +35,8 @@ model Usuario {
     deletedAt             DateTime?
     chamados              Chamado[]
     chamadorCriados       Chamado[]                @relation("CriadorChamado")
-    roles                 Roles?                   @relation(fields: [rolesId], references: [id])
-    rolesId               Int?
-    permission            Permission?              @relation(fields: [permissionId], references: [id])
-    permissionId          Int?
+    cargos                Cargo[]
+    permissoes            Permissao[]
     tokens                Token[]
     contratosProprietario Contrato[]               @relation("Proprietarios")
     contratosInquilino    Contrato[]               @relation("Inquilinos")
@@ -62,22 +59,22 @@ model ApiToken {
     contaId   Int?
 }
 
-model Roles {
+model Cargo {
     id        Int       @id @default(autoincrement())
-    name      String
+    nome      String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-    users     Usuario[]
+    usuarios  Usuario[]
 }
 
-model Permission {
+model Permissao {
     id        Int       @id @default(autoincrement())
-    name      String
+    nome      String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-    users     Usuario[]
+    usuarios  Usuario[]
 }
 
 model Token {
@@ -86,8 +83,8 @@ model Token {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-    user      Usuario?  @relation(fields: [userId], references: [id])
-    userId    Int?
+    usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
+    usuarioId Int?
 }
 
 model Imobiliaria {

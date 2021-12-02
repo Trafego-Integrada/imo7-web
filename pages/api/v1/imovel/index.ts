@@ -27,6 +27,27 @@ handle.post(async (req, res) => {
         valorVenda,
         imobiliariaId,
     } = req.body;
+
+    if (!imobiliariaId) {
+        res.status(400).json({
+            success: false,
+            errorCode: "I02",
+            message: "Informe o ID da Imobiliária",
+        });
+    }
+
+    const existe = await prisma.imobiliaria.findFirst({
+        where: {
+            id: Number(imobiliariaId),
+        },
+    });
+    if (!existe) {
+        res.status(400).json({
+            success: false,
+            errorCode: "I03",
+            message: "Não há imobiliária cadastrada com este ID",
+        });
+    }
     const imovel = await prisma.imovel.create({
         data: {
             codigo,
@@ -44,8 +65,16 @@ handle.post(async (req, res) => {
             valorAluguel,
             valorCondominio,
             valorVenda,
-            imobiliariaId,
-            contaId: 1,
+            imobiliria: {
+                connect: {
+                    id: Number(imobiliariaId),
+                },
+            },
+            conta: {
+                connect: {
+                    id: 1,
+                },
+            },
         },
     });
 

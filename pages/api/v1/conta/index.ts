@@ -4,8 +4,10 @@ import prisma from "../../../../lib/prisma";
 const handle = nextConnect();
 
 handle.get(async (req, res) => {
-    const conta = await prisma.conta.findMany();
-    res.send(conta);
+    const contas = await prisma.conta.findMany({
+        where: {},
+    });
+    res.send(contas);
 });
 
 handle.post(async (req, res) => {

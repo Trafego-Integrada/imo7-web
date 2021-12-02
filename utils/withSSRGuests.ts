@@ -10,11 +10,10 @@ export function withSSRGuest<P>(fn: GetServerSideProps<P>) {
         ctx: GetServerSidePropsContext
     ): Promise<GetServerSidePropsResult<P>> => {
         const cookies = parseCookies(ctx);
-        console.log(cookies, ctx);
-        if (cookies["patriota.token"]) {
+        if (cookies["imo7.token"]) {
             return {
                 redirect: {
-                    destination: "/",
+                    destination: "/painel",
                     permanent: false,
                 },
             };

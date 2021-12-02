@@ -1,7 +1,7 @@
 import prisma from "../lib/prisma";
 import bcrypt from "bcryptjs";
 async function main() {
-    const inquilino = await prisma.usuario.upsert({
+    await prisma.usuario.upsert({
         where: { email: "gabriel@treiv.com.br" },
         update: {},
         create: {
@@ -9,6 +9,87 @@ async function main() {
             email: "gabriel@treiv.com.br",
             documento: "11694158659",
             senhaHash: bcrypt.hashSync("123", 10),
+            cargos: {
+                create: {
+                    nome: "Admin",
+                },
+            },
+            permissoes: {
+                create: [
+                    {
+                        nome: "admin.imobiliaria",
+                    },
+                    {
+                        nome: "admin.imobiliaria.cadastrar",
+                    },
+                    {
+                        nome: "admin.imobiliaria.editar",
+                    },
+                    {
+                        nome: "admin.imobiliaria.excluir",
+                    },
+                    {
+                        nome: "admin.imobiliaria.boleto",
+                    },
+                    {
+                        nome: "admin.imobiliaria.boleto.excluir",
+                    },
+                    {
+                        nome: "admin.imobiliaria.inquilino",
+                    },
+                    {
+                        nome: "admin.imobiliaria.inquilino.excluir",
+                    },
+                    {
+                        nome: "admin.imobiliaria.proprietario",
+                    },
+                    {
+                        nome: "admin.imobiliaria.proprietario.excluir",
+                    },
+                    {
+                        nome: "admin.imobiliaria.usuario",
+                    },
+                    {
+                        nome: "admin.imobiliaria.usuario.criar",
+                    },
+                    {
+                        nome: "admin.imobiliaria.usuario.editar",
+                    },
+                    {
+                        nome: "admin.imobiliaria.usuario.excluir",
+                    },
+                    {
+                        nome: "admin.imobiliaria.extrato",
+                    },
+                    {
+                        nome: "admin.imobiliaria.extrato.excluir",
+                    },
+                    {
+                        nome: "admin.conta",
+                    },
+                    {
+                        nome: "admin.conta.criar",
+                    },
+                    {
+                        nome: "admin.conta.editar",
+                    },
+                    {
+                        nome: "admin.conta.excluir",
+                    },
+                    {
+                        nome: "admin.usuario",
+                    },
+                    {
+                        nome: "admin.usuario.criar",
+                    },
+                    {
+                        nome: "admin.usuario.editar",
+                    },
+                    {
+                        nome: "admin.usuario.excluir",
+                    },
+                ],
+            },
         },
     });
 

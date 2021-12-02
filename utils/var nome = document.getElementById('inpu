@@ -1,0 +1,12 @@
+var nome = document.getElementById('input_1606304958565');
+var email = document.getElementById('input_1606304958566');
+var telefone = document.getElementById('input_1606304984');
+var financiamento = document.getElementById('input_1606305104');
+
+
+ fbq('track', 'CompleteRegistration', {value: {
+     nome: nome.value,
+     email: email.value,
+     telefone: telefone.value,
+     financiamento: financiamento.value
+ }});

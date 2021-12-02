@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import {
     Box,
     Stack,
@@ -20,7 +20,9 @@ import {
 import { NextChakraLink } from "../../components/NextChakraLink";
 import { FaCopy, FaEye, FaGrinWink, FaPrint } from "react-icons/fa";
 import { IoHelpBuoy } from "react-icons/io5";
-import { LayoutPainel } from "../../components/Layouts/Painel";
+import { LayoutPainel } from "../../components/Layouts/LayoutPainel";
+import { withSSRAuth } from "../../utils/withSSRAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 const Dashbord: NextPage = () => {
     return (
@@ -199,3 +201,9 @@ const Dashbord: NextPage = () => {
 };
 
 export default Dashbord;
+
+export const getServerSideProps: GetServerSideProps = withSSRAuth((ctx) => {
+    return {
+        props: {},
+    };
+});

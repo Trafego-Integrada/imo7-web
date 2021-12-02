@@ -6,15 +6,15 @@ export const users: UsersStore = new Map();
 
 export const tokens: RefreshTokensStore = new Map();
 
-export async function createRefreshToken(document: string) {
+export async function createRefreshToken(documento: string) {
     const refreshToken = uuid();
 
     await prisma.token.create({
         data: {
             token: refreshToken,
-            user: {
+            usuario: {
                 connect: {
-                    document,
+                    documento,
                 },
             },
         },
@@ -24,13 +24,13 @@ export async function createRefreshToken(document: string) {
 }
 
 export async function checkRefreshTokenIsValid(
-    document: string,
+    documento: string,
     refreshToken: string
 ) {
     const storedRefreshTokens = await prisma.token.findMany({
         where: {
-            user: {
-                document,
+            usuario: {
+                documento,
             },
         },
     });
@@ -39,13 +39,13 @@ export async function checkRefreshTokenIsValid(
 }
 
 export async function invalidateRefreshToken(
-    document: string,
+    documento: string,
     refreshToken: string
 ) {
     const storedRefreshTokens = await prisma.token.findMany({
         where: {
-            user: {
-                document,
+            usuario: {
+                documento,
             },
         },
     });

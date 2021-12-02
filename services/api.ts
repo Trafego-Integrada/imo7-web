@@ -16,9 +16,9 @@ export function setupApiClient(ctx = undefined) {
     const api = axios.create({
         baseURL: process.env.NEXT_PUBLIC_API_URL
             ? process.env.NEXT_PUBLIC_API_URL
-            : "/api/",
+            : "/api/v1/",
         headers: {
-            Authorization: `Bearer ${cookies["patriota.token"]}`,
+            Authorization: `Bearer ${cookies["imo7.token"]}`,
         },
     });
 
@@ -31,7 +31,7 @@ export function setupApiClient(ctx = undefined) {
                 if (error.response.data?.code === "token.expired") {
                     cookies = parseCookies(ctx);
 
-                    const { "patriota.refreshToken": refreshToken } = cookies;
+                    const { "imo7.refreshToken": refreshToken } = cookies;
                     const originalConfig = error.config;
                     if (!isRefreshing) {
                         isRefreshing = true;
@@ -39,13 +39,13 @@ export function setupApiClient(ctx = undefined) {
                             .then((response) => {
                                 const { token, refreshToken: newRefreshToken } =
                                     response.data;
-                                setCookie(ctx, "patriota.token", token, {
+                                setCookie(ctx, "imo7.token", token, {
                                     maxAge: 60 * 60 * 24 * 30,
                                     path: "/",
                                 });
                                 setCookie(
                                     ctx,
-                                    "patriota.refreshToken",
+                                    "imo7.refreshToken",
                                     newRefreshToken,
                                     {
                                         maxAge: 60 * 60 * 24 * 30,
