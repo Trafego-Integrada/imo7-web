@@ -13,12 +13,25 @@ handle.get(async (req, res) => {
 });
 
 handle.post(async (req, res) => {
-    const { codigo, imobiliariaId } = req.body;
+    console.log(req.body.codigo);
+    const { codigo, imobiliariaId, imovelId, proprietarioId, inquilinoId } =
+        req.body;
     const conta = await prisma.contrato.create({
         data: {
             codigo,
-            imobiliariaId,
+            imobiliariaId: Number(imobiliariaId),
             contaId: 1,
+            imovelId: Number(imovelId),
+            inquilinos: {
+                connect: {
+                    id: Number(inquilinoId),
+                },
+            },
+            proprietarios: {
+                connect: {
+                    id: Number(proprietarioId),
+                },
+            },
         },
     });
     res.send(conta);
