@@ -13,7 +13,6 @@ handle.get(async (req, res) => {
 });
 
 handle.post(async (req, res) => {
-    console.log(req.body.codigo);
     const { codigo, imobiliariaId, imovelId, proprietarioId, inquilinoId } =
         req.body;
     const conta = await prisma.contrato.create({
