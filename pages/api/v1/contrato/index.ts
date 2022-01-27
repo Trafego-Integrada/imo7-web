@@ -35,19 +35,42 @@ handle.post(async (req, res) => {
             imobiliariaId: Number(imobiliariaId),
             contaId: 1,
             imovelId: Number(imovelId),
-            inquilinos: {
+        },
+    });
+    await prisma.usuario.update({
+        where: {
+            id: Number(proprietarioId),
+        },
+        data: {
+            contratosProprietario: {
                 connect: {
-                    id: Number(inquilinoId),
-                },
-            },
-            proprietarios: {
-                connect: {
-                    id: Number(proprietarioId),
+                    id: conta.id,
                 },
             },
         },
     });
-    res.send(conta);
+    await prisma.usuario.update({
+        where: {
+            id: Number(inquilinoId),
+        },
+        data: {
+            contratosInquilino: {
+                connect: {
+                    id: conta.id,
+                },
+            },
+        },
+    });
+    const data = await prisma.contrato.findUnique({
+        where: {
+            id: conta.id,
+        },
+        include: {
+            inquilinos: true,
+            proprietarios: true,
+        },
+    });
+    res.send(data);
 });
 
 export default handle;
