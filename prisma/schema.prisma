@@ -164,7 +164,7 @@ model Contrato {
     imobiliaria    Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId  Int
     imovel         Imovel?          @relation(fields: [imovelId], references: [id])
-    imovelId       Int?
+    imovelId       Int?             @unique
     proprietarios  Usuario[]        @relation("Proprietarios")
     inquilinos     Usuario[]        @relation("Inquilinos")
     boletos        Boleto[]
