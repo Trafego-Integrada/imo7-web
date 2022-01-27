@@ -160,7 +160,7 @@ model ProprietariosOnImoveis {
 
 model Contrato {
     id             Int              @id @default(autoincrement())
-    codigo         Int              @unique
+    codigo         String           @unique
     imobiliaria    Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId  Int
     imovel         Imovel?          @relation(fields: [imovelId], references: [id])

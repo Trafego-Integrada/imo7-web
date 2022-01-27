@@ -15,6 +15,20 @@ handle.get(async (req, res) => {
 handle.post(async (req, res) => {
     const { codigo, imobiliariaId, imovelId, proprietarioId, inquilinoId } =
         req.body;
+
+    const existe = await prisma.contrato.findUnique({
+        where: {
+            codigo: codigo,
+        },
+    });
+
+    if (existe) {
+        res.status(500).send({
+            success: false,
+            message: "Já existe um contrato com este código",
+        });
+    }
+
     const conta = await prisma.contrato.create({
         data: {
             codigo,
