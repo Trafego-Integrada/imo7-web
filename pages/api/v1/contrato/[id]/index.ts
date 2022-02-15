@@ -18,7 +18,7 @@ handle.post(async (req, res) => {
     const { codigo, imobiliariaId } = req.body;
     const conta = await prisma.contrato.update({
         where: {
-            id: id,
+            id: Number(id),
         },
         data: {
             codigo,
