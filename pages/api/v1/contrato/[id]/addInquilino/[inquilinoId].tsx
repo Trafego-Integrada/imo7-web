@@ -11,7 +11,7 @@ handle.post(async (req, res) => {
         },
         data: {
             contratosInquilino: {
-                disconnect: {
+                connect: {
                     id: Number(id),
                 },
             },
