@@ -16,6 +16,9 @@ handle.post(async (req, res) => {
                 },
             },
         },
+        include: {
+            contratosInquilino: true,
+        },
     });
     res.send(conta);
 });
