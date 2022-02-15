@@ -9,6 +9,13 @@ handle.get(async (req, res) => {
         where: {
             id: Number(id),
         },
+        include: {
+            boletos: true,
+            extratos: true,
+            inquilinos: true,
+            proprietarios: true,
+            imovel: true,
+        },
     });
     res.send(conta);
 });
