@@ -15,6 +15,7 @@ handle.get(async (req, res) => {
             inquilinos: true,
             proprietarios: true,
             imovel: true,
+            fiadores: true,
         },
     });
     res.send(conta);
@@ -29,6 +30,15 @@ handle.post(async (req, res) => {
         },
         data: {
             codigo,
+            taxaAdm,
+            dataInicio,
+            dataFim,
+            valorAluguel,
+            valorBonus,
+            diaVencimento,
+            diaRecebimento,
+            diaDeposito,
+            observacoes,
             imobiliariaId,
             contaId: 1,
         },

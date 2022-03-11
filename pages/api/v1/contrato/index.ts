@@ -13,8 +13,22 @@ handle.get(async (req, res) => {
 });
 
 handle.post(async (req, res) => {
-    const { codigo, imobiliariaId, imovelId, proprietarioId, inquilinoId } =
-        req.body;
+    const {
+        codigo,
+        imobiliariaId,
+        taxaAdm,
+        dataInicio,
+        dataFim,
+        valorAluguel,
+        valorBonus,
+        diaVencimento,
+        diaRecebimento,
+        diaDeposito,
+        observacoes,
+        imovelId,
+        proprietarioId,
+        inquilinoId,
+    } = req.body;
 
     const existe = await prisma.contrato.findUnique({
         where: {
@@ -32,6 +46,15 @@ handle.post(async (req, res) => {
     const conta = await prisma.contrato.create({
         data: {
             codigo,
+            taxaAdm,
+            dataInicio,
+            dataFim,
+            valorAluguel,
+            valorBonus,
+            diaVencimento,
+            diaRecebimento,
+            diaDeposito,
+            observacoes,
             imobiliariaId: Number(imobiliariaId),
             contaId: 1,
             imovelId: Number(imovelId),

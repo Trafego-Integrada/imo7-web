@@ -29,6 +29,9 @@ model Usuario {
     nome                  String?                  @db.VarChar(255)
     email                 String?                  @unique @db.VarChar(255)
     documento             String                   @unique
+    telefone              String?
+    celular               String?
+    profissao             String?
     senhaHash             String?
     createdAt             DateTime                 @default(now())
     updatedAt             DateTime                 @updatedAt
@@ -46,6 +49,8 @@ model Usuario {
     conta                 Conta[]
     apiToken              ApiToken[]
     boletos               Boleto[]
+    contratosFiador       Contrato[]               @relation("Fiadores")
+
 }
 
 model ApiToken {
@@ -161,12 +166,22 @@ model ProprietariosOnImoveis {
 model Contrato {
     id             Int              @id @default(autoincrement())
     codigo         String           @unique
+    taxaAdm        Decimal?
+    dataInicio     DateTime         @db.Date
+    dataFim        DateTime         @db.Date
+    valorAluguel   Decimal?
+    valorBonus     Decimal?
+    diaVencimento  Int?
+    diaRecebimento Int?
+    diaDeposito    Int?
+    observacoes    String?          @db.LongText
     imobiliaria    Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId  Int
     imovel         Imovel?          @relation(fields: [imovelId], references: [id])
     imovelId       Int?             @unique
     proprietarios  Usuario[]        @relation("Proprietarios")
     inquilinos     Usuario[]        @relation("Inquilinos")
+    fiadores       Usuario[]        @relation("Fiadores")
     boletos        Boleto[]
     extratos       Extrato[]
     chamados       Chamado[]
