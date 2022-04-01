@@ -33,7 +33,15 @@ handle.put(async (req, res) => {
             email,
             documento,
             imobiliariaId,
-            senhaHash: bcrypt.hashSync(senha, 10),
+            profissao,
+            endereco,
+            cidade,
+            bairro,
+            cep,
+            estado,
+            celular,
+            fone,
+            senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
         },
     });
     res.send(data);

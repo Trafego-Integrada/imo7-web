@@ -33,6 +33,12 @@ model Usuario {
     celular               String?
     profissao             String?
     senhaHash             String?
+    cep                   String?
+    endereco              String?
+    numero                String?
+    bairro                String?
+    cidade                String?
+    estado                String?
     createdAt             DateTime                 @default(now())
     updatedAt             DateTime                 @updatedAt
     deletedAt             DateTime?

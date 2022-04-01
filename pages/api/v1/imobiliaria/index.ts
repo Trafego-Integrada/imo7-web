@@ -9,7 +9,7 @@ handle.get(async (req, res) => {
         where: {
             OR: [
                 {
-                    contaId: contaId ? contaId : null,
+                    contaId: contaId ? Number(contaId) : null,
                 },
                 {
                     nomeFantasia: {

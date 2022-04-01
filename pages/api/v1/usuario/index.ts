@@ -11,14 +11,36 @@ handle.get(async (req, res) => {
 });
 
 handle.post(async (req, res) => {
-    const { nome, email, documento, imobiliariaId, senha } = req.body;
+    const {
+        nome,
+        email,
+        documento,
+        imobiliariaId,
+        senha,
+        profissao,
+        endereco,
+        cidade,
+        bairro,
+        cep,
+        estado,
+        celular,
+        fone,
+    } = req.body;
     const data = await prisma.usuario.create({
         data: {
             nome,
             email,
             documento,
             imobiliariaId,
-            senhaHash: bcrypt.hashSync(senha, 10),
+            profissao,
+            endereco,
+            cidade,
+            bairro,
+            cep,
+            estado,
+            celular,
+            fone,
+            senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
         },
     });
 
