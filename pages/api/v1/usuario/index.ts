@@ -24,7 +24,7 @@ handle.post(async (req, res) => {
         cep,
         estado,
         celular,
-        fone,
+        telefone,
     } = req.body;
     const data = await prisma.usuario.create({
         data: {
@@ -39,7 +39,7 @@ handle.post(async (req, res) => {
             cep,
             estado,
             celular,
-            fone,
+            telefone,
             senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
         },
     });
