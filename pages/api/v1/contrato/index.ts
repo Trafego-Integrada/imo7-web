@@ -1,3 +1,4 @@
+import moment from "moment";
 import nextConnect from "next-connect";
 import prisma from "../../../../lib/prisma";
 
@@ -28,6 +29,7 @@ handle.post(async (req, res) => {
         imovelId,
         proprietarioId,
         inquilinoId,
+        fiadorId,
     } = req.body;
 
     const existe = await prisma.contrato.findUnique({
@@ -46,44 +48,63 @@ handle.post(async (req, res) => {
     const conta = await prisma.contrato.create({
         data: {
             codigo,
-            taxaAdm,
-            dataInicio,
-            dataFim,
-            valorAluguel,
-            valorBonus,
-            diaVencimento,
-            diaRecebimento,
-            diaDeposito,
+            taxaAdm: taxaAdm ? Number(taxaAdm) : null,
+            dataInicio: moment(dataInicio, "DD/MM/YYYY").format(),
+            dataFim: dataFim ? moment(dataFim, "DD/MM/YYYY").format() : null,
+            valorAluguel: valorAluguel ? Number(valorAluguel) : null,
+            valorBonus: valorBonus ? Number(valorAluguel) : null,
+            diaVencimento: diaVencimento ? Number(diaVencimento) : null,
+            diaRecebimento: diaRecebimento ? Number(diaRecebimento) : null,
+            diaDeposito: diaDeposito ? Number(diaDeposito) : null,
             observacoes,
             imobiliariaId: Number(imobiliariaId),
             contaId: 1,
             imovelId: Number(imovelId),
         },
     });
-    await prisma.usuario.update({
-        where: {
-            id: Number(proprietarioId),
-        },
-        data: {
-            contratosProprietario: {
-                connect: {
-                    id: conta.id,
+    if (proprietarioId) {
+        await prisma.usuario.update({
+            where: {
+                id: Number(proprietarioId),
+            },
+            data: {
+                contratosProprietario: {
+                    connect: {
+                        id: conta.id,
+                    },
                 },
             },
-        },
-    });
-    await prisma.usuario.update({
-        where: {
-            id: Number(inquilinoId),
-        },
-        data: {
-            contratosInquilino: {
-                connect: {
-                    id: conta.id,
+        });
+    }
+    if (inquilinoId) {
+        await prisma.usuario.update({
+            where: {
+                id: Number(inquilinoId),
+            },
+            data: {
+                contratosInquilino: {
+                    connect: {
+                        id: conta.id,
+                    },
                 },
             },
-        },
-    });
+        });
+    }
+
+    if (fiadorId) {
+        await prisma.usuario.update({
+            where: {
+                id: Number(fiadorId),
+            },
+            data: {
+                contratosFiador: {
+                    connect: {
+                        id: conta.id,
+                    },
+                },
+            },
+        });
+    }
     const data = await prisma.contrato.findUnique({
         where: {
             id: conta.id,

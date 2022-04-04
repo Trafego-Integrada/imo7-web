@@ -174,7 +174,7 @@ model Contrato {
     codigo         String           @unique
     taxaAdm        Decimal?
     dataInicio     DateTime         @db.Date
-    dataFim        DateTime         @db.Date
+    dataFim        DateTime?        @db.Date
     valorAluguel   Decimal?
     valorBonus     Decimal?
     diaVencimento  Int?
