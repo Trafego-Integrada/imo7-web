@@ -5,12 +5,12 @@ import prisma from "../../../../lib/prisma";
 const handle = nextConnect();
 
 handle.get(async (req, res) => {
-    const conta = await prisma.contrato.findMany({
+    const contas = await prisma.contrato.findMany({
         where: {
             contaId: 1,
         },
     });
-    res.send(conta);
+    res.send(contas);
 });
 
 handle.post(async (req, res) => {
@@ -30,6 +30,10 @@ handle.post(async (req, res) => {
         proprietarioId,
         inquilinoId,
         fiadorId,
+        ultimaParcPaga,
+        ultimoRecebimento,
+        ultimoBomPara,
+        ultimoRepasse,
     } = req.body;
 
     const existe = await prisma.contrato.findUnique({
@@ -51,6 +55,18 @@ handle.post(async (req, res) => {
             taxaAdm: taxaAdm ? Number(taxaAdm) : null,
             dataInicio: moment(dataInicio, "DD/MM/YYYY").format(),
             dataFim: dataFim ? moment(dataFim, "DD/MM/YYYY").format() : null,
+            ultimaParcPaga: ultimaParcPaga
+                ? moment(ultimaParcPaga, "DD/MM/YYYY").format()
+                : null,
+            ultimoRecebimento: ultimoRecebimento
+                ? moment(ultimoRecebimento, "DD/MM/YYYY").format()
+                : null,
+            ultimoBomPara: ultimoBomPara
+                ? moment(ultimoBomPara, "DD/MM/YYYY").format()
+                : null,
+            ultimoRepasse: ultimoRepasse
+                ? moment(ultimoRepasse, "DD/MM/YYYY").format()
+                : null,
             valorAluguel: valorAluguel ? Number(valorAluguel) : null,
             valorBonus: valorBonus ? Number(valorAluguel) : null,
             diaVencimento: diaVencimento ? Number(diaVencimento) : null,

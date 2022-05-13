@@ -5,12 +5,9 @@ import { AuthProvider } from "../contexts/AuthContext";
 import { QueryClientProvider, useQuery } from "react-query";
 import { queryClient } from "../services/queryClient";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { theme } from "../config/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
-    const theme = extendTheme({
-        useSystemColorMode: false,
-    });
-
     return (
         <QueryClientProvider client={queryClient}>
             <AuthProvider>

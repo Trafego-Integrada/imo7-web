@@ -22,8 +22,6 @@ prisma.$use(async (params, next) => {
     // Check incoming query type
 
     if (params.action == "delete") {
-        // Delete queries
-        // Change action to an update
         params.action = "update";
         params.args["data"] = { deletedAt: moment().format() };
     }

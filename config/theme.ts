@@ -1,24 +1,28 @@
-import { extendTheme, ThemeConfig } from "@chakra-ui/react";
-// 2. Add your color mode config
-const config: ThemeConfig = {
-    initialColorMode: "light",
-    useSystemColorMode: false,
-};
-// 3. extend the theme
-const theme = extendTheme({
-    fonts: {
-        body: "Rubik, sans-serif",
-        heading: "Rubik, serif",
-        mono: "Menlo, monospace",
-    },
-    letterSpacings: {
-        tighter: "-0.05em",
-        tight: "-0.025em",
-        normal: "0.9em",
-        wide: "0.025em",
-        wider: "0.05em",
-        widest: "0.1em",
-    },
-    ...config,
+import { extendTheme } from "@chakra-ui/react";
+import { createBreakpoints } from "@chakra-ui/theme-tools";
+
+const breakpoints = createBreakpoints({
+    sm: "320px",
+    md: "768px",
+    lg: "1024px",
+    xl: "1366px",
 });
-export default theme;
+
+export const theme = extendTheme({
+    fonts: {
+        heading: "Rubik, sans-serif",
+        body: "Rubik, sans-serif",
+    },
+    breakpoints,
+    config: {
+        initialColorMode: "light",
+        useSystemColorMode: false,
+    },
+    colors: {
+        bluelight: "#2F80ED",
+        orange: "#F2994A",
+        graydark: "#4F4F4F",
+        graylight: "#F0F0F0",
+        green: "#72BC96",
+    },
+});

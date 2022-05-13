@@ -147,6 +147,24 @@ model Imovel {
     numeroIptu      String?
     numeroAgua      String?
     numeroEnergia   String?
+    quartos         Int?
+    suites          Int?
+    varandas        Int?
+    banheiros       Int?
+    cozinhas        Int?
+    salas           Int?
+    piscinas        Int?
+    garagens        Int?
+    lavabos         Int?
+    terreno         Decimal?
+    areaUtil        Decimal?
+    areaTotal       Decimal?
+    aceitaPet       Boolean?
+    destaque        Boolean?
+    placa           Boolean?
+    mobiliado       Boolean?
+    exclusividade   Boolean?
+    autorizado      Boolean?
     createdAt       DateTime                 @default(now())
     updatedAt       DateTime                 @updatedAt
     deletedAt       DateTime?
@@ -170,33 +188,37 @@ model ProprietariosOnImoveis {
 }
 
 model Contrato {
-    id             Int              @id @default(autoincrement())
-    codigo         String           @unique
-    taxaAdm        Decimal?
-    dataInicio     DateTime         @db.Date
-    dataFim        DateTime?        @db.Date
-    valorAluguel   Decimal?
-    valorBonus     Decimal?
-    diaVencimento  Int?
-    diaRecebimento Int?
-    diaDeposito    Int?
-    observacoes    String?          @db.LongText
-    imobiliaria    Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
-    imobiliariaId  Int
-    imovel         Imovel?          @relation(fields: [imovelId], references: [id])
-    imovelId       Int?             @unique
-    proprietarios  Usuario[]        @relation("Proprietarios")
-    inquilinos     Usuario[]        @relation("Inquilinos")
-    fiadores       Usuario[]        @relation("Fiadores")
-    boletos        Boleto[]
-    extratos       Extrato[]
-    chamados       Chamado[]
-    createdAt      DateTime         @default(now())
-    updatedAt      DateTime         @updatedAt
-    deletedAt      DateTime?
-    AnexoInteracao AnexoInteracao[]
-    conta          Conta            @relation(fields: [contaId], references: [id])
-    contaId        Int
+    id                Int              @id @default(autoincrement())
+    codigo            String           @unique
+    taxaAdm           Decimal?
+    dataInicio        DateTime         @db.Date
+    dataFim           DateTime?        @db.Date
+    valorAluguel      Decimal?
+    valorBonus        Decimal?
+    diaVencimento     Int?
+    diaRecebimento    Int?
+    diaDeposito       Int?
+    ultimaParcPaga    DateTime?        @db.Date
+    ultimoRecebimento DateTime?        @db.Date
+    ultimoBomPara     DateTime?        @db.Date
+    ultimoRepasse     DateTime?        @db.Date
+    observacoes       String?          @db.LongText
+    imobiliaria       Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId     Int
+    imovel            Imovel?          @relation(fields: [imovelId], references: [id])
+    imovelId          Int?             @unique
+    proprietarios     Usuario[]        @relation("Proprietarios")
+    inquilinos        Usuario[]        @relation("Inquilinos")
+    fiadores          Usuario[]        @relation("Fiadores")
+    boletos           Boleto[]
+    extratos          Extrato[]
+    chamados          Chamado[]
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+    deletedAt         DateTime?
+    AnexoInteracao    AnexoInteracao[]
+    conta             Conta            @relation(fields: [contaId], references: [id])
+    contaId           Int
 }
 
 model Boleto {

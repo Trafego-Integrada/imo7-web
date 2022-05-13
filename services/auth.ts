@@ -9,7 +9,7 @@ export async function generateJwtAndRefreshToken(
 ) {
     const token = jwt.sign(payload, auth.secret, {
         subject: document,
-        expiresIn: 60 * 15, // 15 minutes
+        expiresIn: 60 * 60 * 15, // 15 minutes
     });
 
     const refreshToken = await createRefreshToken(document);
