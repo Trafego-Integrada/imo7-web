@@ -71,6 +71,8 @@ handle.post(async (req, res) => {
         uf_sacado,
         email_beneficiario,
         cpf_cnpj_beneficiario,
+        imobiliariaId,
+        contratoId,
     } = req.body;
     if (boletos && boletos.length) {
         boletos.map(async (boleto, key) => {
@@ -265,79 +267,13 @@ handle.post(async (req, res) => {
         });
         res.status(201).send();
     } else {
-        const contrato = await prisma.contrato.upsert({
-            where: {
-                codigo: Number(bols_codl),
-            },
-            create: {
-                codigo: Number(bols_codl),
-
-                inquilinos: {
-                    connectOrCreate: {
-                        where: {
-                            documento: bols_cpf_cnpj,
-                        },
-                        create: {
-                            documento: bols_cpf_cnpj,
-                            nome: nome_razao_sacado,
-                        },
-                    },
-                },
-                imobiliaria: {
-                    connectOrCreate: {
-                        where: {
-                            cnpj: cpf_cnpj_beneficiario,
-                        },
-                        create: {
-                            cnpj: cpf_cnpj_beneficiario,
-                            razaoSocial: beneficiario,
-                            email: email_beneficiario,
-                        },
-                    },
-                },
-                conta: {
-                    connect: {
-                        id: 1,
-                    },
-                },
-            },
-            update: {
-                codigo: Number(bols_codl),
-
-                inquilinos: {
-                    connectOrCreate: {
-                        where: {
-                            documento: bols_cpf_cnpj,
-                        },
-                        create: {
-                            documento: bols_cpf_cnpj,
-                            nome: nome_razao_sacado,
-                        },
-                    },
-                },
-                imobiliaria: {
-                    connectOrCreate: {
-                        where: {
-                            cnpj: cpf_cnpj_beneficiario,
-                        },
-                        create: {
-                            cnpj: cpf_cnpj_beneficiario,
-                            razaoSocial: beneficiario,
-                            email: email_beneficiario,
-                        },
-                    },
-                },
-                conta: {
-                    connect: {
-                        id: 1,
-                    },
-                },
-            },
-        });
-
         const boleto = await prisma.boleto.create({
             data: {
-                bols_cpf_cnpj,
+                inquilino: {
+                    connect: {
+                        documento: bols_cpf_cnpj,
+                    },
+                },
                 bols_codl,
                 envia_email,
                 field_cod_banco,
@@ -392,8 +328,21 @@ handle.post(async (req, res) => {
                 uf_sacado,
                 email_beneficiario,
                 cpf_cnpj_beneficiario,
-                contaId: 1,
-                contratoId: contrato.id,
+                conta: {
+                    connect: {
+                        id: 1,
+                    },
+                },
+                imobiliaria: {
+                    connect: {
+                        id: Number(imobiliariaId),
+                    },
+                },
+                contrato: {
+                    connect: {
+                        id: Number(contratoId),
+                    },
+                },
             },
         });
 

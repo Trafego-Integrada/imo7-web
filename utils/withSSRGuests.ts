@@ -13,7 +13,7 @@ export function withSSRGuest<P>(fn: GetServerSideProps<P>) {
         if (cookies["imo7.token"]) {
             return {
                 redirect: {
-                    destination: "/painel",
+                    destination: "/",
                     permanent: false,
                 },
             };

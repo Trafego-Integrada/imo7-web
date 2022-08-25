@@ -16,7 +16,7 @@ export function setupApiClient(ctx = undefined) {
     const api = axios.create({
         baseURL: process.env.NEXT_PUBLIC_API_URL
             ? process.env.NEXT_PUBLIC_API_URL
-            : "/api/v1/",
+            : "/api/",
         headers: {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
         },

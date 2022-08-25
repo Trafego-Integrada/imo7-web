@@ -140,7 +140,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
-            Router.push("/painel");
+            if (cargos.includes("adm")) {
+                Router.push("/admin");
+            } else if (cargos.includes("imobiliaria")) {
+                Router.push("/admin");
+            } else {
+                Router.push("/painel");
+            }
             authChannel.postMessage("signIn");
         } catch (error) {
             throw new Error(error.response.data?.message);

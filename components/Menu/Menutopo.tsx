@@ -24,6 +24,7 @@ import {
     Text,
     useDisclosure,
 } from "@chakra-ui/react";
+import { useAuth } from "hooks/useAuth";
 import React from "react";
 import { BiPowerOff, BiSupport } from "react-icons/bi";
 import { BsFillGearFill, BsSearch } from "react-icons/bs";
@@ -35,6 +36,7 @@ import { Listagemmenu } from "./Listagemmenu";
 import { Logo } from "./Logo";
 
 export const Menutopo = ({ namepage, subnamepage }) => {
+    const { usuario, signOut } = useAuth();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = React.useRef();
     return (
@@ -171,8 +173,8 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                             >
                                 <Flex alignItems="center" color="white">
                                     <Avatar
-                                        name="Fernando Camargo"
-                                        src="https://bit.ly/broken-link"
+                                        name={usuario?.nome}
+                                        src={usuario?.avatar}
                                     />
                                     <MdOutlineKeyboardArrowDown size="30" />
                                 </Flex>
@@ -195,7 +197,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                                         <Text pl="2">Chamados</Text>
                                     </MenuItem>
                                 </MenuGroup>
-                                <MenuItem>
+                                <MenuItem onClick={() => signOut()}>
                                     <BiPowerOff size="20" />
                                     <Text pl="2"> Sair</Text>
                                 </MenuItem>

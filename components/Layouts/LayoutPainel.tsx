@@ -14,12 +14,12 @@ import {
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
 import { useQuery } from "react-query";
 import { useAuth } from "../../hooks/useAuth";
-import { getAll } from "../../services/models/contrato";
+import { listarContratos } from "../../services/models/contrato";
 import { NextChakraLink } from "../NextChakraLink";
 
 export const LayoutPainel = ({ children }) => {
     const { usuario } = useAuth();
-    const { data: contratos } = useQuery(["meusContratos"], getAll);
+    const { data: contratos } = useQuery(["meusContratos"], listarContratos);
     return (
         <Box bg="gray.100" minH="100vh">
             <Stack as="aside" bg="blue.600">

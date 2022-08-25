@@ -56,7 +56,6 @@ model Usuario {
     apiToken              ApiToken[]
     boletos               Boleto[]
     contratosFiador       Contrato[]               @relation("Fiadores")
-
 }
 
 model ApiToken {
@@ -125,6 +124,7 @@ model Imobiliaria {
     usuarios     Usuario[]
     conta        Conta?     @relation(fields: [contaId], references: [id])
     contaId      Int?
+    Boleto       Boleto[]
 }
 
 model Imovel {
@@ -174,7 +174,6 @@ model Imovel {
     proprietarios   ProprietariosOnImoveis[]
     conta           Conta                    @relation(fields: [contaId], references: [id])
     contaId         Int
-
 }
 
 model ProprietariosOnImoveis {
@@ -189,7 +188,7 @@ model ProprietariosOnImoveis {
 
 model Contrato {
     id                Int              @id @default(autoincrement())
-    codigo            String           @unique
+    codigo            String
     taxaAdm           Decimal?
     dataInicio        DateTime         @db.Date
     dataFim           DateTime?        @db.Date
@@ -198,15 +197,22 @@ model Contrato {
     diaVencimento     Int?
     diaRecebimento    Int?
     diaDeposito       Int?
-    ultimaParcPaga    DateTime?        @db.Date
+    ultimaParcPaga    Int?
     ultimoRecebimento DateTime?        @db.Date
     ultimoBomPara     DateTime?        @db.Date
     ultimoRepasse     DateTime?        @db.Date
+    formaRepasse      String?
+    dataReajuste      DateTime?        @db.Date
+    indiceReajuste    String?
+    responsavel       String?
+    multa             Decimal?
+    juros             Decimal?
+    formaPagamento    String?
     observacoes       String?          @db.LongText
     imobiliaria       Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId     Int
     imovel            Imovel?          @relation(fields: [imovelId], references: [id])
-    imovelId          Int?             @unique
+    imovelId          Int?
     proprietarios     Usuario[]        @relation("Proprietarios")
     inquilinos        Usuario[]        @relation("Inquilinos")
     fiadores          Usuario[]        @relation("Fiadores")
@@ -222,7 +228,7 @@ model Contrato {
 }
 
 model Boleto {
-    id                    Int       @id @default(autoincrement())
+    id                    Int         @id @default(autoincrement())
     bols_cpf_cnpj         String
     bols_codl             String?
     envia_email           String?
@@ -278,14 +284,16 @@ model Boleto {
     uf_sacado             String?
     email_beneficiario    String?
     cpf_cnpj_beneficiario String?
-    createdAt             DateTime  @default(now())
-    updatedAt             DateTime  @updatedAt
+    createdAt             DateTime    @default(now())
+    updatedAt             DateTime    @updatedAt
     deletedAt             DateTime?
-    contrato              Contrato  @relation(references: [id], fields: [contratoId])
+    contrato              Contrato    @relation(references: [id], fields: [contratoId])
     contratoId            Int
-    conta                 Conta     @relation(fields: [contaId], references: [id])
+    conta                 Conta       @relation(fields: [contaId], references: [id])
     contaId               Int
-    inquilino             Usuario   @relation(fields: [bols_cpf_cnpj], references: [documento])
+    inquilino             Usuario     @relation(fields: [bols_cpf_cnpj], references: [documento])
+    imobiliaria           Imobiliaria @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId         Int
 }
 
 model Extrato {

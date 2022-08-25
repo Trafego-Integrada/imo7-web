@@ -83,11 +83,7 @@ handle.get(async (req, res) => {
                 inquilinos: true,
             },
         });
-        const total = await prisma.contrato.count({
-            where: {
-                ...filtroQuery,
-            },
-        });
+        const total = await prisma.contrato.count({});
         res.send({
             success: true,
             data: {

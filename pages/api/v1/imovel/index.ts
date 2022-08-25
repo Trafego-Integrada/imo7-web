@@ -97,6 +97,42 @@ handle.post(async (req, res) => {
         },
     });
 
+    if (proprietarios) {
+        if (Array.isArray(proprietarios) && proprietarios.length > 0) {
+            await Promise.all(
+                proprietarios.map(async (item) => {
+                    await prisma.usuario.update({
+                        where: {
+                            id: Number(item),
+                        },
+                        data: {
+                            imoveis: {
+                                create: {
+                                    imovelId: imovel.id,
+                                    porcentagem: 100,
+                                },
+                            },
+                        },
+                    });
+                })
+            );
+        } else {
+            await prisma.usuario.update({
+                where: {
+                    id: Number(proprietarios),
+                },
+                data: {
+                    imoveis: {
+                        create: {
+                            imovelId: imovel.id,
+                            porcentagem: 100,
+                        },
+                    },
+                },
+            });
+        }
+    }
+
     res.send(imovel);
 });
 

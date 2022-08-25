@@ -9,8 +9,8 @@ import { AuthTokenError } from "../services/errors/AuthTokenError";
 import { validadeUserPermissions } from "./validadeUserPermissions";
 
 type WithSSRAuthOptions = {
-    permissions?: string[];
-    roles?: string[];
+    permissoes?: string[];
+    cargos?: string[];
 };
 
 export function withSSRAuth<P>(
@@ -32,19 +32,20 @@ export function withSSRAuth<P>(
         }
 
         if (options) {
-            const user =
-                jwtDecode<{ permissions: string[]; roles: string[] }>(token);
-            const { permissions, roles } = options;
+            const user = jwtDecode<{ permissoes: string[]; cargos: string[] }>(
+                token
+            );
+            const { permissoes, cargos } = options;
             const userHasValidPermissions = validadeUserPermissions({
                 user,
-                permissions,
-                roles,
+                permissoes,
+                cargos,
             });
 
             if (!userHasValidPermissions) {
                 return {
                     redirect: {
-                        destination: "",
+                        destination: "/",
                         permanent: false,
                     },
                 };
