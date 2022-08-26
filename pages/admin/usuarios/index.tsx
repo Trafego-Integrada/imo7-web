@@ -192,6 +192,9 @@ const Usuarios = () => {
                                         }}
                                         _focus={{ bg: "none" }}
                                         _active={{ bg: "none" }}
+                                        onClick={() =>
+                                            modalusuarios.current.onOpen()
+                                        }
                                     >
                                         Novo usuário <IoAddOutline />
                                     </Button>
@@ -219,7 +222,7 @@ const Usuarios = () => {
                                         <Tr key={item.id}>
                                             <Td>{item.nome}</Td>
                                             <Td>{item.email}</Td>
-                                            <Td></Td>
+                                            <Td>{item.celular}</Td>
                                             <Td>
                                                 <IconButton
                                                     as={MdPageview}

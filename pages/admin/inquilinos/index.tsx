@@ -32,6 +32,7 @@ import { Layout } from "@/components/Layout/layout";
 import { ModalInquilinos } from "@/components/Modals/inquilinos";
 import { listarUsuarios } from "@/services/models/usuario";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
+import { ModalUsuarios } from "@/components/Modals/usuarios";
 
 const Inquilinos = () => {
     const modalinquilinos = useRef();
@@ -263,7 +264,7 @@ const Inquilinos = () => {
                     </Box>
                 </Box>
 
-                <ModalInquilinos ref={modalinquilinos} />
+                <ModalUsuarios ref={modalinquilinos} />
             </Layout>
         </>
     );

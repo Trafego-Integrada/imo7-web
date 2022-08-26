@@ -1,4 +1,9 @@
 import {
+    atualizarUsuario,
+    buscarUsuario,
+    cadastrarUsuario,
+} from "@/services/models/usuario";
+import {
     Button,
     Grid,
     GridItem,
@@ -14,85 +19,202 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
-    useDisclosure
+    useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
-import { forwardRef, useImperativeHandle } from "react"
+import { forwardRef, useImperativeHandle } from "react";
+import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 import { FormInput } from "../Form/FormInput";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { queryClient } from "@/services/queryClient";
 
+const schema = yup.object({
+    nome: yup.string().required("Campo Obrigatório"),
+    email: yup.string().required("Campo Obrigatório"),
+    documento: yup.string().required("Campo Obrigatório"),
+    senha: yup.string(),
+    confirmarSenha: yup
+        .string()
+        .oneOf([yup.ref("senha")], "A senha deve ser a mesma"),
+});
 
-const ModalBase = ({ }, ref) => {
+const ModalBase = ({}, ref) => {
+    const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        control,
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const buscar = useMutation(buscarUsuario, {
+        onSuccess: (data) => {
+            reset(data);
+            onOpen();
+        },
+    });
+    const cadastrar = useMutation(cadastrarUsuario, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["usuarios"]);
+            toast({ title: "Cadastrado com sucesso", status: "success" });
+            onClose();
+        },
+    });
+    const atualizar = useMutation(atualizarUsuario, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["usuarios"]);
+            toast({ title: "Atualizado com sucesso", status: "success" });
+            onClose();
+        },
+    });
+
+    const onSubmit = async (data) => {
+        try {
+            if (data.id) {
+                await atualizar.mutateAsync(data);
+            } else {
+                await cadastrar.mutateAsync(data);
+            }
+        } catch (error) {
+            toast({ title: "Ocorreu um erro", status: "error" });
+        }
+    };
 
     useImperativeHandle(ref, () => ({
-        onOpen: (id = null) => {
+        onOpen: async (id = null) => {
             if (id) {
-                console.log('Buscando dados no sistema');
-                onOpen();
+                await buscar.mutateAsync(id);
             } else {
+                reset({});
                 onOpen();
             }
-        }
-    }))
+        },
+    }));
 
-    return <>
+    return (
+        <>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent minW="60%">
+                    <ModalHeader>Usuário</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Tabs variant="unstyled">
+                            <TabList>
+                                <Tab
+                                    _selected={{
+                                        color: "white",
+                                        bg: "blue.500",
+                                    }}
+                                >
+                                    Dados
+                                </Tab>
+                                <Tab
+                                    _selected={{
+                                        color: "white",
+                                        bg: "blue.500",
+                                    }}
+                                >
+                                    Permissionamento
+                                </Tab>
+                            </TabList>
+                            <TabPanels>
+                                <TabPanel>
+                                    <Grid
+                                        gap={5}
+                                        templateColumns={{
+                                            sm: "repeat(1, 1fr)",
+                                            md: "repeat(2, 1fr)",
+                                            lg: "repeat(3, 1fr)",
+                                        }}
+                                        as="form"
+                                        id="formUsuario"
+                                        onSubmit={handleSubmit(onSubmit)}
+                                    >
+                                        <GridItem>
+                                            <FormInput
+                                                label="Nome"
+                                                placeholder="..."
+                                                {...register("nome")}
+                                                error={errors.nome?.message}
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <FormInput
+                                                label="CPF"
+                                                placeholder="..."
+                                                {...register("documento")}
+                                                error={
+                                                    errors.documento?.message
+                                                }
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <FormInput
+                                                label="Email"
+                                                placeholder="..."
+                                                {...register("email")}
+                                                error={errors.email?.message}
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <FormInput
+                                                label="celular"
+                                                placeholder="..."
+                                                {...register("celular")}
+                                                error={errors.celular?.message}
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <FormInput
+                                                type="password"
+                                                label="Senha"
+                                                placeholder="..."
+                                                {...register("senha")}
+                                                error={errors.senha?.message}
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <FormInput
+                                                type="password"
+                                                label="Confirmar senha"
+                                                placeholder="..."
+                                                {...register("confirmarSenha")}
+                                                error={
+                                                    errors.confirmarSenha
+                                                        ?.message
+                                                }
+                                            />
+                                        </GridItem>
+                                    </Grid>
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+                    </ModalBody>
 
-        <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent minW='60%'>
-                <ModalHeader>Usuário Fernando Camargo</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <Tabs variant='unstyled'>
-                        <TabList>
-                            <Tab _selected={{ color: 'white', bg: 'blue.500' }}>Dados</Tab>
-                            <Tab _selected={{ color: 'white', bg: 'blue.500' }}>Permissionamento</Tab>
-                        </TabList>
-                        <TabPanels>
-                            <TabPanel>
-                                <Grid
-                                    gap={5}
-                                    templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}>
-                                    <GridItem>
-                                        <FormInput
-                                            label='Nome'
-                                            placeholder='...'
-                                        />
-                                    </GridItem>
-                                    <GridItem>
-                                        <FormInput
-                                            label='Fone'
-                                            placeholder='...'
-                                        />
-                                    </GridItem>
-                                    <GridItem>
-                                        <FormInput
-                                            label='Email/Login'
-                                            placeholder='...'
-                                        />
-                                    </GridItem>
-
-                                    <GridItem>
-                                        <FormInput
-                                            label='Senha'
-                                            placeholder='...'
-                                        />
-                                    </GridItem>
-
-                                </Grid>
-                            </TabPanel>
-                        </TabPanels>
-                    </Tabs>
-                </ModalBody>
-
-                <ModalFooter>
-                    <Button variant='ghost' onClick={onClose}>
-                        Fechar
-                    </Button>
-                    <Button colorScheme='blue' mr={3}>Confirmar</Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
-    </>
-}
+                    <ModalFooter>
+                        <Button variant="ghost" onClick={onClose}>
+                            Fechar
+                        </Button>
+                        <Button
+                            colorScheme="blue"
+                            mr={3}
+                            type="submit"
+                            form="formUsuario"
+                        >
+                            Confirmar
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </>
+    );
+};
 export const ModalUsuarios = forwardRef(ModalBase);

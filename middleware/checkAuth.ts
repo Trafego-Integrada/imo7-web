@@ -6,9 +6,7 @@ import { auth } from "../config/config";
 import prisma from "../lib/prisma";
 import { DecodedToken, NextApiRequestWithUser } from "../types/auth";
 
-const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
-
-handler.use(async (req, res, next) => {
+export const checkAuth = async (req, res, next) => {
     const { authorization } = req.headers;
 
     if (!authorization) {
@@ -37,6 +35,10 @@ handler.use(async (req, res, next) => {
 
         const user = await prisma.usuario.findUnique({
             where: { documento: decoded.sub },
+            include: {
+                conta: true,
+                imobiliaria: true,
+            },
         });
 
         req.user = user;
@@ -49,6 +51,4 @@ handler.use(async (req, res, next) => {
             message: "Token invalid.",
         });
     }
-});
-
-export default handler;
+};

@@ -1,8 +1,9 @@
+import { checkAuth } from "@/middleware/checkAuth";
 import nextConnect from "next-connect";
 import prisma from "../../../lib/prisma";
-
+import bcrypt from "bcryptjs";
 const handle = nextConnect();
-
+handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
         const {
@@ -14,6 +15,9 @@ handle.get(async (req, res) => {
             linhas,
             inquilino,
             proprietario,
+            adminImobiliaria,
+            admConta,
+            adm,
         } = req.query;
 
         let filtroQuery = {};
@@ -79,6 +83,44 @@ handle.get(async (req, res) => {
                 },
             };
         }
+        if (adm) {
+            filtroQuery = {
+                ...filtroQuery,
+                cargos: {
+                    some: {
+                        nome: "adm",
+                    },
+                },
+            };
+        }
+        if (admConta) {
+            filtroQuery = {
+                ...filtroQuery,
+                conta: {
+                    some: {
+                        id: req.user.conta?.id,
+                    },
+                },
+                cargos: {
+                    some: {
+                        nome: "conta",
+                    },
+                },
+            };
+        }
+        if (adminImobiliaria) {
+            filtroQuery = {
+                ...filtroQuery,
+                imobiliaria: {
+                    id: req.user.imobiliaria?.id,
+                },
+                cargos: {
+                    some: {
+                        nome: "imobiliaria",
+                    },
+                },
+            };
+        }
 
         let paginacao = {};
         if (pagina && linhas) {
@@ -109,6 +151,67 @@ handle.get(async (req, res) => {
                 data,
             },
         });
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error.message,
+        });
+    }
+});
+
+handle.post(async (req, res) => {
+    try {
+        const {
+            nome,
+            email,
+            documento,
+            imobiliariaId,
+            senha,
+            profissao,
+            endereco,
+            cidade,
+            bairro,
+            cep,
+            estado,
+            celular,
+            telefone,
+        } = req.body;
+
+        const usuarioExiste = await prisma.usuario.findFirst({
+            where: {
+                OR: [
+                    {
+                        email,
+                    },
+                    { documento },
+                ],
+            },
+        });
+
+        if (usuarioExiste) {
+            res.send(usuarioExiste);
+        } else {
+            const data = await prisma.usuario.create({
+                data: {
+                    nome,
+                    email,
+                    documento,
+                    senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
+                    imobiliaria: {
+                        connect: {
+                            id: req.user.imobiliaria?.id,
+                        },
+                    },
+                    cargos: {
+                        connect: {
+                            id: 2,
+                        },
+                    },
+                },
+            });
+
+            res.send(data);
+        }
     } catch (error) {
         res.status(500).send({
             success: false,

@@ -1,31 +1,62 @@
 import nextConnect from "next-connect";
-import prisma from "../../../../lib/prisma";
+import bcrypt from "bcryptjs";
+import prisma from "@/lib/prisma";
+import { checkAuth } from "@/middleware/checkAuth";
 
 const handle = nextConnect();
-
+handle.use(checkAuth);
 handle.get(async (req, res) => {
     const { id } = req.query;
-    const data = await prisma.contrato.findUnique({
+    const data = await prisma.usuario.findFirst({
         where: {
             id: Number(id),
         },
-        include: {
-            AnexoInteracao: true,
-            boletos: true,
-            chamados: true,
-            conta: true,
-            extratos: true,
-            fiadores: true,
-            imobiliaria: true,
-            imovel: true,
-            inquilinos: true,
-            proprietarios: true,
+    });
+    if (!data) {
+        res.status(400).json({
+            success: false,
+            errorCode: "U01",
+            message: "Usuário não encontrado",
+        });
+    }
+    res.send(data);
+});
+
+handle.post(async (req, res) => {
+    const { id } = req.query;
+    const { nome, email, documento, celular, senha } = req.body;
+    const data = await prisma.usuario.update({
+        where: {
+            id: Number(id),
+        },
+        data: {
+            nome,
+            email,
+            documento,
+            celular,
         },
     });
-    res.send({
-        success: true,
-        data,
+    res.send(data);
+});
+
+handle.delete(async (req, res) => {
+    const { id } = req.query;
+    const data = await prisma.usuario.findFirst({
+        where: {
+            id: Number(id),
+        },
     });
+    if (!data) {
+        res.status(400).json({
+            success: false,
+            errorCode: "U01",
+            message: "Usuário não encontrado",
+        });
+    }
+    await prisma.usuario.delete({
+        where: { id: Number(id) },
+    });
+    res.send();
 });
 
 export default handle;

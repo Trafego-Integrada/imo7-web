@@ -38,6 +38,7 @@ export const LayoutPainel = ({ children }) => {
                         </MenuButton>
                         <MenuList>
                             {contratos &&
+                                contratos.length > 0 &&
                                 contratos.map((item, key) => (
                                     <MenuItem key={key}>Download</MenuItem>
                                 ))}

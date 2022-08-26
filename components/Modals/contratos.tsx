@@ -1,3 +1,4 @@
+import { formatoData, formatoValor } from "@/helpers/helpers";
 import {
     Box,
     Button,
@@ -57,7 +58,7 @@ const ModalBase = ({}, ref) => {
             if (id) {
                 await buscar.mutateAsync(id, {
                     onSuccess: (data) => {
-                        setContrato(data.data);
+                        reset(data.data);
                     },
                 });
                 onOpen();
@@ -119,53 +120,36 @@ const ModalBase = ({}, ref) => {
                                                 <Text fontSize="sm">
                                                     Nº do Contrato
                                                 </Text>
-                                                <Text>{contrato?.codigo}</Text>
+                                                <Text>{watch("codigo")}</Text>
                                             </Box>
-                                            <FormInput
-                                                label="Nº do contrato"
-                                                placeholder="ex: 23242424..."
-                                                {...register("codigo")}
-                                                error={errors.codigo?.message}
-                                            />
-                                        </GridItem>
-                                        <GridItem>
-                                            <FormSelect
-                                                label="Tipo"
-                                                placeholder="selecione..."
-                                                {...register("tipo")}
-                                                error={errors.tipo?.message}
-                                            >
-                                                <option value="">
-                                                    Residencial
-                                                </option>
-                                            </FormSelect>
-                                        </GridItem>
-                                        <GridItem>
-                                            <FormInput
-                                                label="Reponsável"
-                                                placeholder="digite o responsável..."
-                                            />
                                         </GridItem>
 
                                         <GridItem>
-                                            <FormInput
-                                                label="Propietário"
-                                                placeholder="digite o nome do propietário..."
-                                            />
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Data Fim
+                                                </Text>
+                                                <Text>
+                                                    {watch("dataFim") &&
+                                                        formatoData(
+                                                            watch("dataFim")
+                                                        )}
+                                                </Text>
+                                            </Box>
                                         </GridItem>
+
                                         <GridItem>
-                                            <FormInput
-                                                label="Inquilino"
-                                                placeholder="digite o nome do inquilino..."
-                                            />
-                                        </GridItem>
-                                        <GridItem>
-                                            <FormInput
-                                                label="Fiador"
-                                                placeholder="digite o nome do fiador..."
-                                            />
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Dia Recebimento
+                                                </Text>
+                                                <Text>
+                                                    {watch("diaRecebimento")}
+                                                </Text>
+                                            </Box>
                                         </GridItem>
                                     </Grid>
+
                                     <Title children="Gerais" />
                                     <Grid
                                         gap={5}
@@ -176,13 +160,24 @@ const ModalBase = ({}, ref) => {
                                         }}
                                     >
                                         <GridItem>
-                                            <FormInput
-                                                label="Taxa administrativa"
-                                                placeholder="ex: 10%..."
-                                            />
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Taxa Administrativa
+                                                </Text>
+                                                <Text>{watch("taxaAdm")}%</Text>
+                                            </Box>
                                         </GridItem>
                                         <GridItem>
-                                            <FormDate label="Início" />
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Data de Início
+                                                </Text>
+                                                <Text>
+                                                    {formatoData(
+                                                        watch("dataInicio")
+                                                    )}
+                                                </Text>
+                                            </Box>
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
@@ -218,34 +213,146 @@ const ModalBase = ({}, ref) => {
                                         }}
                                     >
                                         <GridItem>
-                                            <FormInput
-                                                label="Dia de vencimento"
-                                                placeholder="ex: 20"
-                                            />
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Valor do Aluguel
+                                                </Text>
+                                                <Text>
+                                                    {formatoValor(
+                                                        Number(
+                                                            watch(
+                                                                "valorAluguel"
+                                                            )
+                                                        )
+                                                    )}
+                                                </Text>
+                                            </Box>
                                         </GridItem>
                                         <GridItem>
-                                            <FormInput
-                                                label="Nº de parcelas pagas"
-                                                placeholder="ex: 53"
-                                            />
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Dia Vencimento
+                                                </Text>
+                                                <Text>
+                                                    {watch("diaVencimento")}
+                                                </Text>
+                                            </Box>
                                         </GridItem>
                                         <GridItem>
-                                            <FormInput
-                                                label="Multa"
-                                                placeholder="20%"
-                                            />
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Ultima parcela paga
+                                                </Text>
+                                                <Text>
+                                                    {watch("ultimaParcPaga")}
+                                                </Text>
+                                            </Box>
                                         </GridItem>
                                         <GridItem>
-                                            <FormSelect
-                                                label="Forma de pagamento"
-                                                placeholder="selecione..."
-                                            >
-                                                <option value="">
-                                                    Paga na imobiliária
-                                                </option>
-                                            </FormSelect>
+                                            <Box>
+                                                <Text fontSize="sm">Multa</Text>
+                                                <Text>{watch("multa")}</Text>
+                                            </Box>
+                                        </GridItem>
+                                        <GridItem>
+                                            <GridItem>
+                                                <Box>
+                                                    <Text fontSize="sm">
+                                                        Forma de pagamento
+                                                    </Text>
+                                                    <Text></Text>
+                                                </Box>
+                                            </GridItem>
                                         </GridItem>
                                     </Grid>
+                                    <Box py={2}>
+                                        <Text fontWeight="bold">
+                                            Proprietários
+                                        </Text>
+                                        <Table size="sm" variant="striped">
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Nome</Th>
+                                                    <Th>CPF</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody>
+                                                {watch("proprietarios") &&
+                                                    watch("proprietarios").map(
+                                                        (item) => (
+                                                            <Tr key={item.id}>
+                                                                <Td>
+                                                                    {item.nome}
+                                                                </Td>
+                                                                <Td>
+                                                                    {
+                                                                        item.documento
+                                                                    }
+                                                                </Td>
+                                                            </Tr>
+                                                        )
+                                                    )}
+                                            </Tbody>
+                                        </Table>
+                                    </Box>
+                                    <Box py={2}>
+                                        <Text fontWeight="bold">Fiadores</Text>
+                                        <Table size="sm" variant="striped">
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Nome</Th>
+                                                    <Th>CPF</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody>
+                                                {watch("fiadores") &&
+                                                    watch("fiadores").map(
+                                                        (item) => (
+                                                            <Tr key={item.id}>
+                                                                <Td>
+                                                                    {item.nome}
+                                                                </Td>
+                                                                <Td>
+                                                                    {
+                                                                        item.documento
+                                                                    }
+                                                                </Td>
+                                                            </Tr>
+                                                        )
+                                                    )}
+                                            </Tbody>
+                                        </Table>
+                                    </Box>
+                                    <Box py={2}>
+                                        <Text fontWeight="bold">
+                                            Inquilinos
+                                        </Text>
+                                        <Table size="sm" variant="striped">
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Nome</Th>
+                                                    <Th>CPF</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody>
+                                                {watch("inquilinos") &&
+                                                    watch("inquilinos").map(
+                                                        (item) => (
+                                                            <Tr key={item.id}>
+                                                                <Td>
+                                                                    {item.nome}
+                                                                </Td>
+                                                                <Td>
+                                                                    {
+                                                                        item.documento
+                                                                    }
+                                                                </Td>
+                                                            </Tr>
+                                                        )
+                                                    )}
+                                            </Tbody>
+                                        </Table>
+                                    </Box>
                                 </TabPanel>
                                 <TabPanel>
                                     <Grid d="flex" gap={3}>
