@@ -26,6 +26,8 @@ handler.get(async (req, res) => {
         email: user.email,
         permissoes: user.permissoes,
         cargos: user.cargos,
+        imobiliaria: user.imobiliaria,
+        imobiliariaId: user.imobiliariaId,
     });
 });
 

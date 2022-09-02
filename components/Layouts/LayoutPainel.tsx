@@ -12,13 +12,15 @@ import {
     Text,
 } from "@chakra-ui/layout";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
+import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { useAuth } from "../../hooks/useAuth";
 import { listarContratos } from "../../services/models/contrato";
 import { NextChakraLink } from "../NextChakraLink";
 
 export const LayoutPainel = ({ children }) => {
-    const { usuario } = useAuth();
+    const router = useRouter();
+    const { usuario, signOut } = useAuth();
     const { data: contratos } = useQuery(["meusContratos"], listarContratos);
     return (
         <Box bg="gray.100" minH="100vh">
@@ -47,35 +49,48 @@ export const LayoutPainel = ({ children }) => {
                     <Menu>
                         <MenuButton>
                             <Flex gridGap={2}>
-                                <Avatar size="sm" name={usuario.nome} />
+                                <Avatar
+                                    size="sm"
+                                    name={usuario.nome}
+                                    src={usuario.avatar}
+                                />
                                 <Flex
                                     flexDirection="column"
                                     justify="center"
                                     textAlign="left"
+                                    color="white"
                                 >
-                                    <Text lineHeight="none">Bem vindo,</Text>
-                                    <Text lineHeight="none">
+                                    <Text lineHeight="none" fontSize="xs">
+                                        Bem vindo,
+                                    </Text>
+                                    <Text
+                                        lineHeight="none"
+                                        fontWeight="bold"
+                                        fontSize="sm"
+                                    >
                                         {usuario.nome}
                                     </Text>
                                 </Flex>
                             </Flex>
                         </MenuButton>
                         <MenuList>
-                            {usuario.cargos?.find((i) => i == "Admin") && (
-                                <MenuItem
-                                    as={NextChakraLink}
-                                    href="/painel/admin"
-                                >
-                                    Painel Admin
+                            {usuario.cargos?.find(
+                                (i) =>
+                                    i == "adm" ||
+                                    i == "conta" ||
+                                    i == "imobiliaria"
+                            ) && (
+                                <MenuItem as={NextChakraLink} href="/admin">
+                                    Painel Administrativo
                                 </MenuItem>
                             )}
 
-                            <MenuItem>Sair</MenuItem>
+                            <MenuItem onClick={() => signOut()}>Sair</MenuItem>
                         </MenuList>
                     </Menu>
                 </Container>
             </Stack>
-            <Stack as="aside" h={32} bg="blue.500">
+            <Stack as="aside" h={24} bg="blue.500">
                 <Container
                     maxW="container.xl"
                     as={Flex}
@@ -86,9 +101,36 @@ export const LayoutPainel = ({ children }) => {
                         <Heading color="white">Imo7</Heading>
                     </Box>
                     <Flex w="full" gridGap={8} color="white" justify="center">
-                        <NextChakraLink href="/painel">Home</NextChakraLink>
-                        <NextChakraLink href="/painel">Faturas</NextChakraLink>
-                        <NextChakraLink href="/painel">Chamados</NextChakraLink>
+                        <NextChakraLink
+                            href="/"
+                            fontWeight={
+                                router.asPath == "/" ? "bold" : "normal"
+                            }
+                            letterSpacing="wider"
+                            _hover={{ fontWeight: "bold" }}
+                        >
+                            Home
+                        </NextChakraLink>
+                        <NextChakraLink
+                            href="/faturas"
+                            fontWeight={
+                                router.asPath == "/faturas" ? "bold" : "normal"
+                            }
+                            letterSpacing="wider"
+                            _hover={{ fontWeight: "bold" }}
+                        >
+                            Faturas
+                        </NextChakraLink>
+                        <NextChakraLink
+                            href="/chamados"
+                            fontWeight={
+                                router.asPath == "/chamados" ? "bold" : "normal"
+                            }
+                            letterSpacing="wider"
+                            _hover={{ fontWeight: "bold" }}
+                        >
+                            Chamados
+                        </NextChakraLink>
                     </Flex>
                 </Container>
             </Stack>

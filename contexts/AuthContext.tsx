@@ -43,7 +43,7 @@ export async function signOut(ctx = undefined) {
     destroyCookie(ctx, "imo7.refreshToken");
 
     authChannel.postMessage("signOut");
-    Router.push("/auth/signin");
+    Router.push("/login");
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -86,6 +86,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                         email,
                         permissoes,
                         cargos,
+                        imobiliaria,
+                        imobiliariaId,
+                        conta,
                     } = response.data;
                     setUsuario({
                         id,
@@ -95,6 +98,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                         email,
                         permissoes,
                         cargos,
+                        imobiliaria,
+                        imobiliariaId,
+                        conta,
                     });
                 })
                 .catch(() => {
@@ -119,6 +125,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 refreshToken,
                 permissoes,
                 cargos,
+                imobiliaria,
+                imobiliariaId,
+                conta,
             } = response.data;
             setCookie(undefined, "imo7.token", token, {
                 maxAge: 60 * 60 * 24 * 30,
@@ -136,6 +145,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 email,
                 permissoes,
                 cargos,
+                imobiliaria,
+                imobiliariaId,
+                conta,
             });
 
             api.defaults.headers["Authorization"] = `Bearer ${token}`;
@@ -144,8 +156,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 Router.push("/admin");
             } else if (cargos.includes("imobiliaria")) {
                 Router.push("/admin");
+            } else if (cargos.includes("conta")) {
+                Router.push("/admin");
             } else {
-                Router.push("/painel");
+                Router.push("/");
             }
             authChannel.postMessage("signIn");
         } catch (error) {

@@ -195,5 +195,5 @@ export const getServerSideProps = withSSRAuth(
             props: {},
         };
     },
-    ["imobiliaria"]
+    { cargos: ["imobiliaria", "adm", "conta"] }
 );

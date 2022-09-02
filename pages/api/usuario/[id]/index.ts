@@ -11,6 +11,17 @@ handle.get(async (req, res) => {
         where: {
             id: Number(id),
         },
+        include: {
+            cargos: true,
+            boletos: true,
+            conta: true,
+            contratosFiador: true,
+            contratosInquilino: true,
+            contratosProprietario: true,
+            imobiliaria: true,
+            imoveis: true,
+            permissoes: true,
+        },
     });
     if (!data) {
         res.status(400).json({

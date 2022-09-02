@@ -15,3 +15,11 @@ const Imoveis = () => {
     );
 };
 export default Imoveis;
+export const getServerSideProps = withSSRAuth(
+    async (ctx) => {
+        return {
+            props: {},
+        };
+    },
+    { cargos: ["imobiliaria", "adm", "conta"] }
+);

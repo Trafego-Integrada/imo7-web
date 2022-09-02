@@ -14,8 +14,8 @@ export const Header = ({ title, isFetching, children }) => {
                     <Flex gridGap={2} align="center">
                         <Text
                             fontWeight="semibold"
-                            fontSize="lg"
-                            color="gray.700"
+                            fontSize="2xl"
+                            color="gray.600"
                         >
                             {title}
                         </Text>
@@ -24,17 +24,6 @@ export const Header = ({ title, isFetching, children }) => {
 
                     {children}
                 </Box>
-                <Menu>
-                    <MenuButton>
-                        <Avatar name={usuario?.nome} size="sm" />
-                    </MenuButton>
-                    <MenuList>
-                        <MenuItem as={NextChakraLink} href="/painel">
-                            Painel Cliente
-                        </MenuItem>
-                        <MenuItem>Sair</MenuItem>
-                    </MenuList>
-                </Menu>
             </Flex>
         </Flex>
     );

@@ -30,7 +30,7 @@ import { Layout } from "@/components/Layout/layout";
 import { ModalPropietarios } from "@/components/Modals/propietarios";
 import { listarUsuarios } from "@/services/models/usuario";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
-import { ModalUsuarios } from "@/components/Modals/usuarios";
+import { Usuario } from "@/components/Modals/Usuario";
 
 const Propietarios = () => {
     const modalpropietarios = useRef();
@@ -60,7 +60,7 @@ const Propietarios = () => {
     );
     return (
         <>
-            <Layout title="Propietários">
+            <Layout title="Proprietários">
                 <Box p={5}>
                     <Box bg="graylight" p={5}>
                         <Grid
@@ -252,7 +252,7 @@ const Propietarios = () => {
                     </Box>
                 </Box>
             </Layout>
-            <ModalUsuarios ref={modalpropietarios} />
+            <Usuario ref={modalpropietarios} />
         </>
     );
 };
@@ -263,5 +263,5 @@ export const getServerSideProps = withSSRAuth(
             props: {},
         };
     },
-    ["imobiliaria"]
+    { cargos: ["imobiliaria", "adm", "conta"] }
 );

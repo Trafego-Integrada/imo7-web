@@ -22,3 +22,11 @@ export const formatoValor = (valor) => {
         currency: "BRL",
     }).format(valor);
 };
+export function includesAll(arr: any[], items: any[]) {
+    for (const item of items) {
+        if (!arr.includes(item)) {
+            return false;
+        }
+    }
+    return true;
+}

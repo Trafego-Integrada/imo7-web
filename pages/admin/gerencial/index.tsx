@@ -128,7 +128,7 @@ const Gerencial = () => {
                     <Flex align="center">
                         <Title children="Arquivos" />
                         <Text pl="2" color="red" fontSize="lg">
-                            | Não processados{" "}
+                            | Não processados
                         </Text>
                     </Flex>
                     <Box bg="graylight" p={5} overflowX="auto">
@@ -166,5 +166,5 @@ export const getServerSideProps = withSSRAuth(
             props: {},
         };
     },
-    ["imobiliaria"]
+    { cargos: ["imobiliaria", "adm", "conta"] }
 );

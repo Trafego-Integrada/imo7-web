@@ -1,85 +1,146 @@
-import { Box, Button, Flex, FormControl, Img, Text } from "@chakra-ui/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
-import { FaRegUserCircle } from "react-icons/fa";
-import { RiLockPasswordFill } from "react-icons/ri";
-import { FormInput } from "../components/Form/FormInput";
-import { Logo } from "../components/Menu/Logo";
+import {
+    Box,
+    Button,
+    Flex,
+    Grid,
+    GridItem,
+    Icon,
+    Image,
+    Stack,
+    Text,
+    VStack,
+} from "@chakra-ui/react";
 
+import { useContext, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import { withSSRGuest } from "../utils/withSSRGuests";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { MdFingerprint } from "react-icons/md";
+import { Input } from "../components/Forms/Input";
+import { FaFacebook, FaGoogle, FaSignInAlt } from "react-icons/fa";
+import { CgPassword } from "react-icons/cg";
+import BeatLoader from "react-spinners/BeatLoader";
+import { NextPage } from "next";
+import { Heading } from "@chakra-ui/layout";
 
-const Login = () => {
-    const [show, setShow] = React.useState(false)
-    const handleClick = () => setShow(!show)
-
-    const router = useRouter();
-    return <>
-        <Flex
-            w='100%'
-        >
-            <Box
-                d={{ sm: 'none', lg: 'flex' }}
-                w={{ md: '40%', lg: '70%' }}
-                minH='100vh'
-            >
-                <Img src='bglogin.jpg' />
-            </Box>
-            <Box
-                w={{ sm: '100%', md: '100%', lg: '30%' }}
-                minH='100vh'
-                bg='bluelight'
-                d='flex'
-                alignItems='center'
-                justifyContent='center'
-            >
-                <Box d='flex' flexDir='column' justifyContent='center' >
-                    <Logo />
-                    <Text fontSize='2xl' color='white' textAlign='center'>Faça seu login</Text>
-
-
-                    <Box p={5}>
-                        <FormControl d='flex' flexDir='column' gap={5} >
-
-                            <FormInput
-                                label='Email'
-                                placeholder='endereço de email...'
-                                leftAddon={<FaRegUserCircle color="gray.300" />}
-                                color='white'
-
-                            />
-                            <FormInput
-                                color='white'
-                                label='Senha'
-                                placeholder='digite sua senha...'
-                                type={show ? "text" : "password"}
-                                leftAddon={
-
-                                    <RiLockPasswordFill color="gray.300" />
-                                }
-                                rightAddon={
-                                    <Button h="1.75rem" size="sm" onClick={handleClick}>
-                                        {show ? 'Ocultar' : 'Mostrar'}
-                                    </Button>}
-
-                            />
-                            <Box d='flex' justifyContent='flex-end'>
-                                <Text color='white'>Esqueceu a senha?</Text>
-                            </Box>
-
-                            <Button bg='orange' color='white' onClick={() => router.back()}>
-                                Entrar
-                            </Button>
-                        </FormControl>
-                        <Text color='white'>Não é registrado ainda? Entre em contato <Link color='orange' href='https://trafegointegrada.com.br/'>Trafego Soluções</Link></Text>
-
-                    </Box>
-
-
-
-                </Box>
-            </Box>
-        </Flex>
-
-    </>
+interface CredentialsProps {
+    documento: string;
+    password: string;
 }
-export default Login;
+
+const schema = yup.object().shape({
+    documento: yup.string().required("O CPF é obrigatório"),
+    password: yup.string().required("A senha é obrigatória"),
+});
+
+const SignIn: NextPage = () => {
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
+    const [error, setError] = useState(null);
+    const { signIn } = useContext(AuthContext);
+    const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
+        console.log(data);
+        try {
+            setError(null);
+            await signIn(data);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    return (
+        <Stack bg="gray.50" w="100vw" h="100vh">
+            <Grid templateColumns="repeat(2, 1fr)" w="full" h="full">
+                <GridItem
+                    display={{ base: "none", lg: "flex" }}
+                    bg="blue.500"
+                    alignItems="center"
+                    justifyContent="center"
+                    p={4}
+                >
+                    <Heading size="4xl" display="flex" color="white">
+                        Imo7
+                    </Heading>
+                </GridItem>
+                <GridItem w="full">
+                    <VStack
+                        as="form"
+                        onSubmit={handleSubmit(onSubmit)}
+                        w={{ base: "100vw", lg: "full" }}
+                        h="full"
+                        align="center"
+                        justify="center"
+                        gridGap={4}
+                        p={4}
+                    >
+                        <Box
+                            display={{ base: "block", lg: "none" }}
+                            px={8}
+                            py={4}
+                        >
+                            <Heading size="4xl" display="flex" color="blue.500">
+                                Imo7
+                            </Heading>
+                        </Box>
+                        <Text>Faça seu login</Text>
+                        {error && (
+                            <Flex
+                                color="red"
+                                borderWidth={1}
+                                borderColor="red"
+                                w={96}
+                                p={2}
+                            >
+                                <Text w="full" textAlign="center">
+                                    {error}
+                                </Text>
+                            </Flex>
+                        )}
+                        <Input
+                            w={96}
+                            type="text"
+                            leftIcon={<Icon as={MdFingerprint} w={6} h={6} />}
+                            placeholder="Seu CPF"
+                            {...register("documento")}
+                            error={errors.documento?.message}
+                        />
+                        <Input
+                            type="password"
+                            w={96}
+                            leftIcon={<Icon as={CgPassword} w={6} h={6} />}
+                            placeholder="Sua senha"
+                            {...register("password")}
+                            error={errors.password?.message}
+                        />
+                        <Button
+                            type="submit"
+                            borderRadius={0}
+                            colorScheme="blue"
+                            rightIcon={<Icon as={FaSignInAlt} />}
+                            isLoading={isSubmitting}
+                            spinner={<BeatLoader size={8} color="white" />}
+                        >
+                            Entrar
+                        </Button>
+                    </VStack>
+                    <VStack></VStack>
+                </GridItem>
+            </Grid>
+        </Stack>
+    );
+};
+
+export default SignIn;
+
+export const getServerSideProps = withSSRGuest<any>(async (ctx) => {
+    return {
+        props: {},
+    };
+});

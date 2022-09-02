@@ -1,15 +1,8 @@
 import { GetServerSideProps, NextPage } from "next";
 import {
     Box,
-    Stack,
-    Container,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
     Flex,
     Heading,
-    Avatar,
     Text,
     Grid,
     GridItem,
@@ -202,11 +195,8 @@ const Dashbord: NextPage = () => {
 
 export default Dashbord;
 
-export const getServerSideProps = withSSRAuth(
-    async (ctx) => {
-        return {
-            props: {},
-        };
-    },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);
+export const getServerSideProps: GetServerSideProps = withSSRAuth((ctx) => {
+    return {
+        props: {},
+    };
+});

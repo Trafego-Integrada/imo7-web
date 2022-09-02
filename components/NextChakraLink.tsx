@@ -31,9 +31,7 @@ export const NextChakraLink = ({
             shallow={shallow}
             prefetch={prefetch}
         >
-            <ChakraLink {...chakraProps} _hover={{ textDecor: "none" }}>
-                {children}
-            </ChakraLink>
+            <ChakraLink {...chakraProps}>{children}</ChakraLink>
         </NextLink>
     );
 };

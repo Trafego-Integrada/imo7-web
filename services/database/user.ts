@@ -21,6 +21,8 @@ export async function getUser({ documento }: GetUserProps) {
                 },
             },
             tokens: true,
+            conta: true,
+            imobiliaria: true,
         },
     });
     if (!user) return null;

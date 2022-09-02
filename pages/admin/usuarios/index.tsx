@@ -28,263 +28,37 @@ import { MdPageview } from "react-icons/md";
 import { useQuery } from "react-query";
 import { FormInput } from "@/components/Form/FormInput";
 import { Layout } from "@/components/Layout/layout";
-import { ModalUsuarios } from "@/components/Modals/usuarios";
+import { ModalUsuarios, Usuario } from "@/components/Modals/Usuario";
 import { listarUsuarios } from "@/services/models/usuario";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
+import { TabelaUsuarios } from "@/components/Tabelas/Usuarios";
+import { useAuth } from "hooks/useAuth";
 
-const Usuarios = () => {
-    const modalusuarios = useRef();
-    const [total, setTotal] = useState();
-    const [filtro, setFiltro] = useState({});
-    const { currentPage, setCurrentPage, pagesCount, pages, pageSize } =
-        usePagination({
-            total: total,
-            initialState: { currentPage: 1, pageSize: 15 },
-        });
-    const { data, isLoading, isFetching } = useQuery(
-        [
-            "usuarios",
-            {
-                ...filtro,
-                linhas: pageSize,
-                pagina: currentPage,
-                adminImobiliaria: true,
-            },
-        ],
-        listarUsuarios,
-        {
-            onSuccess: (data) => {
-                setTotal(data.data.total);
-            },
-        }
-    );
+const Usuarios = ({}) => {
+    const { usuario } = useAuth();
+    console.log(usuario);
     return (
         <>
             <Layout title="Usuários">
-                <Box p={5}>
-                    <Box bg="graylight" p={5}>
-                        <Grid
-                            gap={5}
-                            templateColumns={{
-                                sm: "repeat(1, 1fr)",
-                                md: "repeat(2, 1fr)",
-                                lg: "repeat(3, 1fr)",
-                            }}
-                        >
-                            <GridItem>
-                                <FormInput
-                                    label="Usuários"
-                                    placeholder="digite o nome do propietário..."
-                                    bg="white"
-                                    value={filtro.nome}
-                                    onChange={(e) =>
-                                        setFiltro({
-                                            ...filtro,
-                                            nome: e.target.value,
-                                        })
-                                    }
-                                />
-                            </GridItem>
-                            <GridItem>
-                                <FormInput
-                                    label="Nome"
-                                    placeholder="digite o cpf ou cnpj..."
-                                    bg="white"
-                                    value={filtro.documento}
-                                    onChange={(e) =>
-                                        setFiltro({
-                                            ...filtro,
-                                            documento: e.target.value,
-                                        })
-                                    }
-                                />
-                            </GridItem>
-                            <GridItem>
-                                <FormInput
-                                    label="E-mail"
-                                    placeholder="digite o número do email..."
-                                    bg="white"
-                                    value={filtro.email}
-                                    onChange={(e) =>
-                                        setFiltro({
-                                            ...filtro,
-                                            email: e.target.value,
-                                        })
-                                    }
-                                />
-                            </GridItem>
-                        </Grid>
-                        <Box
-                            w="100%"
-                            mt={5}
-                            d="flex"
-                            gap={5}
-                            justifyContent="flex-end"
-                        >
-                            <Button
-                                size="md"
-                                bg="none"
-                                border="1px solid red"
-                                _hover={{
-                                    bg: "red",
-                                    color: "white",
-                                    cursor: "pointer",
-                                }}
-                                _focus={{ bg: "none" }}
-                                _active={{ bg: "none" }}
-                                color="red"
-                                onClick={() => {
-                                    setFiltro({
-                                        nome: "",
-                                        documento: "",
-                                        email: "",
-                                        filtro: "",
-                                    });
-                                }}
-                            >
-                                Limpar Filtro
-                            </Button>
-
-                            <Button
-                                size="md"
-                                bg="none"
-                                border="1px solid black"
-                                _hover={{
-                                    bg: "black",
-                                    color: "white",
-                                    cursor: "pointer",
-                                }}
-                                _focus={{ bg: "none" }}
-                                _active={{ bg: "none" }}
-                                color="black"
-                            >
-                                Filtrar
-                            </Button>
-                        </Box>
-                    </Box>
-
-                    <Box bg="graylight" overflowX="auto" p={5} mt={5}>
-                        <Box p={5} bg="white">
-                            <Grid templateColumns="repeat(2, 1fr)">
-                                <GridItem>
-                                    <FormInput
-                                        bg="white"
-                                        w="max"
-                                        placeholder="Busca rápida..."
-                                        value={filtro.filtro}
-                                        onChange={(e) =>
-                                            setFiltro({
-                                                ...filtro,
-                                                filtro: e.target.value,
-                                            })
-                                        }
-                                    />
-                                </GridItem>
-                                <GridItem d="flex" justifyContent="flex-end">
-                                    <Button
-                                        bg="none"
-                                        border="1px solid #2F80ED"
-                                        color="bluelight"
-                                        _hover={{
-                                            bg: "bluelight",
-                                            color: "white",
-                                            cursor: "pointer",
-                                        }}
-                                        _focus={{ bg: "none" }}
-                                        _active={{ bg: "none" }}
-                                        onClick={() =>
-                                            modalusuarios.current.onOpen()
-                                        }
-                                    >
-                                        Novo usuário <IoAddOutline />
-                                    </Button>
-                                </GridItem>
-                            </Grid>
-                        </Box>
-
-                        <Table variant="striped" mt={5} bg="white">
-                            <Thead>
-                                <Tr>
-                                    <Th>Usuários</Th>
-                                    <Th>Nome</Th>
-                                    <Th>Fone</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {isLoading ? (
-                                    <Tr>
-                                        <Td colSpan={6} textAlign="center">
-                                            <Spinner />
-                                        </Td>
-                                    </Tr>
-                                ) : data && data.data.data.length > 0 ? (
-                                    data.data.data.map((item) => (
-                                        <Tr key={item.id}>
-                                            <Td>{item.nome}</Td>
-                                            <Td>{item.email}</Td>
-                                            <Td>{item.celular}</Td>
-                                            <Td>
-                                                <IconButton
-                                                    as={MdPageview}
-                                                    color="bluelight"
-                                                    onClick={() =>
-                                                        modalusuarios.current.onOpen(
-                                                            item.id
-                                                        )
-                                                    }
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    ))
-                                ) : (
-                                    <Tr>
-                                        <Td colSpan={6} textAlign="center">
-                                            Não há contratos cadastrados ou
-                                            resultados para o filtro selecionado
-                                        </Td>
-                                    </Tr>
-                                )}
-                            </Tbody>
-                        </Table>
-                        <Flex justify="center" py={4}>
-                            <Pagination
-                                pagesCount={pagesCount}
-                                currentPage={currentPage}
-                                onPageChange={setCurrentPage}
-                            >
-                                <PaginationContainer gridGap={4}>
-                                    <PaginationPrevious
-                                        as={IconButton}
-                                        icon={<Icon as={FiArrowLeft} />}
-                                    ></PaginationPrevious>
-                                    {/* <PaginationPageGroup gridGap={4}>
-                                        {pages.map((page: number) => (
-                                            <PaginationPage
-                                                key={`pagination_page_${page}`}
-                                                page={page}
-                                            />
-                                        ))}
-                                    </PaginationPageGroup> */}
-                                    <PaginationNext
-                                        as={IconButton}
-                                        icon={<Icon as={FiArrowRight} />}
-                                    ></PaginationNext>
-                                </PaginationContainer>
-                            </Pagination>
-                        </Flex>
-                    </Box>
-                </Box>
+                <TabelaUsuarios
+                    adm={usuario?.cargos?.includes("adm") ? true : false}
+                    admImobiliaria={
+                        usuario?.cargos?.includes("imobiliaria") ? true : false
+                    }
+                    admConta={usuario?.cargos?.includes("conta") ? true : false}
+                    imobiliariaId={usuario?.imobiliariaId}
+                />
             </Layout>
-            <ModalUsuarios ref={modalusuarios} />
         </>
     );
 };
 export default Usuarios;
+
 export const getServerSideProps = withSSRAuth(
     async (ctx) => {
         return {
             props: {},
         };
     },
-    ["imobiliaria"]
+    { cargos: ["imobiliaria", "adm", "conta"] }
 );

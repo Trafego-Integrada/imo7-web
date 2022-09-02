@@ -1,11 +1,10 @@
-import { withSSRAuth } from "@/utils/withSSRAuth";
 import { Button } from "@chakra-ui/button";
 import { Box, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/layout";
 import { Textarea } from "@chakra-ui/textarea";
 import { NextPage } from "next";
-import { Input } from "../../../components/Forms/Input";
-import { Select } from "../../../components/Forms/Select";
-import { LayoutPainel } from "../../../components/Layouts/LayoutPainel";
+import { Input } from "../../components/Forms/Input";
+import { Select } from "../../components/Forms/Select";
+import { LayoutPainel } from "../../components/Layouts/LayoutPainel";
 
 const AbrirChamado: NextPage = () => {
     return (
@@ -51,11 +50,3 @@ const AbrirChamado: NextPage = () => {
 };
 
 export default AbrirChamado;
-export const getServerSideProps = withSSRAuth(
-    async (ctx) => {
-        return {
-            props: {},
-        };
-    },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);

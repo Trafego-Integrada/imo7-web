@@ -173,9 +173,10 @@ const ModalBase = ({}, ref) => {
                                                     Data de Início
                                                 </Text>
                                                 <Text>
-                                                    {formatoData(
-                                                        watch("dataInicio")
-                                                    )}
+                                                    {watch("dataInicio") &&
+                                                        formatoData(
+                                                            watch("dataInicio")
+                                                        )}
                                                 </Text>
                                             </Box>
                                         </GridItem>

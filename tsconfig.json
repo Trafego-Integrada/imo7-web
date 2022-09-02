@@ -27,7 +27,8 @@
             "@/types/*": ["types/*"],
             "@/services/*": ["services/*"],
             "@/helpers/*": ["helpers/*"],
-            "@/middleware/*": ["middleware/*"]
+            "@/middleware/*": ["middleware/*"],
+            "@/utils/*": ["utils/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"],

@@ -15,11 +15,13 @@ handle.get(async (req, res) => {
             linhas,
             inquilino,
             proprietario,
-            adminImobiliaria,
+            admImobiliaria,
             admConta,
             adm,
+            contaId,
+            imobiliariaId,
         } = req.query;
-
+        console.log(req.query);
         let filtroQuery = {};
 
         if (filtro) {
@@ -83,7 +85,23 @@ handle.get(async (req, res) => {
                 },
             };
         }
-        if (adm) {
+        if (contaId) {
+            filtroQuery = {
+                ...filtroQuery,
+                conta: {
+                    id: Number(contaId),
+                },
+            };
+        } else if (imobiliariaId) {
+            filtroQuery = {
+                ...filtroQuery,
+                imobiliaria: {
+                    id: Number(imobiliariaId),
+                },
+            };
+        }
+
+        if (adm == "true") {
             filtroQuery = {
                 ...filtroQuery,
                 cargos: {
@@ -92,28 +110,18 @@ handle.get(async (req, res) => {
                     },
                 },
             };
-        }
-        if (admConta) {
+        } else if (admConta == "true") {
             filtroQuery = {
                 ...filtroQuery,
-                conta: {
-                    some: {
-                        id: req.user.conta?.id,
-                    },
-                },
                 cargos: {
                     some: {
                         nome: "conta",
                     },
                 },
             };
-        }
-        if (adminImobiliaria) {
+        } else if (admImobiliaria == "true") {
             filtroQuery = {
                 ...filtroQuery,
-                imobiliaria: {
-                    id: req.user.imobiliaria?.id,
-                },
                 cargos: {
                     some: {
                         nome: "imobiliaria",
@@ -132,7 +140,7 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-
+        console.log(filtroQuery);
         const data = await prisma.usuario.findMany({
             where: {
                 ...filtroQuery,
@@ -166,6 +174,7 @@ handle.post(async (req, res) => {
             email,
             documento,
             imobiliariaId,
+            contaId,
             senha,
             profissao,
             endereco,
@@ -188,29 +197,76 @@ handle.post(async (req, res) => {
             },
         });
 
-        if (usuarioExiste) {
-            res.send(usuarioExiste);
-        } else {
-            const data = await prisma.usuario.create({
-                data: {
-                    nome,
-                    email,
-                    documento,
-                    senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
-                    imobiliaria: {
-                        connect: {
-                            id: req.user.imobiliaria?.id,
+        if (!contaId && !imobiliariaId) {
+            if (usuarioExiste) {
+                res.send(usuarioExiste);
+            } else {
+                const data = await prisma.usuario.create({
+                    data: {
+                        nome,
+                        email,
+                        documento,
+                        senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
+                        cargos: {
+                            connect: {
+                                id: 1,
+                            },
                         },
                     },
-                    cargos: {
-                        connect: {
-                            id: 2,
-                        },
-                    },
-                },
-            });
+                });
 
-            res.send(data);
+                res.send(data);
+            }
+        } else if (contaId) {
+            if (usuarioExiste) {
+                res.send(usuarioExiste);
+            } else {
+                const data = await prisma.usuario.create({
+                    data: {
+                        nome,
+                        email,
+                        documento,
+                        senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
+                        conta: {
+                            connect: {
+                                id: Number(contaId),
+                            },
+                        },
+                        cargos: {
+                            connect: {
+                                id: 3,
+                            },
+                        },
+                    },
+                });
+
+                res.send(data);
+            }
+        } else if (imobiliariaId) {
+            if (usuarioExiste) {
+                res.send(usuarioExiste);
+            } else {
+                const data = await prisma.usuario.create({
+                    data: {
+                        nome,
+                        email,
+                        documento,
+                        senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
+                        imobiliaria: {
+                            connect: {
+                                id: Number(imobiliariaId),
+                            },
+                        },
+                        cargos: {
+                            connect: {
+                                id: 2,
+                            },
+                        },
+                    },
+                });
+
+                res.send(data);
+            }
         }
     } catch (error) {
         res.status(500).send({

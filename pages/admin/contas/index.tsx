@@ -11,86 +11,64 @@ import { ImobiliariaDrawer } from "@/components/Drawers/ImobiliariaDrawer";
 import { Input } from "@/components/Forms/Input";
 import { Select } from "@/components/Forms/Select";
 import { Header } from "@/components/Header";
-import { getAll as getAllContas } from "@/services/models/conta";
-import { getAll as getAllImobiliarias } from "@/services/models/imobiliaria";
+import { listarContas } from "@/services/models/conta";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import { Layout } from "@/components/Layout/layout";
+import { ContaModal } from "@/components/Modals/ContaModal";
 
-const Imobiliarias = () => {
-    const imobiliariaDrawer = useRef();
+const Contas = () => {
+    const drawer = useRef();
     const [filter, setFilter] = useState({
         query: "",
         contaId: null,
     });
-    const { data: contas } = useQuery(["contas"], getAllContas);
-    const { data: imobiliarias, isFetching } = useQuery(
-        ["imobiliarias", filter],
-        getAllImobiliarias
+    const { data: contas, isFetching } = useQuery(
+        ["contas", filter],
+        listarContas
     );
     return (
         <Layout>
-            <Header title="Imobiliarias" isFetching={isFetching}></Header>
+            <Header title="Contas" isFetching={isFetching}></Header>
             <Container maxW="full">
                 <Flex justify="space-between" align="center" py={4}>
                     <Flex gridGap={2}>
                         <Input
                             minW={96}
-                            placeholder="Qual imobiliária está procurando?"
+                            placeholder="Qual conta está procurando?"
                             value={filter.query}
                             onChange={(e) =>
                                 setFilter({ ...filter, query: e.target.value })
                             }
                         />
-                        <Select
-                            placeholder="De qual conta é?"
-                            value={filter.contaId}
-                            onChange={(e) =>
-                                setFilter({
-                                    ...filter,
-                                    contaId: e.target.value,
-                                })
-                            }
-                        >
-                            {contas &&
-                                contas.map((item, key) => (
-                                    <option value={item.id}>{item.nome}</option>
-                                ))}
-                        </Select>
                     </Flex>
                     <Button
                         colorScheme="blue"
                         leftIcon={<Icon as={FaPlus} />}
-                        onClick={() => imobiliariaDrawer.current.onOpen()}
+                        onClick={() => drawer.current.onOpen()}
                     >
-                        Adicionar imobiliária
+                        Adicionar conta
                     </Button>
                 </Flex>
                 <Box>
                     <Table variant="striped" size="sm">
                         <Thead>
                             <Tr>
-                                <Th w={24}>Conta</Th>
-                                <Th>Razão Social</Th>
-                                <Th w={12}>Código</Th>
-                                <Th>CNPJ</Th>
-                                <Th>Ações</Th>
+                                <Th>Conta</Th>
+                                <Th w={24}>Ações</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {imobiliarias && imobiliarias.length ? (
-                                imobiliarias.map((item, key) => (
+                            {contas && contas.length ? (
+                                contas.map((item, key) => (
                                     <Tr key={key}>
-                                        <Td>{item.conta?.nome}</Td>
-                                        <Td>{item.razaoSocial}</Td>
-                                        <Td>{item.codigo}</Td>
-                                        <Td>{item.cnpj}</Td>
+                                        <Td>{item.nome}</Td>
                                         <Td>
-                                            <Tooltip label="Editar imobiliária">
+                                            <Tooltip label="Editar conta">
                                                 <Button
                                                     rounded="full"
                                                     size="xs"
                                                     onClick={() =>
-                                                        imobiliariaDrawer.current.onOpen(
+                                                        drawer.current.onOpen(
                                                             item.id
                                                         )
                                                     }
@@ -104,7 +82,7 @@ const Imobiliarias = () => {
                             ) : (
                                 <Tr>
                                     <Td colSpan={5} textAlign="center">
-                                        Não há imobiliarias cadastradas
+                                        Não há contas cadastradas
                                     </Td>
                                 </Tr>
                             )}
@@ -112,12 +90,12 @@ const Imobiliarias = () => {
                     </Table>
                 </Box>
             </Container>
-            <ImobiliariaDrawer ref={imobiliariaDrawer} />
+            <ContaModal ref={drawer} />
         </Layout>
     );
 };
 
-export default Imobiliarias;
+export default Contas;
 export const getServerSideProps = withSSRAuth(
     async (ctx) => {
         return {

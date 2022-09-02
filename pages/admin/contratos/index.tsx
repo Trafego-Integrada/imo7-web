@@ -120,10 +120,11 @@ const Home = () => {
                                         <Tr key={item.id}>
                                             <Td>{item.codigo}</Td>
                                             <Td>
-                                                {formatoData(
-                                                    item.dataInicio,
-                                                    "DATA_HORA"
-                                                )}
+                                                {item.dataInicio &&
+                                                    formatoData(
+                                                        item.dataInicio,
+                                                        "DATA_HORA"
+                                                    )}
                                             </Td>
                                             <Td>{item.dataReajuste}</Td>
                                             <Td>
@@ -150,13 +151,6 @@ const Home = () => {
                                                         )
                                                     }
                                                     aria-label="Abrir"
-                                                />
-
-                                                <IconButton
-                                                    as={IoIosRemoveCircle}
-                                                    color="red"
-                                                    size="sm"
-                                                    aria-label="Remover"
                                                 />
                                             </Td>
                                         </Tr>
@@ -211,5 +205,5 @@ export const getServerSideProps = withSSRAuth(
             props: {},
         };
     },
-    ["imobiliaria"]
+    { cargos: ["imobiliaria", "adm", "conta"] }
 );

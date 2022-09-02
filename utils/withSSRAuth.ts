@@ -25,7 +25,7 @@ export function withSSRAuth<P>(
         if (!token) {
             return {
                 redirect: {
-                    destination: "/auth/signin",
+                    destination: "/login",
                     permanent: false,
                 },
             };
@@ -60,14 +60,14 @@ export function withSSRAuth<P>(
                 destroyCookie(ctx, "imo7.refreshToken");
                 return {
                     redirect: {
-                        destination: "/auth/signin",
+                        destination: "/login",
                         permanent: false,
                     },
                 };
             } else {
                 return {
                     redirect: {
-                        destination: "/auth/signin",
+                        destination: "/login",
                         permanent: false,
                     },
                 };

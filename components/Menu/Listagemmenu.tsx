@@ -5,66 +5,112 @@ import { BiSupport } from "react-icons/bi";
 import { MenuItem } from "./Menuitem";
 import { BsFillGearFill, BsHouseFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
+import { includesAll } from "@/helpers/helpers";
+import { useAuth } from "hooks/useAuth";
+import { isArray } from "lodash";
 
+const menu = [
+    {
+        titulo: "Contratos",
+        href: "/admin/contratos",
+        icon: HiOutlineDocumentText,
+        cargos: ["imobiliaria"],
+    },
+    {
+        titulo: "Cobranças",
+        href: "/admin/boletos",
+        icon: FaHandHoldingUsd,
+        cargos: ["imobiliaria"],
+        subMenus: [
+            {
+                titulo: "Boletos",
+                href: "/admin/boletos",
+                icon: HiOutlineDocumentText,
+                cargos: ["imobiliaria"],
+            },
+        ],
+    },
+    {
+        titulo: "Inquilinos",
+        href: "/admin/inquilinos",
+        icon: FaUsers,
+        cargos: ["imobiliaria"],
+    },
+    {
+        titulo: "Proprietários",
+        href: "/admin/proprietarios",
+        icon: FaUserTie,
+        cargos: ["imobiliaria"],
+    },
+    {
+        titulo: "Usuários",
+        href: "/admin/usuarios",
+        icon: FaUser,
+        cargos: ["imobiliaria", "adm", "conta"],
+    },
+    {
+        titulo: "Chamados",
+        href: "/admin/chamados",
+        icon: BiSupport,
+        cargos: ["imobiliaria"],
+    },
+    {
+        titulo: "Imoveis",
+        href: "/admin/imoveis",
+        icon: BsHouseFill,
+        cargos: ["imobiliaria"],
+    },
+    {
+        titulo: "Configurações",
+        href: "/admin/configuracoes",
+        icon: BsFillGearFill,
+        cargos: ["imobiliaria"],
+    },
+    {
+        titulo: "Imobiliárias",
+        href: "/admin/imobiliarias",
+        icon: HiOutlineDocumentText,
+        cargos: ["conta"],
+    },
+    {
+        titulo: "Contas",
+        href: "/admin/contas",
+        icon: HiOutlineDocumentText,
+        cargos: ["adm"],
+    },
+    {
+        titulo: "Gerencial",
+        href: "/admin/gerencial",
+        icon: MdDashboard,
+        cargos: ["imobiliaria"],
+    },
+];
 export const Listagemmenu = () => {
+    const { usuario } = useAuth();
     return (
         <>
             <List d="flex" flexDir="column">
-                <MenuItem
-                    title="Contratos"
-                    href="/admin/contratos"
-                    icon={HiOutlineDocumentText}
-                />
-                <MenuItem
-                    title="Cobranças"
-                    href="/admin/cobrancas"
-                    icon={FaHandHoldingUsd}
-                    subMenus={[
-                        {
-                            title: "Boletos",
-                            href: "/admin/cobrancas",
-                        },
-                        {
-                            title: "Extratos",
-                            href: "#",
-                        },
-                    ]}
-                />
-                <MenuItem
-                    title="Inquilinos"
-                    href="/admin/inquilinos"
-                    icon={FaUsers}
-                />
-                <MenuItem
-                    title="Propietários"
-                    href="/admin/propietarios"
-                    icon={FaUserTie}
-                />
-                <MenuItem
-                    title="Usuários"
-                    href="/admin/usuarios"
-                    icon={FaUser}
-                />
-                <MenuItem
-                    title="Chamados"
-                    href="/admin/chamados"
-                    icon={BiSupport}
-                />
-                <MenuItem
-                    title="Imóveis"
-                    href="/admin/imoveis"
-                    icon={BsHouseFill}
-                />
-                <MenuItem
-                    title="Configurações"
-                    href="/admin/configuracoes"
-                    icon={BsFillGearFill}
-                />
-                <MenuItem
-                    title="Gerencial"
-                    href="/admin/gerencial"
-                    icon={MdDashboard}
-                />
+                {menu.map((item) => {
+                    if (
+                        item.cargos.length == 0 ||
+                        (isArray(usuario?.cargos) &&
+                            item.cargos.filter((i) => {
+                                if (usuario.cargos?.find((um) => um == i)) {
+                                    return true;
+                                }
+                            }).length)
+                    ) {
+                        return (
+                            <MenuItem
+                                key={item.titulo}
+                                title={item.titulo}
+                                href={item.href}
+                                icon={item.icon}
+                                subMenus={item.subMenus}
+                            />
+                        );
+                    }
+                })}
             </List>
         </>
     );

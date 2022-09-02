@@ -40,7 +40,7 @@ const schema = yup.object({
         .oneOf([yup.ref("senha")], "A senha deve ser a mesma"),
 });
 
-const ModalBase = ({}, ref) => {
+const ModalBase = ({ contaId, imobiliariaId }, ref) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -80,7 +80,11 @@ const ModalBase = ({}, ref) => {
             if (data.id) {
                 await atualizar.mutateAsync(data);
             } else {
-                await cadastrar.mutateAsync(data);
+                await cadastrar.mutateAsync({
+                    ...data,
+                    contaId,
+                    imobiliariaId,
+                });
             }
         } catch (error) {
             toast({ title: "Ocorreu um erro", status: "error" });
@@ -108,22 +112,24 @@ const ModalBase = ({}, ref) => {
                     <ModalBody>
                         <Tabs variant="unstyled">
                             <TabList>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "blue.500",
-                                    }}
-                                >
-                                    Dados
-                                </Tab>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "blue.500",
-                                    }}
-                                >
-                                    Permissionamento
-                                </Tab>
+                                <Tab>Dados</Tab>
+                                {watch("id") && (
+                                    <>
+                                        {watch("contratosFiador").length >
+                                            0 && (
+                                            <Tab>Contratos (Inquilino)</Tab>
+                                        )}
+                                        {watch("contratosProprietario").length >
+                                            0 && (
+                                            <Tab>Contratos (Proprietário)</Tab>
+                                        )}
+                                        {watch("contratosFiador").length >
+                                            0 && <Tab>Contratos (Fiador)</Tab>}
+                                        {watch("imoveis").length > 0 && (
+                                            <Tab>Imoveis</Tab>
+                                        )}
+                                    </>
+                                )}
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
@@ -195,6 +201,9 @@ const ModalBase = ({}, ref) => {
                                         </GridItem>
                                     </Grid>
                                 </TabPanel>
+                                <TabPanel></TabPanel>
+                                <TabPanel></TabPanel>
+                                <TabPanel></TabPanel>
                             </TabPanels>
                         </Tabs>
                     </ModalBody>
@@ -217,4 +226,4 @@ const ModalBase = ({}, ref) => {
         </>
     );
 };
-export const ModalUsuarios = forwardRef(ModalBase);
+export const Usuario = forwardRef(ModalBase);

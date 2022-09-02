@@ -60,6 +60,8 @@ handler.post(async (req, res) => {
         refreshToken: newRefreshToken,
         permissoes: user.permissoes,
         cargos: user.cargos,
+        imobiliaria: user.imobiliaria,
+        imobiliariaId: user.imobiliariaId,
     });
 });
 

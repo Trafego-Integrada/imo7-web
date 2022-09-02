@@ -32,7 +32,7 @@ import { Layout } from "@/components/Layout/layout";
 import { ModalInquilinos } from "@/components/Modals/inquilinos";
 import { listarUsuarios } from "@/services/models/usuario";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
-import { ModalUsuarios } from "@/components/Modals/usuarios";
+import { Usuario } from "@/components/Modals/Usuario";
 
 const Inquilinos = () => {
     const modalinquilinos = useRef();
@@ -264,7 +264,7 @@ const Inquilinos = () => {
                     </Box>
                 </Box>
 
-                <ModalUsuarios ref={modalinquilinos} />
+                <Usuario ref={modalinquilinos} />
             </Layout>
         </>
     );
@@ -276,5 +276,5 @@ export const getServerSideProps = withSSRAuth(
             props: {},
         };
     },
-    ["imobiliaria"]
+    { cargos: ["imobiliaria", "adm", "conta"] }
 );

@@ -4,10 +4,9 @@ import Icon from "@chakra-ui/icon";
 import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/layout";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { NextPage } from "next";
-import { Input } from "../../../../components/Forms/Input";
-import { LayoutPainel } from "../../../../components/Layouts/LayoutPainel";
+import { Input } from "../../../components/Forms/Input";
+import { LayoutPainel } from "../../../components/Layouts/LayoutPainel";
 import { FiSend } from "react-icons/fi";
-import { withSSRAuth } from "@/utils/withSSRAuth";
 const Chamado: NextPage = () => {
     return (
         <LayoutPainel>
@@ -139,11 +138,3 @@ const Chamado: NextPage = () => {
 };
 
 export default Chamado;
-export const getServerSideProps = withSSRAuth(
-    async (ctx) => {
-        return {
-            props: {},
-        };
-    },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);
