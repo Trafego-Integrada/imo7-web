@@ -11,7 +11,7 @@ import { ImobiliariaDrawer } from "@/components/Drawers/ImobiliariaDrawer";
 import { Input } from "@/components/Forms/Input";
 import { Select } from "@/components/Forms/Select";
 import { Header } from "@/components/Header";
-import { getAll as getAllContas } from "@/services/models/conta";
+import { listarContas } from "@/services/models/conta";
 import { getAll as getAllImobiliarias } from "@/services/models/imobiliaria";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import { Layout } from "@/components/Layout/layout";
@@ -22,7 +22,7 @@ const Imobiliarias = () => {
         query: "",
         contaId: null,
     });
-    const { data: contas } = useQuery(["contas"], getAllContas);
+    const { data: contas } = useQuery(["contas"], listarContas);
     const { data: imobiliarias, isFetching } = useQuery(
         ["imobiliarias", filter],
         getAllImobiliarias

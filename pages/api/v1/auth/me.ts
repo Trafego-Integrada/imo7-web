@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import prisma from "../../../../lib/prisma";
-import checkAuth from "../../../../middleware/checkAuth";
-import { getUser } from "../../../../services/database/user";
-import { NextApiRequestWithUser } from "../../../../types/auth";
+import prisma from "@/lib/prisma";
+import { checkAuth } from "@/middleware/checkAuth";
+import { getUser } from "@/services/database/user";
+import { NextApiRequestWithUser } from "@/types/auth";
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
