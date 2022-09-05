@@ -31,7 +31,7 @@ async function main() {
     });
 
     await prisma.usuario.upsert({
-        where: { email: "gabriel@treiv.com.br" },
+        where: { email: "jair@jb.com.br" },
         update: {},
         create: {
             nome: "Jair",
@@ -40,7 +40,7 @@ async function main() {
             senhaHash: bcrypt.hashSync("123", 10),
             cargos: {
                 create: {
-                    nome: "adm",
+                    nome: "conta",
                 },
             },
         },
