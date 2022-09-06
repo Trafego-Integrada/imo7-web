@@ -1,10 +1,8 @@
-import prisma from "../lib/prisma";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 async function main() {
-    await prisma.usuario.upsert({
-        where: { email: "gabriel@treiv.com.br" },
-        update: {},
-        create: {
+    await prisma.usuario.create({
+        data: {
             nome: "Gabriel Ferreira",
             email: "gabriel@treiv.com.br",
             documento: "11694158659",
@@ -17,10 +15,8 @@ async function main() {
         },
     });
 
-    await prisma.conta.upsert({
-        where: { id: 1 },
-        update: {},
-        create: {
+    await prisma.conta.create({
+        data: {
             nome: "JB",
             tokens: {
                 create: {
@@ -30,14 +26,17 @@ async function main() {
         },
     });
 
-    await prisma.usuario.upsert({
-        where: { email: "jair@jb.com.br" },
-        update: {},
-        create: {
+    await prisma.usuario.create({
+        data: {
             nome: "Jair",
             email: "jair@jb.com.br",
             documento: "12312312312",
             senhaHash: bcrypt.hashSync("123", 10),
+            conta: {
+                connect: {
+                    id: 1,
+                },
+            },
             cargos: {
                 create: {
                     nome: "conta",
