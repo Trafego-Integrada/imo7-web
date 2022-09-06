@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 async function main() {
     await prisma.usuario.create({
