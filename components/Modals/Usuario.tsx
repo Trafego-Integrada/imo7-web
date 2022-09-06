@@ -15,10 +15,17 @@ import {
     ModalHeader,
     ModalOverlay,
     Tab,
+    Table,
     TabList,
     TabPanel,
     TabPanels,
     Tabs,
+    Tbody,
+    Td,
+    Text,
+    Th,
+    Thead,
+    Tr,
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
@@ -115,19 +122,36 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                 <Tab>Dados</Tab>
                                 {watch("id") && (
                                     <>
-                                        {watch("contratosFiador").length >
-                                            0 && (
-                                            <Tab>Contratos (Inquilino)</Tab>
-                                        )}
-                                        {watch("contratosProprietario").length >
-                                            0 && (
-                                            <Tab>Contratos (Proprietário)</Tab>
-                                        )}
-                                        {watch("contratosFiador").length >
-                                            0 && <Tab>Contratos (Fiador)</Tab>}
-                                        {watch("imoveis").length > 0 && (
-                                            <Tab>Imoveis</Tab>
-                                        )}
+                                        <Tab
+                                            hidden={
+                                                watch("contratosInquilino")
+                                                    .length > 0
+                                                    ? false
+                                                    : true
+                                            }
+                                        >
+                                            Contratos (Inquilino)
+                                        </Tab>
+                                        <Tab
+                                            hidden={
+                                                watch("contratosProprietario")
+                                                    .length > 0
+                                                    ? false
+                                                    : true
+                                            }
+                                        >
+                                            Contratos (Inquilino)
+                                        </Tab>
+                                        <Tab
+                                            hidden={
+                                                watch("contratosFiador")
+                                                    .length > 0
+                                                    ? false
+                                                    : true
+                                            }
+                                        >
+                                            Contratos (Inquilino)
+                                        </Tab>
                                     </>
                                 )}
                             </TabList>
@@ -201,9 +225,142 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                         </GridItem>
                                     </Grid>
                                 </TabPanel>
-                                <TabPanel></TabPanel>
-                                <TabPanel></TabPanel>
-                                <TabPanel></TabPanel>
+                                <TabPanel>
+                                    <Table size="sm">
+                                        <Thead>
+                                            <Tr>
+                                                <Th>Nº</Th>
+                                                <Th>Inquilinos</Th>
+                                                <Th>Endereco</Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody>
+                                            {watch("contratosInquilino") &&
+                                                watch("contratosInquilino")
+                                                    .length &&
+                                                watch("contratosInquilino").map(
+                                                    (item) => (
+                                                        <Tr key={item.id}>
+                                                            <Td>
+                                                                {item.codigo}
+                                                            </Td>
+                                                            <Td>
+                                                                {item.proprietarios.map(
+                                                                    (item) => (
+                                                                        <Text
+                                                                            key={
+                                                                                item.id
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                item.nome
+                                                                            }
+                                                                        </Text>
+                                                                    )
+                                                                )}
+                                                            </Td>
+                                                            <Td>
+                                                                {
+                                                                    item.imovel
+                                                                        .endereco
+                                                                }
+                                                            </Td>
+                                                        </Tr>
+                                                    )
+                                                )}
+                                        </Tbody>
+                                    </Table>
+                                </TabPanel>
+                                <TabPanel>
+                                    <Table size="sm">
+                                        <Thead>
+                                            <Tr>
+                                                <Th>Nº</Th>
+                                                <Th>Inquilinos</Th>
+                                                <Th>Endereco</Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody>
+                                            {watch("contratosProprietario") &&
+                                                watch("contratosProprietario")
+                                                    .length &&
+                                                watch(
+                                                    "contratosProprietario"
+                                                ).map((item) => (
+                                                    <Tr key={item.id}>
+                                                        <Td>{item.codigo}</Td>
+                                                        <Td>
+                                                            {item.inquilinos.map(
+                                                                (item) => (
+                                                                    <Text
+                                                                        key={
+                                                                            item.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            item.nome
+                                                                        }
+                                                                    </Text>
+                                                                )
+                                                            )}
+                                                        </Td>
+                                                        <Td>
+                                                            {
+                                                                item.imovel
+                                                                    .endereco
+                                                            }
+                                                        </Td>
+                                                    </Tr>
+                                                ))}
+                                        </Tbody>
+                                    </Table>
+                                </TabPanel>
+                                <TabPanel>
+                                    <Table size="sm">
+                                        <Thead>
+                                            <Tr>
+                                                <Th>Nº</Th>
+                                                <Th>Inquilinos</Th>
+                                                <Th>Endereco</Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody>
+                                            {watch("contratosFiador") &&
+                                                watch("contratosFiador")
+                                                    .length &&
+                                                watch("contratosFiador").map(
+                                                    (item) => (
+                                                        <Tr key={item.id}>
+                                                            <Td>
+                                                                {item.codigo}
+                                                            </Td>
+                                                            <Td>
+                                                                {item.inquilinos.map(
+                                                                    (item) => (
+                                                                        <Text
+                                                                            key={
+                                                                                item.id
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                item.nome
+                                                                            }
+                                                                        </Text>
+                                                                    )
+                                                                )}
+                                                            </Td>
+                                                            <Td>
+                                                                {
+                                                                    item.imovel
+                                                                        .endereco
+                                                                }
+                                                            </Td>
+                                                        </Tr>
+                                                    )
+                                                )}
+                                        </Tbody>
+                                    </Table>
+                                </TabPanel>
                             </TabPanels>
                         </Tabs>
                     </ModalBody>

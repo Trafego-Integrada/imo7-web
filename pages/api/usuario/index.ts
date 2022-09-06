@@ -21,7 +21,6 @@ handle.get(async (req, res) => {
             contaId,
             imobiliariaId,
         } = req.query;
-        console.log(req.query);
         let filtroQuery = {};
 
         if (filtro) {
@@ -89,7 +88,9 @@ handle.get(async (req, res) => {
             filtroQuery = {
                 ...filtroQuery,
                 conta: {
-                    id: Number(contaId),
+                    some: {
+                        id: Number(contaId),
+                    },
                 },
             };
         } else if (imobiliariaId) {
@@ -140,7 +141,6 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-        console.log(filtroQuery);
         const data = await prisma.usuario.findMany({
             where: {
                 ...filtroQuery,
@@ -196,10 +196,26 @@ handle.post(async (req, res) => {
                 ],
             },
         });
-
         if (!contaId && !imobiliariaId) {
+            console.log(1);
             if (usuarioExiste) {
-                res.send(usuarioExiste);
+                const data = await prisma.usuario.update({
+                    where: {
+                        id: usuarioExiste.id,
+                    },
+                    data: {
+                        nome,
+                        email,
+                        documento,
+                        senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
+                        cargos: {
+                            connect: {
+                                id: 1,
+                            },
+                        },
+                    },
+                });
+                res.send(data);
             } else {
                 const data = await prisma.usuario.create({
                     data: {
@@ -214,12 +230,33 @@ handle.post(async (req, res) => {
                         },
                     },
                 });
-
                 res.send(data);
             }
         } else if (contaId) {
             if (usuarioExiste) {
-                res.send(usuarioExiste);
+                const data = await prisma.usuario.update({
+                    where: {
+                        id: usuarioExiste.id,
+                    },
+                    data: {
+                        nome,
+                        email,
+                        documento,
+                        senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
+                        conta: {
+                            connect: {
+                                id: Number(contaId),
+                            },
+                        },
+                        cargos: {
+                            connect: {
+                                id: 3,
+                            },
+                        },
+                    },
+                });
+
+                res.send(data);
             } else {
                 const data = await prisma.usuario.create({
                     data: {
@@ -243,8 +280,31 @@ handle.post(async (req, res) => {
                 res.send(data);
             }
         } else if (imobiliariaId) {
+            console.log(3);
             if (usuarioExiste) {
-                res.send(usuarioExiste);
+                const data = await prisma.usuario.update({
+                    where: {
+                        id: usuarioExiste.id,
+                    },
+                    data: {
+                        nome,
+                        email,
+                        documento,
+                        senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
+                        imobiliaria: {
+                            connect: {
+                                id: Number(imobiliariaId),
+                            },
+                        },
+                        cargos: {
+                            connect: {
+                                id: 2,
+                            },
+                        },
+                    },
+                });
+
+                res.send(data);
             } else {
                 const data = await prisma.usuario.create({
                     data: {

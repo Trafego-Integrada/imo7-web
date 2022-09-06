@@ -15,9 +15,25 @@ handle.get(async (req, res) => {
             cargos: true,
             boletos: true,
             conta: true,
-            contratosFiador: true,
-            contratosInquilino: true,
-            contratosProprietario: true,
+            contratosFiador: {
+                include: {
+                    proprietarios: true,
+                    inquilinos: true,
+                    imovel: true,
+                },
+            },
+            contratosInquilino: {
+                include: {
+                    proprietarios: true,
+                    imovel: true,
+                },
+            },
+            contratosProprietario: {
+                include: {
+                    inquilinos: true,
+                    imovel: true,
+                },
+            },
             imobiliaria: true,
             imoveis: true,
             permissoes: true,

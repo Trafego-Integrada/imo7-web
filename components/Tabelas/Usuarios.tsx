@@ -37,6 +37,7 @@ export const TabelaUsuarios = ({
     contaId = null,
     imobiliariaId = null,
 }) => {
+    console.log(contaId);
     const modalusuarios = useRef();
     const [total, setTotal] = useState();
     const [filtro, setFiltro] = useState({});

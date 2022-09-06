@@ -57,10 +57,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
             console.log(message);
             switch (message.data) {
                 case "signOut":
-                    Router.push("/auth/signin");
+                    Router.push("/login");
                     break;
                 case "signIn":
-                    Router.push("/painel");
+                    Router.push("/");
                     break;
                 default:
                     break;

@@ -41,7 +41,7 @@ const Imobiliarias = () => {
                                 setFilter({ ...filter, query: e.target.value })
                             }
                         />
-                        <Select
+                        {/* <Select
                             placeholder="De qual conta é?"
                             value={filter.contaId}
                             onChange={(e) =>
@@ -55,7 +55,7 @@ const Imobiliarias = () => {
                                 contas.map((item, key) => (
                                     <option value={item.id}>{item.nome}</option>
                                 ))}
-                        </Select>
+                        </Select> */}
                     </Flex>
                     <Button
                         colorScheme="blue"

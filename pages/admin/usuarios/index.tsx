@@ -47,6 +47,7 @@ const Usuarios = ({}) => {
                     }
                     admConta={usuario?.cargos?.includes("conta") ? true : false}
                     imobiliariaId={usuario?.imobiliariaId}
+                    contaId={usuario?.conta?.id}
                 />
             </Layout>
         </>

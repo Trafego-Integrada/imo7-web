@@ -62,6 +62,7 @@ handler.post(async (req, res) => {
         cargos: user.cargos,
         imobiliaria: user.imobiliaria,
         imobiliariaId: user.imobiliariaId,
+        conta: user.conta ? user.conta[0] : null,
     });
 });
 

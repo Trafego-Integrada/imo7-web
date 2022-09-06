@@ -22,7 +22,7 @@ handle.post(async (req, res) => {
     const { codigo, nome } = req.body;
     const conta = await prisma.conta.update({
         where: {
-            id: id,
+            id: Number(id),
         },
         data: {
             codigo: Number(codigo),
