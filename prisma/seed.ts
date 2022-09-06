@@ -1,4 +1,6 @@
-import { prisma } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
+
+const prisma = new PrismaClient();
 import bcrypt from "bcryptjs";
 async function main() {
     await prisma.usuario.create({
