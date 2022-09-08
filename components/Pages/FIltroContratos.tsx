@@ -17,7 +17,7 @@ import { FormDate } from "../Form/FormDate";
 import { FormInput } from "../Form/FormInput";
 import { FormSelect } from "../Form/FormSelect";
 
-export const FiltroContratos = () => {
+export const FiltroContratos = ({ setFiltro, filtro }) => {
     const { isOpen, onToggle } = useDisclosure();
     return (
         <Box bg="graylight" p={5}>
@@ -35,16 +35,37 @@ export const FiltroContratos = () => {
                             label="Nº do contrato"
                             placeholder="digite um número..."
                             bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    codigo: e.target.value,
+                                })
+                            }
                         />
                     </GridItem>
                     <GridItem>
-                        <FormDate label="Data de vencimento" bg="white" />
+                        <FormInput
+                            label="Dia de vencimento"
+                            bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    vencimento: e.target.value,
+                                })
+                            }
+                        />
                     </GridItem>
                     <GridItem>
                         <FormInput
                             label="Nome do propietário"
                             placeholder="digite o nome do propietário..."
                             bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    proprietario: e.target.value,
+                                })
+                            }
                         />
                     </GridItem>
                     <GridItem>
@@ -52,6 +73,12 @@ export const FiltroContratos = () => {
                             label="Nome do inquilino"
                             placeholder="digite o nome do inquilino..."
                             bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    inquilino: e.target.value,
+                                })
+                            }
                         />
                     </GridItem>
                     <GridItem>
@@ -59,6 +86,12 @@ export const FiltroContratos = () => {
                             label="Nome do fiador"
                             placeholder="digite o nome do fiador..."
                             bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    fiador: e.target.value,
+                                })
+                            }
                         />
                     </GridItem>
 
@@ -67,6 +100,12 @@ export const FiltroContratos = () => {
                             label="Rua"
                             placeholder="digite o nome da rua..."
                             bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    endereco: e.target.value,
+                                })
+                            }
                         />
                     </GridItem>
                     <GridItem>
@@ -74,6 +113,12 @@ export const FiltroContratos = () => {
                             label="Número"
                             placeholder="digite o número da rua..."
                             bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    numero: e.target.value,
+                                })
+                            }
                         />
                     </GridItem>
                     <GridItem>
@@ -81,6 +126,12 @@ export const FiltroContratos = () => {
                             label="Bairro"
                             placeholder="digite o nome do bairro..."
                             bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    bairro: e.target.value,
+                                })
+                            }
                         />
                     </GridItem>
                     <GridItem>
@@ -88,6 +139,15 @@ export const FiltroContratos = () => {
                             label="Cidade"
                             placeholder="digite o nome da cidade..."
                             bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    filtro: {
+                                        ...filtro.filtro,
+                                        cidade: e.target.value,
+                                    },
+                                })
+                            }
                         />
                     </GridItem>
                     <GridItem>
@@ -95,6 +155,15 @@ export const FiltroContratos = () => {
                             label="Estado"
                             placeholder="digite o nome do estado..."
                             bg="white"
+                            onChange={(e) =>
+                                setFiltro({
+                                    ...filtro,
+                                    estado: {
+                                        ...filtro.filtro,
+                                        query: e.target.value,
+                                    },
+                                })
+                            }
                         />
                     </GridItem>
                 </Grid>

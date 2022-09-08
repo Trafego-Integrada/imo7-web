@@ -77,6 +77,12 @@ const Cobrancas = () => {
                                         label="Nº do contrato"
                                         placeholder="digite um número..."
                                         bg="white"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                codigo: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -84,18 +90,36 @@ const Cobrancas = () => {
                                         label="Nome do inquilino"
                                         placeholder="digite o nome do inquilino..."
                                         bg="white"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                inquilino: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
                                     <FormDate
                                         label="Data de início"
                                         bg="white"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                dataInicio: e,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
                                     <FormDate
                                         label="Data de vencimento"
                                         bg="white"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                vencimento: e,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -113,6 +137,12 @@ const Cobrancas = () => {
                                         label="Rua"
                                         placeholder="digite o nome da rua..."
                                         bg="white"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                endereco: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -120,6 +150,12 @@ const Cobrancas = () => {
                                         label="Número"
                                         placeholder="digite o número da rua..."
                                         bg="white"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                numero: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -127,6 +163,12 @@ const Cobrancas = () => {
                                         label="Bairro"
                                         placeholder="digite o nome do bairro..."
                                         bg="white"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                bairro: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -134,6 +176,12 @@ const Cobrancas = () => {
                                         label="Cidade"
                                         placeholder="digite o nome da cidade..."
                                         bg="white"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                cidade: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -141,6 +189,12 @@ const Cobrancas = () => {
                                         label="Estado"
                                         placeholder="digite o nome do estado..."
                                         bg="white"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                estado: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                             </Grid>

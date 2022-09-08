@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+import moment from "moment";
 import nextConnect from "next-connect";
 import prisma from "../../../lib/prisma";
 
@@ -5,72 +7,142 @@ const handle = nextConnect();
 
 handle.get(async (req, res) => {
     try {
-        const { filtro, pagina, linhas } = req.query;
+        const {
+            query,
+            codigo,
+            inquilino,
+            dataInicio,
+            vencimento,
+            status,
+            endereco,
+            numero,
+            bairro,
+            cidade,
+            estado,
+            pagina,
+            linhas,
+        } = req.query;
 
-        let filtroQuery = {};
-        if (filtro) {
-            if (filtro.filtro) {
-                filtroQuery = {
-                    ...filtroQuery,
-                    OR: [
-                        {
-                            beneficiario: {
-                                contains: filtro.filtro,
+        let filtroQuery: Prisma.BoletoWhereInput = {};
+        if (query) {
+            filtroQuery = {
+                ...filtroQuery,
+                OR: [
+                    {
+                        contrato: {
+                            codigo: {
+                                contains: query,
                             },
                         },
-                        {
-                            contrato: {
-                                codigo: filtro.filtro,
-                            },
+                    },
+                    {
+                        data_vencimen: {
+                            contains: query,
                         },
-                        {
-                            contrato: {
-                                fiadores: {
-                                    some: {
-                                        OR: [
-                                            {
-                                                nome: {
-                                                    contains: filtro.filtro,
-                                                },
-                                            },
-                                        ],
+                    },
+                    {
+                        contrato: {
+                            inquilinos: {
+                                every: {
+                                    nome: {
+                                        contains: inquilino,
                                     },
                                 },
                             },
                         },
-                        {
-                            contrato: {
-                                proprietarios: {
-                                    some: {
-                                        OR: [
-                                            {
-                                                nome: {
-                                                    contains: filtro.filtro,
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
+                    },
+                ],
+            };
+        }
+        if (codigo) {
+            filtroQuery = {
+                ...filtroQuery,
+                contrato: {
+                    codigo: {
+                        contains: codigo,
+                    },
+                },
+            };
+        }
+        if (vencimento) {
+            filtroQuery = {
+                ...filtroQuery,
+                data_vencimen: moment(vencimento).format(),
+            };
+        }
+        if (inquilino) {
+            filtroQuery = {
+                ...filtroQuery,
+                contrato: {
+                    inquilinos: {
+                        every: {
+                            nome: {
+                                contains: inquilino,
                             },
                         },
-                        {
-                            contrato: {
-                                inquilinos: {
-                                    some: {
-                                        OR: [
-                                            {
-                                                nome: {
-                                                    contains: filtro.filtro,
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                            },
+                    },
+                },
+            };
+        }
+        if (endereco) {
+            filtroQuery = {
+                ...filtroQuery,
+                contrato: {
+                    imovel: {
+                        endereco: {
+                            contains: endereco,
                         },
-                    ],
-                };
-            }
+                    },
+                },
+            };
+        }
+        if (numero) {
+            filtroQuery = {
+                ...filtroQuery,
+                contrato: {
+                    imovel: {
+                        numero: {
+                            contains: numero,
+                        },
+                    },
+                },
+            };
+        }
+        if (bairro) {
+            filtroQuery = {
+                ...filtroQuery,
+                contrato: {
+                    imovel: {
+                        bairro: {
+                            contains: bairro,
+                        },
+                    },
+                },
+            };
+        }
+        if (cidade) {
+            filtroQuery = {
+                ...filtroQuery,
+                contrato: {
+                    imovel: {
+                        cidade: {
+                            contains: cidade,
+                        },
+                    },
+                },
+            };
+        }
+        if (estado) {
+            filtroQuery = {
+                ...filtroQuery,
+                contrato: {
+                    imovel: {
+                        estado: {
+                            contains: estado,
+                        },
+                    },
+                },
+            };
         }
         let paginacao = {};
         if (pagina && linhas) {

@@ -77,7 +77,7 @@ const Home = () => {
         <>
             <Layout title="Contratos">
                 <Box p={5}>
-                    <FiltroContratos />
+                    <FiltroContratos filtro={filtro} setFiltro={setFiltro} />
 
                     <Box bg="graylight" overflowX="auto" p={5} mt={5}>
                         <Flex p={5} bg="white" gap={4} align="center">

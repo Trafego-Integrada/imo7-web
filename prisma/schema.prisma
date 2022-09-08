@@ -22,6 +22,7 @@ model Conta {
     imoveis      Imovel[]
     boletos      Boleto[]
     chamados     Chamado[]
+    Extrato      Extrato[]
 }
 
 model Usuario {
@@ -56,6 +57,7 @@ model Usuario {
     apiToken              ApiToken[]
     boletos               Boleto[]
     contratosFiador       Contrato[]               @relation("Fiadores")
+    Extrato               Extrato[]
 }
 
 model ApiToken {
@@ -125,6 +127,7 @@ model Imobiliaria {
     conta        Conta?     @relation(fields: [contaId], references: [id])
     contaId      Int?
     Boleto       Boleto[]
+    Extrato      Extrato[]
 }
 
 model Imovel {
@@ -297,12 +300,40 @@ model Boleto {
 }
 
 model Extrato {
-    id         Int       @id @default(autoincrement())
-    contratoId Int
-    contrato   Contrato  @relation(references: [id], fields: [contratoId])
-    createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updatedAt
-    deletedAt  DateTime?
+    id            Int           @id @default(autoincrement())
+    parcela       Int?
+    dataDeposito  DateTime?     @db.Date
+    responsavel   String?
+    periodo       String?
+    vencimento    DateTime?     @db.Date
+    observacao1   String?
+    observacao2   String?
+    observacao3   String?
+    observacao4   String?
+    observacao5   String?
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
+    deletedAt     DateTime?
+    contrato      Contrato?     @relation(references: [id], fields: [contratoId])
+    contratoId    Int?
+    imobiliaria   Imobiliaria?  @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId Int?
+    proprietario  Usuario?      @relation(fields: [usuarioId], references: [id])
+    usuarioId     Int?
+    conta         Conta?        @relation(fields: [contaId], references: [id])
+    contaId       Int?
+    itens         ItemExtrato[]
+}
+
+model ItemExtrato {
+    id        Int       @id @default(autoincrement())
+    descricao String?
+    valor     Decimal?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    extrato   Extrato   @relation(fields: [extratoId], references: [id])
+    extratoId Int
 }
 
 model DepartamentoChamado {
