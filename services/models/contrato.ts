@@ -24,3 +24,13 @@ export const excluirContrato = async (id) => {
     const { data } = await apiFront.post("contrato/" + id);
     return data;
 };
+
+export const listarParticipantesContratos = async ({ queryKey }) => {
+    const { data } = await apiFront.get(
+        "contrato/" + queryKey[1].contratoId + "/participante",
+        {
+            params: queryKey[1],
+        }
+    );
+    return data;
+};

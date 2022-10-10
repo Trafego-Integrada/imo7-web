@@ -26,7 +26,7 @@ async function index(req: NextApiRequestWithUser, res: NextApiResponse) {
             id: "desc",
         },
         include: {
-            AnexoInteracao: true,
+            anexos: true,
             Contrato: true,
             InteracaoChamado: true,
             assunto: true,

@@ -1,5 +1,6 @@
 import { formatoData, formatoValor } from "@/helpers/helpers";
 import {
+    Badge,
     Box,
     Button,
     Flex,
@@ -20,6 +21,7 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
+    Tag,
     Tbody,
     Td,
     Text,
@@ -40,6 +42,10 @@ import { FormDate } from "../Form/FormDate";
 import { FormInput } from "../Form/FormInput";
 import { FormSelect } from "../Form/FormSelect";
 import { Title } from "../Gerais/title";
+import { Cobrancas } from "./Contrato/Cobrancas";
+import { Fiadores } from "./Contrato/Fiadores";
+import { Inquilinos } from "./Contrato/Inquilinos";
+import { Proprietarios } from "./Contrato/Proprietarios";
 
 const ModalBase = ({}, ref) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -77,38 +83,59 @@ const ModalBase = ({}, ref) => {
                     <ModalCloseButton />
 
                     <ModalBody>
-                        <Tabs variant="unstyled">
-                            <TabList>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "blue.500",
-                                    }}
-                                >
-                                    Dados
-                                </Tab>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "blue.500",
-                                    }}
-                                >
-                                    Documentos
-                                </Tab>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "blue.500",
-                                    }}
-                                >
+                        <Tabs variant="solid-rounded" size="sm">
+                            <TabList gap={2}>
+                                <Tab>Dados</Tab>
+                                <Tab>Documentos</Tab>
+                                <Tab>
                                     Cobranças
+                                    <Badge
+                                        ml={1}
+                                        size="sm"
+                                        textAlign="center"
+                                        rounded="full"
+                                    >
+                                        {watch("boletos")?.length}
+                                    </Badge>
+                                </Tab>
+                                <Tab>
+                                    Inquilinos
+                                    <Badge
+                                        ml={1}
+                                        size="sm"
+                                        textAlign="center"
+                                        rounded="full"
+                                    >
+                                        {watch("inquilinos")?.length}
+                                    </Badge>
+                                </Tab>
+                                <Tab>
+                                    Proprietários
+                                    <Badge
+                                        ml={1}
+                                        size="sm"
+                                        textAlign="center"
+                                        rounded="full"
+                                    >
+                                        {watch("proprietarios")?.length}
+                                    </Badge>
+                                </Tab>
+                                <Tab>
+                                    Fiadores
+                                    <Badge
+                                        ml={1}
+                                        size="sm"
+                                        textAlign="center"
+                                        rounded="full"
+                                    >
+                                        {watch("fiadores")?.length}
+                                    </Badge>
                                 </Tab>
                             </TabList>
-
                             <TabPanels>
                                 <TabPanel>
                                     <Grid
-                                        gap={5}
+                                        gap={2}
                                         templateColumns={{
                                             sm: "repeat(1, 1fr)",
                                             md: "repeat(2, 1fr)",
@@ -180,29 +207,6 @@ const ModalBase = ({}, ref) => {
                                                 </Text>
                                             </Box>
                                         </GridItem>
-                                        <GridItem>
-                                            <FormInput
-                                                label="Duração"
-                                                placeholder="ex: 36 meses"
-                                            />
-                                        </GridItem>
-                                        <GridItem>
-                                            <FormInput
-                                                label="reajuste"
-                                                placeholder="ex: 111"
-                                            />
-                                        </GridItem>
-                                        <GridItem>
-                                            <FormSelect
-                                                label="Indicador p/ reajuste"
-                                                placeholder="selecione..."
-                                            >
-                                                <option value="">IGPM</option>
-                                            </FormSelect>
-                                        </GridItem>
-                                        <GridItem>
-                                            <FormDate label="Último reajuste" />
-                                        </GridItem>
                                     </Grid>
                                     <Title children="Pagamento" />
                                     <Grid
@@ -266,99 +270,11 @@ const ModalBase = ({}, ref) => {
                                             </GridItem>
                                         </GridItem>
                                     </Grid>
-                                    <Box py={2}>
-                                        <Text fontWeight="bold">
-                                            Proprietários
-                                        </Text>
-                                        <Table size="sm" variant="striped">
-                                            <Thead>
-                                                <Tr>
-                                                    <Th>Nome</Th>
-                                                    <Th>CPF</Th>
-                                                </Tr>
-                                            </Thead>
-                                            <Tbody>
-                                                {watch("proprietarios") &&
-                                                    watch("proprietarios").map(
-                                                        (item) => (
-                                                            <Tr key={item.id}>
-                                                                <Td>
-                                                                    {item.nome}
-                                                                </Td>
-                                                                <Td>
-                                                                    {
-                                                                        item.documento
-                                                                    }
-                                                                </Td>
-                                                            </Tr>
-                                                        )
-                                                    )}
-                                            </Tbody>
-                                        </Table>
-                                    </Box>
-                                    <Box py={2}>
-                                        <Text fontWeight="bold">Fiadores</Text>
-                                        <Table size="sm" variant="striped">
-                                            <Thead>
-                                                <Tr>
-                                                    <Th>Nome</Th>
-                                                    <Th>CPF</Th>
-                                                </Tr>
-                                            </Thead>
-                                            <Tbody>
-                                                {watch("fiadores") &&
-                                                    watch("fiadores").map(
-                                                        (item) => (
-                                                            <Tr key={item.id}>
-                                                                <Td>
-                                                                    {item.nome}
-                                                                </Td>
-                                                                <Td>
-                                                                    {
-                                                                        item.documento
-                                                                    }
-                                                                </Td>
-                                                            </Tr>
-                                                        )
-                                                    )}
-                                            </Tbody>
-                                        </Table>
-                                    </Box>
-                                    <Box py={2}>
-                                        <Text fontWeight="bold">
-                                            Inquilinos
-                                        </Text>
-                                        <Table size="sm" variant="striped">
-                                            <Thead>
-                                                <Tr>
-                                                    <Th>Nome</Th>
-                                                    <Th>CPF</Th>
-                                                </Tr>
-                                            </Thead>
-                                            <Tbody>
-                                                {watch("inquilinos") &&
-                                                    watch("inquilinos").map(
-                                                        (item) => (
-                                                            <Tr key={item.id}>
-                                                                <Td>
-                                                                    {item.nome}
-                                                                </Td>
-                                                                <Td>
-                                                                    {
-                                                                        item.documento
-                                                                    }
-                                                                </Td>
-                                                            </Tr>
-                                                        )
-                                                    )}
-                                            </Tbody>
-                                        </Table>
-                                    </Box>
                                 </TabPanel>
                                 <TabPanel>
                                     <Grid d="flex" gap={3}>
                                         <Button
-                                            size="md"
+                                            size="sm"
                                             bg="none"
                                             border="1px solid #2F80ED"
                                             _hover={{
@@ -375,7 +291,7 @@ const ModalBase = ({}, ref) => {
                                         </Button>
 
                                         <Button
-                                            size="md"
+                                            size="sm"
                                             bg="none"
                                             border="1px solid #F2994A"
                                             _hover={{
@@ -392,7 +308,12 @@ const ModalBase = ({}, ref) => {
                                         </Button>
                                     </Grid>
 
-                                    <Table variant="striped" mt={5} bg="white">
+                                    <Table
+                                        variant="striped"
+                                        size="sm"
+                                        mt={5}
+                                        bg="white"
+                                    >
                                         <Thead>
                                             <Tr>
                                                 <Th>#</Th>
@@ -408,6 +329,20 @@ const ModalBase = ({}, ref) => {
                                             </Tr>
                                         </Tbody>
                                     </Table>
+                                </TabPanel>
+                                <TabPanel>
+                                    <Cobrancas data={watch("boletos")} />
+                                </TabPanel>
+                                <TabPanel>
+                                    <Inquilinos data={watch("inquilinos")} />
+                                </TabPanel>
+                                <TabPanel>
+                                    <Proprietarios
+                                        data={watch("proprietarios")}
+                                    />
+                                </TabPanel>
+                                <TabPanel>
+                                    <Fiadores data={watch("fiadores")} />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

@@ -23,13 +23,14 @@ const InputBase = (
         rightAddon,
         leftElement,
         rightElement,
+        size,
         ...rest
     },
     ref
 ) => {
     return (
         <FormControl isInvalid={error} isRequired={required} {...rest}>
-            {label && <FormLabel>{label}</FormLabel>}
+            {label && <FormLabel fontSize={size}>{label}</FormLabel>}
             <InputGroup>
                 {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
                 {leftElement && (

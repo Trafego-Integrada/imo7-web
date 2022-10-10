@@ -2,10 +2,13 @@ import {
     Box,
     Button,
     Circle,
+    Flex,
     Grid,
     GridItem,
+    Icon,
     IconButton,
     Table,
+    Tag,
     Tbody,
     Td,
     Text,
@@ -13,7 +16,7 @@ import {
     Thead,
     Tr,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { MdPageview } from "react-icons/md";
 import { FormDate } from "@/components/Form/FormDate";
 import { FormInput } from "@/components/Form/FormInput";
@@ -21,168 +24,257 @@ import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
 import { ModalChamados } from "@/components/Modals/chamados";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
+import { useQuery } from "react-query";
+import { listarChamados } from "@/services/models/chamado";
+import { formatoData } from "@/helpers/helpers";
+import { useRouter } from "next/router";
+import { FiBookOpen, FiEye, FiSearch } from "react-icons/fi";
 
 const Cobrancas = () => {
+    const router = useRouter();
     const modalchamados = useRef();
+    const [filtro, setFiltro] = useState({});
+    const { data } = useQuery(["chamados", filtro], listarChamados);
     return (
         <>
             <Layout title="Chamados">
-                <Box p={5}>
-                    <Box bg="graylight" p={5}>
+                <Flex flexDir="column" gridGap={4} p={4}>
+                    <Box bg="white" p={4}>
                         <Grid gap={5}>
                             <Grid
                                 templateColumns={{
                                     sm: "repeat(1, 1fr)",
                                     md: "repeat(2, 1fr)",
-                                    lg: "repeat(4, 1fr)",
+                                    lg: "repeat(7, 1fr)",
                                 }}
                                 gap={5}
                             >
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Nº do contrato"
                                         placeholder="digite um número..."
-                                        bg="white"
+                                        value={filtro.codigo}
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                codigo: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Endereço"
                                         placeholder="digite a rua/bairro/cidade..."
-                                        bg="white"
+                                        value={filtro.endereco}
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                endereco: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Inquilino"
                                         placeholder="digite o nome do inquilino..."
-                                        bg="white"
+                                        value={filtro.inquilino}
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                inquilino: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
 
                                 <GridItem>
                                     <FormSelect
+                                        size="sm"
                                         label="Status"
-                                        bg="white"
                                         placeholder="Selecione..."
+                                        value={filtro.status}
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                status: e.target.value,
+                                            })
+                                        }
                                     >
-                                        <option value="">Aberto</option>
-                                        <option value="">Fechado</option>
+                                        <option value="ABERTO" selected>
+                                            Aberto
+                                        </option>
+                                        <option value="FINALIZADO">
+                                            Finalizado
+                                        </option>
+                                        <option value="ARQUIVADO">
+                                            Arquivado
+                                        </option>
                                     </FormSelect>
                                 </GridItem>
 
                                 <GridItem>
-                                    <FormDate
+                                    <FormInput
+                                        size="sm"
+                                        type="date"
                                         label="Data de criação"
-                                        bg="white"
+                                        value={filtro.createdAt}
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                createdAt: e.target.value,
+                                            })
+                                        }
                                     />
                                 </GridItem>
 
                                 <GridItem>
-                                    <FormDate
+                                    <FormInput
+                                        size="sm"
+                                        type="date"
                                         label="Data de retorno"
-                                        bg="white"
                                     />
+                                </GridItem>
+                                <GridItem as={Flex} align="flex-end">
+                                    <Button
+                                        size="md"
+                                        bg="none"
+                                        border="1px solid red"
+                                        _hover={{
+                                            bg: "red",
+                                            color: "white",
+                                            cursor: "pointer",
+                                        }}
+                                        _focus={{ bg: "none" }}
+                                        _active={{ bg: "none" }}
+                                        color="red"
+                                        onClick={() =>
+                                            setFiltro({
+                                                status: null,
+                                                createdAt: "",
+                                                codigo: "",
+                                                endereco: "",
+                                                inquilino: "",
+                                                query: "",
+                                            })
+                                        }
+                                    >
+                                        Limpar Filtro
+                                    </Button>
                                 </GridItem>
                             </Grid>
                         </Grid>
-                        <Box
-                            w="100%"
-                            mt={5}
-                            d="flex"
-                            gap={5}
-                            justifyContent="flex-end"
-                        >
-                            <Button
-                                size="md"
-                                bg="none"
-                                border="1px solid red"
-                                _hover={{
-                                    bg: "red",
-                                    color: "white",
-                                    cursor: "pointer",
-                                }}
-                                _focus={{ bg: "none" }}
-                                _active={{ bg: "none" }}
-                                color="red"
-                            >
-                                Limpar Filtro
-                            </Button>
-
-                            <Button
-                                size="md"
-                                bg="none"
-                                border="1px solid black"
-                                _hover={{
-                                    bg: "black",
-                                    color: "white",
-                                    cursor: "pointer",
-                                }}
-                                _focus={{ bg: "none" }}
-                                _active={{ bg: "none" }}
-                                color="black"
-                            >
-                                Filtrar
-                            </Button>
-                        </Box>
                     </Box>
 
-                    <Box bg="graylight" overflowX="auto" p={5} mt={5}>
+                    <Box bg="white" overflowX="auto" p={4}>
                         <Box p={5} bg="white">
                             <FormInput
                                 bg="white"
                                 w="max"
                                 placeholder="Busca rápida..."
+                                value={filtro.query}
+                                onChange={(e) =>
+                                    setFiltro({
+                                        ...filtro,
+                                        query: e.target.value,
+                                    })
+                                }
                             />
                         </Box>
-                        <Table variant="striped" mt={5} bg="white">
+                        <Table variant="striped" mt={5} bg="white" size="sm">
                             <Thead>
                                 <Tr>
-                                    <Th>Nº do chamado</Th>
-                                    <Th>Inquilino</Th>
-                                    <Th>Responsável</Th>
-                                    <Th>Data de criação</Th>
-                                    <Th>Data de retorno</Th>
-                                    <Th>Status</Th>
-                                    <Th>Nº do contrato</Th>
-                                    <Th>Endereço</Th>
+                                    <Th w={18} textAlign="center">
+                                        Nº do chamado
+                                    </Th>
+                                    <Th w={36} textAlign="center">
+                                        Departamento
+                                    </Th>
+                                    <Th w={36} textAlign="center">
+                                        Assunto
+                                    </Th>
+                                    <Th w={44} textAlign="center">
+                                        Aberto por
+                                    </Th>
+
+                                    <Th>Contrato</Th>
+                                    <Th w={36} textAlign="center">
+                                        Criado em
+                                    </Th>
+                                    <Th w={36} textAlign="center">
+                                        Ultima interação
+                                    </Th>
+                                    <Th w={18} textAlign="center">
+                                        Status
+                                    </Th>
+                                    <Th w={24} textAlign="center">
+                                        Ações
+                                    </Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                <Tr>
-                                    <Td>83282323</Td>
+                                {data?.data?.data.map((item) => (
+                                    <Tr key={item.id}>
+                                        <Td textAlign="center">{item.id}</Td>
+                                        <Td textAlign="center">
+                                            {item.assunto?.departamento?.titulo}
+                                        </Td>
+                                        <Td textAlign="center">
+                                            {item.assunto?.titulo}
+                                        </Td>
+                                        <Td textAlign="center">
+                                            {item.criador?.nome}
+                                        </Td>
 
-                                    <Td>Fernando Camargo</Td>
-                                    <Td>Ramerson Modesto</Td>
-                                    <Td>04/05/2022</Td>
-                                    <Td>10/05/2022</Td>
+                                        <Td>
+                                            <Text>{item.contrato?.codigo}</Text>
+                                            <Text>
+                                                {
+                                                    item.contrato?.imovel
+                                                        ?.endereco
+                                                }
+                                            </Text>
+                                        </Td>
+                                        <Td textAlign="center">
+                                            {formatoData(item.createdAt)}
+                                        </Td>
+                                        <Td textAlign="center">
+                                            {formatoData(
+                                                item.interacoes[
+                                                    item.interacoes.length - 1
+                                                ].createdAt
+                                            )}
+                                        </Td>
 
-                                    <Td>
-                                        <Grid gap={2}>
-                                            <Circle size="5" bg="green" />
-                                            <Text>Aberto</Text>
-                                        </Grid>
-                                    </Td>
-
-                                    <Td>4342424242</Td>
-                                    <Td>
-                                        Rua Orlando de moraes, 146, Santa Rita
-                                        2, Nova Odessa
-                                    </Td>
-                                    <Td>
-                                        <IconButton
-                                            as={MdPageview}
-                                            color="bluelight"
-                                            onClick={() =>
-                                                modalchamados.current.onOpen()
-                                            }
-                                        />
-                                    </Td>
-                                </Tr>
+                                        <Td textAlign="center">
+                                            <Tag>{item.status}</Tag>
+                                        </Td>
+                                        <Td textAlign="center">
+                                            <IconButton
+                                                size="sm"
+                                                icon={<Icon as={FiEye} />}
+                                                colorScheme="blue"
+                                                onClick={() =>
+                                                    router.push({
+                                                        pathname:
+                                                            "/admin/chamados/[id]",
+                                                        query: {
+                                                            id: item.id,
+                                                        },
+                                                    })
+                                                }
+                                            />
+                                        </Td>
+                                    </Tr>
+                                ))}
                             </Tbody>
                         </Table>
                     </Box>
-                </Box>
+                </Flex>
             </Layout>
             <ModalChamados ref={modalchamados} />
         </>

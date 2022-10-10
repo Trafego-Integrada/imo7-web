@@ -10,7 +10,7 @@ const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 handler.use(checkAuth);
 handler.get(async (req, res) => {
     const { documento } = req.user;
-    console.log(documento);
+
     const user = await getUser({ documento });
 
     if (!user) {

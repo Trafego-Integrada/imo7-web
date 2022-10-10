@@ -79,8 +79,8 @@ const Home = () => {
                 <Box p={5}>
                     <FiltroContratos filtro={filtro} setFiltro={setFiltro} />
 
-                    <Box bg="graylight" overflowX="auto" p={5} mt={5}>
-                        <Flex p={5} bg="white" gap={4} align="center">
+                    <Box bg="white" overflowX="auto" p={5} mt={5}>
+                        <Flex gap={4} align="center">
                             <FormInput
                                 bg="white"
                                 maxW={96}
@@ -98,7 +98,7 @@ const Home = () => {
                             {isFetching && <Spinner size="sm" />}
                         </Flex>
 
-                        <Table variant="striped" mt={5} bg="white" size="sm">
+                        <Table variant="striped" mt={5} size="sm">
                             <Thead>
                                 <Tr>
                                     <Th>Nº do contrato</Th>

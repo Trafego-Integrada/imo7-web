@@ -1,17 +1,17 @@
-import nextConnect from "next-connect";
-import multiparty from "multiparty";
+import formidable from "formidable";
+const form = formidable({ multiples: true }); // multiples means req.files will be an array
 
-const multipart = nextConnect();
-
-multipart.use(async (req, res, next) => {
-    const form = new multiparty.Form();
-
-    await form.parse(req, function (err, fields, files) {
-        console.log(fields, files)
-        req.body = fields;
-        req.files = files;
+export const multiparty = async (req, res, next) => {
+    const contentType = req.headers["content-type"];
+    if (contentType && contentType.indexOf("multipart/form-data") !== -1) {
+        form.parse(req, (err, fields, files) => {
+            if (!err) {
+                req.body = fields; // sets the body field in the request object
+                req.files = files; // sets the files field in the request object
+            }
+            next(); // continues to the next middleware or to the route
+        });
+    } else {
         next();
-    });
-});
-
-export default multipart;
+    }
+};

@@ -10,7 +10,7 @@ handle.get(async (req, res) => {
             id: Number(id),
         },
         include: {
-            AnexoInteracao: true,
+            anexos: true,
             boletos: true,
             chamados: true,
             conta: true,

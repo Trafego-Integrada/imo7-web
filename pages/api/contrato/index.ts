@@ -1,9 +1,10 @@
+import { checkAuth } from "@/middleware/checkAuth";
 import { Prisma } from "@prisma/client";
 import nextConnect from "next-connect";
 import prisma from "../../../lib/prisma";
 
 const handle = nextConnect();
-
+handle.get(checkAuth);
 handle.get(async (req, res) => {
     try {
         const {
@@ -20,6 +21,8 @@ handle.get(async (req, res) => {
             estado,
             pagina,
             linhas,
+            proprietarioId,
+            inquilinoId,
         } = req.query;
         let filtroQuery: Prisma.ContratoWhereInput = {};
 
@@ -172,6 +175,34 @@ handle.get(async (req, res) => {
                         contains: estado,
                     },
                 },
+            };
+        }
+        if (proprietarioId) {
+            filtroQuery = {
+                ...filtroQuery,
+                OR: [
+                    {
+                        proprietarios: {
+                            some: {
+                                id: Number(proprietarioId),
+                            },
+                        },
+                    },
+                ],
+            };
+        }
+        if (inquilinoId) {
+            filtroQuery = {
+                ...filtroQuery,
+                OR: [
+                    {
+                        inquilinos: {
+                            some: {
+                                id: Number(inquilinoId),
+                            },
+                        },
+                    },
+                ],
             };
         }
         let paginacao = {};

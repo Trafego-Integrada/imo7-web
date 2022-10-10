@@ -21,7 +21,13 @@ import { NextChakraLink } from "../NextChakraLink";
 export const LayoutPainel = ({ children }) => {
     const router = useRouter();
     const { usuario, signOut } = useAuth();
-    const { data: contratos } = useQuery(["meusContratos"], listarContratos);
+    const { data: contratos } = useQuery(
+        [
+            "meusContratos",
+            { proprietarioId: usuario?.id, inquilinoId: usuario?.id },
+        ],
+        listarContratos
+    );
     return (
         <Box bg="gray.100" minH="100vh">
             <Stack as="aside" bg="blue.600">
@@ -34,15 +40,23 @@ export const LayoutPainel = ({ children }) => {
                 >
                     <Menu>
                         <MenuButton color="white">
-                            {contratos && contratos.length
+                            {contratos && contratos.data?.data?.length
                                 ? "Selecione um contrato"
                                 : "Você não possui contratos ativos"}
                         </MenuButton>
                         <MenuList>
                             {contratos &&
-                                contratos.length > 0 &&
-                                contratos.map((item, key) => (
-                                    <MenuItem key={key}>Download</MenuItem>
+                                contratos.data?.data?.length > 0 &&
+                                contratos.data?.data.map((item, key) => (
+                                    <NextChakraLink
+                                        key={item.id}
+                                        href={`/${item.id}`}
+                                    >
+                                        <MenuItem>
+                                            {item.codigo} -{" "}
+                                            {item.imovel?.endereco}
+                                        </MenuItem>
+                                    </NextChakraLink>
                                 ))}
                         </MenuList>
                     </Menu>
@@ -51,8 +65,8 @@ export const LayoutPainel = ({ children }) => {
                             <Flex gridGap={2}>
                                 <Avatar
                                     size="sm"
-                                    name={usuario.nome}
-                                    src={usuario.avatar}
+                                    name={usuario?.nome}
+                                    src={usuario?.avatar}
                                 />
                                 <Flex
                                     flexDirection="column"
@@ -111,26 +125,38 @@ export const LayoutPainel = ({ children }) => {
                         >
                             Home
                         </NextChakraLink>
-                        <NextChakraLink
-                            href="/faturas"
-                            fontWeight={
-                                router.asPath == "/faturas" ? "bold" : "normal"
-                            }
-                            letterSpacing="wider"
-                            _hover={{ fontWeight: "bold" }}
-                        >
-                            Faturas
-                        </NextChakraLink>
-                        <NextChakraLink
-                            href="/chamados"
-                            fontWeight={
-                                router.asPath == "/chamados" ? "bold" : "normal"
-                            }
-                            letterSpacing="wider"
-                            _hover={{ fontWeight: "bold" }}
-                        >
-                            Chamados
-                        </NextChakraLink>
+                        {router.query.contratoId &&
+                            router.query.contratoId != "undefined" && (
+                                <NextChakraLink
+                                    href={`/${router.query.contratoId}/faturas`}
+                                    fontWeight={
+                                        router.asPath ==
+                                        `/${router.query.contratoId}/faturas`
+                                            ? "bold"
+                                            : "normal"
+                                    }
+                                    letterSpacing="wider"
+                                    _hover={{ fontWeight: "bold" }}
+                                >
+                                    Faturas
+                                </NextChakraLink>
+                            )}
+                        {router.query.contratoId &&
+                            router.query.contratoId != "undefined" && (
+                                <NextChakraLink
+                                    href={`/${router.query.contratoId}/chamados`}
+                                    fontWeight={
+                                        router.asPath ==
+                                        `/${router.query.contratoId}/chamados`
+                                            ? "bold"
+                                            : "normal"
+                                    }
+                                    letterSpacing="wider"
+                                    _hover={{ fontWeight: "bold" }}
+                                >
+                                    Chamados
+                                </NextChakraLink>
+                            )}
                     </Flex>
                 </Container>
             </Stack>

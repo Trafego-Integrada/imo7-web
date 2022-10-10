@@ -58,6 +58,10 @@ model Usuario {
     boletos               Boleto[]
     contratosFiador       Contrato[]               @relation("Fiadores")
     Extrato               Extrato[]
+    interacoesChamado     InteracaoChamado[]
+    conversas             ConversaChamado[]
+    conversasCriador      ConversaChamado[]        @relation("CriadorConversa")
+    Anexo                 Anexo[]
 }
 
 model ApiToken {
@@ -190,43 +194,43 @@ model ProprietariosOnImoveis {
 }
 
 model Contrato {
-    id                Int              @id @default(autoincrement())
+    id                Int         @id @default(autoincrement())
     codigo            String
     taxaAdm           Decimal?
-    dataInicio        DateTime         @db.Date
-    dataFim           DateTime?        @db.Date
+    dataInicio        DateTime    @db.Date
+    dataFim           DateTime?   @db.Date
     valorAluguel      Decimal?
     valorBonus        Decimal?
     diaVencimento     Int?
     diaRecebimento    Int?
     diaDeposito       Int?
     ultimaParcPaga    Int?
-    ultimoRecebimento DateTime?        @db.Date
-    ultimoBomPara     DateTime?        @db.Date
-    ultimoRepasse     DateTime?        @db.Date
+    ultimoRecebimento DateTime?   @db.Date
+    ultimoBomPara     DateTime?   @db.Date
+    ultimoRepasse     DateTime?   @db.Date
     formaRepasse      String?
-    dataReajuste      DateTime?        @db.Date
+    dataReajuste      DateTime?   @db.Date
     indiceReajuste    String?
     responsavel       String?
     multa             Decimal?
     juros             Decimal?
     formaPagamento    String?
-    observacoes       String?          @db.LongText
-    imobiliaria       Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
+    observacoes       String?     @db.LongText
+    imobiliaria       Imobiliaria @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId     Int
-    imovel            Imovel?          @relation(fields: [imovelId], references: [id])
+    imovel            Imovel?     @relation(fields: [imovelId], references: [id])
     imovelId          Int?
-    proprietarios     Usuario[]        @relation("Proprietarios")
-    inquilinos        Usuario[]        @relation("Inquilinos")
-    fiadores          Usuario[]        @relation("Fiadores")
+    proprietarios     Usuario[]   @relation("Proprietarios")
+    inquilinos        Usuario[]   @relation("Inquilinos")
+    fiadores          Usuario[]   @relation("Fiadores")
     boletos           Boleto[]
     extratos          Extrato[]
     chamados          Chamado[]
-    createdAt         DateTime         @default(now())
-    updatedAt         DateTime         @updatedAt
+    createdAt         DateTime    @default(now())
+    updatedAt         DateTime    @updatedAt
     deletedAt         DateTime?
-    AnexoInteracao    AnexoInteracao[]
-    conta             Conta            @relation(fields: [contaId], references: [id])
+    anexos            Anexo[]
+    conta             Conta       @relation(fields: [contaId], references: [id])
     contaId           Int
 }
 
@@ -359,47 +363,73 @@ model AssuntoChamado {
 }
 
 model Chamado {
-    id             Int                @id @default(autoincrement())
-    participantes  Usuario[]
-    titulo         String
-    assuntoId      Int
-    assunto        AssuntoChamado     @relation(references: [id], fields: [assuntoId])
-    createdAt      DateTime           @default(now())
-    updatedAt      DateTime           @updatedAt
-    deletedAt      DateTime?
-    contrato       Contrato?          @relation(fields: [contratoId], references: [id])
-    contratoId     Int?
-    criadorId      Int
-    criador        Usuario            @relation("CriadorChamado", references: [id], fields: [criadorId])
-    status         StatusChamado      @default(ABERTO)
-    interacoes     InteracaoChamado[]
-    AnexoInteracao AnexoInteracao[]
-    imobiliaria    Imobiliaria        @relation(references: [id], fields: [imobiliriaId])
-    imobiliriaId   Int
-    conta          Conta              @relation(fields: [contaId], references: [id])
-    contaId        Int
+    id            Int                @id @default(autoincrement())
+    participantes Usuario[]
+    titulo        String
+    assuntoId     Int
+    assunto       AssuntoChamado     @relation(references: [id], fields: [assuntoId])
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime           @updatedAt
+    deletedAt     DateTime?
+    contrato      Contrato?          @relation(fields: [contratoId], references: [id])
+    contratoId    Int?
+    criadorId     Int
+    criador       Usuario            @relation("CriadorChamado", references: [id], fields: [criadorId])
+    status        StatusChamado      @default(ABERTO)
+    interacoes    InteracaoChamado[]
+    anexos        Anexo[]
+    imobiliaria   Imobiliaria        @relation(references: [id], fields: [imobiliriaId])
+    imobiliriaId  Int
+    conta         Conta              @relation(fields: [contaId], references: [id])
+    contaId       Int
+    conversas     ConversaChamado[]
+}
+
+model ConversaChamado {
+    id            Int                @id @default(autoincrement())
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime           @updatedAt
+    deletedAt     DateTime?
+    chamado       Chamado            @relation(references: [id], fields: [chamadoId])
+    chamadoId     Int
+    participantes Usuario[]
+    interacoes    InteracaoChamado[]
+    criador       Usuario            @relation("CriadorConversa", references: [id], fields: [criadorId])
+    criadorId     Int
+    anexos        Anexo[]
 }
 
 model InteracaoChamado {
-    id        Int       @id @default(autoincrement())
-    mensagem  String?   @db.LongText
-    chamadoId Int
-    chamado   Chamado   @relation(references: [id], fields: [chamadoId])
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
+    id                Int              @id @default(autoincrement())
+    mensagem          String?          @db.LongText
+    chamadoId         Int
+    chamado           Chamado          @relation(references: [id], fields: [chamadoId])
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+    deletedAt         DateTime?
+    usuario           Usuario          @relation(fields: [usuarioId], references: [id])
+    usuarioId         Int
+    conversa          ConversaChamado? @relation(fields: [conversaChamadoId], references: [id])
+    conversaChamadoId Int?
+    anexos            Anexo[]
 }
 
-model AnexoInteracao {
-    id         Int       @id @default(autoincrement())
-    anexo      String    @db.LongText
-    contratoId Int
-    contrato   Contrato  @relation(references: [id], fields: [contratoId])
-    chamadoId  Int
-    chamado    Chamado   @relation(references: [id], fields: [chamadoId])
-    createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updatedAt
-    deletedAt  DateTime?
+model Anexo {
+    id                 Int               @id @default(autoincrement())
+    anexo              String            @db.LongText
+    createdAt          DateTime          @default(now())
+    updatedAt          DateTime          @updatedAt
+    deletedAt          DateTime?
+    contrato           Contrato?         @relation(references: [id], fields: [contratoId])
+    contratoId         Int?
+    chamado            Chamado?          @relation(references: [id], fields: [chamadoId])
+    chamadoId          Int?
+    usuario            Usuario?          @relation(fields: [usuarioId], references: [id])
+    usuarioId          Int?
+    conversa           ConversaChamado?  @relation(fields: [conversaChamadoId], references: [id])
+    conversaChamadoId  Int?
+    interacao          InteracaoChamado? @relation(fields: [interacaoChamadoId], references: [id])
+    interacaoChamadoId Int?
 }
 
 enum StatusChamado {

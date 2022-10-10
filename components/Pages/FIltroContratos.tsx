@@ -20,7 +20,7 @@ import { FormSelect } from "../Form/FormSelect";
 export const FiltroContratos = ({ setFiltro, filtro }) => {
     const { isOpen, onToggle } = useDisclosure();
     return (
-        <Box bg="graylight" p={5}>
+        <Box bg="white" p={5}>
             <Grid gap={5}>
                 <Grid
                     templateColumns={{
@@ -28,13 +28,13 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                         md: "repeat(2, 1fr)",
                         lg: "repeat(5, 1fr)",
                     }}
-                    gap={5}
+                    gap={2}
                 >
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Nº do contrato"
                             placeholder="digite um número..."
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -45,8 +45,8 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Dia de vencimento"
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -57,9 +57,9 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Nome do propietário"
                             placeholder="digite o nome do propietário..."
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -70,9 +70,9 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Nome do inquilino"
                             placeholder="digite o nome do inquilino..."
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -83,9 +83,9 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Nome do fiador"
                             placeholder="digite o nome do fiador..."
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -97,9 +97,9 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
 
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Rua"
                             placeholder="digite o nome da rua..."
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -110,9 +110,9 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Número"
                             placeholder="digite o número da rua..."
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -123,9 +123,9 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Bairro"
                             placeholder="digite o nome do bairro..."
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -136,9 +136,9 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Cidade"
                             placeholder="digite o nome da cidade..."
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -152,9 +152,9 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormInput
+                            size="sm"
                             label="Estado"
                             placeholder="digite o nome do estado..."
-                            bg="white"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -167,62 +167,11 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                         />
                     </GridItem>
                 </Grid>
-
-                <Collapse in={isOpen} animateOpacity>
-                    <Flex gap={5}>
-                        <Box w="max">
-                            <FormDate label="Data início" />
-                        </Box>
-                        <FormSelect
-                            label="Formas de pagamento"
-                            placeholder="selecione..."
-                            bg="white"
-                            w="max"
-                        >
-                            <option value=""></option>
-                        </FormSelect>
-                    </Flex>
-                </Collapse>
             </Grid>
-            <Grid
-                mt={5}
-                templateColumns={{
-                    sm: "repeat(1, 1fr)",
-                    md: "repeat(2, 1fr)",
-                }}
-            >
-                <GridItem w="100%">
-                    <Button
-                        size="md"
-                        onClick={onToggle}
-                        bg="none"
-                        border="none"
-                        p={0}
-                        _hover={{
-                            bg: "none",
-                            border: "none",
-                            cursor: "pointer",
-                        }}
-                        _focus={{ bg: "none", border: "none" }}
-                        _active={{ bg: "none", border: "none" }}
-                        color="red"
-                    >
-                        {isOpen ? (
-                            <Text pr="2">Fechar opções de filtros</Text>
-                        ) : (
-                            <Text pr="2">Exibir mais opções de filtros</Text>
-                        )}
-                        {isOpen ? (
-                            <Icon as={MdOutlineKeyboardArrowUp} />
-                        ) : (
-                            <Icon as={MdOutlineKeyboardArrowDown} />
-                        )}
-                    </Button>
-                </GridItem>
-
+            <Grid mt={2}>
                 <GridItem w="100%" d="flex" justifyContent="flex-end" gap={5}>
                     <Button
-                        size="md"
+                        size="sm"
                         bg="none"
                         border="1px solid red"
                         _hover={{
@@ -238,7 +187,7 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </Button>
 
                     <Button
-                        size="md"
+                        size="sm"
                         bg="none"
                         border="1px solid black"
                         _hover={{

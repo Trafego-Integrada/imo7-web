@@ -45,6 +45,7 @@ export const checkAuth = async (req, res, next) => {
 
         return next();
     } catch (err) {
+        console.log(err);
         return res.status(401).json({
             error: true,
             code: "token.expired",

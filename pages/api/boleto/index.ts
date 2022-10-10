@@ -21,6 +21,7 @@ handle.get(async (req, res) => {
             estado,
             pagina,
             linhas,
+            contratoId,
         } = req.query;
 
         let filtroQuery: Prisma.BoletoWhereInput = {};
@@ -52,6 +53,14 @@ handle.get(async (req, res) => {
                         },
                     },
                 ],
+            };
+        }
+        if (contratoId) {
+            filtroQuery = {
+                ...filtroQuery,
+                contrato: {
+                    id: Number(contratoId),
+                },
             };
         }
         if (codigo) {
@@ -185,6 +194,7 @@ handle.get(async (req, res) => {
             },
         });
     } catch (error) {
+        console.log(error);
         res.status(500).send({
             success: false,
             message: error.message,
