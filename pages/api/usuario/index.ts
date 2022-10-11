@@ -250,7 +250,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                id: 3,
+                                id: 2,
                             },
                         },
                     },
@@ -271,7 +271,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                id: 3,
+                                id: 2,
                             },
                         },
                     },
@@ -298,7 +298,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                id: 2,
+                                id: 3,
                             },
                         },
                     },
@@ -319,7 +319,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                id: 2,
+                                id: 3,
                             },
                         },
                     },
