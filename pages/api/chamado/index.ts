@@ -258,6 +258,11 @@ handle.post(async (req, res) => {
                         id: data.id,
                     },
                 },
+                criador: {
+                    connect: {
+                        id: req.user.id,
+                    },
+                },
                 interacoes: {
                     create: {
                         chamado: {
