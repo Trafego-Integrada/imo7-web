@@ -263,6 +263,11 @@ handle.post(async (req, res) => {
                         id: req.user.id,
                     },
                 },
+                participantes: {
+                    connect: {
+                        id: req.user.id,
+                    },
+                },
                 interacoes: {
                     create: {
                         chamado: {
