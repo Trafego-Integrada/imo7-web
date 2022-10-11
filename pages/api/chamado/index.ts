@@ -227,16 +227,7 @@ handle.post(async (req, res) => {
                     },
                 },
                 titulo,
-                interacoes: {
-                    create: {
-                        mensagem,
-                        usuario: {
-                            connect: {
-                                id: req.user.id,
-                            },
-                        },
-                    },
-                },
+
                 criador: {
                     connect: {
                         id: req.user.id,
@@ -255,6 +246,31 @@ handle.post(async (req, res) => {
                 imobiliaria: {
                     connect: {
                         id: contrato?.imobiliariaId,
+                    },
+                },
+            },
+        });
+
+        const conversa = await prisma.conversaChamado.create({
+            data: {
+                chamado: {
+                    connect: {
+                        id: data.id,
+                    },
+                },
+                interacoes: {
+                    create: {
+                        chamado: {
+                            connect: {
+                                id: data.id,
+                            },
+                        },
+                        mensagem,
+                        usuario: {
+                            connect: {
+                                id: req.user.id,
+                            },
+                        },
                     },
                 },
             },

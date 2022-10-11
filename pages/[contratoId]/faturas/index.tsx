@@ -24,7 +24,10 @@ import { LayoutPainel } from "../../../components/Layouts/LayoutPainel";
 const Chamados: NextPage = () => {
     const router = useRouter();
     const { usuario, signOut } = useAuth();
-    const { data: contratos } = useQuery(["boletos"], listarBoletos);
+    const { data: contratos } = useQuery(
+        ["boletos", { contratoId: router.query.contratoId }],
+        listarBoletos
+    );
     return (
         <LayoutPainel>
             <Container maxW="container.lg">
