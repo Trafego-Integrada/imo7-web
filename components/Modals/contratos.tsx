@@ -42,7 +42,10 @@ import { FormDate } from "../Form/FormDate";
 import { FormInput } from "../Form/FormInput";
 import { FormSelect } from "../Form/FormSelect";
 import { Title } from "../Gerais/title";
+import { Chamados } from "./Contrato/Chamados";
 import { Cobrancas } from "./Contrato/Cobrancas";
+import { Documentos } from "./Contrato/Documentos";
+import { Extratos } from "./Contrato/Extratos";
 import { Fiadores } from "./Contrato/Fiadores";
 import { Inquilinos } from "./Contrato/Inquilinos";
 import { Proprietarios } from "./Contrato/Proprietarios";
@@ -129,6 +132,28 @@ const ModalBase = ({}, ref) => {
                                         rounded="full"
                                     >
                                         {watch("fiadores")?.length}
+                                    </Badge>
+                                </Tab>
+                                <Tab>
+                                    Extratos
+                                    <Badge
+                                        ml={1}
+                                        size="sm"
+                                        textAlign="center"
+                                        rounded="full"
+                                    >
+                                        {watch("extratos")?.length}
+                                    </Badge>
+                                </Tab>
+                                <Tab>
+                                    Chamados
+                                    <Badge
+                                        ml={1}
+                                        size="sm"
+                                        textAlign="center"
+                                        rounded="full"
+                                    >
+                                        {watch("chamados")?.length}
                                     </Badge>
                                 </Tab>
                             </TabList>
@@ -272,63 +297,10 @@ const ModalBase = ({}, ref) => {
                                     </Grid>
                                 </TabPanel>
                                 <TabPanel>
-                                    <Grid d="flex" gap={3}>
-                                        <Button
-                                            size="sm"
-                                            bg="none"
-                                            border="1px solid #2F80ED"
-                                            _hover={{
-                                                bg: "bluelight",
-                                                color: "white",
-                                                cursor: "pointer",
-                                            }}
-                                            _focus={{ bg: "none" }}
-                                            _active={{ bg: "none" }}
-                                            color="bluelight"
-                                        >
-                                            <Icon as={RiAddLine} />
-                                            <Text pl="2">Anexar arquivo</Text>
-                                        </Button>
-
-                                        <Button
-                                            size="sm"
-                                            bg="none"
-                                            border="1px solid #F2994A"
-                                            _hover={{
-                                                bg: "orange",
-                                                color: "white",
-                                                cursor: "pointer",
-                                            }}
-                                            _focus={{ bg: "none" }}
-                                            _active={{ bg: "none" }}
-                                            color="orange"
-                                        >
-                                            <Icon as={IoDocumentTextOutline} />
-                                            <Text pl="2">Gerar documento</Text>
-                                        </Button>
-                                    </Grid>
-
-                                    <Table
-                                        variant="striped"
-                                        size="sm"
-                                        mt={5}
-                                        bg="white"
-                                    >
-                                        <Thead>
-                                            <Tr>
-                                                <Th>#</Th>
-                                                <Th>Título</Th>
-                                                <Th>Criado em</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
-                                            <Tr>
-                                                <Td>643334</Td>
-                                                <Td>comprovante-contrato</Td>
-                                                <Td>13/05/2022</Td>
-                                            </Tr>
-                                        </Tbody>
-                                    </Table>
+                                    <Documentos
+                                        contratoId={watch("id")}
+                                        data={watch("anexos")}
+                                    />
                                 </TabPanel>
                                 <TabPanel>
                                     <Cobrancas data={watch("boletos")} />
@@ -343,6 +315,12 @@ const ModalBase = ({}, ref) => {
                                 </TabPanel>
                                 <TabPanel>
                                     <Fiadores data={watch("fiadores")} />
+                                </TabPanel>
+                                <TabPanel>
+                                    <Extratos data={watch("extratos")} />
+                                </TabPanel>
+                                <TabPanel>
+                                    <Chamados data={watch("chamados")} />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

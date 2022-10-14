@@ -1,57 +1,59 @@
 import {
+    Alert,
     Box,
     Button,
+    Container,
     Flex,
     Grid,
     GridItem,
+    Heading,
     Icon,
     Image,
     Stack,
     Text,
     VStack,
 } from "@chakra-ui/react";
-
 import { useContext, useState } from "react";
-import { AuthContext } from "../contexts/AuthContext";
-import { withSSRGuest } from "../utils/withSSRGuests";
+import { AuthContext } from "@/contexts/AuthContext";
+import { withSSRGuest } from "@/utils/withSSRGuests";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MdFingerprint } from "react-icons/md";
-import { Input } from "../components/Forms/Input";
+import { Input } from "@/components/Forms/Input";
 import { FaFacebook, FaGoogle, FaSignInAlt } from "react-icons/fa";
 import { CgPassword } from "react-icons/cg";
 import BeatLoader from "react-spinners/BeatLoader";
 import { NextPage } from "next";
-import { Heading } from "@chakra-ui/layout";
+import { Site } from "@/components/Layouts/Site";
 import { NextChakraLink } from "@/components/NextChakraLink";
-
+import { useAuth } from "@/hooks/useAuth";
 interface CredentialsProps {
-    documento: string;
+    email: string;
     password: string;
 }
 
 const schema = yup.object().shape({
     documento: yup.string().required("O CPF é obrigatório"),
-    password: yup.string().required("A senha é obrigatória"),
 });
 
 const SignIn: NextPage = () => {
+    const [enviado, setEnviado] = useState(false);
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
     });
     const [error, setError] = useState(null);
-    const { signIn } = useContext(AuthContext);
+    const { recuperarSenha } = useAuth();
     const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
-        console.log(data);
         try {
             setError(null);
-            await signIn(data);
+            const response = await recuperarSenha(data);
+            console.log(response);
+            setEnviado(true);
         } catch (error) {
             setError(error.message);
         }
@@ -74,23 +76,15 @@ const SignIn: NextPage = () => {
                     <VStack
                         as="form"
                         onSubmit={handleSubmit(onSubmit)}
-                        w={{ base: "100vw", lg: "full" }}
                         h="full"
                         align="center"
                         justify="center"
                         gridGap={4}
                         p={4}
                     >
-                        <Box
-                            display={{ base: "block", lg: "none" }}
-                            px={8}
-                            py={4}
-                        >
-                            <Heading size="4xl" display="flex" color="blue.500">
-                                Imo7
-                            </Heading>
-                        </Box>
-                        <Text>Faça seu login</Text>
+                        <Text fontSize="xl" mb={8}>
+                            Recuperar senha
+                        </Text>
                         {error && (
                             <Flex
                                 color="red"
@@ -104,21 +98,17 @@ const SignIn: NextPage = () => {
                                 </Text>
                             </Flex>
                         )}
+                        {enviado && (
+                            <Alert>
+                                Confira sua caixa de entrada, e siga os passos.
+                            </Alert>
+                        )}
                         <Input
                             w={96}
-                            type="text"
                             leftIcon={<Icon as={MdFingerprint} w={6} h={6} />}
                             placeholder="Seu CPF"
                             {...register("documento")}
                             error={errors.documento?.message}
-                        />
-                        <Input
-                            type="password"
-                            w={96}
-                            leftIcon={<Icon as={CgPassword} w={6} h={6} />}
-                            placeholder="Sua senha"
-                            {...register("password")}
-                            error={errors.password?.message}
                         />
                         <Button
                             type="submit"
@@ -128,15 +118,14 @@ const SignIn: NextPage = () => {
                             isLoading={isSubmitting}
                             spinner={<BeatLoader size={8} color="white" />}
                         >
-                            Entrar
+                            Recuperar senha
                         </Button>
-                        <NextChakraLink href="/recuperar-senha">
+                        <NextChakraLink href="/login">
                             <Button variant="ghost" size="xs">
-                                Esqueci minha senha
+                                Voltar para login
                             </Button>
                         </NextChakraLink>
                     </VStack>
-                    <VStack></VStack>
                 </GridItem>
             </Grid>
         </Stack>

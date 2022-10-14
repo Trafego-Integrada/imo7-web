@@ -212,8 +212,14 @@ handle.get(async (req, res) => {
 
 handle.post(async (req, res) => {
     try {
-        const { departamento, assunto, titulo, mensagem, contratoId } =
-            req.body;
+        const {
+            departamento,
+            assunto,
+            titulo,
+            mensagem,
+            contratoId,
+            participantes,
+        } = req.body;
         const contrato = await prisma.contrato.findUnique({
             where: {
                 id: Number(contratoId),
@@ -263,11 +269,19 @@ handle.post(async (req, res) => {
                         id: req.user.id,
                     },
                 },
-                participantes: {
-                    connect: {
-                        id: req.user.id,
-                    },
-                },
+                participantes: participantes
+                    ? {
+                          connect: participantes.map((item) => {
+                              return {
+                                  id: item.id,
+                              };
+                          }),
+                      }
+                    : {
+                          connect: {
+                              id: req.user.id,
+                          },
+                      },
                 interacoes: {
                     create: {
                         chamado: {

@@ -26,18 +26,25 @@ handle.use(multiparty);
 
 handle.get(async (req, res) => {
     try {
-        const { id } = req.query;
+        const { contratoId } = req.query;
+        let filtroQuery = {};
+        if (contratoId) {
+            filtroQuery = {
+                ...filtroQuery,
+                contratoId: Number(contratoId),
+            };
+        }
 
         const data = await prisma.anexo.findMany({
             where: {
-                id: Number(id),
+                ...filtroQuery,
+            },
+            orderBy: {
+                id: "desc",
             },
         });
 
-        res.send({
-            success: true,
-            data,
-        });
+        res.send(data);
     } catch (error) {
         res.status(500).send({
             success: false,
@@ -111,6 +118,13 @@ handle.post(async (req, res) => {
                                 anexo:
                                     process.env.NEXT_PUBLIC_URL_STORAGE +
                                     nameLocation,
+                                contrato: contratoId
+                                    ? {
+                                          connect: {
+                                              id: Number(contratoId),
+                                          },
+                                      }
+                                    : {},
                             },
                         });
                         if (conversaId && chamadoId) {
@@ -178,6 +192,13 @@ handle.post(async (req, res) => {
                     data: {
                         anexo:
                             process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
+                        contrato: contratoId
+                            ? {
+                                  connect: {
+                                      id: Number(contratoId),
+                                  },
+                              }
+                            : {},
                     },
                 });
                 if (conversaId && chamadoId) {

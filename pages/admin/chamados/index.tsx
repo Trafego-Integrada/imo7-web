@@ -29,10 +29,12 @@ import { listarChamados } from "@/services/models/chamado";
 import { formatoData } from "@/helpers/helpers";
 import { useRouter } from "next/router";
 import { FiBookOpen, FiEye, FiSearch } from "react-icons/fi";
+import { ModalAbrirChamado } from "@/components/Modals/AbrirChamado";
 
 const Cobrancas = () => {
     const router = useRouter();
     const modalchamados = useRef();
+    const abrirChamado = useRef();
     const [filtro, setFiltro] = useState({});
     const { data } = useQuery(["chamados", filtro], listarChamados);
     return (
@@ -171,7 +173,7 @@ const Cobrancas = () => {
                     </Box>
 
                     <Box bg="white" overflowX="auto" p={4}>
-                        <Box p={5} bg="white">
+                        <Flex p={5} bg="white" justify="space-between">
                             <FormInput
                                 bg="white"
                                 w="max"
@@ -184,7 +186,13 @@ const Cobrancas = () => {
                                     })
                                 }
                             />
-                        </Box>
+                            <Button
+                                colorScheme="blue"
+                                onClick={() => abrirChamado.current.onOpen()}
+                            >
+                                Abrir Chamado
+                            </Button>
+                        </Flex>
                         <Table variant="striped" mt={5} bg="white" size="sm">
                             <Thead>
                                 <Tr>
@@ -243,11 +251,13 @@ const Cobrancas = () => {
                                             {formatoData(item.createdAt)}
                                         </Td>
                                         <Td textAlign="center">
-                                            {formatoData(
-                                                item.interacoes[
-                                                    item.interacoes.length - 1
-                                                ].createdAt
-                                            )}
+                                            {item.interacoes.length &&
+                                                formatoData(
+                                                    item.interacoes[
+                                                        item.interacoes.length -
+                                                            1
+                                                    ].createdAt
+                                                )}
                                         </Td>
 
                                         <Td textAlign="center">
@@ -277,6 +287,7 @@ const Cobrancas = () => {
                 </Flex>
             </Layout>
             <ModalChamados ref={modalchamados} />
+            <ModalAbrirChamado ref={abrirChamado} />
         </>
     );
 };

@@ -62,6 +62,18 @@ model Usuario {
     conversas             ConversaChamado[]
     conversasCriador      ConversaChamado[]        @relation("CriadorConversa")
     Anexo                 Anexo[]
+    hashsRecuperacao      RecuperarSenha[]
+}
+
+model RecuperarSenha {
+    id        String    @id @default(uuid())
+    hash      String    @default(uuid())
+    utilizado Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    usuario   Usuario   @relation(fields: [usuarioId], references: [id])
+    usuarioId Int
 }
 
 model ApiToken {

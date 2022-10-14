@@ -34,39 +34,16 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData);
 
-let authChannel: BroadcastChannel;
-
 export async function signOut(ctx = undefined) {
-    console.log("cookies", parseCookies(ctx));
+    destroyCookie(undefined, "imo7.token");
+    destroyCookie(undefined, "imo7.refreshToken");
 
-    destroyCookie(ctx, "imo7.token");
-    destroyCookie(ctx, "imo7.refreshToken");
-
-    authChannel.postMessage("signOut");
     Router.push("/login");
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [usuario, setUsuario] = useState<Usuario>({} as Usuario);
     const autenticado = !!usuario;
-
-    useEffect(() => {
-        authChannel = new BroadcastChannel("auth");
-
-        authChannel.onmessage = (message) => {
-            console.log(message);
-            switch (message.data) {
-                case "signOut":
-                    Router.push("/login");
-                    break;
-                case "signIn":
-                    Router.push("/");
-                    break;
-                default:
-                    break;
-            }
-        };
-    }, []);
 
     useEffect(() => {
         const { "imo7.token": token, "imo7.account": accountId } =
@@ -108,6 +85,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 });
         }
     }, []);
+    async function recuperarSenha({ documento }) {
+        try {
+            const response = await api.post("auth/recuperarSenha", {
+                documento,
+            });
+
+            return response;
+        } catch (error) {
+            throw new Error(error.response.data?.message);
+        }
+    }
+    async function redefinirSenha({ codigo, password, confirmPassword }) {
+        try {
+            const response = await api.post("auth/redefinirSenha", {
+                codigo,
+                password,
+                confirmPassword,
+            });
+
+            return response;
+        } catch (error) {
+            throw new Error(error.response.data?.message);
+        }
+    }
 
     async function signIn({ documento: doc, password }: SignInCredentials) {
         try {
@@ -161,7 +162,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
             } else {
                 Router.push("/");
             }
-            authChannel.postMessage("signIn");
         } catch (error) {
             throw new Error(error.response.data?.message);
         }
@@ -182,6 +182,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 signOut,
                 selecionarConta,
                 selecionarContrato,
+                recuperarSenha,
+                redefinirSenha,
             }}
         >
             {children}

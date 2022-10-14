@@ -12,7 +12,23 @@ handle.get(async (req, res) => {
         include: {
             anexos: true,
             boletos: true,
-            chamados: true,
+            chamados: {
+                include: {
+                    assunto: {
+                        include: {
+                            departamento: true,
+                        },
+                    },
+                    criador: true,
+                    participantes: true,
+                    interacoes: true,
+                    contrato: {
+                        include: {
+                            imovel: true,
+                        },
+                    },
+                },
+            },
             conta: true,
             extratos: true,
             fiadores: true,

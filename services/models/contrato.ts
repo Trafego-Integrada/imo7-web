@@ -34,3 +34,12 @@ export const listarParticipantesContratos = async ({ queryKey }) => {
     );
     return data;
 };
+
+export const anexarArquivoContrato = async (body) => {
+    const { data } = await apiFront.post("anexo", body, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return data;
+};
