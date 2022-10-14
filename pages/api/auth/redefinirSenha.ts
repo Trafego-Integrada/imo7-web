@@ -6,7 +6,7 @@ import { NextApiRequestWithUser } from "@/types/auth";
 import { checkAuth } from "@/middleware/checkAuth";
 import { mail } from "@/services/mail";
 import { layoutRecuperarSenha } from "@/lib/layoutEmail";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
 handler.post(async (req, res) => {
