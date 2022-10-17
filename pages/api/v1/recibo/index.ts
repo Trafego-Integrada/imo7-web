@@ -17,32 +17,25 @@ handle.get(async (req, res) => {
 handle.post(async (req, res) => {
     try {
         const {
-            dataDeposito,
-            observacao1,
-            observacao2,
-            observacao3,
-            observacao4,
-            observacao5,
             parcela,
             vencimento,
-            periodo,
+            recebimento,
+            pagamento,
             responsavel,
+            total,
             contratoId,
-            proprietarioId,
             imobiliariaId,
+            inquilinoId,
+            contaId,
             itens,
         } = req.body;
-        const data = await prisma.extrato.create({
+        const data = await prisma.recibo.create({
             data: {
-                dataDeposito: moment(dataDeposito).format(),
-                observacao1,
-                observacao2,
-                observacao3,
-                observacao4,
-                observacao5,
-                parcela: Number(parcela),
-                periodo,
                 vencimento: moment(vencimento).format(),
+                recebimento: moment(recebimento).format(),
+                pagamento: moment(pagamento).format(),
+                total: Number(total),
+                parcela: Number(parcela),
                 responsavel,
                 conta: {
                     connect: {
@@ -54,9 +47,9 @@ handle.post(async (req, res) => {
                         id: Number(contratoId),
                     },
                 },
-                proprietario: {
+                inquilino: {
                     connect: {
-                        id: Number(proprietarioId),
+                        id: Number(inquilinoId),
                     },
                 },
                 imobiliaria: {
@@ -80,7 +73,7 @@ handle.post(async (req, res) => {
                 conta: true,
                 contrato: true,
                 imobiliaria: true,
-                proprietario: true,
+                inquilino: true,
             },
         });
         res.send(data);

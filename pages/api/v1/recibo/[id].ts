@@ -1,48 +1,52 @@
 import moment from "moment";
-import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import prisma from "../../../../lib/prisma";
 
-const handle = nextConnect<NextApiRequest, NextApiResponse>();
+const handle = nextConnect();
 
 handle.get(async (req, res) => {
-    const boletos = await prisma.extrato.findMany({
+    const { id } = req.query;
+    const data = await prisma.recibo.findFirst({
         where: {
-            contaId: 1,
+            id: Number(id),
         },
     });
-    res.send(boletos);
+    if (!data) {
+        res.status(400).json({
+            success: false,
+            errorCode: "R01",
+            message: "Recibo não encontrado",
+        });
+    }
+    res.send(data);
 });
 
 handle.post(async (req, res) => {
     try {
+        const { id } = req.query;
         const {
-            dataDeposito,
-            observacao1,
-            observacao2,
-            observacao3,
-            observacao4,
-            observacao5,
             parcela,
             vencimento,
-            periodo,
+            recebimento,
+            pagamento,
             responsavel,
+            total,
             contratoId,
-            proprietarioId,
             imobiliariaId,
+            inquilinoId,
+            contaId,
             itens,
         } = req.body;
-        const data = await prisma.extrato.create({
+        const data = await prisma.extrato.update({
+            where: {
+                id: Number(id),
+            },
             data: {
-                dataDeposito: moment(dataDeposito).format(),
-                observacao1,
-                observacao2,
-                observacao3,
-                observacao4,
-                observacao5,
-                parcela: Number(parcela),
-                periodo,
                 vencimento: moment(vencimento).format(),
+                recebimento: moment(recebimento).format(),
+                pagamento: moment(pagamento).format(),
+                total: Number(total),
+                parcela: Number(parcela),
                 responsavel,
                 conta: {
                     connect: {
@@ -54,9 +58,9 @@ handle.post(async (req, res) => {
                         id: Number(contratoId),
                     },
                 },
-                proprietario: {
+                inquilino: {
                     connect: {
-                        id: Number(proprietarioId),
+                        id: Number(inquilinoId),
                     },
                 },
                 imobiliaria: {
@@ -75,18 +79,31 @@ handle.post(async (req, res) => {
                     },
                 },
             },
-            include: {
-                itens: true,
-                conta: true,
-                contrato: true,
-                imobiliaria: true,
-                proprietario: true,
-            },
         });
         res.send(data);
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).send(error);
     }
+});
+
+handle.delete(async (req, res) => {
+    const { id } = req.query;
+    const data = await prisma.recibo.findFirst({
+        where: {
+            id: Number(id),
+        },
+    });
+    if (!data) {
+        res.status(400).json({
+            success: false,
+            errorCode: "R01",
+            message: "Recibo não encontrado",
+        });
+    }
+    await prisma.extrato.delete({
+        where: { id: Number(id) },
+    });
+    res.send();
 });
 
 export default handle;

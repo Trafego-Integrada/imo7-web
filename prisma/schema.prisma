@@ -23,6 +23,7 @@ model Conta {
     boletos      Boleto[]
     chamados     Chamado[]
     Extrato      Extrato[]
+    Recibo       Recibo[]
 }
 
 model Usuario {
@@ -63,6 +64,7 @@ model Usuario {
     conversasCriador      ConversaChamado[]        @relation("CriadorConversa")
     Anexo                 Anexo[]
     hashsRecuperacao      RecuperarSenha[]
+    Recibo                Recibo[]
 }
 
 model RecuperarSenha {
@@ -144,6 +146,7 @@ model Imobiliaria {
     contaId      Int?
     Boleto       Boleto[]
     Extrato      Extrato[]
+    Recibo       Recibo[]
 }
 
 model Imovel {
@@ -244,6 +247,7 @@ model Contrato {
     anexos            Anexo[]
     conta             Conta       @relation(fields: [contaId], references: [id])
     contaId           Int
+    Recibo            Recibo[]
 }
 
 model Boleto {
@@ -313,6 +317,39 @@ model Boleto {
     inquilino             Usuario     @relation(fields: [bols_cpf_cnpj], references: [documento])
     imobiliaria           Imobiliaria @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId         Int
+}
+
+model Recibo {
+    id            Int          @id @default(autoincrement())
+    parcela       Int?
+    vencimento    DateTime?    @db.Date
+    recebimento   DateTime?    @db.Date
+    pagamento     DateTime?    @db.Date
+    responsavel   String?
+    total         Decimal?
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @updatedAt
+    deletedAt     DateTime?
+    contrato      Contrato?    @relation(references: [id], fields: [contratoId])
+    contratoId    Int?
+    imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId Int?
+    inquilino     Usuario?     @relation(fields: [inquilinoId], references: [id])
+    inquilinoId   Int?
+    conta         Conta?       @relation(fields: [contaId], references: [id])
+    contaId       Int?
+    itens         ItemRecibo[]
+}
+
+model ItemRecibo {
+    id        Int       @id @default(autoincrement())
+    descricao String?
+    valor     Decimal?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    recibo    Recibo    @relation(fields: [reciboId], references: [id])
+    reciboId  Int
 }
 
 model Extrato {
