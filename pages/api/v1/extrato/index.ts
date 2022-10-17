@@ -34,7 +34,9 @@ handle.post(async (req, res) => {
         } = req.body;
         const data = await prisma.extrato.create({
             data: {
-                dataDeposito: moment(dataDeposito).format(),
+                dataDeposito: dataDeposito
+                    ? moment(dataDeposito, "DD/MM/YYYY").format()
+                    : null,
                 observacao1,
                 observacao2,
                 observacao3,
@@ -42,7 +44,9 @@ handle.post(async (req, res) => {
                 observacao5,
                 parcela: Number(parcela),
                 periodo,
-                vencimento: moment(vencimento).format(),
+                vencimento: dataDeposito
+                    ? moment(vencimento, "DD/MM/YYYY").format()
+                    : null,
                 responsavel,
                 conta: {
                     connect: {
@@ -66,7 +70,7 @@ handle.post(async (req, res) => {
                 },
                 itens: {
                     createMany: {
-                        data: JSON.parse(itens).map((item) => {
+                        data: eval(itens).map((item) => {
                             return {
                                 descricao: item.descricao,
                                 valor: Number(item.valor),

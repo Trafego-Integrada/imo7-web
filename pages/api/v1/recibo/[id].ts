@@ -42,9 +42,15 @@ handle.post(async (req, res) => {
                 id: Number(id),
             },
             data: {
-                vencimento: moment(vencimento).format(),
-                recebimento: moment(recebimento).format(),
-                pagamento: moment(pagamento).format(),
+                vencimento: vencimento
+                    ? moment(vencimento, "DD/MM/YYYY").format()
+                    : null,
+                recebimento: recebimento
+                    ? moment(recebimento, "DD/MM/YYYY").format()
+                    : null,
+                pagamento: pagamento
+                    ? moment(pagamento, "DD/MM/YYYY").format()
+                    : null,
                 total: Number(total),
                 parcela: Number(parcela),
                 responsavel,
@@ -70,7 +76,7 @@ handle.post(async (req, res) => {
                 },
                 itens: {
                     createMany: {
-                        data: JSON.parse(itens).map((item) => {
+                        data: eval(itens).map((item) => {
                             return {
                                 descricao: item.descricao,
                                 valor: Number(item.valor),
