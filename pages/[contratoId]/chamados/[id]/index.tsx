@@ -252,7 +252,9 @@ const Chamado: NextPage = ({ chamado }) => {
                             <label>
                                 <input
                                     type="file"
-                                    onChange={(e) => onUpload(e)}
+                                    onChange={(e) => {
+                                        onUpload(e);
+                                    }}
                                     style={{
                                         display: "none",
                                     }}
@@ -282,7 +284,6 @@ const Chamado: NextPage = ({ chamado }) => {
     }
 
     function DataTabs({ data }) {
-        const modal = useRef();
         return (
             <>
                 <Tabs size="sm" w="full" maxH="full">

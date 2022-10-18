@@ -10,7 +10,7 @@ handle.get(async (req, res) => {
         where: {
             OR: [
                 {
-                    contaId: req.user.conta[0].id,
+                    contaId: req.user.contaId,
                 },
                 {
                     nomeFantasia: {

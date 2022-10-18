@@ -35,9 +35,8 @@ type AuthProviderProps = {
 export const AuthContext = createContext({} as AuthContextData);
 
 export async function signOut(ctx = undefined) {
-    destroyCookie(undefined, "imo7.token");
-    destroyCookie(undefined, "imo7.refreshToken");
-
+    destroyCookie(ctx, "imo7.token");
+    destroyCookie(ctx, "imo7.refreshToken");
     Router.push("/login");
 }
 

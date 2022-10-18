@@ -13,7 +13,7 @@ handle.get(async (req, res) => {
     res.send(imobiliarias);
 });
 
-handle.put(async (req, res) => {
+handle.post(async (req, res) => {
     const { id } = req.query;
     const {
         codigo,

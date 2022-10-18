@@ -23,6 +23,5 @@ export const theme = extendTheme({
         orange: "#F2994A",
         graydark: "#4F4F4F",
         graylight: "#F0F0F0",
-        green: "#72BC96",
     },
 });

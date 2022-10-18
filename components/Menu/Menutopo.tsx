@@ -32,6 +32,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { RiAccountCircleFill, RiMenu3Fill } from "react-icons/ri";
 import { FormInput } from "../Form/FormInput";
 import { FormSelect } from "../Form/FormSelect";
+import { NextChakraLink } from "../NextChakraLink";
 import { Listagemmenu } from "./Listagemmenu";
 import { Logo } from "./Logo";
 
@@ -181,22 +182,17 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                             </MenuButton>
                             <MenuList>
                                 <MenuGroup title="Perfil">
-                                    <MenuItem>
-                                        <RiAccountCircleFill size="20" />
-                                        <Text pl="2">Minha conta</Text>
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <BsFillGearFill size="20" />
-                                        <Text pl="2">Configurações</Text>
+                                    <MenuItem
+                                        as={NextChakraLink}
+                                        href="/minha-conta"
+                                    >
+                                        <Flex>
+                                            <RiAccountCircleFill size="20" />
+                                            <Text pl="2">Minha conta</Text>
+                                        </Flex>
                                     </MenuItem>
                                 </MenuGroup>
                                 <MenuDivider />
-                                <MenuGroup title="Ajuda">
-                                    <MenuItem>
-                                        <BiSupport size="20" />{" "}
-                                        <Text pl="2">Chamados</Text>
-                                    </MenuItem>
-                                </MenuGroup>
                                 <MenuItem onClick={() => signOut()}>
                                     <BiPowerOff size="20" />
                                     <Text pl="2"> Sair</Text>

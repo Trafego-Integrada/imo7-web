@@ -11,17 +11,77 @@ import {
     TabPanels,
     Tabs,
     Text,
+    useToast,
 } from "@chakra-ui/react";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
 import { withSSRAuth } from "../../../utils/withSSRAuth";
-
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useAuth } from "@/hooks/useAuth";
+import { useMutation } from "react-query";
+import { show, update } from "@/services/models/imobiliaria";
+import { useEffect, useState } from "react";
+const schema = yup.object().shape({
+    razaoSocial: yup.string().required("Campo obrigatório"),
+    nomeFantasia: yup.string().required("Campo obrigatório"),
+    cnpj: yup.string().required("Campo obrigatório"),
+});
 const Configuracoes = () => {
+    const toast = useToast();
+    const { usuario } = useAuth();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
+
+    const [error, setError] = useState(null);
+    const buscar = useMutation(show, {
+        onSuccess: (data) => {
+            reset({ ...data });
+        },
+    });
+    const atualizar = useMutation(update);
+    const onSubmit = async (data) => {
+        console.log(data);
+        try {
+            setError(null);
+            await atualizar.mutateAsync(data);
+            toast({
+                title: "Dados atualizados",
+                status: "success",
+                containerStyle: {
+                    zIndex: 999999,
+                },
+                position: "bottom-right",
+            });
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
+    useEffect(() => {
+        buscar.mutate(usuario.imobiliariaId);
+    }, [usuario]);
     return (
         <>
             <Layout title="Configurações">
-                <Box p={5}>
+                <Box as="form" onSubmit={handleSubmit(onSubmit)} p={5}>
+                    <Flex justifyContent="flex-end" gap={3}>
+                        <Button
+                            colorScheme="blue"
+                            isLoading={isSubmitting}
+                            type="submit"
+                        >
+                            Atualizar
+                        </Button>
+                    </Flex>
                     <Box bg="graylight" p={5}>
                         <Tabs size="md" variant="enclosed">
                             <TabList>
@@ -39,7 +99,7 @@ const Configuracoes = () => {
                                         bg: "bluelight",
                                     }}
                                 >
-                                    Contrato
+                                    Contato
                                 </Tab>
                                 <Tab
                                     _selected={{
@@ -91,6 +151,27 @@ const Configuracoes = () => {
                                                         label="Razão Social"
                                                         placeholder="digite a razão social..."
                                                         bg="white"
+                                                        {...register(
+                                                            "razaoSocial"
+                                                        )}
+                                                        error={
+                                                            errors.razaoSocial
+                                                                ?.message
+                                                        }
+                                                    />
+                                                </GridItem>
+                                                <GridItem>
+                                                    <FormInput
+                                                        label="Nome Fantasia"
+                                                        placeholder="digite o nome fantasia..."
+                                                        bg="white"
+                                                        {...register(
+                                                            "nomeFantasia"
+                                                        )}
+                                                        error={
+                                                            errors.razaoSocial
+                                                                ?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                                 <GridItem>
@@ -98,6 +179,10 @@ const Configuracoes = () => {
                                                         label="CNPJ"
                                                         placeholder="digite o CNPJ..."
                                                         bg="white"
+                                                        {...register("cnpj")}
+                                                        error={
+                                                            errors.cnpj?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                                 <GridItem>
@@ -105,6 +190,10 @@ const Configuracoes = () => {
                                                         label="IE"
                                                         placeholder="digite a sua inscrição estadual..."
                                                         bg="white"
+                                                        {...register("ie")}
+                                                        error={
+                                                            errors.ie?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                             </Grid>
@@ -122,18 +211,6 @@ const Configuracoes = () => {
                                         </Text>
                                         <Box bg="white" p={5}></Box>
                                     </Box>
-                                    <Flex
-                                        mt={5}
-                                        justifyContent="flex-end"
-                                        gap={3}
-                                    >
-                                        <Button variant="ghost">
-                                            Cancelar
-                                        </Button>
-                                        <Button colorScheme="blue" mr={3}>
-                                            Confirmar
-                                        </Button>
-                                    </Flex>
                                 </TabPanel>
                                 <TabPanel>
                                     <Box>
@@ -159,6 +236,11 @@ const Configuracoes = () => {
                                                         label="Email para contato"
                                                         placeholder="digite o email para o contato..."
                                                         bg="white"
+                                                        {...register("email")}
+                                                        error={
+                                                            errors.email
+                                                                ?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                                 <GridItem>
@@ -166,6 +248,10 @@ const Configuracoes = () => {
                                                         label="Site"
                                                         placeholder="endereço do seu site..."
                                                         bg="white"
+                                                        {...register("site")}
+                                                        error={
+                                                            errors.site?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                                 <GridItem>
@@ -173,22 +259,17 @@ const Configuracoes = () => {
                                                         label="Telefone"
                                                         placeholder="ex: (99) 99999-9999..."
                                                         bg="white"
+                                                        {...register(
+                                                            "telefone"
+                                                        )}
+                                                        error={
+                                                            errors.telefone
+                                                                ?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                             </Grid>
                                         </Box>
-                                        <Flex
-                                            mt={5}
-                                            justifyContent="flex-end"
-                                            gap={3}
-                                        >
-                                            <Button variant="ghost">
-                                                Cancelar
-                                            </Button>
-                                            <Button colorScheme="blue" mr={3}>
-                                                Confirmar
-                                            </Button>
-                                        </Flex>
                                     </Box>
                                 </TabPanel>
                                 <TabPanel>
@@ -215,6 +296,10 @@ const Configuracoes = () => {
                                                         label="CEP"
                                                         placeholder="ex: 13-386-092..."
                                                         bg="white"
+                                                        {...register("cep")}
+                                                        error={
+                                                            errors.cep?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                                 <GridItem>
@@ -222,6 +307,13 @@ const Configuracoes = () => {
                                                         label="Rua"
                                                         placeholder="digite o nome da rua..."
                                                         bg="white"
+                                                        {...register(
+                                                            "endereco"
+                                                        )}
+                                                        error={
+                                                            errors.endereco
+                                                                ?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                                 <GridItem>
@@ -229,6 +321,11 @@ const Configuracoes = () => {
                                                         label="Número"
                                                         placeholder="digite o número da casa..."
                                                         bg="white"
+                                                        {...register("numero")}
+                                                        error={
+                                                            errors.numero
+                                                                ?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                                 <GridItem>
@@ -236,6 +333,11 @@ const Configuracoes = () => {
                                                         label="Bairro"
                                                         placeholder="digite o nome do bairro..."
                                                         bg="white"
+                                                        {...register("bairro")}
+                                                        error={
+                                                            errors.bairro
+                                                                ?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                                 <GridItem>
@@ -243,6 +345,11 @@ const Configuracoes = () => {
                                                         label="Cidade"
                                                         placeholder="digite o nome da cidade..."
                                                         bg="white"
+                                                        {...register("cidade")}
+                                                        error={
+                                                            errors.cidade
+                                                                ?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                                 <GridItem>
@@ -250,22 +357,15 @@ const Configuracoes = () => {
                                                         label="Estado"
                                                         placeholder="digite o nome do estado..."
                                                         bg="white"
+                                                        {...register("estado")}
+                                                        error={
+                                                            errors.estado
+                                                                ?.message
+                                                        }
                                                     />
                                                 </GridItem>
                                             </Grid>
                                         </Box>
-                                        <Flex
-                                            mt={5}
-                                            justifyContent="flex-end"
-                                            gap={3}
-                                        >
-                                            <Button variant="ghost">
-                                                Cancelar
-                                            </Button>
-                                            <Button colorScheme="blue" mr={3}>
-                                                Confirmar
-                                            </Button>
-                                        </Flex>
                                     </Box>
                                 </TabPanel>
                                 <TabPanel>
@@ -409,19 +509,6 @@ const Configuracoes = () => {
                                             />
                                         </Box>
                                     </Box>
-
-                                    <Flex
-                                        mt={5}
-                                        justifyContent="flex-end"
-                                        gap={3}
-                                    >
-                                        <Button variant="ghost">
-                                            Cancelar
-                                        </Button>
-                                        <Button colorScheme="blue" mr={3}>
-                                            Confirmar
-                                        </Button>
-                                    </Flex>
                                 </TabPanel>
 
                                 <TabPanel>
@@ -447,18 +534,6 @@ const Configuracoes = () => {
                                             </FormSelect>
                                         </Box>
                                     </Box>
-                                    <Flex
-                                        mt={5}
-                                        justifyContent="flex-end"
-                                        gap={3}
-                                    >
-                                        <Button variant="ghost">
-                                            Cancelar
-                                        </Button>
-                                        <Button colorScheme="blue" mr={3}>
-                                            Confirmar
-                                        </Button>
-                                    </Flex>
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

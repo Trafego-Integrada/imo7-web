@@ -29,6 +29,7 @@ import { ModalChamados } from "@/components/Modals/chamados";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import { useMutation, useQuery } from "react-query";
 import {
+    anexarArquivoChamado,
     atualizarChamado,
     enviarMensagemChamado,
     listarChamados,
@@ -59,6 +60,7 @@ import { BiUpload } from "react-icons/bi";
 import { FaFileUpload } from "react-icons/fa";
 import { GrAttachment } from "react-icons/gr";
 import { AiOutlineRollback } from "react-icons/ai";
+import { NextChakraLink } from "@/components/NextChakraLink";
 const schema = yup.object({
     mensagem: yup.string().required("Campo Obrigatório"),
 });
@@ -67,12 +69,17 @@ const Cobrancas = ({ chamado }) => {
     const modalchamados = useRef();
     const [filtro, setFiltro] = useState({});
     const { data } = useQuery(["chamados", filtro], listarChamados);
-    console.log(chamado);
+
     const { usuario } = useAuth();
 
     const { data: conversas } = useQuery(
         ["conversas", { chamadoId: chamado.id }],
-        listarConversas
+        listarConversas,
+        {
+            refetchInterval: 10000,
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
     );
 
     const { mutateAsync: atualizar, isLoading: atualizando } =
@@ -86,10 +93,9 @@ const Cobrancas = ({ chamado }) => {
     };
 
     function Conversa({ data }) {
+        const [files, setFiles] = useState();
         const {
             register,
-            control,
-            watch,
             reset,
             handleSubmit,
             formState: { errors, isSubmitting },
@@ -119,29 +125,33 @@ const Cobrancas = ({ chamado }) => {
                         el.scrollTop = el.scrollHeight;
                     }
                 },
+                refetchInterval: 10000,
+                refetchOnReconnect: false,
+                refetchOnWindowFocus: false,
             }
         );
+        const upload = useMutation(anexarArquivoChamado);
+        const onUpload = async (event) => {
+            console.log(event);
+            console.log("ok");
+            const formData = new FormData();
+            formData.append("chamadoId", chamado.id);
+            formData.append("conversaId", data.id);
+            formData.append("anexos", event.target.files[0]);
+            await upload.mutateAsync(formData);
+        };
+        function checkURL(url) {
+            return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+        }
         return (
-            <VStack
-                pos="relative"
-                bg="white"
-                h="calc(100vh - 13rem)"
-                w="full"
-                rounded="xl"
-                shadow="sm"
-                p={4}
-                gridGap={4}
-            >
+            <Box h="full">
                 <VStack
-                    pos="relative"
                     bg="white"
-                    h="calc(100vh - 13rem)"
-                    w="full"
+                    h={{ base: 550, lg: 550 }}
                     p={4}
                     gridGap={4}
                     overflow="auto"
                     overscrollY="auto"
-                    mb={12}
                     scrollBehavior="auto"
                     id={"mensagens" + data.id}
                 >
@@ -190,10 +200,32 @@ const Cobrancas = ({ chamado }) => {
                                         <Flex flexWrap="wrap" gap={4}>
                                             {item.anexos.map((item) => (
                                                 <Box key={item.id}>
-                                                    <Image
-                                                        src={item.anexo}
-                                                        h={40}
-                                                    />
+                                                    {checkURL(item.anexo) ? (
+                                                        <>
+                                                            <Image
+                                                                src={item.anexo}
+                                                                h={40}
+                                                                alt={item.anexo}
+                                                            />
+                                                            <NextChakraLink
+                                                                href={
+                                                                    item.anexo
+                                                                }
+                                                            >
+                                                                <Button variant="link">
+                                                                    Baixar anexo
+                                                                </Button>
+                                                            </NextChakraLink>
+                                                        </>
+                                                    ) : (
+                                                        <NextChakraLink
+                                                            href={item.anexo}
+                                                        >
+                                                            <Button variant="link">
+                                                                Baixar anexo
+                                                            </Button>
+                                                        </NextChakraLink>
+                                                    )}
                                                 </Box>
                                             ))}
                                         </Flex>
@@ -209,24 +241,21 @@ const Cobrancas = ({ chamado }) => {
                         </Flex>
                     ))}
                 </VStack>
-                <Flex
-                    as="form"
-                    onSubmit={handleSubmit(onSubmit)}
-                    maxW="calc(100% - 2rem)"
-                    position="absolute"
-                    bottom={4}
-                    left={4}
-                    right={0}
-                    mx={4}
-                >
+                <Flex as="form" onSubmit={handleSubmit(onSubmit)} w="full">
                     <FormInput
                         leftElement={
-                            <IconButton
-                                variant="ghost"
-                                icon={<Icon as={GrAttachment} />}
-                                colorScheme="gray"
-                                type="button"
-                            />
+                            <label>
+                                <input
+                                    type="file"
+                                    onChange={(e) => {
+                                        onUpload(e);
+                                    }}
+                                    style={{
+                                        display: "none",
+                                    }}
+                                />
+                                <Icon as={GrAttachment} />
+                            </label>
                         }
                         rightElement={
                             <IconButton
@@ -245,7 +274,7 @@ const Cobrancas = ({ chamado }) => {
                         {...register("mensagem")}
                     />
                 </Flex>
-            </VStack>
+            </Box>
         );
     }
 

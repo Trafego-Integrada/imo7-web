@@ -51,7 +51,26 @@ handle.get(async (req, res) => {
 
 handle.post(async (req, res) => {
     const { id } = req.query;
-    const { nome, email, documento, celular, senha } = req.body;
+    const {
+        nome,
+        email,
+        documento,
+        celular,
+        password,
+        confirmPassword,
+        telefone,
+        profissao,
+    } = req.body;
+
+    let atualizarSenha = {};
+    if (password && confirmPassword) {
+        if (password != confirmPassword) {
+            res.status(401).send("As senhas não conferem");
+        }
+        atualizarSenha = {
+            password: bcrypt.hashSync(password, 10),
+        };
+    }
     const data = await prisma.usuario.update({
         where: {
             id: Number(id),
@@ -59,8 +78,10 @@ handle.post(async (req, res) => {
         data: {
             nome,
             email,
-            documento,
             celular,
+            telefone,
+            profissao,
+            ...atualizarSenha,
         },
     });
     res.send(data);
