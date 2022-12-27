@@ -8,6 +8,7 @@ import { Input } from "@/components/Forms/Input";
 import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 import { FiSend } from "react-icons/fi";
 import { withSSRAuth } from "@/utils/withSSRAuth";
+
 const Chamado: NextPage = () => {
     return (
         <LayoutPainel>
