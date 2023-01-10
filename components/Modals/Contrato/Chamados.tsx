@@ -4,6 +4,7 @@ import {
     Icon,
     IconButton,
     Table,
+    TableContainer,
     Tag,
     Tbody,
     Td,
@@ -18,7 +19,7 @@ import { FiEye } from "react-icons/fi";
 export const Chamados = ({ data }) => {
     const router = useRouter();
     return (
-        <Box>
+        <TableContainer>
             <Table size="sm" variant="striped">
                 <Thead>
                     <Tr>
@@ -91,6 +92,6 @@ export const Chamados = ({ data }) => {
                     ))}
                 </Tbody>
             </Table>
-        </Box>
+        </TableContainer>
     );
 };

@@ -7,22 +7,22 @@ export const listarAnexos = async ({ queryKey }) => {
     return data;
 };
 
-export const buscarAssunto = async (id) => {
-    const { data } = await apiFront.get("assunto/" + id);
+export const buscarAnexo = async (id) => {
+    const { data } = await apiFront.get("anexo/" + id);
     return data;
 };
 
-export const cadastrarAssunto = async (form) => {
-    const { data } = await apiFront.post("assunto", form);
+export const cadastrarAnexo = async (form) => {
+    const { data } = await apiFront.post("anexo", form);
     return data;
 };
 
-export const atualizarAssunto = async ({ id, ...rest }) => {
-    const { data } = await apiFront.post("assunto/" + id, { ...rest });
+export const atualizarAnexo = async ({ id, ...rest }) => {
+    const { data } = await apiFront.post("anexo/" + id, { ...rest });
     return data;
 };
 
-export const excluirAssunto = async (id) => {
-    const { data } = await apiFront.post("assunto/" + id);
+export const excluirAnexo = async (id) => {
+    const { data } = await apiFront.delete("anexo/" + id);
     return data;
 };

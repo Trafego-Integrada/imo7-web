@@ -9,7 +9,7 @@
         "lint": "next lint",
         "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
         "ssh": "ssh ubuntu@132.226.252.163",
-        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aamkhzmypwjddnujwyulslhwught7o7yihwkilmzgnaixq@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
+        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aax3f6z43hgj5mi7525czzmk4lqkxuvm7r25htatv7yafq@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",
@@ -42,6 +42,7 @@
         "react": "18.1.0",
         "react-date-picker": "^8.4.0",
         "react-dom": "18.1.0",
+        "react-dropzone": "^14.2.3",
         "react-dropzone-uploader": "^2.11.0",
         "react-hook-form": "^7.34.0",
         "react-icons": "^4.3.1",

@@ -30,6 +30,7 @@ import { BiPowerOff, BiSupport } from "react-icons/bi";
 import { BsFillGearFill, BsSearch } from "react-icons/bs";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { RiAccountCircleFill, RiMenu3Fill } from "react-icons/ri";
+import { FiltroTopo } from "../FiltroTopo";
 import { FormInput } from "../Form/FormInput";
 import { FormSelect } from "../Form/FormSelect";
 import { NextChakraLink } from "../NextChakraLink";
@@ -134,23 +135,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                     </GridItem>
 
                     <GridItem d="flex" w="100%" alignItems="center" gap={3}>
-                        <FormSelect bg="white">
-                            <option value="">Inquilino</option>
-                            <option value="">Propietario</option>
-                            <option value="">Endereço</option>
-                            <option value="">Nº do contrato</option>
-                        </FormSelect>
-
-                        <InputGroup size="md">
-                            <FormInput
-                                placeholder="Pesquisa de contratos..."
-                                bg="rgba(94, 93, 93, 0.5)"
-                                color="white"
-                            />
-                            <InputRightElement>
-                                <Icon as={BsSearch} color="white" />
-                            </InputRightElement>
-                        </InputGroup>
+                        <FiltroTopo />
                     </GridItem>
 
                     <GridItem

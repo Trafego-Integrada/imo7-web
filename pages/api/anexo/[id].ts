@@ -16,24 +16,36 @@ handler.delete(async (req, res) => {
         });
 
         if (foto) {
-            const client = new os.ObjectStorageClient({
-                authenticationDetailsProvider: providerStorage,
-            });
-            const bucket = "imo7-standard-storage";
+            // const client = new os.ObjectStorageClient({
+            //     authenticationDetailsProvider: providerStorage,
+            // });
+            // const bucket = "imo7-standard-storage";
 
-            const request: os.requests.GetNamespaceRequest = {};
-            const response = await client.getNamespace(request);
-            const namespace = response.value;
+            // const request: os.requests.GetNamespaceRequest = {};
+            // const response = await client.getNamespace(request);
 
-            const deleteObjectRequest: os.requests.DeleteObjectRequest = {
-                namespaceName: namespace,
-                bucketName: bucket,
-                objectName: foto.ED_URL_FOTO.replace(
-                    process.env.NEXT_PUBLIC_URL_STORAGE,
-                    ""
-                ),
-            };
-            await client.deleteObject(deleteObjectRequest);
+            // const namespace = response.value;
+
+            // const getBucketRequest: os.requests.GetBucketRequest = {
+            //     namespaceName: namespace,
+            //     bucketName: bucket,
+            // };
+            // const getBucketResponse = await client.getBucket(getBucketRequest);
+            // console.log(
+            //     foto.anexo.replace(process.env.NEXT_PUBLIC_URL_STORAGE, "")
+            // );
+            // const deleteObjectRequest: os.requests.DeleteObjectRequest = {
+            //     namespaceName: namespace,
+            //     bucketName: bucket,
+            //     objectName: foto.anexo.replace(
+            //         process.env.NEXT_PUBLIC_URL_STORAGE,
+            //         ""
+            //     ),
+            // };
+            // const putObjectResponse = await client.deleteObject(
+            //     deleteObjectRequest
+            // );
+            // console.log(putObjectResponse);
             await prisma.anexo.delete({
                 where: {
                     id: Number(id),

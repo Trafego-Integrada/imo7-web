@@ -56,7 +56,7 @@ handle.post(async (req, res) => {
     try {
         const { id } = req.query;
 
-        const { contratoId, usuarioId, chamadoId, conversaId } = req.body;
+        const { contratoId, usuarioId, chamadoId, conversaId, nome } = req.body;
         const { anexos } = req.files;
         console.log(req.body);
         const client = new os.ObjectStorageClient({
@@ -115,6 +115,7 @@ handle.post(async (req, res) => {
                     if (getObjectResponse) {
                         const anexo = await prisma.anexo.create({
                             data: {
+                                nome,
                                 anexo:
                                     process.env.NEXT_PUBLIC_URL_STORAGE +
                                     nameLocation,
@@ -190,6 +191,7 @@ handle.post(async (req, res) => {
             if (getObjectResponse) {
                 const anexo = await prisma.anexo.create({
                     data: {
+                        nome,
                         anexo:
                             process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
                         contrato: contratoId

@@ -1,11 +1,13 @@
+import { Excluir } from "@/components/AlertDialogs/Excluir";
 import { NextChakraLink } from "@/components/NextChakraLink";
 import { formatoData } from "@/helpers/helpers";
-import { listarAnexos } from "@/services/models/anexo";
+import { excluirAnexo, listarAnexos } from "@/services/models/anexo";
 import { anexarArquivoContrato } from "@/services/models/contrato";
 import { queryClient } from "@/services/queryClient";
 import {
     Box,
     Button,
+    Flex,
     Grid,
     Icon,
     IconButton,
@@ -16,32 +18,22 @@ import {
     Text,
     Th,
     Thead,
+    Tooltip,
     Tr,
     useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { FiDownload, FiEye } from "react-icons/fi";
+import { useRef } from "react";
+import { FiDownload, FiEye, FiTrash } from "react-icons/fi";
 import { RiAddLine } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
+import { ModalAnexo } from "./ModalAnexo";
 
 export const Documentos = ({ contratoId }) => {
     const router = useRouter();
     const toast = useToast();
-    const upload = useMutation(anexarArquivoContrato, {
-        onSuccess: () => {
-            toast({
-                title: "Arquivo anexado com sucesso",
-                status: "success",
-            });
-            queryClient.invalidateQueries(["anexos"]);
-        },
-    });
-    const onUpload = async (event) => {
-        const formData = new FormData();
-        formData.append("contratoId", contratoId);
-        formData.append("anexos", event.target.files[0]);
-        await upload.mutateAsync(formData);
-    };
+    const modalAnexo = useRef();
+    const modalExcluir = useRef();
     const { data } = useQuery(
         [
             "anexos",
@@ -51,6 +43,20 @@ export const Documentos = ({ contratoId }) => {
         ],
         listarAnexos
     );
+    const excluir = useMutation(excluirAnexo);
+
+    const onDelete = async (id) => {
+        await excluir.mutateAsync(id, {
+            onSuccess: () => {
+                toast({
+                    title: "Anexo excluido",
+                    duration: 3000,
+                    status: "success",
+                });
+                queryClient.invalidateQueries(["anexos"]);
+            },
+        });
+    };
     return (
         <Box>
             <Grid d="flex" gap={3}>
@@ -60,45 +66,61 @@ export const Documentos = ({ contratoId }) => {
                         size="sm"
                         colorScheme="blue"
                         type="button"
+                        onClick={() => modalAnexo.current.onOpen()}
                     >
-                        <input
-                            type="file"
-                            onChange={(e) => onUpload(e)}
-                            style={{
-                                display: "none",
-                            }}
-                        />
-                        <Icon as={RiAddLine} />
-                        <Text pl="2">Anexar arquivo</Text>
+                        Anexar arquivo
                     </Button>
                 </label>
             </Grid>
-
             <Table variant="striped" size="sm" mt={5} bg="white">
                 <Thead>
                     <Tr>
                         <Th>Anexo</Th>
-                        <Th></Th>
+                        <Th w={32}></Th>
                     </Tr>
                 </Thead>
                 <Tbody>
                     {data?.map((item) => (
                         <Tr key={item.id}>
-                            <Td>{item.anexo}</Td>
+                            <Td>{item.nome}</Td>
                             <Td>
-                                <NextChakraLink
-                                    href={item.anexo}
-                                    target="_blank"
-                                >
-                                    <IconButton
-                                        icon={<Icon as={FiDownload} />}
-                                    />
-                                </NextChakraLink>
+                                <Flex>
+                                    {" "}
+                                    <NextChakraLink
+                                        href={item.anexo}
+                                        target="_blank"
+                                    >
+                                        <Tooltip label="Download">
+                                            <IconButton
+                                                size="sm"
+                                                icon={<Icon as={FiDownload} />}
+                                            />
+                                        </Tooltip>
+                                    </NextChakraLink>
+                                    <Tooltip label="Excluir">
+                                        <IconButton
+                                            variant="ghost"
+                                            icon={<Icon as={FiTrash} />}
+                                            colorScheme="red"
+                                            onClick={() =>
+                                                modalExcluir.current.onOpen(
+                                                    item.id
+                                                )
+                                            }
+                                        />
+                                    </Tooltip>
+                                </Flex>
                             </Td>
                         </Tr>
                     ))}
                 </Tbody>
             </Table>
+            <ModalAnexo ref={modalAnexo} contratoId={contratoId} />{" "}
+            <Excluir
+                ref={modalExcluir}
+                titulo="Excluir anexo"
+                onDelete={onDelete}
+            />
         </Box>
     );
 };

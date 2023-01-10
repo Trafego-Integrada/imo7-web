@@ -1,13 +1,18 @@
-import { Avatar } from "@chakra-ui/avatar";
-import { Button } from "@chakra-ui/button";
-import Icon from "@chakra-ui/icon";
-import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/layout";
-import { Tooltip } from "@chakra-ui/tooltip";
 import { NextPage } from "next";
 import { Input } from "@/components/Forms/Input";
 import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 import { FiSend } from "react-icons/fi";
 import { withSSRAuth } from "@/utils/withSSRAuth";
+import {
+    Avatar,
+    Box,
+    Button,
+    Flex,
+    Heading,
+    Text,
+    Tooltip,
+    VStack,
+} from "@chakra-ui/react";
 
 const Chamado: NextPage = () => {
     return (

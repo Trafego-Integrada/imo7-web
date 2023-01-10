@@ -65,6 +65,7 @@ model Usuario {
     Anexo                 Anexo[]
     hashsRecuperacao      RecuperarSenha[]
     Recibo                Recibo[]
+    modulos               Modulo[]
 }
 
 model RecuperarSenha {
@@ -91,20 +92,41 @@ model ApiToken {
 
 model Cargo {
     id        Int       @id @default(autoincrement())
+    codigo    String?   @unique
     nome      String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
     usuarios  Usuario[]
+    modulos   Modulo[]
+}
+
+model Modulo {
+    id          Int         @id @default(autoincrement())
+    codigo      String?     @unique
+    nome        String
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    deletedAt   DateTime?
+    usuarios    Usuario[]
+    pai         Modulo?     @relation("Modulos", fields: [paiCodigo], references: [codigo])
+    paiCodigo   String?
+    modulos     Modulo[]    @relation("Modulos")
+    permissoes  Permissao[]
+    cargo       Cargo?      @relation(fields: [cargoCodigo], references: [codigo])
+    cargoCodigo String?
 }
 
 model Permissao {
-    id        Int       @id @default(autoincrement())
-    nome      String
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-    usuarios  Usuario[]
+    id           Int       @id @default(autoincrement())
+    codigo       String?   @unique
+    nome         String
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+    deletedAt    DateTime?
+    usuarios     Usuario[]
+    modulo       Modulo    @relation(fields: [moduloCodigo], references: [codigo])
+    moduloCodigo String
 }
 
 model Token {
@@ -465,6 +487,7 @@ model InteracaoChamado {
 
 model Anexo {
     id                 Int               @id @default(autoincrement())
+    nome               String?
     anexo              String            @db.LongText
     createdAt          DateTime          @default(now())
     updatedAt          DateTime          @updatedAt

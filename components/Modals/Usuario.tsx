@@ -4,7 +4,14 @@ import {
     cadastrarUsuario,
 } from "@/services/models/usuario";
 import {
+    Accordion,
+    AccordionButton,
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
+    Box,
     Button,
+    Checkbox,
     Grid,
     GridItem,
     Modal,
@@ -14,6 +21,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Stack,
     Tab,
     Table,
     TabList,
@@ -31,11 +39,13 @@ import {
 } from "@chakra-ui/react";
 import { forwardRef, useImperativeHandle } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { FormInput } from "../Form/FormInput";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { queryClient } from "@/services/queryClient";
+import { listarModulos } from "@/services/models/modulo";
+import { includesAll } from "@/helpers/helpers";
 
 const schema = yup.object({
     nome: yup.string().required("Campo Obrigatório"),
@@ -56,6 +66,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
         handleSubmit,
         watch,
         reset,
+        setValue,
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
@@ -109,6 +120,16 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
         },
     }));
 
+    const { data: modulos } = useQuery(
+        [
+            "listarModulos",
+            {
+                cargoCodigo: "imobiliaria",
+            },
+        ],
+        listarModulos
+    );
+
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -120,6 +141,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                         <Tabs variant="unstyled">
                             <TabList>
                                 <Tab>Dados</Tab>
+                                <Tab>Permissões</Tab>
                                 {watch("id") && (
                                     <>
                                         <Tab
@@ -224,6 +246,500 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                             />
                                         </GridItem>
                                     </Grid>
+                                </TabPanel>
+                                <TabPanel>
+                                    <Accordion allowMultiple>
+                                        {modulos && modulos.data.length > 0 ? (
+                                            modulos.data.map((item) => {
+                                                if (!item.menuPai) {
+                                                    return (
+                                                        <AccordionItem border="none">
+                                                            <h2>
+                                                                <AccordionButton>
+                                                                    <Box
+                                                                        flex="1"
+                                                                        textAlign="left"
+                                                                    >
+                                                                        <Checkbox
+                                                                            isChecked={
+                                                                                watch(
+                                                                                    "modulos"
+                                                                                ) &&
+                                                                                watch(
+                                                                                    "modulos"
+                                                                                ).includes(
+                                                                                    item.codigo
+                                                                                )
+                                                                            }
+                                                                            isIndeterminate={
+                                                                                watch(
+                                                                                    "modulos"
+                                                                                ) &&
+                                                                                watch(
+                                                                                    "modulos"
+                                                                                ).includes(
+                                                                                    item.codigo
+                                                                                ) &&
+                                                                                !includesAll(
+                                                                                    watch(
+                                                                                        "modulos"
+                                                                                    ),
+                                                                                    item.modulos.map(
+                                                                                        (
+                                                                                            s
+                                                                                        ) =>
+                                                                                            s.codigo
+                                                                                    )
+                                                                                )
+                                                                            }
+                                                                            onChange={(
+                                                                                e
+                                                                            ) => {
+                                                                                let newPerms =
+                                                                                    watch(
+                                                                                        "modulos"
+                                                                                    ).filter(
+                                                                                        (
+                                                                                            p
+                                                                                        ) =>
+                                                                                            p !=
+                                                                                            item.codigo
+                                                                                    );
+                                                                                if (
+                                                                                    e
+                                                                                        .target
+                                                                                        .checked
+                                                                                ) {
+                                                                                    newPerms.push(
+                                                                                        item.codigo
+                                                                                    );
+                                                                                }
+                                                                                console.log(
+                                                                                    newPerms,
+                                                                                    "ok"
+                                                                                );
+                                                                                setValue(
+                                                                                    "modulos",
+                                                                                    newPerms
+                                                                                );
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                item.nome
+                                                                            }
+                                                                        </Checkbox>
+                                                                    </Box>
+                                                                    <AccordionIcon />
+                                                                </AccordionButton>
+                                                            </h2>
+                                                            <AccordionPanel
+                                                                pb={4}
+                                                                px={0}
+                                                            >
+                                                                <Stack ml={8}>
+                                                                    {item
+                                                                        .permissoes
+                                                                        .length >
+                                                                    0 ? (
+                                                                        item.permissoes.map(
+                                                                            (
+                                                                                perm
+                                                                            ) => (
+                                                                                <Checkbox
+                                                                                    key={
+                                                                                        perm.codigo
+                                                                                    }
+                                                                                    isChecked={
+                                                                                        watch(
+                                                                                            "permissoes"
+                                                                                        ) &&
+                                                                                        watch(
+                                                                                            "permissoes"
+                                                                                        ).includes(
+                                                                                            perm.codigo
+                                                                                        )
+                                                                                    }
+                                                                                    onChange={(
+                                                                                        e
+                                                                                    ) => {
+                                                                                        let newPerms =
+                                                                                            watch(
+                                                                                                "permissoes"
+                                                                                            ).filter(
+                                                                                                (
+                                                                                                    p
+                                                                                                ) =>
+                                                                                                    p !=
+                                                                                                    perm.codigo
+                                                                                            );
+                                                                                        if (
+                                                                                            e
+                                                                                                .target
+                                                                                                .checked
+                                                                                        ) {
+                                                                                            newPerms.push(
+                                                                                                perm.codigo
+                                                                                            );
+                                                                                        }
+                                                                                        setValue(
+                                                                                            "permissoes",
+                                                                                            newPerms
+                                                                                        );
+                                                                                    }}
+                                                                                >
+                                                                                    {
+                                                                                        perm.nome
+                                                                                    }
+                                                                                </Checkbox>
+                                                                            )
+                                                                        )
+                                                                    ) : (
+                                                                        <></>
+                                                                    )}
+                                                                </Stack>
+                                                                {item.modulos
+                                                                    .length >
+                                                                0 ? (
+                                                                    item.modulos.map(
+                                                                        (
+                                                                            sub
+                                                                        ) => {
+                                                                            return (
+                                                                                <AccordionItem
+                                                                                    key={
+                                                                                        sub.codigo
+                                                                                    }
+                                                                                    border="none"
+                                                                                >
+                                                                                    <h2>
+                                                                                        <AccordionButton>
+                                                                                            <Box
+                                                                                                flex="1"
+                                                                                                textAlign="left"
+                                                                                                pl={
+                                                                                                    4
+                                                                                                }
+                                                                                            >
+                                                                                                <Checkbox
+                                                                                                    isChecked={
+                                                                                                        watch(
+                                                                                                            "modulos"
+                                                                                                        ) &&
+                                                                                                        watch(
+                                                                                                            "modulos"
+                                                                                                        ).includes(
+                                                                                                            sub.codigo
+                                                                                                        )
+                                                                                                    }
+                                                                                                    isIndeterminate={
+                                                                                                        watch(
+                                                                                                            "modulos"
+                                                                                                        ) &&
+                                                                                                        watch(
+                                                                                                            "modulos"
+                                                                                                        ).includes(
+                                                                                                            sub.codigo
+                                                                                                        ) &&
+                                                                                                        !includesAll(
+                                                                                                            watch(
+                                                                                                                "modulos"
+                                                                                                            ),
+                                                                                                            sub.modulos.map(
+                                                                                                                (
+                                                                                                                    s
+                                                                                                                ) =>
+                                                                                                                    s.codigo
+                                                                                                            )
+                                                                                                        )
+                                                                                                    }
+                                                                                                    onChange={(
+                                                                                                        e
+                                                                                                    ) => {
+                                                                                                        let newPerms =
+                                                                                                            watch(
+                                                                                                                "modulos"
+                                                                                                            ).filter(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p !=
+                                                                                                                    sub.codigo
+                                                                                                            );
+                                                                                                        if (
+                                                                                                            e
+                                                                                                                .target
+                                                                                                                .checked
+                                                                                                        ) {
+                                                                                                            newPerms.push(
+                                                                                                                sub.codigo
+                                                                                                            );
+                                                                                                        }
+                                                                                                        setValue(
+                                                                                                            "modulos",
+                                                                                                            newPerms
+                                                                                                        );
+                                                                                                    }}
+                                                                                                >
+                                                                                                    {
+                                                                                                        sub.nome
+                                                                                                    }
+                                                                                                </Checkbox>
+                                                                                            </Box>
+                                                                                            <AccordionIcon />
+                                                                                        </AccordionButton>
+                                                                                    </h2>
+                                                                                    <AccordionPanel
+                                                                                        pb={
+                                                                                            4
+                                                                                        }
+                                                                                        px={
+                                                                                            0
+                                                                                        }
+                                                                                    >
+                                                                                        <Stack>
+                                                                                            {sub
+                                                                                                .permissoes
+                                                                                                .length >
+                                                                                            0 ? (
+                                                                                                sub.permissoes.map(
+                                                                                                    (
+                                                                                                        perm2
+                                                                                                    ) => (
+                                                                                                        <Checkbox
+                                                                                                            key={
+                                                                                                                perm2.codigo
+                                                                                                            }
+                                                                                                            onChange={(
+                                                                                                                e
+                                                                                                            ) => {
+                                                                                                                let newPerms =
+                                                                                                                    watch(
+                                                                                                                        "permissoes"
+                                                                                                                    ).filter(
+                                                                                                                        (
+                                                                                                                            p
+                                                                                                                        ) =>
+                                                                                                                            p !=
+                                                                                                                            perm2.codigo
+                                                                                                                    );
+                                                                                                                if (
+                                                                                                                    e
+                                                                                                                        .target
+                                                                                                                        .checked
+                                                                                                                ) {
+                                                                                                                    newPerms.push(
+                                                                                                                        perm2.codigo
+                                                                                                                    );
+                                                                                                                }
+                                                                                                                setValue(
+                                                                                                                    "permissoes",
+                                                                                                                    newPerms
+                                                                                                                );
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            {
+                                                                                                                perm2.nome
+                                                                                                            }
+                                                                                                        </Checkbox>
+                                                                                                    )
+                                                                                                )
+                                                                                            ) : (
+                                                                                                <>
+
+                                                                                                </>
+                                                                                            )}
+                                                                                        </Stack>
+                                                                                        {sub
+                                                                                            .modulos
+                                                                                            .length >
+                                                                                        0 ? (
+                                                                                            sub.modulos.map(
+                                                                                                (
+                                                                                                    sub2
+                                                                                                ) => {
+                                                                                                    return (
+                                                                                                        <AccordionItem
+                                                                                                            key={
+                                                                                                                sub2.codigo
+                                                                                                            }
+                                                                                                            border="none"
+                                                                                                        >
+                                                                                                            <h2>
+                                                                                                                <AccordionButton>
+                                                                                                                    <Box
+                                                                                                                        flex="1"
+                                                                                                                        textAlign="left"
+                                                                                                                        pl={
+                                                                                                                            8
+                                                                                                                        }
+                                                                                                                    >
+                                                                                                                        <Checkbox
+                                                                                                                            isChecked={
+                                                                                                                                watch(
+                                                                                                                                    "modulos"
+                                                                                                                                ) &&
+                                                                                                                                watch(
+                                                                                                                                    "modulos"
+                                                                                                                                ).includes(
+                                                                                                                                    sub2.codigo
+                                                                                                                                )
+                                                                                                                            }
+                                                                                                                            isIndeterminate={
+                                                                                                                                watch(
+                                                                                                                                    "modulos"
+                                                                                                                                ) &&
+                                                                                                                                watch(
+                                                                                                                                    "modulos"
+                                                                                                                                ).includes(
+                                                                                                                                    sub2.codigo
+                                                                                                                                ) &&
+                                                                                                                                !includesAll(
+                                                                                                                                    watch(
+                                                                                                                                        "permissoes"
+                                                                                                                                    ),
+                                                                                                                                    sub2.permissoes.map(
+                                                                                                                                        (
+                                                                                                                                            s
+                                                                                                                                        ) =>
+                                                                                                                                            s.codigo
+                                                                                                                                    )
+                                                                                                                                )
+                                                                                                                            }
+                                                                                                                            onChange={(
+                                                                                                                                e
+                                                                                                                            ) => {
+                                                                                                                                let newPerms =
+                                                                                                                                    watch(
+                                                                                                                                        "modulos"
+                                                                                                                                    ).filter(
+                                                                                                                                        (
+                                                                                                                                            p
+                                                                                                                                        ) =>
+                                                                                                                                            p !=
+                                                                                                                                            sub2.codigo
+                                                                                                                                    );
+                                                                                                                                if (
+                                                                                                                                    e
+                                                                                                                                        .target
+                                                                                                                                        .checked
+                                                                                                                                ) {
+                                                                                                                                    newPerms.push(
+                                                                                                                                        sub2.codigo
+                                                                                                                                    );
+                                                                                                                                }
+                                                                                                                                setValue(
+                                                                                                                                    "modulos",
+                                                                                                                                    newPerms
+                                                                                                                                );
+                                                                                                                            }}
+                                                                                                                        >
+                                                                                                                            {
+                                                                                                                                sub2.nome
+                                                                                                                            }
+                                                                                                                        </Checkbox>
+                                                                                                                    </Box>
+                                                                                                                    <AccordionIcon />
+                                                                                                                </AccordionButton>
+                                                                                                            </h2>
+                                                                                                            <AccordionPanel
+                                                                                                                pb={
+                                                                                                                    4
+                                                                                                                }
+                                                                                                            >
+                                                                                                                <Stack
+                                                                                                                    pl={
+                                                                                                                        12
+                                                                                                                    }
+                                                                                                                >
+                                                                                                                    {sub2
+                                                                                                                        .permissoes
+                                                                                                                        .length >
+                                                                                                                    0 ? (
+                                                                                                                        sub2.permissoes.map(
+                                                                                                                            (
+                                                                                                                                perm2
+                                                                                                                            ) => (
+                                                                                                                                <Checkbox
+                                                                                                                                    key={
+                                                                                                                                        perm2.codigo
+                                                                                                                                    }
+                                                                                                                                    isChecked={
+                                                                                                                                        watch(
+                                                                                                                                            "permissoes"
+                                                                                                                                        ) &&
+                                                                                                                                        watch(
+                                                                                                                                            "permissoes"
+                                                                                                                                        ).includes(
+                                                                                                                                            perm2.codigo
+                                                                                                                                        )
+                                                                                                                                    }
+                                                                                                                                    onChange={(
+                                                                                                                                        e
+                                                                                                                                    ) => {
+                                                                                                                                        let newPerms =
+                                                                                                                                            watch(
+                                                                                                                                                "permissoes"
+                                                                                                                                            ).filter(
+                                                                                                                                                (
+                                                                                                                                                    p
+                                                                                                                                                ) =>
+                                                                                                                                                    p !=
+                                                                                                                                                    perm2.codigo
+                                                                                                                                            );
+                                                                                                                                        if (
+                                                                                                                                            e
+                                                                                                                                                .target
+                                                                                                                                                .checked
+                                                                                                                                        ) {
+                                                                                                                                            newPerms.push(
+                                                                                                                                                perm2.codigo
+                                                                                                                                            );
+                                                                                                                                        }
+                                                                                                                                        setValue(
+                                                                                                                                            "permissoes",
+                                                                                                                                            newPerms
+                                                                                                                                        );
+                                                                                                                                    }}
+                                                                                                                                >
+                                                                                                                                    {
+                                                                                                                                        perm2.nome
+                                                                                                                                    }
+                                                                                                                                </Checkbox>
+                                                                                                                            )
+                                                                                                                        )
+                                                                                                                    ) : (
+                                                                                                                        <>
+
+                                                                                                                        </>
+                                                                                                                    )}
+                                                                                                                </Stack>
+                                                                                                            </AccordionPanel>
+                                                                                                        </AccordionItem>
+                                                                                                    );
+                                                                                                }
+                                                                                            )
+                                                                                        ) : (
+                                                                                            <>
+
+                                                                                            </>
+                                                                                        )}
+                                                                                    </AccordionPanel>
+                                                                                </AccordionItem>
+                                                                            );
+                                                                        }
+                                                                    )
+                                                                ) : (
+                                                                    <></>
+                                                                )}
+                                                            </AccordionPanel>
+                                                        </AccordionItem>
+                                                    );
+                                                }
+                                            })
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </Accordion>
                                 </TabPanel>
                                 <TabPanel>
                                     <Table size="sm">

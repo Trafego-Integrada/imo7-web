@@ -87,7 +87,7 @@ const ModalBase = ({}, ref) => {
 
                     <ModalBody>
                         <Tabs variant="solid-rounded" size="sm">
-                            <TabList gap={2}>
+                            <TabList gap={2} overflow="auto">
                                 <Tab>Dados</Tab>
                                 <Tab>Documentos</Tab>
                                 <Tab>

@@ -224,6 +224,8 @@ handle.get(async (req, res) => {
             include: {
                 imovel: true,
                 inquilinos: true,
+                proprietarios: true,
+                fiadores: true,
             },
         });
         const total = await prisma.contrato.count({

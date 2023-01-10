@@ -61,6 +61,7 @@ import { FaFileUpload } from "react-icons/fa";
 import { GrAttachment } from "react-icons/gr";
 import { AiOutlineRollback } from "react-icons/ai";
 import { NextChakraLink } from "@/components/NextChakraLink";
+import prisma from "@/lib/prisma";
 const schema = yup.object({
     mensagem: yup.string().required("Campo Obrigatório"),
 });
@@ -473,11 +474,24 @@ export const getServerSideProps = withSSRAuth(
     async (ctx) => {
         const { id } = ctx.query;
         const api = setupApiClient(ctx);
-        const { data } = await api.get("chamado/" + id);
+        const data = await prisma.chamado.findUnique({
+            where: {
+                id: Number(id),
+            },
+            include: {
+                assunto: {
+                    include: {
+                        departamento: true,
+                    },
+                },
+                participantes: true,
+                criador: true,
+            },
+        });
         console.log(data);
         return {
             props: {
-                chamado: data,
+                chamado: JSON.parse(JSON.stringify(data)),
             },
         };
     },
