@@ -34,7 +34,7 @@ import {
     cadastrarConta,
     atualizarConta,
 } from "@/services/models/conta";
-import { Input } from "@/Forms/Input";
+import { Input } from "@/components/Forms/Input";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 

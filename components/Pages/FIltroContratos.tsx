@@ -13,9 +13,9 @@ import {
     MdOutlineKeyboardArrowDown,
     MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
-import { FormDate } from "@/Form/FormDate";
-import { FormInput } from "@/Form/FormInput";
-import { FormSelect } from "@/Form/FormSelect";
+import { FormDate } from "@/components/Form/FormDate";
+import { FormInput } from "@/components/Form/FormInput";
+import { FormSelect } from "@/components/Form/FormSelect";
 
 export const FiltroContratos = ({ setFiltro, filtro }) => {
     const { isOpen, onToggle } = useDisclosure();

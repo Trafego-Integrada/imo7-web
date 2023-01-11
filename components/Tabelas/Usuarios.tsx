@@ -27,8 +27,8 @@ import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { IoAddOutline } from "react-icons/io5";
 import { MdPageview } from "react-icons/md";
 import { useQuery } from "react-query";
-import { FormInput } from "@/Form/FormInput";
-import { Usuario } from "@/Modals/Usuario";
+import { FormInput } from "@/components/Form/FormInput";
+import { Usuario } from "@/components/Modals/Usuario";
 
 export const TabelaUsuarios = ({
     admConta = false,

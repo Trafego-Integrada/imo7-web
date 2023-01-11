@@ -27,7 +27,7 @@ import {
 import { forwardRef, useImperativeHandle } from "react";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
-import { FormInput } from "@/Form/FormInput";
+import { FormInput } from "@/components/Form/FormInput";
 
 const ModalBase = ({}, ref) => {
     const { isOpen, onOpen, onClose } = useDisclosure();

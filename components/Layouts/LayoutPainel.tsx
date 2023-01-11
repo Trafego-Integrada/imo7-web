@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { listarContratos } from "@/services/models/contrato";
-import { NextChakraLink } from "@/NextChakraLink";
+import { NextChakraLink } from "@/components/NextChakraLink";
 
 export const LayoutPainel = ({ children }) => {
     const router = useRouter();

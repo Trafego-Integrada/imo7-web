@@ -1,4 +1,4 @@
-import { api } from "@/apiClient";
+import { api } from "@/services/apiClient";
 
 export const getAll = async ({ queryKey }) => {
     const { data } = await api.get("imobiliaria", { params: queryKey[1] });

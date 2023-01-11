@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { forwardRef, useImperativeHandle } from "react";
 
-import { FormInput } from "@/Form/FormInput";
+import { FormInput } from "@/components/Form/FormInput";
 
 const ModalBase = ({}, ref) => {
     const { isOpen, onOpen, onClose } = useDisclosure();

@@ -28,10 +28,10 @@ import {
 import { forwardRef, useImperativeHandle } from "react";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
-import { FormDate } from "@/Form/FormDate";
-import { FormInput } from "@/Form/FormInput";
-import { FormSelect } from "@/Form/FormSelect";
-import { FormTextarea } from "@/Form/FormTextarea";
+import { FormDate } from "@/components/Form/FormDate";
+import { FormInput } from "@/components/Form/FormInput";
+import { FormSelect } from "@/components/Form/FormSelect";
+import { FormTextarea } from "@/components/Form/FormTextarea";
 import { Title } from "@/Gerais/title";
 
 const ModalBase = ({}, ref) => {

@@ -1,6 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Menulateral } from "@/Menu/Menulateral";
-import { Menutopo } from "@/Menu/Menutopo";
+import { Menulateral } from "@/components/Menu/Menulateral";
+import { Menutopo } from "@/components/Menu/Menutopo";
 
 export const Layout = ({ title, subtitle, children }) => {
     return (

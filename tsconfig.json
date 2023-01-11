@@ -30,7 +30,8 @@
             "@/helpers/*": ["helpers/*"],
             "@/middleware/*": ["middleware/*"],
             "@/utils/*": ["utils/*"],
-            "@/hooks/*": ["hooks/*"]
+            "@/hooks/*": ["hooks/*"],
+            "@/config/*": ["config/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"],
