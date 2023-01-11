@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-import { auth } from "../config/config";
+import { auth } from "@/config/config";
 import { createRefreshToken } from "./database/auth";
 
 export async function generateJwtAndRefreshToken(

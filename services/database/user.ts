@@ -1,5 +1,5 @@
-import prisma from "../../lib/prisma";
-import { GetUserProps } from "../../types/user";
+import prisma from "@/lib/prisma";
+import { GetUserProps } from "@/types/user";
 
 export async function getUsers() {
     const users = await prisma.usuario.findMany();

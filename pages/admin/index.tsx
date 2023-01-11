@@ -28,7 +28,7 @@ import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
 import { ModalContratos } from "@/components/Modals/contratos";
-import { withSSRAuth } from "../../utils/withSSRAuth";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 const Home = () => {
     const { isOpen, onToggle } = useDisclosure();

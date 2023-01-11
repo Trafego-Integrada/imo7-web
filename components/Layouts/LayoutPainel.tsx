@@ -14,9 +14,9 @@ import {
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import { useAuth } from "../../hooks/useAuth";
-import { listarContratos } from "../../services/models/contrato";
-import { NextChakraLink } from "../NextChakraLink";
+import { useAuth } from "@/hooks/useAuth";
+import { listarContratos } from "@/services/models/contrato";
+import { NextChakraLink } from "@/NextChakraLink";
 
 export const LayoutPainel = ({ children }) => {
     const router = useRouter();

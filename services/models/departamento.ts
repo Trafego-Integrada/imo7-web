@@ -1,4 +1,4 @@
-import { apiFront } from "../apiClientFront";
+import { apiFront } from "@/apiClientFront";
 
 export const listarDepartamentos = async ({ queryKey }) => {
     const { data } = await apiFront.get("departamento", {

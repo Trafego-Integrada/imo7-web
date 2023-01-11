@@ -1,7 +1,7 @@
 import moment from "moment";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import prisma from "../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
 

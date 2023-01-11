@@ -2,7 +2,7 @@ import { checkAuth } from "@/middleware/checkAuth";
 import { Prisma } from "@prisma/client";
 import moment from "moment";
 import nextConnect from "next-connect";
-import prisma from "../../../lib/prisma";
+import prisma from "@/lib/prisma";
 
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";

@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import { generateJwtAndRefreshToken } from "../../../../services/auth";
-import { getUser } from "../../../../services/database/user";
-import { CreateSessionDTO } from "../../../../types/auth";
+import { generateJwtAndRefreshToken } from "@/services/auth";
+import { getUser } from "@/services/database/user";
+import { CreateSessionDTO } from "@/types/auth";
 import bcrypt from "bcryptjs";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();

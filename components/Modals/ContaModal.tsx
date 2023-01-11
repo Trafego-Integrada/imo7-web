@@ -33,13 +33,13 @@ import {
     buscarConta,
     cadastrarConta,
     atualizarConta,
-} from "../../services/models/conta";
-import { Input } from "../Forms/Input";
+} from "@/services/models/conta";
+import { Input } from "@/Forms/Input";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import axios from "axios";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 const schema = yup.object().shape({
     codigo: yup.string().required("O Código é obrigatório"),

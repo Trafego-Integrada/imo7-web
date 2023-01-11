@@ -1,6 +1,6 @@
 import { NextApiResponse } from "next-auth/internals/utils";
 import nextConnect from "next-connect";
-import prisma from "../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { NextApiRequest } from "next";
 

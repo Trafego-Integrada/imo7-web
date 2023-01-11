@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken";
 import jwtDecode from "jwt-decode";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import { auth } from "../config/config";
-import prisma from "../lib/prisma";
-import { DecodedToken, NextApiRequestWithUser } from "../types/auth";
+import { auth } from "@/config/config";
+import prisma from "@/lib/prisma";
+import { DecodedToken, NextApiRequestWithUser } from "@/types/auth";
 
 export const checkAuth = async (req, res, next) => {
     const { authorization } = req.headers;

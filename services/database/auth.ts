@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
-import prisma from "../../lib/prisma";
-import { RefreshTokensStore, UsersStore } from "../../types/auth";
+import prisma from "@/lib/prisma";
+import { RefreshTokensStore, UsersStore } from "@/types/auth";
 
 export const users: UsersStore = new Map();
 

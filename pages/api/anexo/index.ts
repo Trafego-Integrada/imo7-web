@@ -13,7 +13,7 @@ import st from "stream";
 import moment from "moment";
 import prisma from "@/lib/prisma";
 import { providerStorage } from "@/lib/storage";
-import chamado from "../v1/chamado";
+import chamado from "@/v1/chamado";
 import { checkAuth } from "@/middleware/checkAuth";
 
 export const config = {

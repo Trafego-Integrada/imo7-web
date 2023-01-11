@@ -12,8 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { Input } from "../../../../components/Forms/Input";
-import { LayoutPainel } from "../../../../components/Layouts/LayoutPainel";
+import { Input } from "@/../components/Forms/Input";
+import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 import {
     FiArrowLeft,
     FiCheck,

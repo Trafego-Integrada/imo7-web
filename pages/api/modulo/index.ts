@@ -1,5 +1,5 @@
 import nextConnect from "next-connect";
-import prisma from "../../../lib/prisma";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { Prisma } from "@prisma/client";
 import { checkAuth } from "@/middleware/checkAuth";

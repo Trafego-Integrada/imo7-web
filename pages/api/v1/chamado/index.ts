@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../../lib/prisma";
-import Auth from "../../../../middleware/Auth";
+import prisma from "@/lib/prisma";
+import Auth from "@/middleware/Auth";
 
 interface NextApiRequestWithUser extends NextApiRequest {
     user: any;

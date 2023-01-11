@@ -1,13 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import addUserToRequest from "../../../../middleware/addUserToRequest";
-import { generateJwtAndRefreshToken } from "../../../../services/auth";
+import addUserToRequest from "@/middleware/addUserToRequest";
+import { generateJwtAndRefreshToken } from "@/services/auth";
 import {
     checkRefreshTokenIsValid,
     invalidateRefreshToken,
-} from "../../../../services/database/auth";
-import { getUser } from "../../../../services/database/user";
-import { NextApiRequestWithUser } from "../../../../types/auth";
+} from "@/services/database/auth";
+import { getUser } from "@/services/database/user";
+import { NextApiRequestWithUser } from "@/types/auth";
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 

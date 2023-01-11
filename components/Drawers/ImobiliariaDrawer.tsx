@@ -27,18 +27,15 @@ import InputMask from "react-input-mask";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
-import { show, store, update } from "../../services/models/imobiliaria";
-import { Input } from "../Forms/Input";
+import { show, store, update } from "@/services/models/imobiliaria";
+import { Input } from "@/Forms/Input";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import { useAuth } from "../../hooks/useAuth";
-import {
-    getAll as getAllContas,
-    listarContas,
-} from "../../services/models/conta";
-import { Select } from "../Forms/Select";
-import { TabelaUsuarios } from "../Tabelas/Usuarios";
+import { useAuth } from "@/hooks/useAuth";
+import { getAll as getAllContas, listarContas } from "@/services/models/conta";
+import { Select } from "@/Forms/Select";
+import { TabelaUsuarios } from "@/Tabelas/Usuarios";
 
 const schema = yup.object().shape({
     codigo: yup.string().required("O Código é obrigatório"),

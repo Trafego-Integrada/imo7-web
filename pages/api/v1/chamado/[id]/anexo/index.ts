@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import fs, { createReadStream, statSync } from "fs";
-import Auth from "../../../../../../middleware/Auth";
+import Auth from "@/middleware/Auth";
 import * as os from "oci-objectstorage";
 import { ConfigFileAuthenticationDetailsProvider } from "oci-common";
 import st from "stream";

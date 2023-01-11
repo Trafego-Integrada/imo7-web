@@ -40,7 +40,7 @@ import {
 import { forwardRef, useImperativeHandle } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
-import { FormInput } from "../Form/FormInput";
+import { FormInput } from "@/Form/FormInput";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { queryClient } from "@/services/queryClient";

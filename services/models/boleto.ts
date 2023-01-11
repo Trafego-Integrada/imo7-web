@@ -1,4 +1,4 @@
-import { apiFront } from "../apiClientFront";
+import { apiFront } from "@/apiClientFront";
 
 export const listarBoletos = async ({ queryKey }) => {
     const { data } = await apiFront.get("boleto", { params: queryKey[1] });

@@ -2,7 +2,7 @@ import { Avatar } from "@chakra-ui/avatar";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
 import { Spinner } from "@chakra-ui/react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { NextChakraLink } from "./NextChakraLink";
 
 export const Header = ({ title, isFetching, children }) => {

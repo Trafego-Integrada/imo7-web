@@ -1,4 +1,4 @@
-import { apiFront } from "../apiClientFront";
+import { apiFront } from "@/apiClientFront";
 
 export const listarContratos = async ({ queryKey }) => {
     const { data } = await apiFront.get("contrato", { params: queryKey[1] });

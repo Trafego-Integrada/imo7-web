@@ -1,4 +1,4 @@
-import { api } from "../apiClient";
+import { api } from "@/apiClient";
 
 export const getAll = async () => {
     const { data } = await api.get("user");

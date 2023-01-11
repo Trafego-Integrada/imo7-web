@@ -4,8 +4,8 @@ import { Box, Flex, List, ListItem, Text, VStack } from "@chakra-ui/layout";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
 import { FaUsers } from "react-icons/fa";
 import { MdAccountCircle, MdBusiness, MdDashboard } from "react-icons/md";
-import { useAuth } from "../../hooks/useAuth";
-import { NextChakraLink } from "../NextChakraLink";
+import { useAuth } from "@/hooks/useAuth";
+import { NextChakraLink } from "@/NextChakraLink";
 
 export const LayoutAdmin = ({ children }) => {
     const { usuario } = useAuth();

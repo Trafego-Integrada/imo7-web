@@ -1,6 +1,6 @@
 import { checkAuth } from "@/middleware/checkAuth";
 import nextConnect from "next-connect";
-import prisma from "../../../lib/prisma";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";

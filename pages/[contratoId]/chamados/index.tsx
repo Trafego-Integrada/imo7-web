@@ -18,7 +18,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { FiArrowRight } from "react-icons/fi";
 import { useQuery } from "react-query";
-import { LayoutPainel } from "../../../components/Layouts/LayoutPainel";
+import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 
 const Chamados: NextPage = () => {
     const router = useRouter();

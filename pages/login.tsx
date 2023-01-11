@@ -12,13 +12,13 @@ import {
 } from "@chakra-ui/react";
 
 import { useContext, useState } from "react";
-import { AuthContext } from "../contexts/AuthContext";
-import { withSSRGuest } from "../utils/withSSRGuests";
+import { AuthContext } from "@/contexts/AuthContext";
+import { withSSRGuest } from "@/utils/withSSRGuests";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MdFingerprint } from "react-icons/md";
-import { Input } from "../components/Forms/Input";
+import { Input } from "@/components/Forms/Input";
 import { FaFacebook, FaGoogle, FaSignInAlt } from "react-icons/fa";
 import { CgPassword } from "react-icons/cg";
 import BeatLoader from "react-spinners/BeatLoader";

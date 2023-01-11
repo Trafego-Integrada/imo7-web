@@ -1,8 +1,8 @@
 import jwtDecode from "jwt-decode";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import prisma from "../lib/prisma";
-import { DecodedToken, NextApiRequestWithUser } from "../types/auth";
+import prisma from "@/lib/prisma";
+import { DecodedToken, NextApiRequestWithUser } from "@/types/auth";
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 

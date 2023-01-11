@@ -30,10 +30,10 @@ import { BiPowerOff, BiSupport } from "react-icons/bi";
 import { BsFillGearFill, BsSearch } from "react-icons/bs";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { RiAccountCircleFill, RiMenu3Fill } from "react-icons/ri";
-import { FiltroTopo } from "../FiltroTopo";
-import { FormInput } from "../Form/FormInput";
-import { FormSelect } from "../Form/FormSelect";
-import { NextChakraLink } from "../NextChakraLink";
+import { FiltroTopo } from "@/FiltroTopo";
+import { FormInput } from "@/Form/FormInput";
+import { FormSelect } from "@/Form/FormSelect";
+import { NextChakraLink } from "@/NextChakraLink";
 import { Listagemmenu } from "./Listagemmenu";
 import { Logo } from "./Logo";
 

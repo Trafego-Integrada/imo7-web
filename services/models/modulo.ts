@@ -1,4 +1,4 @@
-import { apiFront } from "../apiClientFront";
+import { apiFront } from "@/apiClientFront";
 
 export const listarModulos = async ({ queryKey }) => {
     const { data } = await apiFront.get("modulo", { params: queryKey[1] });

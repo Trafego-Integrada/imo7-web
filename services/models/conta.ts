@@ -1,4 +1,4 @@
-import { api } from "../apiClient";
+import { api } from "@/apiClient";
 
 export const listarContas = async () => {
     const { data } = await api.get("conta");
