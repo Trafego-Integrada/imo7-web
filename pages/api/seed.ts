@@ -5,43 +5,42 @@ import nextConnect from "next-connect";
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
 handler.get(async (req, res) => {
-    await prisma.modulo.createMany({
+    await prisma.permissao.createMany({
         data: [
             {
-                nome: "Contratos",
-                codigo: "imobiliaria.contratos",
+                nome: "Visualizar Documentos",
+                codigo: "imobiliaria.contratos.visualizarDocumentos",
+                moduloCodigo: "imobiliaria.contratos",
             },
             {
-                nome: "Cobranças",
-                codigo: "imobiliaria.cobrancas",
+                nome: "Visualizar Cobranças",
+                codigo: "imobiliaria.contratos.visualizarCobrancas",
+                moduloCodigo: "imobiliaria.contratos",
             },
             {
-                nome: "Inquilinos",
-                codigo: "imobiliaria.inquilinos",
+                nome: "Visualizar Fiadores",
+                codigo: "imobiliaria.contratos.visualizarFiadores",
+                moduloCodigo: "imobiliaria.contratos",
             },
             {
-                nome: "Proprietários",
-                codigo: "imobiliaria.proprietarios",
+                nome: "Visualizar Proprietários",
+                codigo: "imobiliaria.contratos.visualizarProprietarios",
+                moduloCodigo: "imobiliaria.contratos",
             },
             {
-                nome: "Usuários",
-                codigo: "imobiliaria.usuarios",
+                nome: "Visualizar Inquilinos",
+                codigo: "imobiliaria.contratos.visualizarInquilinos",
+                moduloCodigo: "imobiliaria.contratos",
             },
             {
                 nome: "Chamados",
-                codigo: "imobiliaria.chamados",
+                codigo: "imobiliaria.contratos.visualizarChamados",
+                moduloCodigo: "imobiliaria.contratos",
             },
             {
-                nome: "Imoveis",
-                codigo: "imobiliaria.imoveis",
-            },
-            {
-                nome: "Configurações",
-                codigo: "imobiliaria.configuracoes",
-            },
-            {
-                nome: "Gerencial",
-                codigo: "imobiliaria.gerencial",
+                nome: "Extratos",
+                codigo: "imobiliaria.contratos.visualizarExtratos",
+                moduloCodigo: "imobiliaria.contratos",
             },
         ],
     });

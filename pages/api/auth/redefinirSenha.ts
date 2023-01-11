@@ -8,7 +8,8 @@ import { mail } from "@/services/mail";
 import { layoutRecuperarSenha } from "@/lib/layoutEmail";
 import bcrypt from "bcryptjs";
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
-
+import { cors } from "@/middleware/cors";
+handler.use(cors);
 handler.post(async (req, res) => {
     const { codigo, password, confirmPassword } = req.body;
     if (!codigo || !password || !confirmPassword) {

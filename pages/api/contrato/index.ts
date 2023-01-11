@@ -4,9 +4,12 @@ import nextConnect from "next-connect";
 import prisma from "../../../lib/prisma";
 
 const handle = nextConnect();
+import { cors } from "@/middleware/cors";
+handle.use(cors);
 handle.get(checkAuth);
 handle.get(async (req, res) => {
     try {
+        const { imobiliaria } = req.headers;
         const {
             query,
             codigo,
@@ -215,7 +218,12 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-
+        if (imobiliaria) {
+            filtroQuery = {
+                ...filtroQuery,
+                imobiliaria: { url: imobiliaria },
+            };
+        }
         const data = await prisma.contrato.findMany({
             where: {
                 ...filtroQuery,

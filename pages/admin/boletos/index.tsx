@@ -36,7 +36,7 @@ import { listarBoletos } from "@/services/models/boleto";
 import { formatoData } from "@/helpers/helpers";
 import moment from "moment";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
-import { withSSRAuth } from "../../../utils/withSSRAuth";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 const Cobrancas = () => {
     const modal = useRef();

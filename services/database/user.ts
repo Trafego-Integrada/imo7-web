@@ -6,37 +6,63 @@ export async function getUsers() {
     return users;
 }
 
-export async function getUser({ documento }: GetUserProps) {
-    const user = await prisma.usuario.findUnique({
-        where: { documento },
+export async function getUser({ documento, imobiliaria }: GetUserProps) {
+    console.log(documento, imobiliaria);
+    const user = await prisma.usuario.findFirst({
+        where: {
+            OR: [
+                {
+                    documento,
+                },
+                {
+                    email: documento,
+                },
+            ],
+            imobiliaria:
+                imobiliaria != "null"
+                    ? {
+                          url: imobiliaria,
+                      }
+                    : {},
+        },
         include: {
             permissoes: {
                 select: {
-                    nome: true,
+                    codigo: true,
                 },
             },
             cargos: {
                 select: {
-                    nome: true,
+                    codigo: true,
                 },
             },
             tokens: true,
             conta: true,
             imobiliaria: true,
+            modulos: {
+                select: {
+                    codigo: true,
+                },
+            },
         },
     });
     if (!user) return null;
     let arrPermissoes: string[] = [];
     await user?.permissoes.map((permissao) => {
-        arrPermissoes.push(permissao.nome);
+        arrPermissoes.push(permissao.codigo);
     });
     let arrCargos: string[] = [];
     await user?.cargos.map((cargo) => {
-        arrCargos.push(cargo.nome);
+        arrCargos.push(cargo.codigo);
+    });
+    let arrModulos: string[] = [];
+    await user?.modulos.map((cargo) => {
+        arrModulos.push(cargo.codigo);
     });
     return {
         ...user,
         permissoes: arrPermissoes,
         cargos: arrCargos,
+        modulos: arrModulos,
     };
 }

@@ -65,6 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                         imobiliaria,
                         imobiliariaId,
                         conta,
+                        modulos,
                     } = response.data;
                     setUsuario({
                         id,
@@ -77,6 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                         imobiliaria,
                         imobiliariaId,
                         conta,
+                        modulos,
                     });
                 })
                 .catch(() => {
@@ -128,6 +130,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 imobiliaria,
                 imobiliariaId,
                 conta,
+                modulos,
             } = response.data;
             setCookie(undefined, "imo7.token", token, {
                 maxAge: 60 * 60 * 24 * 30,
@@ -146,6 +149,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 imobiliaria,
                 imobiliariaId,
                 conta,
+                modulos,
             });
 
             api.defaults.headers["Authorization"] = `Bearer ${token}`;

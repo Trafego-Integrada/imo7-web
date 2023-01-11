@@ -34,7 +34,7 @@ export const checkAuth = async (req, res, next) => {
         ) as DecodedToken;
 
         const user = await prisma.usuario.findUnique({
-            where: { documento: decoded.sub },
+            where: { id: Number(decoded.sub) },
             include: {
                 conta: true,
                 imobiliaria: true,
@@ -45,7 +45,6 @@ export const checkAuth = async (req, res, next) => {
 
         return next();
     } catch (err) {
-        console.log(err);
         return res.status(401).json({
             error: true,
             code: "token.expired",

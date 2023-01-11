@@ -3,9 +3,12 @@ import nextConnect from "next-connect";
 import prisma from "../../../lib/prisma";
 import bcrypt from "bcryptjs";
 const handle = nextConnect();
+import { cors } from "@/middleware/cors";
+handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
+        const { imobiliaria } = req.headers;
         const {
             filtro,
             nome,
@@ -139,6 +142,12 @@ handle.get(async (req, res) => {
                     pagina && pagina > 1
                         ? Number(pagina) * Number(linhas) - Number(linhas)
                         : 0,
+            };
+        }
+        if (imobiliaria) {
+            filtroQuery = {
+                ...filtroQuery,
+                imobiliaria: { url: imobiliaria },
             };
         }
         const data = await prisma.usuario.findMany({

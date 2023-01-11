@@ -3,6 +3,8 @@ import nextConnect from "next-connect";
 import prisma from "../../../../../lib/prisma";
 
 const handle = nextConnect();
+import { cors } from "@/middleware/cors";
+handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     const { id, usuarioId } = req.query;

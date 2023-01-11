@@ -4,15 +4,15 @@ import { auth } from "../config/config";
 import { createRefreshToken } from "./database/auth";
 
 export async function generateJwtAndRefreshToken(
-    document: string,
+    id: string,
     payload: object = {}
 ) {
     const token = jwt.sign(payload, auth.secret, {
-        subject: document,
+        subject: id.toString(),
         expiresIn: 60 * 60 * 15, // 15 minutes
     });
 
-    const refreshToken = await createRefreshToken(document);
+    const refreshToken = await createRefreshToken(id);
 
     return {
         token,

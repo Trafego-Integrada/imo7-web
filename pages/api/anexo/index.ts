@@ -15,12 +15,15 @@ import prisma from "@/lib/prisma";
 import { providerStorage } from "@/lib/storage";
 import chamado from "../v1/chamado";
 import { checkAuth } from "@/middleware/checkAuth";
+
 export const config = {
     api: {
         bodyParser: false,
     },
 };
 const handle = nextConnect();
+import { cors } from "@/middleware/cors";
+handle.use(cors);
 handle.use(checkAuth);
 handle.use(multiparty);
 
@@ -38,6 +41,9 @@ handle.get(async (req, res) => {
         const data = await prisma.anexo.findMany({
             where: {
                 ...filtroQuery,
+            },
+            include: {
+                usuario: true,
             },
             orderBy: {
                 id: "desc",
@@ -126,6 +132,11 @@ handle.post(async (req, res) => {
                                           },
                                       }
                                     : {},
+                                usuario: {
+                                    connect: {
+                                        id: req.user.id,
+                                    },
+                                },
                             },
                         });
                         if (conversaId && chamadoId) {
@@ -201,6 +212,11 @@ handle.post(async (req, res) => {
                                   },
                               }
                             : {},
+                        usuario: {
+                            connect: {
+                                id: req.user.id,
+                            },
+                        },
                     },
                 });
                 if (conversaId && chamadoId) {

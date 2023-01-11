@@ -8,16 +8,17 @@ import {
 } from "@/services/database/auth";
 import { getUser } from "@/services/database/user";
 import { NextApiRequestWithUser } from "@/types/auth";
+import { cors } from "@/middleware/cors";
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
-
+handler.use(cors);
 handler.use(addUserToRequest);
 
 handler.post(async (req, res) => {
-    const { documento } = req.user;
+    const { documento, imobiliaria } = req.user;
     const { refreshToken } = req.body;
-
-    const user = await getUser({ documento });
+    console.log(imobiliaria);
+    const user = await getUser({ documento, imobiliria: imobiliaria?.url });
 
     if (!user) {
         return res.status(401).json({
@@ -62,7 +63,8 @@ handler.post(async (req, res) => {
         cargos: user.cargos,
         imobiliaria: user.imobiliaria,
         imobiliariaId: user.imobiliariaId,
-        conta: user.conta ? user.conta[0] : null,
+        conta: user.conta,
+        modulos: user.modulos,
     });
 });
 

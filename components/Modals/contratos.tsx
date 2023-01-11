@@ -1,4 +1,5 @@
 import { formatoData, formatoValor } from "@/helpers/helpers";
+import { useAuth } from "@/hooks/useAuth";
 import {
     Badge,
     Box,
@@ -51,6 +52,7 @@ import { Inquilinos } from "./Contrato/Inquilinos";
 import { Proprietarios } from "./Contrato/Proprietarios";
 
 const ModalBase = ({}, ref) => {
+    const { usuario } = useAuth();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [contrato, setContrato] = useState({});
     const {
@@ -89,73 +91,108 @@ const ModalBase = ({}, ref) => {
                         <Tabs variant="solid-rounded" size="sm">
                             <TabList gap={2} overflow="auto">
                                 <Tab>Dados</Tab>
-                                <Tab>Documentos</Tab>
-                                <Tab>
-                                    Cobranças
-                                    <Badge
-                                        ml={1}
-                                        size="sm"
-                                        textAlign="center"
-                                        rounded="full"
-                                    >
-                                        {watch("boletos")?.length}
-                                    </Badge>
-                                </Tab>
-                                <Tab>
-                                    Inquilinos
-                                    <Badge
-                                        ml={1}
-                                        size="sm"
-                                        textAlign="center"
-                                        rounded="full"
-                                    >
-                                        {watch("inquilinos")?.length}
-                                    </Badge>
-                                </Tab>
-                                <Tab>
-                                    Proprietários
-                                    <Badge
-                                        ml={1}
-                                        size="sm"
-                                        textAlign="center"
-                                        rounded="full"
-                                    >
-                                        {watch("proprietarios")?.length}
-                                    </Badge>
-                                </Tab>
-                                <Tab>
-                                    Fiadores
-                                    <Badge
-                                        ml={1}
-                                        size="sm"
-                                        textAlign="center"
-                                        rounded="full"
-                                    >
-                                        {watch("fiadores")?.length}
-                                    </Badge>
-                                </Tab>
-                                <Tab>
-                                    Extratos
-                                    <Badge
-                                        ml={1}
-                                        size="sm"
-                                        textAlign="center"
-                                        rounded="full"
-                                    >
-                                        {watch("extratos")?.length}
-                                    </Badge>
-                                </Tab>
-                                <Tab>
-                                    Chamados
-                                    <Badge
-                                        ml={1}
-                                        size="sm"
-                                        textAlign="center"
-                                        rounded="full"
-                                    >
-                                        {watch("chamados")?.length}
-                                    </Badge>
-                                </Tab>
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarCobrancas"
+                                ) && (
+                                    <Tab>
+                                        Cobranças
+                                        <Badge
+                                            ml={1}
+                                            size="sm"
+                                            textAlign="center"
+                                            rounded="full"
+                                        >
+                                            {watch("boletos")?.length}
+                                        </Badge>
+                                    </Tab>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarInquilinos"
+                                ) && (
+                                    <Tab>
+                                        Inquilinos
+                                        <Badge
+                                            ml={1}
+                                            size="sm"
+                                            textAlign="center"
+                                            rounded="full"
+                                        >
+                                            {watch("inquilinos")?.length}
+                                        </Badge>
+                                    </Tab>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarProprietarios"
+                                ) && (
+                                    <Tab>
+                                        Proprietários
+                                        <Badge
+                                            ml={1}
+                                            size="sm"
+                                            textAlign="center"
+                                            rounded="full"
+                                        >
+                                            {watch("proprietarios")?.length}
+                                        </Badge>
+                                    </Tab>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarFiadores"
+                                ) && (
+                                    <Tab>
+                                        Fiadores
+                                        <Badge
+                                            ml={1}
+                                            size="sm"
+                                            textAlign="center"
+                                            rounded="full"
+                                        >
+                                            {watch("fiadores")?.length}
+                                        </Badge>
+                                    </Tab>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarExtratos"
+                                ) && (
+                                    <Tab>
+                                        Extratos
+                                        <Badge
+                                            ml={1}
+                                            size="sm"
+                                            textAlign="center"
+                                            rounded="full"
+                                        >
+                                            {watch("extratos")?.length}
+                                        </Badge>
+                                    </Tab>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarChamados"
+                                ) && (
+                                    <Tab>
+                                        Chamados
+                                        <Badge
+                                            ml={1}
+                                            size="sm"
+                                            textAlign="center"
+                                            rounded="full"
+                                        >
+                                            {watch("chamados")?.length}
+                                        </Badge>
+                                    </Tab>
+                                )}
                             </TabList>
                             <TabPanels>
                                 <TabPanel>

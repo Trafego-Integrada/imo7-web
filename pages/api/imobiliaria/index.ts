@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
 
 const handle = nextConnect();
+import { cors } from "@/middleware/cors";
+handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     const { query, contaId } = req.query;

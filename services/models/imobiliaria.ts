@@ -16,9 +16,9 @@ export const store = async (form) => {
     return data;
 };
 
-export const update = async ({ id, ...rest }) => {
-    const { data } = await api.post("imobiliaria/" + id, { ...rest });
-    return data;
+export const update = async ({ id, data }) => {
+    const { data: resp } = await api.post("imobiliaria/" + id, data);
+    return resp;
 };
 
 export const destroy = async (id) => {

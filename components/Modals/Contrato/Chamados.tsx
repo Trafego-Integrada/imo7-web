@@ -35,7 +35,6 @@ export const Chamados = ({ data }) => {
                         <Th w={44} textAlign="center">
                             Aberto por
                         </Th>
-
                         <Th w={36} textAlign="center">
                             Criado em
                         </Th>

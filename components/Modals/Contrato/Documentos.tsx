@@ -76,6 +76,8 @@ export const Documentos = ({ contratoId }) => {
                 <Thead>
                     <Tr>
                         <Th>Anexo</Th>
+                        <Th w={32}>Upload feito por</Th>
+                        <Th w={44}>Data do upload</Th>
                         <Th w={32}></Th>
                     </Tr>
                 </Thead>
@@ -83,6 +85,8 @@ export const Documentos = ({ contratoId }) => {
                     {data?.map((item) => (
                         <Tr key={item.id}>
                             <Td>{item.nome}</Td>
+                            <Td>{item.usuario?.nome}</Td>
+                            <Td>{formatoData(item.createdAt, "DATA_HORA")}</Td>
                             <Td>
                                 <Flex>
                                     {" "}

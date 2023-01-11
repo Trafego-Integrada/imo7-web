@@ -4,13 +4,15 @@ import { generateJwtAndRefreshToken } from "@/services/auth";
 import { getUser } from "@/services/database/user";
 import { CreateSessionDTO } from "@/types/auth";
 import bcrypt from "bcryptjs";
+import { cors } from "@/middleware/cors";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
-
+handler.use(cors);
 handler.post(async (req, res) => {
+    const { imobiliaria } = req.headers;
     const { documento, password } = req.body as CreateSessionDTO;
-
-    const user = await getUser({ documento: documento });
+    console.log(1);
+    const user = await getUser({ documento: documento, imobiliaria });
     if (!user) {
         return res.status(401).json({
             error: true,
@@ -27,13 +29,10 @@ handler.post(async (req, res) => {
         });
     }
 
-    const { token, refreshToken } = await generateJwtAndRefreshToken(
-        documento,
-        {
-            permissoes: user.permissoes,
-            cargos: user.cargos,
-        }
-    );
+    const { token, refreshToken } = await generateJwtAndRefreshToken(user.id, {
+        permissoes: user.permissoes,
+        cargos: user.cargos,
+    });
 
     return res.json({
         id: user.id,
@@ -47,7 +46,8 @@ handler.post(async (req, res) => {
         cargos: user.cargos,
         imobiliaria: user.imobiliaria,
         imobiliariaId: user.imobiliariaId,
-        conta: user.conta ? user.conta[0] : null,
+        conta: user.conta,
+        modulos: user.modulos,
     });
 });
 

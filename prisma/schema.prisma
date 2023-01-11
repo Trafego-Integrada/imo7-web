@@ -29,8 +29,8 @@ model Conta {
 model Usuario {
     id                    Int                      @id @default(autoincrement())
     nome                  String?                  @db.VarChar(255)
-    email                 String?                  @unique @db.VarChar(255)
-    documento             String                   @unique
+    email                 String?
+    documento             String
     telefone              String?
     celular               String?
     profissao             String?
@@ -52,9 +52,6 @@ model Usuario {
     contratosProprietario Contrato[]               @relation("Proprietarios")
     contratosInquilino    Contrato[]               @relation("Inquilinos")
     imoveis               ProprietariosOnImoveis[]
-    imobiliaria           Imobiliaria?             @relation(fields: [imobiliariaId], references: [id])
-    imobiliariaId         Int?
-    conta                 Conta[]
     apiToken              ApiToken[]
     boletos               Boleto[]
     contratosFiador       Contrato[]               @relation("Fiadores")
@@ -66,6 +63,12 @@ model Usuario {
     hashsRecuperacao      RecuperarSenha[]
     Recibo                Recibo[]
     modulos               Modulo[]
+    imobiliaria           Imobiliaria?             @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId         Int?
+    conta                 Conta?                   @relation(fields: [contaId], references: [id])
+    contaId               Int?
+
+    @@unique([id, documento])
 }
 
 model RecuperarSenha {
@@ -147,6 +150,7 @@ model Imobiliaria {
     cnpj         String     @unique
     ie           String?
     logo         String?
+    bg           String?
     email        String?
     site         String?
     telefone     String?
@@ -214,10 +218,11 @@ model Imovel {
     deletedAt       DateTime?
     imobiliria      Imobiliaria              @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId   Int
-    contrato        Contrato?
     proprietarios   ProprietariosOnImoveis[]
     conta           Conta                    @relation(fields: [contaId], references: [id])
     contaId         Int
+    contrato        Contrato?                @relation(fields: [contratoId], references: [id])
+    contratoId      Int?                     @unique
 }
 
 model ProprietariosOnImoveis {
@@ -255,8 +260,6 @@ model Contrato {
     observacoes       String?     @db.LongText
     imobiliaria       Imobiliaria @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId     Int
-    imovel            Imovel?     @relation(fields: [imovelId], references: [id])
-    imovelId          Int?
     proprietarios     Usuario[]   @relation("Proprietarios")
     inquilinos        Usuario[]   @relation("Inquilinos")
     fiadores          Usuario[]   @relation("Fiadores")
@@ -270,6 +273,7 @@ model Contrato {
     conta             Conta       @relation(fields: [contaId], references: [id])
     contaId           Int
     Recibo            Recibo[]
+    imovel            Imovel?
 }
 
 model Boleto {
@@ -336,7 +340,8 @@ model Boleto {
     contratoId            Int
     conta                 Conta       @relation(fields: [contaId], references: [id])
     contaId               Int
-    inquilino             Usuario     @relation(fields: [bols_cpf_cnpj], references: [documento])
+    inquilino             Usuario?    @relation(fields: [inquilinoId, bols_cpf_cnpj], references: [id, documento])
+    inquilinoId           Int?
     imobiliaria           Imobiliaria @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId         Int
 }

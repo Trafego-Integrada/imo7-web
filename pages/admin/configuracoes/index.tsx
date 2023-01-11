@@ -5,6 +5,8 @@ import {
     Flex,
     Grid,
     GridItem,
+    Heading,
+    List,
     Tab,
     TabList,
     TabPanel,
@@ -16,7 +18,7 @@ import {
 import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
-import { withSSRAuth } from "../../../utils/withSSRAuth";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -209,7 +211,37 @@ const Configuracoes = () => {
                                         >
                                             Logomarca
                                         </Text>
-                                        <Box bg="white" p={5}></Box>
+                                        <Box bg="white" p={5}>
+                                            <Grid>
+                                                <GridItem>
+                                                    <Flex
+                                                        mt={4}
+                                                        p={12}
+                                                        borderWidth={2}
+                                                        borderStyle="dashed"
+                                                        align="center"
+                                                        {...getRootProps({
+                                                            className:
+                                                                "dropzone",
+                                                        })}
+                                                    >
+                                                        <input
+                                                            {...getInputProps()}
+                                                        />
+                                                        <Text color="gray">
+                                                            Arraste o arquivo ou
+                                                            clique aqui
+                                                        </Text>
+                                                    </Flex>
+                                                    <Box mt={4}>
+                                                        <Heading size="md">
+                                                            Anexo
+                                                        </Heading>
+                                                        <List>{files}</List>
+                                                    </Box>
+                                                </GridItem>
+                                            </Grid>
+                                        </Box>
                                     </Box>
                                 </TabPanel>
                                 <TabPanel>
@@ -503,9 +535,10 @@ const Configuracoes = () => {
                                         </Text>
                                         <Box bg="white" p={5}>
                                             <FormInput
-                                                label="Url de acesso"
-                                                placeholder="dev@trafegointegrada.com.br;"
+                                                label="URL de acesso"
                                                 bg="white"
+                                                {...register("url")}
+                                                error={errors.url?.message}
                                             />
                                         </Box>
                                     </Box>

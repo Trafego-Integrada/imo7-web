@@ -8,7 +8,8 @@ import { mail } from "@/services/mail";
 import { layoutRecuperarSenha } from "@/lib/layoutEmail";
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
-
+import { cors } from "@/middleware/cors";
+handler.use(cors);
 handler.post(async (req, res) => {
     const { documento } = req.body;
     const user = await getUser({ documento });

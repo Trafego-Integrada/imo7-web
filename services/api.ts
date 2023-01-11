@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { GetServerSidePropsContext } from "next";
+import { Router, useRouter } from "next/router";
 import { parseCookies, setCookie } from "nookies";
 import { signOut } from "../contexts/AuthContext";
 import { AuthTokenError } from "./errors/AuthTokenError";
@@ -12,11 +13,20 @@ let failedRequestQueue: {
 
 export function setupApiClient(ctx = undefined) {
     let cookies = parseCookies(ctx);
+    let host;
+
+    if (typeof window !== "undefined") {
+        console.log(window.location);
+        host = window.location.host;
+        host = host.split(".")[0];
+    }
 
     const api = axios.create({
-        baseURL: "/api/",
+        baseURL: "http://localhost:3000/api/",
         headers: {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
+            imobiliaria:
+                host != "localhost:3000" && host != "imo7.com.br" ? host : null,
         },
     });
 

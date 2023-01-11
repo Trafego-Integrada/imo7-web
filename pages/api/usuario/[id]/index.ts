@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
 
 const handle = nextConnect();
+import { cors } from "@/middleware/cors";
+handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     const { id } = req.query;
@@ -80,6 +82,7 @@ handle.post(async (req, res) => {
             password: bcrypt.hashSync(password, 10),
         };
     }
+
     const data = await prisma.usuario.update({
         where: {
             id: Number(id),
@@ -93,7 +96,7 @@ handle.post(async (req, res) => {
             modulos:
                 modulos.length > 0
                     ? {
-                          connect: modulos.map((m) => {
+                          set: modulos.map((m) => {
                               return {
                                   codigo: m,
                               };
@@ -103,7 +106,7 @@ handle.post(async (req, res) => {
             cargos:
                 cargos.length > 0
                     ? {
-                          connect: cargos.map((m) => {
+                          set: cargos.map((m) => {
                               return {
                                   codigo: m,
                               };
@@ -113,7 +116,7 @@ handle.post(async (req, res) => {
             permissoes:
                 permissoes.length > 0
                     ? {
-                          connect: permissoes.map((m) => {
+                          set: permissoes.map((m) => {
                               return {
                                   codigo: m,
                               };

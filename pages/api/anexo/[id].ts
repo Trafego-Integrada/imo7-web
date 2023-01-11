@@ -4,7 +4,8 @@ import { providerStorage } from "@/lib/storage";
 import * as os from "oci-objectstorage";
 
 const handler = nextConnect();
-
+import { cors } from "@/middleware/cors";
+handler.use(cors);
 handler.delete(async (req, res) => {
     try {
         const { id } = req.query;

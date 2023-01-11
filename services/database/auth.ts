@@ -6,7 +6,7 @@ export const users: UsersStore = new Map();
 
 export const tokens: RefreshTokensStore = new Map();
 
-export async function createRefreshToken(documento: string) {
+export async function createRefreshToken(id) {
     const refreshToken = uuid();
 
     await prisma.token.create({
@@ -14,7 +14,7 @@ export async function createRefreshToken(documento: string) {
             token: refreshToken,
             usuario: {
                 connect: {
-                    documento,
+                    id,
                 },
             },
         },

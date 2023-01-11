@@ -124,7 +124,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
         [
             "listarModulos",
             {
-                cargoCodigo: "imobiliaria",
+                cargoCodigo: imobiliariaId ? "imobiliaria" :'adm',
             },
         ],
         listarModulos
@@ -777,7 +777,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                             </Td>
                                                             <Td>
                                                                 {
-                                                                    item.imovel
+                                                                    item.imovel?
                                                                         .endereco
                                                                 }
                                                             </Td>

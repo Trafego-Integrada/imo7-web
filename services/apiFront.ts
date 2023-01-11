@@ -14,7 +14,7 @@ export function setupApiClient(ctx = undefined) {
     let cookies = parseCookies(ctx);
 
     const api = axios.create({
-        baseURL: "/api/",
+        baseURL: "http://localhost:3000/api/",
         headers: {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
         },

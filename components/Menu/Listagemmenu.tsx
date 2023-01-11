@@ -15,18 +15,21 @@ const menu = [
         href: "/admin/contratos",
         icon: HiOutlineDocumentText,
         cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.contratos"],
     },
     {
         titulo: "Cobranças",
         href: "/admin/boletos",
         icon: FaHandHoldingUsd,
         cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.cobrancas"],
         subMenus: [
             {
                 titulo: "Boletos",
                 href: "/admin/boletos",
                 icon: HiOutlineDocumentText,
                 cargos: ["imobiliaria"],
+                modulos: ["imobiliaria.cobrancas.boletos"],
             },
         ],
     },
@@ -35,56 +38,74 @@ const menu = [
         href: "/admin/inquilinos",
         icon: FaUsers,
         cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.inquilinos"],
     },
     {
         titulo: "Proprietários",
         href: "/admin/proprietarios",
         icon: FaUserTie,
         cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.proprietarios"],
     },
     {
         titulo: "Usuários",
         href: "/admin/usuarios",
         icon: FaUser,
         cargos: ["imobiliaria", "adm", "conta"],
+        modulos: ["imobiliaria.usuarios"],
     },
     {
         titulo: "Chamados",
         href: "/admin/chamados",
         icon: BiSupport,
         cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.chamados"],
     },
     {
         titulo: "Imoveis",
         href: "/admin/imoveis",
         icon: BsHouseFill,
         cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.imoveis"],
     },
     {
         titulo: "Configurações",
         href: "/admin/configuracoes",
         icon: BsFillGearFill,
         cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.configuracoes"],
     },
-    {
-        titulo: "Imobiliárias",
-        href: "/admin/imobiliarias",
-        icon: HiOutlineDocumentText,
-        cargos: ["conta"],
-    },
-    {
-        titulo: "Contas",
-        href: "/admin/contas",
-        icon: HiOutlineDocumentText,
-        cargos: ["adm"],
-    },
+
     {
         titulo: "Gerencial",
         href: "/admin/gerencial",
         icon: MdDashboard,
         cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.gerencial"],
+    },
+    {
+        titulo: "Usuários",
+        href: "/admin/usuarios",
+        icon: BsFillGearFill,
+        cargos: ["adm"],
+        modulos: ["adm.usuarios"],
+    },
+    {
+        titulo: "Contas",
+        href: "/admin/contas",
+        icon: BsFillGearFill,
+        cargos: ["adm"],
+        modulos: ["adm.contas"],
+    },
+    {
+        titulo: "Imobiliarias",
+        href: "/admin/imobiliarias",
+        icon: BsFillGearFill,
+        cargos: ["adm"],
+        modulos: ["adm.imobiliarias"],
     },
 ];
+
 export const Listagemmenu = () => {
     const { usuario } = useAuth();
     return (
@@ -96,6 +117,12 @@ export const Listagemmenu = () => {
                         (isArray(usuario?.cargos) &&
                             item.cargos.filter((i) => {
                                 if (usuario.cargos?.find((um) => um == i)) {
+                                    return true;
+                                }
+                            }).length &&
+                            isArray(usuario?.modulos) &&
+                            item.modulos.filter((i) => {
+                                if (usuario.modulos?.find((um) => um == i)) {
                                     return true;
                                 }
                             }).length)

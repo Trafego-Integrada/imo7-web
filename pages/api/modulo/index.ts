@@ -4,7 +4,8 @@ import bcrypt from "bcryptjs";
 import { Prisma } from "@prisma/client";
 import { checkAuth } from "@/middleware/checkAuth";
 const handle = nextConnect();
-
+import { cors } from "@/middleware/cors";
+handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
