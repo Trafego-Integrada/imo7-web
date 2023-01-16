@@ -80,6 +80,12 @@ export default function middleware(req: NextRequest) {
     }
 
     url.pathname = `/_sites/${currentHost}${url.pathname}`;
+
+    if (url.pathname.includes("/_sites/imo7.com.br/")) {
+        url.pathname = url.pathname.replace("/_sites/imo7.com.br/", "/");
+    } else if (url.pathname.includes("/_sites/www/")) {
+        url.pathname = url.pathname.replace("/_sites/www/", "/");
+    }
     if (url.pathname.includes(`/_sites/${url.host}/api/`)) {
         url.pathname = url.pathname.replace(
             `/_sites/${url.host}/api/`,
