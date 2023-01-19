@@ -27,8 +27,8 @@ async function index(req: NextApiRequestWithUser, res: NextApiResponse) {
         },
         include: {
             anexos: true,
-            Contrato: true,
-            InteracaoChamado: true,
+            contrato: true,
+            interacoes: true,
             assunto: true,
             criador: true,
             participantes: true,
@@ -54,14 +54,19 @@ async function store(req: NextApiRequestWithUser, res: NextApiResponse) {
                         id: assuntoId,
                     },
                 },
-                Contrato: {
+                contrato: {
                     connect: {
                         id: contratoId,
                     },
                 },
-                InteracaoChamado: {
+                interacoes: {
                     create: {
                         mensagem: mensagem,
+                        usuario: {
+                            connect: {
+                                id: req.user.id,
+                            },
+                        },
                     },
                 },
                 criador: {
@@ -71,7 +76,7 @@ async function store(req: NextApiRequestWithUser, res: NextApiResponse) {
                 },
             },
             include: {
-                InteracaoChamado: true,
+                interacoes: true,
             },
         });
 

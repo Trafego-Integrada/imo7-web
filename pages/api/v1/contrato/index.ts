@@ -75,9 +75,21 @@ handle.post(async (req, res) => {
             diaRecebimento: diaRecebimento ? Number(diaRecebimento) : null,
             diaDeposito: diaDeposito ? Number(diaDeposito) : null,
             observacoes,
-            imobiliariaId: Number(imobiliariaId),
-            contaId: 1,
-            imovelId: Number(imovelId),
+            imobiliaria: {
+                connect: {
+                    id: Number(imobiliariaId),
+                },
+            },
+            conta: {
+                connect: {
+                    id: 1,
+                },
+            },
+            imovel: {
+                connect: {
+                    id: Number(imovelId),
+                },
+            },
         },
     });
 
