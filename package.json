@@ -9,7 +9,7 @@
         "lint": "next lint",
         "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
         "ssh": "ssh ubuntu@132.226.252.163",
-        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aasce4d66abzf2y35qpq6i2oybhxfuh7ylvuyafw7ihp2a@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
+        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aamwv473kdzfjeajcu6gzd7x2eskeal2hyeie6hvsojiqa@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",

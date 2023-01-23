@@ -271,7 +271,10 @@ handle.post(async (req, res) => {
             data: {
                 inquilino: {
                     connect: {
-                        documento: bols_cpf_cnpj,
+                        imobiliariaId_documento: {
+                            documento: bols_cpf_cnpj,
+                            imobiliariaId: Number(imobiliariaId),
+                        },
                     },
                 },
                 bols_codl,

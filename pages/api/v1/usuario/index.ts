@@ -37,6 +37,7 @@ handle.post(async (req, res) => {
                     },
                     { documento },
                 ],
+                imobiliariaId: Number(imobiliariaId),
             },
         });
 
@@ -48,7 +49,7 @@ handle.post(async (req, res) => {
                     nome,
                     email,
                     documento,
-                    imobiliariaId,
+                    imobiliariaId: Number(imobiliariaId),
                     profissao,
                     endereco,
                     cidade,

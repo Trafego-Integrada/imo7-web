@@ -29,6 +29,7 @@ handle.post(async (req, res) => {
             contaId,
             itens,
         } = req.body;
+
         const data = await prisma.recibo.create({
             data: {
                 vencimento: vencimento
