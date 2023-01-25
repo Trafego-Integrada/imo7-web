@@ -31,12 +31,7 @@ handle.post(async (req, res) => {
 
         const usuarioExiste = await prisma.usuario.findFirst({
             where: {
-                OR: [
-                    {
-                        email,
-                    },
-                    { documento },
-                ],
+                documento,
                 imobiliariaId: Number(imobiliariaId),
             },
         });
