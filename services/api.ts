@@ -28,7 +28,11 @@ export function setupApiClient(ctx = undefined) {
         headers: {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
             imobiliaria:
-                host != "localhost:3000" && host != "imo7.com.br" ? host : null,
+                host != "localhost:3000" &&
+                host != "imo7.com.br" &&
+                host != "imo7"
+                    ? host
+                    : null,
         },
     });
 
