@@ -177,7 +177,7 @@ handle.get(async (req, res) => {
                             gte: dataCriacao[0]
                                 ? moment(dataCriacao[0]).startOf("d").format()
                                 : null,
-                            lte: dataVencimento[1]
+                            lte: dataCriacao[1]
                                 ? moment(dataCriacao[1]).endOf("d").format()
                                 : null,
                         },
