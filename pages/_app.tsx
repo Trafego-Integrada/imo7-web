@@ -6,7 +6,7 @@ import { QueryClientProvider, useQuery } from "react-query";
 import { queryClient } from "@/services/queryClient";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { theme } from "@/config/theme";
-
+import "react-datepicker/dist/react-datepicker.css";
 function MyApp({ Component, pageProps }: AppProps) {
     return (
         <QueryClientProvider client={queryClient}>

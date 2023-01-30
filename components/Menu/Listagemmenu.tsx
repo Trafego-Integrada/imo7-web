@@ -80,8 +80,8 @@ const menu = [
         titulo: "Gerencial",
         href: "/admin/gerencial",
         icon: MdDashboard,
-        cargos: ["imobiliaria"],
-        modulos: ["imobiliaria.gerencial"],
+        cargos: ["adm"],
+        modulos: ["adm.gerencial"],
     },
     {
         titulo: "Usuários",

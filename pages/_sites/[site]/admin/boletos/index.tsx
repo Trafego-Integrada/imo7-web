@@ -33,17 +33,19 @@ import {
 } from "@ajna/pagination";
 import { useQuery } from "react-query";
 import { listarBoletos } from "@/services/models/boleto";
-import { formatoData } from "@/helpers/helpers";
+import { formatoData, formatoValor } from "@/helpers/helpers";
 import moment from "moment";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import Link from "next/link";
+import { FormDateRange } from "@/components/Form/FormDateRange";
 
 const Cobrancas = () => {
     const modal = useRef();
     const [total, setTotal] = useState();
     const [filtro, setFiltro] = useState({
-        filtro: {},
+        dataVencimento: [null, null],
+        dataCriacao: [null, null],
     });
     const { currentPage, setCurrentPage, pagesCount, pages, pageSize } =
         usePagination({
@@ -51,7 +53,20 @@ const Cobrancas = () => {
             initialState: { currentPage: 1, pageSize: 15 },
         });
     const { data, isLoading, isFetching } = useQuery(
-        ["boletos", { ...filtro, linhas: pageSize, pagina: currentPage }],
+        [
+            "boletos",
+            {
+                ...filtro,
+                dataVencimento: filtro.dataVencimento[0]
+                    ? JSON.stringify(filtro.dataVencimento)
+                    : null,
+                dataCriacao: filtro.dataCriacao[0]
+                    ? JSON.stringify(filtro.dataCriacao)
+                    : null,
+                linhas: pageSize,
+                pagina: currentPage,
+            },
+        ],
         listarBoletos,
         {
             onSuccess: (data) => {
@@ -63,7 +78,7 @@ const Cobrancas = () => {
         <>
             <Layout title="Cobranças">
                 <Box p={5}>
-                    <Box bg="graylight" p={5}>
+                    <Box bg="white" p={5}>
                         <Grid gap={5}>
                             <Grid
                                 templateColumns={{
@@ -100,27 +115,29 @@ const Cobrancas = () => {
                                     />
                                 </GridItem>
                                 <GridItem>
-                                    <FormDate
-                                        label="Data de início"
-                                        bg="white"
-                                        onChange={(e) =>
+                                    <FormDateRange
+                                        label="Data Vencimento"
+                                        startDate={filtro?.dataVencimento[0]}
+                                        endDate={filtro?.dataVencimento[1]}
+                                        onChange={(e) => {
                                             setFiltro({
                                                 ...filtro,
-                                                dataInicio: e,
-                                            })
-                                        }
+                                                dataVencimento: e,
+                                            });
+                                        }}
                                     />
                                 </GridItem>
                                 <GridItem>
-                                    <FormDate
-                                        label="Data de vencimento"
-                                        bg="white"
-                                        onChange={(e) =>
+                                    <FormDateRange
+                                        label="Data de Criação"
+                                        startDate={filtro?.dataCriacao[0]}
+                                        endDate={filtro?.dataCriacao[1]}
+                                        onChange={(e) => {
                                             setFiltro({
                                                 ...filtro,
-                                                vencimento: e,
-                                            })
-                                        }
+                                                dataCriacao: e,
+                                            });
+                                        }}
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -219,36 +236,43 @@ const Cobrancas = () => {
                                 _focus={{ bg: "none" }}
                                 _active={{ bg: "none" }}
                                 color="red"
+                                onClick={() =>
+                                    setFiltro({
+                                        dataVencimento: [null, null],
+                                        dataCriacao: [null, null],
+                                    })
+                                }
                             >
                                 Limpar Filtro
-                            </Button>
-
-                            <Button
-                                size="md"
-                                bg="none"
-                                border="1px solid black"
-                                _hover={{
-                                    bg: "black",
-                                    color: "white",
-                                    cursor: "pointer",
-                                }}
-                                _focus={{ bg: "none" }}
-                                _active={{ bg: "none" }}
-                                color="black"
-                            >
-                                Filtrar
                             </Button>
                         </Box>
                     </Box>
 
-                    <Box bg="graylight" overflowX="auto" p={5} mt={5}>
-                        <Box p={5} bg="white">
-                            <FormInput
-                                bg="white"
-                                w="max"
-                                placeholder="Busca rápida..."
-                            />
-                        </Box>
+                    <Box bg="white" overflowX="auto" p={5} mt={5}>
+                        <Flex gap={4} align="center" justify="space-between">
+                            <Text fontSize="sm" color="gray">
+                                <Text as="span" fontWeight="bold">
+                                    {total}
+                                </Text>{" "}
+                                boletos
+                            </Text>
+                            <Flex align="center" gap={2}>
+                                <FormInput
+                                    bg="white"
+                                    maxW={96}
+                                    placeholder="Busca rápida..."
+                                    onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            query: e.target.value,
+                                        })
+                                    }
+                                    rightElement={
+                                        isFetching && <Spinner size="sm" />
+                                    }
+                                />
+                            </Flex>
+                        </Flex>
                         <Table variant="striped" mt={5} bg="white">
                             <Thead>
                                 <Tr>
@@ -272,7 +296,11 @@ const Cobrancas = () => {
                                     data.data.data.map((item) => (
                                         <Tr key={item.id}>
                                             <Td>{item.contrato?.codigo}</Td>
-                                            <Td>{item.data_vencimen}</Td>
+                                            <Td>
+                                                {formatoData(
+                                                    item.data_vencimen
+                                                )}
+                                            </Td>
                                             <Td>
                                                 {item.contrato?.inquilinos?.map(
                                                     (i) => (
@@ -302,10 +330,12 @@ const Cobrancas = () => {
                                                     <Text>Ativo</Text>
                                                 </Grid>
                                             </Td>
-                                            <Td>{item.valor_doc2}</Td>
+                                            <Td>
+                                                {formatoValor(item.valor_doc2)}
+                                            </Td>
                                             <Td>
                                                 <Link
-                                                    href={`/boleto/${item.id}`}
+                                                    href={`/boleto/${item.id}?pdf=true`}
                                                     target="_blank"
                                                     passHref
                                                 >
@@ -320,7 +350,7 @@ const Cobrancas = () => {
                                     ))
                                 ) : (
                                     <Tr>
-                                        <Td colSpan={6} textAlign="center">
+                                        <Td colSpan={7} textAlign="center">
                                             Não encontramos boletos cadastrados
                                         </Td>
                                     </Tr>

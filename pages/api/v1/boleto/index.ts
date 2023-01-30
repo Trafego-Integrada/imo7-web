@@ -1,6 +1,7 @@
 import { NextApiResponse } from "next-auth/internals/utils";
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
+import moment from "moment";
 
 const handle = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
@@ -282,15 +283,21 @@ handle.post(async (req, res) => {
                 field_cod_banco,
                 local_pgto1,
                 local_pgto2,
-                data_vencimen,
+                data_vencimen: data_vencimen
+                    ? moment(data_vencimen, "DD/MM/YYYY").format()
+                    : null,
                 beneficiario,
                 ag_cod_beneficiar,
-                data_doc,
+                data_doc: data_doc
+                    ? moment(data_doc, "DD/MM/YYYY").format()
+                    : null,
                 num_doc2,
                 num_doc,
                 especie_doc,
                 aceite,
-                data_proces,
+                data_proces: data_proces
+                    ? moment(data_proces, "DD/MM/YYYY").format()
+                    : null,
                 nosso_numero2,
                 reservado,
                 carteira,

@@ -16,9 +16,11 @@ import {
 import { FormDate } from "@/components/Form/FormDate";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
+import { FormDateRange } from "../Form/FormDateRange";
 
 export const FiltroContratos = ({ setFiltro, filtro }) => {
     const { isOpen, onToggle } = useDisclosure();
+    console.log(filtro);
     return (
         <Box bg="white" p={5}>
             <Grid gap={5}>
@@ -56,10 +58,50 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                         />
                     </GridItem>
                     <GridItem>
+                        <FormDateRange
+                            label="Data de Reajuste"
+                            startDate={filtro?.dataReajuste[0]}
+                            endDate={filtro?.dataReajuste[1]}
+                            onChange={(e) => {
+                                setFiltro({ ...filtro, dataReajuste: e });
+                            }}
+                        />
+                    </GridItem>
+                    <GridItem>
+                        <FormDateRange
+                            label="Data de Início"
+                            startDate={filtro?.dataInicio[0]}
+                            endDate={filtro?.dataInicio[1]}
+                            onChange={(e) => {
+                                setFiltro({ ...filtro, dataInicio: e });
+                            }}
+                        />
+                    </GridItem>
+                    <GridItem>
+                        <FormDateRange
+                            label="Data Final"
+                            startDate={filtro?.dataFim[0]}
+                            endDate={filtro?.dataFim[1]}
+                            onChange={(e) => {
+                                setFiltro({ ...filtro, dataFim: e });
+                            }}
+                        />
+                    </GridItem>
+                    <GridItem>
+                        <FormDateRange
+                            label="Data de Criação"
+                            startDate={filtro?.dataCriacao[0]}
+                            endDate={filtro?.dataCriacao[1]}
+                            onChange={(e) => {
+                                setFiltro({ ...filtro, dataCriacao: e });
+                            }}
+                        />
+                    </GridItem>
+                    <GridItem>
                         <FormInput
                             size="sm"
-                            label="Nome do propietário"
-                            placeholder="digite o nome do propietário..."
+                            label="Nome do proprietário"
+                            placeholder="digite o nome do proprietário..."
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,
@@ -182,24 +224,16 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                         _focus={{ bg: "none" }}
                         _active={{ bg: "none" }}
                         color="red"
+                        onClick={() =>
+                            setFiltro({
+                                dataReajuste: [null, null],
+                                dataInicio: [null, null],
+                                dataFim: [null, null],
+                                dataCriacao: [null, null],
+                            })
+                        }
                     >
                         Limpar Filtro
-                    </Button>
-
-                    <Button
-                        size="sm"
-                        bg="none"
-                        border="1px solid black"
-                        _hover={{
-                            bg: "black",
-                            color: "white",
-                            cursor: "pointer",
-                        }}
-                        _focus={{ bg: "none" }}
-                        _active={{ bg: "none" }}
-                        color="black"
-                    >
-                        Filtrar
                     </Button>
                 </GridItem>
             </Grid>

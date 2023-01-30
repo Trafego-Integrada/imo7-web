@@ -50,7 +50,10 @@ const Home = () => {
     const modal = useRef();
     const [total, setTotal] = useState();
     const [filtro, setFiltro] = useState({
-        filtro: {},
+        dataReajuste: [null, null],
+        dataInicio: [null, null],
+        dataFim: [null, null],
+        dataCriacao: [null, null],
     });
     const { currentPage, setCurrentPage, pagesCount, pages, pageSize } =
         usePagination({
@@ -62,6 +65,18 @@ const Home = () => {
             "contratos",
             {
                 ...filtro,
+                dataReajuste: filtro.dataReajuste[0]
+                    ? JSON.stringify(filtro.dataReajuste)
+                    : null,
+                dataInicio: filtro.dataInicio[0]
+                    ? JSON.stringify(filtro.dataInicio)
+                    : null,
+                dataFim: filtro.dataFim[0]
+                    ? JSON.stringify(filtro.dataFim)
+                    : null,
+                dataCriacao: filtro.dataCriacao[0]
+                    ? JSON.stringify(filtro.dataCriacao)
+                    : null,
                 linhas: pageSize,
                 pagina: currentPage,
             },
@@ -80,22 +95,32 @@ const Home = () => {
                     <FiltroContratos filtro={filtro} setFiltro={setFiltro} />
 
                     <Box bg="white" overflowX="auto" p={5} mt={5}>
-                        <Flex gap={4} align="center">
-                            <FormInput
-                                bg="white"
-                                maxW={96}
-                                placeholder="Busca rápida..."
-                                onChange={(e) =>
-                                    setFiltro({
-                                        ...filtro,
-                                        filtro: {
-                                            ...filtro.filtro,
-                                            query: e.target.value,
-                                        },
-                                    })
-                                }
-                            />
-                            {isFetching && <Spinner size="sm" />}
+                        <Flex gap={4} align="center" justify="space-between">
+                            <Text fontSize="sm" color="gray">
+                                <Text as="span" fontWeight="bold">
+                                    {total}
+                                </Text>{" "}
+                                contratos
+                            </Text>
+                            <Flex align="center" gap={2}>
+                                <FormInput
+                                    bg="white"
+                                    maxW={96}
+                                    placeholder="Busca rápida..."
+                                    onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            filtro: {
+                                                ...filtro.filtro,
+                                                query: e.target.value,
+                                            },
+                                        })
+                                    }
+                                    rightElement={
+                                        isFetching && <Spinner size="sm" />
+                                    }
+                                />
+                            </Flex>
                         </Flex>
 
                         <Table variant="striped" mt={5} size="sm">

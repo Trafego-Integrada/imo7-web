@@ -9,7 +9,7 @@ handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
         const { imobiliaria } = req.headers;
-        const {
+        let {
             filtro,
             nome,
             documento,
@@ -25,7 +25,9 @@ handle.get(async (req, res) => {
             imobiliariaId,
         } = req.query;
         let filtroQuery = {};
-
+        imobiliariaId: req.user.imobiliariaId
+            ? req.user.imobiliariaId
+            : Number(imobiliariaId);
         if (filtro) {
             filtroQuery = {
                 ...filtroQuery,
@@ -96,7 +98,8 @@ handle.get(async (req, res) => {
                     },
                 },
             };
-        } else if (imobiliariaId) {
+        }
+        if (imobiliariaId) {
             filtroQuery = {
                 ...filtroQuery,
                 imobiliaria: {
@@ -150,6 +153,7 @@ handle.get(async (req, res) => {
                 imobiliaria: { url: imobiliaria },
             };
         }
+        console.log(filtroQuery);
         const data = await prisma.usuario.findMany({
             where: {
                 ...filtroQuery,

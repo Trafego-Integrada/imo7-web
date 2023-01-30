@@ -94,6 +94,23 @@ const ModalBase = ({}, ref) => {
                                 {usuario?.permissoes?.find(
                                     (m) =>
                                         m ===
+                                        "imobiliaria.contratos.visualizarDocumentos"
+                                ) && (
+                                    <Tab>
+                                        Documentos
+                                        <Badge
+                                            ml={1}
+                                            size="sm"
+                                            textAlign="center"
+                                            rounded="full"
+                                        >
+                                            {watch("anexos")?.length}
+                                        </Badge>
+                                    </Tab>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
                                         "imobiliaria.contratos.visualizarCobrancas"
                                 ) && (
                                     <Tab>
@@ -333,32 +350,76 @@ const ModalBase = ({}, ref) => {
                                         </GridItem>
                                     </Grid>
                                 </TabPanel>
-                                <TabPanel>
-                                    <Documentos
-                                        contratoId={watch("id")}
-                                        data={watch("anexos")}
-                                    />
-                                </TabPanel>
-                                <TabPanel>
-                                    <Cobrancas data={watch("boletos")} />
-                                </TabPanel>
-                                <TabPanel>
-                                    <Inquilinos data={watch("inquilinos")} />
-                                </TabPanel>
-                                <TabPanel>
-                                    <Proprietarios
-                                        data={watch("proprietarios")}
-                                    />
-                                </TabPanel>
-                                <TabPanel>
-                                    <Fiadores data={watch("fiadores")} />
-                                </TabPanel>
-                                <TabPanel>
-                                    <Extratos data={watch("extratos")} />
-                                </TabPanel>
-                                <TabPanel>
-                                    <Chamados data={watch("chamados")} />
-                                </TabPanel>
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarChamados"
+                                ) && (
+                                    <TabPanel>
+                                        <Documentos
+                                            contratoId={watch("id")}
+                                            data={watch("anexos")}
+                                        />
+                                    </TabPanel>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarCobrancas"
+                                ) && (
+                                    <TabPanel>
+                                        <Cobrancas data={watch("boletos")} />
+                                    </TabPanel>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarInquilinos"
+                                ) && (
+                                    <TabPanel>
+                                        <Inquilinos
+                                            data={watch("inquilinos")}
+                                        />
+                                    </TabPanel>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarProprietarios"
+                                ) && (
+                                    <TabPanel>
+                                        <Proprietarios
+                                            data={watch("proprietarios")}
+                                        />
+                                    </TabPanel>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarFiadores"
+                                ) && (
+                                    <TabPanel>
+                                        <Fiadores data={watch("fiadores")} />
+                                    </TabPanel>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarExtratos"
+                                ) && (
+                                    <TabPanel>
+                                        <Extratos data={watch("extratos")} />
+                                    </TabPanel>
+                                )}
+                                {usuario?.permissoes?.find(
+                                    (m) =>
+                                        m ===
+                                        "imobiliaria.contratos.visualizarChamados"
+                                ) && (
+                                    <TabPanel>
+                                        <Chamados data={watch("chamados")} />
+                                    </TabPanel>
+                                )}
                             </TabPanels>
                         </Tabs>
                     </ModalBody>

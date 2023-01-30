@@ -37,12 +37,13 @@ import { formatoData } from "@/helpers/helpers";
 import moment from "moment";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { withSSRAuth } from "@/utils/withSSRAuth";
+import { FormDateRange } from "@/components/Form/FormDateRange";
 
 const Cobrancas = () => {
     const modal = useRef();
     const [total, setTotal] = useState();
     const [filtro, setFiltro] = useState({
-        filtro: {},
+        dataVencimento: [null, null],
     });
     const { currentPage, setCurrentPage, pagesCount, pages, pageSize } =
         usePagination({
@@ -99,27 +100,16 @@ const Cobrancas = () => {
                                     />
                                 </GridItem>
                                 <GridItem>
-                                    <FormDate
-                                        label="Data de início"
-                                        bg="white"
-                                        onChange={(e) =>
+                                    <FormDateRange
+                                        label="Data Vencimento"
+                                        startDate={filtro?.dataVencimento[0]}
+                                        endDate={filtro?.dataVencimento[1]}
+                                        onChange={(e) => {
                                             setFiltro({
                                                 ...filtro,
-                                                dataInicio: e,
-                                            })
-                                        }
-                                    />
-                                </GridItem>
-                                <GridItem>
-                                    <FormDate
-                                        label="Data de vencimento"
-                                        bg="white"
-                                        onChange={(e) =>
-                                            setFiltro({
-                                                ...filtro,
-                                                vencimento: e,
-                                            })
-                                        }
+                                                dataVencimento: e,
+                                            });
+                                        }}
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -251,7 +241,7 @@ const Cobrancas = () => {
                         <Table variant="striped" mt={5} bg="white">
                             <Thead>
                                 <Tr>
-                                    <Th>Nº do contrato</Th>
+                                    <Th>Nº do contrato1</Th>
                                     <Th>Data de vencimento</Th>
                                     <Th>Inquilino principal</Th>
                                     <Th>Endereço</Th>

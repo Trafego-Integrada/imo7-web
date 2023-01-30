@@ -5,12 +5,13 @@ import prisma from "@/lib/prisma";
 
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
+import moment from "moment";
 handle.use(cors);
 handle.get(checkAuth);
 handle.get(async (req, res) => {
     try {
         const { imobiliaria } = req.headers;
-        const {
+        let {
             query,
             codigo,
             vencimento,
@@ -26,8 +27,14 @@ handle.get(async (req, res) => {
             linhas,
             proprietarioId,
             inquilinoId,
+            dataReajuste,
+            dataInicio,
+            dataFim,
+            dataCriacao,
         } = req.query;
-        let filtroQuery: Prisma.ContratoWhereInput = {};
+        let filtroQuery: Prisma.ContratoWhereInput = {
+            AND: [],
+        };
 
         if (query) {
             filtroQuery = {
@@ -83,101 +90,225 @@ handle.get(async (req, res) => {
         if (codigo) {
             filtroQuery = {
                 ...filtroQuery,
-                codigo: {
-                    contains: codigo,
-                },
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        codigo: {
+                            contains: codigo,
+                        },
+                    },
+                ],
             };
         }
         if (vencimento) {
             filtroQuery = {
                 ...filtroQuery,
-                diaVencimento: Number(vencimento),
+                AND: [
+                    ...filtroQuery.AND,
+                    { diaVencimento: Number(vencimento) },
+                ],
+            };
+        }
+        if (dataReajuste) {
+            dataReajuste = JSON.parse(dataReajuste);
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        dataReajuste: {
+                            gte: dataReajuste[0]
+                                ? moment(dataReajuste[0]).startOf("d").format()
+                                : null,
+                            lte: dataReajuste[1]
+                                ? moment(dataReajuste[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
+            };
+        }
+        if (dataInicio) {
+            dataInicio = JSON.parse(dataInicio);
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        dataInicio: {
+                            gte: dataInicio[0]
+                                ? moment(dataInicio[0]).startOf("d").format()
+                                : null,
+                            lte: dataInicio[1]
+                                ? moment(dataInicio[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
+            };
+        }
+        if (dataFim) {
+            dataFim = JSON.parse(dataFim);
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        dataFim: {
+                            gte: dataFim[0]
+                                ? moment(dataFim[0]).startOf("d").format()
+                                : null,
+                            lte: dataFim[1]
+                                ? moment(dataFim[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
+            };
+        }
+        if (dataCriacao) {
+            dataCriacao = JSON.parse(dataCriacao);
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        createdAt: {
+                            gte: dataCriacao[0]
+                                ? moment(dataCriacao[0]).startOf("d").format()
+                                : null,
+                            lte: dataVencimento[1]
+                                ? moment(dataCriacao[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
             };
         }
         if (proprietario) {
             filtroQuery = {
                 ...filtroQuery,
-                proprietarios: {
-                    every: {
-                        nome: {
-                            contains: proprietario,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        proprietarios: {
+                            every: {
+                                nome: {
+                                    contains: proprietario,
+                                },
+                            },
                         },
                     },
-                },
+                ],
             };
         }
         if (inquilino) {
             filtroQuery = {
                 ...filtroQuery,
-                inquilinos: {
-                    every: {
-                        nome: {
-                            contains: inquilino,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        inquilinos: {
+                            every: {
+                                nome: {
+                                    contains: inquilino,
+                                },
+                            },
                         },
                     },
-                },
+                ],
             };
         }
         if (fiador) {
             filtroQuery = {
                 ...filtroQuery,
-                fiadores: {
-                    every: {
-                        nome: {
-                            contains: fiador,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        fiadores: {
+                            every: {
+                                nome: {
+                                    contains: fiador,
+                                },
+                            },
                         },
                     },
-                },
+                ],
             };
         }
         if (endereco) {
             filtroQuery = {
                 ...filtroQuery,
-                imovel: {
-                    endereco: {
-                        contains: endereco,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        imovel: {
+                            endereco: {
+                                contains: endereco,
+                            },
+                        },
                     },
-                },
+                ],
             };
         }
         if (numero) {
             filtroQuery = {
                 ...filtroQuery,
-                imovel: {
-                    numero: {
-                        contains: numero,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        imovel: {
+                            numero: {
+                                contains: numero,
+                            },
+                        },
                     },
-                },
+                ],
             };
         }
         if (bairro) {
             filtroQuery = {
                 ...filtroQuery,
-                imovel: {
-                    bairro: {
-                        contains: bairro,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        imovel: {
+                            bairro: {
+                                contains: bairro,
+                            },
+                        },
                     },
-                },
+                ],
             };
         }
         if (cidade) {
             filtroQuery = {
                 ...filtroQuery,
-                imovel: {
-                    cidade: {
-                        contains: cidade,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        imovel: {
+                            cidade: {
+                                contains: cidade,
+                            },
+                        },
                     },
-                },
+                ],
             };
         }
         if (estado) {
             filtroQuery = {
                 ...filtroQuery,
-                imovel: {
-                    estado: {
-                        contains: estado,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        imovel: {
+                            estado: {
+                                contains: estado,
+                            },
+                        },
                     },
-                },
+                ],
             };
         }
         if (proprietarioId) {
@@ -224,6 +355,7 @@ handle.get(async (req, res) => {
                 imobiliaria: { url: imobiliaria },
             };
         }
+        console.log(filtroQuery);
         const data = await prisma.contrato.findMany({
             where: {
                 ...filtroQuery,

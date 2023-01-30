@@ -141,7 +141,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                         <Tabs variant="unstyled">
                             <TabList>
                                 <Tab>Dados</Tab>
-                                <Tab>Permissões</Tab>
+                                {watch('cargos')?.find(i =>  i=='imobiliaria' || i=='conta'|| i=='adm') &&<Tab>Permissões</Tab>}
                                 {watch("id") && (
                                     <>
                                         <Tab
@@ -247,7 +247,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                         </GridItem>
                                     </Grid>
                                 </TabPanel>
-                                <TabPanel>
+                                {watch('cargos')?.find(i => i=='imobiliaria' || i=='conta'|| i=='adm') &&<TabPanel>
                                     <Accordion allowMultiple>
                                         {modulos && modulos.data.length > 0 ? (
                                             modulos.data.map((item) => {
@@ -740,7 +740,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                             <></>
                                         )}
                                     </Accordion>
-                                </TabPanel>
+                                </TabPanel>}
                                 <TabPanel>
                                     <Table size="sm">
                                         <Thead>
@@ -822,7 +822,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                         </Td>
                                                         <Td>
                                                             {
-                                                                item.imovel
+                                                                item.imovel?
                                                                     .endereco
                                                             }
                                                         </Td>

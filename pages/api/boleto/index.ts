@@ -8,7 +8,7 @@ import { cors } from "@/middleware/cors";
 handle.use(cors);
 handle.get(async (req, res) => {
     try {
-        const {
+        let {
             query,
             codigo,
             inquilino,
@@ -23,9 +23,13 @@ handle.get(async (req, res) => {
             pagina,
             linhas,
             contratoId,
+            dataVencimento,
+            dataCriacao,
         } = req.query;
 
-        let filtroQuery: Prisma.BoletoWhereInput = {};
+        let filtroQuery: Prisma.BoletoWhereInput = {
+            AND: [],
+        };
         if (query) {
             filtroQuery = {
                 ...filtroQuery,
@@ -59,99 +63,174 @@ handle.get(async (req, res) => {
         if (contratoId) {
             filtroQuery = {
                 ...filtroQuery,
-                contrato: {
-                    id: Number(contratoId),
-                },
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        contrato: {
+                            id: Number(contratoId),
+                        },
+                    },
+                ],
             };
         }
         if (codigo) {
             filtroQuery = {
                 ...filtroQuery,
-                contrato: {
-                    codigo: {
-                        contains: codigo,
-                    },
-                },
-            };
-        }
-        if (vencimento) {
-            filtroQuery = {
-                ...filtroQuery,
-                data_vencimen: moment(vencimento).format(),
-            };
-        }
-        if (inquilino) {
-            filtroQuery = {
-                ...filtroQuery,
-                contrato: {
-                    inquilinos: {
-                        every: {
-                            nome: {
-                                contains: inquilino,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        contrato: {
+                            codigo: {
+                                contains: codigo,
                             },
                         },
                     },
-                },
+                ],
+            };
+        }
+
+        if (inquilino) {
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        contrato: {
+                            inquilinos: {
+                                every: {
+                                    nome: {
+                                        contains: inquilino,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                ],
             };
         }
         if (endereco) {
             filtroQuery = {
                 ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        endereco: {
-                            contains: endereco,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        contrato: {
+                            imovel: {
+                                endereco: {
+                                    contains: endereco,
+                                },
+                            },
                         },
                     },
-                },
+                ],
             };
         }
         if (numero) {
             filtroQuery = {
                 ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        numero: {
-                            contains: numero,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        contrato: {
+                            imovel: {
+                                numero: {
+                                    contains: numero,
+                                },
+                            },
                         },
                     },
-                },
+                ],
             };
         }
         if (bairro) {
             filtroQuery = {
                 ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        bairro: {
-                            contains: bairro,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        contrato: {
+                            imovel: {
+                                bairro: {
+                                    contains: bairro,
+                                },
+                            },
                         },
                     },
-                },
+                ],
             };
         }
         if (cidade) {
             filtroQuery = {
                 ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        cidade: {
-                            contains: cidade,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        contrato: {
+                            imovel: {
+                                cidade: {
+                                    contains: cidade,
+                                },
+                            },
                         },
                     },
-                },
+                ],
             };
         }
         if (estado) {
             filtroQuery = {
                 ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        estado: {
-                            contains: estado,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        contrato: {
+                            imovel: {
+                                estado: {
+                                    contains: estado,
+                                },
+                            },
                         },
                     },
-                },
+                ],
+            };
+        }
+        if (dataVencimento) {
+            dataVencimento = JSON.parse(dataVencimento);
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        data_vencimen: {
+                            gte: dataVencimento[0]
+                                ? moment(dataVencimento[0])
+                                      .startOf("d")
+                                      .format()
+                                : null,
+                            lte: dataVencimento[1]
+                                ? moment(dataVencimento[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
+            };
+        }
+        if (dataCriacao) {
+            dataCriacao = JSON.parse(dataCriacao);
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        createdAt: {
+                            gte: dataCriacao[0]
+                                ? moment(dataCriacao[0]).startOf("d").format()
+                                : null,
+                            lte: dataVencimento[1]
+                                ? moment(dataCriacao[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
             };
         }
         let paginacao = {};
@@ -164,7 +243,7 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-
+        console.log(filtroQuery);
         const data = await prisma.boleto.findMany({
             where: {
                 ...filtroQuery,

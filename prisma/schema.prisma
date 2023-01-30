@@ -277,22 +277,22 @@ model Contrato {
 }
 
 model Boleto {
-    id                    Int       @id @default(autoincrement())
+    id                    Int         @id @default(autoincrement())
     bols_cpf_cnpj         String
     bols_codl             String?
     envia_email           String?
     field_cod_banco       String?
     local_pgto1           String?
     local_pgto2           String?
-    data_vencimen         String?
+    data_vencimen         DateTime?   @db.Date
     beneficiario          String?
     ag_cod_beneficiar     String?
-    data_doc              String?
+    data_doc              DateTime?   @db.Date
     num_doc2              String?
     num_doc               String?
     especie_doc           String?
     aceite                String?
-    data_proces           String?
+    data_proces           DateTime?   @db.Date
     nosso_numero2         String?
     reservado             String?
     carteira              String?
@@ -333,17 +333,16 @@ model Boleto {
     uf_sacado             String?
     email_beneficiario    String?
     cpf_cnpj_beneficiario String?
-    createdAt             DateTime  @default(now())
-    updatedAt             DateTime  @updatedAt
+    createdAt             DateTime    @default(now())
+    updatedAt             DateTime    @updatedAt
     deletedAt             DateTime?
-    contrato              Contrato  @relation(references: [id], fields: [contratoId])
+    contrato              Contrato    @relation(references: [id], fields: [contratoId])
     contratoId            Int
-    conta                 Conta     @relation(fields: [contaId], references: [id])
+    conta                 Conta       @relation(fields: [contaId], references: [id])
     contaId               Int
-    inquilino             Usuario?  @relation(fields: [imobiliariaId, bols_cpf_cnpj], references: [imobiliariaId, documento], onDelete: NoAction, onUpdate: NoAction)
-
-    imobiliaria   Imobiliaria @relation(fields: [imobiliariaId], references: [id])
-    imobiliariaId Int
+    inquilino             Usuario?    @relation(fields: [imobiliariaId, bols_cpf_cnpj], references: [imobiliariaId, documento], onDelete: NoAction, onUpdate: NoAction)
+    imobiliaria           Imobiliaria @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId         Int
 }
 
 model Recibo {
