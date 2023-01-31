@@ -20,7 +20,7 @@ handler.get(async (req, res) => {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     await page.goto(
-        "https://" + boleto?.imobiliaria.url + ".imo7.com.br/boleto" + id,
+        "https://" + boleto?.imobiliaria.url + ".imo7.com.br/boleto/" + id,
         {
             waitUntil: "networkidle0",
         }
