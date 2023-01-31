@@ -25,7 +25,7 @@ handle.get(async (req, res) => {
             imobiliariaId,
         } = req.query;
         let filtroQuery = {};
-        imobiliariaId: req.user.imobiliariaId
+        imobiliariaId = req.user.imobiliariaId
             ? req.user.imobiliariaId
             : Number(imobiliariaId);
         if (filtro) {

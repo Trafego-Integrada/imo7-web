@@ -36,7 +36,7 @@ handle.get(async (req, res) => {
         let filtroQuery: Prisma.ContratoWhereInput = {
             AND: [],
         };
-        imobiliariaId: req.user.imobiliariaId
+        imobiliariaId = req.user.imobiliariaId
             ? req.user.imobiliariaId
             : Number(imobiliariaId);
         if (query) {
@@ -342,7 +342,9 @@ handle.get(async (req, res) => {
                 ],
             };
         }
+        console.log(imobiliariaId);
         if (imobiliariaId) {
+            console.log(imobiliariaId);
             filtroQuery = {
                 ...filtroQuery,
                 imobiliaria: {
@@ -360,6 +362,7 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
+        console.log(filtroQuery);
         if (imobiliaria) {
             filtroQuery = {
                 ...filtroQuery,

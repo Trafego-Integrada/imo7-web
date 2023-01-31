@@ -28,7 +28,7 @@ handle.get(async (req, res) => {
             createdAt,
             imobiliariaId,
         } = req.query;
-        imobiliariaId: req.user.imobiliariaId
+        imobiliariaId = req.user.imobiliariaId
             ? req.user.imobiliariaId
             : Number(imobiliariaId);
         let filtroQuery: Prisma.BoletoWhereInput = {};
