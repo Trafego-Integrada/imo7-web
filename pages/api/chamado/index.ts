@@ -10,7 +10,7 @@ handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
-        const {
+        let {
             query,
             codigo,
             inquilino,
