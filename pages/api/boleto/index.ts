@@ -6,8 +6,9 @@ import prisma from "@/lib/prisma";
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
 import { checkAuth } from "@/middleware/checkAuth";
-handle.use(checkAuth);
 handle.use(cors);
+handle.use(checkAuth);
+
 handle.get(async (req, res) => {
     try {
         let {
