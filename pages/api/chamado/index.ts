@@ -26,8 +26,11 @@ handle.get(async (req, res) => {
             linhas,
             contratoId,
             createdAt,
+            imobiliariaId,
         } = req.query;
-
+        imobiliariaId: req.user.imobiliariaId
+            ? req.user.imobiliariaId
+            : Number(imobiliariaId);
         let filtroQuery: Prisma.BoletoWhereInput = {};
         if (query) {
             filtroQuery = {
@@ -159,6 +162,14 @@ handle.get(async (req, res) => {
             };
         }
         let paginacao = {};
+        if (imobiliariaId) {
+            filtroQuery = {
+                ...filtroQuery,
+                imobiliaria: {
+                    id: Number(imobiliariaId),
+                },
+            };
+        }
         if (pagina && linhas) {
             paginacao = {
                 take: Number(linhas),

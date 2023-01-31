@@ -153,7 +153,6 @@ handle.get(async (req, res) => {
                 imobiliaria: { url: imobiliaria },
             };
         }
-        console.log(filtroQuery);
         const data = await prisma.usuario.findMany({
             where: {
                 ...filtroQuery,
@@ -210,7 +209,6 @@ handle.post(async (req, res) => {
             },
         });
         if (!contaId && !imobiliariaId) {
-            console.log(1);
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {

@@ -5,6 +5,8 @@ import prisma from "@/lib/prisma";
 
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
+import { checkAuth } from "@/middleware/checkAuth";
+handle.use(checkAuth);
 handle.use(cors);
 handle.get(async (req, res) => {
     try {
@@ -25,8 +27,11 @@ handle.get(async (req, res) => {
             contratoId,
             dataVencimento,
             dataCriacao,
+            imobiliariaId,
         } = req.query;
-
+        imobiliariaId: req.user.imobiliariaId
+            ? req.user.imobiliariaId
+            : Number(imobiliariaId);
         let filtroQuery: Prisma.BoletoWhereInput = {
             AND: [],
         };
@@ -73,6 +78,7 @@ handle.get(async (req, res) => {
                 ],
             };
         }
+
         if (codigo) {
             filtroQuery = {
                 ...filtroQuery,
@@ -243,7 +249,14 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-        console.log(filtroQuery);
+        if (imobiliariaId) {
+            filtroQuery = {
+                ...filtroQuery,
+                imobiliaria: {
+                    id: Number(imobiliariaId),
+                },
+            };
+        }
         const data = await prisma.boleto.findMany({
             where: {
                 ...filtroQuery,
