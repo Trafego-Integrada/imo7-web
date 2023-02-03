@@ -29,14 +29,19 @@ const InputBase = (
     ref
 ) => {
     return (
-        <FormControl isInvalid={error} isRequired={required} {...rest}>
+        <FormControl
+            isInvalid={error}
+            isRequired={required}
+            {...rest}
+            size={size}
+        >
             {label && <FormLabel fontSize={size}>{label}</FormLabel>}
             <InputGroup>
                 {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
                 {leftElement && (
                     <InputLeftElement p={0}>{leftElement}</InputLeftElement>
                 )}
-                <Input ref={ref} {...rest} />
+                <Input ref={ref} {...rest} size={size} />
                 {rightAddon && (
                     <InputRightAddon p={0}>{rightAddon}</InputRightAddon>
                 )}

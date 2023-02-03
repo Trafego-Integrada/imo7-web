@@ -31,6 +31,7 @@ handle.put(async (req, res) => {
         telefone,
         site,
         numero,
+        contaId,
     } = req.body;
     const imobiliaria = await prisma.imobiliaria.update({
         where: {

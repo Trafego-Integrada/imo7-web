@@ -55,7 +55,7 @@ handle.post(async (req, res) => {
                 observacao5,
                 parcela: Number(parcela),
                 periodo,
-                vencimento: vencimento
+                vencimento: dataDeposito
                     ? moment(vencimento, "DD/MM/YYYY").format()
                     : null,
                 responsavel,
@@ -84,7 +84,7 @@ handle.post(async (req, res) => {
                         data: eval(itens).map((item) => {
                             return {
                                 descricao: item.descricao,
-                                valor: Number(item.valor.replace(",", ".")),
+                                valor: Number(item.valor),
                             };
                         }),
                     },

@@ -23,6 +23,7 @@ handle.get(async (req, res) => {
 handle.put(async (req, res) => {
     const { id } = req.query;
     const {
+        boletos,
         bols_cpf_cnpj,
         bols_codl,
         envia_email,
@@ -78,27 +79,40 @@ handle.put(async (req, res) => {
         uf_sacado,
         email_beneficiario,
         cpf_cnpj_beneficiario,
+        imobiliariaId,
+        contratoId,
     } = req.body;
     const boleto = await prisma.boleto.update({
         where: {
             id: Number(id),
         },
         data: {
-            bols_cpf_cnpj,
+            inquilino: {
+                connect: {
+                    imobiliariaId_documento: {
+                        documento: bols_cpf_cnpj,
+                        imobiliariaId: Number(imobiliariaId),
+                    },
+                },
+            },
             bols_codl,
             envia_email,
             field_cod_banco,
             local_pgto1,
             local_pgto2,
-            data_vencimen,
+            data_vencimen: data_vencimen
+                ? moment(data_vencimen, "DD/MM/YYYY").format()
+                : null,
             beneficiario,
             ag_cod_beneficiar,
-            data_doc,
+            data_doc: data_doc ? moment(data_doc, "DD/MM/YYYY").format() : null,
             num_doc2,
             num_doc,
             especie_doc,
             aceite,
-            data_proces,
+            data_proces: data_proces
+                ? moment(data_proces, "DD/MM/YYYY").format()
+                : null,
             nosso_numero2,
             reservado,
             carteira,
@@ -139,6 +153,21 @@ handle.put(async (req, res) => {
             uf_sacado,
             email_beneficiario,
             cpf_cnpj_beneficiario,
+            conta: {
+                connect: {
+                    id: 1,
+                },
+            },
+            imobiliaria: {
+                connect: {
+                    id: Number(imobiliariaId),
+                },
+            },
+            contrato: {
+                connect: {
+                    id: Number(contratoId),
+                },
+            },
         },
     });
     res.send(boleto);

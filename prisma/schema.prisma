@@ -143,36 +143,38 @@ model Token {
 }
 
 model Imobiliaria {
-    id           Int        @id @default(autoincrement())
-    codigo       String?
-    razaoSocial  String
-    nomeFantasia String?
-    cnpj         String     @unique
-    ie           String?
-    logo         String?
-    bg           String?
-    email        String?
-    site         String?
-    telefone     String?
-    cep          String?
-    endereco     String?
-    numero       String?
-    bairro       String?
-    cidade       String?
-    estado       String?
-    url          String?
-    createdAt    DateTime   @default(now())
-    updatedAt    DateTime   @updatedAt
-    deletedAt    DateTime?
-    contratos    Contrato[]
-    chamados     Chamado[]
-    imoveis      Imovel[]
-    usuarios     Usuario[]
-    conta        Conta?     @relation(fields: [contaId], references: [id])
-    contaId      Int?
-    Boleto       Boleto[]
-    Extrato      Extrato[]
-    Recibo       Recibo[]
+    id                   Int                    @id @default(autoincrement())
+    codigo               String?
+    razaoSocial          String
+    nomeFantasia         String?
+    cnpj                 String                 @unique
+    ie                   String?
+    logo                 String?
+    bg                   String?
+    email                String?
+    site                 String?
+    telefone             String?
+    cep                  String?
+    endereco             String?
+    numero               String?
+    bairro               String?
+    cidade               String?
+    estado               String?
+    url                  String?
+    createdAt            DateTime               @default(now())
+    updatedAt            DateTime               @updatedAt
+    deletedAt            DateTime?
+    contratos            Contrato[]
+    chamados             Chamado[]
+    imoveis              Imovel[]
+    usuarios             Usuario[]
+    conta                Conta?                 @relation(fields: [contaId], references: [id])
+    contaId              Int?
+    Boleto               Boleto[]
+    Extrato              Extrato[]
+    Recibo               Recibo[]
+    FichaCadastral       FichaCadastral[]
+    ModeloFichaCadastral ModeloFichaCadastral[]
 }
 
 model Imovel {
@@ -512,4 +514,82 @@ enum StatusChamado {
     ABERTO
     FINALIZADO
     ARQUIVADO
+}
+
+enum TipoFicha {
+    inquilino
+    proprietario
+    fiador
+    imovel
+}
+
+model ModeloFichaCadastral {
+    id             String           @id @default(cuid())
+    tipo           TipoFicha
+    nome           String
+    descricao      String?          @db.LongText
+    instrucoes     String?          @db.LongText
+    observacoes    String?          @db.LongText
+    campos         Json?
+    arquivos       Json?
+    checkbox       Json?
+    createdAt      DateTime         @default(now())
+    updatedAt      DateTime?        @updatedAt
+    deletedAt      DateTime?
+    imobiliaria    Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId  Int
+    FichaCadastral FichaCadastral[]
+}
+
+enum StatusFicha {
+    aguardando
+    preenchida
+    em_analise
+    aprovada
+    reprovada
+    arquivada
+}
+
+model FichaCadastral {
+    id                     String               @id @default(cuid())
+    tipo                   TipoFicha
+    nome                   String
+    identificacao          Json?
+    status                 StatusFicha          @default(aguardando)
+    createdAt              DateTime             @default(now())
+    updatedAt              DateTime?            @updatedAt
+    deletedAt              DateTime?
+    imobiliaria            Imobiliaria          @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId          Int
+    modelo                 ModeloFichaCadastral @relation(fields: [modeloFichaCadastralId], references: [id])
+    modeloFichaCadastralId String
+}
+
+enum TipoCampo {
+    text
+    textarea
+    select
+    multiselect
+    radio
+    checkbox
+    file
+    files
+    datetime
+    date
+    time
+    boolean
+}
+
+model CampoFichaCadastral {
+    id        String    @id @default(cuid())
+    tipoFicha TipoFicha
+    tipoCampo TipoCampo
+    codigo    String?
+    nome      String?
+    descricao String?
+    opcoes    Json?
+    limite    Int?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
+    deletedAt DateTime?
 }

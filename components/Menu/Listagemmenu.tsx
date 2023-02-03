@@ -8,6 +8,7 @@ import { MdDashboard } from "react-icons/md";
 import { includesAll } from "@/helpers/helpers";
 import { useAuth } from "hooks/useAuth";
 import { isArray } from "lodash";
+import { TbForms } from "react-icons/tb";
 
 const menu = [
     {
@@ -46,6 +47,13 @@ const menu = [
         icon: FaUserTie,
         cargos: ["imobiliaria"],
         modulos: ["imobiliaria.proprietarios"],
+    },
+    {
+        titulo: "Fichas",
+        href: "/admin/fichas",
+        icon: TbForms,
+        cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.fichas"],
     },
     {
         titulo: "Usuários",

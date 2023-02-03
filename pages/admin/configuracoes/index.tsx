@@ -26,6 +26,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useMutation } from "react-query";
 import { show, update } from "@/services/models/imobiliaria";
 import { useEffect, useState } from "react";
+import { FichasCadastrais } from "@/components/Pages/Admin/Configuracoes/FichasCadastrais";
 const schema = yup.object().shape({
     razaoSocial: yup.string().required("Campo obrigatório"),
     nomeFantasia: yup.string().required("Campo obrigatório"),
@@ -125,7 +126,7 @@ const Configuracoes = () => {
                                         bg: "bluelight",
                                     }}
                                 >
-                                    2º Via de boletos
+                                    2º Via de boletos1
                                 </Tab>
                             </TabList>
                             <TabPanels>
@@ -567,6 +568,9 @@ const Configuracoes = () => {
                                             </FormSelect>
                                         </Box>
                                     </Box>
+                                </TabPanel>
+                                <TabPanel>
+                                    <FichasCadastrais />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

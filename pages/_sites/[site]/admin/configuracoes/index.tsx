@@ -29,12 +29,16 @@ import { useMutation } from "react-query";
 import { show, update } from "@/services/models/imobiliaria";
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { FichasCadastrais } from "@/components/Pages/Admin/Configuracoes/FichasCadastrais";
+import { useRouter } from "next/router";
 const schema = yup.object().shape({
     razaoSocial: yup.string().required("Campo obrigatório"),
     nomeFantasia: yup.string().required("Campo obrigatório"),
     cnpj: yup.string().required("Campo obrigatório"),
 });
 const Configuracoes = () => {
+    const router = useRouter();
+    const [tab, setTab] = useState(0);
     const [logo, setLogo] = useState([]);
     const [bg, setBg] = useState([]);
     const toast = useToast();
@@ -106,6 +110,30 @@ const Configuracoes = () => {
             {file.path} - {file.size} bytes
         </ListItem>
     ));
+    console.log(router);
+    const tabIndex = (value) => {
+        switch (value) {
+            case "dados":
+                return 0;
+            case "contato":
+                return 1;
+            case "endereco":
+                return 2;
+            case "envio":
+                return 3;
+            case "segundaVia":
+                return 4;
+            case "fichas":
+                return 5;
+            default:
+                return 0;
+        }
+    };
+    useEffect(() => {
+        if (router.query.tab) {
+            setTab(tabIndex(router.query.tab));
+        }
+    }, [router.query]);
     return (
         <>
             <Layout title="Configurações">
@@ -120,50 +148,21 @@ const Configuracoes = () => {
                         </Button>
                     </Flex>
                     <Box bg="graylight" p={5}>
-                        <Tabs size="md" variant="enclosed">
+                        <Tabs
+                            size="sm"
+                            colorScheme="blue"
+                            index={tab}
+                            onChange={setTab}
+                        >
                             <TabList>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "bluelight",
-                                    }}
-                                >
-                                    Dados
-                                </Tab>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "bluelight",
-                                    }}
-                                >
-                                    Contato
-                                </Tab>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "bluelight",
-                                    }}
-                                >
-                                    Endereço
-                                </Tab>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "bluelight",
-                                    }}
-                                >
-                                    Envio
-                                </Tab>
-                                <Tab
-                                    _selected={{
-                                        color: "white",
-                                        bg: "bluelight",
-                                    }}
-                                >
-                                    2º Via de boletos
-                                </Tab>
+                                <Tab value="dados">Dados</Tab>
+                                <Tab value="contato">Contato</Tab>
+                                <Tab value="endereco">Endereço</Tab>
+                                <Tab value="envio">Envio</Tab>
+                                <Tab value="segundaVia">2º Via de boletos</Tab>
+                                <Tab value="fichas">Fichas Cadastrais</Tab>
                             </TabList>
-                            <TabPanels>
+                            <TabPanels bg="white">
                                 <TabPanel>
                                     <Box>
                                         <Text
@@ -635,6 +634,9 @@ const Configuracoes = () => {
                                             </FormSelect>
                                         </Box>
                                     </Box>
+                                </TabPanel>
+                                <TabPanel>
+                                    <FichasCadastrais />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

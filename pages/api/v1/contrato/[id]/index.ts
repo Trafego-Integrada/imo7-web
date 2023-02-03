@@ -40,6 +40,13 @@ handle.post(async (req, res) => {
         proprietarioId,
         inquilinoId,
         fiadorId,
+        ultimaParcPaga,
+        ultimoRecebimento,
+        ultimoBomPara,
+        ultimoRepasse,
+        proprietarios,
+        inquilinos,
+        fiadores,
     } = req.body;
     const conta = await prisma.contrato.update({
         where: {
@@ -50,16 +57,152 @@ handle.post(async (req, res) => {
             taxaAdm: taxaAdm ? Number(taxaAdm) : null,
             dataInicio: moment(dataInicio, "DD/MM/YYYY").format(),
             dataFim: dataFim ? moment(dataFim, "DD/MM/YYYY").format() : null,
+            ultimaParcPaga: ultimaParcPaga ? Number(ultimaParcPaga) : null,
+            ultimoRecebimento: ultimoRecebimento
+                ? moment(ultimoRecebimento, "DD/MM/YYYY").format()
+                : null,
+            ultimoBomPara: ultimoBomPara
+                ? moment(ultimoBomPara, "DD/MM/YYYY").format()
+                : null,
+            ultimoRepasse: ultimoRepasse
+                ? moment(ultimoRepasse, "DD/MM/YYYY").format()
+                : null,
             valorAluguel: valorAluguel ? Number(valorAluguel) : null,
             valorBonus: valorBonus ? Number(valorAluguel) : null,
             diaVencimento: diaVencimento ? Number(diaVencimento) : null,
             diaRecebimento: diaRecebimento ? Number(diaRecebimento) : null,
             diaDeposito: diaDeposito ? Number(diaDeposito) : null,
             observacoes,
-            imovelId: Number(imovelId),
+            imobiliaria: {
+                connect: {
+                    id: Number(imobiliariaId),
+                },
+            },
+            conta: {
+                connect: {
+                    id: 1,
+                },
+            },
+            imovel: {
+                connect: {
+                    id: Number(imovelId),
+                },
+            },
         },
     });
-    res.send(conta);
+    if (proprietarios) {
+        if (Array.isArray(proprietarios) && proprietarios.length > 0) {
+            await Promise.all(
+                proprietarios.map(async (item) => {
+                    await prisma.usuario.update({
+                        where: {
+                            id: Number(item),
+                        },
+                        data: {
+                            contratosProprietario: {
+                                connect: {
+                                    id: conta.id,
+                                },
+                            },
+                        },
+                    });
+                })
+            );
+        } else {
+            await prisma.usuario.update({
+                where: {
+                    id: Number(proprietarios),
+                },
+                data: {
+                    contratosProprietario: {
+                        connect: {
+                            id: conta.id,
+                        },
+                    },
+                },
+            });
+        }
+    }
+
+    if (inquilinos) {
+        if (Array.isArray(inquilinos) && inquilinos.length > 0) {
+            await Promise.all(
+                inquilinos.map(async (item) => {
+                    await prisma.usuario.update({
+                        where: {
+                            id: Number(item),
+                        },
+                        data: {
+                            contratosInquilino: {
+                                connect: {
+                                    id: conta.id,
+                                },
+                            },
+                        },
+                    });
+                })
+            );
+        } else {
+            await prisma.usuario.update({
+                where: {
+                    id: Number(inquilinos),
+                },
+                data: {
+                    contratosInquilino: {
+                        connect: {
+                            id: conta.id,
+                        },
+                    },
+                },
+            });
+        }
+    }
+
+    if (fiadores) {
+        if (Array.isArray(fiadores) && fiadores.length > 0) {
+            await Promise.all(
+                fiadores.map(async (item) => {
+                    await prisma.usuario.update({
+                        where: {
+                            id: Number(item),
+                        },
+                        data: {
+                            contratosFiador: {
+                                connect: {
+                                    id: conta.id,
+                                },
+                            },
+                        },
+                    });
+                })
+            );
+        } else {
+            await prisma.usuario.update({
+                where: {
+                    id: Number(fiadores),
+                },
+                data: {
+                    contratosFiador: {
+                        connect: {
+                            id: conta.id,
+                        },
+                    },
+                },
+            });
+        }
+    }
+
+    const data = await prisma.contrato.findUnique({
+        where: {
+            id: conta.id,
+        },
+        include: {
+            inquilinos: true,
+            proprietarios: true,
+            fiadores: true,
+        },
+    });
+    res.send(data);
 });
 
 export default handle;
