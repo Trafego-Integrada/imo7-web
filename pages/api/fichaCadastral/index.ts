@@ -10,12 +10,52 @@ handle.use(checkAuth);
 
 handle.get(async (req, res) => {
     try {
-        const { tipoFicha } = req.query;
+        const { tipoFicha, query } = req.query;
         let filtroQuery: Prisma.FichaCadastralWhereInput = {};
 
         if (tipoFicha) {
             filtroQuery = {
                 ...filtroQuery,
+            };
+        }
+
+        if (query) {
+            filtroQuery = {
+                ...filtroQuery,
+                OR: [
+                    {
+                        nome: {
+                            contains: query,
+                        },
+                    },
+                    {
+                        descricao: {
+                            contains: query,
+                        },
+                    },
+                    {
+                        documento: {
+                            contains: query,
+                        },
+                    },
+                    {
+                        telefone: {
+                            contains: query,
+                        },
+                    },
+                    {
+                        email: {
+                            contains: query,
+                        },
+                    },
+                    {
+                        modelo: {
+                            nome: {
+                                contains: query,
+                            },
+                        },
+                    },
+                ],
             };
         }
 
@@ -25,6 +65,10 @@ handle.get(async (req, res) => {
                 imobiliaria: {
                     id: req.user.imobiliariaId,
                 },
+            },
+            include: {
+                preenchimento: true,
+                modelo: true,
             },
         });
 
@@ -44,8 +88,29 @@ handle.get(async (req, res) => {
 });
 handle.post(async (req, res) => {
     try {
-        const { tipo, descricao } = req.body;
-        res.send();
+        const { modelo, descricao, nome, documento, email, telefone } =
+            req.body;
+        const data = await prisma.fichaCadastral.create({
+            data: {
+                modelo: {
+                    connect: {
+                        id: modelo.id,
+                    },
+                },
+                descricao,
+                nome,
+                documento,
+                email,
+                telefone,
+                status: "aguardando",
+                imobiliaria: {
+                    connect: {
+                        id: req.user.imobiliariaId,
+                    },
+                },
+            },
+        });
+        res.send(data);
     } catch (error) {
         res.status(500).send({
             success: false,

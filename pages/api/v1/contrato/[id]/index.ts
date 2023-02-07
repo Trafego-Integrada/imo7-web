@@ -47,6 +47,12 @@ handle.post(async (req, res) => {
         proprietarios,
         inquilinos,
         fiadores,
+        dataReajuste,
+        indiceReajuste,
+        formaPagamento,
+        formaRepasse,
+        juros,
+        multa,
     } = req.body;
     const conta = await prisma.contrato.update({
         where: {
@@ -72,6 +78,14 @@ handle.post(async (req, res) => {
             diaVencimento: diaVencimento ? Number(diaVencimento) : null,
             diaRecebimento: diaRecebimento ? Number(diaRecebimento) : null,
             diaDeposito: diaDeposito ? Number(diaDeposito) : null,
+            dataReajuste: dataReajuste
+                ? moment(dataReajuste, "DD/MM/YYYY").format()
+                : null,
+            indiceReajuste,
+            formaPagamento,
+            formaRepasse,
+            juros,
+            multa,
             observacoes,
             imobiliaria: {
                 connect: {

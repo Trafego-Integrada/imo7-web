@@ -39,16 +39,6 @@ const InputBase = (
                 <Textarea
                     ref={ref}
                     {...rest}
-                    maxW="full"
-                    letterSpacing="wider"
-                    border={0}
-                    borderRadius={0}
-                    borderBottomWidth={2}
-                    borderBottomStyle="solid"
-                    borderBottomColor="primary"
-                    _focus={{ outline: 0, borderBottomWidth: 3 }}
-                    _hover={{ outline: 0 }}
-                    _active={{ outline: 0 }}
                     isInvalid={error ? true : false}
                 />
                 {rightAddon && <InputRightAddon>{rightAddon}</InputRightAddon>}

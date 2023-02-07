@@ -551,18 +551,32 @@ enum StatusFicha {
 }
 
 model FichaCadastral {
-    id                     String               @id @default(cuid())
-    tipo                   TipoFicha
-    nome                   String
-    identificacao          Json?
-    status                 StatusFicha          @default(aguardando)
-    createdAt              DateTime             @default(now())
-    updatedAt              DateTime?            @updatedAt
+    id                     String                        @id @default(cuid())
+    descricao              String
+    nome                   String?
+    documento              String?
+    email                  String?
+    telefone               String?
+    status                 StatusFicha                   @default(aguardando)
+    motivoReprovacao       String?                       @db.LongText
+    createdAt              DateTime                      @default(now())
+    updatedAt              DateTime?                     @updatedAt
     deletedAt              DateTime?
-    imobiliaria            Imobiliaria          @relation(fields: [imobiliariaId], references: [id])
+    imobiliaria            Imobiliaria                   @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId          Int
-    modelo                 ModeloFichaCadastral @relation(fields: [modeloFichaCadastralId], references: [id])
+    modelo                 ModeloFichaCadastral          @relation(fields: [modeloFichaCadastralId], references: [id])
     modeloFichaCadastralId String
+    preenchimento          FichaCadastralPreenchimento[]
+}
+
+model FichaCadastralPreenchimento {
+    ficha                     FichaCadastral      @relation(fields: [fichaCadastralId], references: [id])
+    fichaCadastralId          String
+    campo                     CampoFichaCadastral @relation(fields: [campoFichaCadastralCodigo], references: [codigo])
+    campoFichaCadastralCodigo String
+    valor                     String?             @db.LongText
+
+    @@unique([fichaCadastralId, campoFichaCadastralCodigo])
 }
 
 enum TipoCampo {
@@ -580,16 +594,34 @@ enum TipoCampo {
     boolean
 }
 
-model CampoFichaCadastral {
-    id        String    @id @default(cuid())
-    tipoFicha TipoFicha
-    tipoCampo TipoCampo
-    codigo    String?
+model CategoriaCampoFichaCadastral {
+    id        String                @id @default(cuid())
     nome      String?
     descricao String?
-    opcoes    Json?
-    limite    Int?
-    createdAt DateTime  @default(now())
-    updatedAt DateTime? @updatedAt
+    ordem     Int?
+    createdAt DateTime              @default(now())
+    updatedAt DateTime?             @updatedAt
     deletedAt DateTime?
+    campos    CampoFichaCadastral[]
+}
+
+model CampoFichaCadastral {
+    id                          String                        @id @default(cuid())
+    tipoFicha                   TipoFicha
+    tipoCampo                   TipoCampo
+    codigo                      String?
+    nome                        String?
+    descricao                   String?
+    opcoes                      Json?
+    limite                      Int?
+    colSpan                     Int?
+    ordem                       Int?
+    createdAt                   DateTime                      @default(now())
+    updatedAt                   DateTime?                     @updatedAt
+    deletedAt                   DateTime?
+    categoria                   CategoriaCampoFichaCadastral? @relation(fields: [categoriaId], references: [id])
+    categoriaId                 String?
+    FichaCadastralPreenchimento FichaCadastralPreenchimento[]
+
+    @@unique([codigo, categoriaId])
 }

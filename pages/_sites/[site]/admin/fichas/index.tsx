@@ -2,6 +2,7 @@ import { FormInput } from "@/components/Form/FormInput";
 import { Layout } from "@/components/Layout/layout";
 import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
 import { NextChakraLink } from "@/components/NextChakraLink";
+import { statusFicha } from "@/helpers/helpers";
 import { listarFichas } from "@/services/models/fichaCadastral";
 import {
     Box,
@@ -10,6 +11,7 @@ import {
     Heading,
     Icon,
     IconButton,
+    Progress,
     Table,
     TableContainer,
     Tbody,
@@ -17,16 +19,22 @@ import {
     Text,
     Th,
     Thead,
+    Tooltip,
     Tr,
+    useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useRef } from "react";
-import { FiEdit, FiPlus } from "react-icons/fi";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
+import { FiEdit, FiEye, FiLink, FiLink2, FiPlus } from "react-icons/fi";
 import { useQuery } from "react-query";
 
 const FichasCadastrais = () => {
+    const [query, setQuery] = useState("");
+    const toast = useToast();
+    const router = useRouter();
     const modal = useRef();
-    const { data: fichas } = useQuery(["fichas", {}], listarFichas);
+    const { data: fichas } = useQuery(["fichas", { query }], listarFichas);
     return (
         <Layout>
             <Box p={4}>
@@ -50,6 +58,8 @@ const FichasCadastrais = () => {
                                 size="sm"
                                 minW={96}
                                 placeholder="Encontre uma ficha"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
                             />
                             <Text fontSize="xs" color="gray" w="full">
                                 <Text as="span" fontWeight="bold">
@@ -75,27 +85,118 @@ const FichasCadastrais = () => {
                                     <Tr>
                                         <Th w={44}>Tipo</Th>
                                         <Th>Nome</Th>
-                                        <Th w={44}></Th>
+                                        <Th w={44}>Preenchimento</Th>
+                                        <Th w={44}>Status</Th>
+                                        <Th w={24}></Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
                                     {fichas?.data?.length > 0 ? (
                                         fichas.data.map((item) => (
                                             <Tr key={item.id}>
-                                                <Td>{item.tipo}</Td>
                                                 <Td>
-                                                    <Text>{item.nome}</Text>
+                                                    {item.modelo?.tipo}
+                                                    <br />
+                                                    {item.modelo?.nome}
+                                                </Td>
+                                                <Td>
+                                                    <Text fontWeight="bold">
+                                                        {item.nome}
+                                                    </Text>
                                                     <Text>
                                                         {item.descricao}
                                                     </Text>
                                                 </Td>
                                                 <Td>
-                                                    <IconButton
-                                                        variant="ghost"
-                                                        icon={
-                                                            <Icon as={FiEdit} />
-                                                        }
-                                                    />
+                                                    <Tooltip
+                                                        label={`${
+                                                            item.preenchimento.filter(
+                                                                (i) => i.valor
+                                                            ).length
+                                                        } de ${
+                                                            item.preenchimento
+                                                                .length
+                                                        } campos preenchidos`}
+                                                    >
+                                                        <Box>
+                                                            <Progress
+                                                                value={
+                                                                    item.preenchimento.filter(
+                                                                        (i) =>
+                                                                            i.valor
+                                                                    ).length
+                                                                }
+                                                                max={
+                                                                    item
+                                                                        .preenchimento
+                                                                        .length >
+                                                                    0
+                                                                        ? item
+                                                                              .preenchimento
+                                                                              .length
+                                                                        : 100
+                                                                }
+                                                            />
+                                                        </Box>
+                                                    </Tooltip>
+                                                </Td>
+                                                <Td>
+                                                    {statusFicha(item.status)}
+                                                </Td>
+                                                <Td>
+                                                    <Tooltip label="Visualizar Ficha">
+                                                        <Link
+                                                            href={`/fichaCadastral/${item.id}`}
+                                                            target="_blank"
+                                                        >
+                                                            <IconButton
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiEye
+                                                                        }
+                                                                    />
+                                                                }
+                                                            />
+                                                        </Link>
+                                                    </Tooltip>
+                                                    <Tooltip label="Copiar URL da Ficha">
+                                                        <IconButton
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            icon={
+                                                                <Icon
+                                                                    as={FiLink}
+                                                                />
+                                                            }
+                                                            onClick={() => {
+                                                                navigator.clipboard.writeText(
+                                                                    `${window.location.origin}/fichaCadastral/${item.id}`
+                                                                );
+                                                                toast({
+                                                                    title: "URL Copiada",
+                                                                });
+                                                            }}
+                                                        />
+                                                    </Tooltip>
+                                                    <Tooltip label="Editar Ficha">
+                                                        <IconButton
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            icon={
+                                                                <Icon
+                                                                    as={FiEdit}
+                                                                />
+                                                            }
+                                                            onClick={() =>
+                                                                modal.current.onOpen(
+                                                                    item.id
+                                                                )
+                                                            }
+                                                        />
+                                                    </Tooltip>
                                                 </Td>
                                             </Tr>
                                         ))

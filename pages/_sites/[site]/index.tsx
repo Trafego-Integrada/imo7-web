@@ -6,14 +6,10 @@ import {
     Text,
     Grid,
     GridItem,
-    Badge,
     Icon,
     Button,
     Container,
 } from "@chakra-ui/react";
-import { NextChakraLink } from "@/components/NextChakraLink";
-import { FaCopy, FaEye, FaGrinWink, FaPrint } from "react-icons/fa";
-import { IoHelpBuoy } from "react-icons/io5";
 import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import { useAuth } from "@/hooks/useAuth";

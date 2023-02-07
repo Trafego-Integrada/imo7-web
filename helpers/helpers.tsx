@@ -1,3 +1,5 @@
+import { Tag } from "@chakra-ui/react";
+
 export const formatoData = (data, tipo = "DATA") => {
     switch (tipo) {
         case "DATA":
@@ -30,3 +32,44 @@ export function includesAll(arr: any[], items: any[]) {
     }
     return true;
 }
+
+export const statusFicha = (status) => {
+    switch (status) {
+        case "aguardando":
+            return (
+                <Tag colorScheme="blue" size="sm">
+                    Aguardando Preenchimento
+                </Tag>
+            );
+        case "preenchida":
+            return (
+                <Tag colorScheme="green" size="sm">
+                    Preenchida
+                </Tag>
+            );
+        case "em_analise":
+            return (
+                <Tag colorScheme="orange" size="sm">
+                    Em análise
+                </Tag>
+            );
+        case "aprovada":
+            return (
+                <Tag colorScheme="green" size="sm">
+                    Aprovado
+                </Tag>
+            );
+        case "reprovada":
+            return (
+                <Tag colorScheme="red" size="sm">
+                    Reprovada
+                </Tag>
+            );
+        case "arquivada":
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Arquivada
+                </Tag>
+            );
+    }
+};
