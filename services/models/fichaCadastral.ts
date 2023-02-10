@@ -37,3 +37,23 @@ export const excluirFicha = async (id) => {
     const { data } = await apiFront.delete("fichaCadastral/" + id);
     return data;
 };
+
+export const aprovaCampo = async ({ fichaId, campoCodigo }) => {
+    const { data } = await apiFront.post(
+        "fichaCadastral/" + fichaId + "/aprovarCampo",
+        { campoCodigo }
+    );
+    return data;
+};
+
+export const reprovarCampo = async ({
+    fichaId,
+    campoCodigo,
+    motivoReprovacao,
+}) => {
+    const { data } = await apiFront.post(
+        "fichaCadastral/" + fichaId + "/reprovarCampo",
+        { campoCodigo, motivoReprovacao }
+    );
+    return data;
+};

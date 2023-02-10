@@ -2,19 +2,7 @@ import { FormInput } from "@/components/Form/FormInput";
 import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormTextarea } from "@/components/Form/FormTextarea";
-import { Input } from "@/components/Forms/Input";
-import { Select } from "@/components/Forms/Select";
-import { listarAssuntos } from "@/services/models/assunto";
 import { listarCategoriaCampoFichas } from "@/services/models/categoriaCampoFicha";
-import {
-    cadastrarChamado,
-    iniciarConversaChamado,
-} from "@/services/models/chamado";
-import {
-    listarContratos,
-    listarParticipantesContratos,
-} from "@/services/models/contrato";
-import { listarDepartamentos } from "@/services/models/departamento";
 import {
     atualizarFicha,
     buscarFicha,
@@ -51,11 +39,11 @@ import { forwardRef, useImperativeHandle } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
+import { AnaliseCampo } from "./AnaliseCampo";
 const schema = yup.object({});
 const ModalBase = ({}, ref) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const toast = useToast();
-    const router = useRouter();
     const {
         register,
         control,
@@ -273,21 +261,50 @@ const ModalBase = ({}, ref) => {
                                                         <Text fontSize="xs">
                                                             {i.nome}
                                                         </Text>
-                                                        {watch(
-                                                            "preenchimento"
-                                                        )?.find(
-                                                            (p) =>
-                                                                p.campoFichaCadastralCodigo ==
-                                                                i.codigo
-                                                        )?.valor && (
-                                                            <Text
-                                                                fontSize="sm"
-                                                                fontWeight="bold"
-                                                            >
-                                                                {i.tipoCampo ==
-                                                                "file" ? (
-                                                                    <Link
-                                                                        href={
+
+                                                        <Text
+                                                            fontSize="sm"
+                                                            fontWeight="bold"
+                                                        >
+                                                            {i.tipoCampo ==
+                                                            "file" ? (
+                                                                <Link
+                                                                    href={
+                                                                        watch(
+                                                                            "preenchimento"
+                                                                        )?.find(
+                                                                            (
+                                                                                p
+                                                                            ) =>
+                                                                                p.campoFichaCadastralCodigo ==
+                                                                                i.codigo
+                                                                        )?.valor
+                                                                            ? watch(
+                                                                                  "preenchimento"
+                                                                              )?.find(
+                                                                                  (
+                                                                                      p
+                                                                                  ) =>
+                                                                                      p.campoFichaCadastralCodigo ==
+                                                                                      i.codigo
+                                                                              )
+                                                                                  ?.valor
+                                                                            : "#"
+                                                                    }
+                                                                    passHref
+                                                                >
+                                                                    <Text>
+                                                                        Visualizar
+                                                                        arquivo
+                                                                    </Text>
+                                                                </Link>
+                                                            ) : (
+                                                                <>
+                                                                    <Flex
+                                                                        align="center"
+                                                                        gap={2}
+                                                                    >
+                                                                        {
                                                                             watch(
                                                                                 "preenchimento"
                                                                             )?.find(
@@ -298,36 +315,19 @@ const ModalBase = ({}, ref) => {
                                                                                     i.codigo
                                                                             )
                                                                                 ?.valor
-                                                                                ? watch(
-                                                                                      "preenchimento"
-                                                                                  )?.find(
-                                                                                      (
-                                                                                          p
-                                                                                      ) =>
-                                                                                          p.campoFichaCadastralCodigo ==
-                                                                                          i.codigo
-                                                                                  )
-                                                                                      ?.valor
-                                                                                : "#"
                                                                         }
-                                                                        passHref
-                                                                    >
-                                                                        <Text>
-                                                                            Visualizar
-                                                                            arquivo
-                                                                        </Text>
-                                                                    </Link>
-                                                                ) : (
-                                                                    watch(
-                                                                        "preenchimento"
-                                                                    )?.find(
-                                                                        (p) =>
-                                                                            p.campoFichaCadastralCodigo ==
-                                                                            i.codigo
-                                                                    )?.valor
-                                                                )}
-                                                            </Text>
-                                                        )}
+                                                                        <AnaliseCampo
+                                                                            campoCodigo={
+                                                                                ""
+                                                                            }
+                                                                            fichaId={
+                                                                                ""
+                                                                            }
+                                                                        />
+                                                                    </Flex>
+                                                                </>
+                                                            )}
+                                                        </Text>
                                                     </GridItem>
                                                 ))}
                                             </Grid>

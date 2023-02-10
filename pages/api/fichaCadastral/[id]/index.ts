@@ -1,12 +1,7 @@
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
-import { providerStorage } from "@/lib/storage";
-import * as os from "oci-objectstorage";
-
 const handler = nextConnect();
 import { cors } from "@/middleware/cors";
-import { checkAuth } from "@/middleware/checkAuth";
-import { multiparty } from "@/middleware/multipart";
 handler.use(cors);
 
 handler.get(async (req, res) => {
@@ -67,6 +62,7 @@ handler.post(async (req, res) => {
                             },
                             update: {
                                 valor: item[1],
+                                motivoReprovacao: null,
                             },
                         };
                     }),

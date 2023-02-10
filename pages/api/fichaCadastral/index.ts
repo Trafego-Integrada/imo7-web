@@ -69,6 +69,7 @@ handle.get(async (req, res) => {
             include: {
                 preenchimento: true,
                 modelo: true,
+                responsavel: true,
             },
         });
 
@@ -106,6 +107,11 @@ handle.post(async (req, res) => {
                 imobiliaria: {
                     connect: {
                         id: req.user.imobiliariaId,
+                    },
+                },
+                responsavel: {
+                    connect: {
+                        id: req.user.id,
                     },
                 },
             },

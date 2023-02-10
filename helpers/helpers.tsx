@@ -73,3 +73,16 @@ export const statusFicha = (status) => {
             );
     }
 };
+
+export const tipoFicha = (tipo) => {
+    switch (tipo) {
+        case "inquilino":
+            return "Cadastro de Inquilino";
+        case "proprietario":
+            return "Cadastro de Proprietário";
+        case "fiador":
+            return "Cadastro de Fiador";
+        case "imovel":
+            return "Cadastro de Imóvel";
+    }
+};

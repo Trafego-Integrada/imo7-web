@@ -67,6 +67,7 @@ model Usuario {
     imobiliariaId         Int?
     conta                 Conta?                   @relation(fields: [contaId], references: [id])
     contaId               Int?
+    FichaCadastral        FichaCadastral[]
 
     @@unique([imobiliariaId, documento])
 }
@@ -567,6 +568,8 @@ model FichaCadastral {
     modelo                 ModeloFichaCadastral          @relation(fields: [modeloFichaCadastralId], references: [id])
     modeloFichaCadastralId String
     preenchimento          FichaCadastralPreenchimento[]
+    responsavel            Usuario?                      @relation(fields: [responsavelId], references: [id])
+    responsavelId          Int?
 }
 
 model FichaCadastralPreenchimento {
@@ -575,8 +578,10 @@ model FichaCadastralPreenchimento {
     campo                     CampoFichaCadastral @relation(fields: [campoFichaCadastralCodigo], references: [codigo])
     campoFichaCadastralCodigo String
     valor                     String?             @db.LongText
+    motivoReprovacao          String?
+    aprovado                  Boolean             @default(false)
 
-    @@unique([fichaCadastralId, campoFichaCadastralCodigo])
+    @@id([fichaCadastralId, campoFichaCadastralCodigo])
 }
 
 enum TipoCampo {
@@ -609,7 +614,7 @@ model CampoFichaCadastral {
     id                          String                        @id @default(cuid())
     tipoFicha                   TipoFicha
     tipoCampo                   TipoCampo
-    codigo                      String?
+    codigo                      String?                       @unique
     nome                        String?
     descricao                   String?
     opcoes                      Json?

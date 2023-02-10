@@ -27,6 +27,7 @@ import {
 } from "@/services/models/modeloFicha";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { listarCategoriaCampoFichas } from "@/services/models/categoriaCampoFicha";
 
 export const FormModeloFichaCadastral = ({ id = null }) => {
     const router = useRouter();
@@ -48,14 +49,13 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
     const atualizar = useMutation(atualizarFicha);
     const onSubmit = async (data) => {
         try {
-            if (data.if) {
-                await cadastrar.mutateAsync(data, {
+            if (data.id) {
+                await atualizar.mutateAsync(data, {
                     onSuccess: (data) => {
                         toast({
-                            title: "Ficha cadastrada com sucesso",
+                            title: "Ficha atualizada com sucesso",
                             status: "success",
                         });
-                        router.back();
                     },
                 });
             } else {
@@ -71,6 +71,15 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
             }
         } catch (error) {}
     };
+    const { data: categorias } = useQuery(
+        [
+            "categorias",
+            {
+                tipoFicha: watch("tipo"),
+            },
+        ],
+        listarCategoriaCampoFichas
+    );
     const { data: campos } = useQuery(
         [
             "campos",
@@ -134,43 +143,49 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
                 gap={4}
             >
                 <GridItem bg="white" p={4}>
-                    <Heading size="sm">Campos</Heading>
-                    <Table size="sm">
-                        <Thead>
-                            <Tr>
-                                <Th></Th>
-                                <Th w={24}>Exibir</Th>
-                                <Th w={24}>Obrigatório</Th>
-                            </Tr>
-                        </Thead>
-                        {campos?.data
-                            ?.filter(
-                                (i) =>
-                                    i.tipoCampo != "files" &&
-                                    i.tipoCampo != "file"
-                            )
-                            .map((item, key) => (
-                                <Tr key={item.id}>
-                                    <Td>{item.nome}</Td>
-                                    <Td>
-                                        <Switch
-                                            size="sm"
-                                            {...register(
-                                                `campos.${item.codigo}.exibir`
-                                            )}
-                                        />
-                                    </Td>
-                                    <Td>
-                                        <Switch
-                                            size="sm"
-                                            {...register(
-                                                `campos.${item.codigo}.obrigatorio`
-                                            )}
-                                        />
-                                    </Td>
-                                </Tr>
-                            ))}
-                    </Table>
+                    <Grid gap={4}>
+                        {categorias?.data?.map((item) => (
+                            <GridItem>
+                                <Heading size="sm">{item.nome}</Heading>
+                                <Table size="sm">
+                                    <Thead>
+                                        <Tr>
+                                            <Th></Th>
+                                            <Th w={24}>Exibir</Th>
+                                            <Th w={24}>Obrigatório</Th>
+                                        </Tr>
+                                    </Thead>
+                                    {item?.campos
+                                        ?.filter(
+                                            (i) =>
+                                                i.tipoCampo != "files" &&
+                                                i.tipoCampo != "file"
+                                        )
+                                        .map((i, key) => (
+                                            <Tr key={i.id}>
+                                                <Td>{i.nome}</Td>
+                                                <Td>
+                                                    <Switch
+                                                        size="sm"
+                                                        {...register(
+                                                            `campos.${i.codigo}.exibir`
+                                                        )}
+                                                    />
+                                                </Td>
+                                                <Td>
+                                                    <Switch
+                                                        size="sm"
+                                                        {...register(
+                                                            `campos.${i.codigo}.obrigatorio`
+                                                        )}
+                                                    />
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                </Table>
+                            </GridItem>
+                        ))}
+                    </Grid>
                 </GridItem>
                 <GridItem bg="white" p={4}>
                     <Heading size="sm">Arquivos</Heading>

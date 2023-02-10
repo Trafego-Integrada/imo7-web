@@ -112,6 +112,13 @@ const menu = [
         cargos: ["adm"],
         modulos: ["adm.imobiliarias"],
     },
+    {
+        titulo: "Cadastros",
+        href: "/admin/cadastros",
+        icon: BsFillGearFill,
+        cargos: ["adm"],
+        modulos: ["adm.imobiliarias"],
+    },
 ];
 
 export const Listagemmenu = () => {

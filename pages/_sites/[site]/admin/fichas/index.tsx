@@ -2,7 +2,7 @@ import { FormInput } from "@/components/Form/FormInput";
 import { Layout } from "@/components/Layout/layout";
 import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
 import { NextChakraLink } from "@/components/NextChakraLink";
-import { statusFicha } from "@/helpers/helpers";
+import { formatoData, statusFicha, tipoFicha } from "@/helpers/helpers";
 import { listarFichas } from "@/services/models/fichaCadastral";
 import {
     Box,
@@ -86,6 +86,9 @@ const FichasCadastrais = () => {
                                         <Th w={44}>Tipo</Th>
                                         <Th>Nome</Th>
                                         <Th w={44}>Preenchimento</Th>
+
+                                        <Th w={44}>Responsável</Th>
+                                        <Th w={24}>Criado em</Th>
                                         <Th w={44}>Status</Th>
                                         <Th w={24}></Th>
                                     </Tr>
@@ -95,7 +98,9 @@ const FichasCadastrais = () => {
                                         fichas.data.map((item) => (
                                             <Tr key={item.id}>
                                                 <Td>
-                                                    {item.modelo?.tipo}
+                                                    {tipoFicha(
+                                                        item.modelo?.tipo
+                                                    )}
                                                     <br />
                                                     {item.modelo?.nome}
                                                 </Td>
@@ -108,37 +113,96 @@ const FichasCadastrais = () => {
                                                     </Text>
                                                 </Td>
                                                 <Td>
-                                                    <Tooltip
-                                                        label={`${
-                                                            item.preenchimento.filter(
-                                                                (i) => i.valor
-                                                            ).length
-                                                        } de ${
-                                                            item.preenchimento
-                                                                .length
-                                                        } campos preenchidos`}
-                                                    >
-                                                        <Box>
-                                                            <Progress
-                                                                value={
-                                                                    item.preenchimento.filter(
+                                                    <Box pos="relative">
+                                                        <Tooltip
+                                                            label={`${
+                                                                item.preenchimento.filter(
+                                                                    (i) =>
+                                                                        i.valor
+                                                                ).length
+                                                            } de ${
+                                                                item
+                                                                    .preenchimento
+                                                                    .length
+                                                            } campos preenchidos`}
+                                                        >
+                                                            <Box>
+                                                                <Progress
+                                                                    size="lg"
+                                                                    value={
+                                                                        item.preenchimento.filter(
+                                                                            (
+                                                                                i
+                                                                            ) =>
+                                                                                i.valor
+                                                                        ).length
+                                                                    }
+                                                                    max={
+                                                                        item
+                                                                            .preenchimento
+                                                                            .length >
+                                                                        0
+                                                                            ? item
+                                                                                  .preenchimento
+                                                                                  .length
+                                                                            : 100
+                                                                    }
+                                                                />
+                                                            </Box>
+                                                        </Tooltip>
+                                                        <Flex
+                                                            pos="absolute"
+                                                            top="0"
+                                                            justify="center"
+                                                            mx="auto"
+                                                            w="full"
+                                                        >
+                                                            <Text
+                                                                textAlign="center"
+                                                                fontSize="xs"
+                                                                color={
+                                                                    Number(
+                                                                        (item.preenchimento.filter(
+                                                                            (
+                                                                                i
+                                                                            ) =>
+                                                                                i.valor
+                                                                        )
+                                                                            .length /
+                                                                            item
+                                                                                .preenchimento
+                                                                                .length) *
+                                                                            100
+                                                                    ).toFixed(
+                                                                        0
+                                                                    ) == 100
+                                                                        ? "white"
+                                                                        : "gray"
+                                                                }
+                                                            >
+                                                                {Number(
+                                                                    (item.preenchimento.filter(
                                                                         (i) =>
                                                                             i.valor
-                                                                    ).length
-                                                                }
-                                                                max={
-                                                                    item
-                                                                        .preenchimento
-                                                                        .length >
-                                                                    0
-                                                                        ? item
-                                                                              .preenchimento
-                                                                              .length
-                                                                        : 100
-                                                                }
-                                                            />
-                                                        </Box>
-                                                    </Tooltip>
+                                                                    ).length /
+                                                                        item
+                                                                            .preenchimento
+                                                                            .length) *
+                                                                        100
+                                                                ).toFixed(2)}
+                                                                % preenchida
+                                                            </Text>
+                                                        </Flex>
+                                                    </Box>
+                                                </Td>
+
+                                                <Td>
+                                                    {item.responsavel?.nome}
+                                                </Td>
+                                                <Td>
+                                                    {formatoData(
+                                                        item.createdAt
+                                                    )}
                                                 </Td>
                                                 <Td>
                                                     {statusFicha(item.status)}
@@ -182,20 +246,21 @@ const FichasCadastrais = () => {
                                                         />
                                                     </Tooltip>
                                                     <Tooltip label="Editar Ficha">
-                                                        <IconButton
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={FiEdit}
-                                                                />
-                                                            }
-                                                            onClick={() =>
-                                                                modal.current.onOpen(
-                                                                    item.id
-                                                                )
-                                                            }
-                                                        />
+                                                        <Link
+                                                            href={`/admin/fichas/${item.id}`}
+                                                        >
+                                                            <IconButton
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiEdit
+                                                                        }
+                                                                    />
+                                                                }
+                                                            />
+                                                        </Link>
                                                     </Tooltip>
                                                 </Td>
                                             </Tr>

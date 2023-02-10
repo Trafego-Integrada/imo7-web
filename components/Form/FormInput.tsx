@@ -23,6 +23,7 @@ const InputBase = (
         rightAddon,
         leftElement,
         rightElement,
+        borderWidth,
         size,
         ...rest
     },
@@ -41,7 +42,12 @@ const InputBase = (
                 {leftElement && (
                     <InputLeftElement p={0}>{leftElement}</InputLeftElement>
                 )}
-                <Input ref={ref} {...rest} size={size} />
+                <Input
+                    ref={ref}
+                    {...rest}
+                    size={size}
+                    borderWidth={borderWidth}
+                />
                 {rightAddon && (
                     <InputRightAddon p={0}>{rightAddon}</InputRightAddon>
                 )}

@@ -24,4 +24,27 @@ handler.get(async (req, res) => {
         });
     }
 });
+handler.post(async (req, res) => {
+    try {
+        const { tipo, nome, descricao, campos } = req.body;
+
+        const data = await prisma.modeloFichaCadastral.update({
+            where: {
+                id: req.query.id,
+            },
+            data: {
+                tipo,
+                nome,
+                descricao,
+                campos,
+            },
+        });
+        res.send(data);
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error.message,
+        });
+    }
+});
 export default handler;
