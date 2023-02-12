@@ -38,6 +38,9 @@ handler.post(async (req, res) => {
             tipoFicha,
             codigo,
             categoria,
+            mask,
+            cep,
+            camposEndereco,
         } = req.body;
         const data = await prisma.campoFichaCadastral.update({
             where: {
@@ -55,6 +58,9 @@ handler.post(async (req, res) => {
                         id: categoria.id,
                     },
                 },
+                mask,
+                cep,
+                camposEndereco,
             },
         });
         res.send(data);

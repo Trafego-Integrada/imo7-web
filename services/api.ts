@@ -35,6 +35,26 @@ export function setupApiClient(ctx = undefined) {
                     : null,
         },
     });
+    api.interceptors.request.use((request) => {
+        let cookies = parseCookies({ req: request });
+        let host;
+        if (typeof window !== "undefined") {
+            console.log(window.location);
+            host = window.location.host;
+            host = host.split(".")[0];
+        }
+        request.headers = {
+            ...request.headers,
+            Authorization: `Bearer ${cookies["imo7.token"]}`,
+            imobiliaria:
+                host != "localhost:3000" &&
+                host != "imo7.com.br" &&
+                host != "imo7"
+                    ? host
+                    : null,
+        };
+        return request;
+    });
 
     api.interceptors.response.use(
         (response) => {

@@ -1,5 +1,7 @@
+import { Excluir } from "@/components/AlertDialogs/Excluir";
 import { NextChakraLink } from "@/components/NextChakraLink";
-import { listarFichas } from "@/services/models/modeloFicha";
+import { excluirFicha, listarFichas } from "@/services/models/modeloFicha";
+import { queryClient } from "@/services/queryClient";
 import {
     Box,
     Button,
@@ -14,13 +16,31 @@ import {
     Th,
     Thead,
     Tr,
+    useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { FiEdit, FiPlus } from "react-icons/fi";
-import { useQuery } from "react-query";
+import { useRef } from "react";
+import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
+import { useMutation, useQuery } from "react-query";
 
 export const FichasCadastrais = () => {
+    const toast = useToast();
+    const modalExcluir = useRef();
     const { data: fichas } = useQuery(["fichas", {}], listarFichas);
+    const excluir = useMutation(excluirFicha);
+
+    const onDelete = async (id) => {
+        await excluir.mutateAsync(id, {
+            onSuccess: () => {
+                toast({
+                    title: "Categoria excluida",
+                    duration: 3000,
+                    status: "success",
+                });
+                queryClient.invalidateQueries(["fichas"]);
+            },
+        });
+    };
     return (
         <Box>
             <Flex justify="space-between" align="center">
@@ -70,6 +90,17 @@ export const FichasCadastrais = () => {
                                                     variant="ghost"
                                                     icon={<Icon as={FiEdit} />}
                                                 />
+                                                {/* <IconButton
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    colorScheme="red"
+                                                    icon={<Icon as={FiTrash} />}
+                                                    onClick={() =>
+                                                        modalExcluir.current.onOpen(
+                                                            item.id
+                                                        )
+                                                    }
+                                                /> */}
                                             </Link>
                                         </Td>
                                     </Tr>
@@ -89,6 +120,11 @@ export const FichasCadastrais = () => {
                     </Table>
                 </TableContainer>
             </Box>
+            <Excluir
+                ref={modalExcluir}
+                titulo="Excluir categoria"
+                onDelete={onDelete}
+            />
         </Box>
     );
 };

@@ -64,10 +64,16 @@ export default function middleware(req: NextRequest) {
     //   url.pathname = `/home${url.pathname}`;
     //   return NextResponse.rewrite(url);
     // }
-    console.log(url.route);
+    console.log(url);
     // rewrite everything else to `/_sites/[site] dynamic route
     if (url.pathname.includes("/img/")) {
         return NextResponse.rewrite(url);
+    }
+    if (url.pathname.includes(`/admin/_next/static/worker/`)) {
+        url.pathname = url.pathname.replace(
+            `/admin/_next/static/worker/`,
+            "/_next/static/worker/"
+        );
     }
     if (url.pathname.includes("_next")) {
         return NextResponse.rewrite(url);
@@ -87,13 +93,10 @@ export default function middleware(req: NextRequest) {
         url.pathname = url.pathname.replace("/_sites/localhost:3000/", "/");
     } else if (url.pathname.includes("/_sites/www/")) {
         url.pathname = url.pathname.replace("/_sites/www/", "/");
+    } else if (url.pathname.includes("/_sites/www/")) {
+        url.pathname = url.pathname.replace("/_sites/www/", "/");
     }
-    if (url.pathname.includes(`/_sites/${url.host}/api/`)) {
-        url.pathname = url.pathname.replace(
-            `/_sites/${url.host}/api/`,
-            "/api/"
-        );
-    }
+
     console.log(1);
     return NextResponse.rewrite(url);
 }

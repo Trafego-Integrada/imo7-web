@@ -9,7 +9,7 @@
         "lint": "next lint",
         "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
         "ssh": "ssh ubuntu@132.226.252.163",
-        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aaywbrt4ehmmqu7pslynl4mh3mwa5xkamvdoviprxopurq@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
+        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aacqymvnqmazmu5emrsizxm72z5ow3rtayeas6lun4biua@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",
@@ -46,7 +46,12 @@
         "nodemailer": "^6.8.0",
         "nookies": "^2.5.2",
         "oci-sdk": "^1.23.0",
+        "pdfjs-dist": "^3.3.122",
         "puppeteer": "^19.6.2",
+        "quill-blot-formatter": "^1.0.5",
+        "quill-image-drop-module": "^1.0.3",
+        "quill-image-resize-module-react": "^3.0.0",
+        "quill-table-ui": "^1.0.7",
         "react": "18.1.0",
         "react-barcode": "^1.4.6",
         "react-date-picker": "^8.4.0",
@@ -58,7 +63,10 @@
         "react-hook-form": "^7.34.0",
         "react-icons": "^4.7.1",
         "react-input-mask": "^2.0.4",
+        "react-pdf": "^6.2.2",
         "react-query": "^3.24.5",
+        "react-quill": "^2.0.0",
+        "react-quill-with-table": "^1.3.3",
         "react-spinners": "^0.11.0",
         "sass": "^1.39.0",
         "slug": "^8.2.2",
@@ -71,6 +79,7 @@
         "@types/react-input-mask": "^3.0.1",
         "eslint": "7.29.0",
         "eslint-config-next": "11.0.1",
+        "file-loader": "^6.2.0",
         "prisma": "^3.8.1",
         "ts-node": "^10.0.0",
         "typescript": "^4.3.4"

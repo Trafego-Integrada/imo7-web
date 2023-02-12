@@ -13,6 +13,7 @@ import {
     AlertTitle,
     Box,
     Button,
+    Checkbox,
     Container,
     Flex,
     Grid,
@@ -30,12 +31,13 @@ import { useForm } from "react-hook-form";
 import { FiEye } from "react-icons/fi";
 import { useMutation } from "react-query";
 import * as yup from "yup";
-
+import "react-quill/dist/quill.snow.css";
+import { buscarEndereco } from "@/lib/buscarEndereco";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
     const [schema, setSchema] = useState({});
-
     const toast = useToast();
     const {
+        reset,
         watch,
         register,
         handleSubmit,
@@ -68,16 +70,52 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         }
     };
 
-    console.log(errors);
+    const buscarEnderecoPorCep = async (cep, camposEndereco) => {
+        try {
+            if (cep.length > 8) {
+                const res = await buscarEndereco(cep);
+                console.log(res);
+                let obj = {};
+                Object.entries(camposEndereco).map((item) => {
+                    if (item[0] == "endereco") {
+                        obj[item[1].codigo] = res.logradouro;
+                    } else if (item[0] == "bairro") {
+                        obj[item[1].codigo] = res.bairro;
+                    } else if (item[0] == "cidade") {
+                        obj[item[1].codigo] = res.cidade;
+                    } else if (item[0] == "estado") {
+                        obj[item[1].codigo] = res.uf;
+                    }
+                });
+                reset({
+                    ...watch(),
+                    preenchimento: {
+                        ...watch("preenchimento"),
+                        ...obj,
+                    },
+                });
+            }
+        } catch (e) {
+            toast({
+                title: "Endereço não encontrado",
+                status: "warning",
+            });
+        }
+    };
     return (
         <Box
-            bg="gray.200"
+            bg="gray.100"
             minH="100vh"
             as="form"
             onSubmit={handleSubmit(onSubmit)}
         >
             <Container maxW="container.lg">
-                <Flex align="center" py={8}>
+                <Flex
+                    align="center"
+                    py={8}
+                    gap={6}
+                    flexDir={{ base: "column", lg: "row" }}
+                >
                     <Box>
                         <Image w={150} src={ficha.imobiliaria.logo} />
                     </Box>
@@ -137,7 +175,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                 <Grid gap={4}>
                     {campos
                         .filter((i) =>
-                            i.campos.find((e) => modelo.campos[e.codigo])
+                            i.campos.find((e) => modelo?.campos[e.codigo])
                         )
                         .map((item) => (
                             <Box key={item.id} bg="white" p={4}>
@@ -162,6 +200,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                     <FormInput
                                                         size="sm"
                                                         label={campo.nome}
+                                                        mask={campo.mask}
                                                         {...register(
                                                             "preenchimento." +
                                                                 campo.codigo,
@@ -175,6 +214,15 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                         ?.obrigatorio,
                                                                     message:
                                                                         "Campo obrigatório",
+                                                                },
+                                                                onChange: (
+                                                                    e
+                                                                ) => {
+                                                                    buscarEnderecoPorCep(
+                                                                        e.target
+                                                                            .value,
+                                                                        campo.camposEndereco
+                                                                    );
                                                                 },
                                                             }
                                                         )}
@@ -284,7 +332,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                     />
                                                 ) : campo.tipoCampo ==
                                                   "file" ? (
-                                                    <Flex align="flex-end">
+                                                    <Flex align="center">
                                                         <FormInput
                                                             size="sm"
                                                             type="file"
@@ -305,36 +353,79 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                     },
                                                                 }
                                                             )}
-                                                        />
-                                                        {watch(
-                                                            "preenchimento." +
-                                                                campo.codigo
-                                                        ) && (
-                                                            <Link
-                                                                href={watch(
+                                                            borderColor={
+                                                                watch(
+                                                                    "analise." +
+                                                                        campo.codigo
+                                                                )?.aprovado
+                                                                    ? "green"
+                                                                    : ""
+                                                            }
+                                                            borderWidth={
+                                                                watch(
+                                                                    "analise." +
+                                                                        campo.codigo
+                                                                )?.aprovado
+                                                                    ? 2
+                                                                    : ""
+                                                            }
+                                                            error={
+                                                                errors.preenchimento &&
+                                                                errors
+                                                                    .preenchimento[
+                                                                    campo.codigo
+                                                                ]?.message
+                                                                    ? errors
+                                                                          .preenchimento[
+                                                                          campo
+                                                                              .codigo
+                                                                      ]?.message
+                                                                    : watch(
+                                                                          "analise." +
+                                                                              campo.codigo
+                                                                      )
+                                                                          ?.motivoReprovacao
+                                                                    ? "Campo reprovado: " +
+                                                                      watch(
+                                                                          "analise." +
+                                                                              campo.codigo
+                                                                      )
+                                                                          ?.motivoReprovacao
+                                                                    : ""
+                                                            }
+                                                            rightAddon={
+                                                                watch(
                                                                     "preenchimento." +
                                                                         campo.codigo
-                                                                )}
-                                                                target="_parent"
-                                                            >
-                                                                <Button
-                                                                    size="sm"
-                                                                    borderLeftRadius={
-                                                                        0
-                                                                    }
-                                                                    leftIcon={
-                                                                        <Icon
-                                                                            as={
-                                                                                FiEye
+                                                                ) && (
+                                                                    <Link
+                                                                        href={watch(
+                                                                            "preenchimento." +
+                                                                                campo.codigo
+                                                                        )}
+                                                                        target="_parent"
+                                                                    >
+                                                                        <Button
+                                                                            size="sm"
+                                                                            variant="ghost"
+                                                                            colorScheme="blue"
+                                                                            leftIcon={
+                                                                                <Icon
+                                                                                    as={
+                                                                                        FiEye
+                                                                                    }
+                                                                                />
                                                                             }
-                                                                        />
-                                                                    }
-                                                                    px={6}
-                                                                >
-                                                                    Visualizar
-                                                                </Button>
-                                                            </Link>
-                                                        )}
+                                                                            px={
+                                                                                6
+                                                                            }
+                                                                        >
+                                                                            Visualizar
+                                                                        </Button>
+                                                                    </Link>
+                                                                )
+                                                            }
+                                                        />
                                                     </Flex>
                                                 ) : campo.tipoCampo ==
                                                   "files" ? (
@@ -345,7 +436,19 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                         label={campo.nome}
                                                         {...register(
                                                             "arquivos." +
-                                                                campo.codigo
+                                                                campo.codigo,
+                                                            {
+                                                                required: {
+                                                                    value: modelo
+                                                                        .campos[
+                                                                        campo
+                                                                            .codigo
+                                                                    ]
+                                                                        ?.obrigatorio,
+                                                                    message:
+                                                                        "Campo obrigatório",
+                                                                },
+                                                            }
                                                         )}
                                                     />
                                                 ) : (
@@ -357,6 +460,30 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             </Box>
                         ))}
                 </Grid>
+                <Box colSpan={{ base: 1, lg: 5 }} p={4} bg="white" mt={4}>
+                    <Box
+                        dangerouslySetInnerHTML={{
+                            __html: modelo.instrucoes,
+                        }}
+                    />
+                </Box>
+                <Flex mt={4} p={4} bg="white" flexDir="column">
+                    {modelo.checkbox?.map((item, key) => (
+                        <Checkbox
+                            key={item.id}
+                            {...register("checkbox_" + key, {
+                                required: {
+                                    message:
+                                        "Você deve aceitar para prosseguir",
+                                    value: true,
+                                },
+                            })}
+                            isInvalid={errors[`checkbox_${key}`]?.message}
+                        >
+                            {item}
+                        </Checkbox>
+                    ))}
+                </Flex>
                 <Flex py={4} justify="flex-end">
                     {(ficha.status == "reprovada" ||
                         ficha.status == "aguardando") && (

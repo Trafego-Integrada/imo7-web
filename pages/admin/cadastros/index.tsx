@@ -37,7 +37,7 @@ const Configuracoes = () => {
                     <Grid
                         gridTemplateColumns={{
                             base: "repeat(1,1fr)",
-                            lg: "repeat(5,1fr)",
+                            lg: "repeat(4,1fr)",
                         }}
                     >
                         <GridItem bg="white" p={4}>

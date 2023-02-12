@@ -22,6 +22,7 @@ import {
     TabPanels,
     Tabs,
     Box,
+    Checkbox,
 } from "@chakra-ui/react";
 import InputMask from "react-input-mask";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
@@ -49,6 +50,7 @@ import {
 } from "@/services/models/campoFicha";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
+import { listarCampos } from "@/services/models/campo";
 
 const schema = yup.object().shape({
     nome: yup.string().required("Campo obrigatório"),
@@ -123,6 +125,7 @@ const DrawerBase = ({}, ref) => {
         ["listaCategorias", {}],
         listarCategoriaCampoFichas
     );
+    const { data: campos } = useQuery(["listaCampos", {}], listarCampos);
     return (
         <Drawer isOpen={isOpen} onClose={onClose} placement="right">
             <DrawerOverlay />
@@ -234,6 +237,96 @@ const DrawerBase = ({}, ref) => {
                                     error={errors.colSpan?.message}
                                 />
                             </GridItem>
+                            <GridItem>
+                                <FormInput
+                                    size="sm"
+                                    label="Mascara"
+                                    {...register("mask")}
+                                    error={errors.mask?.message}
+                                />
+                            </GridItem>
+                            <GridItem>
+                                <Checkbox
+                                    size="sm"
+                                    isChecked={watch("cep")}
+                                    {...register("cep")}
+                                    isInvalid={errors.cep?.message}
+                                >
+                                    Campo de CEP
+                                </Checkbox>
+                            </GridItem>{" "}
+                            {watch("cep") && (
+                                <GridItem>
+                                    <Controller
+                                        control={control}
+                                        name="camposEndereco.endereco"
+                                        render={({ field }) => (
+                                            <FormMultiSelect
+                                                {...field}
+                                                size="sm"
+                                                label="Campo Endereço"
+                                                placeholder="Selecione..."
+                                                options={campos?.data}
+                                                getOptionLabel={(e) =>
+                                                    e.codigo + " - " + e.nome
+                                                }
+                                                getOptionValue={(e) => e.id}
+                                            />
+                                        )}
+                                    />
+                                    <Controller
+                                        control={control}
+                                        name="camposEndereco.bairro"
+                                        render={({ field }) => (
+                                            <FormMultiSelect
+                                                {...field}
+                                                size="sm"
+                                                label="Campo Bairro"
+                                                placeholder="Selecione..."
+                                                options={campos?.data}
+                                                getOptionLabel={(e) =>
+                                                    e.codigo + " - " + e.nome
+                                                }
+                                                getOptionValue={(e) => e.id}
+                                            />
+                                        )}
+                                    />
+                                    <Controller
+                                        control={control}
+                                        name="camposEndereco.cidade"
+                                        render={({ field }) => (
+                                            <FormMultiSelect
+                                                {...field}
+                                                size="sm"
+                                                label="Campo Cidade"
+                                                placeholder="Selecione..."
+                                                options={campos?.data}
+                                                getOptionLabel={(e) =>
+                                                    e.codigo + " - " + e.nome
+                                                }
+                                                getOptionValue={(e) => e.id}
+                                            />
+                                        )}
+                                    />
+                                    <Controller
+                                        control={control}
+                                        name="camposEndereco.estado"
+                                        render={({ field }) => (
+                                            <FormMultiSelect
+                                                {...field}
+                                                size="sm"
+                                                label="Campo Estado"
+                                                placeholder="Selecione..."
+                                                options={campos?.data}
+                                                getOptionLabel={(e) =>
+                                                    e.codigo + " - " + e.nome
+                                                }
+                                                getOptionValue={(e) => e.id}
+                                            />
+                                        )}
+                                    />
+                                </GridItem>
+                            )}
                         </Grid>
                     </Box>
                 </DrawerBody>

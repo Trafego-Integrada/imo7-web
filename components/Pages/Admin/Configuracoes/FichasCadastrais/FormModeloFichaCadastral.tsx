@@ -9,17 +9,20 @@ import {
     Grid,
     GridItem,
     Heading,
+    Icon,
+    IconButton,
     Switch,
     Table,
     Td,
     Text,
+    Textarea,
     Th,
     Thead,
     Tr,
     useToast,
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "react-query";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
     atualizarFicha,
     buscarFicha,
@@ -28,18 +31,25 @@ import {
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { listarCategoriaCampoFichas } from "@/services/models/categoriaCampoFicha";
-
+const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+import dynamic from "next/dynamic";
+import { FiPlus, FiTrash } from "react-icons/fi";
 export const FormModeloFichaCadastral = ({ id = null }) => {
     const router = useRouter();
     const toast = useToast();
 
     const {
+        control,
         reset,
         register,
         watch,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            instrucoes: "",
+        },
+    });
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
             reset(data);
@@ -133,6 +143,20 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
                         size="sm"
                     />
                 </GridItem>
+                <GridItem colSpan={{ base: 1, lg: 3 }}>
+                    <Box>
+                        <Text fontSize="sm" mb={2}>
+                            Instruções
+                        </Text>
+                        <Controller
+                            control={control}
+                            name="instrucoes"
+                            render={({ field }) => (
+                                <Editor {...field} theme="snow" />
+                            )}
+                        />
+                    </Box>
+                </GridItem>
             </Grid>
             <Grid
                 py={4}
@@ -187,44 +211,100 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
                         ))}
                     </Grid>
                 </GridItem>
-                <GridItem bg="white" p={4}>
-                    <Heading size="sm">Arquivos</Heading>
-                    <Table size="sm">
-                        <Thead>
-                            <Tr>
-                                <Th></Th>
-                                <Th w={24}>Exibir</Th>
-                                <Th w={24}>Obrigatório</Th>
-                            </Tr>
-                        </Thead>
-                        {campos?.data
-                            ?.filter(
-                                (i) =>
-                                    i.tipoCampo == "files" ||
-                                    i.tipoCampo == "file"
-                            )
-                            .map((item, key) => (
-                                <Tr key={item.id}>
-                                    <Td>{item.nome}</Td>
-                                    <Td>
-                                        <Switch
-                                            size="sm"
-                                            {...register(
-                                                `campos.${item.codigo}.exibir`
-                                            )}
-                                        />
-                                    </Td>
-                                    <Td>
-                                        <Switch
-                                            size="sm"
-                                            {...register(
-                                                `campos.${item.codigo}.obrigatorio`
-                                            )}
-                                        />
-                                    </Td>
+                <GridItem as={Grid} gap={4}>
+                    <GridItem bg="white" p={4}>
+                        <Heading size="sm">Arquivos</Heading>
+                        <Table size="sm">
+                            <Thead>
+                                <Tr>
+                                    <Th></Th>
+                                    <Th w={24}>Exibir</Th>
+                                    <Th w={24}>Obrigatório</Th>
                                 </Tr>
+                            </Thead>
+                            {campos?.data
+                                ?.filter(
+                                    (i) =>
+                                        i.tipoCampo == "files" ||
+                                        i.tipoCampo == "file"
+                                )
+                                .map((item, key) => (
+                                    <Tr key={item.id}>
+                                        <Td>{item.nome}</Td>
+                                        <Td>
+                                            <Switch
+                                                size="sm"
+                                                {...register(
+                                                    `campos.${item.codigo}.exibir`
+                                                )}
+                                            />
+                                        </Td>
+                                        <Td>
+                                            <Switch
+                                                size="sm"
+                                                {...register(
+                                                    `campos.${item.codigo}.obrigatorio`
+                                                )}
+                                            />
+                                        </Td>
+                                    </Tr>
+                                ))}
+                        </Table>
+                    </GridItem>
+                    <GridItem bg="white" p={4}>
+                        <Flex justify="space-between" align="center">
+                            <Box>
+                                <Heading size="sm">Aceites</Heading>
+                                <Text fontSize="xs" color="gray">
+                                    Adicione aceites às fichas cadastrais
+                                </Text>
+                            </Box>
+                            <IconButton
+                                icon={<Icon as={FiPlus} />}
+                                colorScheme="blue"
+                                variant="ghost"
+                                rounded="full"
+                                onClick={() => {
+                                    let arr = watch("checkbox");
+                                    if (arr && arr.length) {
+                                        arr.push("");
+                                    } else {
+                                        arr = [""];
+                                    }
+                                    reset({ ...watch(), checkbox: arr });
+                                }}
+                            />
+                        </Flex>
+                        <Flex mt={4} gap={4} flexDir="column">
+                            {watch("checkbox")?.map((item, key) => (
+                                <Box pos="relative">
+                                    <FormTextarea
+                                        key={key}
+                                        size="sm"
+                                        label={`Aceite nº ${key + 1}`}
+                                        {...register(`checkbox.${key}`)}
+                                    />
+                                    <IconButton
+                                        icon={<Icon as={FiTrash} />}
+                                        pos="absolute"
+                                        top={0}
+                                        right={0}
+                                        size="xs"
+                                        colorScheme="red"
+                                        variant="ghost"
+                                        onClick={() => {
+                                            let arr = watch("checkbox");
+                                            arr.splice(key, 1);
+                                            reset({
+                                                ...watch(),
+                                                checkbox: arr,
+                                            });
+                                        }}
+                                    />
+                                </Box>
                             ))}
-                    </Table>
+                        </Flex>
+                    </GridItem>
                 </GridItem>
             </Grid>
             <Flex justify="space-between">

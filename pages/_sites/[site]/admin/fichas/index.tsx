@@ -89,6 +89,7 @@ const FichasCadastrais = () => {
 
                                         <Th w={44}>Responsável</Th>
                                         <Th w={24}>Criado em</Th>
+                                        <Th w={24}>Última atualização</Th>
                                         <Th w={44}>Status</Th>
                                         <Th w={24}></Th>
                                     </Tr>
@@ -147,6 +148,20 @@ const FichasCadastrais = () => {
                                                                                   .length
                                                                             : 100
                                                                     }
+                                                                    colorScheme={
+                                                                        item.preenchimento.filter(
+                                                                            (
+                                                                                i
+                                                                            ) =>
+                                                                                i.valor
+                                                                        )
+                                                                            .length ==
+                                                                        item
+                                                                            .preenchimento
+                                                                            .length
+                                                                            ? "green"
+                                                                            : "yellow"
+                                                                    }
                                                                 />
                                                             </Box>
                                                         </Tooltip>
@@ -177,7 +192,7 @@ const FichasCadastrais = () => {
                                                                         0
                                                                     ) == 100
                                                                         ? "white"
-                                                                        : "gray"
+                                                                        : ""
                                                                 }
                                                             >
                                                                 {Number(
@@ -201,7 +216,14 @@ const FichasCadastrais = () => {
                                                 </Td>
                                                 <Td>
                                                     {formatoData(
-                                                        item.createdAt
+                                                        item.createdAt,
+                                                        "DATA_HORA"
+                                                    )}
+                                                </Td>
+                                                <Td>
+                                                    {formatoData(
+                                                        item.updatedAt,
+                                                        "DATA_HORA"
                                                     )}
                                                 </Td>
                                                 <Td>
@@ -246,21 +268,20 @@ const FichasCadastrais = () => {
                                                         />
                                                     </Tooltip>
                                                     <Tooltip label="Editar Ficha">
-                                                        <Link
-                                                            href={`/admin/fichas/${item.id}`}
-                                                        >
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiEdit
-                                                                        }
-                                                                    />
-                                                                }
-                                                            />
-                                                        </Link>
+                                                        <IconButton
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            icon={
+                                                                <Icon
+                                                                    as={FiEdit}
+                                                                />
+                                                            }
+                                                            onClick={() =>
+                                                                modal.current.onOpen(
+                                                                    item.id
+                                                                )
+                                                            }
+                                                        />
                                                     </Tooltip>
                                                 </Td>
                                             </Tr>

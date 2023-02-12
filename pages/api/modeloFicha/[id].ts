@@ -26,7 +26,8 @@ handler.get(async (req, res) => {
 });
 handler.post(async (req, res) => {
     try {
-        const { tipo, nome, descricao, campos } = req.body;
+        const { tipo, nome, descricao, campos, instrucoes, checkbox } =
+            req.body;
 
         const data = await prisma.modeloFichaCadastral.update({
             where: {
@@ -37,6 +38,8 @@ handler.post(async (req, res) => {
                 nome,
                 descricao,
                 campos,
+                instrucoes,
+                checkbox,
             },
         });
         res.send(data);

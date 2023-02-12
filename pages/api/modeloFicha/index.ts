@@ -48,7 +48,7 @@ handle.get(async (req, res) => {
 });
 handle.post(async (req, res) => {
     try {
-        const { tipo, nome, descricao, campos } = req.body;
+        const { tipo, nome, descricao, campos, instrucoes } = req.body;
 
         const data = await prisma.modeloFichaCadastral.create({
             data: {
@@ -56,6 +56,7 @@ handle.post(async (req, res) => {
                 nome,
                 descricao,
                 campos,
+                instrucoes,
                 imobiliaria: {
                     connect: {
                         id: req.user.imobiliariaId,

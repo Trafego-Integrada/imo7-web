@@ -1,6 +1,7 @@
 import { FormTextarea } from "@/components/Form/FormTextarea";
 import { aprovaCampo, reprovarCampo } from "@/services/models/fichaCadastral";
 import {
+    Box,
     Button,
     Flex,
     Icon,
@@ -63,57 +64,52 @@ export const AnaliseCampo = ({ fichaId, campoCodigo, buscarFicha }) => {
                     }}
                 />
             </Tooltip>
-            <Popover
-                initialFocusRef={initialFocusRef}
-                isOpen={isOpen}
-                onClose={onClose}
-            >
+
+            <Popover>
                 <PopoverTrigger>
-                    <Tooltip label="Reprovar">
-                        <IconButton
-                            size="xs"
-                            variant="ghost"
-                            colorScheme="red"
-                            icon={<Icon as={IoClose} />}
-                            onClick={() => onOpen()}
-                        />
-                    </Tooltip>
+                    <IconButton
+                        size="xs"
+                        variant="ghost"
+                        colorScheme="red"
+                        icon={
+                            <Tooltip label="Reprovar">
+                                <Icon as={IoClose} />
+                            </Tooltip>
+                        }
+                        onClick={() => onOpen()}
+                    />
                 </PopoverTrigger>
-                <Portal>
-                    <PopoverContent zIndex={999999999}>
-                        <ReactFocusLock returnFocus persistentFocus={false}>
-                            <PopoverArrow />
-                            <PopoverHeader>
-                                Informe o motivo da reprovação
-                            </PopoverHeader>
-                            <PopoverCloseButton />
-                            <PopoverBody>
-                                <FormTextarea
-                                    value={motivo}
-                                    onChange={(e) => setMotivo(e.target.value)}
-                                    placeholder="Descreva o motivo..."
-                                />
-                            </PopoverBody>
-                            <PopoverFooter>
-                                <Flex justifyContent="flex-end">
-                                    <Button
-                                        colorScheme="red"
-                                        size="sm"
-                                        onClick={() => {
-                                            reprovar.mutate({
-                                                fichaId,
-                                                campoCodigo,
-                                                motivoReprovacao: motivo,
-                                            });
-                                        }}
-                                    >
-                                        Reprovar
-                                    </Button>
-                                </Flex>
-                            </PopoverFooter>
-                        </ReactFocusLock>
-                    </PopoverContent>
-                </Portal>
+                <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader>
+                        Informe o motivo da reprovação
+                    </PopoverHeader>
+                    <PopoverBody>
+                        <FormTextarea
+                            value={motivo}
+                            onChange={(e) => setMotivo(e.target.value)}
+                            placeholder="Descreva o motivo..."
+                        />
+                    </PopoverBody>
+                    <PopoverFooter>
+                        <Flex justifyContent="flex-end">
+                            <Button
+                                colorScheme="red"
+                                size="sm"
+                                onClick={() => {
+                                    reprovar.mutate({
+                                        fichaId,
+                                        campoCodigo,
+                                        motivoReprovacao: motivo,
+                                    });
+                                }}
+                            >
+                                Reprovar
+                            </Button>
+                        </Flex>
+                    </PopoverFooter>
+                </PopoverContent>
             </Popover>
         </>
     );
