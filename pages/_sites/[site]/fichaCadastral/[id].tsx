@@ -102,6 +102,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             });
         }
     };
+    console.log(errors);
     return (
         <Box
             bg="gray.100"
@@ -347,12 +348,19 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                     campo.codigo,
                                                                 {
                                                                     required: {
-                                                                        value: modelo
-                                                                            .campos[
-                                                                            campo
-                                                                                .codigo
-                                                                        ]
-                                                                            ?.obrigatorio,
+                                                                        value:
+                                                                            modelo
+                                                                                .campos[
+                                                                                campo
+                                                                                    .codigo
+                                                                            ]
+                                                                                ?.obrigatorio &&
+                                                                            !watch(
+                                                                                "preenchimento." +
+                                                                                    campo.codigo
+                                                                            )
+                                                                                ? true
+                                                                                : false,
                                                                         message:
                                                                             "Campo obrigatório",
                                                                     },
@@ -375,13 +383,12 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                     : ""
                                                             }
                                                             error={
-                                                                errors.preenchimento &&
-                                                                errors
-                                                                    .preenchimento[
+                                                                errors.arquivos &&
+                                                                errors.arquivos[
                                                                     campo.codigo
                                                                 ]?.message
                                                                     ? errors
-                                                                          .preenchimento[
+                                                                          .arquivos[
                                                                           campo
                                                                               .codigo
                                                                       ]?.message
