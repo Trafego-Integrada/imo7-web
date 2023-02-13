@@ -12,7 +12,6 @@ import { statSync } from "fs";
 import slug from "slug";
 
 handler.use(cors);
-handler.use(checkAuth);
 handler.use(multiparty);
 handler.post(async (req, res) => {
     try {
