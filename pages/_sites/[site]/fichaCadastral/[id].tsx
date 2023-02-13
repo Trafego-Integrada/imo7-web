@@ -218,11 +218,16 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 onChange: (
                                                                     e
                                                                 ) => {
-                                                                    buscarEnderecoPorCep(
-                                                                        e.target
-                                                                            .value,
-                                                                        campo.camposEndereco
-                                                                    );
+                                                                    if (
+                                                                        campo.cep
+                                                                    ) {
+                                                                        buscarEnderecoPorCep(
+                                                                            e
+                                                                                .target
+                                                                                .value,
+                                                                            campo.camposEndereco
+                                                                        );
+                                                                    }
                                                                 },
                                                             }
                                                         )}
