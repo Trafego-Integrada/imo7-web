@@ -34,7 +34,7 @@ export const Cobrancas = ({ data }) => {
                             <Td>{formatoValor(item.valor_doc2)}</Td>
                             <Td>
                                 <Link
-                                    href={`/boleto/${item.id}`}
+                                    href={`https://www.imo7.com.br/api/boleto/${item.id}/pdf`}
                                     target="_blank"
                                     passHref
                                 >
