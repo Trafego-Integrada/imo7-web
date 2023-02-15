@@ -1279,10 +1279,10 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
-"@types/jsonwebtoken@^8.5.0":
-  version "8.5.4"
-  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.5.4.tgz#50ccaf0aa6f5d7b9956e70fe323b76e582991913"
-  integrity sha512-4L8msWK31oXwdtC81RmRBAULd0ShnAHjBuKT9MRQpjP0piNrZdXyTRcKY9/UIfhGeKIT4PvF5amOOUbbT/9Wpg==
+"@types/jsonwebtoken@9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.0.tgz#4db9bfaf276ef4fdc3608194fab8b8f2fd1c44f9"
+  integrity sha512-mM4TkDpA9oixqg1Fv2vVpOFyIVLJjm5x4k0V+K/rEsizfjD7Tk7LKk3GTtbB7KCfP0FEHQtsZqFxYA0+sijNVg==
   dependencies:
     "@types/node" "*"
 
@@ -1293,7 +1293,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/jssha@^2.0.0":
+"@types/jssha@2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/jssha/-/jssha-2.0.0.tgz#15027ef6480c4d2c8c42762e227b23b34276e68f"
   integrity sha512-oBnY3csYnXfqZXDRBJwP1nDDJCW/+VMJ88UHT4DCy0deSXpJIQvMCwYlnmdW4M+u7PiSfQc44LmiFcUbJ8hLEw==
@@ -1391,10 +1391,10 @@
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.1.tgz#18845205e86ff0038517aab7a18a62a6b9f71275"
   integrity sha512-EaCxbanVeyxDRTQBkdLb3Bvl/HK7PBK6UJjsSixB0iHKoWxE5uu2Q/DgtpOhPIojN0Zl1whvOd7PoHs2P0s5eA==
 
-"@types/sshpk@^1.10.3":
-  version "1.10.6"
-  resolved "https://registry.yarnpkg.com/@types/sshpk/-/sshpk-1.10.6.tgz#e50ba6cf7134a1b97c78fd67454d4c0d75b9e3df"
-  integrity sha512-yYkTj+/AYlxtNp7mSGJrRsUwJECSCUYbi5K8Fx0xVgGQljbEWDSvNap3I2e+Xs4wzLWf6wcNP1Rm2egNDt3onw==
+"@types/sshpk@1.10.3":
+  version "1.10.3"
+  resolved "https://registry.yarnpkg.com/@types/sshpk/-/sshpk-1.10.3.tgz#265b2d13f95225e20abffa17719fca9756c8e56a"
+  integrity sha512-cru1waDhHZnZuB18E6Dgf2UXf8U93mdOEDcKYe5jTri+fpucidSs7DLmGICpLxN+95aYkwtgeyny9fBFzQVdmA==
   dependencies:
     "@types/node" "*"
 
@@ -3651,7 +3651,17 @@ jsonfile@^2.1.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonwebtoken@8.5.1, jsonwebtoken@^8.5.1:
+jsonwebtoken@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-9.0.0.tgz#d0faf9ba1cc3a56255fe49c0961a67e520c1926d"
+  integrity sha512-tuGfYXxkQGDPnLJ7SibiQgVgeDgfbPq2k2ICcbgqW8WxWLBAxKQM/ZCu/IT8SOSwmaYl4dpTFCW5xZv7YbbWUw==
+  dependencies:
+    jws "^3.2.2"
+    lodash "^4.17.21"
+    ms "^2.1.1"
+    semver "^7.3.8"
+
+jsonwebtoken@^8.5.1:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
   integrity sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==
@@ -4267,734 +4277,1139 @@ oblivious-set@1.0.0:
   resolved "https://registry.yarnpkg.com/oblivious-set/-/oblivious-set-1.0.0.tgz#c8316f2c2fb6ff7b11b6158db3234c49f733c566"
   integrity sha512-z+pI07qxo4c2CulUHCDf9lcqDlMSo72N/4rLUpRXf6fu+q8vjt8y0xS+Tlf8NTJDdTXHbdeO1n3MlbctwEoXZw==
 
-oci-aianomalydetection@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-aianomalydetection/-/oci-aianomalydetection-1.23.0.tgz#c4283531eec12a9de635117bc4d753386991225d"
-  integrity sha512-V+ftJNP8jSG/hDyDKbQdenZZY/1vWU8KZaXcUsQENuiwCgTJK9MJ4EPXx9B+eeYNh2di4oGbXhSacB65zryNGQ==
+oci-adm@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-adm/-/oci-adm-2.52.0.tgz#b2f72fc1a66b8bf7976d0cbaab3d03ce9803f723"
+  integrity sha512-18DPuCvEtlEIqID+dmbbmWTPHkJDnd8rgDD2/Mk0k4ddCFGwAUeVfXU9lactyn72or89peCG/gttxAXVfxW96Q==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-ailanguage@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-ailanguage/-/oci-ailanguage-1.23.0.tgz#aaf4a3c216e543bace2bcb522aa17808ec796523"
-  integrity sha512-XMBKxBFSKtXsrTJQK1vZzDc19KSmO3BhW41d7KR6aIWKYs3z/jEot5iPpP8P5l3DgXYTCRPFm3UTHGRjpn3+6Q==
+oci-aianomalydetection@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-aianomalydetection/-/oci-aianomalydetection-2.52.0.tgz#312faf925d93fb824bdb6c57e5c5e480f5366c6d"
+  integrity sha512-C7jZdLASF3AwkUK+619cbdMZNNExFixVk6ZpQ9/PE7wBUsQTHv/mruqHUjaT/FVEiv31aI73wFAPQCm5gCsiaA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-analytics@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-analytics/-/oci-analytics-1.23.0.tgz#931e66c28f44cc9c81f5252090ff3a1de70a4036"
-  integrity sha512-GWzLt3/nEKzdKBnzHD8NunYthkj+UO7oD0u1IGbxEpNP1znZuF+/+BxJMwOmlVtDPaNKe2EMe2rI2EVFJzoZWg==
+oci-aidocument@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-aidocument/-/oci-aidocument-2.52.0.tgz#39a7fcab7aaa08ed1ec56f77db50105f09ec29fc"
+  integrity sha512-E+DvaViN+iJxDT+Z/04teeRmiIPBzkHpdbQP7FbG2/Z1ychXeydUovmcfD+I8DNFICU62L4gDGRDCaA0WD7tuA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-announcementsservice@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-announcementsservice/-/oci-announcementsservice-1.23.0.tgz#d93ab4626b3ee09155a8ac6bae160be9816715e5"
-  integrity sha512-+U4f5di7YrtdceGzL4b4lzjUUG3cR3VPodDEaNS7BNvN9YR7YHiKUq8FWWba2od4slvzZ1J7xONQJcraxqcBzQ==
+oci-ailanguage@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-ailanguage/-/oci-ailanguage-2.52.0.tgz#72a4ac8888ed9af607b8404bf9e6464c925f5ffb"
+  integrity sha512-ZilUVbF+5vmxShwimvgk2nWiEC+pqOWRXMLruZbFzf0R4uWEBisMGQJub2x47fv6NSx+HcRepIaCcgdPSFf6qQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-apigateway@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-apigateway/-/oci-apigateway-1.23.0.tgz#f82873d4850cc46e3c23f89de74812e260c00835"
-  integrity sha512-g26EMjk+t65Sbbe37niVns8RZcZ0zC2hPWAYk5FJUY0kpgthgb6vzw+uD5vNhXbGB56E+ucHCM9XafiVLdb+RQ==
+oci-aispeech@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-aispeech/-/oci-aispeech-2.52.0.tgz#d4854c800d8da9d1d46f1212556d76ebe2ae4780"
+  integrity sha512-+QRbZcqn1bGaYxHqRCaM6oQ7SUXOvn1n7kX7mzlHVvKqNIGFfSInCXPry7BaBvA2rPPzJ5c4dD0v8CJOG4tIhg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-apmcontrolplane@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-apmcontrolplane/-/oci-apmcontrolplane-1.23.0.tgz#e2748633455b4f5c5bf0de09c0f2d81cae2bfe34"
-  integrity sha512-MDKWAaKcZdfDfVopD7eRP8Uq5Mb1biCdS9kdITPAz7Jkv7Lgg7wRppf/O3IzFZn2EqurIARRW8pjPvmKw3PjpQ==
+oci-aivision@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-aivision/-/oci-aivision-2.52.0.tgz#12ecfd8eedb3a96cf5cd82422dda08632a1be0c8"
+  integrity sha512-ohPzSfzFw90wnOwVF0HH26mwJGkUQ7oxmxvHge0fzpNFI/uiAtx2TnIu22vc4I3Va1d5avCSG4d94Eapq4MnZw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-apmsynthetics@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-apmsynthetics/-/oci-apmsynthetics-1.23.0.tgz#fa782b7f43a7ed2bb62ac702a10728d1b5fca968"
-  integrity sha512-3dWvCYU5ku1K56DfTVUNX+JBKyjxdKkXm8zYm1xObiJqb2K9hg2BcTgszFD3s/obdzDtz31Cl48copxeQxTuAA==
+oci-analytics@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-analytics/-/oci-analytics-2.52.0.tgz#059b30de31e41c43a304158b7a15f737c576c6a6"
+  integrity sha512-TQVdvPs8SJvWHYlDp0DBIsFzMEfkAMpUCGUlG7rwyfdjexYDgGCg0tsy5Fvk+VQCdU+JK5vK2R6cCpmcI5G8hQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-apmtraces@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-apmtraces/-/oci-apmtraces-1.23.0.tgz#5f04c08f1f0c2f288c6e0f3f84f887e750f64704"
-  integrity sha512-/fBZVJa3FrO0/GOb5+YZA0P57gdwT9a8WSizzdkGNELJ87HWj/7Z/jRCcp6QwGoDHCvdfBvX51nIwkuyP+Uo2Q==
+oci-announcementsservice@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-announcementsservice/-/oci-announcementsservice-2.52.0.tgz#54a4ee3575717b3ccb37c3b2c0e46926cf90c2df"
+  integrity sha512-1vYWZzfhnSlRYjATe8mY4IKhIPaPkSErb5yTrGU2zn37ess+vOSnzbxcNDFaXaPvVERQs2M8bhNYTFSIQMi1Cw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-applicationmigration@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-applicationmigration/-/oci-applicationmigration-1.23.0.tgz#73e10e4c7e85ba279102580207a7d25f5097334a"
-  integrity sha512-jUpWoeFmgSbvC+O0YQ0M8/0qigHRJCSH9jqvLtG99zHJauNlTtiKvYM9ysSS6d1d7yk5F/wAWnF9NFFuj8xUvw==
+oci-apigateway@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-apigateway/-/oci-apigateway-2.52.0.tgz#17563d5ca048565968620e32e2d1f9a5daea1725"
+  integrity sha512-tDUHHsC1UnWTqEosXxb4hEKz4VBAX7x/GRqJHptROvXCVyrTDFRFC83sXYm11kpLXhcy4HyL+bclJprYwMIj0Q==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-artifacts@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-artifacts/-/oci-artifacts-1.23.0.tgz#3998e380de61a962ca9679b014b5e43ac6929c69"
-  integrity sha512-u/1gIQIVe02ffVN5Lt+VW81BCz0yhdYDxgjBhtmHHHYvJG3UsYO673MyC9x/Xv//3jRX+UPPU+5qGJ0/Ang46w==
+oci-apmconfig@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-apmconfig/-/oci-apmconfig-2.52.0.tgz#d41b3f1bbf923f1a74c3ad7096f732c822973928"
+  integrity sha512-oiko9UI6CMrdFwRsXXSWJKsriL2caQaX7twPhpxEJH6eH7nzoVAGqacnZlkDkB6rnn6x7RH8tWISmiRXTMAdZA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-audit@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-audit/-/oci-audit-1.23.0.tgz#84eb64bc0e30802892140a1347dce8167373044c"
-  integrity sha512-5DHkIxK2RaRVOY5bpKoOeFWY++qbUAfC8ruX2U1k139PAd4wuezEZLuUuzcjs7gHoN4QZipC5d6RtqP8DsLRvA==
+oci-apmcontrolplane@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-apmcontrolplane/-/oci-apmcontrolplane-2.52.0.tgz#a80822d43611146baf5297effe6203c06b852921"
+  integrity sha512-2xfvMGAZsW7qq3pnQeC3tpcrfCH7XVJwY8iG1S8m42b7PE5LAO3W9APyr4XFIks5C4WxvFRIOelp8ONgybrGaQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-autoscaling@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-autoscaling/-/oci-autoscaling-1.23.0.tgz#34e2e0c1f4b82dc377aa5d13f2e0b1f7d64f28fa"
-  integrity sha512-9uHR7OzqSBZ+eHyCTp9h0F5iB5ooxxS6des0EvMWj4L2WB0jr/blUhc1NSGCpBsdlXcKFsj3PP1JB/modl85Xg==
+oci-apmsynthetics@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-apmsynthetics/-/oci-apmsynthetics-2.52.0.tgz#271999d83eb9ebb644a3cffe12bdc0aec7f59b4b"
+  integrity sha512-xl0qTb0uNOtXS1WNJ74UPOuYyE64d8zOOWo/OoDkCPWTF1CXVwglYn9D21N+RGBZTlFpyVxw4EiWlyEf2h+WEA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-bastion@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-bastion/-/oci-bastion-1.23.0.tgz#7bb67a1ea8569b070d7009ec4670fed080ea32c9"
-  integrity sha512-dViDrT9q/vVJCNfY+0tjZx+aMLto1EBpwP1kE+GwO5JKI64spiWlQvnRTqaClgTWn26Rg0pLYmKPPrR1Rw2Btg==
+oci-apmtraces@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-apmtraces/-/oci-apmtraces-2.52.0.tgz#93bbf023299a92ad7663c00d0fd2ae38942f51dd"
+  integrity sha512-tAEdnlEhfTnpvrBc/C5bTPrb2Rjiq08K7jQkn5i5rwA8FSkEuJPJvKkNrGfdovvZskQvbKTh33nqDD3PHCY6pQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-bds@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-bds/-/oci-bds-1.23.0.tgz#aa99e6ce8a1e94dc001b49a2225d91065808e419"
-  integrity sha512-J7KAMZUkGIxVz5vskBPHYKTkZLuRF5mAt6uFHmsdjWJx42VbbxMbITuhmvggeXxN7G5vivQL6ZMjRdjjreZU2Q==
+oci-applicationmigration@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-applicationmigration/-/oci-applicationmigration-2.52.0.tgz#be7484c4facd9dec86f003980fa156f9c69246f9"
+  integrity sha512-A+mlYXxvEHJYD1nhGTSTDL9OhZMnr5i4OeAK0DCGAdUTfLnJHvdpS4XWFoOPrrrfPte/opMwRB4SfYVEw9sBiQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-blockchain@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-blockchain/-/oci-blockchain-1.23.0.tgz#732cb4348c32916e03284e3c3a7fd469d2875f4e"
-  integrity sha512-lK+7cya3Tctar9tlCSZ/Q2lxcheuxChaOF+YNlTEP7y1rbCK4KddePyHGeY0bb3WSL/k8B5Dul1aYKXMWH6amA==
+oci-appmgmtcontrol@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-appmgmtcontrol/-/oci-appmgmtcontrol-2.52.0.tgz#e0bceb1ccf383e3d64fe2ef808dcb1a0aad0b92c"
+  integrity sha512-DpjgLfdmuXziHCx3/cr4pd4I+CNgd7DfUw7Gv92Z1Nw2BEyoazN42CdvQD+5cfOaKey17petJd5DXK30OfEHpw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-budget@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-budget/-/oci-budget-1.23.0.tgz#ab894e6e3c998f992e18a2921ab738b736802951"
-  integrity sha512-AHsb8H9GTzwzWhdsFxF/GOizYRhiaRRpvrmEWRAfW/TFiwoWFBXIOrTFpsAcd0/tUEGRnt7kY4kUZXxD/O3oUA==
+oci-artifacts@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-artifacts/-/oci-artifacts-2.52.0.tgz#6053fb2f276e92a402aa96695708d280159fc612"
+  integrity sha512-1/deJQzd7O2dcg4JL7lS1QIxHvNimy66e2cR9FBIMercrKpRNnSpmxr90sk6liH9DoMaOcvlFqIEqPs58XwbcA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-cims@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-cims/-/oci-cims-1.23.0.tgz#f874ee55af74c1303c9bc358a4b71b243dd34c31"
-  integrity sha512-229RNHyFhOT1hvc0tRmMZkTkne/i2Kf4AxeRjXg6b0OJp8to4k1MGY2acNagjvWsf6x/kO71V52kjZy/dNEDWA==
+oci-audit@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-audit/-/oci-audit-2.52.0.tgz#37592a1a0b3d4ff3c27da6fca4a4e0ee07c39739"
+  integrity sha512-dzr7zJ5+XyGSqX+fDwvcWt9rmlM27ryeQiiqkTlbaKEmIOoHRj+CCqmTmyzYASwyIvlkuvILLlpW5fAS9KgMGQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-cloudguard@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-cloudguard/-/oci-cloudguard-1.23.0.tgz#c303766bb0fcbeb0b4932f25c462a0928c009b89"
-  integrity sha512-1k0weAWrQLmvE0w4geye13UEe8/K1EXxFrY8xM12FgieqIVxSfKQfmpBoBATsE43n9ejIlKsfEkLlG0H2w0mLA==
+oci-autoscaling@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-autoscaling/-/oci-autoscaling-2.52.0.tgz#39f29a657d822272c5a422d59ad4b59d90e1653e"
+  integrity sha512-qEFbPzAXArsHCG1mnm84eFGVaUVoyOtqFsM9xuuSiLYDJT7+cE/DpTgwrEEFp0ccVbVvTWL7G/TC5DHXTx5M3g==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-common@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-common/-/oci-common-1.23.0.tgz#7e50df7a476c2a60e887dfa5651e799448f36177"
-  integrity sha512-yGCUBTdzumvR4nVsFQnyv3rslCNPNH9T5HhyPl3ujZ99wrmDcgNRW4OCrUO1H/1xCVRCAJhAKr5epK7JASIw0Q==
+oci-bastion@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-bastion/-/oci-bastion-2.52.0.tgz#dc101200a8677ac9f5dc25ea74e0c074ba488626"
+  integrity sha512-Cz5aYFkhn+HAdhZfcGKGUEUi75KF6GGM+fNlckt5fbbxl8dItF4PVMikZCzGtuRkSEEFeGCvxI7xTE8aX/sxKg==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-bds@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-bds/-/oci-bds-2.52.0.tgz#61322d2a7cdf866a0e2d6f44944af6568946d0cb"
+  integrity sha512-4yCv8AN9X21mvhMp5kSuZ58jLD4ZBABnab/E/Rmos8dsCpYyGue6t00aJb/Q23YYrlHC0aR7l4ovdYrMhtiiVA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-blockchain@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-blockchain/-/oci-blockchain-2.52.0.tgz#42b2404dc12ab1d1a79a085388706fb5a54672d9"
+  integrity sha512-CTIp70eBBx6XfYjsZkhxNX78F4vCqB1drRQHQQ2vWB/0kgeUDl+FJakNkVnmQtaRYuvK58Am7UPwTwaTMHyTmA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-budget@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-budget/-/oci-budget-2.52.0.tgz#574a05bf7ed7f2815026c6aed5f4cd3cb3543c8e"
+  integrity sha512-n1p6kI4oSBTKzE8Xy4GqdbUmTCasBbGU5UH3AfeNLVLKnZ89CzhW6yeZtiuV0LVCuMfkKh6urhJx4Q8CiMWfZw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-certificates@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-certificates/-/oci-certificates-2.52.0.tgz#7132eff8bd9c461d91e5d5a20fd9601c07bcd19e"
+  integrity sha512-ixKW//DqH6L9hWm7hN0wUTY582tu+rFenVRVt00phqYv95Fq8TgPvX01p0HKIbxgYcEKklnuqPMn4i8syfE3xA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-certificatesmanagement@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-certificatesmanagement/-/oci-certificatesmanagement-2.52.0.tgz#46cdb77b7ca9fd2f925aa85c2d7c2f668065effb"
+  integrity sha512-1XPPOsX8uF5P/kWXQJinzetorthG8kUATaD7ir7u216CAaS0Rse7K+BQ+KpH/yTGi6mVgpfZ6rW5OxGQsAutUg==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-cims@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-cims/-/oci-cims-2.52.0.tgz#77db58de051014c421c5bb6b76ac37352918cc85"
+  integrity sha512-mZpfzrJkxMmgd7sYh+FR0NwI/Izibc0Q+8OY5bWQM+GKrHFVIw9ULDBktyNdG1tLcXeqEhIDu2J1WOWSVKNfbA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-cloudbridge@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-cloudbridge/-/oci-cloudbridge-2.52.0.tgz#f030c9dada9e14ef3a00e30d598258888f95f204"
+  integrity sha512-bZLYHgHSDChlQ9ngKY6tWxcP5yQ5jIloAK7UeKgvB4ewYdsLle9kz7VmGsvZhCethvmBS8t2O8Wy/ZG9JZffOg==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-cloudguard@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-cloudguard/-/oci-cloudguard-2.52.0.tgz#22345874cbf9735f541f4f16cbe1454899b18a84"
+  integrity sha512-p6UTinsAh+c+Ve1S2Xs9I0U1mhD2XsWpEw0o5ROolUEUm5Ud3xtMHPatH5zOmYDcwkJ257v4gOmnd5hjjL7LGw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-cloudmigrations@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-cloudmigrations/-/oci-cloudmigrations-2.52.0.tgz#94f8a8a3b4102f0adc1054e109f52e4c9966c0b5"
+  integrity sha512-1Efinue6baccrfnk5/MCL+8kfTOsdi0JKg3buKkJ7qilqxMHn3GkNTCWYeO3pse1rFI0kzKIGN9mW0skuOsp3w==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-common@2.52.0, oci-common@^2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-common/-/oci-common-2.52.0.tgz#8e5f74b6a704b3fcf2fadbcf819f23fca9488032"
+  integrity sha512-86qBgAIBj3pZS40qqmJUDQsdnimOT9MmEjYN8Cqk8uanqQ9j/HxbMuEZR7Fj7Sfx4cYbn0mqr7rbG7fE1VWHRA==
   dependencies:
     "@types/isomorphic-fetch" "0.0.35"
-    "@types/jsonwebtoken" "^8.5.0"
-    "@types/jssha" "^2.0.0"
+    "@types/jsonwebtoken" "9.0.0"
+    "@types/jssha" "2.0.0"
     "@types/opossum" "4.1.1"
-    "@types/sshpk" "^1.10.3"
+    "@types/sshpk" "1.10.3"
     es6-promise "4.2.6"
     http-signature "1.3.1"
     isomorphic-fetch "3.0.0"
-    jsonwebtoken "8.5.1"
+    jsonwebtoken "9.0.0"
     jssha "2.4.1"
     opossum "5.0.1"
     sshpk "1.16.1"
     uuid "3.3.3"
 
-oci-computeinstanceagent@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-computeinstanceagent/-/oci-computeinstanceagent-1.23.0.tgz#58bab1ecc73398a9d42b55628efb8d32086bcf43"
-  integrity sha512-A4e8rCICXuHcITZJ51tcnIrB0glkRi8csHec6sijmYJGPSIvUUfuq2u6suVfazIbKsXxJ/OziRKgC5TECPQM9A==
+oci-computeinstanceagent@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-computeinstanceagent/-/oci-computeinstanceagent-2.52.0.tgz#de103458b759613ffb97eac80e388268696472cd"
+  integrity sha512-NHNdvKrpbqPQRoq4mXju0yapz0LLb0f0rDtmUdCpVO59pLkJnHrtiqgbBnWtkbDXQu8GVWk019iKcr87Q0ovKA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-containerengine@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-containerengine/-/oci-containerengine-1.23.0.tgz#77bcd28cb021616cd4187dc0fee7aa8e97e58647"
-  integrity sha512-kM4TDKidsp+T0FE8388oAiouEAq4kHxZZ2b1R9kT0N/Mo8rycd4b0dssCjuhIuHp8nLBvnz6Idevymu5noRE7Q==
+oci-containerengine@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-containerengine/-/oci-containerengine-2.52.0.tgz#6ea63b4046c8592afa6b2f1ed1300af4755bed0b"
+  integrity sha512-Ijpc8CWAQpgmZwMjQr9UujMcAvkrxpWXGHxMN3aMVRdN33mJ37IQXASfczfi2MMQvApXJLgIIJi2JnbdYLH5gQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-core@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-core/-/oci-core-1.23.0.tgz#dc34a4eb77ab3faa9cc08b3fd030079a4b420752"
-  integrity sha512-MDEdZvufheJoOPR1VhqZNnFPQFEsMF3adtBN9EUDgdkIFsC9hI9jsQBcP86lwKL5NOQKuTglMpfQwqJRoISCxw==
+oci-containerinstances@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-containerinstances/-/oci-containerinstances-2.52.0.tgz#e5afdd16e1533b0fb638120621305d5aed610ff6"
+  integrity sha512-TmjmC2exq3dqw3h10i7doeFFa0tjAmwWYvhtnhf7KnB0uEEHcDH2lkWcpGc5EI1x41ZCuWxluSOVi6YftPWgZQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-database@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-database/-/oci-database-1.23.0.tgz#b45fea3ca3c8940f85a6827aaab5c0a7c8fce9e6"
-  integrity sha512-O17LAN966+W6YIWCm1TkJw1l8cbQ9QikypOg1GumaIZuL7QcckC3nf7zzRLqIB5kSBd00WLXR7PpUAkWiDlocA==
+oci-core@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-core/-/oci-core-2.52.0.tgz#b4e3f7a3531ca816e2b1dabdfaf15388bed60f12"
+  integrity sha512-xFI9tvIh9oiCPq3YSp9noAqyG96vLNs9IVYSQd0M2imdQ0Haamcq9auZomHxcB2TKzeYc1EVBdOMP90QJ4SgGQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-databasemanagement@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-databasemanagement/-/oci-databasemanagement-1.23.0.tgz#02fc62908935f6cd65a95416c40723627bf1ba00"
-  integrity sha512-vo0zuMcp7mFxVix9pqwQJ2AyO5l8swZNhty7LpdBJAkaROws1ZOLbvwpou6fcZtXJhL4gUvRSrtYuehUMGWTmQ==
+oci-dashboardservice@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-dashboardservice/-/oci-dashboardservice-2.52.0.tgz#cbf2cb495eb7b6bb09ff75199764a731f4899ea6"
+  integrity sha512-k4Fs0xyBdP0anpLItV8xrQJVh+NB13+UdEYRlBB5R7UFe5l6ackfTn08YV+OXF6yTn/d5+CwZ71VkftG9sKpnA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-databasemigration@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-databasemigration/-/oci-databasemigration-1.23.0.tgz#54e82769ce187e0f51c8aaa0256ea7bd86835a4f"
-  integrity sha512-b+DAzrjM9a/NVfzpUzwp/h+yBdBiLnvpqRruy1lueKP0jkp78zKMTIbdt/6v0xoRk4FgHg3ZK4eeCVmkITpjNA==
+oci-database@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-database/-/oci-database-2.52.0.tgz#c5208cc0bb96cec5f927f5b89a1f03e32b02d9ce"
+  integrity sha512-91iw3gll78kjd8oZ4K/zlXzd4RAeeR9Uq4LuYds4gu1d/bYezg4fQ/YrHyIHxBiU5th3XUnkal+rUPzqUUTgzg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-datacatalog@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-datacatalog/-/oci-datacatalog-1.23.0.tgz#b5450596ced7693912c55ac73ed5895aeaad2976"
-  integrity sha512-UoUtsoq3ox7ED576m+cgUn7CW9xJgABx6XObyIQeRBExcCaa2KNQK/CIJZI6m8ZbTGLlefU24/yGX5WBw8z8PQ==
+oci-databasemanagement@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-databasemanagement/-/oci-databasemanagement-2.52.0.tgz#3d6c667776bc4a20acee6484ea0d756f414cbbff"
+  integrity sha512-3HAjoUP6P0BJHKTPH8uhYeu4DYiZYYNDrJ8/Ln/SZEcqizA/I7ioMVZ4aOsha2go//s2yQ0nuTKGqYVpVIfFXQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-dataflow@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-dataflow/-/oci-dataflow-1.23.0.tgz#c40127d2c36a862b1c39c25eefb93bdcd663c6c9"
-  integrity sha512-dF74q3Vz8qaI0EZzZvwJo5X9mSdjTwHuUG8ILzE7njLXQ8kasDhLAAUn2+eOW3eh+uMArrg2DRYHsafaNxgfPQ==
+oci-databasemigration@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-databasemigration/-/oci-databasemigration-2.52.0.tgz#efb9bf20fdece1fd7dcb98fd8e624dc8e40b87d9"
+  integrity sha512-YFZbjUunf8Voo3ij7QDzQ5F6n/sUcXIxCVLZO/JkEuXGFLPbeyEhP3TiwVXDm49BvKu+UYYUWhUwoSAqePo+Kg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-dataintegration@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-dataintegration/-/oci-dataintegration-1.23.0.tgz#f9728265ecc3e35216534c8a33a75bfa358706db"
-  integrity sha512-QCQk4IyruMa5RrLF2mNjKPFoHLYdovowkFMnN4CigABAXujc+BCWm+vT4EZE19SLbxocPollIHIq4Pt3RUy64g==
+oci-databasetools@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-databasetools/-/oci-databasetools-2.52.0.tgz#49a4094562befbe3804b19d501b3e7eb59afbdc6"
+  integrity sha512-4Bl2Rv6F3/uU7QH2T54WMh3BFupBgZbHZ5RXDw7FPTFfKW3pWVd+gSOLghEwGFLILlJDHz9iKppHeD8q/oU5YA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-datasafe@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-datasafe/-/oci-datasafe-1.23.0.tgz#f639490ae2f378573a712baa0ecda1c503d878e1"
-  integrity sha512-V78Iq1tszEBRzXF0+9IO9rhtyKMFeiREj+vrjcK1rIowNUCOesCmbmh0LRHf9qoD05LAHz/AZfbqj6lTGv3XvQ==
+oci-datacatalog@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-datacatalog/-/oci-datacatalog-2.52.0.tgz#0ea3ac1f61528c6c1add726bd704f6e48515f59f"
+  integrity sha512-TI7FbCYMGdhjX4g0eaSLbW9/P0FbUS6+FUvrnWuftE26t7Pf9gLtBr2tbIswyULTG5RIouqY9P/1AWPKCMQEfw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-datascience@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-datascience/-/oci-datascience-1.23.0.tgz#bebdb5f2cab261ae5f3c65d0c141aa3e5a488534"
-  integrity sha512-1RKf0XLlNuGypkQhrtpxZd+e7075QMIq2nbKGZ8+QVj/1vfIwrUe0FVXhCuixjfuYMhHSHQPYyCYAdSX55p5Mw==
+oci-dataconnectivity@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-dataconnectivity/-/oci-dataconnectivity-2.52.0.tgz#83b80d7327bc96d20990cd1a71bc60fdfda48c65"
+  integrity sha512-Ac4IrvUbSDEciLEFYuHtzyT+7FD3+rTP5x4Hltud4yrtghkTbTlsImI9+BVyXWz75FO+odVTHDfCq0GP3P9EyQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-devops@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-devops/-/oci-devops-1.23.0.tgz#3818197fac49ee636fd39f6cce18f136c7be6e14"
-  integrity sha512-On0UmciZ8sJrDTBBK4GmUPqlBCOg9I9E8s/WwL979+fF65fJPoggoHAPU6K96r7pkMItEAwTmv81hJewtwvQFQ==
+oci-dataflow@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-dataflow/-/oci-dataflow-2.52.0.tgz#2858124db75c8de939fa284aebd8af965374bd9e"
+  integrity sha512-OHRoBkq2vPfofy5wQ9HqUpb4UfgB38h9sr2IkRMYT8Hf08i65afrA2z3GB9SmV9xkF8GjGqyWfxx2E5W+/3Tkg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-dns@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-dns/-/oci-dns-1.23.0.tgz#e6bf576d56f5f05a7cc7aecf05a20b849c1a1991"
-  integrity sha512-BlrzrYflB2krXKo6r04GIgdBWkkf5txJoJauixxUr9E3w2oBjrTTOXzRn+qIWjFfGvagB9y5eFfKuvhU/cW30Q==
+oci-dataintegration@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-dataintegration/-/oci-dataintegration-2.52.0.tgz#2781d5c191d62e4047c06e3a524531f002522f0b"
+  integrity sha512-8hqAroA7o5wiFTEJFvaPh1UKJIFg4bWOPRA+WdO6MWsgoZp1d/RwFbUo8vN2xuxg3wPdClAwpmjBRNifue4l3Q==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-dts@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-dts/-/oci-dts-1.23.0.tgz#163cfa4f4203578d90109124dab50d513fd4dd2e"
-  integrity sha512-qZn6H115u2Tjz2/fZom8IL9FpFI8l+a9eCukLNLc/vSQHNzDHsBKzjCzkoV0c5I9o6Ne1KRN+b+22KZI550wkA==
+oci-datalabelingservice@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-datalabelingservice/-/oci-datalabelingservice-2.52.0.tgz#c5c38eeb7cf3fee8b9c150370520841d193ea2c5"
+  integrity sha512-G1btv89UOrHKclYsValoA/x8r6B2yuzsuWZohHaYZro2hLDDmddcQZ6d+PeSN587npBV+EtNF1t38HyLEIQNxA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-email@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-email/-/oci-email-1.23.0.tgz#6e6b284c7a6d397e56531523ab9950deda5a166c"
-  integrity sha512-TWzF9l59coTNRjtsdR8Wjju/wGXEzgHMLaRLCNSsgVPsZO2ny9QLqVEMCyvhy0eI3mUiXTbZ3H2mUcf3OGcJfw==
+oci-datalabelingservicedataplane@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-datalabelingservicedataplane/-/oci-datalabelingservicedataplane-2.52.0.tgz#fa7a807bff3aaef222070bc5121f8c1a84c3cb02"
+  integrity sha512-wxOdGkFzOeQVZP4NBrEBfFnL/KeMa21QWglyDpvy2Y7z6vi/EQT+2m+Re4NWtg/+ibGmrg+CcFipQrfx6yApYA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-events@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-events/-/oci-events-1.23.0.tgz#3e143ba3ac10a2ec7e0b99ccb83b5a379bff5b7d"
-  integrity sha512-VtjwrG1nZ9xCEotMxx0lKZt0jfJjxwKNqsp/VdOGLGatwBQvIEV+2vK0gCntydmysnpmqPmffc6jXUwdiXnisA==
+oci-datasafe@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-datasafe/-/oci-datasafe-2.52.0.tgz#2e23a127a27ebd22e51eca410783291c53f88684"
+  integrity sha512-+a0VqZVl9fUja+FT6GWKeN/P4XKXd3gUwnd//B7pgSdYAE8kr48nedXe4DJWySzWgELn1BhAtrjTQaHHTFrILQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-filestorage@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-filestorage/-/oci-filestorage-1.23.0.tgz#687ebb9ac312fc8d4f9fd5bafbbcdcef0680af5c"
-  integrity sha512-QeWCGIjniwxfs84fGbjsWlryBCaHA4P1borPafoxovU3Gkb2CwOxzoiOLIPaPouYJD+qmcm0RKRctUt+l0xSaw==
+oci-datascience@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-datascience/-/oci-datascience-2.52.0.tgz#206f64f475c276af6bdd96c4f6c026ee7739fee0"
+  integrity sha512-jIH2HokJDO7TC5d+fVSG9iB9D7R/fGdXO7yzxKEuxUCGy81WXQVjsHI8xI38m7Qa0HbXrymPoDtBBCvodv4Ddg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-functions@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-functions/-/oci-functions-1.23.0.tgz#fefec9fa81723a2dbe1366684133020015ffa04b"
-  integrity sha512-Jzh0xH7PKGRalKhHAEoM8DAAO5OVb1QF8YN9uf/p76zQTCIszADirijsExzMJfGpL9r4JqpVaMHgZQYmPkf4mA==
+oci-devops@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-devops/-/oci-devops-2.52.0.tgz#de47c7c16cbcc9c4a9bae70ca129096550e53f63"
+  integrity sha512-i/hFNfbrQO24J5z+i27qLnQi9MDrOOboGHHmljvs9NrB5Nu/jztK6KUmmGftCwV+GuvQ/HVhQZ+5zZFeFPwrVA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-genericartifactscontent@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-genericartifactscontent/-/oci-genericartifactscontent-1.23.0.tgz#353642f4d1e1805647c7a852aac14b29172e2a40"
-  integrity sha512-uweVJU85t1trPj4pGuyZV8Bw1tDPvuTlyJoLXX37kWFDanGRxBLaue1pAo+BQ/+3hEcORAwDxYnvV9IeE2eN3g==
+oci-disasterrecovery@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-disasterrecovery/-/oci-disasterrecovery-2.52.0.tgz#6aaedf2fdde496978482dca73efc36b366512852"
+  integrity sha512-l0iGgrg0Fz7Zc7dpJ5hZ1gEmikD2DdMgvKou6NBqT+k6QH4z668/XlSYvd8F5pevW/Lg3Csl3vtLyTNnqfKG+g==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-goldengate@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-goldengate/-/oci-goldengate-1.23.0.tgz#8b172eb4061b64a4afbff5b40537e2beadafe76b"
-  integrity sha512-tOc6zToWsLLg9oDcWEqqf21t/OH4fUn9/Wb7KKTRRSFSB1lZchsjGkBOos9I1n3Wehzu/TqpCBuCcPlB2YHlBA==
+oci-dns@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-dns/-/oci-dns-2.52.0.tgz#1b5ce3e21d0c24633566d3f64e0f6f1c7877cf01"
+  integrity sha512-A1d0FZsVB6fF/djhyEGXor84KEpAC5Cj/4XHGsdytt48biGLx8h83qa1GXJPEd+KBWDM8LrapDDF5Vk/SGMeFg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-healthchecks@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-healthchecks/-/oci-healthchecks-1.23.0.tgz#f249e2bc45b44295ccb4a32bfe1a65f393a4e695"
-  integrity sha512-F8f2Q1NsDhzBBMLrEAXy+7ngiqIWNs2WW7u9YB33yR11f9DZe3zOoC6S0dO/ILo1Gp+e4uYgTqSjg42vE3IIpA==
+oci-dts@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-dts/-/oci-dts-2.52.0.tgz#c7f48195dee415f037c528f0d3d7c49b160b9465"
+  integrity sha512-IlP33a27l2VW9Tv0ETJ/mmxggW9Cf66UTGT6ozjPxDpnopn6E3Q6fuQ4/S5aF2BOAoC6ePeE+FUlOpRIS3RMDA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-identity@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-identity/-/oci-identity-1.23.0.tgz#72bf8819e09b067d90a98d000f4fff3b2e8cbb62"
-  integrity sha512-rtE5ttbJMGddBXH+w+PveiFtaABSqZlb2rDpheFeH6J4ZvZkAcHnByPZWP3jnatN7DYpmhO0gE5JtAztQCcr4A==
+oci-email@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-email/-/oci-email-2.52.0.tgz#75c6a68f75c2efb80a330364d8e3f818ee7cb878"
+  integrity sha512-BnlGNowPflnJpV7SXo08zcQciy8QYaQI3/RHvWQOUzP1TIGLBF8la4P/qUrYqVSbuMr/Ds7D59vYRVZlRtBPHw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-integration@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-integration/-/oci-integration-1.23.0.tgz#330b947054bd00bca3c6b3f3181bc63e23dc62ac"
-  integrity sha512-N+IduQiphdeH6RuEMBOAf6Ni6gJi2T3NlczoT2A8wPGwv3GCRbm2NN8DGqf70ZH9kGAmsiz36vQ7Xl/H47LTgw==
+oci-emwarehouse@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-emwarehouse/-/oci-emwarehouse-2.52.0.tgz#5af60a1e3bf90e58a0a7c2a52049e93e791e1a00"
+  integrity sha512-TrcJpuEZYtA7goOOxyUhtULpeF5hcber09TWSJRBOZo4CVjnq/RCfFKNcS1uhXB0H6dSXPhLsKyqQcoF9xfwIQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-jms@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-jms/-/oci-jms-1.23.0.tgz#55c24390ae1ab8a1c829e4bb1945636a6c13f83b"
-  integrity sha512-p9rfMLsdppv3U2ONpp4TB8omrJCQ5R6xqH7/k2NPcCM4M2eGpVO1kLAkRUYYzYD8+exw39tCXuQrcLIQ2pkE7Q==
+oci-events@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-events/-/oci-events-2.52.0.tgz#473d7a43f2b6fcb0d03d98ea6b55f7950e9e3234"
+  integrity sha512-+4YcSZD77hjo0OJzyUuT0rkSq6F5uGgBB+S0MOy1iYtH61id9+fIsjNl1pRzTvc+feFmqL8B0SvRxAppBPVzbQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-keymanagement@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-keymanagement/-/oci-keymanagement-1.23.0.tgz#bec9fe6fc1d7323783bb63e4645bc01ec53c03cf"
-  integrity sha512-cKYs6lAyE1hhVlDanKHpOJYPy0e6nW8mA3aAUa28IFigops8azvwhx0yIOe8oaUeUTh3P0JxXxGolLbRdEoQQg==
+oci-filestorage@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-filestorage/-/oci-filestorage-2.52.0.tgz#0ee02e9a3e5a5475d9a588c0f18b0737f2a34426"
+  integrity sha512-4Gx4iTyBaXwV3EOwppt7irb3+f4nDFNVqU4okP4ULrcghGBTJuagjgw1FSp70TgZnEvWBvxfAg8DegTiNPHVOA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-limits@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-limits/-/oci-limits-1.23.0.tgz#f3f1b3cf79fa35560058ca41ab1b57d2b6d4b35f"
-  integrity sha512-WNqTjls0BRa6gCkWVtVUc07pTSuENRfJNLnpKLbscjsjUiwPTq4Pui6mq1SFo7k8Cm0N7xd1KHt+3XD+ujmokw==
+oci-functions@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-functions/-/oci-functions-2.52.0.tgz#a24d6cf7c96af62e4420ca9503b0e3cd92fc5d49"
+  integrity sha512-bk0iTaHb1NxfZ4anhIU+nGLn8NU/y7+YPps/dzXKJwFYx16LsvJ3EYKJmqoS4UJ6P0ad7vbVL49F+rNWhM7Flg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-loadbalancer@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-loadbalancer/-/oci-loadbalancer-1.23.0.tgz#58d37ab645a7cf0c34c7bf01038c9be3e503b296"
-  integrity sha512-ZNOJ94+QdJfQ76HWAv0AC0dmqCxQ7etAycEDAVn8Uq/XYfhF+/5FFVS3AZj4aV2Orhkq7yuNsTqbCwA6bqUUvg==
+oci-fusionapps@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-fusionapps/-/oci-fusionapps-2.52.0.tgz#5621674ca5a2e23ede8c2ae5e1b6408a4fcea485"
+  integrity sha512-98fzp9o+t2AfReGJM/jfZx5devjFGDtIZnqB2+Hxl8MD3M8HRZl2mHLP1JuzB2cBE5PxpvNMvPeOkQaY7v3m9A==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-loganalytics@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-loganalytics/-/oci-loganalytics-1.23.0.tgz#83faab8d1c924ece8183cabddc41dbe1fcdfdc8f"
-  integrity sha512-FCtNyAY570HvomjmOi+m5gXbcHOu9AZ8T5sFtqX4HlLs9w4e/A5aXf2P3CuFI1F42uFAsQ0tTi0JwRsRNMdd9A==
+oci-genericartifactscontent@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-genericartifactscontent/-/oci-genericartifactscontent-2.52.0.tgz#ef49e388e8afcb9337eb79aed5be0435efac67c0"
+  integrity sha512-5BzTVMYCLMUddQB9GPmnR95IPGio/+PbEzdvXMqHphEXzO1v5ClJD25VAhNN4l03DeVd8gHQL+ljRe90XvD9bA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-logging@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-logging/-/oci-logging-1.23.0.tgz#c881ca337a2b637f169aec8f584d25c1b23f7d95"
-  integrity sha512-L+erLTLkFA4WwkYpahOYR+kkCWH1PQeXp3jww3VFJvDY6o/WrI7mXbSiN3+jgcBeW0GWUzDiBkO4CY/hjBgWpA==
+oci-goldengate@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-goldengate/-/oci-goldengate-2.52.0.tgz#f540c5efd052a09494cec1b9b3000f46cdf94a16"
+  integrity sha512-r1OkXg+argG+1zyaRbdGMPSYnFNIhD6bBCiuiNrgB1SbAaZWMv/dPYZV761UIvy9Upkzunaa11WSwa0ir0+ctg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-loggingingestion@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-loggingingestion/-/oci-loggingingestion-1.23.0.tgz#b13768a6d2eb72704902c8705067603b49530532"
-  integrity sha512-BNsK3Gn0BVAjkIhpnbWkUB6QdAGlM02b7zMF3IEWqrHO1kiwvigxPODH0BDUWMeMf0x66JmRwBRBaf5W0riOqw==
+oci-governancerulescontrolplane@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-governancerulescontrolplane/-/oci-governancerulescontrolplane-2.52.0.tgz#caf9d6d56cd97bd460a68a88a48b118cb1f8451d"
+  integrity sha512-hVh7zABvJXFyDyGY57XNtdOyRcDSDAwUEKVU/Q4mZ6W9CFSmo76K8y41oGLfsev1DX08kMJw8IwrLtMwgM8ioA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-loggingsearch@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-loggingsearch/-/oci-loggingsearch-1.23.0.tgz#0778a1b268ed82a388f4733000c930e297ebd7a1"
-  integrity sha512-eZn51gpkYr7+wFhclq8f5BAAl9o52hGp0bgoA/kQcvuWyhP4eV1bv3LJGhbHJEifdGaJCR7N6B5A0VR+fjm4Hg==
+oci-healthchecks@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-healthchecks/-/oci-healthchecks-2.52.0.tgz#7ffe4e53591ee68f71d3bc063dd4a0bb7f62ff8a"
+  integrity sha512-GW8DhUEuxX3Y6a1rwcy4BEfxR2t2W2TeMPaw6ovaHAVk0wgAPq3yxkAj2DDd7UQyl24ah6K1A9EEAKfigOrMZA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-managementagent@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-managementagent/-/oci-managementagent-1.23.0.tgz#6877a75227d48d6fffe1c2a0c76b0e8fde1e88bd"
-  integrity sha512-r8xSB/7J0zvHekTzZCfpfUCxqMxdWxSiDKZQSgblm7h36KkupWQC06Cpvj5JZziSAZCMeEpcudC3ncqCaj3XVg==
+oci-identity@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-identity/-/oci-identity-2.52.0.tgz#ddd6ca1ee21fc02c7172fdb71ab9df78f2aac82f"
+  integrity sha512-0oY4H3sEbsfuaCJrwE/qIqDjC+18/0nt5P9LDG4dI1GdXCSAntIXaxCpIUDEcLq0el6m+8g8+I8IlgnNYpHHcA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-managementdashboard@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-managementdashboard/-/oci-managementdashboard-1.23.0.tgz#ff71ec0db86c4606e9092cc166f07d8fa95675e1"
-  integrity sha512-GiPpU+AmVzvS8WmzOaMa2Dvyt1BtpnSU3VRYLkPX5rIzdMfeMJuGsqVa6jEp7SCrSNS0L8nT85cjw6kuphzNtw==
+oci-identitydataplane@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-identitydataplane/-/oci-identitydataplane-2.52.0.tgz#0f1e461db5c86db97b96827c80757fc8ddb81a7e"
+  integrity sha512-/ueafblxG0s9WMitPPBwx/Y5LRd50OFD9i8teR/KN58ePcAvXdN3nSPLqElN+4CTJnuDY6Rl8R4qAjrzjotRGw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-marketplace@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-marketplace/-/oci-marketplace-1.23.0.tgz#287447e651979ff3c3653b505f028ea1453a1866"
-  integrity sha512-iH3x39irY+942AtowzrPKZH1EiVQtSecAq4do20X0S5qWrXTCl1iIQFxP86tZ2twVnpp6tjo1a8eKP85koFy7g==
+oci-integration@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-integration/-/oci-integration-2.52.0.tgz#441c8e234e3744fc65d43e24f11627da0dba894c"
+  integrity sha512-VN1W5GpgtrKXwRievzlLY1VldJEbF56ZL1Mw5ttGa9m9BOowgk3EQaCVi7adJpx5YKDIGkGLWl1VESqU5xon0w==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-monitoring@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-monitoring/-/oci-monitoring-1.23.0.tgz#261513b4c2c0ec87271273a86cd36d6f9f0c55c7"
-  integrity sha512-TIJ0xGxwOOVEaX26g9rJCV39Um4egRSlocxw2UIXB28oNAsm+4d9KoX5yjQx9EcyQj3YKUnghRwzqvdJgGi9EA==
+oci-jms@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-jms/-/oci-jms-2.52.0.tgz#58aa90e1c75d4ee0499b1265adc5193a2a73e7d8"
+  integrity sha512-vXoRwTBTnmTI2E38CiabacHEngLsCtUdRHelkh3hWyP/Uc7Rce9e4iSGdw9H6lPYE/fBEmtf4Jla4UZgO8+iow==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-mysql@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-mysql/-/oci-mysql-1.23.0.tgz#b44ea95b6661a2caae4bd502f1cc85b2620c02ba"
-  integrity sha512-yNjCFXXphz8INNKqs6aniqtPD5axtYBgbtzwIpZVomyYz5wgz11Ko30RKRN3rEjWH8dRdO2KaDrNod7T2k0cFg==
+oci-keymanagement@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-keymanagement/-/oci-keymanagement-2.52.0.tgz#46be8a1d1fb0cf6a4c5d9e107c7ed2436dcde3ff"
+  integrity sha512-w8CAl9dX9V5ZYfA9zItrPAxDlgwhWsdTJqVi0/NCIXU2I/iCbwj/y1nDwZQ66HZq5P4ntBjTz2N8UpmS96HLQw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-networkloadbalancer@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-networkloadbalancer/-/oci-networkloadbalancer-1.23.0.tgz#bd23b3af568790b7a948544cf5fa6653df5ba643"
-  integrity sha512-kGwmF3sWODlY7vSvSA5tFbFdrPSk7/N0bpfzwhYpnL/3mWQUmdDlCdLtkBUsW9QJQ8h6dWsXRJf88gVtbwc4IQ==
+oci-licensemanager@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-licensemanager/-/oci-licensemanager-2.52.0.tgz#c56ef0c40e413a9de4c0c723eddaa31fa6524875"
+  integrity sha512-lsRdZyZVjzZJeP2S+3FY2eL88r/3bZ/P3qdMeWnzBfQpkIrG6RYYWuSkf957/M8acAlJQlrGM32mKhMdr+TSaA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-nosql@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-nosql/-/oci-nosql-1.23.0.tgz#44500de49e2d4e9c448c437c7430fac0e2fef7e5"
-  integrity sha512-h2JvjJRzkivvGw3NRlYqvrHyKTVqBFFzPguVY/3+FQzrUwRjReD/toIeN2SLdgp/wBqCClylAch0auYjB3DIYA==
+oci-limits@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-limits/-/oci-limits-2.52.0.tgz#3a0ec0f4e18c33d178c9a10e84f19c0b3028a9b8"
+  integrity sha512-66kSNbDspsiyPNhSOvhNE92ujP/z22ByRfuxLkFtrfzWjTkY1IlLOsjeZw7KKM0VGU0D8YdHgDz4q96LXQ62rQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-objectstorage@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-objectstorage/-/oci-objectstorage-1.23.0.tgz#36128fd5d68aa2a6327159576ce7f7e7325c90bc"
-  integrity sha512-u3DyZwaEGTZrvS167RevVM9BAgptKNMx7dn0gX1Hl2v0nmJg6GCsE3T+4V9qk0x12OyAbPnSpyYVnuHotUP3pg==
+oci-loadbalancer@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-loadbalancer/-/oci-loadbalancer-2.52.0.tgz#45015fb69b35bf94fbbb5f7e926f8124c0d92d6b"
+  integrity sha512-HxGAcyMMZhYccfmNYFpzRn3EZDUUe7DBMmW4P7rIa6RrfDdOAsF37wSFkY2LKA17+wYKgdWh/iib13Amz769Vw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-lockbox@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-lockbox/-/oci-lockbox-2.52.0.tgz#8ad17a8cd5bc8e85b69548486fcdd77182a79f27"
+  integrity sha512-TXvPtRV5tAMhkb5BnMZg6o/ywTZNzBGus+TcTxWZj5Rn7s3ZTtHuv7p/A3e1XPuYlNUxM3YWJOORVY0VS3dbZA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-loganalytics@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-loganalytics/-/oci-loganalytics-2.52.0.tgz#07f8b3b39874f73a6901581d2b86e314e3d3c07b"
+  integrity sha512-fTqUtBNIdU4fslmUDKSlOeebUfKtO5Qur+gYds+RgA4N+4mlP6ONBTGak9fKsKuhgjUD3CK+2HJrMsQJfX2BMw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-logging@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-logging/-/oci-logging-2.52.0.tgz#916a78da5a53d08e025423f3d87e55440d27de25"
+  integrity sha512-zAfIQ1HJp639snEX3Q3M0mfBcfxq9gkBEOp8OPqG5z1l8pf9ZTw3GfjmmX8n3A2ucAi5T6cIiE0XnBjIwF1OdA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-loggingingestion@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-loggingingestion/-/oci-loggingingestion-2.52.0.tgz#1dfdba8f61383e7ca867c55c8502b008f07b2abf"
+  integrity sha512-aAD0K9gqConwBxxVau1V70So1NTCj5Oc/qxgzf9y8j/azDzcv0Y1qVyj1WcD5BxmSGh9UNjzAcxS4qtJEkW1TQ==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-loggingsearch@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-loggingsearch/-/oci-loggingsearch-2.52.0.tgz#6aeb711321c9d908c427817e12a8842437c8c225"
+  integrity sha512-FKiwSt3AtjgJLnPF5gq7L65KHXPYgqUGMj1jblDeuTN9BnI/xCAx19fNTr9nQN/CXOt6BNm/Tnzeq67Chls6lg==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-managementagent@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-managementagent/-/oci-managementagent-2.52.0.tgz#9e32077490953a047fbab40c45e55b0a60afc1d2"
+  integrity sha512-sPKeJo/2IALwCHqbbDJBGCJK/J9QlGe216RwOovcIeap5wH2RkMVAOw9bgQdhggkYTaTJzg3VaThQ0v+5hAcpA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-managementdashboard@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-managementdashboard/-/oci-managementdashboard-2.52.0.tgz#834154ec882b5f35fd9cce3680555ae9fe3701c4"
+  integrity sha512-GwSWAOpI8zekvl8JC7gePTKqjwqdMH28ciJt9a5l0PmifTv4Vzj14qnhvGK2E1xwAHEfy4OMYJKVu4SEj7pr8Q==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-marketplace@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-marketplace/-/oci-marketplace-2.52.0.tgz#905828e7736480ff07e0dc706c934f9c27419bf0"
+  integrity sha512-nQV9jkcRObUBMA/ZkmJb9IdS9u8QAjvbyD9TV2iF4n+hPd3niRh3Pw93/UjlEMw/6yEt5Zfjv5oRXEjCvEhNfA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-mediaservices@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-mediaservices/-/oci-mediaservices-2.52.0.tgz#ef622848c9ecf7b41645244eca30e2649a497a0b"
+  integrity sha512-k8b2bKcubbDICZ0uHKhEylT94nTyODlYmQGCsVSiRAj7VeN2dN/yT2w4EA9ufLiOGJTr6/M29KCl1UeKxCczow==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-monitoring@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-monitoring/-/oci-monitoring-2.52.0.tgz#6470d37e5b406faad89e94f47e912491b1f30b1b"
+  integrity sha512-vDdylH/zXceQ+7PRR/JJsRjM3ubCxmul2KIBvhV2qSMz74dofBNe6SiUNjFNtZ5oDOfsowxj/x+SGZSaVuHNyw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-mysql@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-mysql/-/oci-mysql-2.52.0.tgz#350a5f69af789551547b232bcd20f262b906f944"
+  integrity sha512-lUKeRMgsyY0U2nGYyhUW7JSE/9qfOitluXgNu55ozZBnTKH2V73DlcRpktO9k9vy6txIpEB57IpcvlUqtGrn8w==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-networkfirewall@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-networkfirewall/-/oci-networkfirewall-2.52.0.tgz#2b109aa2f9df2b0378cf2bf92f125a23dfa2e70a"
+  integrity sha512-hsWpkO3d3X4ymxbdOXuecTx8BcRxEt6rDW/vVi4z2BChOa0kih9oJK+BNqmilgg4BXRvJrG0vmMD6fL8fDymxw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-networkloadbalancer@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-networkloadbalancer/-/oci-networkloadbalancer-2.52.0.tgz#8000ce55a6664f621d12869a73e43f9f927df4e3"
+  integrity sha512-4R0BHZ1eacP3+wSE2WOfCX4ufux74O/GMe4DeaEj5fjWsBFZosLeyuOBPvA0jLOAd+sE5u4J69h61IdKUTzvWw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-nosql@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-nosql/-/oci-nosql-2.52.0.tgz#346a31da18f37c73c7597af7bc7014815e3bf0f3"
+  integrity sha512-ksOGLGWkVSUxuVb/OCqXJ6Z1jHHj6PCqw2WhmT9qlyl7gftbi2ga3mmfQXaax4Ew6dcR01khJ/jEws4d+ULSxg==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-objectstorage@2.52.0, oci-objectstorage@^2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-objectstorage/-/oci-objectstorage-2.52.0.tgz#19689fd08cad5c0012f80d7491f6e2d1d8d3ffaf"
+  integrity sha512-JDfLtzACz8o+dlXe+62z0oaTZYfsKuNqvsdC1/DzjANhAeVRgr4PX8EhORPOuxtJjgYf9unXOGkenr7aaClPZw==
   dependencies:
     await-semaphore "^0.1.3"
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-oce@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-oce/-/oci-oce-1.23.0.tgz#3493273e10ff9ba49e7ea292ee897d6fbbf724cd"
-  integrity sha512-r2Yo8uB7xXNaBOGOvV/O+7KelocO/EeFQMNmsUM4gP4fctJfQBYhlGukGobEW4tnhI+SpWbCwCOFFRCsqack4g==
+oci-oce@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-oce/-/oci-oce-2.52.0.tgz#85cbf981f642b14ac52127674a771f6e3c501a88"
+  integrity sha512-qoxknYgp7iOelsFMnAwYNprlw9gUPZRFpM+ghsPpUvZZjtES18cqeJLjgB409+Pti7dV1WIZUwBJaxHcVsm1PA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-ocvp@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-ocvp/-/oci-ocvp-1.23.0.tgz#f0ebdf24df443900a1e1f43e885ba072b4be639e"
-  integrity sha512-FFM3vnEBB61O05paSXLK80OmxN98/T5BelpDvEVMNt99GIwOipDy64ACjMlyvqDJRNtyGSfbOrSUCeNcsCLpWQ==
+oci-ocvp@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-ocvp/-/oci-ocvp-2.52.0.tgz#6f147358aa1e62e7d9735a54d3f23b78722c4c48"
+  integrity sha512-/jXnhePZn7re1ohXpvFN1xuGAv7GT2v4TKkk/4a5omeCCEsSzwsXyzRHaY+e0h3JEeBzn2jlfQJwSSzKeTBa1g==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-oda@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-oda/-/oci-oda-1.23.0.tgz#1ad1ef3a265a5d5664a4c813bdbda51fa383765a"
-  integrity sha512-OYDy/OKvJHwu0Pu9dtwljrYfM1nB/TdaQHZws/IsBgTXDXrCAgmW0Ono03bvNp9rbPCO+Mmyx6iG6yIVqtzyRg==
+oci-oda@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-oda/-/oci-oda-2.52.0.tgz#549900574f7c4b4b6ed440d93988567b9f6cc87f"
+  integrity sha512-x1clupJJ6RXzp05esx1BuKvj7GQWP08opkfJmA941J/dDFJs4aZiyl1A4YRdnrG6Y7GYQijtC7s/exrfYxWJ6w==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-ons@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-ons/-/oci-ons-1.23.0.tgz#981aa80bdaf6a11e34d27258c45b23149205207c"
-  integrity sha512-Yd/BYJV91i6VNCIJ6Yy4vybxg+qZJyf2c4CofxnLViwLncIhzwWNYI1hpOay07OqrL3YM6Juj/Om0LpspkX0DA==
+oci-onesubscription@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-onesubscription/-/oci-onesubscription-2.52.0.tgz#1d07c3e72548960ef5e2acabfee16282f565e58e"
+  integrity sha512-6AcWwxPkbjZBdsr2D7OPO5iLW+LlPxZYDDTjXDXWbqMzSc5HeIDOYvLxE6e8vsJyy9Wr4w22wu+UTZG2GIKJEQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-operatoraccesscontrol@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-operatoraccesscontrol/-/oci-operatoraccesscontrol-1.23.0.tgz#d27f823e7461092bf8f0ee134f3bf13b3c9d72e8"
-  integrity sha512-FrKd/imnQOOzgFoGY7cfn25JPKyDshBzdRPsmjvgUqANopq0jldI1bju8ED0c8bkmAix+3SKBUeXZWpCdvMlXA==
+oci-ons@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-ons/-/oci-ons-2.52.0.tgz#92670b734fcfbe895392d56dae139d3e536ab15d"
+  integrity sha512-ciVKWuCGqewtcbZneqpvS71ZoXHcuKEOItLa3v0JWH4OvVigmPcUTXs+r7sicq6lh2IgzAWuOKEYREyuiYJZPA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-opsi@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-opsi/-/oci-opsi-1.23.0.tgz#555a116d2edb5a41e0cf21da35c822e11d671275"
-  integrity sha512-IXTPasA+fVWYy+RkR4qnyq3g74DB1llmQJKn7NutxKKmpXe92TvzkzaIPV5mseZc3p9mGus9ycLNhNNCuxFSbw==
+oci-opa@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-opa/-/oci-opa-2.52.0.tgz#e995ecc8d2e1d909ff910e51abca3373a58863f1"
+  integrity sha512-BoL5VtTYoG3OMnfffIfs+tKn7vs0xH2lHa+lQXJpweGphbuscXsdzYUNMgwCoiL+HLC1SDsgpMlvyCaa/AA8Kw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-optimizer@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-optimizer/-/oci-optimizer-1.23.0.tgz#5a3a36358013a272b3174447b6756def9448ba10"
-  integrity sha512-lTe2RBLpJMOJ7kfK2dqKXisWq7Pw26bECRRiyusVq3YmfUsMREdmeuPARc+YiCgoJIJPrqmW2xn3RcRXjdRCWA==
+oci-opensearch@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-opensearch/-/oci-opensearch-2.52.0.tgz#f1fa280b77346197181dd6a500db908449f8581b"
+  integrity sha512-FezJWjYsIJIIWwxl2En/w8CcEc/zxXvZj4Od6G+hFsEjwDkP7qjrJGLgnKTEaHh29DETgVN6c+/3vPNRXY6hBA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-osmanagement@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-osmanagement/-/oci-osmanagement-1.23.0.tgz#fd0c066a549e97a6687497c95d9ae58150453098"
-  integrity sha512-JlYp2rM3rG7wnoWWNy75EzkbZRafTG+fdlW4j+PxEGp3JZRCa1JhTM5PgM1EEi6b1YD4naZ+r0m7joGG+sTJtA==
+oci-operatoraccesscontrol@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-operatoraccesscontrol/-/oci-operatoraccesscontrol-2.52.0.tgz#6ee25c4f1a8b96ef33330d49f82978cbbdc87ec7"
+  integrity sha512-G2y/WyZ0fl/zvQpHTHGXfqcNpdv+/g0qmX4nVffqEhzUCd4Cim+k7+esPH7Sk7HOw757yB8kFpqGYuX60utq2A==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-resourcemanager@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-resourcemanager/-/oci-resourcemanager-1.23.0.tgz#adcc52d94a6c7203efda04f029b4cb68543db338"
-  integrity sha512-my7wbKXG5BAHK7jiesr1r22NW96v42hg+rNXZM6y/a6dNQSWE0yB5WrpOVxTnqSs8SDQWaCQlvILQW6NM4phjQ==
+oci-opsi@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-opsi/-/oci-opsi-2.52.0.tgz#3eae3552904235ec8adb52115859a20b0b347c0a"
+  integrity sha512-LyD7C4mhCReDZOf+Y5TYl4RJa976h8yamnLpMFnooacFU+Y2rY4b7gVWNE1go4K9b5bPTtOFzLtb1mKiIV0xbA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-resourcesearch@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-resourcesearch/-/oci-resourcesearch-1.23.0.tgz#7fc5a51a0aec4b6779ca9db37a781feec4da4124"
-  integrity sha512-3kjZXt2NcqRENSNAQ81/k6F08TpRlfVdF9XWg0EvgOSlNXOHHA415TtgE69HqLKkWYXhc1HLdnxmNKgdPjcIkg==
+oci-optimizer@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-optimizer/-/oci-optimizer-2.52.0.tgz#cfc32e3948e238a54b6b04936f7f58febc03e79c"
+  integrity sha512-aaETzTZniEQznI8ISAcVzIjND6GuxtSALoyhPw3jGhD9Jmoq8ZNKCXjduEVNXJa/VtddsjRlYj3hk7Uu/87yEg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-rover@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-rover/-/oci-rover-1.23.0.tgz#d8a4dc2a37d77a6f6800f368ae8e5076dd208fac"
-  integrity sha512-CyBL1RUEstcyOqI2yjvcH7m+auvVwn3/3SieIT2HEUdhUE8PW3v9CCWvED1WQp9o/wm6HOdcMjtR8+QQowjDUA==
+oci-osmanagement@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-osmanagement/-/oci-osmanagement-2.52.0.tgz#afcedc22829d41586366b73188af2d034da5f1aa"
+  integrity sha512-HzheAlHQ1Zr3tUZo6XoZeW2/VmSyUhbl/1SFCWDKz1ND7urvDVoABSOeYEHzC89q3gqWZ2kGMGjN+pkRS2YyIQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-sch@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-sch/-/oci-sch-1.23.0.tgz#697f2f09e7cad1adc6f6a052704c2a482779da14"
-  integrity sha512-KFsXE96bunE0s1TdDS5qNOF8ib5IbD0ZAuYMLfzZy8Fx/4Z6VnjvSgfpSpDNYiuXFkJMN0/mjSJKoJ3W7Wk8XA==
+oci-ospgateway@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-ospgateway/-/oci-ospgateway-2.52.0.tgz#d3791f3635c4cfae90f3f24210b599f83133e234"
+  integrity sha512-pMbDVomHtxOxBUoo8L76BBF0n4c574JFv25tAM9nVuWY4OXRuRVZCUbRPu7yCJuoJzLVnHxpFOCA+gWnAAKqQg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-sdk@^1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-sdk/-/oci-sdk-1.23.0.tgz#1f5a7f226b33b11c7dde00cf40c9c5fab5b8724a"
-  integrity sha512-Q3QAss/tDeQBaNIXpERUKFzUIjRsj7fXB/Eqy/Bw3/vg2v4FMRKI4a5QXgc57xd1dFxnxSVTKxf4tjSWnlti/g==
+oci-osubbillingschedule@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-osubbillingschedule/-/oci-osubbillingschedule-2.52.0.tgz#1b3d82ea1f16d6c593a9b93d8c9a8cb93ac84095"
+  integrity sha512-LjPObxaVCtxGDNdEVAjQyfQjUKqLMb4A36D7zA8mso9zhf018avMtMqJtMWWRs3ns7Wv9khuw7wDwnJGGj+FoQ==
   dependencies:
-    oci-aianomalydetection "1.23.0"
-    oci-ailanguage "1.23.0"
-    oci-analytics "1.23.0"
-    oci-announcementsservice "1.23.0"
-    oci-apigateway "1.23.0"
-    oci-apmcontrolplane "1.23.0"
-    oci-apmsynthetics "1.23.0"
-    oci-apmtraces "1.23.0"
-    oci-applicationmigration "1.23.0"
-    oci-artifacts "1.23.0"
-    oci-audit "1.23.0"
-    oci-autoscaling "1.23.0"
-    oci-bastion "1.23.0"
-    oci-bds "1.23.0"
-    oci-blockchain "1.23.0"
-    oci-budget "1.23.0"
-    oci-cims "1.23.0"
-    oci-cloudguard "1.23.0"
-    oci-common "1.23.0"
-    oci-computeinstanceagent "1.23.0"
-    oci-containerengine "1.23.0"
-    oci-core "1.23.0"
-    oci-database "1.23.0"
-    oci-databasemanagement "1.23.0"
-    oci-databasemigration "1.23.0"
-    oci-datacatalog "1.23.0"
-    oci-dataflow "1.23.0"
-    oci-dataintegration "1.23.0"
-    oci-datasafe "1.23.0"
-    oci-datascience "1.23.0"
-    oci-devops "1.23.0"
-    oci-dns "1.23.0"
-    oci-dts "1.23.0"
-    oci-email "1.23.0"
-    oci-events "1.23.0"
-    oci-filestorage "1.23.0"
-    oci-functions "1.23.0"
-    oci-genericartifactscontent "1.23.0"
-    oci-goldengate "1.23.0"
-    oci-healthchecks "1.23.0"
-    oci-identity "1.23.0"
-    oci-integration "1.23.0"
-    oci-jms "1.23.0"
-    oci-keymanagement "1.23.0"
-    oci-limits "1.23.0"
-    oci-loadbalancer "1.23.0"
-    oci-loganalytics "1.23.0"
-    oci-logging "1.23.0"
-    oci-loggingingestion "1.23.0"
-    oci-loggingsearch "1.23.0"
-    oci-managementagent "1.23.0"
-    oci-managementdashboard "1.23.0"
-    oci-marketplace "1.23.0"
-    oci-monitoring "1.23.0"
-    oci-mysql "1.23.0"
-    oci-networkloadbalancer "1.23.0"
-    oci-nosql "1.23.0"
-    oci-objectstorage "1.23.0"
-    oci-oce "1.23.0"
-    oci-ocvp "1.23.0"
-    oci-oda "1.23.0"
-    oci-ons "1.23.0"
-    oci-operatoraccesscontrol "1.23.0"
-    oci-opsi "1.23.0"
-    oci-optimizer "1.23.0"
-    oci-osmanagement "1.23.0"
-    oci-resourcemanager "1.23.0"
-    oci-resourcesearch "1.23.0"
-    oci-rover "1.23.0"
-    oci-sch "1.23.0"
-    oci-secrets "1.23.0"
-    oci-servicecatalog "1.23.0"
-    oci-streaming "1.23.0"
-    oci-tenantmanagercontrolplane "1.23.0"
-    oci-usageapi "1.23.0"
-    oci-vault "1.23.0"
-    oci-vulnerabilityscanning "1.23.0"
-    oci-waas "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-secrets@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-secrets/-/oci-secrets-1.23.0.tgz#b26778310f71e40515cb111f06bd093ae590b431"
-  integrity sha512-GLtC26kV9mDrJM3YA8TtbB5J99Kpc24GVWxyiqIq4g62TDPvk4UvzlCE2c7w14KYl5/vXpCVbHVn1fW5+unGCw==
+oci-osuborganizationsubscription@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-osuborganizationsubscription/-/oci-osuborganizationsubscription-2.52.0.tgz#5deb6cf225e5d6c13ed9a66c5ca45e88c95f0203"
+  integrity sha512-e3yHDpz7O8QgaCcXyH6US13tQd5ojTh/NW/Jd1aUXadTD/f7siAoHOrwUtxJbkU2izNUvr6x/iwz3ohM/kEKhQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-servicecatalog@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-servicecatalog/-/oci-servicecatalog-1.23.0.tgz#39f62454eeff5fd4f67eadd13f197a9ed2862d9b"
-  integrity sha512-nW7hx7jn4LegHuyPuXKryn2DXGKQIvT0DlMcnFKd/OduEWScWcjXivPzYht9BjPH7QsvpMhlPes/gGOHJYoDlg==
+oci-osubsubscription@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-osubsubscription/-/oci-osubsubscription-2.52.0.tgz#6e71498c8f63f3b9cda6ead644d44f40efa738d9"
+  integrity sha512-GYgEBqBewI+U8krY5s5iJgFrpNlODLiS2ILpKyYom1LJsYFteKA00+4N1MhCcLRVijEvt8gwoMWqLn47Wj5RCQ==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-streaming@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-streaming/-/oci-streaming-1.23.0.tgz#8aa51b76657dc0f225adda1e4f393436ffb925cb"
-  integrity sha512-//US6+7lNbwBVRM0sgM781jhDr6ZsjLX5vYxwmpPLsqduQQFYsm57/oAmjndSffzEWI+pwyvyMPCN67nGWpLqQ==
+oci-osubusage@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-osubusage/-/oci-osubusage-2.52.0.tgz#51c46aaf4de5f4c2f272deddae0ac03af79e1c26"
+  integrity sha512-ka9uiVuaBHd13+nxznzyo9p5u+sk89tSfPsy38blydr+HUjs90fbJsYIzGyud9jMLlnBwOcJp4EtMoBREHIQ4g==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-tenantmanagercontrolplane@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-tenantmanagercontrolplane/-/oci-tenantmanagercontrolplane-1.23.0.tgz#fcfdec12c22b26e7e9595f0b7a5a3e7c74978691"
-  integrity sha512-NBRuU0K6lHln/+gi76XfXV7piL17e+94dim+p3Fd8gHYL00bRpHhKSheEhrxgJgkdq3LA1M+7XHSvFdkW10UoA==
+oci-queue@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-queue/-/oci-queue-2.52.0.tgz#0376274d356682c5b2120d857645df056b5968a8"
+  integrity sha512-/7wuBpisaWHDZmhnlFCJrlTsSXkMFysXaqEwmpfqRw1O/99+RjWmHbKA7Bym1Cw7qlsjSlCzoSSsCRiMO8tqVg==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-usageapi@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-usageapi/-/oci-usageapi-1.23.0.tgz#328a6ba5437e458cd7e44fd257074a51174d48ef"
-  integrity sha512-I1xtNH3jtnePRYf+jeCTYwlubXszlCUt9hMOxBpXJlio9fSifn1c1X0LGRie2IMannA75w9e6lGp1TlQE5B7qQ==
+oci-recovery@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-recovery/-/oci-recovery-2.52.0.tgz#470f836bdbaea2b69e662521313486314a8c90e3"
+  integrity sha512-oxODRKzEb5pzexP/pKhHUYiOHobgmhLwdbZpExmdylN8XLN6XCqpXUXzxtpF11VcAfLkN2Qk+jmqTa3nNZP1qA==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-vault@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-vault/-/oci-vault-1.23.0.tgz#6bcb0601f3597d892e25cba78b5139b6c06211fa"
-  integrity sha512-u92D6lBX+96eUKCQ1PTd5xfsa50Pn9yzT3552Es5EtmSpfqBBH5D9ZipicO27+Xx75tqjtUS4E9U+3BqzKxWBw==
+oci-resourcemanager@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-resourcemanager/-/oci-resourcemanager-2.52.0.tgz#6ed8e2496edb3cee546a50367cffc22bbe17c64a"
+  integrity sha512-JzQzJlpgyuOw+E0Mkg1V6zoHxwR1jDahANqgGSy8Wj5BfO9WlcDARj9Kufq8u7pqCWy+FXOhzZBRLmz0h1Auuw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-vulnerabilityscanning@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-vulnerabilityscanning/-/oci-vulnerabilityscanning-1.23.0.tgz#eadcd8de2d6d113547b938bccd5b9c2f41029388"
-  integrity sha512-MYnBE58gzs/Qk532mfPuMDWp0Is1BjtCYM6KJB8Hy5nJ3xfBOFqH23BBvo0Sf8LcD2YnRQvahIBR694sqK/k9Q==
+oci-resourcesearch@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-resourcesearch/-/oci-resourcesearch-2.52.0.tgz#d94df89685acca4b7dd14099d9bf5a57dade1bc0"
+  integrity sha512-e1nsFhKortzTx+mNsPFJfJ82B5Oa3NSmLcw4K20Up05I2H++8Ed/gAMwKXNDYe1G0wV9lr+vf/aKbmvWX/g5Aw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-waas@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-waas/-/oci-waas-1.23.0.tgz#e04fbada071199fa1e4b254e22e95c968600f79f"
-  integrity sha512-+tdr0Le0SGoaQlPuFE9mZJ/JvE7nWN0KKbueCycQXAcKkm+ZBZCysbahSdxasMvO6Ezffwf646hh2XcuwEhSvg==
+oci-rover@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-rover/-/oci-rover-2.52.0.tgz#62134580ed57822c9127c0edd802dc821a7a0577"
+  integrity sha512-a7sbEqZB7WDQ4cJ8+HaC0f8DnFMoUXZQujIjAUdbuvj5ncIHbhr3/0RWXaB4ZJLlcUTq9Cm4mdmmfq91cQuj5A==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
-oci-workrequests@1.23.0:
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/oci-workrequests/-/oci-workrequests-1.23.0.tgz#cac4759f0931e3b707a8055b4b2ca526037bf71c"
-  integrity sha512-5H7HSbLT/kO7LgGa7ALsGC+SML0S/4rqdwUQL5mm5JOoBJUFE13kuV15LUlvDJbtkFofr7x4ihFbVX1pR1y+zg==
+oci-sch@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-sch/-/oci-sch-2.52.0.tgz#11720a32f2dfe8d4de44105231b54a3c32dd6aaf"
+  integrity sha512-e8ECVf9XYF0LE7mbNT1AwQZH5e3pXAwho1FhAVlM67VnxL2RCSiEv9M6d7cvonHivKIib/uA/FRWRwVAoYbQSw==
   dependencies:
-    oci-common "1.23.0"
-    oci-workrequests "1.23.0"
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-sdk@^2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-sdk/-/oci-sdk-2.52.0.tgz#02921e4653da0cac975a6c65af6969b559e62281"
+  integrity sha512-TR/merAOg0c6oco3jw7iFG+MeGKTH5bPIQK3qE6XBeCY967j+/M8CunevxaXLsB04DWFSMQvd9kPR48J980mTw==
+  dependencies:
+    oci-adm "2.52.0"
+    oci-aianomalydetection "2.52.0"
+    oci-aidocument "2.52.0"
+    oci-ailanguage "2.52.0"
+    oci-aispeech "2.52.0"
+    oci-aivision "2.52.0"
+    oci-analytics "2.52.0"
+    oci-announcementsservice "2.52.0"
+    oci-apigateway "2.52.0"
+    oci-apmconfig "2.52.0"
+    oci-apmcontrolplane "2.52.0"
+    oci-apmsynthetics "2.52.0"
+    oci-apmtraces "2.52.0"
+    oci-applicationmigration "2.52.0"
+    oci-appmgmtcontrol "2.52.0"
+    oci-artifacts "2.52.0"
+    oci-audit "2.52.0"
+    oci-autoscaling "2.52.0"
+    oci-bastion "2.52.0"
+    oci-bds "2.52.0"
+    oci-blockchain "2.52.0"
+    oci-budget "2.52.0"
+    oci-certificates "2.52.0"
+    oci-certificatesmanagement "2.52.0"
+    oci-cims "2.52.0"
+    oci-cloudbridge "2.52.0"
+    oci-cloudguard "2.52.0"
+    oci-cloudmigrations "2.52.0"
+    oci-common "2.52.0"
+    oci-computeinstanceagent "2.52.0"
+    oci-containerengine "2.52.0"
+    oci-containerinstances "2.52.0"
+    oci-core "2.52.0"
+    oci-dashboardservice "2.52.0"
+    oci-database "2.52.0"
+    oci-databasemanagement "2.52.0"
+    oci-databasemigration "2.52.0"
+    oci-databasetools "2.52.0"
+    oci-datacatalog "2.52.0"
+    oci-dataconnectivity "2.52.0"
+    oci-dataflow "2.52.0"
+    oci-dataintegration "2.52.0"
+    oci-datalabelingservice "2.52.0"
+    oci-datalabelingservicedataplane "2.52.0"
+    oci-datasafe "2.52.0"
+    oci-datascience "2.52.0"
+    oci-devops "2.52.0"
+    oci-disasterrecovery "2.52.0"
+    oci-dns "2.52.0"
+    oci-dts "2.52.0"
+    oci-email "2.52.0"
+    oci-emwarehouse "2.52.0"
+    oci-events "2.52.0"
+    oci-filestorage "2.52.0"
+    oci-functions "2.52.0"
+    oci-fusionapps "2.52.0"
+    oci-genericartifactscontent "2.52.0"
+    oci-goldengate "2.52.0"
+    oci-governancerulescontrolplane "2.52.0"
+    oci-healthchecks "2.52.0"
+    oci-identity "2.52.0"
+    oci-identitydataplane "2.52.0"
+    oci-integration "2.52.0"
+    oci-jms "2.52.0"
+    oci-keymanagement "2.52.0"
+    oci-licensemanager "2.52.0"
+    oci-limits "2.52.0"
+    oci-loadbalancer "2.52.0"
+    oci-lockbox "2.52.0"
+    oci-loganalytics "2.52.0"
+    oci-logging "2.52.0"
+    oci-loggingingestion "2.52.0"
+    oci-loggingsearch "2.52.0"
+    oci-managementagent "2.52.0"
+    oci-managementdashboard "2.52.0"
+    oci-marketplace "2.52.0"
+    oci-mediaservices "2.52.0"
+    oci-monitoring "2.52.0"
+    oci-mysql "2.52.0"
+    oci-networkfirewall "2.52.0"
+    oci-networkloadbalancer "2.52.0"
+    oci-nosql "2.52.0"
+    oci-objectstorage "2.52.0"
+    oci-oce "2.52.0"
+    oci-ocvp "2.52.0"
+    oci-oda "2.52.0"
+    oci-onesubscription "2.52.0"
+    oci-ons "2.52.0"
+    oci-opa "2.52.0"
+    oci-opensearch "2.52.0"
+    oci-operatoraccesscontrol "2.52.0"
+    oci-opsi "2.52.0"
+    oci-optimizer "2.52.0"
+    oci-osmanagement "2.52.0"
+    oci-ospgateway "2.52.0"
+    oci-osubbillingschedule "2.52.0"
+    oci-osuborganizationsubscription "2.52.0"
+    oci-osubsubscription "2.52.0"
+    oci-osubusage "2.52.0"
+    oci-queue "2.52.0"
+    oci-recovery "2.52.0"
+    oci-resourcemanager "2.52.0"
+    oci-resourcesearch "2.52.0"
+    oci-rover "2.52.0"
+    oci-sch "2.52.0"
+    oci-secrets "2.52.0"
+    oci-servicecatalog "2.52.0"
+    oci-servicemanagerproxy "2.52.0"
+    oci-servicemesh "2.52.0"
+    oci-stackmonitoring "2.52.0"
+    oci-streaming "2.52.0"
+    oci-tenantmanagercontrolplane "2.52.0"
+    oci-threatintelligence "2.52.0"
+    oci-usage "2.52.0"
+    oci-usageapi "2.52.0"
+    oci-vault "2.52.0"
+    oci-vbsinst "2.52.0"
+    oci-visualbuilder "2.52.0"
+    oci-vnmonitoring "2.52.0"
+    oci-vulnerabilityscanning "2.52.0"
+    oci-waa "2.52.0"
+    oci-waas "2.52.0"
+    oci-waf "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-secrets@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-secrets/-/oci-secrets-2.52.0.tgz#4851b39a758ace17f9050e01d1c3228a43575433"
+  integrity sha512-AO8TcmVG3abe8+JzwBFiEybEfQ8gY2zrkN7Yma7ANF8pdFLrsSBjgQnYcPBjlayxGzz9jINolA72LvQL4tQyQg==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-servicecatalog@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-servicecatalog/-/oci-servicecatalog-2.52.0.tgz#0029764d67e591169825b7e4762601a71db03958"
+  integrity sha512-7WRtBO5smXb5Ym/B20SSZFLTFgZTJxujgspxT/7G0CMbPVVGT79SBjmvU8FXaNvgymaub70JH6GVrSE4bQM83A==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-servicemanagerproxy@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-servicemanagerproxy/-/oci-servicemanagerproxy-2.52.0.tgz#7f4e53be3bb3218344059f542c60a3e2c98024ec"
+  integrity sha512-BJsEzuqTfA0HqFozO6zRTl5HZOmwtd8JTwZZMRb8fE1ICWPRPcHUTbwjFvm7X/ApJcUN2PIUo8P0ZndQDOZfow==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-servicemesh@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-servicemesh/-/oci-servicemesh-2.52.0.tgz#4f2446836c53a7e0c55d6af095c725c4753ab2c3"
+  integrity sha512-eNIVvpfEwgICVb5lLDIWwiLoi3PR78AHp3Z4/BnAoTK4pgMToonf8oFGKpPCK3rJ0KRRIQxr4mfC1B6C55ih8Q==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-stackmonitoring@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-stackmonitoring/-/oci-stackmonitoring-2.52.0.tgz#9dba9f9d608ae8d1a77e6125b5ebf87f3a4e2211"
+  integrity sha512-fZ1pEUxxQy550ucwZyPGg0muSc/oljyiqEtv8DOj5PHI0xxSkK7slJ4VyCPI9nP2wqCW6mivS3T80/O6SnFhQw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-streaming@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-streaming/-/oci-streaming-2.52.0.tgz#630d56e2e92c5e1a94f6c403d52eaab195a1cc5a"
+  integrity sha512-bhhJyK+Y4E1U/LYYfJs6GWHTbNnlo7Um7ymADZyIn9PFzlvDKsRc82JWiWlL+PryMAXZCB4OqNjUktbD9P/b5g==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-tenantmanagercontrolplane@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-tenantmanagercontrolplane/-/oci-tenantmanagercontrolplane-2.52.0.tgz#401e3d49337b600041ab2ab2ac0d87fd1ca2ea4b"
+  integrity sha512-mm/I/o/ufFHjzmMeiw5fuHVHYXgsO1eTjR5X9N/Nd121fgG2VdrU1wjdp6zXt8YtJ9IY3tKDnOuhxQCEhbXoTw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-threatintelligence@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-threatintelligence/-/oci-threatintelligence-2.52.0.tgz#ab8a1d7d2b3f2f5e464c3ac2a669cafba82f3127"
+  integrity sha512-Gll5eC0W7rLwnckWYaC4yFCTZNFSEmOQzl5dUMD0buVQunTmUTok1/0tIQUHa73iM+Epr0GOy7sQatrFiwnycA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-usage@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-usage/-/oci-usage-2.52.0.tgz#c4754bfed6cc1b5c98662a8a730964cd2abb126e"
+  integrity sha512-wMTOQQXU/GlNkza3ig1O4KMy9njg85Hg2O9RIVMO2+XpIZsxcABKq3IC2NR0/cjfBHhRU0RgpGviZFx845SbXA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-usageapi@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-usageapi/-/oci-usageapi-2.52.0.tgz#dee49c6f6a34b30ab6baa4db15e3327d795dca99"
+  integrity sha512-vLeIqxF8ILiY3CVOaD/oSSx2g1O5Fk9Wm9PQBO7iKLvyyKgcWZRrLXhSsUwTVvMAackimuGWy6u1E5ds51t1xQ==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-vault@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-vault/-/oci-vault-2.52.0.tgz#01f4e010b828b6d1fcffc098631d5e7191fe8a5b"
+  integrity sha512-TGPR36mKyYS16mQlY1a5t37T2Y2kqOjmB7QEiVMorju+6xRU40SyyWf3SMPqvKA40HfTEKA/YncsjVdH1fCSaA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-vbsinst@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-vbsinst/-/oci-vbsinst-2.52.0.tgz#dab8a8dfa14603966ab624b7a5a67878b854a52b"
+  integrity sha512-wj5sjoIk4e5gp751H9cVi1LzeUJKP79MxBXN6YqHyauS+oPME1NLoXLtkq2W62hV2ck3/loqRXyu31jwrKrG0w==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-visualbuilder@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-visualbuilder/-/oci-visualbuilder-2.52.0.tgz#715bf6d491ec28d93123a16023b608fef3a895a6"
+  integrity sha512-dx3cjMcvvySVAk7y1TmX9mayUkMvcl/irsporAmYHJmoXk60T1WwaZq1fnM4/VLSUFdMRr8XOv3WHhEknAaOTg==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-vnmonitoring@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-vnmonitoring/-/oci-vnmonitoring-2.52.0.tgz#9afc47568ea46674fe5cfb3e304669bf168a2826"
+  integrity sha512-jtbxP+tnf+z8h3VgdJ4fp91VJDH7PBBsPkM6E7oeoT1UhcNgqxbYQUbVvFuFZuThe6Vu/r94Q4ZTZArkPd+2Mw==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-vulnerabilityscanning@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-vulnerabilityscanning/-/oci-vulnerabilityscanning-2.52.0.tgz#fb60b33293c7ca0e54a1909f0c7684aeabc30aab"
+  integrity sha512-moJJI338Oe/4z3+r+amI4ezpVBxWFh//fkUQZfd0uuYfSA2Y7Cou/q7ew1ioWvjHR5IuuVta516KK5dkvxHWwA==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-waa@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-waa/-/oci-waa-2.52.0.tgz#8e860e10163d10cae80493505c3663b687abeb69"
+  integrity sha512-M6vJAQMhmYZit+aWXGwHaFJl7zu4KNKcVzCKP3aspTCM+cKwa0is1qsXFXxaEBOZ/yjxcf0IuFTsYMtYJ7ul2Q==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-waas@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-waas/-/oci-waas-2.52.0.tgz#232ae29d455fe5f9c911902a32a88a43b0641427"
+  integrity sha512-GLNjR9KCTj9zCu7MNyhXPnQ7/bRC/b1R0rEvrCJnoo0qcKhQ5mD9MqUInFKwwaV1tDr/FHwc9zfpxl8Uc6FT+A==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-waf@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-waf/-/oci-waf-2.52.0.tgz#a2422c7c91d9d50c3be0558c65eee3f2b7087979"
+  integrity sha512-C+vvTGlUD/AAIn4fJm4zpQtFgyrRWBXyvZjILDPuJKGiyG1qhoDSi2TuaR/uCm2gnkjfXsmyNg9z6niplitrjg==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
+
+oci-workrequests@2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/oci-workrequests/-/oci-workrequests-2.52.0.tgz#fe4a382a268099b409bd65e3175e7e08f9ef0566"
+  integrity sha512-lK5wTuY/BPZblfAsTvffGfQ49k1gHkIPYRepPDwBCV3EYbYESTb232AK3YSif39mOXdrnPX5aOTRn4eqrgW/BQ==
+  dependencies:
+    oci-common "2.52.0"
+    oci-workrequests "2.52.0"
 
 once@^1.3.0, once@^1.3.1, once@^1.4.0:
   version "1.4.0"
@@ -6011,6 +6426,13 @@ semver@^7.2.1, semver@^7.3.5:
   version "7.3.5"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.5.tgz#0b621c879348d8998e4b0e4be94b3f12e6018ef7"
   integrity sha512-PoeGJYh8HK4BTO/a9Tf6ZG3veo/A7ZVsYrSA6J8ny9nb3B1VrpkuN+z9OE5wfE5p6H4LchYZsegiQgbJD94ZFQ==
+  dependencies:
+    lru-cache "^6.0.0"
+
+semver@^7.3.8:
+  version "7.3.8"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
+  integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
   dependencies:
     lru-cache "^6.0.0"
 
