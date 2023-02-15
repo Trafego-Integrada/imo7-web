@@ -425,7 +425,7 @@ const Configuracoes = () => {
                                         </Text>
                                         <Box bg="white" p={5}>
                                             <Grid
-                                                d="flex"
+                                                display="flex"
                                                 alignItems="flex-end"
                                                 gap={5}
                                                 templateColumns={{
@@ -469,7 +469,7 @@ const Configuracoes = () => {
                                         </Text>
                                         <Box bg="white" p={5}>
                                             <Grid
-                                                d="flex"
+                                                display="flex"
                                                 alignItems="flex-end"
                                                 gap={5}
                                                 templateColumns={{

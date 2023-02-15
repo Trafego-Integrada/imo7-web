@@ -126,7 +126,7 @@ const Inquilinos = () => {
                         <Box
                             w="100%"
                             mt={5}
-                            d="flex"
+                            display="flex"
                             gap={5}
                             justifyContent="flex-end"
                         >

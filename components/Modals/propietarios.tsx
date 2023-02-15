@@ -117,7 +117,7 @@ const ModalBase = ({}, ref) => {
                                 </TabPanel>
 
                                 <TabPanel>
-                                    <Grid d="flex" gap={3}>
+                                    <Grid display="flex" gap={3}>
                                         <Button
                                             size="md"
                                             bg="none"

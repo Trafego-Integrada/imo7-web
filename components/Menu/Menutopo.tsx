@@ -44,7 +44,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
     return (
         <>
             <Box
-                d={{ sm: "flex", md: "none" }}
+                display={{ sm: "flex", md: "none" }}
                 w="100%"
                 bg="bluelight"
                 h="120px"
@@ -52,12 +52,12 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                 p={5}
             >
                 <Grid templateColumns="repeat(3, 1fr)" w="100%">
-                    <GridItem w="100%" d="flex" alignItems="center">
+                    <GridItem w="100%" display="flex" alignItems="center">
                         <Logo />
                     </GridItem>
                     <GridItem
                         w="100%"
-                        d="flex"
+                        display="flex"
                         alignItems="center"
                         color="white"
                     >
@@ -67,7 +67,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                     </GridItem>
                     <GridItem
                         w="100%"
-                        d="flex"
+                        display="flex"
                         alignItems="center"
                         justifyContent="flex-end"
                     >
@@ -107,7 +107,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
             </Box>
 
             <Box
-                d={{ sm: "none", md: "flex" }}
+                display={{ sm: "none", md: "flex" }}
                 ml={{ base: "0px", md: "120px" }}
                 w="100%"
                 bg="bluelight"
@@ -119,7 +119,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                         <Flex
                             gap={1}
                             color="white"
-                            d="flex"
+                            display="flex"
                             alignItems="center"
                         >
                             <Text fontSize="3xl" letterSpacing={"2px"}>
@@ -134,13 +134,18 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                         </Flex>
                     </GridItem>
 
-                    <GridItem d="flex" w="100%" alignItems="center" gap={3}>
+                    <GridItem
+                        display="flex"
+                        w="100%"
+                        alignItems="center"
+                        gap={3}
+                    >
                         <FiltroTopo />
                     </GridItem>
 
                     <GridItem
                         w="100%"
-                        d="flex"
+                        display="flex"
                         alignItems="center"
                         justifyContent="flex-end"
                     >

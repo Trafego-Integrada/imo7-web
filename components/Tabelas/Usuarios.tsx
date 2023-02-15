@@ -121,7 +121,13 @@ export const TabelaUsuarios = ({
                         />
                     </GridItem>
                 </Grid>
-                <Box w="100%" mt={5} d="flex" gap={5} justifyContent="flex-end">
+                <Box
+                    w="100%"
+                    mt={5}
+                    display="flex"
+                    gap={5}
+                    justifyContent="flex-end"
+                >
                     <Button
                         size="md"
                         bg="none"
@@ -181,7 +187,7 @@ export const TabelaUsuarios = ({
                                 }
                             />
                         </GridItem>
-                        <GridItem d="flex" justifyContent="flex-end">
+                        <GridItem display="flex" justifyContent="flex-end">
                             <Button
                                 bg="none"
                                 border="1px solid #2F80ED"

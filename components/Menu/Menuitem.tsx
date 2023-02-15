@@ -24,7 +24,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
     return (
         <>
             <ListItem
-                d={{ sm: "flex", md: "none" }}
+                display={{ sm: "flex", md: "none" }}
                 flexDir="column"
                 w="full"
                 rounded="none"
@@ -75,7 +75,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
 
                 {subMenus && (
                     <Collapse in={show}>
-                        <List d="flex" flexDir="column">
+                        <List display="flex" flexDir="column">
                             {subMenus.map((item, key) => (
                                 <ListItem
                                     as={Button}
@@ -98,7 +98,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
             </ListItem>
 
             <ListItem
-                d={{ sm: "none", md: "flex" }}
+                display={{ sm: "none", md: "flex" }}
                 justifyContent="center"
                 alignItems="center"
                 flexDir="column"

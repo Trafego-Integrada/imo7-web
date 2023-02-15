@@ -1,0 +1,96 @@
+server {
+   server_name *.imo7.com.br imo7.com.br www.imo7.com.br;
+
+
+  #  location /_next/ {
+  #      alias /home/ubuntu/imo7.com.br/.next/;
+  #      expires 30d;
+  #      access_log on;
+  #  }
+
+    location / {
+        # reverse proxy for next server
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+
+        # we need to remove this 404 handling
+        # because next's _next folder and own handling
+        # try_files $uri $uri/ =404;
+    }
+
+
+
+
+
+
+
+
+}
+
+server {
+    if ($host ~ ^[^.]+\.imo7\.com\.br$) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = imo7.com.br) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = www.imo7.com.br) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+listen 80;
+        listen [::]:80;
+   server_name *.imo7.com.br imo7.com.br www.imo7.com.br;
+
+
+    location /_next/ {
+        alias /home/ubuntu/imo7.com.br/.next/;
+        expires 30d;
+        access_log on;
+    }
+
+    location / {
+        # reverse proxy for next server
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+
+        # we need to remove this 404 handling
+        # because next's _next folder and own handling
+        # try_files $uri $uri/ =404;
+    }
+
+
+
+}
+server {
+    if ($host ~ ^[^.]+\.imo7\.com\.br$) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = imo7.com.br) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+   server_name *.imo7.com.br imo7.com.br www.imo7.com.br;
+    listen 80;
+    return 404; # managed by Certbot
+
+
+
+
+}

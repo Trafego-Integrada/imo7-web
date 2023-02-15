@@ -9,7 +9,7 @@ export const Menulateral = () => {
                 w="120px"
                 h="100vh"
                 bg="graydark"
-                d={{ base: "none", md: "flex" }}
+                display={{ base: "none", md: "flex" }}
                 flexDirection={"column"}
                 zIndex="2"
                 pos="fixed"

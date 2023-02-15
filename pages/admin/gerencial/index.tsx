@@ -38,13 +38,13 @@ const Gerencial = () => {
                                 minH="200px"
                                 w="100%"
                                 bg="white"
-                                d="flex"
+                                display="flex"
                                 alignItems="center"
                                 justifyContent="center"
                             >
                                 <Box
                                     w="100%"
-                                    d="flex"
+                                    display="flex"
                                     alignItems="center"
                                     flexDir="column"
                                     gap={3}
@@ -67,14 +67,14 @@ const Gerencial = () => {
                                 minH="200px"
                                 w="100%"
                                 bg="white"
-                                d="flex"
+                                display="flex"
                                 alignItems="center"
                                 justifyContent="center"
                             >
                                 <Box
                                     w="100%"
                                     bg="white"
-                                    d="flex"
+                                    display="flex"
                                     alignItems="center"
                                     flexDir="column"
                                     gap={3}
@@ -97,14 +97,14 @@ const Gerencial = () => {
                                 minH="200px"
                                 w="100%"
                                 bg="white"
-                                d="flex"
+                                display="flex"
                                 alignItems="center"
                                 justifyContent="center"
                             >
                                 <Box
                                     w="100%"
                                     bg="white"
-                                    d="flex"
+                                    display="flex"
                                     alignItems="center"
                                     flexDir="column"
                                     gap={3}

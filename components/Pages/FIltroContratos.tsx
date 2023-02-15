@@ -211,7 +211,12 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                 </Grid>
             </Grid>
             <Grid mt={2}>
-                <GridItem w="100%" d="flex" justifyContent="flex-end" gap={5}>
+                <GridItem
+                    w="100%"
+                    display="flex"
+                    justifyContent="flex-end"
+                    gap={5}
+                >
                     <Button
                         size="sm"
                         bg="none"

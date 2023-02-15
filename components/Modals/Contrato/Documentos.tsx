@@ -59,7 +59,7 @@ export const Documentos = ({ contratoId }) => {
     };
     return (
         <Box>
-            <Grid d="flex" gap={3}>
+            <Grid display="flex" gap={3}>
                 <label>
                     <Button
                         as="label"
