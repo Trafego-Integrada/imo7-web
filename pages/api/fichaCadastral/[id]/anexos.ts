@@ -109,6 +109,8 @@ handler.post(async (req, res) => {
 
         res.send();
     } catch (error) {
+        console.log(error);
+        console.log(error?.response);
         res.status(500).send({
             success: false,
             message: error.message,
