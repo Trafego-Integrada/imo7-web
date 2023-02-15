@@ -86,3 +86,30 @@ export const tipoFicha = (tipo) => {
             return "Cadastro de Imóvel";
     }
 };
+
+export const arrayStatusFicha = [
+    {
+        label: "Aguardando Preenchimento",
+        value: "aguardando",
+    },
+    {
+        label: "Preenchida",
+        value: "preenchida",
+    },
+    {
+        label: "Em análise",
+        value: "em_analise",
+    },
+    {
+        label: "Aprovada",
+        value: "aprovada",
+    },
+    {
+        label: "Reprovada",
+        value: "reprovada",
+    },
+    {
+        label: "Arquivada",
+        value: "arquivada",
+    },
+];

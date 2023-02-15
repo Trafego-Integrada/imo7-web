@@ -25,6 +25,7 @@ const InputBase = (
         rightAddon,
         leftElement,
         rightElement,
+        size,
         ...rest
     },
     ref
@@ -32,9 +33,14 @@ const InputBase = (
     const [value, onChange] = useState(new Date());
 
     return (
-        <FormControl isInvalid={error} isRequired={required}>
-            {label && <FormLabel>{label}</FormLabel>}
-            <InputGroup>
+        <FormControl
+            isInvalid={error}
+            isRequired={required}
+            size={size}
+            {...rest}
+        >
+            {label && <FormLabel fontSize={size}>{label}</FormLabel>}
+            <InputGroup size={size}>
                 {leftAddon && (
                     <InputLeftAddon p={0}>{leftAddon}</InputLeftAddon>
                 )}
@@ -48,7 +54,7 @@ const InputBase = (
                     locale="pt-BR"
                     dateFormat="dd/MM/yyyy"
                     isClearable={true}
-                    borderRadius={8}
+                    size={size}
                     {...rest}
                 />
 

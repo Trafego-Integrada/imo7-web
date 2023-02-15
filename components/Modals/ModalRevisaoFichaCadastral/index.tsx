@@ -108,17 +108,17 @@ const ModalBase = ({}, ref) => {
             <ModalContent>
                 <ModalHeader>Ficha Cadastral</ModalHeader>
                 <ModalBody
-                    id="formFichaCadastral"
+                    id="formRevisarFichaCadastral"
                     as="form"
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <Tabs>
                         <TabList>
-                            <Tab>Geral</Tab>
-                            {/* {watch("id") && <Tab>Revisão</Tab>} */}
+                            {/* <Tab>Geral</Tab> */}
+                            {watch("id") && <Tab>Revisão</Tab>}
                         </TabList>
                         <TabPanels>
-                            <TabPanel px={0}>
+                            {/* <TabPanel px={0}>
                                 <Box bg="white" p={4} rounded="lg">
                                     <Grid
                                         gridTemplateColumns={{
@@ -200,52 +200,10 @@ const ModalBase = ({}, ref) => {
                                                 descricao="Utilize este campo para te auxiliar a identificar a ficha"
                                             />
                                         </GridItem>
-                                        <GridItem>
-                                            <FormSelect
-                                                label="Status"
-                                                placeholder="Selecione o status"
-                                                error={errors.telefone?.message}
-                                                {...register("status")}
-                                            >
-                                                <option value="aguardando">
-                                                    Aguardando Preenchimento
-                                                </option>
-                                                <option value="preenchida">
-                                                    Preenchida
-                                                </option>
-                                                <option value="em_analise">
-                                                    Em análise
-                                                </option>
-                                                <option value="aprovada">
-                                                    Aprovada
-                                                </option>
-                                                <option value="reprovada">
-                                                    Reprovada
-                                                </option>
-                                                <option value="arquivada">
-                                                    Arquivada
-                                                </option>
-                                            </FormSelect>
-                                        </GridItem>
-                                        {watch("status") == "reprovada" && (
-                                            <GridItem>
-                                                <FormTextarea
-                                                    label="Motivo da Reprovação"
-                                                    placeholder="Digite o motivo..."
-                                                    error={
-                                                        errors.motivoReprovacao
-                                                            ?.message
-                                                    }
-                                                    {...register(
-                                                        "motivoReprovacao"
-                                                    )}
-                                                />
-                                            </GridItem>
-                                        )}
                                     </Grid>
                                 </Box>
-                            </TabPanel>
-                            {/* <TabPanel px={0}>
+                            </TabPanel> */}
+                            <TabPanel px={0}>
                                 <Box bg="white" p={4} rounded="lg">
                                     <Grid gap={4}>
                                         {campos?.data
@@ -525,7 +483,7 @@ const ModalBase = ({}, ref) => {
                                         )}
                                     </Grid>
                                 </Box>
-                            </TabPanel> */}
+                            </TabPanel>
                         </TabPanels>
                     </Tabs>
                 </ModalBody>
@@ -536,7 +494,7 @@ const ModalBase = ({}, ref) => {
                         variant="solid"
                         isLoading={isSubmitting}
                         type="submit"
-                        form="formFichaCadastral"
+                        form="formRevisarFichaCadastral"
                     >
                         Salvar
                     </Button>
@@ -547,4 +505,4 @@ const ModalBase = ({}, ref) => {
     );
 };
 
-export const ModalFichaCadastral = forwardRef(ModalBase);
+export const ModalRevisaoFichaCadastral = forwardRef(ModalBase);

@@ -1,9 +1,19 @@
+import { FormDateRange } from "@/components/Form/FormDateRange";
 import { FormInput } from "@/components/Form/FormInput";
+import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { Layout } from "@/components/Layout/layout";
 import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
+import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFichaCadastral";
 import { NextChakraLink } from "@/components/NextChakraLink";
-import { formatoData, statusFicha, tipoFicha } from "@/helpers/helpers";
+import {
+    arrayStatusFicha,
+    formatoData,
+    statusFicha,
+    tipoFicha,
+} from "@/helpers/helpers";
+import { useAuth } from "@/hooks/useAuth";
 import { listarFichas } from "@/services/models/fichaCadastral";
+import { listarUsuarios } from "@/services/models/usuario";
 import {
     Box,
     Button,
@@ -27,14 +37,58 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { FiEdit, FiEye, FiLink, FiLink2, FiPlus } from "react-icons/fi";
+import { MdOutlineVerifiedUser } from "react-icons/md";
 import { useQuery } from "react-query";
 
+const filtroPadrao = {
+    query: "",
+    identificacao: "",
+    createdAt: [null, null],
+    updatedAt: [null, null],
+    status: [],
+    responsaveis: [],
+};
 const FichasCadastrais = () => {
-    const [query, setQuery] = useState("");
+    const { usuario } = useAuth();
+    const [filtro, setFiltro] = useState(filtroPadrao);
     const toast = useToast();
     const router = useRouter();
     const modal = useRef();
-    const { data: fichas } = useQuery(["fichas", { query }], listarFichas);
+    const modalRevisar = useRef();
+    const { data: fichas } = useQuery(
+        [
+            "fichas",
+            {
+                ...filtro,
+                createdAt: filtro.createdAt[0]
+                    ? JSON.stringify(filtro.createdAt)
+                    : null,
+                updatedAt: filtro.updatedAt[0]
+                    ? JSON.stringify(filtro.updatedAt)
+                    : null,
+                status: filtro.status[0] ? JSON.stringify(filtro.status) : null,
+                responsaveis: filtro.responsaveis[0]
+                    ? JSON.stringify(filtro.responsaveis)
+                    : null,
+            },
+        ],
+        listarFichas
+    );
+    const { data: responsaveis } = useQuery(
+        [
+            "listaResponsaveis",
+            {
+                imobiliariaId: usuario?.imobiliariaId,
+                contaId: usuario?.conta?.id,
+                admConta: usuario?.cargos?.includes("conta") ? true : false,
+                admImobiliaria: usuario?.cargos?.includes("imobiliaria")
+                    ? true
+                    : false,
+                adm: usuario?.cargos?.includes("adm") ? true : false,
+            },
+        ],
+        listarUsuarios
+    );
     return (
         <Layout>
             <Box p={4}>
@@ -47,6 +101,96 @@ const FichasCadastrais = () => {
                     </Text>
                 </Box>
                 <Box>
+                    <Box bg="white" p={4} mb={4}>
+                        <Flex align="center" justify="space-between">
+                            <Heading size="sm" mb={2}>
+                                Filtro avançado
+                            </Heading>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                colorScheme="gray"
+                                onClick={() => setFiltro(filtroPadrao)}
+                            >
+                                Limpar filtro
+                            </Button>
+                        </Flex>
+                        <Flex gap={2}>
+                            <FormInput
+                                size="sm"
+                                minW={96}
+                                label="Identificação"
+                                placeholder="Por nome, cpf/cnpj, telefone ou e-mail"
+                                value={filtro.identificacao}
+                                onChange={(e) =>
+                                    setFiltro({
+                                        ...filtro,
+                                        identificacao: e.target.value,
+                                    })
+                                }
+                            />
+                            <FormDateRange
+                                minW={44}
+                                size="sm"
+                                label="Data de Criação"
+                                startDate={filtro?.createdAt[0]}
+                                endDate={filtro?.createdAt[1]}
+                                onChange={(e) => {
+                                    setFiltro({
+                                        ...filtro,
+                                        createdAt: e,
+                                    });
+                                }}
+                            />
+                            <FormDateRange
+                                minW={44}
+                                size="sm"
+                                label="Data de Atualização"
+                                startDate={filtro?.updatedAt[0]}
+                                endDate={filtro?.updatedAt[1]}
+                                onChange={(e) => {
+                                    setFiltro({
+                                        ...filtro,
+                                        updatedAt: e,
+                                    });
+                                }}
+                            />
+                            <FormMultiSelect
+                                placeholder="Selecione..."
+                                minW={44}
+                                size="sm"
+                                label="Status"
+                                value={arrayStatusFicha.filter((i) =>
+                                    filtro.status.includes(i.value)
+                                )}
+                                onChange={(e) => {
+                                    setFiltro({
+                                        ...filtro,
+                                        status: e.map((i) => i.value),
+                                    });
+                                }}
+                                isMulti
+                                options={arrayStatusFicha}
+                            />
+                            <FormMultiSelect
+                                minW={44}
+                                size="sm"
+                                label="Responsável"
+                                value={filtro.responsaveis}
+                                onChange={(e) => {
+                                    setFiltro({
+                                        ...filtro,
+                                        responsaveis: e,
+                                    });
+                                }}
+                                isMulti
+                                placeholder="Selecione..."
+                                options={responsaveis?.data?.data}
+                                getOptionLabel={(e) => e.nome}
+                                getOptionValue={(e) => e.id}
+                            />
+                        </Flex>
+                    </Box>
                     <Flex
                         justify="space-between"
                         align="center"
@@ -54,18 +198,25 @@ const FichasCadastrais = () => {
                         p={4}
                     >
                         <Flex gap={4} align="center">
-                            <FormInput
-                                size="sm"
-                                minW={96}
-                                placeholder="Encontre uma ficha"
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                            />
+                            <Flex gap={4}>
+                                <FormInput
+                                    size="sm"
+                                    minW={96}
+                                    label="Pesquisa rápida"
+                                    value={filtro.query}
+                                    onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            query: e.target.value,
+                                        })
+                                    }
+                                />
+                            </Flex>
                             <Text fontSize="xs" color="gray" w="full">
                                 <Text as="span" fontWeight="bold">
                                     {fichas?.total}
                                 </Text>{" "}
-                                fichas cadastrais
+                                fichas cadastrais encontradas
                             </Text>
                         </Flex>
 
@@ -230,24 +381,43 @@ const FichasCadastrais = () => {
                                                     {statusFicha(item.status)}
                                                 </Td>
                                                 <Td>
-                                                    <Tooltip label="Visualizar Ficha">
-                                                        <Link
-                                                            href={`/fichaCadastral/${item.id}`}
-                                                            target="_blank"
-                                                        >
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiEye
-                                                                        }
-                                                                    />
-                                                                }
-                                                            />
-                                                        </Link>
+                                                    <Tooltip label="Revisar Ficha">
+                                                        <IconButton
+                                                            colorScheme="green"
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            icon={
+                                                                <Icon
+                                                                    as={
+                                                                        MdOutlineVerifiedUser
+                                                                    }
+                                                                />
+                                                            }
+                                                            onClick={() =>
+                                                                modalRevisar.current.onOpen(
+                                                                    item.id
+                                                                )
+                                                            }
+                                                        />
                                                     </Tooltip>
+                                                    <Tooltip label="Editar Ficha">
+                                                        <IconButton
+                                                            colorScheme="blue"
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            icon={
+                                                                <Icon
+                                                                    as={FiEdit}
+                                                                />
+                                                            }
+                                                            onClick={() =>
+                                                                modal.current.onOpen(
+                                                                    item.id
+                                                                )
+                                                            }
+                                                        />
+                                                    </Tooltip>
+
                                                     <Tooltip label="Copiar URL da Ficha">
                                                         <IconButton
                                                             size="sm"
@@ -267,21 +437,23 @@ const FichasCadastrais = () => {
                                                             }}
                                                         />
                                                     </Tooltip>
-                                                    <Tooltip label="Editar Ficha">
-                                                        <IconButton
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={FiEdit}
-                                                                />
-                                                            }
-                                                            onClick={() =>
-                                                                modal.current.onOpen(
-                                                                    item.id
-                                                                )
-                                                            }
-                                                        />
+                                                    <Tooltip label="Visualizar Ficha">
+                                                        <Link
+                                                            href={`/fichaCadastral/${item.id}`}
+                                                            target="_blank"
+                                                        >
+                                                            <IconButton
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiEye
+                                                                        }
+                                                                    />
+                                                                }
+                                                            />
+                                                        </Link>
                                                     </Tooltip>
                                                 </Td>
                                             </Tr>
@@ -289,7 +461,7 @@ const FichasCadastrais = () => {
                                     ) : (
                                         <Tr>
                                             <Td
-                                                colSpan={3}
+                                                colSpan={8}
                                                 textAlign="center"
                                                 color="gray"
                                             >
@@ -304,6 +476,7 @@ const FichasCadastrais = () => {
                 </Box>
             </Box>
             <ModalFichaCadastral ref={modal} />
+            <ModalRevisaoFichaCadastral ref={modalRevisar} />
         </Layout>
     );
 };

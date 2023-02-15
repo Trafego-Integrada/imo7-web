@@ -134,9 +134,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
             } = response.data;
             setCookie(undefined, "imo7.token", token, {
                 maxAge: 60 * 60 * 24 * 30,
+                path: "/",
             });
             setCookie(undefined, "imo7.refreshToken", refreshToken, {
                 maxAge: 60 * 60 * 24 * 30,
+                path: "/",
             });
             setUsuario({
                 id,

@@ -35,6 +35,7 @@ const InputBase = (
         leftAddon,
         children,
         rightElementWidth,
+        size,
         ...rest
     },
     ref
@@ -43,8 +44,8 @@ const InputBase = (
     const handleClick = () => setShow(!show);
     const router = useRouter();
     return (
-        <FormControl isInvalid={error ? true : false}>
-            {label && <FormLabel>{label}</FormLabel>}
+        <FormControl isInvalid={error ? true : false} size={size} {...rest}>
+            {label && <FormLabel fontSize={size}>{label}</FormLabel>}
             <InputGroup>
                 {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
                 {leftElement && (
@@ -53,6 +54,7 @@ const InputBase = (
                 {create ? (
                     <CreatableSelect
                         ref={ref}
+                        size={size}
                         {...rest}
                         chakraStyles={{
                             container: (_, { selectProps: { width } }) => ({
@@ -63,6 +65,7 @@ const InputBase = (
                 ) : (
                     <Select
                         ref={ref}
+                        size={size}
                         {...rest}
                         chakraStyles={{
                             container: (_, { selectProps: { width } }) => ({
