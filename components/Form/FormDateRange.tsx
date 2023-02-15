@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { forwardRef, useState } from "react";
 import { RangeDatepicker } from "chakra-dayzed-datepicker";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import br from "date-fns/locale/pt-BR";
 registerLocale("pt-BR", br);
 const InputBase = (
