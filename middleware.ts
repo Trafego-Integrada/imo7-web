@@ -64,7 +64,6 @@ export default function middleware(req: NextRequest) {
     //   url.pathname = `/home${url.pathname}`;
     //   return NextResponse.rewrite(url);
     // }
-    console.log(url);
     // rewrite everything else to `/_sites/[site] dynamic route
     if (url.pathname.includes("/img/")) {
         return NextResponse.rewrite(url);
@@ -86,7 +85,7 @@ export default function middleware(req: NextRequest) {
     }
 
     url.pathname = `/_sites/${currentHost}${url.pathname}`;
-    console.log(url);
+
     if (url.pathname.includes("/_sites/imo7.com.br/")) {
         url.pathname = url.pathname.replace("/_sites/imo7.com.br/", "/");
     } else if (url.pathname.includes("/_sites/localhost:3000/")) {
@@ -97,6 +96,5 @@ export default function middleware(req: NextRequest) {
         url.pathname = url.pathname.replace("/_sites/www/", "/");
     }
 
-    console.log(1);
     return NextResponse.rewrite(url);
 }

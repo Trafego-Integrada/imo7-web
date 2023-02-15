@@ -16,6 +16,8 @@ handler.use(multiparty);
 handler.post(async (req, res) => {
     try {
         const { id } = req.query;
+        console.log(id);
+        console.log(req.files);
         const client = new os.ObjectStorageClient({
             authenticationDetailsProvider: providerStorage,
         });
@@ -31,9 +33,10 @@ handler.post(async (req, res) => {
             bucketName: bucket,
         };
         const getBucketResponse = await client.getBucket(getBucketRequest);
-
+        console.log(getBucketResponse);
         await Promise.all(
             Object.entries(req.files).map(async (i) => {
+                console.log(i);
                 const extension = i[1].name.slice(
                     (Math.max(0, i[1].name.lastIndexOf(".")) || Infinity) + 1
                 );
@@ -57,7 +60,7 @@ handler.post(async (req, res) => {
                 const putObjectResponse = await client.putObject(
                     putObjectRequest
                 );
-
+                console.log(putObjectResponse);
                 const getObjectRequest: os.requests.GetObjectRequest = {
                     objectName: nameLocation,
                     bucketName: bucket,
@@ -66,7 +69,7 @@ handler.post(async (req, res) => {
                 const getObjectResponse = await client.getObject(
                     getObjectRequest
                 );
-
+                console.log(getObjectResponse);
                 if (getObjectResponse) {
                     await prisma.fichaCadastral.update({
                         where: {
