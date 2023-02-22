@@ -50,7 +50,6 @@ import { includesAll } from "@/helpers/helpers";
 const schema = yup.object({
     nome: yup.string().required("Campo Obrigatório"),
     email: yup.string().required("Campo Obrigatório"),
-    documento: yup.string().required("Campo Obrigatório"),
     senha: yup.string(),
     confirmarSenha: yup
         .string()

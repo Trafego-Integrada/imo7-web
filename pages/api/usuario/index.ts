@@ -204,7 +204,6 @@ handle.post(async (req, res) => {
                     {
                         email,
                     },
-                    { documento },
                 ],
             },
         });

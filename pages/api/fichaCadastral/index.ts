@@ -176,7 +176,12 @@ handle.get(async (req, res) => {
                 },
             },
             include: {
-                preenchimento: true,
+                preenchimento: {
+                    include: {
+                        campo: true,
+                        ficha: true,
+                    },
+                },
                 modelo: true,
                 responsavel: true,
             },
@@ -201,8 +206,15 @@ handle.get(async (req, res) => {
 });
 handle.post(async (req, res) => {
     try {
-        const { modelo, descricao, nome, documento, email, telefone } =
-            req.body;
+        const {
+            modelo,
+            descricao,
+            nome,
+            documento,
+            email,
+            telefone,
+            responsavel,
+        } = req.body;
         const data = await prisma.fichaCadastral.create({
             data: {
                 modelo: {
@@ -223,7 +235,7 @@ handle.post(async (req, res) => {
                 },
                 responsavel: {
                     connect: {
-                        id: req.user.id,
+                        id: Number(responsavel.id),
                     },
                 },
             },

@@ -1,5 +1,5 @@
 import { listarUsuarios } from "@/services/models/usuario";
-import { Box, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 
 export const Inquilinos = ({ data }) => {
@@ -15,7 +15,13 @@ export const Inquilinos = ({ data }) => {
                 <Tbody>
                     {data?.map((item) => (
                         <Tr key={item.id}>
-                            <Td>{item.nome}</Td>
+                            <Td>
+                                <Text fontWeight="bold">{item.nome}</Text>
+                                <Text color="gray">
+                                    {item.telefone} / {item.celular} /{" "}
+                                    {item.email}
+                                </Text>
+                            </Td>
                             <Td>{item.documento}</Td>
                         </Tr>
                     ))}

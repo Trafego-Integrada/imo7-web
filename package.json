@@ -9,7 +9,7 @@
         "lint": "next lint",
         "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
         "ssh": "ssh ubuntu@140.238.181.195",
-        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aaavm5neqnkisind7o4x5s6gc3xoglgnlvd7bmdmovgnsa@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
+        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aaws6s4rzq4rf7w3mh2kjctdbc6khxa6zmdmvhazodgaya@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",
@@ -31,6 +31,7 @@
         "date-fns": "^2.29.3",
         "dayzed": "^3.2.3",
         "dotenv": "^10.0.0",
+        "file-saver": "^2.0.5",
         "formidable": "^1.2.2",
         "framer-motion": "^6",
         "fs": "^0.0.1-security",
@@ -66,6 +67,7 @@
         "react-hook-form": "^7.34.0",
         "react-icons": "^4.7.1",
         "react-input-mask": "^2.0.4",
+        "react-json-to-excel": "^1.0.7",
         "react-pdf": "^6.2.2",
         "react-query": "^3.24.5",
         "react-quill": "^2.0.0",
@@ -73,6 +75,7 @@
         "react-spinners": "^0.11.0",
         "sass": "^1.39.0",
         "slug": "^8.2.2",
+        "xlsx": "^0.18.5",
         "yup": "^0.32.9"
     },
     "devDependencies": {

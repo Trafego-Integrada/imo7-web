@@ -1,4 +1,4 @@
-import { Box, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 
 export const Proprietarios = ({ data }) => {
     return (
@@ -13,7 +13,13 @@ export const Proprietarios = ({ data }) => {
                 <Tbody>
                     {data?.map((item) => (
                         <Tr key={item.id}>
-                            <Td>{item.nome}</Td>
+                            <Td>
+                                <Text fontWeight="bold">{item.nome}</Text>
+                                <Text color="gray">
+                                    {item.telefone} / {item.celular} /{" "}
+                                    {item.email}
+                                </Text>
+                            </Td>
                             <Td>{item.documento}</Td>
                         </Tr>
                     ))}

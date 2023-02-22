@@ -83,7 +83,7 @@ const ModalBase = ({}, ref) => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent minW="60%">
-                    <ModalHeader>Contrato Nº 32424</ModalHeader>
+                    <ModalHeader>Contrato Nº {watch("codigo")} </ModalHeader>
 
                     <ModalCloseButton />
 
@@ -325,7 +325,7 @@ const ModalBase = ({}, ref) => {
                                         <GridItem>
                                             <Box>
                                                 <Text fontSize="sm">
-                                                    Ultima parcela paga
+                                                    Última parcela paga
                                                 </Text>
                                                 <Text>
                                                     {watch("ultimaParcPaga")}

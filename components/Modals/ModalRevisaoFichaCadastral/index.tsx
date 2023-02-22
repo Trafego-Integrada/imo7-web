@@ -21,6 +21,7 @@ import {
     IconButton,
     Modal,
     ModalBody,
+    ModalCloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
@@ -37,6 +38,7 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { forwardRef, useImperativeHandle, useRef } from "react";
@@ -105,7 +107,9 @@ const ModalBase = ({}, ref) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
+
             <ModalContent>
+                <ModalCloseButton />
                 <ModalHeader>Ficha Cadastral</ModalHeader>
                 <ModalBody
                     id="formRevisarFichaCadastral"
@@ -406,18 +410,32 @@ const ModalBase = ({}, ref) => {
                                                                                         2
                                                                                     }
                                                                                 >
-                                                                                    {
-                                                                                        watch(
-                                                                                            "preenchimento"
-                                                                                        )?.find(
-                                                                                            (
-                                                                                                p
-                                                                                            ) =>
-                                                                                                p.campoFichaCadastralCodigo ==
-                                                                                                i.codigo
-                                                                                        )
-                                                                                            ?.valor
-                                                                                    }
+                                                                                    {i.tipoCampo ==
+                                                                                    "date"
+                                                                                        ? moment(
+                                                                                              watch(
+                                                                                                  "preenchimento"
+                                                                                              )?.find(
+                                                                                                  (
+                                                                                                      p
+                                                                                                  ) =>
+                                                                                                      p.campoFichaCadastralCodigo ==
+                                                                                                      i.codigo
+                                                                                              )
+                                                                                                  ?.valor
+                                                                                          ).format(
+                                                                                              "DD/MM/YYYY"
+                                                                                          )
+                                                                                        : watch(
+                                                                                              "preenchimento"
+                                                                                          )?.find(
+                                                                                              (
+                                                                                                  p
+                                                                                              ) =>
+                                                                                                  p.campoFichaCadastralCodigo ==
+                                                                                                  i.codigo
+                                                                                          )
+                                                                                              ?.valor}
                                                                                     <AnaliseCampo
                                                                                         campoCodigo={
                                                                                             i.codigo

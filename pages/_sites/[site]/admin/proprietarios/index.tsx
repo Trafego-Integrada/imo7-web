@@ -73,7 +73,7 @@ const Propietarios = () => {
                         >
                             <GridItem>
                                 <FormInput
-                                    label="Propietários"
+                                    label="Proprietários"
                                     placeholder="digite o nome do propietário..."
                                     bg="white"
                                     value={filtro.nome}

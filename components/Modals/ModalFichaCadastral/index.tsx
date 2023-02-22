@@ -9,6 +9,7 @@ import {
     cadastrarFicha,
 } from "@/services/models/fichaCadastral";
 import { listarFichas } from "@/services/models/modeloFicha";
+import { listarUsuarios } from "@/services/models/usuario";
 import { queryClient } from "@/services/queryClient";
 import {
     Box,
@@ -89,6 +90,10 @@ const ModalBase = ({}, ref) => {
         ["categoriasCampos"],
         listarCategoriaCampoFichas
     );
+    const { data: usuarios } = useQuery(
+        ["listaUsuarios", { admImobiliaria: true }],
+        listarUsuarios
+    );
 
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
@@ -147,6 +152,29 @@ const ModalBase = ({}, ref) => {
                                                         getOptionValue={(e) =>
                                                             e.id
                                                         }
+                                                    />
+                                                )}
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <Controller
+                                                control={control}
+                                                name="responsavel"
+                                                render={({ field }) => (
+                                                    <FormMultiSelect
+                                                        {...field}
+                                                        label="Responsável"
+                                                        options={
+                                                            usuarios &&
+                                                            usuarios.data?.data
+                                                        }
+                                                        getOptionLabel={(e) =>
+                                                            e.nome
+                                                        }
+                                                        getOptionValue={(e) =>
+                                                            e.id
+                                                        }
+                                                        placeholder="Selecione o responsável"
                                                     />
                                                 )}
                                             />

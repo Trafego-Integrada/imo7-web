@@ -148,10 +148,16 @@ const Home = () => {
                                                 {item.dataInicio &&
                                                     formatoData(
                                                         item.dataInicio,
-                                                        "DATA_HORA"
+                                                        "DATA"
                                                     )}
                                             </Td>
-                                            <Td>{item.dataReajuste}</Td>
+                                            <Td>
+                                                {item.dataReajuste &&
+                                                    formatoData(
+                                                        item.dataReajuste,
+                                                        "DATA"
+                                                    )}
+                                            </Td>
                                             <Td>
                                                 {item.inquilinos.map((item) => (
                                                     <Text key={item.id}>

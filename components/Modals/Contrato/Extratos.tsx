@@ -8,9 +8,9 @@ export const Extratos = ({ data }) => {
                 <Thead>
                     <Tr>
                         <Th>Nº Parcela</Th>
-                        <Th>Data Deposito</Th>
+                        <Th>Data Depósito</Th>
                         <Th>Responsável</Th>
-                        <Th>Periodo</Th>
+                        <Th>Período</Th>
                         <Th>Vencimento</Th>
                         <Th></Th>
                     </Tr>

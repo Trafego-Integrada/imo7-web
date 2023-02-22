@@ -69,7 +69,7 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormDateRange
-                            label="Data de Início"
+                            label="Data de Início do Contrato"
                             startDate={filtro?.dataInicio[0]}
                             endDate={filtro?.dataInicio[1]}
                             onChange={(e) => {
@@ -79,7 +79,7 @@ export const FiltroContratos = ({ setFiltro, filtro }) => {
                     </GridItem>
                     <GridItem>
                         <FormDateRange
-                            label="Data Final"
+                            label="Data Final do Contrato"
                             startDate={filtro?.dataFim[0]}
                             endDate={filtro?.dataFim[1]}
                             onChange={(e) => {

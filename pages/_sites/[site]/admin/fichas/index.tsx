@@ -1,3 +1,4 @@
+import { Excluir } from "@/components/AlertDialogs/Excluir";
 import { FormDateRange } from "@/components/Form/FormDateRange";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
@@ -12,8 +13,9 @@ import {
     tipoFicha,
 } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
-import { listarFichas } from "@/services/models/fichaCadastral";
+import { excluirFicha, listarFichas } from "@/services/models/fichaCadastral";
 import { listarUsuarios } from "@/services/models/usuario";
+import { queryClient } from "@/services/queryClient";
 import {
     Box,
     Button,
@@ -36,10 +38,19 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { FiEdit, FiEye, FiLink, FiLink2, FiPlus } from "react-icons/fi";
+import { BsFileExcel } from "react-icons/bs";
+import {
+    FiEdit,
+    FiEye,
+    FiLink,
+    FiLink2,
+    FiPlus,
+    FiTrash,
+} from "react-icons/fi";
 import { MdOutlineVerifiedUser } from "react-icons/md";
-import { useQuery } from "react-query";
-
+import { useMutation, useQuery } from "react-query";
+import { exportToExcel } from "react-json-to-excel";
+import { FaFileExcel } from "react-icons/fa";
 const filtroPadrao = {
     query: "",
     identificacao: "",
@@ -54,6 +65,7 @@ const FichasCadastrais = () => {
     const toast = useToast();
     const router = useRouter();
     const modal = useRef();
+    const modalExcluir = useRef();
     const modalRevisar = useRef();
     const { data: fichas } = useQuery(
         [
@@ -89,6 +101,21 @@ const FichasCadastrais = () => {
         ],
         listarUsuarios
     );
+    const excluir = useMutation(excluirFicha);
+
+    const onDelete = async (id) => {
+        await excluir.mutateAsync(id, {
+            onSuccess: () => {
+                toast({
+                    title: "Ficha excluida",
+                    duration: 3000,
+                    status: "success",
+                });
+                queryClient.invalidateQueries(["fichas"]);
+            },
+        });
+    };
+    console.log(usuario);
     return (
         <Layout>
             <Box p={4}>
@@ -219,15 +246,31 @@ const FichasCadastrais = () => {
                                 fichas cadastrais encontradas
                             </Text>
                         </Flex>
-
                         <Button
                             size="sm"
-                            leftIcon={<Icon as={FiPlus} />}
+                            leftIcon={<Icon as={FaFileExcel} />}
                             colorScheme="blue"
-                            onClick={() => modal.current.onOpen()}
+                            onClick={() => {
+                                exportToExcel(
+                                    fichas?.data,
+                                    "fichas-cadastrais"
+                                );
+                            }}
                         >
-                            Novo
+                            Exportar para Excel
                         </Button>
+                        {usuario?.permissoes?.includes(
+                            "imobiliaria.fichas.cadastrar"
+                        ) && (
+                            <Button
+                                size="sm"
+                                leftIcon={<Icon as={FiPlus} />}
+                                colorScheme="blue"
+                                onClick={() => modal.current.onOpen()}
+                            >
+                                Novo
+                            </Button>
+                        )}
                     </Flex>
                     <Box bg="white" mt={4} p={4}>
                         <TableContainer>
@@ -381,43 +424,53 @@ const FichasCadastrais = () => {
                                                     {statusFicha(item.status)}
                                                 </Td>
                                                 <Td>
-                                                    <Tooltip label="Revisar Ficha">
-                                                        <IconButton
-                                                            colorScheme="green"
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={
-                                                                        MdOutlineVerifiedUser
-                                                                    }
-                                                                />
-                                                            }
-                                                            onClick={() =>
-                                                                modalRevisar.current.onOpen(
-                                                                    item.id
-                                                                )
-                                                            }
-                                                        />
-                                                    </Tooltip>
-                                                    <Tooltip label="Editar Ficha">
-                                                        <IconButton
-                                                            colorScheme="blue"
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={FiEdit}
-                                                                />
-                                                            }
-                                                            onClick={() =>
-                                                                modal.current.onOpen(
-                                                                    item.id
-                                                                )
-                                                            }
-                                                        />
-                                                    </Tooltip>
-
+                                                    {" "}
+                                                    {usuario?.permissoes?.includes(
+                                                        "imobiliaria.fichas.revisar"
+                                                    ) && (
+                                                        <Tooltip label="Revisar Ficha">
+                                                            <IconButton
+                                                                colorScheme="green"
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            MdOutlineVerifiedUser
+                                                                        }
+                                                                    />
+                                                                }
+                                                                onClick={() =>
+                                                                    modalRevisar.current.onOpen(
+                                                                        item.id
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Tooltip>
+                                                    )}
+                                                    {usuario?.permissoes?.includes(
+                                                        "imobiliaria.fichas.editar"
+                                                    ) && (
+                                                        <Tooltip label="Editar Ficha">
+                                                            <IconButton
+                                                                colorScheme="blue"
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiEdit
+                                                                        }
+                                                                    />
+                                                                }
+                                                                onClick={() =>
+                                                                    modal.current.onOpen(
+                                                                        item.id
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Tooltip>
+                                                    )}
                                                     <Tooltip label="Copiar URL da Ficha">
                                                         <IconButton
                                                             size="sm"
@@ -455,6 +508,29 @@ const FichasCadastrais = () => {
                                                             />
                                                         </Link>
                                                     </Tooltip>
+                                                    {usuario?.permissoes?.includes(
+                                                        "imobiliaria.fichas.excluir"
+                                                    ) && (
+                                                        <Tooltip label="Excluir Ficha">
+                                                            <IconButton
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiTrash
+                                                                        }
+                                                                    />
+                                                                }
+                                                                colorScheme="red"
+                                                                onClick={() => {
+                                                                    modalExcluir.current.onOpen(
+                                                                        item.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </Tooltip>
+                                                    )}
                                                 </Td>
                                             </Tr>
                                         ))
@@ -477,6 +553,7 @@ const FichasCadastrais = () => {
             </Box>
             <ModalFichaCadastral ref={modal} />
             <ModalRevisaoFichaCadastral ref={modalRevisar} />
+            <Excluir ref={modalExcluir} onDelete={onDelete} />
         </Layout>
     );
 };
