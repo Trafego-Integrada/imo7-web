@@ -16,6 +16,7 @@ import {
     IconButton,
     Spinner,
     Table,
+    Tag,
     Tbody,
     Td,
     Th,
@@ -228,6 +229,13 @@ export const TabelaUsuarios = ({
                                     <Td>{item.nome}</Td>
                                     <Td>{item.email}</Td>
                                     <Td>{item.celular}</Td>
+                                    <Td>
+                                        {item.status ? (
+                                            <Tag colorScheme="green">Ativo</Tag>
+                                        ) : (
+                                            <Tag colorScheme="red">Inátivo</Tag>
+                                        )}
+                                    </Td>
                                     <Td>
                                         <IconButton
                                             as={MdPageview}

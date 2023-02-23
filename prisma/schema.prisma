@@ -41,6 +41,7 @@ model Usuario {
     bairro                String?
     cidade                String?
     estado                String?
+    status                Boolean                  @default(true)
     createdAt             DateTime                 @default(now())
     updatedAt             DateTime                 @updatedAt
     deletedAt             DateTime?
@@ -226,6 +227,7 @@ model Imovel {
     contaId         Int
     contrato        Contrato?                @relation(fields: [contratoId], references: [id])
     contratoId      Int?                     @unique
+    FichaCadastral  FichaCadastral[]
 }
 
 model ProprietariosOnImoveis {
@@ -570,6 +572,8 @@ model FichaCadastral {
     preenchimento          FichaCadastralPreenchimento[]
     responsavel            Usuario?                      @relation(fields: [responsavelId], references: [id])
     responsavelId          Int?
+    imovel                 Imovel?                       @relation(fields: [imovelId], references: [id])
+    imovelId               Int?
 }
 
 model FichaCadastralPreenchimento {

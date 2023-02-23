@@ -8,6 +8,7 @@ import {
     buscarFicha,
     cadastrarFicha,
 } from "@/services/models/fichaCadastral";
+import { listarImoveis } from "@/services/models/imovel";
 import { listarFichas } from "@/services/models/modeloFicha";
 import { listarUsuarios } from "@/services/models/usuario";
 import { queryClient } from "@/services/queryClient";
@@ -94,6 +95,7 @@ const ModalBase = ({}, ref) => {
         ["listaUsuarios", { admImobiliaria: true }],
         listarUsuarios
     );
+    const { data: imoveis } = useQuery(["listarImoveis", {}], listarImoveis);
 
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
@@ -175,6 +177,29 @@ const ModalBase = ({}, ref) => {
                                                             e.id
                                                         }
                                                         placeholder="Selecione o responsável"
+                                                    />
+                                                )}
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <Controller
+                                                control={control}
+                                                name="imovel"
+                                                render={({ field }) => (
+                                                    <FormMultiSelect
+                                                        {...field}
+                                                        label="Imóvel"
+                                                        options={
+                                                            imoveis &&
+                                                            imoveis.data?.data
+                                                        }
+                                                        getOptionLabel={(e) =>
+                                                            `${e.codigo} - ${e.endereco}`
+                                                        }
+                                                        getOptionValue={(e) =>
+                                                            e.id
+                                                        }
+                                                        placeholder="Selecione o imóvel"
                                                     />
                                                 )}
                                             />

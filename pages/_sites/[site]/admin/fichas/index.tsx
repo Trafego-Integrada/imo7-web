@@ -40,6 +40,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { BsFileExcel } from "react-icons/bs";
 import {
+    FiDownloadCloud,
     FiEdit,
     FiEye,
     FiLink,
@@ -50,7 +51,7 @@ import {
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 import { exportToExcel } from "react-json-to-excel";
-import { FaFileExcel } from "react-icons/fa";
+import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 const filtroPadrao = {
     query: "",
     identificacao: "",
@@ -246,31 +247,34 @@ const FichasCadastrais = () => {
                                 fichas cadastrais encontradas
                             </Text>
                         </Flex>
-                        <Button
-                            size="sm"
-                            leftIcon={<Icon as={FaFileExcel} />}
-                            colorScheme="blue"
-                            onClick={() => {
-                                exportToExcel(
-                                    fichas?.data,
-                                    "fichas-cadastrais"
-                                );
-                            }}
-                        >
-                            Exportar para Excel
-                        </Button>
-                        {usuario?.permissoes?.includes(
-                            "imobiliaria.fichas.cadastrar"
-                        ) && (
+                        <Flex gap={2}>
                             <Button
+                                variant="outline"
                                 size="sm"
-                                leftIcon={<Icon as={FiPlus} />}
+                                leftIcon={<Icon as={FaFileExcel} />}
                                 colorScheme="blue"
-                                onClick={() => modal.current.onOpen()}
+                                onClick={() => {
+                                    exportToExcel(
+                                        fichas?.data,
+                                        "fichas-cadastrais"
+                                    );
+                                }}
                             >
-                                Novo
+                                Exportar para Excel
                             </Button>
-                        )}
+                            {usuario?.permissoes?.includes(
+                                "imobiliaria.fichas.cadastrar"
+                            ) && (
+                                <Button
+                                    size="sm"
+                                    leftIcon={<Icon as={FiPlus} />}
+                                    colorScheme="blue"
+                                    onClick={() => modal.current.onOpen()}
+                                >
+                                    Novo
+                                </Button>
+                            )}
+                        </Flex>
                     </Flex>
                     <Box bg="white" mt={4} p={4}>
                         <TableContainer>
@@ -280,7 +284,6 @@ const FichasCadastrais = () => {
                                         <Th w={44}>Tipo</Th>
                                         <Th>Nome</Th>
                                         <Th w={44}>Preenchimento</Th>
-
                                         <Th w={44}>Responsável</Th>
                                         <Th w={24}>Criado em</Th>
                                         <Th w={24}>Última atualização</Th>
@@ -502,6 +505,45 @@ const FichasCadastrais = () => {
                                                                     <Icon
                                                                         as={
                                                                             FiEye
+                                                                        }
+                                                                    />
+                                                                }
+                                                            />
+                                                        </Link>
+                                                    </Tooltip>
+                                                    <Tooltip label="Exportar para Excel">
+                                                        <IconButton
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            icon={
+                                                                <Icon
+                                                                    as={
+                                                                        FaFileExcel
+                                                                    }
+                                                                />
+                                                            }
+                                                            onClick={() =>
+                                                                exportToExcel(
+                                                                    item.preenchimento,
+                                                                    "ficha-cadastral-" +
+                                                                        item.id
+                                                                )
+                                                            }
+                                                        />
+                                                    </Tooltip>
+                                                    <Tooltip label="Gerar PDF">
+                                                        <Link
+                                                            href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
+                                                            target="_blank"
+                                                            passHref
+                                                        >
+                                                            <IconButton
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FaFilePdf
                                                                         }
                                                                     />
                                                                 }

@@ -60,7 +60,7 @@ handler.post(async (req, res) => {
                 },
                 mask,
                 cep,
-                camposEndereco,
+                camposEndereco: camposEndereco ? camposEndereco : {},
             },
         });
         res.send(data);

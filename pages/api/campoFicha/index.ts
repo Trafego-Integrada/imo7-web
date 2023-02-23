@@ -55,6 +55,7 @@ handle.post(async (req, res) => {
             tipoFicha,
             codigo,
             categoria,
+            camposEndereco,
         } = req.body;
         const data = await prisma.campoFichaCadastral.create({
             data: {
@@ -70,6 +71,7 @@ handle.post(async (req, res) => {
                     },
                 },
                 tipoFicha,
+                camposEndereco: camposEndereco ? camposEndereco : {},
             },
         });
         res.send(data);

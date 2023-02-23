@@ -71,6 +71,7 @@ handle.post(async (req, res) => {
         cargos,
         modulos,
         permissoes,
+        status,
     } = req.body;
 
     let atualizarSenha = {};
@@ -93,6 +94,7 @@ handle.post(async (req, res) => {
             celular,
             telefone,
             profissao,
+            status,
             modulos:
                 modulos.length > 0
                     ? {

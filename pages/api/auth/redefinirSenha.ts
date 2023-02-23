@@ -47,7 +47,7 @@ handler.post(async (req, res) => {
                 id: recuperacao.usuarioId,
             },
             data: {
-                passwordHash: bcrypt.hashSync(password, 10),
+                senhaHash: bcrypt.hashSync(password, 10),
             },
         });
 

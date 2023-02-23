@@ -19,6 +19,12 @@ handler.post(async (req, res) => {
             message: "Usuário não cadastrado",
         });
     }
+    if (!user.status) {
+        return res.status(401).json({
+            error: true,
+            message: "Usuário inátivo, contate o administrador.",
+        });
+    }
     if (
         !user ||
         (user.senhaHash && !bcrypt.compareSync(password, user.senhaHash))

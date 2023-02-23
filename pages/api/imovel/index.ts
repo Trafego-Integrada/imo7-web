@@ -3,7 +3,9 @@ import prisma from "@/lib/prisma";
 
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
+import { checkAuth } from "@/middleware/checkAuth";
 handle.use(cors);
+handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
         const { filtro, pagina, linhas } = req.query;
@@ -63,6 +65,12 @@ handle.get(async (req, res) => {
                 };
             }
         }
+        if (req.user.imobiliariaId) {
+            filtroQuery = {
+                ...filtroQuery,
+                imobiliariaId: Number(req.user.imobiliariaId),
+            };
+        }
         let paginacao = {};
         if (pagina && linhas) {
             paginacao = {
@@ -74,17 +82,13 @@ handle.get(async (req, res) => {
             };
         }
 
-        const data = await prisma.contrato.findMany({
+        const data = await prisma.imovel.findMany({
             where: {
                 ...filtroQuery,
             },
             ...paginacao,
-            include: {
-                imovel: true,
-                inquilinos: true,
-            },
         });
-        const total = await prisma.contrato.count({});
+        const total = await prisma.imovel.count({});
         res.send({
             success: true,
             data: {

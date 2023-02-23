@@ -22,6 +22,7 @@ import {
     ModalHeader,
     ModalOverlay,
     Stack,
+    Switch,
     Tab,
     Table,
     TabList,
@@ -49,6 +50,7 @@ import { includesAll } from "@/helpers/helpers";
 
 const schema = yup.object({
     nome: yup.string().required("Campo Obrigatório"),
+    documento: yup.string().required("Campo Obrigatório"),
     email: yup.string().required("Campo Obrigatório"),
     senha: yup.string(),
     confirmarSenha: yup
@@ -230,6 +232,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                 placeholder="..."
                                                 {...register("senha")}
                                                 error={errors.senha?.message}
+                                                autocomplete="new-password"
                                             />
                                         </GridItem>
                                         <GridItem>
@@ -243,6 +246,16 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                         ?.message
                                                 }
                                             />
+                                        </GridItem><GridItem>
+                                            <Switch
+                                                label="Status"
+                                                placeholder="..."
+                                                {...register("status")}
+                                                error={
+                                                    errors.status
+                                                        ?.message
+                                                }
+                                            >Ativo</Switch>
                                         </GridItem>
                                     </Grid>
                                 </TabPanel>
@@ -888,6 +901,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                             colorScheme="blue"
                             mr={3}
                             type="submit"
+                            isLoading={isSubmitting}
                             form="formUsuario"
                         >
                             Confirmar

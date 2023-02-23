@@ -103,7 +103,7 @@ const ModalBase = ({}, ref) => {
             }
         },
     }));
-
+    console.log(watch());
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -211,7 +211,14 @@ const ModalBase = ({}, ref) => {
                                 <Box bg="white" p={4} rounded="lg">
                                     <Grid gap={4}>
                                         {campos?.data
-                                            ?.filter((i) => i.campos.length)
+                                            ?.filter((i) =>
+                                                i.campos.find(
+                                                    (e) =>
+                                                        watch(
+                                                            `modelo.campos.${e.codigo}`
+                                                        )?.exibir
+                                                )
+                                            )
                                             .map((item) => (
                                                 <Box
                                                     key={item.id}
@@ -219,7 +226,7 @@ const ModalBase = ({}, ref) => {
                                                     p={4}
                                                 >
                                                     <Heading size="sm">
-                                                        {item.nome}
+                                                        {item.nome}1
                                                     </Heading>
                                                     <Grid
                                                         mt={4}

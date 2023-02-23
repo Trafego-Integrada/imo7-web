@@ -196,6 +196,7 @@ handle.post(async (req, res) => {
             estado,
             celular,
             telefone,
+            status,
         } = req.body;
 
         const usuarioExiste = await prisma.usuario.findFirst({
@@ -205,6 +206,12 @@ handle.post(async (req, res) => {
                         email,
                     },
                 ],
+                imobiliariaId: imobiliariaId,
+                cargos: {
+                    some: {
+                        codigo: "imobiliaria",
+                    },
+                },
             },
         });
         if (!contaId && !imobiliariaId) {
@@ -218,6 +225,7 @@ handle.post(async (req, res) => {
                         email,
                         documento,
                         senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
+                        status,
                         cargos: {
                             connect: {
                                 id: 1,
@@ -232,6 +240,7 @@ handle.post(async (req, res) => {
                         nome,
                         email,
                         documento,
+                        status,
                         senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
                         cargos: {
                             connect: {
@@ -252,6 +261,7 @@ handle.post(async (req, res) => {
                         nome,
                         email,
                         documento,
+                        status,
                         senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
                         conta: {
                             connect: {
@@ -273,6 +283,7 @@ handle.post(async (req, res) => {
                         nome,
                         email,
                         documento,
+                        status,
                         senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
                         conta: {
                             connect: {
@@ -300,6 +311,7 @@ handle.post(async (req, res) => {
                         nome,
                         email,
                         documento,
+                        status,
                         senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
                         imobiliaria: {
                             connect: {

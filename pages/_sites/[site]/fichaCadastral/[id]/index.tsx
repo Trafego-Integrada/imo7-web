@@ -34,6 +34,7 @@ import * as yup from "yup";
 import "react-quill/dist/quill.snow.css";
 import { buscarEndereco } from "@/lib/buscarEndereco";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
+    console.log(modelo);
     const [schema, setSchema] = useState({});
     const toast = useToast();
     const {
@@ -102,7 +103,6 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             });
         }
     };
-    console.log(errors);
     return (
         <Box
             bg="gray.100"
@@ -176,7 +176,9 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                 <Grid gap={4}>
                     {campos
                         .filter((i) =>
-                            i.campos.find((e) => modelo?.campos[e.codigo])
+                            i.campos.find(
+                                (e) => modelo?.campos[e.codigo]?.exibir
+                            )
                         )
                         .map((item) => (
                             <Box key={item.id} bg="white" p={4}>
