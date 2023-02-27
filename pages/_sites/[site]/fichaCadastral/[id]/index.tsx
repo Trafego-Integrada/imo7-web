@@ -21,6 +21,7 @@ import {
     Heading,
     Icon,
     Image,
+    Tag,
     Text,
     useToast,
 } from "@chakra-ui/react";
@@ -173,6 +174,25 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                         </Alert>
                     )}
                 </Box>
+
+                {ficha.imovel ? (
+                    <Box p={4} bg="white">
+                        <Text>
+                            Ficha referente ao imóvel: {ficha.imovel?.codigo} -{" "}
+                            {ficha.imovel?.endereco}, {ficha.imovel?.bairro},{" "}
+                            {ficha.imovel?.cidade}/{ficha.imovel?.estado}
+                        </Text>
+                    </Box>
+                ) : ficha.codigoImovel ? (
+                    <Box p={4} bg="white">
+                        <Text>
+                            Ficha referente ao imóvel: {ficha.codigoImovel} -{" "}
+                            {ficha.enderecoImovel}
+                        </Text>
+                    </Box>
+                ) : (
+                    ""
+                )}
                 <Grid gap={4}>
                     {campos
                         .filter((i) =>
@@ -494,7 +514,12 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             })}
                             isInvalid={errors[`checkbox_${key}`]?.message}
                         >
-                            {item}
+                            {item}{" "}
+                            {errors[`checkbox_${key}`]?.message && (
+                                <Tag colorScheme="red">
+                                    Você deve aceitar os termos para prosseguir
+                                </Tag>
+                            )}
                         </Checkbox>
                     ))}
                 </Flex>
@@ -529,6 +554,7 @@ export const getServerSideProps = async (ctx) => {
                     campo: true,
                 },
             },
+            imovel: true,
         },
     });
     const modelo = await prisma.modeloFichaCadastral.findUnique({

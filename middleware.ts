@@ -88,6 +88,8 @@ export default function middleware(req: NextRequest) {
 
     if (url.pathname.includes("/_sites/imo7.com.br/")) {
         url.pathname = url.pathname.replace("/_sites/imo7.com.br/", "/");
+    } else if (url.pathname.includes("/_sites/www.imo7.com.br/")) {
+        url.pathname = url.pathname.replace("/_sites/www.imo7.com.br/", "/");
     } else if (url.pathname.includes("/_sites/localhost:3000/")) {
         url.pathname = url.pathname.replace("/_sites/localhost:3000/", "/");
     } else if (url.pathname.includes("/_sites/www/")) {

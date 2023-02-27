@@ -560,6 +560,8 @@ model FichaCadastral {
     documento              String?
     email                  String?
     telefone               String?
+    codigoImovel           String?
+    enderecoImovel         String?
     status                 StatusFicha                   @default(aguardando)
     motivoReprovacao       String?                       @db.LongText
     createdAt              DateTime                      @default(now())

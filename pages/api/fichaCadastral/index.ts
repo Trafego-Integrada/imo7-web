@@ -214,7 +214,33 @@ handle.post(async (req, res) => {
             email,
             telefone,
             responsavel,
+            imovel,
+            codigoImovel,
+            enderecoImovel,
         } = req.body;
+
+        let dataPreenchimento = {};
+        if (responsavel) {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                responsavel: {
+                    connect: {
+                        id: Number(responsavel.id),
+                    },
+                },
+            };
+        }
+        if (imovel) {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                imovel: {
+                    connect: {
+                        id: Number(imovel.id),
+                    },
+                },
+            };
+        }
+
         const data = await prisma.fichaCadastral.create({
             data: {
                 modelo: {
@@ -228,16 +254,14 @@ handle.post(async (req, res) => {
                 email,
                 telefone,
                 status: "aguardando",
+                codigoImovel,
+                enderecoImovel,
                 imobiliaria: {
                     connect: {
                         id: req.user.imobiliariaId,
                     },
                 },
-                responsavel: {
-                    connect: {
-                        id: Number(responsavel.id),
-                    },
-                },
+                ...dataPreenchimento,
             },
         });
         res.send(data);

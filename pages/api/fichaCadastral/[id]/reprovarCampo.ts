@@ -10,16 +10,30 @@ handler.post(async (req, res) => {
         const { id } = req.query;
         const { campoCodigo, motivoReprovacao } = req.body;
 
-        const data = await prisma.fichaCadastralPreenchimento.update({
+        const data = await prisma.fichaCadastralPreenchimento.upsert({
             where: {
                 fichaCadastralId_campoFichaCadastralCodigo: {
                     fichaCadastralId: id,
                     campoFichaCadastralCodigo: campoCodigo,
                 },
             },
-            data: {
+            update: {
                 aprovado: false,
                 motivoReprovacao,
+            },
+            create: {
+                aprovado: false,
+                motivoReprovacao,
+                campo: {
+                    connect: {
+                        codigo: campoCodigo,
+                    },
+                },
+                ficha: {
+                    connect: {
+                        id: id,
+                    },
+                },
             },
         });
         res.send(data);

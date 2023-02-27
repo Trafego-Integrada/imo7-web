@@ -19,6 +19,7 @@ handler.get(async (req, res) => {
                     },
                 },
                 responsavel: true,
+                imovel: true,
             },
         });
         res.send(data);
@@ -42,6 +43,9 @@ handler.post(async (req, res) => {
             status,
             motivoReprovacao,
             responsavel,
+            imovel,
+            codigoImovel,
+            enderecoImovel,
         } = req.body;
 
         let dataPreenchimento = {};
@@ -81,6 +85,23 @@ handler.post(async (req, res) => {
                 },
             };
         }
+        if (imovel) {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                imovel: {
+                    connect: {
+                        id: Number(imovel.id),
+                    },
+                },
+            };
+        } else {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                imovel: {
+                    disconnect: true,
+                },
+            };
+        }
 
         const data = await prisma.fichaCadastral.update({
             where: {
@@ -100,6 +121,8 @@ handler.post(async (req, res) => {
                 telefone,
                 status,
                 motivoReprovacao,
+                codigoImovel,
+                enderecoImovel,
                 ...dataPreenchimento,
             },
         });

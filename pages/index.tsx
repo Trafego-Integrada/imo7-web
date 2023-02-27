@@ -110,7 +110,7 @@ const Dashbord: NextPage = () => {
 
 export default Dashbord;
 
-export const getServerSideProps: GetServerSideProps = withSSRAuth((ctx) => {
+export const getServerSideProps = withSSRAuth((ctx) => {
     return {
         props: {},
     };

@@ -181,29 +181,7 @@ const ModalBase = ({}, ref) => {
                                                 )}
                                             />
                                         </GridItem>
-                                        <GridItem>
-                                            <Controller
-                                                control={control}
-                                                name="imovel"
-                                                render={({ field }) => (
-                                                    <FormMultiSelect
-                                                        {...field}
-                                                        label="Imóvel"
-                                                        options={
-                                                            imoveis &&
-                                                            imoveis.data?.data
-                                                        }
-                                                        getOptionLabel={(e) =>
-                                                            `${e.codigo} - ${e.endereco}`
-                                                        }
-                                                        getOptionValue={(e) =>
-                                                            e.id
-                                                        }
-                                                        placeholder="Selecione o imóvel"
-                                                    />
-                                                )}
-                                            />
-                                        </GridItem>
+
                                         <GridItem>
                                             <FormInput
                                                 label="Descrição"
@@ -217,7 +195,7 @@ const ModalBase = ({}, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
-                                                label="Nome / Razão Social"
+                                                label="Nome"
                                                 placeholder="nome"
                                                 error={errors.nome?.message}
                                                 {...register("nome")}
@@ -226,8 +204,9 @@ const ModalBase = ({}, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
-                                                label="CPF/CNPJ"
-                                                placeholder="CPF/CNPJ"
+                                                mask={"999.999.999-99"}
+                                                label="CPF"
+                                                placeholder="CPF"
                                                 error={
                                                     errors.documento?.message
                                                 }
@@ -246,6 +225,7 @@ const ModalBase = ({}, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
+                                                mask="(99) 9 9999-9999"
                                                 label="Telefone / Celular"
                                                 placeholder="Telefone"
                                                 error={errors.telefone?.message}
@@ -296,6 +276,77 @@ const ModalBase = ({}, ref) => {
                                             </GridItem>
                                         )}
                                     </Grid>
+                                    <Box mt={4}>
+                                        <Heading size="md">
+                                            Associe um imóvel
+                                        </Heading>
+                                        <Text fontSize="sm" color="gray" mb={4}>
+                                            Facilita a ligação e identificação
+                                            da ficha com um imóvel
+                                        </Text>
+                                        <Grid
+                                            gridTemplateColumns={{
+                                                base: "repeat(1, 1fr)",
+                                                lg: "repeat(3, 1fr)",
+                                            }}
+                                            gap={4}
+                                        >
+                                            <GridItem
+                                                colSpan={{ base: 1, lg: 3 }}
+                                            >
+                                                <Controller
+                                                    control={control}
+                                                    name="imovel"
+                                                    render={({ field }) => (
+                                                        <FormMultiSelect
+                                                            {...field}
+                                                            label="Imóvel"
+                                                            options={
+                                                                imoveis &&
+                                                                imoveis.data
+                                                                    ?.data
+                                                            }
+                                                            getOptionLabel={(
+                                                                e
+                                                            ) =>
+                                                                `${e.codigo} - ${e.endereco}, ${e.bairro}, ${e.cidade}/${e.estado}`
+                                                            }
+                                                            getOptionValue={(
+                                                                e
+                                                            ) => e.id}
+                                                            placeholder="Selecione o imóvel"
+                                                            isClearable
+                                                        />
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem
+                                                colSpan={{ base: 1, lg: 3 }}
+                                            >
+                                                ou
+                                            </GridItem>
+                                            <GridItem>
+                                                <FormInput
+                                                    label="Código do Imóvel"
+                                                    placeholder="Digite o código"
+                                                    {...register(
+                                                        "codigoImovel"
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem
+                                                colSpan={{ base: 1, lg: 2 }}
+                                            >
+                                                <FormInput
+                                                    label="Endereço do Imóvel"
+                                                    placeholder="Digite o endereço"
+                                                    {...register(
+                                                        "enderecoImovel"
+                                                    )}
+                                                />
+                                            </GridItem>
+                                        </Grid>
+                                    </Box>
                                 </Box>
                             </TabPanel>
                             {/* <TabPanel px={0}>
