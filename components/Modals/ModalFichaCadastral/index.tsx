@@ -234,18 +234,27 @@ const ModalBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem>
-                                            <FormInput
-                                                mask={
-                                                    watch("documento") &&
-                                                    "999.999.999-99"
-                                                }
-                                                label="CPF"
-                                                placeholder="CPF"
-                                                error={
-                                                    errors.documento?.message
-                                                }
-                                                {...register("documento")}
-                                                descricao="Utilize este campo para te auxiliar a identificar a ficha"
+                                            <Controller
+                                                control={control}
+                                                name="documento"
+                                                render={({ field }) => (
+                                                    <FormInput
+                                                        {...field}
+                                                        mask={
+                                                            watch(
+                                                                "documento"
+                                                            ) &&
+                                                            "999.999.999-99"
+                                                        }
+                                                        label="CPF"
+                                                        placeholder="CPF"
+                                                        error={
+                                                            errors.documento
+                                                                ?.message
+                                                        }
+                                                        descricao="Utilize este campo para te auxiliar a identificar a ficha"
+                                                    />
+                                                )}
                                             />
                                         </GridItem>
                                         <GridItem>
@@ -258,16 +267,25 @@ const ModalBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem>
-                                            <FormInput
-                                                mask={
-                                                    watch("telefone") &&
-                                                    "(99) 9 9999-9999"
-                                                }
-                                                label="Telefone / Celular"
-                                                placeholder="Telefone"
-                                                error={errors.telefone?.message}
-                                                {...register("telefone")}
-                                                descricao="Utilize este campo para te auxiliar a identificar a ficha"
+                                            <Controller
+                                                control={control}
+                                                name="telefone"
+                                                render={({ field }) => (
+                                                    <FormInput
+                                                        {...field}
+                                                        mask={
+                                                            watch("telefone") &&
+                                                            "(99) 9 9999-9999"
+                                                        }
+                                                        label="Telefone / Celular"
+                                                        placeholder="Telefone"
+                                                        error={
+                                                            errors.telefone
+                                                                ?.message
+                                                        }
+                                                        descricao="Utilize este campo para te auxiliar a identificar a ficha"
+                                                    />
+                                                )}
                                             />
                                         </GridItem>
                                         <GridItem>
@@ -378,21 +396,32 @@ const ModalBase = ({}, ref) => {
                                                 colStart={{ base: 1, lg: 1 }}
                                                 colSpan={{ base: 1, lg: 1 }}
                                             >
-                                                <FormInput
-                                                    mask={
-                                                        watch("cepImovel") &&
-                                                        "99999-999"
-                                                    }
-                                                    label="CEP do Imóvel"
-                                                    placeholder="Digite o cep"
-                                                    {...register("cepImovel", {
-                                                        onChange: (e) => {
-                                                            handleBuscarCep(
-                                                                e.target.value
-                                                            );
-                                                        },
-                                                    })}
+                                                <Controller
+                                                    control={control}
+                                                    name="cepImovel"
+                                                    render={({ field }) => (
+                                                        <FormInput
+                                                            {...field}
+                                                            mask={
+                                                                watch(
+                                                                    "cepImovel"
+                                                                ) && "99999-999"
+                                                            }
+                                                            label="CEP do Imóvel"
+                                                            placeholder="Digite o cep"
+                                                            onChange={(e) => {
+                                                                field.onChange(
+                                                                    e
+                                                                );
+                                                                handleBuscarCep(
+                                                                    e.target
+                                                                        .value
+                                                                );
+                                                            }}
+                                                        />
+                                                    )}
                                                 />
+
                                                 {buscandoCep && <Spinner />}
                                             </GridItem>
                                             <GridItem
