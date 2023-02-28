@@ -140,7 +140,6 @@ const ModalBase = ({}, ref) => {
             setBuscandoCep(false);
         }
     };
-    console.log(watch());
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -236,7 +235,10 @@ const ModalBase = ({}, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
-                                                mask={"999.999.999-99"}
+                                                mask={
+                                                    watch("documento") &&
+                                                    "999.999.999-99"
+                                                }
                                                 label="CPF"
                                                 placeholder="CPF"
                                                 error={
@@ -257,7 +259,10 @@ const ModalBase = ({}, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
-                                                mask="(99) 9 9999-9999"
+                                                mask={
+                                                    watch("telefone") &&
+                                                    "(99) 9 9999-9999"
+                                                }
                                                 label="Telefone / Celular"
                                                 placeholder="Telefone"
                                                 error={errors.telefone?.message}
@@ -374,7 +379,10 @@ const ModalBase = ({}, ref) => {
                                                 colSpan={{ base: 1, lg: 1 }}
                                             >
                                                 <FormInput
-                                                    mask="99999-999"
+                                                    mask={
+                                                        watch("cepImovel") &&
+                                                        "99999-999"
+                                                    }
                                                     label="CEP do Imóvel"
                                                     placeholder="Digite o cep"
                                                     {...register("cepImovel", {
