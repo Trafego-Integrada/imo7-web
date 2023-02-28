@@ -88,7 +88,7 @@ const ModalBase = ({}, ref) => {
 
     const { data: modelos } = useQuery(["modelosFichas"], listarFichas);
     const { data: campos } = useQuery(
-        ["categoriasCampos"],
+        ["categoriasCampos", { tipoFicha: watch("modelo.tipo") }],
         listarCategoriaCampoFichas
     );
 

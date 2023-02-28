@@ -2,6 +2,7 @@ import { FormInput } from "@/components/Form/FormInput";
 import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormTextarea } from "@/components/Form/FormTextarea";
+import { buscarEndereco } from "@/lib/buscarEndereco";
 import { listarCategoriaCampoFichas } from "@/services/models/categoriaCampoFicha";
 import {
     atualizarFicha,
@@ -27,6 +28,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Spinner,
     Tab,
     TabList,
     TabPanel,
@@ -39,9 +41,10 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FiDownload, FiEye } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
@@ -50,6 +53,7 @@ import { ModalPreview } from "../Preview";
 import { AnaliseCampo } from "./AnaliseCampo";
 const schema = yup.object({});
 const ModalBase = ({}, ref) => {
+    const [buscandoCep, setBuscandoCep] = useState(false);
     const preview = useRef();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const toast = useToast();
@@ -60,10 +64,22 @@ const ModalBase = ({}, ref) => {
         handleSubmit,
         reset,
         formState: { errors, isSubmitting },
-    } = useForm({ resolver: yupResolver(schema) });
+    } = useForm({
+        resolver: yupResolver(schema),
+        defaultValues: {
+            documento: "",
+            cepImovel: "",
+            telefone: "",
+        },
+    });
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
-            reset(data);
+            reset({
+                ...data,
+                documento: data.documento ? data.documento : "",
+                telefone: data.telefone ? data.telefone : "",
+                cepImovel: data.cepImovel ? data.cepImovel : "",
+            });
         },
     });
     const cadastrar = useMutation(cadastrarFicha);
@@ -99,7 +115,8 @@ const ModalBase = ({}, ref) => {
 
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
-            reset({});
+            setBuscandoCep(false);
+            reset({ documento: "", cepImovel: "", telefone: "" });
             if (id) {
                 buscar.mutateAsync(id);
                 onOpen();
@@ -109,6 +126,21 @@ const ModalBase = ({}, ref) => {
         },
     }));
 
+    const handleBuscarCep = async (cep) => {
+        if (cep.length === 9) {
+            setBuscandoCep(true);
+            const res = await buscarEndereco(cep);
+            reset({
+                ...watch(),
+                enderecoImovel: res.logradouro,
+                bairroImovel: res.bairro,
+                estadoImovel: res.uf,
+                cidadeImovel: res.cidade,
+            });
+            setBuscandoCep(false);
+        }
+    };
+    console.log(watch());
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -287,12 +319,12 @@ const ModalBase = ({}, ref) => {
                                         <Grid
                                             gridTemplateColumns={{
                                                 base: "repeat(1, 1fr)",
-                                                lg: "repeat(3, 1fr)",
+                                                lg: "repeat(5, 1fr)",
                                             }}
                                             gap={4}
                                         >
                                             <GridItem
-                                                colSpan={{ base: 1, lg: 3 }}
+                                                colSpan={{ base: 1, lg: 5 }}
                                             >
                                                 <Controller
                                                     control={control}
@@ -315,17 +347,19 @@ const ModalBase = ({}, ref) => {
                                                                 e
                                                             ) => e.id}
                                                             placeholder="Selecione o imóvel"
-                                                            isClearable
+                                                            isClearable={true}
                                                         />
                                                     )}
                                                 />
                                             </GridItem>
                                             <GridItem
-                                                colSpan={{ base: 1, lg: 3 }}
+                                                colSpan={{ base: 1, lg: 5 }}
                                             >
                                                 ou
                                             </GridItem>
-                                            <GridItem>
+                                            <GridItem
+                                                colStart={{ base: 1, lg: 1 }}
+                                            >
                                                 <FormInput
                                                     label="Código do Imóvel"
                                                     placeholder="Digite o código"
@@ -335,13 +369,88 @@ const ModalBase = ({}, ref) => {
                                                 />
                                             </GridItem>
                                             <GridItem
-                                                colSpan={{ base: 1, lg: 2 }}
+                                                as={Flex}
+                                                colStart={{ base: 1, lg: 1 }}
+                                                colSpan={{ base: 1, lg: 1 }}
+                                            >
+                                                <FormInput
+                                                    mask="99999-999"
+                                                    label="CEP do Imóvel"
+                                                    placeholder="Digite o cep"
+                                                    {...register("cepImovel", {
+                                                        onChange: (e) => {
+                                                            handleBuscarCep(
+                                                                e.target.value
+                                                            );
+                                                        },
+                                                    })}
+                                                />
+                                                {buscandoCep && <Spinner />}
+                                            </GridItem>
+                                            <GridItem
+                                                colStart={{ base: 1, lg: 1 }}
+                                                colSpan={{ base: 1, lg: 4 }}
                                             >
                                                 <FormInput
                                                     label="Endereço do Imóvel"
                                                     placeholder="Digite o endereço"
                                                     {...register(
                                                         "enderecoImovel"
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem
+                                                colSpan={{ base: 1, lg: 1 }}
+                                            >
+                                                <FormInput
+                                                    label="Número do Imóvel"
+                                                    placeholder="Digite o Número"
+                                                    {...register(
+                                                        "numeroImovel"
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem
+                                                colSpan={{ base: 1, lg: 2 }}
+                                            >
+                                                <FormInput
+                                                    label="Complemento do Imóvel"
+                                                    placeholder="Digite o Complemento"
+                                                    {...register(
+                                                        "complementoImovel"
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem
+                                                colSpan={{ base: 1, lg: 1 }}
+                                            >
+                                                <FormInput
+                                                    label="Bairro do Imóvel"
+                                                    placeholder="Digite o bairro"
+                                                    {...register(
+                                                        "bairroImovel"
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem
+                                                colSpan={{ base: 1, lg: 1 }}
+                                            >
+                                                <FormInput
+                                                    label="Cidade do Imóvel"
+                                                    placeholder="Digite o endereço"
+                                                    {...register(
+                                                        "cidadeImovel"
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem
+                                                colSpan={{ base: 1, lg: 1 }}
+                                            >
+                                                <FormInput
+                                                    label="Estado do Imóvel"
+                                                    placeholder="Digite o estado"
+                                                    {...register(
+                                                        "estadoImovel"
                                                     )}
                                                 />
                                             </GridItem>

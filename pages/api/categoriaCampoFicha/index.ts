@@ -44,6 +44,7 @@ handle.get(async (req, res) => {
             include: {
                 campos: {
                     where: {
+                        tipoFicha,
                         deletedAt: null,
                     },
                     orderBy: {

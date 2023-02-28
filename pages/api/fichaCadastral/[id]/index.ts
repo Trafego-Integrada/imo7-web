@@ -45,7 +45,13 @@ handler.post(async (req, res) => {
             responsavel,
             imovel,
             codigoImovel,
+            cepImovel,
             enderecoImovel,
+            numeroImovel,
+            complementoImovel,
+            bairroImovel,
+            cidadeImovel,
+            estadoImovel,
         } = req.body;
 
         let dataPreenchimento = {};
@@ -122,7 +128,13 @@ handler.post(async (req, res) => {
                 status,
                 motivoReprovacao,
                 codigoImovel,
+                cepImovel,
                 enderecoImovel,
+                numeroImovel,
+                complementoImovel,
+                bairroImovel,
+                cidadeImovel,
+                estadoImovel,
                 ...dataPreenchimento,
             },
         });

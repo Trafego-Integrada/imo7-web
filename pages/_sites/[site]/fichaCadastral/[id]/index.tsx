@@ -187,7 +187,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     <Box p={4} bg="white">
                         <Text>
                             Ficha referente ao imóvel: {ficha.codigoImovel} -{" "}
-                            {ficha.enderecoImovel}
+                            {ficha.enderecoImovel} nº {ficha.numeroImovel}{" "}
+                            {ficha.complementoImovel &&
+                                `(${ficha.complementoImovel})`}
+                            , {ficha.bairroImovel}, {ficha.cidadeImovel}/
+                            {ficha.estadoImovel}
                         </Text>
                     </Box>
                 ) : (
@@ -575,6 +579,9 @@ export const getServerSideProps = async (ctx) => {
         },
         include: {
             campos: {
+                where: {
+                    tipoFicha: ficha?.modelo.tipo,
+                },
                 orderBy: {
                     ordem: "asc",
                 },

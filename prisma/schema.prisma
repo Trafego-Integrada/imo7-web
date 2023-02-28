@@ -561,7 +561,13 @@ model FichaCadastral {
     email                  String?
     telefone               String?
     codigoImovel           String?
+    cepImovel              String?
     enderecoImovel         String?
+    numeroImovel           String?
+    complementoImovel      String?
+    bairroImovel           String?
+    cidadeImovel           String?
+    estadoImovel           String?
     status                 StatusFicha                   @default(aguardando)
     motivoReprovacao       String?                       @db.LongText
     createdAt              DateTime                      @default(now())

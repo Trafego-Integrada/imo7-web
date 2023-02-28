@@ -216,7 +216,13 @@ handle.post(async (req, res) => {
             responsavel,
             imovel,
             codigoImovel,
+            cepImovel,
             enderecoImovel,
+            numeroImovel,
+            complementoImovel,
+            bairroImovel,
+            cidadeImovel,
+            estadoImovel,
         } = req.body;
 
         let dataPreenchimento = {};
@@ -255,7 +261,13 @@ handle.post(async (req, res) => {
                 telefone,
                 status: "aguardando",
                 codigoImovel,
+                cepImovel,
                 enderecoImovel,
+                numeroImovel,
+                complementoImovel,
+                bairroImovel,
+                cidadeImovel,
+                estadoImovel,
                 imobiliaria: {
                     connect: {
                         id: req.user.imobiliariaId,
