@@ -51,11 +51,16 @@ import {
 import { DrawerCampo } from "@/components/Drawers/Cadastros/FichaCadastral/DrawerCampo";
 
 const Configuracoes = () => {
+    const [ficha, setFicha] = useState("");
     const [query, setQuery] = useState("");
+    const [categoria, setCategoria] = useState("");
     const toast = useToast();
     const drawer = useRef();
     const modalExcluir = useRef();
-    const { data: campos } = useQuery(["campos", { query }], listarCampoFichas);
+    const { data: campos } = useQuery(
+        ["campos", { query, categoria, tipoFicha: ficha }],
+        listarCampoFichas
+    );
     const excluir = useMutation(excluirCampoFicha);
 
     const onDelete = async (id) => {
@@ -70,6 +75,11 @@ const Configuracoes = () => {
             },
         });
     };
+
+    const { data: categorias } = useQuery(
+        ["categoriasCampos", {}],
+        listarCategoriaCampoFichas
+    );
     return (
         <>
             <Layout title="Campos">
@@ -91,10 +101,43 @@ const Configuracoes = () => {
                             py={6}
                         >
                             <Flex gap={4} align="center">
+                                <FormSelect
+                                    size="sm"
+                                    placeholder="Por tipo"
+                                    value={ficha}
+                                    onChange={(e) => setFicha(e.target.value)}
+                                >
+                                    <option value="inquilino">
+                                        Cadastro de Inquilino
+                                    </option>
+                                    <option value="fiador">
+                                        Cadastro de Fiador
+                                    </option>
+                                    <option value="proprietario">
+                                        Cadastro de Proprietario
+                                    </option>
+                                    <option value="imovel">
+                                        Cadastro de Imovel
+                                    </option>
+                                </FormSelect>
+                                <FormSelect
+                                    size="sm"
+                                    placeholder="Por categoria"
+                                    value={categoria}
+                                    onChange={(e) =>
+                                        setCategoria(e.target.value)
+                                    }
+                                >
+                                    {categorias?.data?.map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.nome}
+                                        </option>
+                                    ))}
+                                </FormSelect>
                                 <FormInput
                                     size="sm"
                                     minW={96}
-                                    placeholder="Encontre uma categoria"
+                                    placeholder="Encontre por codigo ou nome"
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
                                 />
@@ -122,6 +165,7 @@ const Configuracoes = () => {
                                     <Tr>
                                         <Th w={24}>Ordem</Th>
                                         <Th w={24}>Categoria</Th>
+                                        <Th w={24}>Codigo</Th>
                                         <Th>Nome</Th>
                                         <Th w={24}></Th>
                                     </Tr>
@@ -131,6 +175,7 @@ const Configuracoes = () => {
                                         <Tr key={item.id}>
                                             <Td>{item.ordem}</Td>
                                             <Td>{item.categoria?.nome}</Td>
+                                            <Td>{item.codigo}</Td>
                                             <Td>
                                                 <Text fontWeight="bold">
                                                     {item.nome}

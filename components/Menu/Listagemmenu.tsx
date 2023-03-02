@@ -125,7 +125,7 @@ export const Listagemmenu = () => {
     const { usuario } = useAuth();
     return (
         <>
-            <List display="flex" flexDir="column">
+            <List display="flex" flexDir="column" overflow="auto">
                 {menu.map((item) => {
                     if (
                         item.cargos.length == 0 ||

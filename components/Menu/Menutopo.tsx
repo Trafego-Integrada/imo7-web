@@ -47,7 +47,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                 display={{ sm: "flex", md: "none" }}
                 w="100%"
                 bg="bluelight"
-                h="120px"
+                h="100px"
                 alignItems="center"
                 p={5}
             >
@@ -108,10 +108,10 @@ export const Menutopo = ({ namepage, subnamepage }) => {
 
             <Box
                 display={{ sm: "none", md: "flex" }}
-                ml={{ base: "0px", md: "120px" }}
+                ml={{ base: "0px", md: "100px" }}
                 w="100%"
                 bg="bluelight"
-                h="120px"
+                h="100px"
                 alignItems="center"
             >
                 <Grid templateColumns="repeat(3, 1fr)" w="100%" p={5}>

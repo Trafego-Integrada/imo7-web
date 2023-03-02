@@ -19,12 +19,27 @@ handle.get(async (req, res) => {
             status,
             responsaveis,
             identificacao,
+            deletedAt,
         } = req.query;
         let filtroQuery: Prisma.FichaCadastralWhereInput = { AND: [] };
 
         if (tipoFicha) {
             filtroQuery = {
                 ...filtroQuery,
+            };
+        }
+        console.log(req.query);
+        if (deletedAt) {
+            filtroQuery = {
+                ...filtroQuery,
+                deletedAt: {
+                    not: null,
+                },
+            };
+        } else {
+            filtroQuery = {
+                ...filtroQuery,
+                deletedAt: null,
             };
         }
 
@@ -171,6 +186,7 @@ handle.get(async (req, res) => {
         const data = await prisma.fichaCadastral.findMany({
             where: {
                 ...filtroQuery,
+
                 imobiliaria: {
                     id: req.user.imobiliariaId,
                 },

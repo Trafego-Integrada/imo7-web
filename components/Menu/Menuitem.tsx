@@ -117,8 +117,8 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                 pos="relative"
             >
                 <Flex flexDir={{ md: "column" }} alignItems="center">
-                    <Icon as={icon} fontSize={{ base: "1xl", md: "2xl" }} />
-                    <Text fontWeight="normal" fontSize="sm" mt={2}>
+                    <Icon as={icon} fontSize={{ base: "md", md: "md" }} />
+                    <Text fontWeight="normal" fontSize="xs" mt={2}>
                         {title}
                     </Text>
                 </Flex>

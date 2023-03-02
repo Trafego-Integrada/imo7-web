@@ -68,6 +68,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                     bgPos="center"
                     alignItems="center"
                     justifyContent="center"
+                    bgSize="cover"
                     p={4}
                 ></GridItem>
                 <GridItem colSpan={1}>

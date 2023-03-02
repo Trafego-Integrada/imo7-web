@@ -12,8 +12,8 @@ export const Layout = ({ title, subtitle, children }) => {
             <Box
                 h="full"
                 bg="gray.200"
-                ml={{ base: "0px", md: "120px" }}
-                w={{ sm: "", md: "calc(100% - 120px)" }}
+                ml={{ base: "0px", md: "100px" }}
+                w={{ sm: "", md: "calc(100% - 100px)" }}
             >
                 {children}
             </Box>

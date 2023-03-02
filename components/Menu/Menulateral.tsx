@@ -6,7 +6,7 @@ export const Menulateral = () => {
     return (
         <>
             <Box
-                w="120px"
+                w="100px"
                 h="100vh"
                 bg="graydark"
                 display={{ base: "none", md: "flex" }}

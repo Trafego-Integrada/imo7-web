@@ -10,13 +10,35 @@ handle.use(checkAuth);
 
 handle.get(async (req, res) => {
     try {
-        const { tipoFicha } = req.query;
+        const { query, categoria, tipoFicha } = req.query;
         let filtroQuery: Prisma.CampoFichaCadastralWhereInput = {};
-
+        if (query) {
+            filtroQuery = {
+                ...filtroQuery,
+                OR: [
+                    {
+                        codigo: {
+                            contains: query,
+                        },
+                    },
+                    {
+                        nome: {
+                            contains: query,
+                        },
+                    },
+                ],
+            };
+        }
         if (tipoFicha) {
             filtroQuery = {
                 ...filtroQuery,
                 tipoFicha,
+            };
+        }
+        if (categoria) {
+            filtroQuery = {
+                ...filtroQuery,
+                categoriaId: categoria,
             };
         }
 

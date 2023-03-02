@@ -34,6 +34,7 @@ import { useMutation } from "react-query";
 import * as yup from "yup";
 import "react-quill/dist/quill.snow.css";
 import { buscarEndereco } from "@/lib/buscarEndereco";
+import { GetServerSideProps } from "next";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
     console.log(modelo);
     const [schema, setSchema] = useState({});
@@ -546,7 +547,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
 
 export default FichaCadastral;
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const { id } = ctx.query;
     let ficha = await prisma.fichaCadastral.findUnique({
         where: { id },
@@ -561,6 +562,13 @@ export const getServerSideProps = async (ctx) => {
             imovel: true,
         },
     });
+    if (ficha?.deletedAt) {
+        return {
+            props: {
+                notFound: true,
+            },
+        };
+    }
     const modelo = await prisma.modeloFichaCadastral.findUnique({
         where: {
             id: ficha?.modeloFichaCadastralId,

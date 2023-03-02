@@ -34,7 +34,7 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData);
 
-export async function signOut(ctx = undefined) {
+export async function signOut(ctx = null) {
     destroyCookie(ctx, "imo7.token");
     destroyCookie(ctx, "imo7.refreshToken");
     Router.push("/login");
@@ -132,11 +132,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 conta,
                 modulos,
             } = response.data;
-            setCookie(undefined, "imo7.token", token, {
+            setCookie(null, "imo7.token", token, {
                 maxAge: 60 * 60 * 24 * 30,
                 path: "/",
             });
-            setCookie(undefined, "imo7.refreshToken", refreshToken, {
+            setCookie(null, "imo7.refreshToken", refreshToken, {
                 maxAge: 60 * 60 * 24 * 30,
                 path: "/",
             });
@@ -171,10 +171,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     function selecionarConta(id) {
-        setCookie(undefined, "imo7.conta", id);
+        setCookie(null, "imo7.conta", id);
     }
     function selecionarContrato(id) {
-        setCookie(undefined, "imo7.contrato", id);
+        setCookie(null, "imo7.contrato", id);
     }
     return (
         <AuthContext.Provider
