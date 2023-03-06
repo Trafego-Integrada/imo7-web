@@ -16,11 +16,15 @@ import {
     Checkbox,
     Container,
     Flex,
+    FormLabel,
     Grid,
     GridItem,
     Heading,
     Icon,
     Image,
+    Radio,
+    RadioGroup,
+    Stack,
     Tag,
     Text,
     useToast,
@@ -28,18 +32,20 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { FiEye } from "react-icons/fi";
 import { useMutation } from "react-query";
 import * as yup from "yup";
 import "react-quill/dist/quill.snow.css";
 import { buscarEndereco } from "@/lib/buscarEndereco";
 import { GetServerSideProps } from "next";
+import { FormSelect } from "@/components/Form/FormSelect";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
     console.log(modelo);
     const [schema, setSchema] = useState({});
     const toast = useToast();
     const {
+        control,
         reset,
         watch,
         register,
@@ -58,17 +64,20 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             await atualizar.mutateAsync(data);
 
             const formData = new FormData();
-            await Promise.all(
-                Object.entries(data.arquivos).map((item) => {
-                    var files = item[1].length;
-                    for (var x = 0; x < files; x++) {
-                        formData.append(item[0], item[1][x]);
-                    }
-                })
-            );
-            await atualizarAnexos.mutateAsync({ id: data.id, formData });
+            if (data.arquivos && Object.entries(data.arquivos).length) {
+                await Promise.all(
+                    Object.entries(data.arquivos).map((item) => {
+                        var files = item[1].length;
+                        for (var x = 0; x < files; x++) {
+                            formData.append(item[0], item[1][x]);
+                        }
+                    })
+                );
+                await atualizarAnexos.mutateAsync({ id: data.id, formData });
+            }
             toast({ title: "Ficha salva", status: "success" });
         } catch (e) {
+            console.log(e);
             toast({ title: "Houve um problema", status: "error" });
         }
     };
@@ -224,9 +233,181 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                 key={campo.id}
                                                 colSpan={{ lg: campo.colSpan }}
                                             >
-                                                {campo.tipoCampo == "text" ? (
+                                                {campo.tipoCampo ==
+                                                    "checkbox" && (
+                                                    <>
+                                                        <Controller
+                                                            control={control}
+                                                            name={
+                                                                "preenchimento." +
+                                                                campo.codigo
+                                                            }
+                                                            rules={{
+                                                                required: {
+                                                                    value: modelo
+                                                                        .campos[
+                                                                        campo
+                                                                            .codigo
+                                                                    ]
+                                                                        ?.obrigatorio,
+                                                                    message:
+                                                                        "Campo obrigatório",
+                                                                },
+                                                            }}
+                                                            render={({
+                                                                field,
+                                                            }) => (
+                                                                <Checkbox
+                                                                    {...field}
+                                                                    onChange={(
+                                                                        e
+                                                                    ) => {
+                                                                        if (
+                                                                            e
+                                                                                .target
+                                                                                .checked
+                                                                        ) {
+                                                                            field.onChange(
+                                                                                "Sim"
+                                                                            );
+                                                                        } else {
+                                                                            field.onChange(
+                                                                                "Não"
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                    borderColor={
+                                                                        watch(
+                                                                            "analise." +
+                                                                                campo.codigo
+                                                                        )
+                                                                            ?.aprovado
+                                                                            ? "green"
+                                                                            : ""
+                                                                    }
+                                                                    borderWidth={
+                                                                        watch(
+                                                                            "analise." +
+                                                                                campo.codigo
+                                                                        )
+                                                                            ?.aprovado
+                                                                            ? 2
+                                                                            : ""
+                                                                    }
+                                                                    error={
+                                                                        errors.preenchimento &&
+                                                                        errors
+                                                                            .preenchimento[
+                                                                            campo
+                                                                                .codigo
+                                                                        ]
+                                                                            ?.message
+                                                                            ? errors
+                                                                                  .preenchimento[
+                                                                                  campo
+                                                                                      .codigo
+                                                                              ]
+                                                                                  ?.message
+                                                                            : watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            ? "Campo reprovado: " +
+                                                                              watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            : ""
+                                                                    }
+                                                                >
+                                                                    {campo.nome}
+                                                                </Checkbox>
+                                                            )}
+                                                        />
+                                                    </>
+                                                )}
+                                                {campo.tipoCampo ==
+                                                    "select" && (
+                                                    <FormSelect
+                                                        size="sm"
+                                                        label={campo.nome}
+                                                        mask={campo.mask}
+                                                        {...register(
+                                                            "preenchimento." +
+                                                                campo.codigo,
+                                                            {
+                                                                required: {
+                                                                    value: modelo
+                                                                        .campos[
+                                                                        campo
+                                                                            .codigo
+                                                                    ]
+                                                                        ?.obrigatorio,
+                                                                    message:
+                                                                        "Campo obrigatório",
+                                                                },
+                                                            }
+                                                        )}
+                                                        borderColor={
+                                                            watch(
+                                                                "analise." +
+                                                                    campo.codigo
+                                                            )?.aprovado
+                                                                ? "green"
+                                                                : ""
+                                                        }
+                                                        borderWidth={
+                                                            watch(
+                                                                "analise." +
+                                                                    campo.codigo
+                                                            )?.aprovado
+                                                                ? 2
+                                                                : ""
+                                                        }
+                                                        error={
+                                                            errors.preenchimento &&
+                                                            errors
+                                                                .preenchimento[
+                                                                campo.codigo
+                                                            ]?.message
+                                                                ? errors
+                                                                      .preenchimento[
+                                                                      campo
+                                                                          .codigo
+                                                                  ]?.message
+                                                                : watch(
+                                                                      "analise." +
+                                                                          campo.codigo
+                                                                  )
+                                                                      ?.motivoReprovacao
+                                                                ? "Campo reprovado: " +
+                                                                  watch(
+                                                                      "analise." +
+                                                                          campo.codigo
+                                                                  )
+                                                                      ?.motivoReprovacao
+                                                                : ""
+                                                        }
+                                                    >
+                                                        {campo.opcoes.map(
+                                                            (op) => (
+                                                                <option
+                                                                    key={op}
+                                                                    value={op}
+                                                                >
+                                                                    {op}
+                                                                </option>
+                                                            )
+                                                        )}
+                                                    </FormSelect>
+                                                )}
+                                                {campo.tipoCampo == "text" ||
+                                                campo.tipoCampo == "number" ? (
                                                     <FormInput
                                                         size="sm"
+                                                        type={campo.tipoCampo}
                                                         label={campo.nome}
                                                         mask={campo.mask}
                                                         {...register(
@@ -300,11 +481,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 : ""
                                                         }
                                                     />
-                                                ) : campo.tipoCampo ==
-                                                  "date" ? (
+                                                ) : campo.tipoCampo == "date" ||
+                                                  campo.tipoCampo == "time" ? (
                                                     <FormInput
                                                         size="sm"
-                                                        type="date"
+                                                        type={campo.tipoCampo}
                                                         label={campo.nome}
                                                         {...register(
                                                             "preenchimento." +

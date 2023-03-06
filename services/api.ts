@@ -11,7 +11,7 @@ let failedRequestQueue: {
     onFailure: (err: AxiosError<any>) => void;
 }[] = [];
 
-export function setupApiClient(ctx = undefined) {
+export function setupApiClient(ctx = null) {
     let cookies = parseCookies(ctx);
     let host;
 
@@ -36,10 +36,9 @@ export function setupApiClient(ctx = undefined) {
         },
     });
     api.interceptors.request.use((request) => {
-        let cookies = parseCookies({ req: request });
+        let cookies = parseCookies();
         let host;
         if (typeof window !== "undefined") {
-            console.log(window.location);
             host = window.location.host;
             host = host.split(".")[0];
         }
@@ -63,7 +62,7 @@ export function setupApiClient(ctx = undefined) {
         (error: AxiosError) => {
             if (error.response?.status === 401) {
                 if (error.response.data?.code === "token.expired") {
-                    cookies = parseCookies(ctx);
+                    cookies = parseCookies();
 
                     const { "imo7.refreshToken": refreshToken } = cookies;
                     const originalConfig = error.config;
@@ -73,12 +72,12 @@ export function setupApiClient(ctx = undefined) {
                             .then((response) => {
                                 const { token, refreshToken: newRefreshToken } =
                                     response.data;
-                                setCookie(ctx, "imo7.token", token, {
+                                setCookie(null, "imo7.token", token, {
                                     maxAge: 60 * 60 * 24 * 30,
                                     path: "/",
                                 });
                                 setCookie(
-                                    ctx,
+                                    null,
                                     "imo7.refreshToken",
                                     newRefreshToken,
                                     {

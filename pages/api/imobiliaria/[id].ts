@@ -1,20 +1,20 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
+import { providerStorage } from "@/lib/storage";
+import { checkAuth } from "@/middleware/checkAuth";
+import { cors } from "@/middleware/cors";
+import { multiparty } from "@/middleware/multipart";
+import { statSync } from "fs";
+import moment from "moment";
+import nextConnect from "next-connect";
+import * as os from "oci-objectstorage";
+import slug from "slug";
 
 const handle = nextConnect();
-import { cors } from "@/middleware/cors";
-import moment from "moment";
-import { statSync } from "fs";
 export const config = {
     api: {
         bodyParser: false,
     },
 };
-import { checkAuth } from "@/middleware/checkAuth";
-import { multiparty } from "@/middleware/multipart";
-import * as os from "oci-objectstorage";
-import { providerStorage } from "@/lib/storage";
-import slug from "slug";
 handle.use(cors);
 handle.use(checkAuth);
 handle.use(multiparty);
@@ -46,8 +46,22 @@ handle.post(async (req, res) => {
         telefone,
         site,
         numero,
+        removerLogo,
+        removerBg,
     } = req.body;
     const { logo, bg } = req.files;
+    let limparLogo = {};
+    let limparBg = {};
+    if (removerLogo) {
+        limparLogo = {
+            logo: null,
+        };
+    }
+    if (limparBg) {
+        limparBg = {
+            bg: null,
+        };
+    }
     const imobiliaria = await prisma.imobiliaria.update({
         where: {
             id: Number(id),
@@ -68,6 +82,8 @@ handle.post(async (req, res) => {
             telefone,
             site,
             numero,
+            ...limparLogo,
+            ...limparBg,
         },
     });
 

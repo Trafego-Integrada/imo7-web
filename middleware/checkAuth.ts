@@ -41,7 +41,15 @@ export const checkAuth = async (req, res, next) => {
             },
         });
 
-        if (!user.status) {
+        if (!user) {
+            return res.status(401).json({
+                error: true,
+                code: "user.naoExiste",
+                message: "Usuário não existe",
+            });
+        }
+
+        if (!user?.status) {
             return res.status(401).json({
                 error: true,
                 code: "user.status",

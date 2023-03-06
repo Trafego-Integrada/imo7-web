@@ -51,6 +51,7 @@ import {
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { listarCampos } from "@/services/models/campo";
+import { FormAutocomplete } from "@/components/Form/FormAutocomplete";
 
 const schema = yup.object().shape({
     nome: yup.string().required("Campo obrigatório"),
@@ -127,7 +128,7 @@ const DrawerBase = ({}, ref) => {
     );
     const { data: campos } = useQuery(["listaCampos", {}], listarCampos);
     return (
-        <Drawer isOpen={isOpen} onClose={onClose} placement="right">
+        <Drawer isOpen={isOpen} onClose={onClose} placement="right" size="lg">
             <DrawerOverlay />
             <DrawerContent>
                 <DrawerHeader>
@@ -188,21 +189,17 @@ const DrawerBase = ({}, ref) => {
                                     {...register("tipoCampo")}
                                     error={errors.tipoCampo?.message}
                                 >
+                                    <option value="number">Number</option>
                                     <option value="text">Text</option>
                                     <option value="textarea">Textarea</option>
                                     <option value="select">Select</option>
-                                    <option value="multiselect">
-                                        Multi Select
-                                    </option>
-                                    <option value="radio">Radio</option>
                                     <option value="checkbox">Checkbox</option>
                                     <option value="file">Arquivo</option>
-                                    <option value="datetime">
+                                    <option value="datetime-local">
                                         Data e Hora
                                     </option>
                                     <option value="date">Data</option>
                                     <option value="time">Hora</option>
-                                    <option value="boolean">Booleano</option>
                                 </FormSelect>
                             </GridItem>
                             <GridItem>
@@ -237,95 +234,134 @@ const DrawerBase = ({}, ref) => {
                                     error={errors.colSpan?.message}
                                 />
                             </GridItem>
-                            <GridItem>
-                                <FormInput
-                                    size="sm"
-                                    label="Mascara"
-                                    {...register("mask")}
-                                    error={errors.mask?.message}
-                                />
-                            </GridItem>
-                            <GridItem>
-                                <Checkbox
-                                    size="sm"
-                                    isChecked={watch("cep")}
-                                    {...register("cep")}
-                                    isInvalid={errors.cep?.message}
-                                >
-                                    Campo de CEP
-                                </Checkbox>
-                            </GridItem>{" "}
-                            {watch("cep") && (
-                                <GridItem>
-                                    <Controller
-                                        control={control}
-                                        name="camposEndereco.endereco"
-                                        render={({ field }) => (
-                                            <FormMultiSelect
-                                                {...field}
-                                                size="sm"
-                                                label="Campo Endereço"
-                                                placeholder="Selecione..."
-                                                options={campos?.data}
-                                                getOptionLabel={(e) =>
-                                                    e.codigo + " - " + e.nome
-                                                }
-                                                getOptionValue={(e) => e.id}
+                            {(watch("tipoCampo") == "select" ||
+                                watch("tipoCampo") == "radio") && (
+                                <>
+                                    <GridItem>
+                                        <Controller
+                                            control={control}
+                                            name="opcoes"
+                                            render={({ field }) => (
+                                                <FormAutocomplete
+                                                    label="Opções"
+                                                    {...field}
+                                                    multiple
+                                                    items={[]}
+                                                />
+                                            )}
+                                        />
+                                    </GridItem>
+                                </>
+                            )}
+                            {watch("tipoCampo") == "text" && (
+                                <>
+                                    <GridItem>
+                                        <FormInput
+                                            size="sm"
+                                            label="Mascara"
+                                            {...register("mask")}
+                                            error={errors.mask?.message}
+                                        />
+                                    </GridItem>
+                                    <GridItem>
+                                        <Checkbox
+                                            size="sm"
+                                            isChecked={watch("cep")}
+                                            {...register("cep")}
+                                            isInvalid={errors.cep?.message}
+                                        >
+                                            Campo de CEP
+                                        </Checkbox>
+                                    </GridItem>
+                                    {watch("cep") && (
+                                        <GridItem>
+                                            <Controller
+                                                control={control}
+                                                name="camposEndereco.endereco"
+                                                render={({ field }) => (
+                                                    <FormMultiSelect
+                                                        {...field}
+                                                        size="sm"
+                                                        label="Campo Endereço"
+                                                        placeholder="Selecione..."
+                                                        options={campos?.data}
+                                                        getOptionLabel={(e) =>
+                                                            e.codigo +
+                                                            " - " +
+                                                            e.nome
+                                                        }
+                                                        getOptionValue={(e) =>
+                                                            e.id
+                                                        }
+                                                    />
+                                                )}
                                             />
-                                        )}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name="camposEndereco.bairro"
-                                        render={({ field }) => (
-                                            <FormMultiSelect
-                                                {...field}
-                                                size="sm"
-                                                label="Campo Bairro"
-                                                placeholder="Selecione..."
-                                                options={campos?.data}
-                                                getOptionLabel={(e) =>
-                                                    e.codigo + " - " + e.nome
-                                                }
-                                                getOptionValue={(e) => e.id}
+                                            <Controller
+                                                control={control}
+                                                name="camposEndereco.bairro"
+                                                render={({ field }) => (
+                                                    <FormMultiSelect
+                                                        {...field}
+                                                        size="sm"
+                                                        label="Campo Bairro"
+                                                        placeholder="Selecione..."
+                                                        options={campos?.data}
+                                                        getOptionLabel={(e) =>
+                                                            e.codigo +
+                                                            " - " +
+                                                            e.nome
+                                                        }
+                                                        getOptionValue={(e) =>
+                                                            e.id
+                                                        }
+                                                    />
+                                                )}
                                             />
-                                        )}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name="camposEndereco.cidade"
-                                        render={({ field }) => (
-                                            <FormMultiSelect
-                                                {...field}
-                                                size="sm"
-                                                label="Campo Cidade"
-                                                placeholder="Selecione..."
-                                                options={campos?.data}
-                                                getOptionLabel={(e) =>
-                                                    e.codigo + " - " + e.nome
-                                                }
-                                                getOptionValue={(e) => e.id}
+                                            <Controller
+                                                control={control}
+                                                name="camposEndereco.cidade"
+                                                render={({ field }) => (
+                                                    <FormMultiSelect
+                                                        {...field}
+                                                        size="sm"
+                                                        label="Campo Cidade"
+                                                        placeholder="Selecione..."
+                                                        options={campos?.data}
+                                                        getOptionLabel={(e) =>
+                                                            e.codigo +
+                                                            " - " +
+                                                            e.nome
+                                                        }
+                                                        getOptionValue={(e) =>
+                                                            e.id
+                                                        }
+                                                    />
+                                                )}
                                             />
-                                        )}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name="camposEndereco.estado"
-                                        render={({ field }) => (
-                                            <FormMultiSelect
-                                                {...field}
-                                                size="sm"
-                                                label="Campo Estado"
-                                                placeholder="Selecione..."
-                                                options={campos?.data}
-                                                getOptionLabel={(e) =>
-                                                    e.codigo + " - " + e.nome
-                                                }
-                                                getOptionValue={(e) => e.id}
+                                            <Controller
+                                                control={control}
+                                                name="camposEndereco.estado"
+                                                render={({ field }) => (
+                                                    <FormMultiSelect
+                                                        {...field}
+                                                        size="sm"
+                                                        label="Campo Estado"
+                                                        placeholder="Selecione..."
+                                                        options={campos?.data}
+                                                        getOptionLabel={(e) =>
+                                                            e.codigo +
+                                                            " - " +
+                                                            e.nome
+                                                        }
+                                                        getOptionValue={(e) =>
+                                                            e.id
+                                                        }
+                                                    />
+                                                )}
                                             />
-                                        )}
-                                    />
-                                </GridItem>
+                                        </GridItem>
+                                    )}
+                                </>
                             )}
                         </Grid>
                     </Box>

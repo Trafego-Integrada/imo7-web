@@ -1,9 +1,9 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
 import { Prisma } from "@prisma/client";
 import moment from "moment";
+import nextConnect from "next-connect";
 
 const handle = nextConnect();
 handle.use(cors);
@@ -20,6 +20,7 @@ handle.get(async (req, res) => {
             responsaveis,
             identificacao,
             deletedAt,
+            codigo,
         } = req.query;
         let filtroQuery: Prisma.FichaCadastralWhereInput = { AND: [] };
 
@@ -110,6 +111,17 @@ handle.get(async (req, res) => {
                                 },
                             },
                         ],
+                    },
+                ],
+            };
+        }
+        if (codigo) {
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        codigo: Number(codigo),
                     },
                 ],
             };
@@ -262,9 +274,22 @@ handle.post(async (req, res) => {
                 },
             };
         }
+        let ultimoCodigo = 1;
+        const ultimaFicha = await prisma.fichaCadastral.findFirst({
+            where: {
+                imobiliariaId: req.user.imobiliariaId,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+        if (ultimaFicha?.codigo) {
+            ultimoCodigo = ultimaFicha.codigo + 1;
+        }
 
         const data = await prisma.fichaCadastral.create({
             data: {
+                codigo: ultimoCodigo,
                 modelo: {
                     connect: {
                         id: modelo.id,

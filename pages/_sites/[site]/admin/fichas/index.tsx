@@ -5,7 +5,6 @@ import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { Layout } from "@/components/Layout/layout";
 import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
 import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFichaCadastral";
-import { NextChakraLink } from "@/components/NextChakraLink";
 import {
     arrayStatusFicha,
     formatoData,
@@ -38,20 +37,11 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { BsFileExcel } from "react-icons/bs";
-import {
-    FiDownloadCloud,
-    FiEdit,
-    FiEye,
-    FiLink,
-    FiLink2,
-    FiPlus,
-    FiTrash,
-} from "react-icons/fi";
-import { MdOutlineVerifiedUser } from "react-icons/md";
-import { useMutation, useQuery } from "react-query";
-import { exportToExcel } from "react-json-to-excel";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
+import { FiEdit, FiEye, FiLink, FiPlus, FiTrash } from "react-icons/fi";
+import { MdOutlineVerifiedUser } from "react-icons/md";
+import { exportToExcel } from "react-json-to-excel";
+import { useMutation, useQuery } from "react-query";
 const filtroPadrao = {
     query: "",
     identificacao: "",
@@ -143,7 +133,20 @@ const FichasCadastrais = () => {
                                 Limpar filtro
                             </Button>
                         </Flex>
-                        <Flex gap={2}>
+                        <Flex gap={2} flexDir={{ lg: "row", base: "column" }}>
+                            <FormInput
+                                size="sm"
+                                minW={32}
+                                label="Codigo"
+                                placeholder="Por codigo"
+                                value={filtro.codigo}
+                                onChange={(e) =>
+                                    setFiltro({
+                                        ...filtro,
+                                        codigo: e.target.value,
+                                    })
+                                }
+                            />
                             <FormInput
                                 size="sm"
                                 minW={96}
@@ -294,6 +297,7 @@ const FichasCadastrais = () => {
                             <Table size="sm">
                                 <Thead>
                                     <Tr>
+                                        <Th w={44}>ID</Th>
                                         <Th w={44}>Tipo</Th>
                                         <Th>Nome</Th>
                                         <Th w={44}>Preenchimento</Th>
@@ -308,6 +312,7 @@ const FichasCadastrais = () => {
                                     {fichas?.data?.length > 0 ? (
                                         fichas.data.map((item) => (
                                             <Tr key={item.id}>
+                                                <Td># {item.codigo}</Td>
                                                 <Td>
                                                     {tipoFicha(
                                                         item.modelo?.tipo

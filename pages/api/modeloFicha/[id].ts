@@ -39,7 +39,8 @@ handler.post(async (req, res) => {
                 descricao,
                 campos,
                 instrucoes,
-                checkbox,
+                checkbox: checkbox ? checkbox : [],
+                checkbox: checkbox ? checkbox : [],
             },
         });
         res.send(data);

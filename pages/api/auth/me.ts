@@ -10,13 +10,10 @@ const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 handler.use(cors);
 handler.use(checkAuth);
 handler.get(async (req, res) => {
-    const { documento } = req.user;
-
     const user = await getUser({
-        documento,
-        imobiliaria: req.user?.imobiliria?.url,
+        documento: req.user.documento,
+        imobiliria: req.user.imobiliaria?.url,
     });
-
     if (!user) {
         return res
             .status(400)
@@ -26,7 +23,7 @@ handler.get(async (req, res) => {
     return res.json({
         id: user.id,
         nome: user.nome,
-        documento,
+        documento: user.documento,
         email: user.email,
         permissoes: user.permissoes,
         cargos: user.cargos,

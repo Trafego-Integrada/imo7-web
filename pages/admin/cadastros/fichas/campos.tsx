@@ -160,7 +160,7 @@ const Configuracoes = () => {
                         </Flex>
 
                         <TableContainer>
-                            <Table size="sm">
+                            <Table size="sm" variant="striped">
                                 <Thead>
                                     <Tr>
                                         <Th w={24}>Ordem</Th>
@@ -184,7 +184,6 @@ const Configuracoes = () => {
                                                     {item.descricao}
                                                 </Text>
                                             </Td>
-                                            <Td>{}</Td>
                                             <Td>
                                                 <IconButton
                                                     variant="ghost"

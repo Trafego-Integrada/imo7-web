@@ -1,3 +1,10 @@
+import { FormInput } from "@/components/Form/FormInput";
+import { FormSelect } from "@/components/Form/FormSelect";
+import { Layout } from "@/components/Layout/layout";
+import { FichasCadastrais } from "@/components/Pages/Admin/Configuracoes/FichasCadastrais";
+import { useAuth } from "@/hooks/useAuth";
+import { show, update } from "@/services/models/imobiliaria";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 import {
     Box,
     Button,
@@ -5,7 +12,8 @@ import {
     Flex,
     Grid,
     GridItem,
-    Heading,
+    Icon,
+    IconButton,
     Image,
     List,
     ListItem,
@@ -17,20 +25,14 @@ import {
     Text,
     useToast,
 } from "@chakra-ui/react";
-import { FormInput } from "@/components/Form/FormInput";
-import { FormSelect } from "@/components/Form/FormSelect";
-import { Layout } from "@/components/Layout/layout";
-import { withSSRAuth } from "@/utils/withSSRAuth";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useAuth } from "@/hooks/useAuth";
-import { useMutation } from "react-query";
-import { show, update } from "@/services/models/imobiliaria";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { FichasCadastrais } from "@/components/Pages/Admin/Configuracoes/FichasCadastrais";
-import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import { FiTrash } from "react-icons/fi";
+import { useMutation } from "react-query";
+import * as yup from "yup";
 const schema = yup.object().shape({
     razaoSocial: yup.string().required("Campo obrigatório"),
     nomeFantasia: yup.string().required("Campo obrigatório"),
@@ -44,6 +46,7 @@ const Configuracoes = () => {
     const toast = useToast();
     const { usuario } = useAuth();
     const {
+        setValue,
         watch,
         register,
         handleSubmit,
@@ -248,9 +251,36 @@ const Configuracoes = () => {
                                                 <GridItem>Logo</GridItem>
                                                 <GridItem>
                                                     {watch("logo") && (
-                                                        <Image
-                                                            src={watch("logo")}
-                                                        />
+                                                        <Box pos="relative">
+                                                            <IconButton
+                                                                top={0}
+                                                                colorScheme="red"
+                                                                pos="absolute"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiTrash
+                                                                        }
+                                                                    />
+                                                                }
+                                                                zIndex={0}
+                                                                onClick={() => {
+                                                                    setValue(
+                                                                        "removerlogo",
+                                                                        true
+                                                                    );
+                                                                    setValue(
+                                                                        "logo",
+                                                                        null
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Image
+                                                                src={watch(
+                                                                    "logo"
+                                                                )}
+                                                            />
+                                                        </Box>
                                                     )}
                                                     <Flex
                                                         mt={4}
@@ -280,9 +310,36 @@ const Configuracoes = () => {
                                                 </GridItem>
                                                 <GridItem>
                                                     {watch("bg") && (
-                                                        <Image
-                                                            src={watch("bg")}
-                                                        />
+                                                        <Box pos="relative">
+                                                            <IconButton
+                                                                top={0}
+                                                                colorScheme="red"
+                                                                pos="absolute"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiTrash
+                                                                        }
+                                                                    />
+                                                                }
+                                                                zIndex={0}
+                                                                onClick={() => {
+                                                                    setValue(
+                                                                        "removerBg",
+                                                                        true
+                                                                    );
+                                                                    setValue(
+                                                                        "bg",
+                                                                        null
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Image
+                                                                src={watch(
+                                                                    "bg"
+                                                                )}
+                                                            />
+                                                        </Box>
                                                     )}
                                                     <Flex
                                                         mt={4}

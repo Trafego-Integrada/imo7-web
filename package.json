@@ -9,11 +9,12 @@
         "lint": "next lint",
         "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
         "ssh": "ssh ubuntu@140.238.181.195",
-        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aaamsy5yushkzvyezc4fsqplap5fp3dyw7rhlt5rssnf5a@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
+        "db": "ssh -i C:/Users/Gabriel/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aaigsk3shbjt7fkmryokfldlmvakjcw2y3dzcmcwe5747q@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",
         "@chakra-ui/react": "^1.8.8",
+        "@choc-ui/chakra-autocomplete": "^5.1.4",
         "@emotion/react": "^11",
         "@emotion/styled": "^11",
         "@fontsource/rubik": "^4.5.9",

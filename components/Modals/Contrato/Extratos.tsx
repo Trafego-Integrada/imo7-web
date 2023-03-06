@@ -22,7 +22,10 @@ export const Extratos = ({ data }) => {
                             <Td>{formatoData(item.dataDeposito)}</Td>
                             <Td>{item.responsavel}</Td>
                             <Td>{item.periodo}</Td>
-                            <Td>{formatoData(item.vencimento)}</Td>
+                            <Td>
+                                {item.vencimento &&
+                                    formatoData(item.vencimento)}
+                            </Td>
                             <Td></Td>
                         </Tr>
                     ))}

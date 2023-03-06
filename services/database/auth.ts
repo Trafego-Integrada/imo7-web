@@ -25,12 +25,26 @@ export async function createRefreshToken(id) {
 
 export async function checkRefreshTokenIsValid(
     documento: string,
+    imobiliaria,
     refreshToken: string
 ) {
     const storedRefreshTokens = await prisma.token.findMany({
         where: {
             usuario: {
-                documento,
+                OR: [
+                    {
+                        documento,
+                    },
+                    {
+                        email: documento,
+                    },
+                ],
+                imobiliaria:
+                    imobiliaria != "null"
+                        ? {
+                              url: imobiliaria,
+                          }
+                        : {},
             },
         },
     });
@@ -38,18 +52,7 @@ export async function checkRefreshTokenIsValid(
     return storedRefreshTokens.some((token) => token.token === refreshToken);
 }
 
-export async function invalidateRefreshToken(
-    documento: string,
-    refreshToken: string
-) {
-    const storedRefreshTokens = await prisma.token.findMany({
-        where: {
-            usuario: {
-                documento,
-            },
-        },
-    });
-
+export async function invalidateRefreshToken(refreshToken: string) {
     await prisma.token.delete({
         where: {
             token: refreshToken,

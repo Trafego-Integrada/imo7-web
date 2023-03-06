@@ -1,8 +1,12 @@
+import { FormInput } from "@/components/Form/FormInput";
+import { includesAll } from "@/helpers/helpers";
+import { listarModulos } from "@/services/models/modulo";
 import {
     atualizarUsuario,
     buscarUsuario,
-    cadastrarUsuario,
+    cadastrarUsuario
 } from "@/services/models/usuario";
+import { queryClient } from "@/services/queryClient";
 import {
     Accordion,
     AccordionButton,
@@ -18,9 +22,7 @@ import {
     ModalBody,
     ModalCloseButton,
     ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
+    ModalFooter, ModalOverlay,
     Stack,
     Switch,
     Tab,
@@ -36,17 +38,13 @@ import {
     Thead,
     Tr,
     useDisclosure,
-    useToast,
+    useToast
 } from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { forwardRef, useImperativeHandle } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
-import { FormInput } from "@/components/Form/FormInput";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { queryClient } from "@/services/queryClient";
-import { listarModulos } from "@/services/models/modulo";
-import { includesAll } from "@/helpers/helpers";
 
 const schema = yup.object({
     nome: yup.string().required("Campo Obrigatório"),
@@ -136,7 +134,6 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent minW="60%">
-                    <ModalHeader>Usuário</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Tabs variant="unstyled">
@@ -215,6 +212,14 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                 placeholder="..."
                                                 {...register("email")}
                                                 error={errors.email?.message}
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <FormInput
+                                                label="telefone"
+                                                placeholder="..."
+                                                {...register("telefone")}
+                                                error={errors.telefone?.message}
                                             />
                                         </GridItem>
                                         <GridItem>

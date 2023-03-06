@@ -1,14 +1,13 @@
+import { Title } from "@/components/Gerais/title";
 import { formatoData, formatoValor } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
+import { buscarContrato } from "@/services/models/contrato";
 import {
     Badge,
     Box,
     Button,
-    Flex,
     Grid,
     GridItem,
-    Icon,
-    IconButton,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -17,32 +16,16 @@ import {
     ModalHeader,
     ModalOverlay,
     Tab,
-    Table,
     TabList,
     TabPanel,
     TabPanels,
     Tabs,
-    Tag,
-    Tbody,
-    Td,
     Text,
-    Th,
-    Thead,
-    Tr,
     useDisclosure,
 } from "@chakra-ui/react";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaEdit } from "react-icons/fa";
-import { GrAdd } from "react-icons/gr";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { RiAddLine } from "react-icons/ri";
 import { useMutation } from "react-query";
-import { buscarContrato } from "@/services/models/contrato";
-import { FormDate } from "@/components/Form/FormDate";
-import { FormInput } from "@/components/Form/FormInput";
-import { FormSelect } from "@/components/Form/FormSelect";
-import { Title } from "@/components/Gerais/title";
 import { Chamados } from "./Contrato/Chamados";
 import { Cobrancas } from "./Contrato/Cobrancas";
 import { Documentos } from "./Contrato/Documentos";
@@ -283,6 +266,51 @@ const ModalBase = ({}, ref) => {
                                                         formatoData(
                                                             watch("dataInicio")
                                                         )}
+                                                </Text>
+                                            </Box>
+                                        </GridItem>
+                                    </Grid>
+
+                                    <Title children="Imóvel" />
+                                    <Grid
+                                        gap={5}
+                                        templateColumns={{
+                                            sm: "repeat(1, 1fr)",
+                                            md: "repeat(2, 1fr)",
+                                            lg: "repeat(5, 1fr)",
+                                        }}
+                                    >
+                                        <GridItem>
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Código
+                                                </Text>
+                                                <Text>
+                                                    {watch("imovel.codigo")}
+                                                </Text>
+                                            </Box>
+                                        </GridItem>
+                                        <GridItem>
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Descrição
+                                                </Text>
+                                                <Text>
+                                                    {watch("imovel.descricao")}
+                                                </Text>
+                                            </Box>
+                                        </GridItem>
+                                        <GridItem colSpan={{ lg: 5 }}>
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Endereço
+                                                </Text>
+                                                <Text>
+                                                    {watch("imovel.endereco")},{" "}
+                                                    {watch("imovel.bairro")},
+                                                    {watch("imovel.cidade")}/
+                                                    {watch("imovel.estado")} -
+                                                    CEP {watch("imovel.cep")}
                                                 </Text>
                                             </Box>
                                         </GridItem>

@@ -33,6 +33,7 @@ handler.use(async (req, res, next) => {
         const user = await prisma.usuario.findFirst({
             where: { id: Number(decoded.sub) },
         });
+
         if (!user.status) {
             return res.status(401).json({
                 error: true,

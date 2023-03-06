@@ -555,6 +555,7 @@ enum StatusFicha {
 
 model FichaCadastral {
     id                     String                        @id @default(cuid())
+    codigo                 Int?
     descricao              String
     nome                   String?
     documento              String?

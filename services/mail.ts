@@ -2,10 +2,10 @@ import nodemailer from "nodemailer";
 
 export const mail = nodemailer.createTransport({
     port: 465,
-    host: "smtp.gmail.com",
+    host: "mail.imo7.com.br",
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: "contato@imo7.com.br",
+        pass: "7R7cq07=}fnY",
     },
     secure: true,
 });

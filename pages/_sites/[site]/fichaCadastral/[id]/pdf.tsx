@@ -1,40 +1,21 @@
-import { FormInput } from "@/components/Form/FormInput";
-import { Layout } from "@/components/Layout/layout";
-import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 import prisma from "@/lib/prisma";
-import {
-    atualizarAnexosFicha,
-    atualizarFicha,
-} from "@/services/models/fichaCadastral";
 import {
     Alert,
     AlertDescription,
     AlertIcon,
     AlertTitle,
     Box,
-    Button,
-    Checkbox,
-    Container,
     Flex,
     Grid,
     GridItem,
     Heading,
-    Icon,
     Image,
     Text,
-    useToast,
 } from "@chakra-ui/react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { FiEye } from "react-icons/fi";
-import { useMutation } from "react-query";
-import * as yup from "yup";
-import "react-quill/dist/quill.snow.css";
-import { buscarEndereco } from "@/lib/buscarEndereco";
 import moment from "moment";
+import Link from "next/link";
 import QRCode from "react-qr-code";
+import "react-quill/dist/quill.snow.css";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
     return (
         <Box minH="100vh" p={4}>
@@ -141,14 +122,35 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                 ficha.preenchimento[
                                                     campo.codigo
                                                 ] ? (
-                                                    <QRCode
-                                                        size={75}
-                                                        value={
-                                                            ficha.preenchimento[
-                                                                campo.codigo
-                                                            ]
-                                                        }
-                                                    />
+                                                    <Flex flexDir="column">
+                                                        <QRCode
+                                                            size={75}
+                                                            value={
+                                                                ficha
+                                                                    .preenchimento[
+                                                                    campo.codigo
+                                                                ]
+                                                            }
+                                                        />
+
+                                                        <Text
+                                                            fontSize="xs"
+                                                            mt={2}
+                                                        >
+                                                            Leia o QRCode ou{" "}
+                                                            <Link
+                                                                href={
+                                                                    ficha
+                                                                        .preenchimento[
+                                                                        campo
+                                                                            .codigo
+                                                                    ]
+                                                                }
+                                                            >
+                                                                clique aqui
+                                                            </Link>
+                                                        </Text>
+                                                    </Flex>
                                                 ) : null
                                             ) : (
                                                 <Text fontSize="sm">

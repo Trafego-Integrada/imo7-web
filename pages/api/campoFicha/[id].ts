@@ -41,6 +41,7 @@ handler.post(async (req, res) => {
             mask,
             cep,
             camposEndereco,
+            opcoes,
         } = req.body;
         const data = await prisma.campoFichaCadastral.update({
             where: {
@@ -61,6 +62,7 @@ handler.post(async (req, res) => {
                 mask,
                 cep,
                 camposEndereco: camposEndereco ? camposEndereco : {},
+                opcoes: opcoes ? opcoes : [],
             },
         });
         res.send(data);

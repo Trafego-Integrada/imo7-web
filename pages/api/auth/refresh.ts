@@ -9,10 +9,11 @@ import {
 import { getUser } from "@/services/database/user";
 import { NextApiRequestWithUser } from "@/types/auth";
 import { cors } from "@/middleware/cors";
+import { checkAuth } from "@/middleware/checkAuth";
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 handler.use(cors);
-handler.use(addUserToRequest);
+handler.use(checkAuth);
 
 handler.post(async (req, res) => {
     const { documento, imobiliaria } = req.user;
@@ -35,6 +36,7 @@ handler.post(async (req, res) => {
 
     const isValidRefreshToken = await checkRefreshTokenIsValid(
         documento,
+        imobiliaria.url,
         refreshToken
     );
 
@@ -44,7 +46,7 @@ handler.post(async (req, res) => {
             .json({ error: true, message: "Refresh token is invalid." });
     }
 
-    await invalidateRefreshToken(documento, refreshToken);
+    await invalidateRefreshToken(refreshToken);
 
     const { token, refreshToken: newRefreshToken } =
         await generateJwtAndRefreshToken(documento, {
