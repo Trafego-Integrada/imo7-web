@@ -9,7 +9,7 @@ handler.get(async (req, res) => {
     console.log(req);
     const { id } = req.query;
 
-    const boleto = await prisma.boleto.findUnique({
+    const extrato = await prisma.extrato.findUnique({
         where: {
             id: Number(id),
         },
@@ -20,7 +20,7 @@ handler.get(async (req, res) => {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     await page.goto(
-        "http//imperium.localhost:3000/extrato/" + id,
+        "https://" + extrato?.imobiliaria.url + ".imo7.com.br/extrato/" + id,
         {
             waitUntil: "networkidle0",
         }
