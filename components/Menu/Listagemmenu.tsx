@@ -1,14 +1,13 @@
 import { List } from "@chakra-ui/react";
-import { HiOutlineDocumentText } from "react-icons/hi";
-import { FaHandHoldingUsd, FaUser, FaUsers, FaUserTie } from "react-icons/fa";
-import { BiSupport } from "react-icons/bi";
-import { MenuItem } from "./Menuitem";
-import { BsFillGearFill, BsHouseFill } from "react-icons/bs";
-import { MdDashboard } from "react-icons/md";
-import { includesAll } from "@/helpers/helpers";
 import { useAuth } from "hooks/useAuth";
 import { isArray } from "lodash";
+import { BiSupport } from "react-icons/bi";
+import { BsFillGearFill, BsHouseFill } from "react-icons/bs";
+import { FaHandHoldingUsd, FaUser, FaUsers, FaUserTie } from "react-icons/fa";
+import { HiOutlineDocumentText } from "react-icons/hi";
+import { MdDashboard } from "react-icons/md";
 import { TbForms } from "react-icons/tb";
+import { MenuItem } from "./Menuitem";
 
 const menu = [
     {
@@ -35,6 +34,14 @@ const menu = [
         ],
     },
     {
+        titulo: "Extratos",
+        href: "/admin/extratos",
+        icon: FaHandHoldingUsd,
+        cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.cobrancas"],
+        
+    },
+    {
         titulo: "Inquilinos",
         href: "/admin/inquilinos",
         icon: FaUsers,
@@ -54,6 +61,15 @@ const menu = [
         icon: TbForms,
         cargos: ["imobiliaria"],
         modulos: ["imobiliaria.fichas"],
+        subMenus: [
+            {
+                titulo: "Fichas Excluídas",
+                href: "/admin/fichas/excluidas",
+                icon: HiOutlineDocumentText,
+                cargos: ["imobiliaria"],
+                modulos: ["imobiliaria.fichas.excluidas"],
+            },
+        ],
     },
     {
         titulo: "Usuários",
