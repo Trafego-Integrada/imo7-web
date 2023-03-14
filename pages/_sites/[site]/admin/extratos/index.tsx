@@ -340,8 +340,8 @@ const Cobrancas = () => {
                                             </Td>
                                             <Td>
                                                 <Link
-                                                    // href={`https://www.imo7.com.br/api/extrato/${item.id}/pdf`}
-                                                    href={`http://localhost:3000/api/extrato/${item.id}/pdf`}
+                                                     href={`https://www.imo7.com.br/api/extrato/${item.id}/pdf`}
+                                                    // href={`http://localhost:3000/api/extrato/${item.id}/pdf`}
                                                     target="_blank"
                                                     passHref
                                                 >
