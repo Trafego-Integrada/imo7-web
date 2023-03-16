@@ -3442,9 +3442,7 @@ const Extrato = ({ extrato }) => {
                                         <td style="border-top:1px solid black;">Descrição</td>
                                         <td style="border-top:1px solid black;text-align: right;">Valor</td>
                                     </tr>
-                                    le="text-align: right;"><?= ($extrato['extrato_valor01'] != '' ? moedaNegativo($extrato['extrato_valor01']) : null) ?></td>
-                                        </tr>
-                                    <?php } ?>
+                                    
                                     ${extrato.itens.map((item) => {
                                         return `<tr>
                                         <td>${item.descricao}</td>
