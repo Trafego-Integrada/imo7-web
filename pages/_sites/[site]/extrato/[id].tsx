@@ -1,8 +1,6 @@
 import { formatoData, formatoValor } from "@/helpers/helpers";
 import pdf from "@/lib/pdf";
 import prisma from "@/lib/prisma";
-import { Flex } from "@chakra-ui/react";
-import Barcode from "react-barcode";
 
 const Extrato = ({ extrato }) => {
     return (
@@ -3496,9 +3494,6 @@ const Extrato = ({ extrato }) => {
                     </html>`,
                 }}
             ></div>
-            <Flex justify="center">
-                <Barcode value={boleto.linha_digitavel} width={1} height={44} />
-            </Flex>
         </>
     );
 };
