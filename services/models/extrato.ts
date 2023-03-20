@@ -1,4 +1,4 @@
-import { api } from "@/services/apiClient
+import { api } from "@/services/apiClient"
 
 export const listarExtratos = async ({ queryKey }) => {
     const { data } = await api.get("extrato", { params: queryKey[1] });
