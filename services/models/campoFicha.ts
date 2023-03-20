@@ -1,4 +1,4 @@
-import { api } from "@/services/apiClient
+import { api } from "@/services/apiClient"
 
 export const listarCampoFichas = async ({ queryKey }) => {
     const { data } = await api.get("campoFicha", {
