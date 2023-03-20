@@ -10,9 +10,10 @@ const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 handler.use(cors);
 handler.use(checkAuth);
 handler.get(async (req, res) => {
+    console.log(req.user)
     const user = await getUser({
         documento: req.user.documento,
-        imobiliria: req.user.imobiliaria?.url,
+        imobiliaria: req.user.imobiliaria?.url,
     });
     if (!user) {
         return res

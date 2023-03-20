@@ -31,9 +31,12 @@ const Dashbord: NextPage = () => {
     return (
         <LayoutPainel>
             <Container maxW="container.lg">
-                <Heading mb={8} size="md">
+                <Box mb={6}>
+                    <Heading size="md" color="gray.700" >
                     Selecione um contrato
-                </Heading>
+                    </Heading>
+                    <Text fontSize="sm" color="gray">Para continuar, selecione o contrato que deseja operar.</Text>
+                </Box>
                 <Grid gap={4}>
                     {contratos &&
                         contratos.data?.data?.length > 0 &&
@@ -43,7 +46,7 @@ const Dashbord: NextPage = () => {
                                 key={item.id}
                                 bg="white"
                                 rounded="lg"
-                                shadow="lg"
+                                shadow="sm"
                                 align="center"
                                 justify="space-between"
                                 p={4}
@@ -51,27 +54,26 @@ const Dashbord: NextPage = () => {
                                 <Flex gridGap={4}>
                                     <Box>
                                         <Text
-                                            fontSize="sm"
-                                            fontWeight="bold"
-                                            color="gray.800"
+                                            fontSize="xs"
+                                            color="gray.500"
                                             textTransform="uppercase"
                                         >
                                             Contrato
                                         </Text>
-                                        <Text color="gray.500">
+                                        <Text color="gray.700" 
+                                            fontWeight="bold">
                                             {item.codigo}
                                         </Text>
                                     </Box>
                                     <Box>
                                         <Text
-                                            fontSize="sm"
-                                            fontWeight="semibold"
+                                            fontSize="xs"
                                             textTransform="uppercase"
-                                            color="gray.800"
+                                            color="gray.500"
                                         >
                                             Endereço
                                         </Text>
-                                        <Text color="gray.500">
+                                        <Text color="gray.700" fontWeight="bold">
                                             {item.imovel?.endereco},
                                             {item.imovel?.numero},
                                             {item.imovel?.bairro},
@@ -82,6 +84,7 @@ const Dashbord: NextPage = () => {
                                     </Box>
                                 </Flex>
                                 <Button
+                                    variant="ghost"
                                     colorScheme="blue"
                                     size="sm"
                                     rightIcon={<Icon as={FiArrowRight} />}

@@ -1,13 +1,10 @@
-import jwt from "jsonwebtoken";
-import jwtDecode from "jwt-decode";
-import { NextApiRequest, NextApiResponse } from "next";
-import nextConnect from "next-connect";
 import { auth } from "@/config/config";
 import prisma from "@/lib/prisma";
-import { DecodedToken, NextApiRequestWithUser } from "@/types/auth";
+import { DecodedToken } from "@/types/auth";
+import jwt from "jsonwebtoken";
 
 export const checkAuth = async (req, res, next) => {
-    const { authorization } = req.headers;
+    const { authorization, imobiliaria } = req.headers;
 
     if (!authorization) {
         return res.status(401).json({

@@ -22,7 +22,7 @@ handle.get(async (req, res) => {
             admConta,
             adm,
             contaId,
-            imobiliariaId,
+            imobiliariaId,status
         } = req.query;
         let filtroQuery = {};
         imobiliariaId = req.user.imobiliariaId
@@ -151,6 +151,17 @@ handle.get(async (req, res) => {
             filtroQuery = {
                 ...filtroQuery,
                 imobiliaria: { url: imobiliaria },
+            };
+        }
+        if (status) {
+            filtroQuery = {
+                ...filtroQuery,
+                status:JSON.parse(status),
+            };
+        } else {
+            filtroQuery = {
+                ...filtroQuery,
+                status:true,
             };
         }
         const data = await prisma.usuario.findMany({

@@ -1,28 +1,28 @@
-import { apiFront } from "@/services/apiClientFront";
+import { api } from "@/services/apiClient";
 
 export const listarFichas = async ({ queryKey }) => {
-    const { data } = await apiFront.get("modeloFicha", {
+    const { data } = await api.get("modeloFicha", {
         params: queryKey[1],
     });
     return data;
 };
 
 export const buscarFicha = async (id) => {
-    const { data } = await apiFront.get("modeloFicha/" + id);
+    const { data } = await api.get("modeloFicha/" + id);
     return data;
 };
 
 export const cadastrarFicha = async (form) => {
-    const { data } = await apiFront.post("modeloFicha", form);
+    const { data } = await api.post("modeloFicha", form);
     return data;
 };
 
 export const atualizarFicha = async ({ id, ...rest }) => {
-    const { data } = await apiFront.post("modeloFicha/" + id, { ...rest });
+    const { data } = await api.post("modeloFicha/" + id, { ...rest });
     return data;
 };
 
 export const excluirFicha = async (id) => {
-    const { data } = await apiFront.delete("modeloFicha/" + id);
+    const { data } = await api.delete("modeloFicha/" + id);
     return data;
 };

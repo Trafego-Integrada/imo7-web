@@ -1,3 +1,17 @@
+import { FormDateRange } from "@/components/Form/FormDateRange";
+import { FormInput } from "@/components/Form/FormInput";
+import { FormSelect } from "@/components/Form/FormSelect";
+import { Layout } from "@/components/Layout/layout";
+import { formatoData, formatoValor } from "@/helpers/helpers";
+import { listarBoletos } from "@/services/models/boleto";
+import { withSSRAuth } from "@/utils/withSSRAuth";
+import {
+    Pagination,
+    PaginationContainer,
+    PaginationNext,
+    PaginationPrevious,
+    usePagination
+} from "@ajna/pagination";
 import {
     Box,
     Button,
@@ -16,29 +30,11 @@ import {
     Thead,
     Tr,
 } from "@chakra-ui/react";
-import { FormDate } from "@/components/Form/FormDate";
-import { FormInput } from "@/components/Form/FormInput";
-import { FormSelect } from "@/components/Form/FormSelect";
-import { Layout } from "@/components/Layout/layout";
-import { VscFilePdf } from "react-icons/vsc";
-import { useRef, useState } from "react";
-import {
-    Pagination,
-    PaginationContainer,
-    PaginationNext,
-    PaginationPage,
-    PaginationPageGroup,
-    PaginationPrevious,
-    usePagination,
-} from "@ajna/pagination";
-import { useQuery } from "react-query";
-import { listarBoletos } from "@/services/models/boleto";
-import { formatoData, formatoValor } from "@/helpers/helpers";
-import moment from "moment";
-import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
-import { withSSRAuth } from "@/utils/withSSRAuth";
 import Link from "next/link";
-import { FormDateRange } from "@/components/Form/FormDateRange";
+import { useRef, useState } from "react";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { VscFilePdf } from "react-icons/vsc";
+import { useQuery } from "react-query";
 
 const Cobrancas = () => {
     const modal = useRef();
@@ -273,7 +269,7 @@ const Cobrancas = () => {
                                 />
                             </Flex>
                         </Flex>
-                        <Table variant="striped" mt={5} bg="white">
+                        <Table size="sm" variant="striped" mt={5} bg="white">
                             <Thead>
                                 <Tr>
                                     <Th>Nº do contrato</Th>
@@ -297,7 +293,7 @@ const Cobrancas = () => {
                                         <Tr key={item.id}>
                                             <Td>{item.contrato?.codigo}</Td>
                                             <Td>
-                                                {formatoData(
+                                                {item.data_vencimen && formatoData(
                                                     item.data_vencimen
                                                 )}
                                             </Td>
@@ -357,7 +353,8 @@ const Cobrancas = () => {
                                 )}
                             </Tbody>
                         </Table>
-                        <Flex justify="center" py={4}>
+                        <Flex justify="center" py={4} align="center" gap={4}>
+                            <Text> Página {currentPage} de {pages.length}</Text>
                             <Pagination
                                 pagesCount={pagesCount}
                                 currentPage={currentPage}
@@ -368,14 +365,14 @@ const Cobrancas = () => {
                                         as={IconButton}
                                         icon={<Icon as={FiArrowLeft} />}
                                     ></PaginationPrevious>
-                                    <PaginationPageGroup gridGap={4}>
+                                    {/* <PaginationPageGroup gridGap={4}>
                                         {pages.map((page: number) => (
                                             <PaginationPage
                                                 key={`pagination_page_${page}`}
                                                 page={page}
                                             />
                                         ))}
-                                    </PaginationPageGroup>
+                                    </PaginationPageGroup> */}
                                     <PaginationNext
                                         as={IconButton}
                                         icon={<Icon as={FiArrowRight} />}

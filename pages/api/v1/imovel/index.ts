@@ -84,7 +84,7 @@ handle.post(async (req, res) => {
             valorAluguel,
             valorCondominio,
             valorVenda,
-            imobiliria: {
+            imobiliaria: {
                 connect: {
                     id: Number(imobiliariaId),
                 },

@@ -1,8 +1,6 @@
-import axios, { AxiosError } from "axios";
-import { GetServerSidePropsContext } from "next";
-import { Router, useRouter } from "next/router";
-import { parseCookies, setCookie } from "nookies";
 import { signOut } from "@/contexts/AuthContext";
+import axios, { AxiosError } from "axios";
+import { parseCookies, setCookie } from "nookies";
 import { AuthTokenError } from "./errors/AuthTokenError";
 
 let isRefreshing = false;
@@ -27,18 +25,14 @@ export function setupApiClient(ctx = null) {
             : "http://localhost:3000/api/",
         headers: {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
-            imobiliaria:
-                host != "localhost:3000" &&
-                host != "imo7.com.br" &&
-                host != "imo7"
-                    ? host
-                    : null,
+           
         },
     });
     api.interceptors.request.use((request) => {
-        let cookies = parseCookies();
+        let cookies = parseCookies({req:request});
         let host;
         if (typeof window !== "undefined") {
+            console.log(window.location)
             host = window.location.host;
             host = host.split(".")[0];
         }
@@ -60,15 +54,28 @@ export function setupApiClient(ctx = null) {
             return response;
         },
         (error: AxiosError) => {
+            
             if (error.response?.status === 401) {
                 if (error.response.data?.code === "token.expired") {
                     cookies = parseCookies();
-
-                    const { "imo7.refreshToken": refreshToken } = cookies;
+                    let host;
+                    if (typeof window !== "undefined") {
+                        host = window.location.host;
+                        host = host.split(".")[0];
+                    }
+                    const { "imo7.refreshToken": refreshToken,"imo7.token":token } = cookies;
                     const originalConfig = error.config;
                     if (!isRefreshing) {
+                        const user = jwtDecode<{ permissoes: string[]; cargos: string[] }>(
+                            token
+                        );
+                        console.log('y',user)
                         isRefreshing = true;
-                        api.post("auth/refresh", { refreshToken })
+                        api.post("auth/refresh", { refreshToken, imobiliaria:host != "localhost:3000" &&
+                        host != "imo7.com.br" &&
+                        host != "imo7"
+                            ? host
+                            : null, documento })
                             .then((response) => {
                                 const { token, refreshToken: newRefreshToken } =
                                     response.data;

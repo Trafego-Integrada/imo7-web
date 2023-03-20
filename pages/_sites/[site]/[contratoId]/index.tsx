@@ -1,31 +1,29 @@
-import { GetServerSideProps, NextPage } from "next";
+import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
+import { NextChakraLink } from "@/components/NextChakraLink";
+import { formatoValor } from "@/helpers/helpers";
+import prisma from "@/lib/prisma";
+import { listarChamados } from "@/services/models/chamado";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 import {
+    Badge,
     Box,
+    Button,
     Flex,
-    Heading,
-    Text,
     Grid,
     GridItem,
-    Badge,
+    Heading,
     Icon,
-    Button,
     IconButton,
+    Text,
 } from "@chakra-ui/react";
-import { NextChakraLink } from "@/components/NextChakraLink";
-import { FaBoxOpen, FaCopy, FaEye, FaGrinWink, FaPrint } from "react-icons/fa";
-import { IoHelpBuoy } from "react-icons/io5";
-import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
-import { withSSRAuth } from "@/utils/withSSRAuth";
-import { useAuth } from "@/hooks/useAuth";
-import { setupApiClient } from "@/services/api";
-import { useRouter } from "next/router";
 import moment from "moment";
-import { formatoValor } from "@/helpers/helpers";
-import { useQuery } from "react-query";
-import { listarChamados } from "@/services/models/chamado";
-import { FiEye } from "react-icons/fi";
-import prisma from "@/lib/prisma";
+import { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { FaCopy, FaEye, FaGrinWink, FaPrint } from "react-icons/fa";
+import { FiEye } from "react-icons/fi";
+import { IoHelpBuoy } from "react-icons/io5";
+import { useQuery } from "react-query";
 
 const Dashbord: NextPage = ({ boletos }) => {
     const router = useRouter();
@@ -49,7 +47,7 @@ const Dashbord: NextPage = ({ boletos }) => {
                                 alignItems="center"
                                 px={4}
                             >
-                                Aguardando
+                                Aguardando Pagamento
                             </Badge>
                         </Flex>
                         <Flex px={4} justify="space-between" align="center">
@@ -111,61 +109,84 @@ const Dashbord: NextPage = ({ boletos }) => {
                             mt={4}
                             borderTopWidth={1}
                             borderTopColor="gray.100"
-                            h={12}
+                            h={14}
                             fontSize="sm"
                         >
-                            <NextChakraLink href="/">
-                                <Flex
-                                    align="center"
-                                    gridGap={4}
-                                    justify="center"
-                                    color="blue.500"
+                            <GridItem>
+                                <Link href={`https://www.imo7.com.br/api/boleto/${boletos[0].id}/pdf`}
+                                                    target="_blank"
+                                                    passHref>
+                                    <Flex
+                                        align="center"
+                                        gridGap={4}
+                                        justify="center"
+                                        color="blue.500"  h="full"
+                                    >
+                                        <Icon as={FaPrint} fontSize="xl" />
+                                        <Box textAlign="center">
+                                            <Link
+                                                href={`/boleto/${boletos[0].id}`}
+                                                target="_blank"
+                                                passHref
+                                            >
+                                                <Text
+                                                    fontWeight="bold"
+                                                    lineHeight="none"
+                                                >
+                                                    Imprimir
+                                                </Text>
+                                            </Link>
+                                            <Text>2ª via da fatura</Text>
+                                        </Box>
+                                    </Flex>
+                                </Link>
+                            </GridItem>
+                            <GridItem>
+                                <Link
+                                    href="/"
+                                    borderLeftWidth={1}
+                                    borderLeftColor="gray.100"
+                                    passHref
                                 >
-                                    <Icon as={FaPrint} fontSize="xl" />
-                                    <Box textAlign="center">
-                                        <Link
-                                            href={`/boleto/${boletos[0].id}`}
-                                            target="_blank"
-                                            passHref
-                                        >
+                                    <Flex
+                                        align="center"
+                                        gridGap={4}
+                                        justify="center"
+                                        color="blue.500" h="full"
+                                    >
+                                        <Icon as={FaEye} fontSize="xl" />
+                                        <Box textAlign="center">
                                             <Text
                                                 fontWeight="bold"
                                                 lineHeight="none"
                                             >
-                                                Imprimir
+                                                Visualizar
                                             </Text>
-                                        </Link>
-                                        <Text>2ª via da fatura</Text>
-                                    </Box>
-                                </Flex>
-                            </NextChakraLink>
-                            <NextChakraLink
-                                href="/"
-                                borderLeftWidth={1}
-                                borderLeftColor="gray.100"
-                            >
-                                <Flex
-                                    align="center"
-                                    gridGap={4}
-                                    justify="center"
-                                    color="blue.500"
-                                >
-                                    <Icon as={FaEye} fontSize="xl" />
-                                    <Box textAlign="center">
-                                        <Text
-                                            fontWeight="bold"
-                                            lineHeight="none"
-                                        >
-                                            Visualizar
-                                        </Text>
-                                        <Text>Fatura</Text>
-                                    </Box>
-                                </Flex>
-                            </NextChakraLink>
+                                            <Text>Fatura</Text>
+                                        </Box>
+                                    </Flex>
+                                </Link>
+                            </GridItem>
+                            
                         </Grid>
                     </GridItem>
                 ) : (
-                    <GridItem>Não há boletos para este contrato</GridItem>
+                    <GridItem bg="white" rounded="2xl" align="center" justify="center" as={Flex}><Flex
+                    h="full"
+                    flexDirection="column"
+                    align="center"
+                    justify="center"
+                    gridGap={4}
+                >
+                    <Icon
+                        as={FaGrinWink}
+                        fontSize="6xl"
+                        color="gray.400"
+                    />
+                    <Text color="gray.400" fontWeight="bold">
+                    Não há boletos em aberto para este contrato
+                    </Text>
+                </Flex></GridItem>
                 )}
                 <GridItem
                     as={Flex}
@@ -233,12 +254,13 @@ const Dashbord: NextPage = ({ boletos }) => {
                     )}
 
                     <Flex
-                        h={20}
+                        h={14}
                         mt={4}
                         borderTopWidth={1}
                         borderTopColor="gray.100"
                         fontSize="sm"
                         align="center"
+                        justify="center"
                     >
                         <NextChakraLink
                             w="full"
@@ -273,6 +295,7 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
         const { contratoId, site } = ctx.query;
         const boletos = await prisma.boleto.findMany({
             where: {
+                contratoId:Number(contratoId),
                 imobiliaria: {
                     url: site,
                 },

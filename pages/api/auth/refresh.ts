@@ -1,6 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import nextConnect from "next-connect";
-import addUserToRequest from "@/middleware/addUserToRequest";
+import { cors } from "@/middleware/cors";
 import { generateJwtAndRefreshToken } from "@/services/auth";
 import {
     checkRefreshTokenIsValid,
@@ -8,18 +6,17 @@ import {
 } from "@/services/database/auth";
 import { getUser } from "@/services/database/user";
 import { NextApiRequestWithUser } from "@/types/auth";
-import { cors } from "@/middleware/cors";
-import { checkAuth } from "@/middleware/checkAuth";
+import { NextApiResponse } from "next";
+import nextConnect from "next-connect";
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 handler.use(cors);
-handler.use(checkAuth);
 
 handler.post(async (req, res) => {
-    const { documento, imobiliaria } = req.user;
-    const { refreshToken } = req.body;
+    // const { documento, imobiliaria } = req.user;
+    const { refreshToken, documento, imobiliaria } = req.body;
     console.log(imobiliaria);
-    const user = await getUser({ documento, imobiliria: imobiliaria?.url });
+    const user = await getUser({ documento, imobiliaria });
 
     if (!user) {
         return res.status(401).json({

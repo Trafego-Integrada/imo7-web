@@ -23,7 +23,7 @@ const AbrirChamado: NextPage = () => {
                         fontSize="xs"
                         lineHeight="none"
                     >
-                        Aqui, você poderá abrir um chamado à imobiliria, para
+                        Aqui, você poderá abrir um chamado à imobiliaria, para
                         resolução de problemas, dúvidas entre outros assuntos
                         relacionados ao seu contrato.
                     </Text>

@@ -1,17 +1,41 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import nextConnect from "next-connect";
+import { cors } from "@/middleware/cors";
 import { generateJwtAndRefreshToken } from "@/services/auth";
 import { getUser } from "@/services/database/user";
 import { CreateSessionDTO } from "@/types/auth";
 import bcrypt from "bcryptjs";
-import { cors } from "@/middleware/cors";
+import { NextApiRequest, NextApiResponse } from "next";
+import nextConnect from "next-connect";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.use(cors);
+handler.get(async(req, res) => {
+    const {documento} = req.query
+    const { imobiliaria } = req.headers;
+    
+    const user = await getUser({ documento, imobiliaria });
+    if (!user) {
+        return res.status(401).json({
+            error: true,
+            message: "Usuário não cadastrado",
+        });
+    }
+    if (!user.status) {
+        return res.status(401).json({
+            error: true,
+            message: "Usuário inátivo, contate o administrador.",
+        });
+    }
+
+    return res.json({
+        id: user.id,
+        nome: user.nome,
+        atualizar:user.senhaHash? false:true
+    });
+})
 handler.post(async (req, res) => {
     const { imobiliaria } = req.headers;
     const { documento, password } = req.body as CreateSessionDTO;
-    console.log(1);
+ 
     const user = await getUser({ documento: documento, imobiliaria });
     if (!user) {
         return res.status(401).json({

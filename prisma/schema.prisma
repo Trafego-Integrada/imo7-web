@@ -220,7 +220,7 @@ model Imovel {
     createdAt       DateTime                 @default(now())
     updatedAt       DateTime                 @updatedAt
     deletedAt       DateTime?
-    imobiliria      Imobiliaria              @relation(fields: [imobiliariaId], references: [id])
+    imobiliaria     Imobiliaria              @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId   Int
     proprietarios   ProprietariosOnImoveis[]
     conta           Conta                    @relation(fields: [contaId], references: [id])
@@ -458,8 +458,8 @@ model Chamado {
     status        StatusChamado      @default(ABERTO)
     interacoes    InteracaoChamado[]
     anexos        Anexo[]
-    imobiliaria   Imobiliaria        @relation(references: [id], fields: [imobiliriaId])
-    imobiliriaId  Int
+    imobiliaria   Imobiliaria        @relation(references: [id], fields: [imobiliariaId])
+    imobiliariaId Int
     conta         Conta              @relation(fields: [contaId], references: [id])
     contaId       Int
     conversas     ConversaChamado[]

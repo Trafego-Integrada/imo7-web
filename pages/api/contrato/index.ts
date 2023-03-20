@@ -342,9 +342,7 @@ handle.get(async (req, res) => {
                 ],
             };
         }
-        console.log(imobiliariaId);
         if (imobiliariaId) {
-            console.log(imobiliariaId);
             filtroQuery = {
                 ...filtroQuery,
                 imobiliaria: {
@@ -362,14 +360,12 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-        console.log(filtroQuery);
         if (imobiliaria) {
             filtroQuery = {
                 ...filtroQuery,
                 imobiliaria: { url: imobiliaria },
             };
         }
-        console.log(filtroQuery);
         const data = await prisma.contrato.findMany({
             where: {
                 ...filtroQuery,

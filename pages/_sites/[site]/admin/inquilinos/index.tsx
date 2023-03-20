@@ -187,7 +187,7 @@ const Inquilinos = () => {
                                 }
                             />
                         </Box>
-                        <Table variant="striped" mt={5} bg="white">
+                        <Table size="sm" variant="striped" mt={5} bg="white">
                             <Thead>
                                 <Tr>
                                     <Th>Inquilino</Th>

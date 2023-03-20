@@ -1,19 +1,20 @@
+import { FormInput } from "@/components/Form/FormInput";
+import { Layout } from "@/components/Layout/layout";
+import { ModalContratos } from "@/components/Modals/contratos";
+import { FiltroContratos } from "@/components/Pages/FIltroContratos";
+import { formatoData } from "@/helpers/helpers";
+import { listarContratos } from "@/services/models/contrato";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 import {
     Pagination,
     PaginationContainer,
     PaginationNext,
-    PaginationPage,
-    PaginationPageGroup,
     PaginationPrevious,
-    usePagination,
+    usePagination
 } from "@ajna/pagination";
 import {
     Box,
-    Button,
-    Collapse,
     Flex,
-    Grid,
-    GridItem,
     Icon,
     IconButton,
     Spinner,
@@ -23,28 +24,14 @@ import {
     Text,
     Th,
     Thead,
-    Tr,
-    useDisclosure,
+    Tr
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
-import { IoIosRemoveCircle } from "react-icons/io";
 import {
-    MdOutlineKeyboardArrowDown,
-    MdOutlineKeyboardArrowUp,
-    MdPageview,
+    MdPageview
 } from "react-icons/md";
 import { useQuery } from "react-query";
-import { FormDate } from "@/components/Form/FormDate";
-import { FormInput } from "@/components/Form/FormInput";
-import { FormSelect } from "@/components/Form/FormSelect";
-import { Layout } from "@/components/Layout/layout";
-import { ModalContratos } from "@/components/Modals/contratos";
-import { FiltroContratos } from "@/components/Pages/FIltroContratos";
-import { Paginator } from "@/components/Paginator";
-import { formatoData } from "@/helpers/helpers";
-import { listarContratos } from "@/services/models/contrato";
-import { withSSRAuth } from "@/utils/withSSRAuth";
 
 const Home = () => {
     const modal = useRef();
@@ -196,7 +183,8 @@ const Home = () => {
                                 )}
                             </Tbody>
                         </Table>
-                        <Flex justify="center" py={4}>
+                        <Flex justify="center" py={4} align="center" gap={4}>
+                            <Text> Página {currentPage} de {pages.length}</Text>
                             <Pagination
                                 pagesCount={pagesCount}
                                 currentPage={currentPage}

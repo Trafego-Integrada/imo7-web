@@ -1,28 +1,28 @@
-import { apiFront } from "@/services/apiClientFront";
+import { api } from "@/services/apiClient";
 
 export const listarAnexos = async ({ queryKey }) => {
-    const { data } = await apiFront.get("anexo", {
+    const { data } = await api.get("anexo", {
         params: queryKey[1],
     });
     return data;
 };
 
 export const buscarAnexo = async (id) => {
-    const { data } = await apiFront.get("anexo/" + id);
+    const { data } = await api.get("anexo/" + id);
     return data;
 };
 
 export const cadastrarAnexo = async (form) => {
-    const { data } = await apiFront.post("anexo", form);
+    const { data } = await api.post("anexo", form);
     return data;
 };
 
 export const atualizarAnexo = async ({ id, ...rest }) => {
-    const { data } = await apiFront.post("anexo/" + id, { ...rest });
+    const { data } = await api.post("anexo/" + id, { ...rest });
     return data;
 };
 
 export const excluirAnexo = async (id) => {
-    const { data } = await apiFront.delete("anexo/" + id);
+    const { data } = await api.delete("anexo/" + id);
     return data;
 };

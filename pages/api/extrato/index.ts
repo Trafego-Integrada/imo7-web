@@ -276,6 +276,9 @@ handle.get(async (req, res) => {
                 proprietario: true,
                 itens:true
             },
+            orderBy:{
+                createdAt:'desc'
+            }
         });
         const total = await prisma.extrato.count({
             where: {

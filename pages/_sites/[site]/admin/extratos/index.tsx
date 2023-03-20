@@ -9,8 +9,6 @@ import {
     Pagination,
     PaginationContainer,
     PaginationNext,
-    PaginationPage,
-    PaginationPageGroup,
     PaginationPrevious,
     usePagination
 } from "@ajna/pagination";
@@ -272,17 +270,18 @@ const Cobrancas = () => {
                                 />
                             </Flex>
                         </Flex>
-                        <Table variant="striped" mt={5} bg="white">
+                        <Table size="sm" variant="striped" mt={5} bg="white">
                             <Thead>
                                 <Tr>
                                     <Th>Nº do contrato</Th>
+                                    <Th>Nº Parcela</Th>
                                     <Th>Data de vencimento</Th>
                                     <Th>Data do Depósito</Th>
                                     <Th>Inquilino principal</Th>
                                     <Th>Endereço</Th>
                                     <Th>Status</Th>
                                     <Th>Valor</Th>
-                                    <Th>Boletos</Th>
+                                    <Th></Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -296,6 +295,7 @@ const Cobrancas = () => {
                                     data.data.data.map((item) => (
                                         <Tr key={item.id}>
                                             <Td>{item.contrato?.codigo}</Td>
+                                            <Td>{item.parcela}</Td>
                                             <Td>
                                                 {item.vencimento &&formatoData(
                                                     item.vencimento
@@ -307,13 +307,7 @@ const Cobrancas = () => {
                                                 )}
                                             </Td>
                                             <Td>
-                                                {item.contrato?.proprietarios?.map(
-                                                    (i) => (
-                                                        <Text key={i.id}>
-                                                            {i.nome}
-                                                        </Text>
-                                                    )
-                                                )}
+                                                {item.proprietario?.nome}
                                             </Td>
                                             <Td>
                                                 {
@@ -336,7 +330,7 @@ const Cobrancas = () => {
                                                 </Grid>
                                             </Td>
                                             <Td>
-                                                {formatoValor(item.itens.reduce((acc,item) => item.valor + acc,0))}
+                                                {formatoValor(item.itens?.reduce((acc,item) => item.valor + acc,0))}
                                             </Td>
                                             <Td>
                                                 <Link
@@ -363,7 +357,8 @@ const Cobrancas = () => {
                                 )}
                             </Tbody>
                         </Table>
-                        <Flex justify="center" py={4}>
+                        <Flex justify="center" py={4} align="center" gap={4}>
+                            <Text> Página {currentPage} de {pages.length}</Text>
                             <Pagination
                                 pagesCount={pagesCount}
                                 currentPage={currentPage}
@@ -374,14 +369,14 @@ const Cobrancas = () => {
                                         as={IconButton}
                                         icon={<Icon as={FiArrowLeft} />}
                                     ></PaginationPrevious>
-                                    <PaginationPageGroup gridGap={4}>
+                                    {/* <PaginationPageGroup gridGap={4}>
                                         {pages.map((page: number) => (
                                             <PaginationPage
                                                 key={`pagination_page_${page}`}
                                                 page={page}
                                             />
                                         ))}
-                                    </PaginationPageGroup>
+                                    </PaginationPageGroup> */}
                                     <PaginationNext
                                         as={IconButton}
                                         icon={<Icon as={FiArrowRight} />}

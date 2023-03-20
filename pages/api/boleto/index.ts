@@ -1,11 +1,13 @@
+import prisma from "@/lib/prisma";
+import { checkAuth } from "@/middleware/checkAuth";
+import { cors } from "@/middleware/cors";
 import { Prisma } from "@prisma/client";
 import moment from "moment";
 import nextConnect from "next-connect";
-import prisma from "@/lib/prisma";
 
 const handle = nextConnect();
-import { cors } from "@/middleware/cors";
-import { checkAuth } from "@/middleware/checkAuth";
+
+
 handle.use(cors);
 handle.use(checkAuth);
 
@@ -258,6 +260,7 @@ handle.get(async (req, res) => {
                 },
             };
         }
+        console.log('111',filtroQuery.AND)
         const data = await prisma.boleto.findMany({
             where: {
                 ...filtroQuery,
@@ -288,7 +291,6 @@ handle.get(async (req, res) => {
             },
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
             message: error.message,

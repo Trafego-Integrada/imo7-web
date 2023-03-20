@@ -1,28 +1,28 @@
-import { apiFront } from "@/services/apiClientFront";
+import { api } from "@/services/apiClient
 
 export const listarCampos = async ({ queryKey }) => {
-    const { data } = await apiFront.get("campoFicha", {
+    const { data } = await api.get("campoFicha", {
         params: queryKey[1],
     });
     return data;
 };
 
 export const buscarCampo = async (id) => {
-    const { data } = await apiFront.get("campoFicha/" + id);
+    const { data } = await api.get("campoFicha/" + id);
     return data;
 };
 
 export const cadastrarCampo = async (form) => {
-    const { data } = await apiFront.post("campoFicha", form);
+    const { data } = await api.post("campoFicha", form);
     return data;
 };
 
 export const atualizarCampo = async ({ id, ...rest }) => {
-    const { data } = await apiFront.post("campoFicha/" + id, { ...rest });
+    const { data } = await api.post("campoFicha/" + id, { ...rest });
     return data;
 };
 
 export const excluirCampo = async (id) => {
-    const { data } = await apiFront.delete("campoFicha/" + id);
+    const { data } = await api.delete("campoFicha/" + id);
     return data;
 };

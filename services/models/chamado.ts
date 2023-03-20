@@ -1,32 +1,32 @@
-import { apiFront } from "@/services/apiClientFront";
+import { api } from "@/services/apiClient"
 
 export const listarChamados = async ({ queryKey }) => {
-    const { data } = await apiFront.get("chamado", { params: queryKey[1] });
+    const { data } = await api.get("chamado", { params: queryKey[1] });
     return data;
 };
 
 export const buscarChamado = async (id) => {
-    const { data } = await apiFront.get("chamado/" + id);
+    const { data } = await api.get("chamado/" + id);
     return data;
 };
 
 export const cadastrarChamado = async (form) => {
-    const { data } = await apiFront.post("chamado", form);
+    const { data } = await api.post("chamado", form);
     return data;
 };
 
 export const atualizarChamado = async ({ id, ...rest }) => {
-    const { data } = await apiFront.post("chamado/" + id, { ...rest });
+    const { data } = await api.post("chamado/" + id, { ...rest });
     return data;
 };
 
 export const excluirChamado = async (id) => {
-    const { data } = await apiFront.post("chamado/" + id);
+    const { data } = await api.post("chamado/" + id);
     return data;
 };
 
 export const listarConversas = async ({ queryKey }) => {
-    const { data } = await apiFront.get(
+    const { data } = await api.get(
         "chamado/" + queryKey[1].chamadoId + "/conversa",
         {
             params: queryKey[1],
@@ -36,7 +36,7 @@ export const listarConversas = async ({ queryKey }) => {
 };
 
 export const listarIntecoesChamados = async ({ queryKey }) => {
-    const { data } = await apiFront.get(
+    const { data } = await api.get(
         "chamado/" +
             queryKey[1].chamadoId +
             "/conversa/" +
@@ -54,7 +54,7 @@ export const enviarMensagemChamado = async ({
     conversaId,
     ...rest
 }) => {
-    const { data } = await apiFront.post(
+    const { data } = await api.post(
         "chamado/" + chamadoId + "/conversa/" + conversaId + "/mensagem",
         {
             ...rest,
@@ -64,14 +64,14 @@ export const enviarMensagemChamado = async ({
 };
 
 export const iniciarConversaChamado = async ({ chamadoId, ...rest }) => {
-    const { data } = await apiFront.post("chamado/" + chamadoId + "/conversa", {
+    const { data } = await api.post("chamado/" + chamadoId + "/conversa", {
         ...rest,
     });
     return data;
 };
 
 export const anexarArquivoChamado = async (body) => {
-    const { data } = await apiFront.post("anexo", body, {
+    const { data } = await api.post("anexo", body, {
         headers: {
             "Content-Type": "multipart/form-data",
         },

@@ -1,29 +1,29 @@
-import { apiFront } from "@/services/apiClientFront";
+import { api } from "@/services/apiClient";
 
 export const listarFichas = async ({ queryKey }) => {
-    const { data } = await apiFront.get("fichaCadastral", {
+    const { data } = await api.get("fichaCadastral", {
         params: queryKey[1],
     });
     return data;
 };
 
 export const buscarFicha = async (id) => {
-    const { data } = await apiFront.get("fichaCadastral/" + id);
+    const { data } = await api.get("fichaCadastral/" + id);
     return data;
 };
 
 export const cadastrarFicha = async (form) => {
-    const { data } = await apiFront.post("fichaCadastral", form);
+    const { data } = await api.post("fichaCadastral", form);
     return data;
 };
 
 export const atualizarFicha = async ({ id, ...rest }) => {
-    const { data } = await apiFront.post("fichaCadastral/" + id, { ...rest });
+    const { data } = await api.post("fichaCadastral/" + id, { ...rest });
     return data;
 };
 
 export const atualizarAnexosFicha = async ({ id, formData }) => {
-    const { data } = await apiFront.post(
+    const { data } = await api.post(
         "fichaCadastral/" + id + "/anexos",
         formData,
         {
@@ -34,12 +34,12 @@ export const atualizarAnexosFicha = async ({ id, formData }) => {
 };
 
 export const excluirFicha = async (id) => {
-    const { data } = await apiFront.delete("fichaCadastral/" + id);
+    const { data } = await api.delete("fichaCadastral/" + id);
     return data;
 };
 
 export const aprovaCampo = async ({ fichaId, campoCodigo }) => {
-    const { data } = await apiFront.post(
+    const { data } = await api.post(
         "fichaCadastral/" + fichaId + "/aprovarCampo",
         { campoCodigo }
     );
@@ -51,7 +51,7 @@ export const reprovarCampo = async ({
     campoCodigo,
     motivoReprovacao,
 }) => {
-    const { data } = await apiFront.post(
+    const { data } = await api.post(
         "fichaCadastral/" + fichaId + "/reprovarCampo",
         { campoCodigo, motivoReprovacao }
     );
