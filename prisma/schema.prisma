@@ -45,8 +45,6 @@ model Usuario {
     createdAt             DateTime                 @default(now())
     updatedAt             DateTime                 @updatedAt
     deletedAt             DateTime?
-    chamados              Chamado[]
-    chamadorCriados       Chamado[]                @relation("CriadorChamado")
     cargos                Cargo[]
     permissoes            Permissao[]
     tokens                Token[]
@@ -69,6 +67,12 @@ model Usuario {
     conta                 Conta?                   @relation(fields: [contaId], references: [id])
     contaId               Int?
     FichaCadastral        FichaCadastral[]
+    chamadorCriados       Chamado[]                @relation("CriadorChamado")
+    chamadosResponsavel   Chamado[]                @relation("ResponsavelChamados")
+    ChamadosParticipante  Chamado[]                @relation("ParticipantesChamado")
+    tarefasResponsavel    Tarefa[]                 @relation("ResponsaveisTarefa")
+    tarefasMembro         Tarefa[]                 @relation("MembrosTarefa")
+    LinhaTempoChamado     LinhaTempoChamado[]
 
     @@unique([imobiliariaId, documento])
 }
@@ -428,6 +432,7 @@ model DepartamentoChamado {
     updatedAt      DateTime         @updatedAt
     deletedAt      DateTime?
     AssuntoChamado AssuntoChamado[]
+    Tarefa         Tarefa[]
 }
 
 model AssuntoChamado {
@@ -444,7 +449,7 @@ model AssuntoChamado {
 
 model Chamado {
     id            Int                @id @default(autoincrement())
-    participantes Usuario[]
+    participantes Usuario[]          @relation("ParticipantesChamado")
     titulo        String
     assuntoId     Int
     assunto       AssuntoChamado     @relation(references: [id], fields: [assuntoId])
@@ -463,6 +468,18 @@ model Chamado {
     conta         Conta              @relation(fields: [contaId], references: [id])
     contaId       Int
     conversas     ConversaChamado[]
+    responsavel   Usuario?           @relation("ResponsavelChamados", fields: [responsavelId], references: [id])
+    responsavelId Int?
+}
+
+model LinhaTempoChamado {
+    id        Int       @id @default(autoincrement())
+    descricao String?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    usuario   Usuario   @relation(fields: [usuarioId], references: [id])
+    usuarioId Int
 }
 
 model ConversaChamado {
@@ -515,6 +532,7 @@ model Anexo {
 
 enum StatusChamado {
     ABERTO
+    EM_ANDAMENTO
     FINALIZADO
     ARQUIVADO
 }
@@ -645,4 +663,69 @@ model CampoFichaCadastral {
     FichaCadastralPreenchimento FichaCadastralPreenchimento[]
 
     @@unique([codigo, categoriaId])
+}
+
+enum TipoCadastroPessoa {
+    prestador
+}
+
+enum TipoPessoa {
+    fisica
+    juridica
+}
+
+model Pessoa {
+    id           String      @id @default(cuid())
+    tipoCadastro TipoPessoa
+    tipoPessoa   String?
+    razaoSocial  String?
+    categoria    String?
+    documento    String?
+    telefone     String?
+    celular      String?
+    email        String?
+    cep          String?
+    estado       String?
+    cidade       String?
+    bairro       String?
+    endereco     String?
+    numero       String?
+    complemento  String?
+    observacoes  String?
+    tags         String?
+    createdAt    DateTime    @default(now())
+    updatedAt    DateTime?   @updatedAt
+    deletedAt    DateTime?
+    Orcamento    Orcamento[]
+}
+
+model Orcamento {
+    id          String    @id @default(cuid())
+    responsavel String?
+    valor       Decimal?
+    dataVisita  DateTime?
+    observacoes String?   @db.LongText
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime? @updatedAt
+    deletedAt   DateTime?
+    prestador   Pessoa    @relation(fields: [prestadorId], references: [id])
+    prestadorId String
+}
+
+model Tarefa {
+    id                    String               @id @default(cuid())
+    titulo                String?
+    tipoServico           String?
+    descricao             String?              @db.LongText
+    dataVencimento        DateTime?
+    prioridade            String?
+    status                String?
+    dataEntrega           DateTime?
+    createdAt             DateTime             @default(now())
+    updatedAt             DateTime?            @updatedAt
+    deletedAt             DateTime?
+    responsaveis          Usuario[]            @relation("ResponsaveisTarefa")
+    membros               Usuario[]            @relation("MembrosTarefa")
+    departamento          DepartamentoChamado? @relation(fields: [departamentoChamadoId], references: [id])
+    departamentoChamadoId Int?
 }

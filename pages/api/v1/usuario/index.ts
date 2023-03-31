@@ -3,11 +3,50 @@ import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { NextApiRequest } from "next";
+import { Prisma } from "@prisma/client";
 
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
 
 handle.get(async (req, res) => {
-    const data = await prisma.usuario.findMany({});
+    const {imobiliariaId,fiadores, proprietarios, inquilinos} = req.query
+
+    let query:Prisma.UsuarioWhereInput ={}
+
+    if(imobiliariaId){
+        query = {
+            ...query,
+            imobiliariaId:Number(imobiliariaId)
+        }
+    }
+    if(fiadores){
+        query = {
+            ...query,
+            contratosFiador:{
+                some:{}
+            }
+        }
+    }
+    if(inquilinos){
+        query = {
+            ...query,
+            contratosInquilino:{
+                some:{}
+            }
+        }
+    }
+    if(proprietarios){
+        query = {
+            ...query,
+            contratosProprietario:{
+                some:{}
+            }
+        }
+    }
+    const data = await prisma.usuario.findMany({
+        where:{
+            ...query
+        }
+    });
     res.send(data);
 });
 
