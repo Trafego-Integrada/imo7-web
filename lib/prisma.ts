@@ -35,7 +35,7 @@ prisma.$use(async (params, next) => {
         }
     }
     if (params.action == "findFirst" || params.action == "findMany") {
-        console.log(params)
+        // console.log(params)
         if (params.args.where && params.args.where["deletedAt"]) {
         } else if (params.args.where != undefined) {
             params.args.where["deletedAt"] = null;

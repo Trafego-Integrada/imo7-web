@@ -70,19 +70,25 @@ handle.post(async (req, res) => {
             telefone,
             site,
             numero,
-            contaId: req.user.conta[0].id,
+            contaId: Number(contaId),
         },
     });
 
     const usuarioExiste = await prisma.usuario.findUnique({
         where: {
-            documento: usuario.documento,
+            imobiliariaId_documento: {
+                documento:usuario.documento,
+                imobiliariaId:data.id
+            },
         },
     });
     if (usuarioExiste) {
         await prisma.usuario.update({
             where: {
-                documento: usuario.documento,
+                imobiliariaId_documento: {
+                    documento:usuario.documento,
+                    imobiliariaId:data.id
+                },
             },
             data: {
                 nome: usuario.nome,

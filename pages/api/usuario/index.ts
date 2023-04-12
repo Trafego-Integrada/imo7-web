@@ -22,7 +22,8 @@ handle.get(async (req, res) => {
             admConta,
             adm,
             contaId,
-            imobiliariaId,status
+            imobiliariaId,
+            status
         } = req.query;
         let filtroQuery = {};
         imobiliariaId = req.user.imobiliariaId
@@ -147,7 +148,7 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-        if (imobiliaria) {
+        if (imobiliaria != 'null' && imobiliaria) {
             filtroQuery = {
                 ...filtroQuery,
                 imobiliaria: { url: imobiliaria },
@@ -164,6 +165,7 @@ handle.get(async (req, res) => {
                 status:true,
             };
         }
+        console.log(filtroQuery)
         const data = await prisma.usuario.findMany({
             where: {
                 ...filtroQuery,
@@ -225,7 +227,9 @@ handle.post(async (req, res) => {
                 },
             },
         });
+        console.log(contaId)
         if (!contaId && !imobiliariaId) {
+            console.log(1)
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {
@@ -239,7 +243,7 @@ handle.post(async (req, res) => {
                         status,
                         cargos: {
                             connect: {
-                                id: 1,
+                                codigo:"adm"
                             },
                         },
                     },
@@ -255,7 +259,7 @@ handle.post(async (req, res) => {
                         senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
                         cargos: {
                             connect: {
-                                id: 1,
+                                codigo:"adm"
                             },
                         },
                     },
@@ -263,6 +267,7 @@ handle.post(async (req, res) => {
                 res.send(data);
             }
         } else if (contaId) {
+            console.log(2)
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {
@@ -281,7 +286,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                id: 2,
+                                codigo:"conta"
                             },
                         },
                     },
@@ -303,7 +308,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                id: 2,
+                                codigo:"conta"
                             },
                         },
                     },
@@ -312,7 +317,7 @@ handle.post(async (req, res) => {
                 res.send(data);
             }
         } else if (imobiliariaId) {
-            console.log(3);
+            console.log(3)
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {
@@ -331,7 +336,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                id: 3,
+                                codigo:"imobiliaria"
                             },
                         },
                     },
@@ -352,7 +357,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                id: 3,
+                                codigo:"imobiliaria"
                             },
                         },
                     },

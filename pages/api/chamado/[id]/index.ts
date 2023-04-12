@@ -11,6 +11,7 @@ handle.get(async (req, res) => {
             id: Number(id),
         },
         include: {
+            responsavel:true,
             anexos: true,
             assunto: {
                 include: {
@@ -49,13 +50,32 @@ handle.get(async (req, res) => {
 handle.post(async (req, res) => {
     try {
         const { id } = req.query;
-        const { status } = req.body;
+        const { status, responsavel, participantes,assunto, departamento } = req.body;
 
         await prisma.chamado.update({
             where: {
                 id: Number(id),
             },
-            data: { status },
+            data: { 
+                status,
+                assunto:{
+                    connect:{
+                        id: Number(assunto.id)
+                    }
+                },
+                responsavel:{
+                    connect:{
+                        id: Number(responsavel.id)
+                    }
+                },
+                participantes:{
+                    set: participantes.length > 0 ? participantes.map(item => {
+                        return {
+                            id:Number(item.id)
+                        }
+                    }):{}
+                }
+            },
         });
         res.send();
     } catch (error) {

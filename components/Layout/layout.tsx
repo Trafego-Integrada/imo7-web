@@ -7,16 +7,13 @@ export const Layout = ({ title, subtitle, children }) => {
         <Box minH="100vh" bg="gray.200">
             <Flex>
                 <Menulateral />
-                <Menutopo namepage={title} subnamepage={subtitle} />
+                <Box w={{ sm: "", md: "calc(100% - 100px)" }}>
+                    <Menutopo namepage={title} subnamepage={subtitle} />
+                    <Box h="full" bg="gray.200">
+                        {children}
+                    </Box>
+                </Box>
             </Flex>
-            <Box
-                h="full"
-                bg="gray.200"
-                ml={{ base: "0px", md: "100px" }}
-                w={{ sm: "", md: "calc(100% - 100px)" }}
-            >
-                {children}
-            </Box>
         </Box>
     );
 };

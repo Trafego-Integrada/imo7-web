@@ -15,7 +15,7 @@ import { FormInput } from "@/components/Form/FormInput";
 import { NextChakraLink } from "@/components/NextChakraLink";
 import { AuthContext } from "@/contexts/AuthContext";
 import prisma from "@/lib/prisma";
-import { api } from '@/services/apiClient';
+import { api } from "@/services/apiClient";
 import { withSSRGuest } from "@/utils/withSSRGuests";
 import { Heading } from "@chakra-ui/layout";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,7 +24,7 @@ import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CgPassword } from "react-icons/cg";
 import { FaSignInAlt } from "react-icons/fa";
-import { FiMail, FiPaperclip, FiPhone } from "react-icons/fi";
+import { FiArrowLeft, FiMail, FiPaperclip, FiPhone } from "react-icons/fi";
 import { MdFingerprint } from "react-icons/md";
 import BeatLoader from "react-spinners/BeatLoader";
 import * as yup from "yup";
@@ -39,10 +39,11 @@ const schema = yup.object().shape({
 });
 
 const SignIn: NextPage = ({ imobiliaria }) => {
-    const [usuario, setUsuario] = useState(null)
-    const [usuarioExiste, setUsuarioExiste] = useState(false)
-    const[atualizarCadastro, setAtualizarCadastro] = useState(false)
-    const {watch,
+    const [usuario, setUsuario] = useState(null);
+    const [usuarioExiste, setUsuarioExiste] = useState(false);
+    const [atualizarCadastro, setAtualizarCadastro] = useState(false);
+    const {
+        watch,
         register,
         handleSubmit,
         reset,
@@ -52,25 +53,24 @@ const SignIn: NextPage = ({ imobiliaria }) => {
     });
     const [error, setError] = useState(null);
     const { signIn } = useContext(AuthContext);
-    const verificar = async() => {
-        const {data} = await api.get('auth/sessions',{
-            params:{
-                documento:watch('documento')
-            }
-        })
-        setUsuario(data)
-        console.log(data)
-    }
-    const atualizar = async() => {
-        
+    const verificar = async () => {
+        const { data } = await api.get("auth/sessions", {
+            params: {
+                documento: watch("documento"),
+            },
+        });
+        setUsuario(data);
+        console.log(data);
+    };
+    const atualizar = async () => {
         try {
             setError(null);
-            const {data} = await api.post('auth/update',watch())
-        setUsuario(data)
+            const { data } = await api.post("auth/update", watch());
+            setUsuario(data);
         } catch (error) {
             setError(error.response?.data?.message);
         }
-    }
+    };
     const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
         console.log(data);
         try {
@@ -123,7 +123,24 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                 </Heading>
                             )}
                         </Box>
-                        {usuario && usuario.atualizar ? <><Text textAlign="center" fontWeight="bold">Seja bem vindo(a),<br/> {usuario.nome}!</Text><Text fontSize="sm" color="gray" textAlign="center">É seu primeiro login, crie uma senha e atualize seus dados cadastrais</Text></>:<Text>Faça seu login</Text>}
+                        {usuario && usuario.atualizar ? (
+                            <>
+                                <Text textAlign="center" fontWeight="bold">
+                                    Seja bem vindo(a),
+                                    <br /> {usuario.nome}!
+                                </Text>
+                                <Text
+                                    fontSize="sm"
+                                    color="gray"
+                                    textAlign="center"
+                                >
+                                    É seu primeiro login, crie uma senha e
+                                    atualize seus dados cadastrais
+                                </Text>
+                            </>
+                        ) : (
+                            <Text>Faça seu login</Text>
+                        )}
                         {error && (
                             <Flex
                                 color="red"
@@ -140,98 +157,133 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                         <FormInput
                             w={96}
                             type="text"
-                            leftElement={<Icon as={MdFingerprint} w={6} h={6} />}
+                            leftElement={
+                                <Icon as={MdFingerprint} w={6} h={6} />
+                            }
                             placeholder="Seu CPF"
                             {...register("documento")}
-                            error={errors.documento?.message}isDisabled={usuario? true:false}
+                            error={errors.documento?.message}
+                            isDisabled={usuario ? true : false}
                         />
-                        {usuario && !usuario?.atualizar ?   
-                        <FormInput
+                        {usuario && !usuario?.atualizar ? (
+                            <FormInput
                                 type="password"
                                 w={96}
-                                leftElement={<Icon as={CgPassword} w={6} h={6} />}
+                                leftElement={
+                                    <Icon as={CgPassword} w={6} h={6} />
+                                }
                                 placeholder="Digite a senha"
                                 {...register("password")}
                                 error={errors.password?.message}
                             />
-                            :usuario&& usuario.atualizar ? 
+                        ) : usuario && usuario.atualizar ? (
                             <>
-                            <FormInput
-                                w={96}
-                                leftElement={<Icon as={FiPaperclip} w={6} h={6} />}
-                                placeholder="Informeu o número do seu contrato"
-                                {...register("contrato")}
-                                error={errors.contrato?.message}
-                            />
-                            <FormInput
-                                w={96}
-                                leftElement={<Icon as={FiMail} w={6} h={6} />}
-                                placeholder="Informeu um e-mail válido"
-                                {...register("email")}
-                                error={errors.email?.message}
-                            />
-                            <FormInput
-                            mask="(99) 9 9999-9999"
-                                w={96}
-                                leftElement={<Icon as={FiPhone} w={6} h={6} />}
-                                placeholder="Informeu seu celular"
-                                {...register("celular")}
-                                error={errors.celular?.message}
-                            />
-                            <FormInput
-                            type="password"
-                            w={96}
-                            leftElement={<Icon as={CgPassword} w={6} h={6} />}
-                            placeholder="Crie uma senha"
-                            {...register("password")}
-                            error={errors.password?.message}
-                        />
-                        <FormInput
-                        type="password"
-                        w={96}
-                        leftElement={<Icon as={CgPassword} w={6} h={6} />}
-                        placeholder="Repita a senha"
-                        {...register("confirmPassword")}
-                        error={errors.confirmPassword?.message}
-                    />
-                    </>:<></>}
-                        {!usuario  ? <Button
-                            type="button"
-                            borderRadius={0}
-                            colorScheme="blue"
-                            rightIcon={<Icon as={FaSignInAlt} />}
-                            spinner={<BeatLoader size={8} color="white" />}
-                            onClick={() => verificar()}
-                        >
-                            Continuar
-                        </Button>: usuario && usuario.atualizar ?<><Button
-                            type="button"
-                            borderRadius={0}
-                            colorScheme="blue"
-                            rightIcon={<Icon as={FaSignInAlt} />}
-                            spinner={<BeatLoader size={8} color="white" />}
-                            onClick={() => atualizar()}
-                        >
-                            Atualizar
-                        </Button></> :<><Button
-                            type="submit"
-                            borderRadius={0}
-                            colorScheme="blue"
-                            rightIcon={<Icon as={FaSignInAlt} />}
-                            isLoading={isSubmitting}
-                            spinner={<BeatLoader size={8} color="white" />}
-                        >
-                            Entrar
-                        </Button><Button
-                            borderRadius={0}
-                            colorScheme="blue"
-                            rightIcon={<Icon as={FaSignInAlt} />}
-                            
-                            spinner={<BeatLoader size={8} color="white" />}
-                            onClick={() =>  setUsuario(null)}
-                        >
-                            Voltar
-                        </Button></>}
+                                <FormInput
+                                    w={96}
+                                    leftElement={
+                                        <Icon as={FiPaperclip} w={6} h={6} />
+                                    }
+                                    placeholder="Informeu o número do seu contrato"
+                                    {...register("contrato")}
+                                    error={errors.contrato?.message}
+                                />
+                                <FormInput
+                                    w={96}
+                                    leftElement={
+                                        <Icon as={FiMail} w={6} h={6} />
+                                    }
+                                    placeholder="Informeu um e-mail válido"
+                                    {...register("email")}
+                                    error={errors.email?.message}
+                                />
+                                <FormInput
+                                    mask="(99) 9 9999-9999"
+                                    w={96}
+                                    leftElement={
+                                        <Icon as={FiPhone} w={6} h={6} />
+                                    }
+                                    placeholder="Informeu seu celular"
+                                    {...register("celular")}
+                                    error={errors.celular?.message}
+                                />
+                                <FormInput
+                                    type="password"
+                                    w={96}
+                                    leftElement={
+                                        <Icon as={CgPassword} w={6} h={6} />
+                                    }
+                                    placeholder="Crie uma senha"
+                                    {...register("password")}
+                                    error={errors.password?.message}
+                                />
+                                <FormInput
+                                    type="password"
+                                    w={96}
+                                    leftElement={
+                                        <Icon as={CgPassword} w={6} h={6} />
+                                    }
+                                    placeholder="Repita a senha"
+                                    {...register("confirmPassword")}
+                                    error={errors.confirmPassword?.message}
+                                />
+                            </>
+                        ) : (
+                            <></>
+                        )}
+                        {!usuario ? (
+                            <Button
+                                type="button"
+                                borderRadius={0}
+                                colorScheme="blue"
+                                rightIcon={<Icon as={FaSignInAlt} />}
+                                spinner={<BeatLoader size={8} color="white" />}
+                                onClick={() => verificar()}
+                            >
+                                Continuar
+                            </Button>
+                        ) : usuario && usuario.atualizar ? (
+                            <>
+                                <Button
+                                    type="button"
+                                    borderRadius={0}
+                                    colorScheme="blue"
+                                    rightIcon={<Icon as={FaSignInAlt} />}
+                                    spinner={
+                                        <BeatLoader size={8} color="white" />
+                                    }
+                                    onClick={() => atualizar()}
+                                >
+                                    Atualizar
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    type="submit"
+                                    borderRadius={0}
+                                    colorScheme="blue"
+                                    rightIcon={<Icon as={FaSignInAlt} />}
+                                    isLoading={isSubmitting}
+                                    spinner={
+                                        <BeatLoader size={8} color="white" />
+                                    }
+                                >
+                                    Entrar
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    borderRadius={0}
+                                    colorScheme="blue"
+                                    leftIcon={<Icon as={FiArrowLeft} />}
+                                    spinner={
+                                        <BeatLoader size={8} color="white" />
+                                    }
+                                    onClick={() => setUsuario(null)}
+                                >
+                                    Voltar
+                                </Button>
+                            </>
+                        )}
                         <NextChakraLink href="/recuperar-senha">
                             <Button variant="ghost" size="xs">
                                 Esqueci minha senha

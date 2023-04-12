@@ -22,7 +22,7 @@ import { FormDate } from "@/components/Form/FormDate";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
-import { ModalChamados } from "@/components/Modals/chamados";
+import { ModalChamado } from "@/components/Modals/ModalChamado";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import { useQuery } from "react-query";
 import { listarChamados } from "@/services/models/chamado";
@@ -33,7 +33,7 @@ import { ModalAbrirChamado } from "@/components/Modals/AbrirChamado";
 
 const Cobrancas = () => {
     const router = useRouter();
-    const modalchamados = useRef();
+    const modalChamado = useRef();
     const abrirChamado = useRef();
     const [filtro, setFiltro] = useState({});
     const { data } = useQuery(["chamados", filtro], listarChamados);
@@ -269,13 +269,9 @@ const Cobrancas = () => {
                                                 icon={<Icon as={FiEye} />}
                                                 colorScheme="blue"
                                                 onClick={() =>
-                                                    router.push({
-                                                        pathname:
-                                                            "/admin/chamados/[id]",
-                                                        query: {
-                                                            id: item.id,
-                                                        },
-                                                    })
+                                                    modalChamado.current.onOpen(
+                                                        item.id
+                                                    )
                                                 }
                                             />
                                         </Td>
@@ -286,7 +282,7 @@ const Cobrancas = () => {
                     </Box>
                 </Flex>
             </Layout>
-            <ModalChamados ref={modalchamados} />
+            <ModalChamado ref={modalChamado} />
             <ModalAbrirChamado ref={abrirChamado} />
         </>
     );

@@ -301,7 +301,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                                                     watch(
                                                                                         "modulos"
                                                                                     ),
-                                                                                    item.modulos.map(
+                                                                                    item.modulos?.map(
                                                                                         (
                                                                                             s
                                                                                         ) =>
@@ -461,7 +461,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                                                                             watch(
                                                                                                                 "modulos"
                                                                                                             ),
-                                                                                                            sub.modulos.map(
+                                                                                                            sub.modulos?.map(
                                                                                                                 (
                                                                                                                     s
                                                                                                                 ) =>

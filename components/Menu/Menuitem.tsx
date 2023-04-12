@@ -74,7 +74,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                 </Box>
 
                 {subMenus && (
-                    <Collapse in={show}>
+                    <Collapse in={show} pos>
                         <List display="flex" flexDir="column">
                             {subMenus.map((item, key) => (
                                 <ListItem
@@ -109,14 +109,18 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                 }
                 color="white"
                 _hover={{ bg: "gray.600" }}
-                onClick={() => router.push(href)}
                 cursor="pointer"
                 role="group"
                 borderBottom="1px solid rgba(255,255,255,0.2)"
                 p={3}
                 pos="relative"
+                zIndex={999}
             >
-                <Flex flexDir={{ md: "column" }} alignItems="center">
+                <Flex
+                    flexDir={{ md: "column" }}
+                    alignItems="center"
+                    onClick={() => router.push(href)}
+                >
                     <Icon as={icon} fontSize={{ base: "md", md: "md" }} />
                     <Text fontWeight="normal" fontSize="xs" mt={2}>
                         {title}
@@ -127,7 +131,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                     <List
                         display="none"
                         pos="absolute"
-                        left="120px"
+                        left="100px"
                         top={0}
                         flexDir="column"
                         _groupHover={{ display: "flex", height: "100%" }}
@@ -142,7 +146,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                                 justifyContent="left"
                                 p="3"
                                 leftIcon={<Icon as={BsCircle} />}
-                                onClick={() => router.push(href)}
+                                onClick={() => router.push(item.href)}
                                 fontSize="sm"
                             >
                                 {item.titulo}

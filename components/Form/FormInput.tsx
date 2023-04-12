@@ -53,11 +53,11 @@ const InputBase = (
                     maskChar=""
                     borderWidth={borderWidth}
                 />
-                {rightAddon && (
-                    <InputRightAddon p={0}>{rightAddon}</InputRightAddon>
-                )}
+                {rightAddon && <InputRightAddon>{rightAddon}</InputRightAddon>}
                 {rightElement && (
-                    <InputRightElement>{rightElement}</InputRightElement>
+                    <InputRightElement {...rightElement.props}>
+                        {rightElement}
+                    </InputRightElement>
                 )}
             </InputGroup>
             {description && <FormHelperText>{description}</FormHelperText>}

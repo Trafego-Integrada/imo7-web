@@ -7,6 +7,9 @@ import { queryClient } from "@/services/queryClient";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { theme } from "@/config/theme";
 import "react-datepicker/dist/react-datepicker.css";
+import "moment/locale/pt-br";
+import moment from "moment";
+moment.locale("pt-br");
 function MyApp({ Component, pageProps }: AppProps) {
     return (
         <QueryClientProvider client={queryClient}>

@@ -72,7 +72,10 @@ model Usuario {
     ChamadosParticipante  Chamado[]                @relation("ParticipantesChamado")
     tarefasResponsavel    Tarefa[]                 @relation("ResponsaveisTarefa")
     tarefasMembro         Tarefa[]                 @relation("MembrosTarefa")
-    LinhaTempoChamado     LinhaTempoChamado[]
+    HistoricoChamado      HistoricoChamado[]
+    Orcamento             Orcamento[]
+    DepartamentoChamado   DepartamentoChamado?     @relation(fields: [departamentoChamadoId], references: [id])
+    departamentoChamadoId Int?
 
     @@unique([imobiliariaId, documento])
 }
@@ -149,38 +152,40 @@ model Token {
 }
 
 model Imobiliaria {
-    id                   Int                    @id @default(autoincrement())
-    codigo               String?
-    razaoSocial          String
-    nomeFantasia         String?
-    cnpj                 String                 @unique
-    ie                   String?
-    logo                 String?
-    bg                   String?
-    email                String?
-    site                 String?
-    telefone             String?
-    cep                  String?
-    endereco             String?
-    numero               String?
-    bairro               String?
-    cidade               String?
-    estado               String?
-    url                  String?
-    createdAt            DateTime               @default(now())
-    updatedAt            DateTime               @updatedAt
-    deletedAt            DateTime?
-    contratos            Contrato[]
-    chamados             Chamado[]
-    imoveis              Imovel[]
-    usuarios             Usuario[]
-    conta                Conta?                 @relation(fields: [contaId], references: [id])
-    contaId              Int?
-    Boleto               Boleto[]
-    Extrato              Extrato[]
-    Recibo               Recibo[]
-    FichaCadastral       FichaCadastral[]
-    ModeloFichaCadastral ModeloFichaCadastral[]
+    id                    Int                    @id @default(autoincrement())
+    codigo                String?
+    razaoSocial           String
+    nomeFantasia          String?
+    cnpj                  String                 @unique
+    ie                    String?
+    logo                  String?
+    bg                    String?
+    email                 String?
+    site                  String?
+    telefone              String?
+    cep                   String?
+    endereco              String?
+    numero                String?
+    bairro                String?
+    cidade                String?
+    estado                String?
+    url                   String?
+    createdAt             DateTime               @default(now())
+    updatedAt             DateTime               @updatedAt
+    deletedAt             DateTime?
+    contratos             Contrato[]
+    chamados              Chamado[]
+    imoveis               Imovel[]
+    usuarios              Usuario[]
+    conta                 Conta?                 @relation(fields: [contaId], references: [id])
+    contaId               Int?
+    boletos               Boleto[]
+    extratos              Extrato[]
+    recibos               Recibo[]
+    fichasCadastrais      FichaCadastral[]
+    modelosFichaCadastral ModeloFichaCadastral[]
+    CategoriaPessoa       CategoriaPessoa[]
+    departamentos         DepartamentoChamado[]
 }
 
 model Imovel {
@@ -425,14 +430,17 @@ model ItemExtrato {
 }
 
 model DepartamentoChamado {
-    id             Int              @id @default(autoincrement())
-    titulo         String
-    ativo          Boolean          @default(true)
-    createdAt      DateTime         @default(now())
-    updatedAt      DateTime         @updatedAt
-    deletedAt      DateTime?
-    AssuntoChamado AssuntoChamado[]
-    Tarefa         Tarefa[]
+    id            Int              @id @default(autoincrement())
+    titulo        String
+    ativo         Boolean          @default(true)
+    createdAt     DateTime         @default(now())
+    updatedAt     DateTime         @updatedAt
+    deletedAt     DateTime?
+    assuntos      AssuntoChamado[]
+    tarefas       Tarefa[]
+    integrantes   Usuario[]
+    imobiliaria   Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId Int?
 }
 
 model AssuntoChamado {
@@ -444,7 +452,7 @@ model AssuntoChamado {
     createdAt      DateTime            @default(now())
     updatedAt      DateTime            @updatedAt
     deletedAt      DateTime?
-    Chamado        Chamado[]
+    chamados       Chamado[]
 }
 
 model Chamado {
@@ -470,16 +478,21 @@ model Chamado {
     conversas     ConversaChamado[]
     responsavel   Usuario?           @relation("ResponsavelChamados", fields: [responsavelId], references: [id])
     responsavelId Int?
+    historicos    HistoricoChamado[]
+    Orcamento     Orcamento[]
+    Tarefa        Tarefa[]
 }
 
-model LinhaTempoChamado {
+model HistoricoChamado {
     id        Int       @id @default(autoincrement())
     descricao String?
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-    usuario   Usuario   @relation(fields: [usuarioId], references: [id])
-    usuarioId Int
+    usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
+    usuarioId Int?
+    chamado   Chamado   @relation(fields: [chamadoId], references: [id])
+    chamadoId Int
 }
 
 model ConversaChamado {
@@ -674,10 +687,21 @@ enum TipoPessoa {
     juridica
 }
 
+model CategoriaPessoa {
+    id            String             @id @default(cuid())
+    tipo          TipoCadastroPessoa
+    nome          String
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime?          @updatedAt
+    deletedAt     DateTime?
+    imobiliaria   Imobiliaria        @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId Int
+}
+
 model Pessoa {
-    id           String      @id @default(cuid())
-    tipoCadastro TipoPessoa
-    tipoPessoa   String?
+    id           String             @id @default(cuid())
+    tipoCadastro TipoCadastroPessoa
+    // tipoPessoa   TipoPessoa
     razaoSocial  String?
     categoria    String?
     documento    String?
@@ -693,23 +717,28 @@ model Pessoa {
     complemento  String?
     observacoes  String?
     tags         String?
-    createdAt    DateTime    @default(now())
-    updatedAt    DateTime?   @updatedAt
+    createdAt    DateTime           @default(now())
+    updatedAt    DateTime?          @updatedAt
     deletedAt    DateTime?
-    Orcamento    Orcamento[]
+    orcamento    Orcamento[]
 }
 
 model Orcamento {
-    id          String    @id @default(cuid())
-    responsavel String?
-    valor       Decimal?
-    dataVisita  DateTime?
-    observacoes String?   @db.LongText
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime? @updatedAt
-    deletedAt   DateTime?
-    prestador   Pessoa    @relation(fields: [prestadorId], references: [id])
-    prestadorId String
+    id            String    @id @default(cuid())
+    responsavel   String?
+    valor         Decimal?
+    dataVisita    DateTime?
+    observacoes   String?   @db.LongText
+    status        String?
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime? @updatedAt
+    deletedAt     DateTime?
+    prestador     Pessoa?   @relation(fields: [prestadorId], references: [id])
+    prestadorId   String?
+    chamado       Chamado?  @relation(fields: [chamadoId], references: [id])
+    chamadoId     Int?
+    solicitante   Usuario   @relation(fields: [solicitanteId], references: [id])
+    solicitanteId Int
 }
 
 model Tarefa {
@@ -728,4 +757,6 @@ model Tarefa {
     membros               Usuario[]            @relation("MembrosTarefa")
     departamento          DepartamentoChamado? @relation(fields: [departamentoChamadoId], references: [id])
     departamentoChamadoId Int?
+    chamado               Chamado?             @relation(fields: [chamadoId], references: [id])
+    chamadoId             Int?
 }

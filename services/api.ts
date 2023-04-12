@@ -69,7 +69,6 @@ export function setupApiClient(ctx = null) {
                         const user = jwtDecode<{ permissoes: string[]; cargos: string[] }>(
                             token
                         );
-                        console.log('y',user)
                         isRefreshing = true;
                         api.post("auth/refresh", { refreshToken, imobiliaria:host != "localhost:3000" &&
                         host != "imo7.com.br" &&

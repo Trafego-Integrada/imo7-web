@@ -45,7 +45,12 @@ handle.get(async (req, res) => {
             },
             include: {
                 cargo: true,
-                modulos: true,
+                modulos: {
+                    include:{
+                        modulos:true,
+                        permissoes:true
+                    }
+                },
                 pai: true,
                 permissoes: true,
                 usuarios: true,

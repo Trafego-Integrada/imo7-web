@@ -23,6 +23,6 @@ export const atualizarDepartamento = async ({ id, ...rest }) => {
 };
 
 export const excluirDepartamento = async (id) => {
-    const { data } = await api.post("departamento/" + id);
+    const { data } = await api.delete("departamento/" + id);
     return data;
 };

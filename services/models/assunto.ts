@@ -23,6 +23,6 @@ export const atualizarAssunto = async ({ id, ...rest }) => {
 };
 
 export const excluirAssunto = async (id) => {
-    const { data } = await api.post("assunto/" + id);
+    const { data } = await api.delete("assunto/" + id);
     return data;
 };

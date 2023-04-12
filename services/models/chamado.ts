@@ -78,3 +78,27 @@ export const anexarArquivoChamado = async (body) => {
     });
     return data;
 };
+export const listarHistoricosChamado = async ({ queryKey }) => {
+    const { data } = await api.get(`chamado/${queryKey[1].chamadoId}/historico`, { params: queryKey[1] });
+    return data;
+};
+
+export const buscarHistoricoChamado = async ({chamadoId, id}) => {
+    const { data } = await api.get(`chamado/${chamadoId}/historico/${id}`);
+    return data;
+};
+
+export const cadastrarHistoricoChamado = async ({chamadoId, ...rest}) => {
+    const { data } = await api.post(`chamado/${chamadoId}/historico`, {...rest});
+    return data;
+};
+
+export const atualizarHistoricoChamado = async ({chamadoId,id, ...rest}) => {
+    const { data } = await api.post(`chamado/${chamadoId}/historico/${id}`, { ...rest });
+    return data;
+};
+
+export const excluirHistoricoChamado = async ({chamadoId, id}) => {
+    const { data } = await api.post(`chamado/${chamadoId}/historico/${id}`);
+    return data;
+};

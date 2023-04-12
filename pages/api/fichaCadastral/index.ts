@@ -29,7 +29,6 @@ handle.get(async (req, res) => {
                 ...filtroQuery,
             };
         }
-        console.log(req.query);
         if (deletedAt) {
             filtroQuery = {
                 ...filtroQuery,

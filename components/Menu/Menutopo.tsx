@@ -108,7 +108,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
 
             <Box
                 display={{ sm: "none", md: "flex" }}
-                ml={{ base: "0px", md: "100px" }}
+                ml={{ base: "0px" }}
                 w="100%"
                 bg="bluelight"
                 h="100px"

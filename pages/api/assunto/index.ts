@@ -194,5 +194,29 @@ handle.get(async (req, res) => {
         });
     }
 });
+handle.post(async (req, res) => {
+    try {
+        const {
+            titulo, ativo, departamentoId
+        } = req.body; 
 
+        const data = await prisma.assuntoChamado.create({
+            data: {
+                titulo, 
+                ativo,
+                departamento:{
+                    connect:{
+                        id:Number(departamentoId)
+                    }
+                }
+            },
+        });
+        res.send(data);
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error.message,
+        });
+    }
+});
 export default handle;

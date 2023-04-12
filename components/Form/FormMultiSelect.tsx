@@ -35,6 +35,7 @@ const InputBase = (
         leftAddon,
         children,
         rightElementWidth,
+        placeholder,
         size,
         ...rest
     },
@@ -55,6 +56,9 @@ const InputBase = (
                     <CreatableSelect
                         ref={ref}
                         size={size}
+                        placeholder={
+                            placeholder ? placeholder : "Selecione...."
+                        }
                         {...rest}
                         chakraStyles={{
                             container: (_, { selectProps: { width } }) => ({
@@ -66,6 +70,9 @@ const InputBase = (
                     <Select
                         ref={ref}
                         size={size}
+                        placeholder={
+                            placeholder ? placeholder : "Selecione...."
+                        }
                         {...rest}
                         chakraStyles={{
                             container: (_, { selectProps: { width } }) => ({

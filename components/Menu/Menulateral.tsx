@@ -7,12 +7,12 @@ export const Menulateral = () => {
         <>
             <Box
                 w="100px"
-                h="100vh"
+                h="full"
+                minH="100vh"
                 bg="graydark"
                 display={{ base: "none", md: "flex" }}
                 flexDirection={"column"}
                 zIndex="2"
-                pos="fixed"
             >
                 <Logo />
                 <Listagemmenu />

@@ -266,7 +266,11 @@ handle.post(async (req, res) => {
                     connect: {
                         id: contrato?.imobiliariaId,
                     },
-                },
+                },responsavel:{
+                    connect:{
+                        id:req.user.id
+                    }
+                }
             },
         });
 

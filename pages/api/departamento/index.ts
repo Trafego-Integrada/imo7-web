@@ -5,153 +5,30 @@ import prisma from "@/lib/prisma";
 
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
+import { checkAuth } from "@/middleware/checkAuth";
 handle.use(cors);
+handle.use(checkAuth)
 handle.get(async (req, res) => {
     try {
         const {
-            query,
-            codigo,
-            inquilino,
-            dataInicio,
-            vencimento,
-            status,
-            endereco,
-            numero,
-            bairro,
-            cidade,
-            estado,
+            filtro,
             pagina,
             linhas,
-            contratoId,
         } = req.query;
 
-        let filtroQuery: Prisma.BoletoWhereInput = {};
-        if (query) {
+        let filtroQuery: Prisma.DepartamentoChamadoWhereInput = {};
+        if (filtro) {
             filtroQuery = {
                 ...filtroQuery,
-                OR: [
+                OR: [           
                     {
-                        contrato: {
-                            codigo: {
-                                contains: query,
-                            },
-                        },
-                    },
-                    {
-                        data_vencimen: {
-                            contains: query,
-                        },
-                    },
-                    {
-                        contrato: {
-                            inquilinos: {
-                                every: {
-                                    nome: {
-                                        contains: inquilino,
-                                    },
-                                },
-                            },
+                        titulo: {
+                            contains: filtro,
+
+                            
                         },
                     },
                 ],
-            };
-        }
-        if (contratoId) {
-            filtroQuery = {
-                ...filtroQuery,
-                contrato: {
-                    id: Number(contratoId),
-                },
-            };
-        }
-        if (codigo) {
-            filtroQuery = {
-                ...filtroQuery,
-                contrato: {
-                    codigo: {
-                        contains: codigo,
-                    },
-                },
-            };
-        }
-        if (vencimento) {
-            filtroQuery = {
-                ...filtroQuery,
-                data_vencimen: moment(vencimento).format(),
-            };
-        }
-        if (inquilino) {
-            filtroQuery = {
-                ...filtroQuery,
-                contrato: {
-                    inquilinos: {
-                        every: {
-                            nome: {
-                                contains: inquilino,
-                            },
-                        },
-                    },
-                },
-            };
-        }
-        if (endereco) {
-            filtroQuery = {
-                ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        endereco: {
-                            contains: endereco,
-                        },
-                    },
-                },
-            };
-        }
-        if (numero) {
-            filtroQuery = {
-                ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        numero: {
-                            contains: numero,
-                        },
-                    },
-                },
-            };
-        }
-        if (bairro) {
-            filtroQuery = {
-                ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        bairro: {
-                            contains: bairro,
-                        },
-                    },
-                },
-            };
-        }
-        if (cidade) {
-            filtroQuery = {
-                ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        cidade: {
-                            contains: cidade,
-                        },
-                    },
-                },
-            };
-        }
-        if (estado) {
-            filtroQuery = {
-                ...filtroQuery,
-                contrato: {
-                    imovel: {
-                        estado: {
-                            contains: estado,
-                        },
-                    },
-                },
             };
         }
         let paginacao = {};
@@ -168,15 +45,18 @@ handle.get(async (req, res) => {
         const data = await prisma.departamentoChamado.findMany({
             where: {
                 ...filtroQuery,
+                imobiliariaId:req.user.imobiliariaId
             },
             ...paginacao,
             include: {
-                AssuntoChamado: true,
+                assuntos: true,
+                integrantes:true
             },
         });
         const total = await prisma.departamentoChamado.count({
             where: {
                 ...filtroQuery,
+                imobiliariaId:req.user.imobiliariaId
             },
         });
         res.send({
@@ -188,6 +68,32 @@ handle.get(async (req, res) => {
         });
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            success: false,
+            message: error.message,
+        });
+    }
+});
+
+handle.post(async (req, res) => {
+    try {
+        const {
+            titulo, ativo, integrantes
+        } = req.body; 
+
+        const data = await prisma.departamentoChamado.create({
+            data: {
+                titulo, 
+                ativo,
+                imobiliaria:{
+                    connect:{
+                        id:req.user.imobiliariaId
+                    }
+                }
+            },
+        });
+        res.send(data);
+    } catch (error) {
         res.status(500).send({
             success: false,
             message: error.message,

@@ -1,15 +1,28 @@
 import { List } from "@chakra-ui/react";
 import { useAuth } from "hooks/useAuth";
 import { isArray } from "lodash";
-import { BiSupport } from "react-icons/bi";
+import { BiSupport, BiTask } from "react-icons/bi";
 import { BsFillGearFill, BsHouseFill } from "react-icons/bs";
-import { FaHandHoldingUsd, FaUser, FaUsers, FaUserTie } from "react-icons/fa";
+import {
+    FaFileInvoice,
+    FaHandHoldingUsd,
+    FaUser,
+    FaUsers,
+    FaUserTie,
+} from "react-icons/fa";
 import { HiOutlineDocumentText } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import { TbForms } from "react-icons/tb";
 import { MenuItem } from "./Menuitem";
 
 const menu = [
+    {
+        titulo: "Tarefas",
+        href: "/admin/tarefas",
+        icon: BiTask,
+        cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.contratos"],
+    },
     {
         titulo: "Contratos",
         href: "/admin/contratos",
@@ -39,7 +52,6 @@ const menu = [
         icon: FaHandHoldingUsd,
         cargos: ["imobiliaria"],
         modulos: ["imobiliaria.cobrancas"],
-        
     },
     {
         titulo: "Inquilinos",
@@ -54,6 +66,13 @@ const menu = [
         icon: FaUserTie,
         cargos: ["imobiliaria"],
         modulos: ["imobiliaria.proprietarios"],
+    },
+    {
+        titulo: "Orçamentos",
+        href: "/admin/orcamentos",
+        icon: FaFileInvoice,
+        cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.contratos"],
     },
     {
         titulo: "Fichas",
@@ -91,6 +110,28 @@ const menu = [
         icon: BsHouseFill,
         cargos: ["imobiliaria"],
         modulos: ["imobiliaria.imoveis"],
+    },
+    {
+        titulo: "Cadastros",
+        icon: BsFillGearFill,
+        cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.configuracoes"],
+        subMenus: [
+            {
+                titulo: "Pessoas",
+                href: "/admin/cadastros/pessoas",
+                icon: HiOutlineDocumentText,
+                cargos: [],
+                modulos: [],
+            },
+            {
+                titulo: "Departamentos",
+                href: "/admin/cadastros/departamentos",
+                icon: HiOutlineDocumentText,
+                cargos: [],
+                modulos: [],
+            },
+        ],
     },
     {
         titulo: "Configurações",
@@ -141,7 +182,7 @@ export const Listagemmenu = () => {
     const { usuario } = useAuth();
     return (
         <>
-            <List display="flex" flexDir="column" overflow="auto">
+            <List display="flex" flexDir="column">
                 {menu.map((item) => {
                     if (
                         item.cargos.length == 0 ||
