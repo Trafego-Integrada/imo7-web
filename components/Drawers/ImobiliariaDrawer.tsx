@@ -102,17 +102,22 @@ const DrawerBase = ({}, ref) => {
 
     const onSubmit = async (data) => {
         if (data.id) {
-            await atualizar.mutateAsync(data, {
-                onSuccess: () => {
-                    reset();
-                    onClose();
-                    toast({
-                        title: "Sucesso!",
-                        description: "Imobiliária atualizada com sucesso!",
-                        status: "success",
-                    });
-                },
-            });
+            const formData = new FormData();
+            Object.entries(data).map((i) => formData.append(i[0], i[1]));
+            await atualizar.mutateAsync(
+                { id: data.id, data: formData },
+                {
+                    onSuccess: () => {
+                        reset();
+                        onClose();
+                        toast({
+                            title: "Sucesso!",
+                            description: "Imobiliária atualizada com sucesso!",
+                            status: "success",
+                        });
+                    },
+                }
+            );
         } else {
             await cadastrar.mutateAsync(data, {
                 onSuccess: () => {

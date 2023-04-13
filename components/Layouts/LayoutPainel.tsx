@@ -126,7 +126,12 @@ export const LayoutPainel = ({ children }) => {
                             Home
                         </NextChakraLink>
                         {router.query.contratoId &&
-                            router.query.contratoId != "undefined" && (
+                            router.query.contratoId != "undefined" &&
+                            contratos?.data?.data?.find((c) =>
+                                c.inquilinos?.find((p) => p.id == usuario?.id)
+                                    ? true
+                                    : false
+                            ) && (
                                 <NextChakraLink
                                     href={`/${router.query.contratoId}/faturas`}
                                     fontWeight={
@@ -139,6 +144,29 @@ export const LayoutPainel = ({ children }) => {
                                     _hover={{ fontWeight: "bold" }}
                                 >
                                     Faturas
+                                </NextChakraLink>
+                            )}
+                        {router.query.contratoId &&
+                            router.query.contratoId != "undefined" &&
+                            contratos?.data?.data?.find((c) =>
+                                c.proprietarios?.find(
+                                    (p) => p.id == usuario?.id
+                                )
+                                    ? true
+                                    : false
+                            ) && (
+                                <NextChakraLink
+                                    href={`/${router.query.contratoId}/extratos`}
+                                    fontWeight={
+                                        router.asPath ==
+                                        `/${router.query.contratoId}/extratos`
+                                            ? "bold"
+                                            : "normal"
+                                    }
+                                    letterSpacing="wider"
+                                    _hover={{ fontWeight: "bold" }}
+                                >
+                                    Extratos
                                 </NextChakraLink>
                             )}
                         {router.query.contratoId &&

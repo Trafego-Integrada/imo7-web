@@ -699,9 +699,9 @@ model CategoriaPessoa {
 }
 
 model Pessoa {
-    id           String             @id @default(cuid())
-    tipoCadastro TipoCadastroPessoa
-    // tipoPessoa   TipoPessoa
+    id           String              @id @default(cuid())
+    tipoCadastro TipoCadastroPessoa?
+    tipoPessoa   TipoPessoa?
     razaoSocial  String?
     categoria    String?
     documento    String?
@@ -717,8 +717,8 @@ model Pessoa {
     complemento  String?
     observacoes  String?
     tags         String?
-    createdAt    DateTime           @default(now())
-    updatedAt    DateTime?          @updatedAt
+    createdAt    DateTime            @default(now())
+    updatedAt    DateTime?           @updatedAt
     deletedAt    DateTime?
     orcamento    Orcamento[]
 }

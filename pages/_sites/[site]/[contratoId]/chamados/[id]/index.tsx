@@ -443,6 +443,7 @@ const Chamado: NextPage = ({ chamado }) => {
 export default Chamado;
 export const getServerSideProps = async (ctx) => {
     const { id } = ctx.query;
+    console.log(ctx.query);
     const api = setupApiClient(ctx);
     const { data } = await api.get(`chamado/${id}`);
     return {

@@ -35,6 +35,7 @@ handle.get(async (req, res) => {
         } = req.query;
         let filtroQuery: Prisma.ContratoWhereInput = {
             AND: [],
+            OR:[]
         };
         imobiliariaId = req.user.imobiliariaId
             ? req.user.imobiliariaId
@@ -43,6 +44,7 @@ handle.get(async (req, res) => {
             filtroQuery = {
                 ...filtroQuery,
                 OR: [
+                    ...filtroQuery.OR,
                     {
                         codigo: {
                             contains: query,
@@ -332,6 +334,7 @@ handle.get(async (req, res) => {
             filtroQuery = {
                 ...filtroQuery,
                 OR: [
+                    ...filtroQuery.OR,
                     {
                         inquilinos: {
                             some: {

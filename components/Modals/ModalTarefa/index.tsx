@@ -106,7 +106,7 @@ const ModalBase = ({ chamadoId }, ref) => {
         },
     }));
     const { data: responsaveis } = useQuery(
-        ["responsaveis", {}],
+        ["responsaveis", { admImobiliaria: true }],
         listarUsuarios
     );
     const { data: departamentos } = useQuery(
