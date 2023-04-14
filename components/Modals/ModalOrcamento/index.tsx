@@ -2,6 +2,8 @@ import { FormInput } from "@/components/Form/FormInput";
 import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormTextarea } from "@/components/Form/FormTextarea";
+
+import { FormInputCurrency } from "@/components/Form/FormInputCurrency";
 import { includesAll } from "@/helpers/helpers";
 import { listarModulos } from "@/services/models/modulo";
 import {
@@ -19,6 +21,7 @@ import {
     atualizarUsuario,
     buscarUsuario,
     cadastrarUsuario,
+    listarUsuarios,
 } from "@/services/models/usuario";
 import { queryClient } from "@/services/queryClient";
 import {
@@ -64,8 +67,9 @@ import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
 
 const schema = yup.object({
-    responsavel: yup.string().required("Campo Obrigatório"),
+    solicitante: yup.object().required("Campo Obrigatório"),
     prestador: yup.object().required("Campo Obrigatório"),
+    valor: yup.string().required("Campo Obrigatório"),
 });
 
 const ModalBase = ({ chamadoId }, ref) => {
@@ -88,7 +92,7 @@ const ModalBase = ({ chamadoId }, ref) => {
             reset({
                 ...data,
                 dataVisita: data.dataVisita
-                    ? moment(data.dataVisita).format("YYYY-MM-DD HH:mm")
+                    ? moment(data.dataVisita).format("YYYY-MM-DD")
                     : null,
             });
             onOpen();
@@ -96,14 +100,14 @@ const ModalBase = ({ chamadoId }, ref) => {
     });
     const cadastrar = useMutation(cadastrarOrcamento, {
         onSuccess: () => {
-            queryClient.invalidateQueries(["pessoas"]);
+            queryClient.invalidateQueries(["orcamentos"]);
             toast({ title: "Cadastrado com sucesso", status: "success" });
             onClose();
         },
     });
     const atualizar = useMutation(atualizarOrcamento, {
         onSuccess: () => {
-            queryClient.invalidateQueries(["pessoas"]);
+            queryClient.invalidateQueries(["orcamentos"]);
             toast({ title: "Atualizado com sucesso", status: "success" });
             onClose();
         },
@@ -135,6 +139,10 @@ const ModalBase = ({ chamadoId }, ref) => {
         ["prestadores", { tipoCadastro: "prestador" }],
         listarPessoas
     );
+    const { data: responsaveis } = useQuery(
+        ["responsaveis", { admImobiliaria: true }],
+        listarUsuarios
+    );
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="4xl">
@@ -156,12 +164,21 @@ const ModalBase = ({ chamadoId }, ref) => {
                             onSubmit={handleSubmit(onSubmit)}
                         >
                             <GridItem colSpan={{ lg: 1 }}>
-                                <FormInput
-                                    size="sm"
-                                    label="Responsavel"
-                                    placeholder="..."
-                                    {...register("responsavel")}
-                                    error={errors.responsavel?.message}
+                                <Controller
+                                    control={control}
+                                    name="solicitante"
+                                    render={({ field }) => (
+                                        <FormMultiSelect
+                                            size="sm"
+                                            label="Responsavel"
+                                            placeholder="..."
+                                            options={responsaveis?.data?.data}
+                                            getOptionLabel={(e) => e.nome}
+                                            getOptionValue={(e) => e.id}
+                                            error={errors.solicitante?.message}
+                                            {...field}
+                                        />
+                                    )}
                                 />
                             </GridItem>
                             <GridItem>
@@ -186,17 +203,25 @@ const ModalBase = ({ chamadoId }, ref) => {
                             </GridItem>
 
                             <GridItem>
-                                <FormInput
-                                    size="sm"
-                                    label="Valor do Orçamento"
-                                    placeholder="..."
-                                    {...register("valor")}
-                                    error={errors.valor?.message}
+                                <Controller
+                                    name="valor"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <FormInputCurrency
+                                            label="Valor "
+                                            placeholder="R$"
+                                            error={errors.valor?.message}
+                                            defaultValue={field.value}
+                                            onValueChange={(value) => {
+                                                field.onChange(value);
+                                            }}
+                                        />
+                                    )}
                                 />
                             </GridItem>
                             <GridItem>
                                 <FormInput
-                                    type="datetime-local"
+                                    type="datetime"
                                     size="sm"
                                     label="Data da Visita"
                                     placeholder="..."

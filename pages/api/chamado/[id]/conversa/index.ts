@@ -54,6 +54,21 @@ handle.post(async (req, res) => {
             },
         },
     });
+    await prisma.historicoChamado.create({
+        data:{
+            descricao:'Iniciou uma conversa com '+participantes.map(item => item.nome),
+            chamado: {
+                connect: {
+                    id: Number(id),
+                },
+            },
+            usuario: {
+                connect: {
+                    id: req.user.id,
+                },
+            },
+        }
+    })
     res.send(data);
 });
 

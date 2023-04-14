@@ -20,7 +20,6 @@ if (process.env.NODE_ENV === "production") {
 
 prisma.$use(async (params, next) => {
     // Check incoming query type
-
     if (params.action == "delete") {
         params.action = "update";
         params.args["data"] = { deletedAt: moment().format() };

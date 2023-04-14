@@ -17,7 +17,7 @@ handle.get(async (req, res) => {
         include:{
             departamento:true,
             membros:true,
-            responsaveis:true
+            responsaveis:true,tags:true
         }
        
     });
@@ -29,9 +29,7 @@ handle.post(async (req, res) => {
     const { id } = req.query;
     const {
         dataEntrega, dataVencimento, departamento, descricao, prioridade, titulo, status,
-        membros,responsaveis, tipoServico  } = req.body;
-
-    
+        membros,responsaveis, tags  } = req.body;
 
     const data = await prisma.tarefa.update({
         where: {
@@ -62,9 +60,43 @@ handle.post(async (req, res) => {
                         id:item.id
                     }
                 })
-            }:{set:[]},tipoServico
+            }:{set:[]},tags:{
+                set:tags.length > 0 ?tags.filter(e => e.id).map(tag => {
+                    return {
+                            id:tag.id
+                        
+
+                    }
+                }):{},
+                create: tags.length > 0 ?tags.filter(e => e.label).map(tag => {
+                    return {
+                        
+                            nome: tag.label,
+                            imobiliariaId:req.user.imobiliariaId
+
+                    }
+                }):{},
+            
+            }
         },
     });
+    if(data.chamadoId) {
+        await prisma.historicoChamado.create({
+            data:{
+                descricao:'Atualizou a tarefa # '+data.id,
+                chamado: {
+                    connect: {
+                        id: Number(data.chamadoId),
+                    },
+                },
+                usuario: {
+                    connect: {
+                        id: req.user.id,
+                    },
+                },
+            }
+        })
+    }
     res.send(data);
 });
 

@@ -22,6 +22,8 @@ import { useQuery } from "react-query";
 import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 import { FaGrinWink } from "react-icons/fa";
 import { listarExtratos } from "@/services/models/extrato";
+import { formatoData } from "@/helpers/helpers";
+import Link from "next/link";
 
 const Chamados: NextPage = () => {
     const router = useRouter();
@@ -69,9 +71,9 @@ const Chamados: NextPage = () => {
                                                 textTransform="uppercase"
                                                 color="gray.800"
                                             >
-                                                Vencimento
+                                                Nº Parcela
                                             </Text>
-                                            <Text>{item.data_vencimen}</Text>
+                                            <Text>{item.parcela}</Text>
                                         </Box>
                                         <Box>
                                             <Text
@@ -80,9 +82,14 @@ const Chamados: NextPage = () => {
                                                 textTransform="uppercase"
                                                 color="gray.800"
                                             >
-                                                Referência
+                                                Data do Depósito
                                             </Text>
-                                            <Text>{item.instrucoes3}</Text>
+                                            <Text>
+                                                {item.dataDeposito &&
+                                                    formatoData(
+                                                        item.dataDeposito
+                                                    )}
+                                            </Text>
                                         </Box>
                                         <Box>
                                             <Text
@@ -91,9 +98,9 @@ const Chamados: NextPage = () => {
                                                 textTransform="uppercase"
                                                 color="gray.800"
                                             >
-                                                Linha Digitábel
+                                                Período
                                             </Text>
-                                            <Text>{item.barcode}</Text>
+                                            <Text>{item.periodo}</Text>
                                         </Box>
                                     </Flex>
                                     <Flex align="center">
@@ -102,23 +109,25 @@ const Chamados: NextPage = () => {
                                         </Badge>
                                     </Flex>
                                 </Flex>
-
-                                <Button
-                                    colorScheme="blue"
-                                    size="sm"
-                                    rightIcon={<Icon as={FiArrowRight} />}
-                                    onClick={() =>
-                                        router.push({
-                                            pathname: "/boleto/[id]",
-                                            query: {
-                                                contratoId: item.contratoId,
-                                                id: item.id,
-                                            },
-                                        })
-                                    }
+                                <Link
+                                    href={{
+                                        pathname: "/extrato/[id]",
+                                        query: {
+                                            contratoId: item.contratoId,
+                                            id: item.id,
+                                            pdf: true,
+                                        },
+                                    }}
+                                    target="_blank"
                                 >
-                                    Abrir
-                                </Button>
+                                    <Button
+                                        colorScheme="blue"
+                                        size="sm"
+                                        rightIcon={<Icon as={FiArrowRight} />}
+                                    >
+                                        Abrir
+                                    </Button>
+                                </Link>
                             </GridItem>
                         ))
                     ) : (

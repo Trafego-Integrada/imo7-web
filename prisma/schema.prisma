@@ -76,6 +76,7 @@ model Usuario {
     Orcamento             Orcamento[]
     DepartamentoChamado   DepartamentoChamado?     @relation(fields: [departamentoChamadoId], references: [id])
     departamentoChamadoId Int?
+    Tarefa                Tarefa[]
 
     @@unique([imobiliariaId, documento])
 }
@@ -186,6 +187,9 @@ model Imobiliaria {
     modelosFichaCadastral ModeloFichaCadastral[]
     CategoriaPessoa       CategoriaPessoa[]
     departamentos         DepartamentoChamado[]
+    TagTarefa             TagTarefa[]
+    Tarefa                Tarefa[]
+    Pessoa                Pessoa[]
 }
 
 model Imovel {
@@ -696,36 +700,39 @@ model CategoriaPessoa {
     deletedAt     DateTime?
     imobiliaria   Imobiliaria        @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId Int
+    Pessoa        Pessoa[]
 }
 
 model Pessoa {
-    id           String              @id @default(cuid())
-    tipoCadastro TipoCadastroPessoa?
-    tipoPessoa   TipoPessoa?
-    razaoSocial  String?
-    categoria    String?
-    documento    String?
-    telefone     String?
-    celular      String?
-    email        String?
-    cep          String?
-    estado       String?
-    cidade       String?
-    bairro       String?
-    endereco     String?
-    numero       String?
-    complemento  String?
-    observacoes  String?
-    tags         String?
-    createdAt    DateTime            @default(now())
-    updatedAt    DateTime?           @updatedAt
-    deletedAt    DateTime?
-    orcamento    Orcamento[]
+    id                String              @id @default(cuid())
+    tipoCadastro      TipoCadastroPessoa?
+    tipoPessoa        TipoPessoa?
+    razaoSocial       String?
+    categoria         CategoriaPessoa?    @relation(fields: [categoriaPessoaId], references: [id])
+    documento         String?
+    telefone          String?
+    celular           String?
+    email             String?
+    cep               String?
+    estado            String?
+    cidade            String?
+    bairro            String?
+    endereco          String?
+    numero            String?
+    complemento       String?
+    observacoes       String?
+    tags              String?
+    createdAt         DateTime            @default(now())
+    updatedAt         DateTime?           @updatedAt
+    deletedAt         DateTime?
+    orcamento         Orcamento[]
+    categoriaPessoaId String?
+    imobiliaria       Imobiliaria?        @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId     Int?
 }
 
 model Orcamento {
     id            String    @id @default(cuid())
-    responsavel   String?
     valor         Decimal?
     dataVisita    DateTime?
     observacoes   String?   @db.LongText
@@ -741,13 +748,20 @@ model Orcamento {
     solicitanteId Int
 }
 
+enum PrioridadeTarefa {
+    Baixa
+    Media
+    Alta
+    Urgente
+}
+
 model Tarefa {
     id                    String               @id @default(cuid())
     titulo                String?
-    tipoServico           String?
     descricao             String?              @db.LongText
+    conclusao             String?              @db.LongText
     dataVencimento        DateTime?
-    prioridade            String?
+    prioridade            PrioridadeTarefa?
     status                String?
     dataEntrega           DateTime?
     createdAt             DateTime             @default(now())
@@ -759,4 +773,30 @@ model Tarefa {
     departamentoChamadoId Int?
     chamado               Chamado?             @relation(fields: [chamadoId], references: [id])
     chamadoId             Int?
+    codigoContrato        String?
+    codigoImovel          String?
+    cepImovel             String?
+    enderecoImovel        String?
+    numeroImovel          String?
+    complementoImovel     String?
+    bairroImovel          String?
+    cidadeImovel          String?
+    estadoImovel          String?
+    tags                  TagTarefa[]
+    criador               Usuario?             @relation(fields: [criadorId], references: [id])
+    criadorId             Int?
+    imobiliaria           Imobiliaria?         @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId         Int?
+}
+
+model TagTarefa {
+    id            String       @id @default(cuid())
+    nome          String
+    cor           String?
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime?    @updatedAt
+    deletedAt     DateTime?
+    tarefas       Tarefa[]
+    imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId Int?
 }

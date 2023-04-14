@@ -28,7 +28,7 @@ handle.get(async (req, res) => {
 handle.post(async (req, res) => {
     const { id } = req.query;
     const {
-        dataVisita, observacoes, prestador, responsavel, valor,status
+        dataVisita, observacoes, prestador, solicitante, valor,status
     } = req.body;
 
     
@@ -45,16 +45,33 @@ handle.post(async (req, res) => {
                         id:prestador.id
                     }
                 },
-                responsavel,
-                valor,
+                valor:valor.replace(',','.'),
                 status,
                 solicitante:{
                     connect:{
-                        id: req.user.id
+                        id: solicitante.id
                     }
                 }
         },
     });
+
+    if(data.chamadoId) {
+        await prisma.historicoChamado.create({
+            data:{
+                descricao:'Atualizou um orçamento',
+                chamado: {
+                    connect: {
+                        id: Number(data.chamadoId),
+                    },
+                },
+                usuario: {
+                    connect: {
+                        id: req.user.id,
+                    },
+                },
+            }
+        })
+    }
     res.send(data);
 });
 

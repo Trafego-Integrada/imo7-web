@@ -51,10 +51,16 @@ import {
 import { DrawerCampo } from "@/components/Drawers/Cadastros/FichaCadastral/DrawerCampo";
 import { ModalPessoa } from "@/components/Modals/ModalPessoa";
 import { excluirPessoa, listarPessoas } from "@/services/models/pessoa";
+import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
+import { listarCategoriasPessoa } from "@/services/models/categoriaPessoa";
 
 const Configuracoes = () => {
     const [ficha, setFicha] = useState("");
-    const [query, setQuery] = useState("");
+    const [filtro, setFiltro] = useState({
+        tipoCadastro: null,
+        categoria: null,
+        query: "",
+    });
     const [categoria, setCategoria] = useState("");
     const toast = useToast();
     const drawer = useRef();
@@ -75,8 +81,17 @@ const Configuracoes = () => {
         });
     };
 
-    const { data } = useQuery(["pessoas", { filtro: query }], listarPessoas);
-    console.log(data);
+    const { data } = useQuery(["pessoas", filtro], listarPessoas);
+
+    const { data: categorias } = useQuery(
+        [
+            "categorias",
+            {
+                tipo: filtro.tipoCadastro,
+            },
+        ],
+        listarCategoriasPessoa
+    );
     return (
         <>
             <Layout title="Pessoas">
@@ -101,24 +116,45 @@ const Configuracoes = () => {
                                 <FormSelect
                                     size="sm"
                                     placeholder="Por tipo"
-                                    value={ficha}
-                                    onChange={(e) => setFicha(e.target.value)}
+                                    value={filtro.tipoCadastro}
+                                    onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            tipoCadastro: e.target.value,
+                                        })
+                                    }
                                 >
                                     <option value="prestador">
                                         Prestador de Serviço
                                     </option>
                                 </FormSelect>
-
+                                <FormMultiSelect
+                                    isClearable
+                                    size="sm"
+                                    placeholder="Por categoria"
+                                    options={categorias?.data?.data}
+                                    getOptionLabel={(e) => e.nome}
+                                    getOptionValue={(e) => e.id}
+                                    value={filtro.categoria}
+                                    onChange={(e) =>
+                                        setFiltro({ ...filtro, categoria: e })
+                                    }
+                                />
                                 <FormInput
                                     size="sm"
                                     minW={96}
                                     placeholder="Encontre por nome"
-                                    value={query}
-                                    onChange={(e) => setQuery(e.target.value)}
+                                    value={filtro.query}
+                                    onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            query: e.target.value,
+                                        })
+                                    }
                                 />
                                 <Text fontSize="xs" color="gray" w="full">
                                     <Text as="span" fontWeight="bold">
-                                        {data?.total}
+                                        {data?.data?.total}
                                     </Text>{" "}
                                     cadastros encontrados
                                 </Text>
@@ -139,6 +175,7 @@ const Configuracoes = () => {
                                 <Thead>
                                     <Tr>
                                         <Th w={24}>Tipo de Cadastro</Th>
+                                        <Th w={24}>Categoria</Th>
                                         <Th>Nome</Th>
                                         <Th w={44}>Documento</Th>
                                         <Th w={44}>Celular</Th>
@@ -153,6 +190,7 @@ const Configuracoes = () => {
                                                     "prestador" &&
                                                     "Prestador de Serviço"}
                                             </Td>
+                                            <Td>{item.categoria?.nome}</Td>
                                             <Td>{item.razaoSocial}</Td>
                                             <Td>{item.documento}</Td>
                                             <Td>{item.celular}</Td>
@@ -198,11 +236,3 @@ const Configuracoes = () => {
     );
 };
 export default Configuracoes;
-export const getServerSideProps = withSSRAuth(
-    async (ctx) => {
-        return {
-            props: {},
-        };
-    },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);

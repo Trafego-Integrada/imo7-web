@@ -159,12 +159,7 @@ handle.get(async (req, res) => {
                 ...filtroQuery,
                 status:JSON.parse(status),
             };
-        } else {
-            filtroQuery = {
-                ...filtroQuery,
-                status:true,
-            };
-        }
+        } 
         console.log(filtroQuery)
         const data = await prisma.usuario.findMany({
             where: {

@@ -43,6 +43,7 @@ export default function middleware(req: NextRequest) {
                   .replace(`.platformize.vercel.app`, "")
                   .replace(`.imobiliariasimob.com.br`, "")
                   .replace(`.imo7.com.br`, "")
+                  .replace(`www.imo7.com.br`, "")
             : hostname.replace(`.localhost:3000`, "");
     // rewrites for app pages
     if (currentHost == "app") {

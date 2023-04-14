@@ -12,6 +12,8 @@ handle.get(async (req, res) => {
     const data = await prisma.pessoa.findFirst({
         where: {
             id,
+        },include:{
+            categoria:true
         },
        
     });
@@ -47,7 +49,11 @@ handle.post(async (req, res) => {
             tipoCadastro,
                 tipoPessoa,
                 razaoSocial,
-                categoria, 
+                categoria:{
+                    connect:{
+                        id:categoria.id
+                    }
+                }, 
                 cep,
                 bairro, 
                 cidade, 
@@ -56,7 +62,8 @@ handle.post(async (req, res) => {
                 celular,
                 telefone,
                 documento,
-                endereco,complemento,observacoes,tags,numero
+                endereco,complemento,observacoes,tags,numero,
+                
         },
     });
     res.send(data);

@@ -11,23 +11,47 @@ handle.get(async (req, res) => {
         let {
             filtro,
             pagina, 
-            linhas
+            linhas,query, tipoCadastro, categoria
             
         } = req.query;
         let filtroQuery = {};
       
-        if (filtro) {
+        if (query) {
             filtroQuery = {
                 ...filtroQuery,
                 OR: [
                     {
                         razaoSocial: {
-                            contains: filtro,
+                            contains: query,
                         },
                     },
                 ],
             };
         }
+        if (tipoCadastro) {
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    {
+                        tipoCadastro
+                    },
+                ],
+            };
+        }
+        if (categoria) {
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    {
+                        categoria: {
+                            id: JSON.parse(categoria).id
+                            
+                        },
+                    },
+                ],
+            };
+        }
+      
       
         let paginacao = {};
         if (pagina && linhas) {
@@ -43,12 +67,17 @@ handle.get(async (req, res) => {
         const data = await prisma.pessoa.findMany({
             where: {
                 ...filtroQuery,
+                imobiliriaId:req.user.imobiliariaId
+            },
+            include:{
+                categoria:true
             },
             ...paginacao,
         });
         const total = await prisma.pessoa.count({
             where: {
                 ...filtroQuery,
+                imobiliriaId:req.user.imobiliariaId
             },
         });
         res.send({
@@ -89,7 +118,11 @@ handle.post(async (req, res) => {
                 tipoCadastro,
                 tipoPessoa,
                 razaoSocial,
-                categoria, 
+                categoria:{
+                    connect:{
+                        id:categoria.id
+                    }
+                }, 
                 cep,
                 bairro, 
                 cidade, 
@@ -98,7 +131,11 @@ handle.post(async (req, res) => {
                 celular,
                 telefone,
                 documento,
-                endereco,complemento,observacoes,tags,numero
+                endereco,complemento,observacoes,tags,numero,imobiliaria:{
+                    connect:{
+                        id:req.user.imobiliariaId
+                    }
+                }
             },
         });
 

@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
-import moment from "moment";
 handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
@@ -12,7 +11,7 @@ handle.get(async (req, res) => {
         let {
             filtro,
             pagina, 
-            linhas, chamadoId
+            linhas
             
         } = req.query;
         let filtroQuery = {};
@@ -22,7 +21,7 @@ handle.get(async (req, res) => {
                 ...filtroQuery,
                 OR: [
                     {
-                        razaoSocial: {
+                        nome: {
                             contains: filtro,
                         },
                     },
@@ -41,26 +40,17 @@ handle.get(async (req, res) => {
             };
         }
        
-        if(chamadoId) {
-            filtroQuery = {
-                ...filtroQuery,
-                chamadoId:Number(chamadoId)
-            }
-        }
-        const data = await prisma.orcamento.findMany({
+        const data = await prisma.tagTarefa.findMany({
             where: {
                 ...filtroQuery,
+                imobiliariaId:req.user.imobiliariaId
             },
             ...paginacao,
-            include:{
-                prestador:true,
-                solicitante:true,
-                chamado:true
-            }
         });
-        const total = await prisma.orcamento.count({
+        const total = await prisma.tagTarefa.count({
             where: {
                 ...filtroQuery,
+                imobiliariaId:req.user.imobiliariaId
             },
         });
         res.send({
@@ -81,50 +71,19 @@ handle.get(async (req, res) => {
 handle.post(async (req, res) => {
     try {
         const {
-           dataVisita, observacoes, prestador, solicitante, valor,status, chamadoId
+            nome
         } = req.body;
 
-        const data = await prisma.orcamento.create({
+        const data = await prisma.tagTarefa.create({
             data: {
-                dataVisita:dataVisita ? moment(dataVisita).format():null,
-                observacoes,
-                prestador:{
-                    connect:{
-                        id:prestador.id
-                    }
-                },
-                valor:valor.replace(',','.'),
-                status,
-                solicitante:{
-                    connect:{
-                        id: solicitante.id
-                    }
-                },
-                chamado:chamadoId ? {
-                    connect:{
-                        id:Number(chamadoId)
-                    }
-                }:{}
+               nome,
+               imobiliaria:{
+               connect:{
+                id:req.user.imobiliariaId
+               }
+               }
             },
         });
-        if(chamadoId) {
-            await prisma.historicoChamado.create({
-                data:{
-                    descricao:'Criou um orçamento',
-                    chamado: {
-                        connect: {
-                            id: Number(chamadoId),
-                        },
-                    },
-                    usuario: {
-                        connect: {
-                            id: req.user.id,
-                        },
-                    },
-                }
-            })
-        }
-       
 
         res.send(data);
            

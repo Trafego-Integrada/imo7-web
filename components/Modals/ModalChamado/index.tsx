@@ -117,7 +117,7 @@ const ModalBase = ({}, ref) => {
                                         <Tarefas chamado={chamado} />
                                     </TabPanel>
                                     <TabPanel>
-                                        <Anexos chamado={chamado} />
+                                        <Anexos chamadoId={chamado?.id} />
                                     </TabPanel>
                                 </TabPanels>
                             </Tabs>

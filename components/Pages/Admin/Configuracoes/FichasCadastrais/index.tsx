@@ -42,7 +42,7 @@ export const FichasCadastrais = () => {
         });
     };
     return (
-        <Box>
+        <Box bg="white" p={4}>
             <Flex justify="space-between" align="center">
                 <Text fontSize="xs" color="gray">
                     <Text as="span" fontWeight="bold">

@@ -27,7 +27,7 @@ import { useMutation } from "react-query";
 import { useDropzone } from "react-dropzone";
 import { FormInput } from "@/components/Form/FormInput";
 
-const ModalBase = ({ contratoId }, ref) => {
+const ModalBase = ({ contratoId, chamadoId }, ref) => {
     const router = useRouter();
     const [nome, setNome] = useState("");
     const [file, setFile] = useState([]);
@@ -61,7 +61,8 @@ const ModalBase = ({ contratoId }, ref) => {
     });
     const onUpload = async (event) => {
         const formData = new FormData();
-        formData.append("contratoId", contratoId);
+        contratoId && formData.append("contratoId", contratoId);
+        chamadoId && formData.append("chamadoId", chamadoId);
         formData.append("nome", nome);
         formData.append("anexos", file[0]);
         await upload.mutateAsync(formData);

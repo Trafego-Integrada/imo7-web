@@ -29,12 +29,19 @@ handle.use(multiparty);
 
 handle.get(async (req, res) => {
     try {
-        const { contratoId } = req.query;
+        const { contratoId, chamadoId } = req.query;
         let filtroQuery = {};
         if (contratoId) {
             filtroQuery = {
                 ...filtroQuery,
                 contratoId: Number(contratoId),
+            };
+        }
+
+        if (chamadoId) {
+            filtroQuery = {
+                ...filtroQuery,
+                chamadoId: Number(chamadoId),
             };
         }
 
@@ -132,6 +139,20 @@ handle.post(async (req, res) => {
                                           },
                                       }
                                     : {},
+                                chamado: chamadoId
+                                    ? {
+                                          connect: {
+                                              id: Number(chamadoId),
+                                          },
+                                      }
+                                    : {},
+                                conversa: conversaId
+                                    ? {
+                                          connect: {
+                                              id: Number(conversaId),
+                                          },
+                                      }
+                                    : {},
                                 usuario: {
                                     connect: {
                                         id: req.user.id,
@@ -147,6 +168,27 @@ handle.post(async (req, res) => {
                                             id: Number(conversaId),
                                         },
                                     },
+                                    chamado: {
+                                        connect: {
+                                            id: Number(chamadoId),
+                                        },
+                                    },
+                                    anexos: {
+                                        connect: {
+                                            id: anexo.id,
+                                        },
+                                    },
+                                    mensagem: "Arquivos anexados",
+                                    usuario: {
+                                        connect: {
+                                            id: req.user.id,
+                                        },
+                                    },
+                                },
+                            });
+                        } else if (chamadoId) {
+                            await prisma.interacaoChamado.create({
+                                data: {
                                     chamado: {
                                         connect: {
                                             id: Number(chamadoId),
@@ -245,7 +287,29 @@ handle.post(async (req, res) => {
                             },
                         },
                     });
+                } else if (chamadoId) {
+                    await prisma.interacaoChamado.create({
+                        data: {
+                            chamado: {
+                                connect: {
+                                    id: Number(chamadoId),
+                                },
+                            },
+                            anexos: {
+                                connect: {
+                                    id: anexo.id,
+                                },
+                            },
+                            mensagem: "Arquivos anexados",
+                            usuario: {
+                                connect: {
+                                    id: req.user.id,
+                                },
+                            },
+                        },
+                    });
                 }
+                
             }
         }
 

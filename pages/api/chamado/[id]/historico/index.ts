@@ -7,20 +7,28 @@ import { cors } from "@/middleware/cors";
 handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
-    const { id, usuarioId } = req.query;
+    const { id, usuarioId, linhas} = req.query;
     const data = await prisma.historicoChamado.findMany({
         where: {
             chamadoId: Number(id),
             
         },
+        take:linhas?Number(linhas):null,
         include: {
             usuario:true,
         },
         orderBy: {
-            createdAt: "asc",
+            createdAt: "desc",
         },
     });
-    res.send(data);
+
+    const total = await prisma.historicoChamado.count({
+        where: {
+            chamadoId: Number(id),
+            
+        },
+    });
+    res.send({data,total});
 });
 
 handle.post(async (req, res) => {

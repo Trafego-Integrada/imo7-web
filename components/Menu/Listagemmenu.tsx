@@ -10,8 +10,9 @@ import {
     FaUsers,
     FaUserTie,
 } from "react-icons/fa";
+import { FiTag } from "react-icons/fi";
 import { HiOutlineDocumentText } from "react-icons/hi";
-import { MdDashboard } from "react-icons/md";
+import { MdCategory, MdDashboard } from "react-icons/md";
 import { TbForms } from "react-icons/tb";
 import { MenuItem } from "./Menuitem";
 
@@ -128,6 +129,20 @@ const menu = [
                 titulo: "Departamentos",
                 href: "/admin/cadastros/departamentos",
                 icon: HiOutlineDocumentText,
+                cargos: [],
+                modulos: [],
+            },
+            {
+                titulo: "Categorias de Pessoas",
+                href: "/admin/cadastros/categoriasPessoa",
+                icon: MdCategory,
+                cargos: [],
+                modulos: [],
+            },
+            {
+                titulo: "Tags de Tarefas",
+                href: "/admin/cadastros/tagsTarefa",
+                icon: FiTag,
                 cargos: [],
                 modulos: [],
             },

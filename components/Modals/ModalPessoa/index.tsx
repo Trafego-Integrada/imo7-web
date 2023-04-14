@@ -1,6 +1,8 @@
 import { FormInput } from "@/components/Form/FormInput";
+import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { includesAll } from "@/helpers/helpers";
+import { listarCategoriasPessoa } from "@/services/models/categoriaPessoa";
 import { listarModulos } from "@/services/models/modulo";
 import {
     atualizarPessoa,
@@ -50,7 +52,7 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { forwardRef, useImperativeHandle } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
 
@@ -116,7 +118,10 @@ const ModalBase = ({}, ref) => {
             }
         },
     }));
-
+    const { data: categorias } = useQuery(
+        ["categorias", { tipo: watch("tipo") }],
+        listarCategoriasPessoa
+    );
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="4xl">
@@ -177,12 +182,21 @@ const ModalBase = ({}, ref) => {
                             </GridItem>
 
                             <GridItem>
-                                <FormInput
-                                    size="sm"
-                                    label="Categoria"
-                                    placeholder="..."
-                                    {...register("categoria")}
-                                    error={errors.categoria?.message}
+                                <Controller
+                                    control={control}
+                                    name="categoria"
+                                    render={({ field }) => (
+                                        <FormMultiSelect
+                                            size="sm"
+                                            label="Categoria"
+                                            placeholder="Qual categoria?"
+                                            options={categorias?.data?.data}
+                                            getOptionLabel={(e) => e.nome}
+                                            getOptionValue={(e) => e.id}
+                                            error={errors.categoria?.message}
+                                            {...field}
+                                        />
+                                    )}
                                 />
                             </GridItem>
                             <GridItem>

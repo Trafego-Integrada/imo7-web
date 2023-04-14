@@ -150,12 +150,13 @@ const Configuracoes = () => {
                             Atualizar
                         </Button>
                     </Flex>
-                    <Box bg="graylight" p={5}>
+                    <Box p={5}>
                         <Tabs
                             size="sm"
                             colorScheme="blue"
                             index={tab}
                             onChange={setTab}
+                            variant="solid-rounded"
                         >
                             <TabList>
                                 <Tab value="dados">Dados</Tab>
@@ -165,207 +166,226 @@ const Configuracoes = () => {
                                 <Tab value="segundaVia">2º Via de boletos</Tab>
                                 <Tab value="fichas">Fichas Cadastrais</Tab>
                             </TabList>
-                            <TabPanels bg="white">
-                                <TabPanel>
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        >
-                                            Detalhes da conta
-                                        </Text>
-                                        <Box bg="white" p={5}>
-                                            <Grid
-                                                gap={5}
-                                                templateColumns={{
-                                                    sm: "repeat(1, 1fr)",
-                                                    md: "repeat(2, 1fr)",
-                                                    lg: "repeat(3, 1fr)",
-                                                }}
-                                            >
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Razão Social"
-                                                        placeholder="digite a razão social..."
-                                                        bg="white"
-                                                        {...register(
-                                                            "razaoSocial"
-                                                        )}
-                                                        error={
-                                                            errors.razaoSocial
-                                                                ?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Nome Fantasia"
-                                                        placeholder="digite o nome fantasia..."
-                                                        bg="white"
-                                                        {...register(
-                                                            "nomeFantasia"
-                                                        )}
-                                                        error={
-                                                            errors.razaoSocial
-                                                                ?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="CNPJ"
-                                                        placeholder="digite o CNPJ..."
-                                                        bg="white"
-                                                        {...register("cnpj")}
-                                                        error={
-                                                            errors.cnpj?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="IE"
-                                                        placeholder="digite a sua inscrição estadual..."
-                                                        bg="white"
-                                                        {...register("ie")}
-                                                        error={
-                                                            errors.ie?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                            </Grid>
-                                        </Box>
-                                    </Box>
+                            <TabPanels>
+                                <TabPanel px={0}>
+                                    <Box bg="white" p={4}>
+                                        <Grid gap={5}>
+                                            <GridItem>
+                                                <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                    <GridItem
+                                                        as={Flex}
+                                                        align="center"
+                                                    >
+                                                        <Text>
+                                                            Razão Social
+                                                        </Text>
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            size="sm"
+                                                            placeholder="digite a razão social..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "razaoSocial"
+                                                            )}
+                                                            error={
+                                                                errors
+                                                                    .razaoSocial
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                </Grid>
+                                            </GridItem>
+                                            <GridItem>
+                                                <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                    <GridItem
+                                                        as={Flex}
+                                                        align="center"
+                                                    >
+                                                        <Text>
+                                                            Nome Fantasia
+                                                        </Text>
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            size="sm"
+                                                            placeholder="digite o nome fantasia..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "nomeFantasia"
+                                                            )}
+                                                            error={
+                                                                errors
+                                                                    .razaoSocial
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                </Grid>
+                                            </GridItem>
+                                            <GridItem>
+                                                <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                    <GridItem
+                                                        as={Flex}
+                                                        align="center"
+                                                    >
+                                                        <Text>CNPJ </Text>
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            size="sm"
+                                                            placeholder="digite o CNPJ..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "cnpj"
+                                                            )}
+                                                            error={
+                                                                errors.cnpj
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                </Grid>
+                                            </GridItem>
+                                            <GridItem>
+                                                <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                    <GridItem
+                                                        as={Flex}
+                                                        align="center"
+                                                    >
+                                                        <Text>
+                                                            Inscrição Estadual{" "}
+                                                        </Text>
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            size="sm"
+                                                            placeholder="digite a sua inscrição estadual..."
+                                                            bg="white"
+                                                            {...register("ie")}
+                                                            error={
+                                                                errors.ie
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                </Grid>
+                                            </GridItem>
+                                        </Grid>
 
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        ></Text>
-                                        <Box bg="white" p={5}>
-                                            <Grid gridTemplateColumns="repeat(2,1fr)">
-                                                <GridItem>Logo</GridItem>
-                                                <GridItem>
-                                                    {watch("logo") && (
-                                                        <Box pos="relative">
-                                                            <IconButton
-                                                                top={0}
-                                                                colorScheme="red"
-                                                                pos="absolute"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiTrash
-                                                                        }
-                                                                    />
-                                                                }
-                                                                zIndex={0}
-                                                                onClick={() => {
-                                                                    setValue(
-                                                                        "removerlogo",
-                                                                        true
-                                                                    );
-                                                                    setValue(
-                                                                        "logo",
-                                                                        null
-                                                                    );
-                                                                }}
-                                                            />
-                                                            <Image
-                                                                src={watch(
-                                                                    "logo"
-                                                                )}
-                                                            />
-                                                        </Box>
-                                                    )}
-                                                    <Flex
-                                                        mt={4}
-                                                        p={12}
-                                                        borderWidth={2}
-                                                        borderStyle="dashed"
-                                                        align="center"
-                                                        {...getRootProps({
-                                                            className:
-                                                                "dropzone",
-                                                        })}
-                                                    >
-                                                        <input
-                                                            {...getInputProps()}
+                                        <Grid gridTemplateColumns="repeat(2,1fr)">
+                                            <GridItem as={Flex} align="center">
+                                                <Text>Logo</Text>
+                                            </GridItem>
+                                            <GridItem>
+                                                {watch("logo") && (
+                                                    <Box pos="relative">
+                                                        <IconButton
+                                                            top={0}
+                                                            colorScheme="red"
+                                                            pos="absolute"
+                                                            icon={
+                                                                <Icon
+                                                                    as={FiTrash}
+                                                                />
+                                                            }
+                                                            zIndex={0}
+                                                            onClick={() => {
+                                                                setValue(
+                                                                    "removerlogo",
+                                                                    true
+                                                                );
+                                                                setValue(
+                                                                    "logo",
+                                                                    null
+                                                                );
+                                                            }}
                                                         />
-                                                        <Text color="gray">
-                                                            Arraste o arquivo ou
-                                                            clique aqui
-                                                        </Text>
-                                                    </Flex>
-                                                    <Box mt={4}>
-                                                        <List>{logos}</List>
-                                                    </Box>
-                                                </GridItem>
-                                                <GridItem>
-                                                    Background Login
-                                                </GridItem>
-                                                <GridItem>
-                                                    {watch("bg") && (
-                                                        <Box pos="relative">
-                                                            <IconButton
-                                                                top={0}
-                                                                colorScheme="red"
-                                                                pos="absolute"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiTrash
-                                                                        }
-                                                                    />
-                                                                }
-                                                                zIndex={0}
-                                                                onClick={() => {
-                                                                    setValue(
-                                                                        "removerBg",
-                                                                        true
-                                                                    );
-                                                                    setValue(
-                                                                        "bg",
-                                                                        null
-                                                                    );
-                                                                }}
-                                                            />
-                                                            <Image
-                                                                src={watch(
-                                                                    "bg"
-                                                                )}
-                                                            />
-                                                        </Box>
-                                                    )}
-                                                    <Flex
-                                                        mt={4}
-                                                        p={12}
-                                                        borderWidth={2}
-                                                        borderStyle="dashed"
-                                                        align="center"
-                                                        {...getRootPropsBg({
-                                                            className:
-                                                                "dropzone",
-                                                        })}
-                                                    >
-                                                        <input
-                                                            {...getInputPropsBg()}
+                                                        <Image
+                                                            src={watch("logo")}
                                                         />
-                                                        <Text color="gray">
-                                                            Arraste o arquivo ou
-                                                            clique aqui
-                                                        </Text>
-                                                    </Flex>
-                                                    <Box mt={4}>
-                                                        <List>{bgs}</List>
                                                     </Box>
-                                                </GridItem>
-                                            </Grid>
-                                        </Box>
+                                                )}
+                                                <Flex
+                                                    mt={4}
+                                                    p={12}
+                                                    borderWidth={2}
+                                                    borderStyle="dashed"
+                                                    align="center"
+                                                    {...getRootProps({
+                                                        className: "dropzone",
+                                                    })}
+                                                    justify="center"
+                                                >
+                                                    <input
+                                                        {...getInputProps()}
+                                                    />
+                                                    <Text color="gray">
+                                                        Arraste o arquivo ou
+                                                        clique aqui
+                                                    </Text>
+                                                </Flex>
+                                                <Box mt={4}>
+                                                    <List>{logos}</List>
+                                                </Box>
+                                            </GridItem>
+                                            <GridItem as={Flex} align="center">
+                                                <Text>Background Login</Text>
+                                            </GridItem>
+                                            <GridItem>
+                                                {watch("bg") && (
+                                                    <Box pos="relative">
+                                                        <IconButton
+                                                            top={0}
+                                                            colorScheme="red"
+                                                            pos="absolute"
+                                                            icon={
+                                                                <Icon
+                                                                    as={FiTrash}
+                                                                />
+                                                            }
+                                                            zIndex={0}
+                                                            onClick={() => {
+                                                                setValue(
+                                                                    "removerBg",
+                                                                    true
+                                                                );
+                                                                setValue(
+                                                                    "bg",
+                                                                    null
+                                                                );
+                                                            }}
+                                                        />
+                                                        <Image
+                                                            src={watch("bg")}
+                                                        />
+                                                    </Box>
+                                                )}
+                                                <Flex
+                                                    mt={4}
+                                                    p={12}
+                                                    borderWidth={2}
+                                                    borderStyle="dashed"
+                                                    align="center"
+                                                    {...getRootPropsBg({
+                                                        className: "dropzone",
+                                                    })}
+                                                    justify="center"
+                                                >
+                                                    <input
+                                                        {...getInputPropsBg()}
+                                                    />
+                                                    <Text color="gray">
+                                                        Arraste o arquivo ou
+                                                        clique aqui
+                                                    </Text>
+                                                </Flex>
+                                                <Box mt={4}>
+                                                    <List>{bgs}</List>
+                                                </Box>
+                                            </GridItem>
+                                        </Grid>
                                     </Box>
                                 </TabPanel>
                                 <TabPanel>

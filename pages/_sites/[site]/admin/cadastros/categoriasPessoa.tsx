@@ -1,4 +1,6 @@
 import {
+    Avatar,
+    AvatarGroup,
     Box,
     Button,
     Checkbox,
@@ -16,6 +18,7 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
+    Tag,
     Tbody,
     Td,
     Text,
@@ -52,11 +55,15 @@ import { DrawerCampo } from "@/components/Drawers/Cadastros/FichaCadastral/Drawe
 import { ModalPessoa } from "@/components/Modals/ModalPessoa";
 import { excluirPessoa, listarPessoas } from "@/services/models/pessoa";
 import {
-    excluirOrcamento,
-    listarOrcamentos,
-} from "@/services/models/orcamento";
-import { ModalOrcamento } from "@/components/Modals/ModalOrcamento";
-import { formatoData, formatoValor } from "@/helpers/helpers";
+    excluirDepartamento,
+    listarDepartamentos,
+} from "@/services/models/departamento";
+import { ModalDepartamento } from "@/components/Modals/ModalDepartamento";
+import {
+    excluirCategoriaPessoa,
+    listarCategoriasPessoa,
+} from "@/services/models/categoriaPessoa";
+import { ModalCategoriaPessoa } from "@/components/Modals/ModalCategoriaPessoa";
 
 const Configuracoes = () => {
     const [ficha, setFicha] = useState("");
@@ -66,37 +73,37 @@ const Configuracoes = () => {
     const drawer = useRef();
     const modalExcluir = useRef();
 
-    const excluir = useMutation(excluirOrcamento);
+    const excluir = useMutation(excluirCategoriaPessoa);
 
     const onDelete = async (id) => {
         await excluir.mutateAsync(id, {
             onSuccess: () => {
                 toast({
-                    title: "Orçamento excluido",
+                    title: "Categoria excluida",
                     duration: 3000,
                     status: "success",
                 });
-                queryClient.invalidateQueries(["orcamentos"]);
+                queryClient.invalidateQueries(["categoriasPessoa"]);
             },
         });
     };
 
     const { data } = useQuery(
-        ["orcamentos", { filtro: query }],
-        listarOrcamentos
+        ["categoriasPessoa", { filtro: query }],
+        listarCategoriasPessoa
     );
-    console.log(data);
     return (
         <>
-            <Layout title="Orçamentos">
+            <Layout title="Categorias de Pessoas">
                 <Box p={4}>
                     <Box bg="white" p={4}>
                         <Box mb={4}>
                             <Heading size="md" color="gray.600">
-                                Orçamentos
+                                Categorias de Pessoas
                             </Heading>
                             <Text color="gray" fontSize="sm" fontStyle="italic">
-                                Gere e gerêncie os orçamentos
+                                Gere e gerêncie os cadastros de categorias de
+                                pessoas
                             </Text>
                         </Box>
                         <Flex
@@ -110,15 +117,15 @@ const Configuracoes = () => {
                                 <FormInput
                                     size="sm"
                                     minW={96}
-                                    placeholder="Encontre por prestador"
+                                    placeholder="Encontre por nome"
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
                                 />
                                 <Text fontSize="xs" color="gray" w="full">
                                     <Text as="span" fontWeight="bold">
-                                        {data?.data?.total}
+                                        {data?.total}
                                     </Text>{" "}
-                                    orçamentos encontrados
+                                    cadastros encontrados
                                 </Text>
                             </Flex>
 
@@ -136,24 +143,22 @@ const Configuracoes = () => {
                             <Table size="sm" variant="striped">
                                 <Thead>
                                     <Tr>
-                                        <Th>Prestador</Th>
-                                        <Th w={44}>valor</Th>
-                                        <Th w={44}>Responsável</Th>
-                                        <Th w={44}>Criado em</Th>
+                                        <Th>Título</Th>
+                                        <Th w={60}>Tipo de Pessoa</Th>
                                         <Th w={24}></Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
                                     {data?.data?.data?.map((item) => (
                                         <Tr key={item.id}>
+                                            <Td>{item.nome}</Td>
+
                                             <Td>
-                                                {item.prestador?.razaoSocial}
+                                                {item.tipo == "prestador"
+                                                    ? "Prestador de Serviço"
+                                                    : item.tipo}
                                             </Td>
-                                            <Td>{formatoValor(item.valor)}</Td>
-                                            <Td>{item.solicitante?.nome}</Td>
-                                            <Td>
-                                                {formatoData(item.createdAt)}
-                                            </Td>
+
                                             <Td>
                                                 <IconButton
                                                     variant="ghost"
@@ -185,7 +190,7 @@ const Configuracoes = () => {
                         </TableContainer>
                     </Box>
                 </Box>
-                <ModalOrcamento ref={drawer} />
+                <ModalCategoriaPessoa ref={drawer} />
                 <Excluir
                     ref={modalExcluir}
                     titulo="Excluir pessoa"

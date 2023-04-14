@@ -1,18 +1,21 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
-import bcrypt from "bcryptjs";
 async function main() {
     
     await prisma.cargo.createMany({
         data: [
             {
-                nome: "adm",
+                nome: "Administrador",
                 codigo:"adm"
             },
             {
-                nome: "imobiliaria",
+                nome: "Imobiliária",
                 codigo:"imobiliaria"
+            },
+            {
+                nome: "Conta",
+                codigo:"conta"
             },
         ],
         skipDuplicates:true
@@ -21,56 +24,86 @@ async function main() {
     await prisma.modulo.createMany({
         data:[
             {
-                nome:'Administrador',
+                nome:'Contratos',
                 codigo:'imobiliaria.contratos',
             },
             {
-                nome:'Administrador',
+                nome:'Cobranças',
                 codigo:'imobiliaria.cobrancas',
             },
             {
-                nome:'Administrador',
+                nome:'Boletos',
                 codigo:'imobiliaria.cobrancas.boletos',
             },
             {
-                nome:'Administrador',
+                nome:'Inquilinos',
                 codigo:'imobiliaria.inquilinos',
             },
             {
-                nome:'Administrador',
+                nome:'Proprietários',
                 codigo:'imobiliaria.proprietarios',
             },
             {
-                nome:'Administrador',
+                nome:'Fichas',
                 codigo:'imobiliaria.fichas',
             },
             {
-                nome:'Administrador',
+                nome:'Fichas Excluidas',
                 codigo:'imobiliaria.fichas.excluidas',
             },
             {
-                nome:'Administrador',
+                nome:'Chamados',
                 codigo:'imobiliaria.chamados',
             },
             {
-                nome:'Administrador',
+                nome:'Imóveis',
                 codigo:'imobiliaria.imoveis',
             },
             {
-                nome:'Administrador',
+                nome:'Configurações',
                 codigo:'imobiliaria.configuracoes',
+            },{
+                nome:'Tarefas',
+                codigo:'imobiliaria.tarefas',
+            },{
+                nome:'Orçamentos',
+                codigo:'imobiliaria.orcamentos',
+            },{
+                nome:'Cadastros',
+                codigo:'imobiliaria.cadastros',
             },
             {
-                nome:'Administrador',
+                nome:'Gerencial',
                 codigo:'adm.gerencial',
             },
             {
-                nome:'Administrador',
+                nome:'Usuários',
                 codigo:'adm.usuarios',
             },
             {
-                nome:'Administrador',
+                nome:'Imobiliárias',
                 codigo:'adm.imobiliarias',
+            },
+        ],
+        skipDuplicates:true
+    })
+
+    await prisma.permissao.createMany({
+        data:[
+            {
+                nome:"Editar",
+                codigo:"tarefas.editar",
+                moduloCodigo:"imobiliaria.tarefas"
+            },
+            {
+                nome:"Excluir",
+                codigo:"tarefas.editar",
+                moduloCodigo:"imobiliaria.tarefas"
+            },
+            {
+                nome:"Editar Todas",
+                codigo:"tarefas.editarTodas",
+                moduloCodigo:"imobiliaria.tarefas"
             },
         ],
         skipDuplicates:true

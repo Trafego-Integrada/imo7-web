@@ -1,6 +1,6 @@
 import { Excluir } from "@/components/AlertDialogs/Excluir";
 import { FormInput } from "@/components/Form/FormInput";
-import { formatoData } from "@/helpers/helpers";
+import { formatoData, formatoValor } from "@/helpers/helpers";
 import {
     excluirOrcamento,
     listarOrcamentos,
@@ -96,10 +96,9 @@ export const Orcamentos = ({ chamado }) => {
                     <Thead>
                         <Tr>
                             <Th>Prestador</Th>
-                            <Th w={44}>Responsável</Th>
-                            <Th w={44}>valor</Th>
+                            <Th w={24}>valor</Th>
                             <Th w={44}>Solicitante</Th>
-                            <Th w={44}>Criado em</Th>
+                            <Th w={24}>Criado em</Th>
                             <Th w={24}></Th>
                         </Tr>
                     </Thead>
@@ -107,8 +106,7 @@ export const Orcamentos = ({ chamado }) => {
                         {data?.data?.data?.map((item) => (
                             <Tr key={item.id}>
                                 <Td>{item.prestador?.razaoSocial}</Td>
-                                <Td>{item.responsavel}</Td>
-                                <Td>{item.valor}</Td>
+                                <Td>{formatoValor(item.valor)}</Td>
                                 <Td>{item.solicitante?.nome}</Td>
                                 <Td>{formatoData(item.createdAt)}</Td>
                                 <Td>

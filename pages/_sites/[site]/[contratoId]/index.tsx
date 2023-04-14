@@ -1,6 +1,7 @@
 import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 import { NextChakraLink } from "@/components/NextChakraLink";
 import { formatoValor } from "@/helpers/helpers";
+import { useAuth } from "@/hooks/useAuth";
 import prisma from "@/lib/prisma";
 import { listarChamados } from "@/services/models/chamado";
 import { withSSRAuth } from "@/utils/withSSRAuth";
@@ -25,7 +26,8 @@ import { FiEye } from "react-icons/fi";
 import { IoHelpBuoy } from "react-icons/io5";
 import { useQuery } from "react-query";
 
-const Dashbord: NextPage = ({ boletos }) => {
+const Dashbord: NextPage = ({ boletos, extratos }) => {
+    const { usuario } = useAuth();
     const router = useRouter();
     const { data: chamados } = useQuery(
         ["chamados", { contratoId: router.query?.contratoId }],
@@ -34,21 +36,144 @@ const Dashbord: NextPage = ({ boletos }) => {
     return (
         <LayoutPainel>
             <Grid gridTemplateColumns="repeat(3,1fr)" gap={4}>
+                {extratos?.length ? (
+                    <GridItem bg="white" rounded="2xl">
+                        <Flex justify="space-between" align="center" p={4}>
+                            <Heading size="sm" color="gray.600">
+                                Ultimo extrato
+                            </Heading>
+                        </Flex>
+                        <Flex px={4} justify="space-between" align="center">
+                            <Text fontSize="md" lineHeight="none">
+                                Data do Depósito{" "}
+                                <Text as="span" fontWeight="bold">
+                                    {moment(extratos[0].dataDeposito).format(
+                                        "DD [de] MMMM "
+                                    )}
+                                </Text>
+                            </Text>
+                        </Flex>
+                        <Text
+                            py={4}
+                            textAlign="center"
+                            fontSize="2xl"
+                            fontWeight="bold"
+                        >
+                            {/* {formatoValor(extratos[0].valor_doc2)} */}
+                        </Text>
+
+                        <Grid
+                            gridTemplateColumns="repeat(2,1fr)"
+                            mt={4}
+                            borderTopWidth={1}
+                            borderTopColor="gray.100"
+                            h={14}
+                            fontSize="sm"
+                        >
+                            <GridItem>
+                                <Link
+                                    href={{
+                                        pathname: "/extrato/[id]",
+                                        query: {
+                                            id: extratos[0].id,
+                                            pdf: true,
+                                        },
+                                    }}
+                                    target="_blank"
+                                    passHref
+                                >
+                                    <Flex
+                                        align="center"
+                                        gridGap={4}
+                                        justify="center"
+                                        color="blue.500"
+                                        h="full"
+                                    >
+                                        <Icon as={FaPrint} fontSize="xl" />
+                                        <Box textAlign="center">
+                                            <Link
+                                                href={`/boleto/${extratos[0].id}`}
+                                                target="_blank"
+                                                passHref
+                                            >
+                                                <Text
+                                                    fontWeight="bold"
+                                                    lineHeight="none"
+                                                >
+                                                    Imprimir
+                                                </Text>
+                                            </Link>
+                                            <Text>2ª via do extrato</Text>
+                                        </Box>
+                                    </Flex>
+                                </Link>
+                            </GridItem>
+                            <GridItem>
+                                <Link
+                                    href={{
+                                        pathname: "/extrato/[id]",
+                                        query: {
+                                            id: extratos[0].id,
+                                        },
+                                    }}
+                                    borderLeftWidth={1}
+                                    borderLeftColor="gray.100"
+                                    passHref
+                                >
+                                    <Flex
+                                        align="center"
+                                        gridGap={4}
+                                        justify="center"
+                                        color="blue.500"
+                                        h="full"
+                                    >
+                                        <Icon as={FaEye} fontSize="xl" />
+                                        <Box textAlign="center">
+                                            <Text
+                                                fontWeight="bold"
+                                                lineHeight="none"
+                                            >
+                                                Visualizar
+                                            </Text>
+                                            <Text>Extrato</Text>
+                                        </Box>
+                                    </Flex>
+                                </Link>
+                            </GridItem>
+                        </Grid>
+                    </GridItem>
+                ) : (
+                    <GridItem
+                        bg="white"
+                        rounded="2xl"
+                        align="center"
+                        justify="center"
+                        as={Flex}
+                    >
+                        <Flex
+                            h="full"
+                            flexDirection="column"
+                            align="center"
+                            justify="center"
+                            gridGap={4}
+                        >
+                            <Icon
+                                as={FaGrinWink}
+                                fontSize="6xl"
+                                color="gray.400"
+                            />
+                            <Text color="gray.400" fontWeight="bold">
+                                Não há extratos para este contrato
+                            </Text>
+                        </Flex>
+                    </GridItem>
+                )}
                 {boletos?.length ? (
                     <GridItem bg="white" rounded="2xl">
                         <Flex justify="space-between" align="center" p={4}>
                             <Heading size="sm" color="gray.600">
                                 Ultima fatura
                             </Heading>
-                            <Badge
-                                colorScheme="blue"
-                                variant="solid"
-                                display="flex"
-                                alignItems="center"
-                                px={4}
-                            >
-                                Aguardando Pagamento
-                            </Badge>
                         </Flex>
                         <Flex px={4} justify="space-between" align="center">
                             <Text fontSize="md" lineHeight="none">
@@ -77,7 +202,7 @@ const Dashbord: NextPage = ({ boletos }) => {
                                 textAlign="center"
                             >
                                 Utilize o código de barras a seguir para pagar
-                                sua fatura{" "}
+                                sua fatura
                             </Text>
                             <Flex
                                 mt={2}
@@ -113,14 +238,17 @@ const Dashbord: NextPage = ({ boletos }) => {
                             fontSize="sm"
                         >
                             <GridItem>
-                                <Link href={`https://www.imo7.com.br/api/boleto/${boletos[0].id}/pdf`}
-                                                    target="_blank"
-                                                    passHref>
+                                <Link
+                                    href={`https://www.imo7.com.br/api/boleto/${boletos[0].id}/pdf`}
+                                    target="_blank"
+                                    passHref
+                                >
                                     <Flex
                                         align="center"
                                         gridGap={4}
                                         justify="center"
-                                        color="blue.500"  h="full"
+                                        color="blue.500"
+                                        h="full"
                                     >
                                         <Icon as={FaPrint} fontSize="xl" />
                                         <Box textAlign="center">
@@ -152,7 +280,8 @@ const Dashbord: NextPage = ({ boletos }) => {
                                         align="center"
                                         gridGap={4}
                                         justify="center"
-                                        color="blue.500" h="full"
+                                        color="blue.500"
+                                        h="full"
                                     >
                                         <Icon as={FaEye} fontSize="xl" />
                                         <Box textAlign="center">
@@ -167,26 +296,33 @@ const Dashbord: NextPage = ({ boletos }) => {
                                     </Flex>
                                 </Link>
                             </GridItem>
-                            
                         </Grid>
                     </GridItem>
                 ) : (
-                    <GridItem bg="white" rounded="2xl" align="center" justify="center" as={Flex}><Flex
-                    h="full"
-                    flexDirection="column"
-                    align="center"
-                    justify="center"
-                    gridGap={4}
-                >
-                    <Icon
-                        as={FaGrinWink}
-                        fontSize="6xl"
-                        color="gray.400"
-                    />
-                    <Text color="gray.400" fontWeight="bold">
-                    Não há boletos em aberto para este contrato
-                    </Text>
-                </Flex></GridItem>
+                    <GridItem
+                        bg="white"
+                        rounded="2xl"
+                        align="center"
+                        justify="center"
+                        as={Flex}
+                    >
+                        <Flex
+                            h="full"
+                            flexDirection="column"
+                            align="center"
+                            justify="center"
+                            gridGap={4}
+                        >
+                            <Icon
+                                as={FaGrinWink}
+                                fontSize="6xl"
+                                color="gray.400"
+                            />
+                            <Text color="gray.400" fontWeight="bold">
+                                Não há boletos em aberto para este contrato
+                            </Text>
+                        </Flex>
+                    </GridItem>
                 )}
                 <GridItem
                     as={Flex}
@@ -293,9 +429,26 @@ export default Dashbord;
 export const getServerSideProps = withSSRAuth(async (ctx) => {
     try {
         const { contratoId, site } = ctx.query;
+        const contrato = await prisma.contrato.findMany({
+            where: {
+                id: Number(contratoId),
+            },
+            include: {
+                proprietarios: true,
+                inquilinos: true,
+            },
+        });
         const boletos = await prisma.boleto.findMany({
             where: {
-                contratoId:Number(contratoId),
+                contratoId: Number(contratoId),
+                imobiliaria: {
+                    url: site,
+                },
+            },
+        });
+        const extratos = await prisma.extrato.findMany({
+            where: {
+                contratoId: Number(contratoId),
                 imobiliaria: {
                     url: site,
                 },
@@ -304,10 +457,11 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
         return {
             props: {
                 boletos: JSON.parse(JSON.stringify(boletos)),
+                extratos: JSON.parse(JSON.stringify(extratos)),
+                contrato: JSON.parse(JSON.stringify(contrato)),
             },
         };
     } catch (error) {
-        console.log(error);
         return {
             props: {},
         };

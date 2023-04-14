@@ -50,6 +50,7 @@ const ModalBase = ({ chamadoId, contratoId }, ref) => {
             });
             queryClient.invalidateQueries("conversas");
             queryClient.invalidateQueries("interacoes");
+            onClose();
             reset({ mensagem: "" });
         } catch (error) {
             console.log(error);
@@ -95,7 +96,7 @@ const ModalBase = ({ chamadoId, contratoId }, ref) => {
                     />
                 </ModalBody>
                 <ModalFooter gridGap={4}>
-                    <Button>Desistir</Button>
+                    <Button onClick={onClose}>Desistir</Button>
                     <Button
                         colorScheme="blue"
                         isLoading={isSubmitting}

@@ -59,15 +59,21 @@ import {
     excluirOrcamento,
     listarOrcamentos,
 } from "@/services/models/orcamento";
-import { ModalOrcamento } from "@/components/Modals/ModalOrcamento";
 import { formatoData } from "@/helpers/helpers";
 import { ModalTarefa } from "@/components/Modals/ModalTarefa";
 import { listarTarefas } from "@/services/models/tarefa";
+import { FiltroTarefas } from "@/components/Pages/FiltroTarefas";
+import { TooltipAvatar } from "@/components/TooltipAvatar";
 
 const Configuracoes = () => {
-    const [ficha, setFicha] = useState("");
-    const [query, setQuery] = useState("");
-    const [categoria, setCategoria] = useState("");
+    const [filtro, setFiltro] = useState({
+        query: "",
+        dataCriacao: [null, null],
+        dataEntrega: [null, null],
+        dataVencimento: [null, null],
+
+        responsaveis: [],
+    });
     const toast = useToast();
     const drawer = useRef();
     const modalExcluir = useRef();
@@ -87,12 +93,34 @@ const Configuracoes = () => {
         });
     };
 
-    const { data } = useQuery(["tarefas", { filtro: query }], listarTarefas);
+    const { data } = useQuery(
+        [
+            "tarefas",
+            {
+                ...filtro,
+                dataCriacao: filtro.dataCriacao[0]
+                    ? JSON.stringify(filtro.dataCriacao)
+                    : null,
+                dataVencimento: filtro.dataVencimento[0]
+                    ? JSON.stringify(filtro.dataVencimento)
+                    : null,
+                dataEntrega: filtro.dataEntrega[0]
+                    ? JSON.stringify(filtro.dataEntrega)
+                    : null,
+                responsaveis:
+                    filtro.responsaveis.length > 0
+                        ? JSON.stringify(filtro.responsaveis)
+                        : null,
+            },
+        ],
+        listarTarefas
+    );
 
     return (
         <>
             <Layout title="Tarefas">
-                <Box p={4}>
+                <Flex p={4} flexDir="column" gap={4}>
+                    <FiltroTarefas setFiltro={setFiltro} filtro={filtro} />
                     <Box bg="white" p={4}>
                         <Box mb={4}>
                             <Heading size="md" color="gray.600">
@@ -114,8 +142,13 @@ const Configuracoes = () => {
                                     size="sm"
                                     minW={96}
                                     placeholder="Encontre por prestador"
-                                    value={query}
-                                    onChange={(e) => setQuery(e.target.value)}
+                                    value={filtro.query}
+                                    onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            query: e.target.value,
+                                        })
+                                    }
                                 />
                                 <Text fontSize="xs" color="gray" w="full">
                                     <Text as="span" fontWeight="bold">
@@ -141,6 +174,7 @@ const Configuracoes = () => {
                                     <Tr>
                                         <Th w={44}>Vencimento</Th>
                                         <Th>Titulo</Th>
+                                        <Td w={24}>Nº Contrato</Td>
                                         <Th w={44}>Departamento</Th>
                                         <Th w={44}>Responsaveis</Th>
                                         <Th w={44}>Membros</Th>
@@ -160,26 +194,23 @@ const Configuracoes = () => {
                                             </Td>
 
                                             <Td>{item.titulo}</Td>
+                                            <Td>{item?.codigoContrato}</Td>
                                             <Td>{item.departamento?.titulo}</Td>
                                             <Td>
-                                                <AvatarGroup>
-                                                    {item.responsaveis.map(
-                                                        (item) => (
-                                                            <Avatar
-                                                                size="sm"
-                                                                name={item.nome}
-                                                                src={item.foto}
-                                                            />
-                                                        )
-                                                    )}
-                                                </AvatarGroup>
+                                                {item.responsaveis.map(
+                                                    (item, k) =>
+                                                        `${k != 0 ? "," : ""} ${
+                                                            item.nome
+                                                        }`
+                                                )}
                                             </Td>
                                             <Td>
                                                 <AvatarGroup>
                                                     {item.membros.map(
                                                         (item) => (
-                                                            <Avatar
-                                                                size="sm"
+                                                            <TooltipAvatar
+                                                                key={item.id}
+                                                                size="xs"
                                                                 name={item.nome}
                                                                 src={item.foto}
                                                             />
@@ -222,7 +253,7 @@ const Configuracoes = () => {
                             </Table>
                         </TableContainer>
                     </Box>
-                </Box>
+                </Flex>
                 <ModalTarefa ref={drawer} />
                 <Excluir
                     ref={modalExcluir}
@@ -234,11 +265,3 @@ const Configuracoes = () => {
     );
 };
 export default Configuracoes;
-export const getServerSideProps = withSSRAuth(
-    async (ctx) => {
-        return {
-            props: {},
-        };
-    },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);

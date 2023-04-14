@@ -7,7 +7,7 @@ import { queryClient } from "@/services/queryClient";
 import { Box, Flex, Text, useToast, Button } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import moment from "moment";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiSend } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
@@ -16,6 +16,7 @@ const schema = yup.object({
     descricao: yup.string().required("Campo Obrigatório"),
 });
 export const Historico = ({ chamadoId }) => {
+    const [linhas, setLinhas] = useState(10);
     const messagesEndRef = useRef();
     const toast = useToast();
     const {
@@ -43,31 +44,49 @@ export const Historico = ({ chamadoId }) => {
         }
     });
     const { data: historicos } = useQuery(
-        ["historicosChamado", { chamadoId }],
+        ["historicosChamado", { chamadoId, linhas }],
         listarHistoricosChamado,
         {
             enabled: !!chamadoId,
         }
     );
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-    useEffect(() => {
-        scrollToBottom();
-    }, [historicos]);
     return (
         <Flex flexDir="column" gap={4} as="form" onSubmit={onSubmit}>
-            <Flex flexDir="column" gap={4} overflow="auto" maxH={96}>
-                {historicos?.map((historico) => (
-                    <Box key={historico.id} bg="gray.100" p={4} rounded="lg">
-                        <Text mb={4} fontSize="sm">
-                            {historico?.usuario?.nome} - Adicionou um comentário{" "}
-                            {moment(historico.createdAt).fromNow()}
+            <Flex
+                flexDir="column"
+                align="center"
+                gap={4}
+                overflow="auto"
+                maxH={96}
+            >
+                {historicos?.data?.map((historico) => (
+                    <Box
+                        key={historico.id}
+                        bg="gray.100"
+                        p={4}
+                        rounded="lg"
+                        w="full"
+                    >
+                        <Text mb={4} fontSize="sm" color="gray.500">
+                            {historico?.usuario?.nome} -{" "}
+                            {moment(historico.createdAt).format(
+                                "DD/MM/YYYY HH:mm"
+                            )}
                         </Text>
-                        <Text>{historico.descricao} </Text>
+                        <Text fontWeight="bold">{historico.descricao} </Text>
                     </Box>
                 ))}
-                <Box ref={messagesEndRef} />
+                {historicos?.total > linhas && (
+                    <Button
+                        onClick={() =>
+                            linhas <= historicos?.total
+                                ? setLinhas(linhas + 10)
+                                : setLinhas(historicos?.total)
+                        }
+                    >
+                        Ver mais
+                    </Button>
+                )}
             </Flex>
             <FormInput
                 size="sm"
