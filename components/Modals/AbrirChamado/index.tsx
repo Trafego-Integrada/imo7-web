@@ -95,9 +95,10 @@ const ModalBase = ({ callback }, ref) => {
         }
     );
     const { data: assuntos } = useQuery(
-        ["assuntos", { departamentoId: watch("departamento") }],
+        ["assuntos", { departamentoId: watch("departamentoId") }],
         listarAssuntos,
         {
+            enabled: !!watch("departamentoId"),
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
         }
@@ -157,7 +158,7 @@ const ModalBase = ({ callback }, ref) => {
         <Modal isOpen={isOpen} onClose={onClose} size="2xl">
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Adicionar Conversa</ModalHeader>
+                <ModalHeader>Chamado</ModalHeader>
                 <ModalBody
                     id="formAbrirChamado"
                     as="form"

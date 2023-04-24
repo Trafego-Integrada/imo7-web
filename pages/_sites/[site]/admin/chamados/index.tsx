@@ -199,6 +199,7 @@ const Cobrancas = () => {
                                     <Th w={18} textAlign="center">
                                         Nº do chamado
                                     </Th>
+                                    <Th>Titulo</Th>
                                     <Th w={36} textAlign="center">
                                         Departamento
                                     </Th>
@@ -228,6 +229,7 @@ const Cobrancas = () => {
                                 {data?.data?.data.map((item) => (
                                     <Tr key={item.id}>
                                         <Td textAlign="center">{item.id}</Td>
+                                        <Td>{item?.titulo}</Td>
                                         <Td textAlign="center">
                                             {item.assunto?.departamento?.titulo}
                                         </Td>

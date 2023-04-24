@@ -7,13 +7,25 @@ import { cors } from "@/middleware/cors";
 handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
-    const { id, usuarioId, linhas} = req.query;
+    const { id, usuarioId, cursor} = req.query;
+    console.log(cursor == "0" ? "Sim":"Não")
+    let withCursor = {}
+
+    if(cursor != 0) {
+        withCursor = {
+            skip: 1,
+            cursor:{
+                id:Number(cursor)
+            }
+        }
+    } 
     const data = await prisma.historicoChamado.findMany({
         where: {
             chamadoId: Number(id),
             
         },
-        take:linhas?Number(linhas):null,
+        ...withCursor,
+        take:10,
         include: {
             usuario:true,
         },
@@ -28,7 +40,10 @@ handle.get(async (req, res) => {
             
         },
     });
-    res.send({data,total});
+    console.log(data)
+    const lastPostInResults = data[data.length-1]
+    const myCursor = lastPostInResults?.id ? lastPostInResults.id : null
+    res.send({data,total, nextCursor:myCursor});
 });
 
 handle.post(async (req, res) => {

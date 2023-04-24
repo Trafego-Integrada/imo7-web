@@ -78,8 +78,8 @@ export const anexarArquivoChamado = async (body) => {
     });
     return data;
 };
-export const listarHistoricosChamado = async ({ queryKey }) => {
-    const { data } = await api.get(`chamado/${queryKey[1].chamadoId}/historico`, { params: queryKey[1] });
+export const listarHistoricosChamado = async ({ queryKey, pageParam = 0 }) => {
+    const { data } = await api.get(`chamado/${queryKey[1].chamadoId}/historico`, { params: {...queryKey[1],cursor:pageParam} });
     return data;
 };
 

@@ -65,16 +65,20 @@ handle.get(async (req, res) => {
         if(codigoImovel) {
             filtroQuery = {
                 ...filtroQuery,
-                codigoImovel:{
-                    contains:codigoImovel
+                chamado:{
+                    codigoImovel:{
+                        contains:codigoImovel
+                    }
                 }
             }
         }
         if(codigoContrato) {
             filtroQuery = {
                 ...filtroQuery,
-                codigoContrato:{
-                    contains:codigoContrato
+                chamado:{
+                    codigoContrato:{
+                        contains:codigoContrato
+                    }
                 }
             }
         }
@@ -164,7 +168,9 @@ handle.get(async (req, res) => {
             include:{
                 departamento:true,
                 membros:true,
-                responsaveis:true,tags:true
+                responsaveis:true,
+                tags:true,
+                chamado:true
             }
         });
         const total = await prisma.tarefa.count({

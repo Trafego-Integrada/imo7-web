@@ -61,7 +61,7 @@ import {
 } from "@/services/models/orcamento";
 import { formatoData } from "@/helpers/helpers";
 import { ModalTarefa } from "@/components/Modals/ModalTarefa";
-import { listarTarefas } from "@/services/models/tarefa";
+import { excluirTarefa, listarTarefas } from "@/services/models/tarefa";
 import { FiltroTarefas } from "@/components/Pages/FiltroTarefas";
 import { TooltipAvatar } from "@/components/TooltipAvatar";
 
@@ -78,7 +78,7 @@ const Configuracoes = () => {
     const drawer = useRef();
     const modalExcluir = useRef();
 
-    const excluir = useMutation(excluirOrcamento);
+    const excluir = useMutation(excluirTarefa);
 
     const onDelete = async (id) => {
         await excluir.mutateAsync(id, {
@@ -141,7 +141,7 @@ const Configuracoes = () => {
                                 <FormInput
                                     size="sm"
                                     minW={96}
-                                    placeholder="Encontre por prestador"
+                                    placeholder="Encontre por titulo ou descrição"
                                     value={filtro.query}
                                     onChange={(e) =>
                                         setFiltro({
@@ -174,7 +174,6 @@ const Configuracoes = () => {
                                     <Tr>
                                         <Th w={44}>Vencimento</Th>
                                         <Th>Titulo</Th>
-                                        <Td w={24}>Nº Contrato</Td>
                                         <Th w={44}>Departamento</Th>
                                         <Th w={44}>Responsaveis</Th>
                                         <Th w={44}>Membros</Th>
@@ -193,8 +192,43 @@ const Configuracoes = () => {
                                                     : null}
                                             </Td>
 
-                                            <Td>{item.titulo}</Td>
-                                            <Td>{item?.codigoContrato}</Td>
+                                            <Td>
+                                                {item.titulo}
+                                                <Flex gap={2} mt={1}>
+                                                    {item?.chamado
+                                                        ?.codigoContrato && (
+                                                        <Tooltip label="Nº do Contrato">
+                                                            <Tag
+                                                                size="sm"
+                                                                colorScheme="blue"
+                                                            >
+                                                                Contrato:{" "}
+                                                                {
+                                                                    item
+                                                                        ?.chamado
+                                                                        ?.codigoContrato
+                                                                }
+                                                            </Tag>
+                                                        </Tooltip>
+                                                    )}
+                                                    {item?.chamado
+                                                        ?.codigoImovel && (
+                                                        <Tooltip label="Código do Imóvel">
+                                                            <Tag
+                                                                size="sm"
+                                                                colorScheme="blue"
+                                                            >
+                                                                Imóvel:{" "}
+                                                                {
+                                                                    item
+                                                                        ?.chamado
+                                                                        ?.codigoImovel
+                                                                }
+                                                            </Tag>
+                                                        </Tooltip>
+                                                    )}
+                                                </Flex>
+                                            </Td>
                                             <Td>{item.departamento?.titulo}</Td>
                                             <Td>
                                                 {item.responsaveis.map(
