@@ -60,6 +60,7 @@
         "quill-table-ui": "^1.0.7",
         "react": "18.1.0",
         "react-barcode": "^1.4.6",
+        "react-currency-input-field": "^3.6.10",
         "react-date-picker": "^8.4.0",
         "react-datepicker": "^4.9.0",
         "react-dom": "18.1.0",
