@@ -48,8 +48,15 @@ export const Historico = ({ chamadoId }) => {
         listarHistoricosChamado,
         {
             enabled: !!chamadoId,
+            onSuccess: () => {
+                // linhas != 10 && scrollToBottom();
+            },
         }
     );
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
     return (
         <Flex flexDir="column" gap={4} as="form" onSubmit={onSubmit}>
             <Flex
@@ -87,6 +94,8 @@ export const Historico = ({ chamadoId }) => {
                         Ver mais
                     </Button>
                 )}
+
+                <Box ref={messagesEndRef} />
             </Flex>
             <FormInput
                 size="sm"

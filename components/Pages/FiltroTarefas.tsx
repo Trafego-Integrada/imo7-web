@@ -24,7 +24,7 @@ import { useQuery } from "react-query";
 export const FiltroTarefas = ({ setFiltro, filtro }) => {
     const { isOpen, onToggle } = useDisclosure();
     const { data: responsaveis } = useQuery(
-        ["responsaveis", { admImobiliaria: true }],
+        ["responsaveis", { admImobiliaria: true, status: true }],
         listarUsuarios
     );
     return (

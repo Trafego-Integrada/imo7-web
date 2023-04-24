@@ -77,7 +77,7 @@ handle.post(async (req, res) => {
 
 handle.delete(async (req, res) => {
     const { id } = req.query;
-    const data = await prisma.pessoa.findFirst({
+    const data = await prisma.orcamento.findFirst({
         where: {
             id,
         },
@@ -86,10 +86,10 @@ handle.delete(async (req, res) => {
         res.status(400).json({
             success: false,
             errorCode: "U01",
-            message: "Usuário não encontrado",
+            message: "Orçamento não encontrado",
         });
     }
-    await prisma.pessoa.delete({
+    await prisma.orcamento.delete({
         where: { id },
     });
     res.send();

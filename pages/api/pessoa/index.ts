@@ -67,7 +67,7 @@ handle.get(async (req, res) => {
         const data = await prisma.pessoa.findMany({
             where: {
                 ...filtroQuery,
-                imobiliriaId:req.user.imobiliariaId
+                imobiliariaId:req.user.imobiliariaId
             },
             include:{
                 categoria:true
@@ -77,7 +77,7 @@ handle.get(async (req, res) => {
         const total = await prisma.pessoa.count({
             where: {
                 ...filtroQuery,
-                imobiliriaId:req.user.imobiliariaId
+                imobiliariaId:req.user.imobiliariaId
             },
         });
         res.send({

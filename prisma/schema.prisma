@@ -460,31 +460,40 @@ model AssuntoChamado {
 }
 
 model Chamado {
-    id            Int                @id @default(autoincrement())
-    participantes Usuario[]          @relation("ParticipantesChamado")
-    titulo        String
-    assuntoId     Int
-    assunto       AssuntoChamado     @relation(references: [id], fields: [assuntoId])
-    createdAt     DateTime           @default(now())
-    updatedAt     DateTime           @updatedAt
-    deletedAt     DateTime?
-    contrato      Contrato?          @relation(fields: [contratoId], references: [id])
-    contratoId    Int?
-    criadorId     Int
-    criador       Usuario            @relation("CriadorChamado", references: [id], fields: [criadorId])
-    status        StatusChamado      @default(ABERTO)
-    interacoes    InteracaoChamado[]
-    anexos        Anexo[]
-    imobiliaria   Imobiliaria        @relation(references: [id], fields: [imobiliariaId])
-    imobiliariaId Int
-    conta         Conta              @relation(fields: [contaId], references: [id])
-    contaId       Int
-    conversas     ConversaChamado[]
-    responsavel   Usuario?           @relation("ResponsavelChamados", fields: [responsavelId], references: [id])
-    responsavelId Int?
-    historicos    HistoricoChamado[]
-    Orcamento     Orcamento[]
-    Tarefa        Tarefa[]
+    id                Int                @id @default(autoincrement())
+    participantes     Usuario[]          @relation("ParticipantesChamado")
+    titulo            String
+    bairroImovel      String?
+    cepImovel         String?
+    cidadeImovel      String?
+    estadoImovel      String?
+    codigoImovel      String?
+    codigoContrato    String?
+    complementoImovel String?
+    enderecoImovel    String?
+    numeroImovel      String?
+    assuntoId         Int
+    assunto           AssuntoChamado     @relation(references: [id], fields: [assuntoId])
+    createdAt         DateTime           @default(now())
+    updatedAt         DateTime           @updatedAt
+    deletedAt         DateTime?
+    contrato          Contrato?          @relation(fields: [contratoId], references: [id])
+    contratoId        Int?
+    criadorId         Int
+    criador           Usuario            @relation("CriadorChamado", references: [id], fields: [criadorId])
+    status            StatusChamado      @default(ABERTO)
+    interacoes        InteracaoChamado[]
+    anexos            Anexo[]
+    imobiliaria       Imobiliaria        @relation(references: [id], fields: [imobiliariaId])
+    imobiliariaId     Int
+    conta             Conta              @relation(fields: [contaId], references: [id])
+    contaId           Int
+    conversas         ConversaChamado[]
+    responsavel       Usuario?           @relation("ResponsavelChamados", fields: [responsavelId], references: [id])
+    responsavelId     Int?
+    historicos        HistoricoChamado[]
+    Orcamento         Orcamento[]
+    Tarefa            Tarefa[]
 }
 
 model HistoricoChamado {

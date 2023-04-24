@@ -208,7 +208,7 @@ handle.post(async (req, res) => {
                 prioridade,
                 titulo, 
                 status,
-                membros:membros && membros.length> 0 ? {
+                membros:membros && membros.length > 0 ? {
                     connect:membros.map(item => {
                         return {
                             id:item.id
@@ -226,21 +226,25 @@ handle.post(async (req, res) => {
                         id:Number(chamadoId)
                     }
                 } : {},
-                tags:{
-                    connectOrCreate: tags.length > 0 ?tags.map(tag => {
+                tags: tags&& tags.length > 0 ? {
+                    connectOrCreate: tags.map(tag => {
                         return {
                             where:{
                                 id:tag.id? tag.id : '0'
                             },
                             create:{
-                                nome: tag.value,
-                                imobiliariaId:req.user.imobiliariaId
+                                nome: tag.value ? tag.value :tag.nome,
+                                imobiliaria:{
+                                    connect:{
+                                        id:req.user.imobiliariaId
+                                    }
+                                }
                             }
 
                         }
-                    }):{},
+                    })}:{},
                     
-                },
+                
                 imobiliaria:{
                     connect:{
                         id:req.user.imobiliariaId

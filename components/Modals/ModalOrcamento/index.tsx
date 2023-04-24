@@ -140,7 +140,7 @@ const ModalBase = ({ chamadoId }, ref) => {
         listarPessoas
     );
     const { data: responsaveis } = useQuery(
-        ["responsaveis", { admImobiliaria: true }],
+        ["responsaveis", { admImobiliaria: true, status: true }],
         listarUsuarios
     );
     return (
@@ -208,6 +208,7 @@ const ModalBase = ({ chamadoId }, ref) => {
                                     control={control}
                                     render={({ field }) => (
                                         <FormInputCurrency
+                                            size="sm"
                                             label="Valor "
                                             placeholder="R$"
                                             error={errors.valor?.message}
@@ -221,7 +222,7 @@ const ModalBase = ({ chamadoId }, ref) => {
                             </GridItem>
                             <GridItem>
                                 <FormInput
-                                    type="datetime"
+                                    type="date"
                                     size="sm"
                                     label="Data da Visita"
                                     placeholder="..."

@@ -2,9 +2,11 @@ import prisma from "@/lib/prisma";
 import { cors } from "@/middleware/cors";
 import { Prisma } from "@prisma/client";
 import moment from "moment";
+import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
+import { toXML } from 'jstoxml';
 
-const handle = nextConnect();
+const handle = nextConnect<NextApiRequest, NextApiResponse>();
 handle.use(cors);
 handle.get(async (req, res) => {
     try {
@@ -18,7 +20,7 @@ handle.get(async (req, res) => {
             identificacao,
             deletedAt,
             codigo,
-            imobiliariaId
+            imobiliariaId,xml
         } = req.query;
         let filtroQuery: Prisma.FichaCadastralWhereInput = { AND: [] };
 
@@ -27,7 +29,6 @@ handle.get(async (req, res) => {
                 ...filtroQuery,
             };
         }
-        console.log(req.query);
         if (deletedAt) {
             filtroQuery = {
                 ...filtroQuery,
@@ -192,6 +193,11 @@ handle.get(async (req, res) => {
                 ],
             };
         }
+        if(!imobiliariaId) {
+            res.status(400).send({
+                message:"Informe o ID da Imobiliária"
+            })
+        }
         console.log(filtroQuery);
         const data = await prisma.fichaCadastral.findMany({
             where: {
@@ -215,8 +221,18 @@ handle.get(async (req, res) => {
                 },
             },
         });
+        console.log(count)
+        if(xml == "1") {
 
+            return res.setHeader("Content-Type", "text/xml").send(toXML(data.map(i => {
+                return {
+                    ficha:i
+                }
+            })));
+        } else {
+            
         res.send({ data, total: count });
+        }
     } catch (error) {
         res.status(500).send({
             success: false,

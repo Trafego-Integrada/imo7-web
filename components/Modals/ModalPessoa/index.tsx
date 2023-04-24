@@ -2,6 +2,7 @@ import { FormInput } from "@/components/Form/FormInput";
 import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { includesAll } from "@/helpers/helpers";
+import { buscarEndereco } from "@/lib/buscarEndereco";
 import { listarCategoriasPessoa } from "@/services/models/categoriaPessoa";
 import { listarModulos } from "@/services/models/modulo";
 import {
@@ -24,6 +25,7 @@ import {
     Box,
     Button,
     Checkbox,
+    Flex,
     Grid,
     GridItem,
     Modal,
@@ -33,6 +35,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Spinner,
     Stack,
     Switch,
     Tab,
@@ -51,13 +54,16 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
 
 const schema = yup.object({
     razaoSocial: yup.string().required("Campo Obrigatório"),
+    tipoCadastro: yup.string().required("Campo Obrigatório"),
+    categoria: yup.object().required("Campo Obrigatório"),
+    tipoPessoa: yup.string().required("Campo Obrigatório"),
 });
 
 const ModalBase = ({}, ref) => {
@@ -122,6 +128,21 @@ const ModalBase = ({}, ref) => {
         ["categorias", { tipo: watch("tipo") }],
         listarCategoriasPessoa
     );
+    const [buscandoCep, setBuscandoCep] = useState(false);
+    const handleBuscarCep = async (cep) => {
+        if (cep.length === 9) {
+            setBuscandoCep(true);
+            const res = await buscarEndereco(cep);
+            reset({
+                ...watch(),
+                endereco: res.logradouro,
+                bairro: res.bairro,
+                estado: res.uf,
+                cidade: res.cidade,
+            });
+            setBuscandoCep(false);
+        }
+    };
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="4xl">
@@ -202,7 +223,12 @@ const ModalBase = ({}, ref) => {
                             <GridItem>
                                 <FormInput
                                     size="sm"
-                                    label="documento"
+                                    label="CPF/CNPJ"
+                                    mask={
+                                        watch("tipoPessoa") == "fisica"
+                                            ? "999.999.999-99"
+                                            : "99.999.999/9999-99"
+                                    }
                                     placeholder="..."
                                     {...register("documento")}
                                     error={errors.documento?.message}
@@ -212,6 +238,7 @@ const ModalBase = ({}, ref) => {
                                 <FormInput
                                     size="sm"
                                     label="Telefone"
+                                    mask={"(99) 9999-9999"}
                                     placeholder="..."
                                     {...register("telefone")}
                                     error={errors.telefone?.message}
@@ -221,6 +248,7 @@ const ModalBase = ({}, ref) => {
                                 <FormInput
                                     size="sm"
                                     label="Celular"
+                                    mask={"(99) 9 9999-9999"}
                                     placeholder="..."
                                     {...register("celular")}
                                     error={errors.celular?.message}
@@ -235,14 +263,30 @@ const ModalBase = ({}, ref) => {
                                     error={errors.email?.message}
                                 />
                             </GridItem>
-                            <GridItem>
-                                <FormInput
-                                    size="sm"
-                                    label="CEP"
-                                    placeholder="..."
-                                    {...register("cep")}
-                                    error={errors.cep?.message}
+                            <GridItem
+                                as={Flex}
+                                colStart={{ base: 1, lg: 1 }}
+                                colSpan={{ base: 1, lg: 1 }}
+                            >
+                                <Controller
+                                    control={control}
+                                    name="cep"
+                                    render={({ field }) => (
+                                        <FormInput
+                                            size="sm"
+                                            {...field}
+                                            mask={"99999-999"}
+                                            label="CEP do Imóvel"
+                                            placeholder="Digite o cep"
+                                            onChange={(e) => {
+                                                field.onChange(e);
+                                                handleBuscarCep(e.target.value);
+                                            }}
+                                        />
+                                    )}
                                 />
+
+                                {buscandoCep && <Spinner />}
                             </GridItem>
                             <GridItem>
                                 <FormInput

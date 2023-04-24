@@ -30,7 +30,7 @@ export function setupApiClient(ctx = undefined) {
             if (error.response?.status === 401) {
                 if (error.response.data?.code === "token.expired") {
                     cookies = parseCookies(ctx);
-
+                    console.log('expirou')
                     const { "imo7.refreshToken": refreshToken } = cookies;
                     const originalConfig = error.config;
                     if (!isRefreshing) {

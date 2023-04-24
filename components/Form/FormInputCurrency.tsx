@@ -26,13 +26,14 @@ const InputBase = (
         mask,
         maskChar,
         decimal,
+        size,
         ...rest
     },
     ref
 ) => {
     return (
-        <FormControl isInvalid={error} isRequired={required}>
-            {label && <FormLabel>{label}</FormLabel>}
+        <FormControl isInvalid={error} isRequired={required} size={size}>
+            {label && <FormLabel fontSize={size}>{label}</FormLabel>}
             <InputGroup {...rest}>
                 {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
                 {leftElement && (
@@ -45,6 +46,7 @@ const InputBase = (
                     }
                     decimalScale={2}
                     ref={ref}
+                    size={size}
                     {...rest}
                 />
                 {rightAddon && <InputRightAddon>{rightAddon}</InputRightAddon>}

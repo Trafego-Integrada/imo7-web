@@ -186,27 +186,23 @@ handle.post(async (req, res) => {
                                     },
                                 },
                             });
-                        } else if (chamadoId) {
-                            await prisma.interacaoChamado.create({
-                                data: {
+                        } 
+                        if(chamadoId) {
+                            await prisma.historicoChamado.create({
+                                data:{
                                     chamado: {
                                         connect: {
                                             id: Number(chamadoId),
                                         },
                                     },
-                                    anexos: {
-                                        connect: {
-                                            id: anexo.id,
-                                        },
-                                    },
-                                    mensagem: "Arquivos anexados",
                                     usuario: {
                                         connect: {
                                             id: req.user.id,
                                         },
                                     },
-                                },
-                            });
+                                    descricao:`Arquivo anexado: ${nome}`
+                                }
+                            })
                         }
                     }
                 })
@@ -247,10 +243,24 @@ handle.post(async (req, res) => {
                         nome,
                         anexo:
                             process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
-                        contrato: contratoId
+                            contrato: contratoId
                             ? {
                                   connect: {
                                       id: Number(contratoId),
+                                  },
+                              }
+                            : {},
+                        chamado: chamadoId
+                            ? {
+                                  connect: {
+                                      id: Number(chamadoId),
+                                  },
+                              }
+                            : {},
+                        conversa: conversaId
+                            ? {
+                                  connect: {
+                                      id: Number(conversaId),
                                   },
                               }
                             : {},
@@ -287,29 +297,24 @@ handle.post(async (req, res) => {
                             },
                         },
                     });
-                } else if (chamadoId) {
-                    await prisma.interacaoChamado.create({
-                        data: {
+                } 
+                if(chamadoId) {
+                    await prisma.historicoChamado.create({
+                        data:{
                             chamado: {
                                 connect: {
                                     id: Number(chamadoId),
                                 },
                             },
-                            anexos: {
-                                connect: {
-                                    id: anexo.id,
-                                },
-                            },
-                            mensagem: "Arquivos anexados",
                             usuario: {
                                 connect: {
                                     id: req.user.id,
                                 },
                             },
-                        },
-                    });
+                            descricao:`Arquivo anexado: ${nome}`
+                        }
+                    })
                 }
-                
             }
         }
 

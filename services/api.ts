@@ -1,5 +1,6 @@
 import { signOut } from "@/contexts/AuthContext";
 import axios, { AxiosError } from "axios";
+import jwtDecode from "jwt-decode";
 import { parseCookies, setCookie } from "nookies";
 import { AuthTokenError } from "./errors/AuthTokenError";
 
@@ -58,24 +59,24 @@ export function setupApiClient(ctx = null) {
             
             if (error.response?.status === 401) {
                 if (error.response.data?.code === "token.expired") {
+                    console.log('expirou')
                     cookies = parseCookies();
                     let host;
                     if (typeof window !== "undefined") {
                         host = window.location.host;
                         host = host.split(".")[0];
                     }
+                    console.log(host)
                     const { "imo7.refreshToken": refreshToken,"imo7.token":token } = cookies;
                     const originalConfig = error.config;
                     if (!isRefreshing) {
-                        const user = jwtDecode<{ permissoes: string[]; cargos: string[] }>(
-                            token
-                        );
+                        console.log('expirou 2')
                         isRefreshing = true;
                         api.post("auth/refresh", { refreshToken, imobiliaria:host != "localhost:3000" &&
                         host != "imo7.com.br" &&
                         host != "imo7"
                             ? host
-                            : null, documento })
+                            : null })
                             .then((response) => {
                                 const { token, refreshToken: newRefreshToken } =
                                     response.data;
