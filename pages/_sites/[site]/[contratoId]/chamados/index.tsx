@@ -19,7 +19,8 @@ import { useRouter } from "next/router";
 import { FiArrowRight } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
-import {FaGrinWink} from 'react-icons/fa'
+import { FaGrinWink } from "react-icons/fa";
+import Link from "next/link";
 const Chamados: NextPage = () => {
     const router = useRouter();
     const { usuario, signOut } = useAuth();
@@ -30,12 +31,22 @@ const Chamados: NextPage = () => {
     return (
         <LayoutPainel>
             <Container maxW="container.lg">
-                <Heading mb={8} size="md">
-                    Chamados
-                </Heading>
+                <Flex justify="space-between">
+                    <Heading mb={8} size="md">
+                        Chamados
+                    </Heading>
+                    <Link
+                        passHref
+                        href={{
+                            pathname: "/[contratoId]/chamados/novo",
+                            query: { contratoId: router.query.contratoId },
+                        }}
+                    >
+                        <Button>Abrir chamado</Button>
+                    </Link>
+                </Flex>
                 <Grid gap={4}>
-                    {contratos &&
-                        contratos.data?.data?.length > 0 ?
+                    {contratos && contratos.data?.data?.length > 0 ? (
                         contratos.data?.data.map((item, key) => (
                             <GridItem
                                 as={Flex}
@@ -118,22 +129,27 @@ const Chamados: NextPage = () => {
                                     Abrir
                                 </Button>
                             </GridItem>
-                        )):<><Flex
-                        h="full"
-                        flexDirection="column"
-                        align="center"
-                        justify="center"
-                        gridGap={4}
-                    >
-                        <Icon
-                            as={FaGrinWink}
-                            fontSize="6xl"
-                            color="gray.400"
-                        />
-                        <Text color="gray.400" fontWeight="bold">
-                        Não há chamados para este contrato
-                        </Text>
-                    </Flex></>}
+                        ))
+                    ) : (
+                        <>
+                            <Flex
+                                h="full"
+                                flexDirection="column"
+                                align="center"
+                                justify="center"
+                                gridGap={4}
+                            >
+                                <Icon
+                                    as={FaGrinWink}
+                                    fontSize="6xl"
+                                    color="gray.400"
+                                />
+                                <Text color="gray.400" fontWeight="bold">
+                                    Não há chamados para este contrato
+                                </Text>
+                            </Flex>
+                        </>
+                    )}
                 </Grid>
             </Container>
         </LayoutPainel>

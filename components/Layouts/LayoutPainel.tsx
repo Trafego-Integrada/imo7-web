@@ -28,6 +28,7 @@ export const LayoutPainel = ({ children }) => {
         ],
         listarContratos
     );
+    console.log(router);
     return (
         <Box bg="gray.100" minH="100vh">
             <Stack as="aside" bg="blue.600">
@@ -40,9 +41,29 @@ export const LayoutPainel = ({ children }) => {
                 >
                     <Menu>
                         <MenuButton color="white">
-                            {contratos && contratos.data?.data?.length
-                                ? "Selecione um contrato"
-                                : "Você não possui contratos ativos"}
+                            {router.route.includes("[contratoId]") ? (
+                                <>
+                                    {`${
+                                        contratos?.data.data.find(
+                                            (i) =>
+                                                i.id ==
+                                                Number(router.query.contratoId)
+                                        ).codigo
+                                    } - ${
+                                        contratos?.data.data.find(
+                                            (i) =>
+                                                i.id ==
+                                                Number(router.query.contratoId)
+                                        ).imovel?.endereco
+                                    }`}
+                                </>
+                            ) : (
+                                <>
+                                    {contratos && contratos.data?.data?.length
+                                        ? "Selecione um contrato"
+                                        : "Você não possui contratos ativos"}
+                                </>
+                            )}
                         </MenuButton>
                         <MenuList>
                             {contratos &&

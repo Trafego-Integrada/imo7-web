@@ -42,6 +42,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { GrAttachment } from "react-icons/gr";
 import { NextChakraLink } from "@/components/NextChakraLink";
+import prisma from "@/lib/prisma";
 const schema = yup.object({
     mensagem: yup.string().required("Campo Obrigatório"),
 });
@@ -443,12 +444,25 @@ const Chamado: NextPage = ({ chamado }) => {
 export default Chamado;
 export const getServerSideProps = async (ctx) => {
     const { id } = ctx.query;
-    console.log(ctx.query);
-    const api = setupApiClient(ctx);
-    const { data } = await api.get(`chamado/${id}`);
+
+    const chamado = await prisma.chamado.findUnique({
+        where: {
+            id: Number(id),
+        },
+        include: {
+            contrato: {
+                include: {
+                    imovel: true,
+                },
+            },
+            responsavel: true,
+            criador: true,
+            participantes: true,
+        },
+    });
     return {
         props: {
-            chamado: data,
+            chamado: JSON.parse(JSON.stringify(chamado)),
         },
     };
 };

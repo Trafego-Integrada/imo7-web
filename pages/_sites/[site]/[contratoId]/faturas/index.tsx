@@ -21,6 +21,8 @@ import { FiArrowRight } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 import { FaGrinWink } from "react-icons/fa";
+import Link from "next/link";
+import { formatoData } from "@/helpers/helpers";
 
 const Chamados: NextPage = () => {
     const router = useRouter();
@@ -36,8 +38,7 @@ const Chamados: NextPage = () => {
                     Faturas
                 </Heading>
                 <Grid gap={4}>
-                    {contratos &&
-                        contratos.data?.data?.length > 0 ?
+                    {contratos && contratos.data?.data?.length > 0 ? (
                         contratos.data?.data.map((item, key) => (
                             <GridItem
                                 as={Flex}
@@ -65,7 +66,11 @@ const Chamados: NextPage = () => {
                                             >
                                                 Vencimento
                                             </Text>
-                                            <Text>{item.data_vencimen}</Text>
+                                            <Text>
+                                                {formatoData(
+                                                    item.data_vencimen
+                                                )}
+                                            </Text>
                                         </Box>
                                         <Box>
                                             <Text
@@ -96,40 +101,47 @@ const Chamados: NextPage = () => {
                                         </Badge>
                                     </Flex>
                                 </Flex>
-
-                                <Button
-                                    colorScheme="blue"
-                                    size="sm"
-                                    rightIcon={<Icon as={FiArrowRight} />}
-                                    onClick={() =>
-                                        router.push({
-                                            pathname: "/boleto/[id]",
-                                            query: {
-                                                contratoId: item.contratoId,
-                                                id: item.id,
-                                            },
-                                        })
-                                    }
+                                <Link
+                                    href={{
+                                        pathname: "/boleto/[id]",
+                                        query: {
+                                            contratoId: item.contratoId,
+                                            id: item.id,
+                                        },
+                                    }}
+                                    target="_blank"
+                                    passHref
                                 >
-                                    Abrir
-                                </Button>
+                                    <Button
+                                        colorScheme="blue"
+                                        size="sm"
+                                        rightIcon={<Icon as={FiArrowRight} />}
+                                    >
+                                        Abrir
+                                    </Button>
+                                </Link>
                             </GridItem>
-                        )):<><Flex
-                        h="full"
-                        flexDirection="column"
-                        align="center"
-                        justify="center"
-                        gridGap={4}
-                    >
-                        <Icon
-                            as={FaGrinWink}
-                            fontSize="6xl"
-                            color="gray.400"
-                        />
-                        <Text color="gray.400" fontWeight="bold">
-                        Não há boletos em aberto para este contrato
-                        </Text>
-                    </Flex></>}
+                        ))
+                    ) : (
+                        <>
+                            <Flex
+                                h="full"
+                                flexDirection="column"
+                                align="center"
+                                justify="center"
+                                gridGap={4}
+                            >
+                                <Icon
+                                    as={FaGrinWink}
+                                    fontSize="6xl"
+                                    color="gray.400"
+                                />
+                                <Text color="gray.400" fontWeight="bold">
+                                    Não há boletos em aberto para este contrato
+                                </Text>
+                            </Flex>
+                        </>
+                    )}
                 </Grid>
             </Container>
         </LayoutPainel>

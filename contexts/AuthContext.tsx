@@ -1,6 +1,6 @@
 import Router from "next/router";
 import { createContext, ReactNode, useEffect, useState } from "react";
-
+import { deleteCookie } from "cookies-next";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { api } from "@/services/apiClient";
 
@@ -35,6 +35,8 @@ type AuthProviderProps = {
 export const AuthContext = createContext({} as AuthContextData);
 
 export async function signOut(ctx = null) {
+    deleteCookie("imo7.token");
+    deleteCookie("imo7.refreshToken");
     destroyCookie(ctx, "imo7.token");
     destroyCookie(ctx, "imo7.refreshToken");
     Router.push("/login");

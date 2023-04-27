@@ -95,7 +95,6 @@ handle.get(async (req, res) => {
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
-                    ...filtroQuery.AND,
                     {
                         codigo: {
                             contains: codigo,
@@ -105,20 +104,32 @@ handle.get(async (req, res) => {
             };
         }
         if (vencimento) {
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
-                    ...filtroQuery.AND,
+                    ...filtroQuery?.AND,
                     { diaVencimento: Number(vencimento) },
                 ],
             };
         }
         if (dataReajuste) {
             dataReajuste = JSON.parse(dataReajuste);
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
-                    ...filtroQuery.AND,
+                    ...filtroQuery?.AND,
                     {
                         dataReajuste: {
                             gte: dataReajuste[0]
@@ -133,11 +144,17 @@ handle.get(async (req, res) => {
             };
         }
         if (dataInicio) {
-            dataInicio = JSON.parse(dataInicio);
+            dataInicio = JSON.parse(dataInicio); 
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
-                    ...filtroQuery.AND,
+                    ...filtroQuery?.AND,
                     {
                         dataInicio: {
                             gte: dataInicio[0]
@@ -153,10 +170,16 @@ handle.get(async (req, res) => {
         }
         if (dataFim) {
             dataFim = JSON.parse(dataFim);
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
-                    ...filtroQuery.AND,
+                    ...filtroQuery?.AND,
                     {
                         dataFim: {
                             gte: dataFim[0]
@@ -172,6 +195,12 @@ handle.get(async (req, res) => {
         }
         if (dataCriacao) {
             dataCriacao = JSON.parse(dataCriacao);
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
@@ -190,6 +219,12 @@ handle.get(async (req, res) => {
             };
         }
         if (proprietario) {
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
@@ -207,10 +242,16 @@ handle.get(async (req, res) => {
             };
         }
         if (inquilino) {
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
-                    ...filtroQuery.AND,
+                    ...filtroQuery?.AND,
                     {
                         inquilinos: {
                             every: {
@@ -224,6 +265,12 @@ handle.get(async (req, res) => {
             };
         }
         if (fiador) {
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
@@ -241,6 +288,12 @@ handle.get(async (req, res) => {
             };
         }
         if (endereco) {
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
@@ -256,6 +309,12 @@ handle.get(async (req, res) => {
             };
         }
         if (numero) {
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
@@ -271,6 +330,12 @@ handle.get(async (req, res) => {
             };
         }
         if (bairro) {
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
@@ -286,6 +351,12 @@ handle.get(async (req, res) => {
             };
         }
         if (cidade) {
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
@@ -301,6 +372,12 @@ handle.get(async (req, res) => {
             };
         }
         if (estado) {
+            if(!filtroQuery.AND){
+                filtroQuery={
+                    ...filtroQuery,
+                    AND:[]
+                }
+            }
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
@@ -316,6 +393,7 @@ handle.get(async (req, res) => {
             };
         }
         if (proprietarioId) {
+            
             filtroQuery = {
                 ...filtroQuery,
                 OR: [

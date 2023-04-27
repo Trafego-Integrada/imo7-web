@@ -16,8 +16,8 @@ import { listarAssuntos } from "@/services/models/assunto";
 import { watch } from "fs";
 import { useRouter } from "next/router";
 const schema = yup.object({
-    departamento: yup.string().required("Campo Obrigatório"),
-    assunto: yup.string().required("Campo Obrigatório"),
+    departamentoId: yup.string().required("Campo Obrigatório"),
+    assuntoId: yup.string().required("Campo Obrigatório"),
     titulo: yup.string().required("Campo Obrigatório"),
     mensagem: yup.string().required("Campo Obrigatório"),
 });
@@ -88,8 +88,8 @@ const AbrirChamado: NextPage = () => {
                     <GridItem>
                         <Select
                             placeholder="Departamento"
-                            error={errors.departamento?.message}
-                            {...register("departamento")}
+                            error={errors.departamentoId?.message}
+                            {...register("departamentoId")}
                         >
                             {departamentos?.data?.data?.map((item) => (
                                 <option key={item.id} value={item.id}>
@@ -101,9 +101,9 @@ const AbrirChamado: NextPage = () => {
                     <GridItem>
                         <Select
                             placeholder="Assunto"
-                            error={errors.assunto?.message}
-                            {...register("assunto")}
-                            isDisabled={watch("departamento") ? false : true}
+                            error={errors.assuntoId?.message}
+                            {...register("assuntoId")}
+                            isDisabled={watch("departamentoId") ? false : true}
                         >
                             {assuntos?.data?.data?.map((item) => (
                                 <option key={item.id} value={item.id}>

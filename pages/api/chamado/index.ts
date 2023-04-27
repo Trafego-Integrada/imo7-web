@@ -295,6 +295,42 @@ handle.post(async (req, res) => {
             estadoImovel
             },
         });
+        if(!participantes && mensagem) {
+            await prisma.conversaChamado.create({
+                data:{
+                    chamado: {
+                        connect: {
+                            id: data.id,
+                        },
+                    },
+                    criador: {
+                        connect: {
+                            id: req.user.id,
+                        },
+                    },
+                    participantes:{
+                        connect:{
+                            id:req.user.id
+                        }
+                    },
+                    interacoes: {
+                        create: {
+                            chamado: {
+                                connect: {
+                                    id: data.id,
+                                },
+                            },
+                            mensagem,
+                            usuario: {
+                                connect: {
+                                    id: req.user.id,
+                                },
+                            },
+                        },
+                    },
+                }
+            })
+        }
 
         if(participantes) {
             const conversa = await prisma.conversaChamado.create({

@@ -14,10 +14,13 @@ import {
     Tr,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useRef } from "react";
 import { FiEye } from "react-icons/fi";
+import { ModalChamado } from "../ModalChamado";
 
 export const Chamados = ({ data }) => {
     const router = useRouter();
+    const modal = useRef();
     return (
         <TableContainer>
             <Table size="sm" variant="striped">
@@ -37,9 +40,6 @@ export const Chamados = ({ data }) => {
                         </Th>
                         <Th w={36} textAlign="center">
                             Criado em
-                        </Th>
-                        <Th w={36} textAlign="center">
-                            Ultima interação
                         </Th>
                         <Th w={18} textAlign="center">
                             Status
@@ -62,12 +62,6 @@ export const Chamados = ({ data }) => {
                             <Td textAlign="center">
                                 {formatoData(item.createdAt)}
                             </Td>
-                            <Td textAlign="center">
-                                {formatoData(
-                                    item.interacoes[item.interacoes.length - 1]
-                                        .createdAt
-                                )}
-                            </Td>
 
                             <Td textAlign="center">
                                 <Tag>{item.status}</Tag>
@@ -78,12 +72,7 @@ export const Chamados = ({ data }) => {
                                     icon={<Icon as={FiEye} />}
                                     colorScheme="blue"
                                     onClick={() =>
-                                        router.push({
-                                            pathname: "/admin/chamados/[id]",
-                                            query: {
-                                                id: item.id,
-                                            },
-                                        })
+                                        modal.current.onOpen(item.id)
                                     }
                                 />
                             </Td>
@@ -91,6 +80,7 @@ export const Chamados = ({ data }) => {
                     ))}
                 </Tbody>
             </Table>
+            <ModalChamado ref={modal} />
         </TableContainer>
     );
 };
