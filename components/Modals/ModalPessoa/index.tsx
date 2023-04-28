@@ -109,6 +109,7 @@ const ModalBase = ({}, ref) => {
             } else {
                 await cadastrar.mutateAsync(data);
             }
+            queryClient.invalidateQueries("prestadores");
         } catch (error) {
             toast({ title: "Ocorreu um erro", status: "error" });
         }

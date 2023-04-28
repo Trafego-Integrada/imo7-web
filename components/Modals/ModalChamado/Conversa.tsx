@@ -50,6 +50,7 @@ export function Conversa({ data, chamado }) {
                 conversaId: data.id,
             });
             queryClient.invalidateQueries("interacoes");
+            queryClient.invalidateQueries("historicosChamado");
             reset({ mensagem: "" });
         } catch (error) {
             console.log(error);

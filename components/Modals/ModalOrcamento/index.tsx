@@ -35,6 +35,7 @@ import {
     Checkbox,
     Grid,
     GridItem,
+    IconButton,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -61,10 +62,12 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import moment from "moment";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
+import { FiPlus } from "react-icons/fi";
+import { ModalPessoa } from "../ModalPessoa";
 
 const schema = yup.object({
     solicitante: yup.object().required("Campo Obrigatório"),
@@ -73,6 +76,7 @@ const schema = yup.object({
 });
 
 const ModalBase = ({ chamadoId }, ref) => {
+    const modalPessoa = useRef();
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -149,7 +153,7 @@ const ModalBase = ({ chamadoId }, ref) => {
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
-                        Pessoa <ModalCloseButton />
+                        Orçamento <ModalCloseButton />
                     </ModalHeader>
                     <ModalBody>
                         <Grid
@@ -160,7 +164,7 @@ const ModalBase = ({ chamadoId }, ref) => {
                                 lg: "repeat(4, 1fr)",
                             }}
                             as="form"
-                            id="formPessoa"
+                            id="formOrcamento"
                             onSubmit={handleSubmit(onSubmit)}
                         >
                             <GridItem colSpan={{ lg: 1 }}>
@@ -197,6 +201,15 @@ const ModalBase = ({ chamadoId }, ref) => {
                                             getOptionValue={(e) => e.id}
                                             error={errors.prestador?.message}
                                             {...field}
+                                            rightAddon={
+                                                <IconButton
+                                                    size="sm"
+                                                    icon={<FiPlus />}
+                                                    onClick={() =>
+                                                        modalPessoa.current.onOpen()
+                                                    }
+                                                />
+                                            }
                                         />
                                     )}
                                 />
@@ -252,13 +265,14 @@ const ModalBase = ({ chamadoId }, ref) => {
                             mr={3}
                             type="submit"
                             isLoading={isSubmitting}
-                            form="formPessoa"
+                            form="formOrcamento"
                         >
                             Confirmar
                         </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+            <ModalPessoa ref={modalPessoa} />
         </>
     );
 };

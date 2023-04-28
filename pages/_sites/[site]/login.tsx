@@ -232,26 +232,32 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                         )}
                         {!usuario ? (
                             <Button
-                                type="button"
+                                type="submit"
                                 borderRadius={0}
                                 colorScheme="blue"
                                 rightIcon={<Icon as={FaSignInAlt} />}
                                 spinner={<BeatLoader size={8} color="white" />}
-                                onClick={() => verificar()}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    verificar();
+                                }}
                             >
                                 Continuar
                             </Button>
                         ) : usuario && usuario.atualizar ? (
                             <>
                                 <Button
-                                    type="button"
+                                    type="submit"
                                     borderRadius={0}
                                     colorScheme="blue"
                                     rightIcon={<Icon as={FaSignInAlt} />}
                                     spinner={
                                         <BeatLoader size={8} color="white" />
                                     }
-                                    onClick={() => atualizar()}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        atualizar();
+                                    }}
                                 >
                                     Atualizar
                                 </Button>

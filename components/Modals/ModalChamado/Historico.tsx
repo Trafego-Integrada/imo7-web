@@ -90,9 +90,11 @@ export const Historico = ({ chamadoId }) => {
                                         "DD/MM/YYYY HH:mm"
                                     )}
                                 </Text>
-                                <Text fontWeight="bold">
-                                    {historico.descricao}{" "}
-                                </Text>
+                                <Box
+                                    dangerouslySetInnerHTML={{
+                                        __html: historico.descricao,
+                                    }}
+                                />
                             </Box>
                         ))}
                     </React.Fragment>

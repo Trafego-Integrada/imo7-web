@@ -240,12 +240,7 @@ const ModalBase = ({}, ref) => {
                                                 render={({ field }) => (
                                                     <FormInput
                                                         {...field}
-                                                        mask={
-                                                            watch(
-                                                                "documento"
-                                                            ) &&
-                                                            "999.999.999-99"
-                                                        }
+                                                        mask={"999.999.999-99"}
                                                         label="CPF"
                                                         placeholder="CPF"
                                                         error={
@@ -274,7 +269,6 @@ const ModalBase = ({}, ref) => {
                                                     <FormInput
                                                         {...field}
                                                         mask={
-                                                            watch("telefone") &&
                                                             "(99) 9 9999-9999"
                                                         }
                                                         label="Telefone / Celular"
@@ -402,11 +396,7 @@ const ModalBase = ({}, ref) => {
                                                     render={({ field }) => (
                                                         <FormInput
                                                             {...field}
-                                                            mask={
-                                                                watch(
-                                                                    "cepImovel"
-                                                                ) && "99999-999"
-                                                            }
+                                                            mask={"99999-999"}
                                                             label="CEP do Imóvel"
                                                             placeholder="Digite o cep"
                                                             onChange={(e) => {

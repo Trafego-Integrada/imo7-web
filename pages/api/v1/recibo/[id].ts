@@ -1,8 +1,9 @@
 import moment from "moment";
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const handle = nextConnect();
+const handle = nextConnect<NextApiRequest, NextApiResponse>();
 
 handle.get(async (req, res) => {
     const { id } = req.query;
@@ -79,7 +80,7 @@ handle.post(async (req, res) => {
                         data: eval(itens).map((item) => {
                             return {
                                 descricao: item.descricao,
-                                valor: Number(item.valor),
+                                valor: Number(item.valor.replaceAll('.','').replace(',','.')),
                             };
                         }),
                     },

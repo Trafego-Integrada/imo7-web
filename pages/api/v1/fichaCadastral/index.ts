@@ -4,7 +4,7 @@ import { Prisma } from "@prisma/client";
 import moment from "moment";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import { toXML } from 'jstoxml';
+import { json2xml } from 'xml-js';
 
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
 handle.use(cors);
@@ -221,17 +221,30 @@ handle.get(async (req, res) => {
                 },
             },
         });
-        console.log(count)
         if(xml == "1") {
-
-            return res.setHeader("Content-Type", "text/xml").send(toXML(data.map(i => {
-                return {
-                    ficha:i
-                }
-            })));
+            const jsonObj = {
+                "name": "'Garage'",
+                "teste": [
+                  { color: "'red'", maxSpeed: "120", age: "2" },
+                ],
+              };
+              
+              const json = JSON.stringify({fichas:data});
+              
+            const xml = json2xml(json, {compact: true, ignoreComment: true, spaces: 4});
+              
+            res.statusCode = 200
+            res.setHeader('Content-Type', 'text/xml')
+              
+              
+              const xmlRes = `<?xml version="1.0" encoding="UTF-8"?>
+              <root> 
+              ${xml}
+              </root>`
+          
+            res.end(xmlRes)
         } else {
-            
-        res.send({ data, total: count });
+            res.send({ data, total: count });
         }
     } catch (error) {
         res.status(500).send({
@@ -240,6 +253,8 @@ handle.get(async (req, res) => {
         });
     }
 });
+
+
 
 
 export default handle;

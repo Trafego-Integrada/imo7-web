@@ -200,7 +200,8 @@ handle.post(async (req, res) => {
                                             id: req.user.id,
                                         },
                                     },
-                                    descricao:`Arquivo anexado: ${nome}`
+                                    descricao:`Arquivo anexado: ${nome ? nome : ''} <a href="${process.env.NEXT_PUBLIC_URL_STORAGE +
+                                        nameLocation}" target="_blank">Visualizar arquivo</a>`
                                 }
                             })
                         }
@@ -311,7 +312,8 @@ handle.post(async (req, res) => {
                                     id: req.user.id,
                                 },
                             },
-                            descricao:`Arquivo anexado: ${nome}`
+                            descricao:`Arquivo anexado: ${nome ? nome : ''} <a href="${process.env.NEXT_PUBLIC_URL_STORAGE +
+                                nameLocation}" target="_blank">Visualizar arquivo</a>`
                         }
                     })
                 }

@@ -47,7 +47,7 @@ const InputBase = (
     return (
         <FormControl isInvalid={error ? true : false} size={size} {...rest}>
             {label && <FormLabel fontSize={size}>{label}</FormLabel>}
-            <InputGroup>
+            <InputGroup size={size}>
                 {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
                 {leftElement && (
                     <InputLeftElement>{leftElement}</InputLeftElement>
@@ -81,7 +81,11 @@ const InputBase = (
                         }}
                     />
                 )}
-                {rightAddon && <InputRightAddon>{rightAddon}</InputRightAddon>}
+                {rightAddon && (
+                    <InputRightAddon {...rightAddon.props}>
+                        {rightAddon}
+                    </InputRightAddon>
+                )}
                 {rightElement && (
                     <InputRightElement width={rightElementWidth}>
                         {rightElement}
