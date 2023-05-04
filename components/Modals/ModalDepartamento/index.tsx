@@ -139,7 +139,7 @@ const ModalBase = ({}, ref) => {
                         <Tabs size="sm" variant="solid-rounded">
                             <TabList>
                                 <Tab>Departamento</Tab>
-                                <Tab>Assuntos</Tab>
+                                {watch("id") && <Tab>Assuntos</Tab>}
                             </TabList>
                             <TabPanels>
                                 <TabPanel>

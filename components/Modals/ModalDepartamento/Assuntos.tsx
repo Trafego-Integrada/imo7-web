@@ -32,7 +32,10 @@ export const Assuntos = ({ departamentoId }) => {
     const modalExcluir = useRef();
     const { data } = useQuery(
         ["assuntos", { filtro: query, departamentoId }],
-        listarAssuntos
+        listarAssuntos,
+        {
+            enabled: !!departamentoId,
+        }
     );
     const excluir = useMutation(excluirAssunto);
 

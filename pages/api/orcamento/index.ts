@@ -50,6 +50,8 @@ handle.get(async (req, res) => {
         const data = await prisma.orcamento.findMany({
             where: {
                 ...filtroQuery,
+                
+                imobiliariaId:req.user.imobiliariaId
             },
             ...paginacao,
             include:{
@@ -61,6 +63,8 @@ handle.get(async (req, res) => {
         const total = await prisma.orcamento.count({
             where: {
                 ...filtroQuery,
+                
+                imobiliariaId:req.user.imobiliariaId
             },
         });
         res.send({
