@@ -77,6 +77,7 @@ model Usuario {
     DepartamentoChamado   DepartamentoChamado?     @relation(fields: [departamentoChamadoId], references: [id])
     departamentoChamadoId Int?
     Tarefa                Tarefa[]
+    Notificacao           Notificacao[]
 
     @@unique([imobiliariaId, documento])
 }
@@ -190,6 +191,7 @@ model Imobiliaria {
     TagTarefa             TagTarefa[]
     Tarefa                Tarefa[]
     Pessoa                Pessoa[]
+    RegraNotificacao      RegraNotificacao[]
 }
 
 model Imovel {
@@ -254,63 +256,64 @@ model ProprietariosOnImoveis {
 }
 
 model Contrato {
-    id                Int         @id @default(autoincrement())
+    id                Int           @id @default(autoincrement())
     codigo            String
     taxaAdm           Decimal?
-    dataInicio        DateTime    @db.Date
-    dataFim           DateTime?   @db.Date
+    dataInicio        DateTime      @db.Date
+    dataFim           DateTime?     @db.Date
     valorAluguel      Decimal?
     valorBonus        Decimal?
     diaVencimento     Int?
     diaRecebimento    Int?
     diaDeposito       Int?
     ultimaParcPaga    Int?
-    ultimoRecebimento DateTime?   @db.Date
-    ultimoBomPara     DateTime?   @db.Date
-    ultimoRepasse     DateTime?   @db.Date
+    ultimoRecebimento DateTime?     @db.Date
+    ultimoBomPara     DateTime?     @db.Date
+    ultimoRepasse     DateTime?     @db.Date
     formaRepasse      String?
-    dataReajuste      DateTime?   @db.Date
+    dataReajuste      DateTime?     @db.Date
     indiceReajuste    String?
     responsavel       String?
     multa             Decimal?
     juros             Decimal?
     formaPagamento    String?
-    observacoes       String?     @db.LongText
-    imobiliaria       Imobiliaria @relation(fields: [imobiliariaId], references: [id])
+    observacoes       String?       @db.LongText
+    imobiliaria       Imobiliaria   @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId     Int
-    proprietarios     Usuario[]   @relation("Proprietarios")
-    inquilinos        Usuario[]   @relation("Inquilinos")
-    fiadores          Usuario[]   @relation("Fiadores")
+    proprietarios     Usuario[]     @relation("Proprietarios")
+    inquilinos        Usuario[]     @relation("Inquilinos")
+    fiadores          Usuario[]     @relation("Fiadores")
     boletos           Boleto[]
     extratos          Extrato[]
     chamados          Chamado[]
-    createdAt         DateTime    @default(now())
-    updatedAt         DateTime    @updatedAt
+    createdAt         DateTime      @default(now())
+    updatedAt         DateTime      @updatedAt
     deletedAt         DateTime?
     anexos            Anexo[]
-    conta             Conta       @relation(fields: [contaId], references: [id])
+    conta             Conta         @relation(fields: [contaId], references: [id])
     contaId           Int
     Recibo            Recibo[]
     imovel            Imovel?
+    Notificacao       Notificacao[]
 }
 
 model Boleto {
-    id                    Int         @id @default(autoincrement())
+    id                    Int           @id @default(autoincrement())
     bols_cpf_cnpj         String
     bols_codl             String?
     envia_email           String?
     field_cod_banco       String?
     local_pgto1           String?
     local_pgto2           String?
-    data_vencimen         DateTime?   @db.Date
+    data_vencimen         DateTime?     @db.Date
     beneficiario          String?
     ag_cod_beneficiar     String?
-    data_doc              DateTime?   @db.Date
+    data_doc              DateTime?     @db.Date
     num_doc2              String?
     num_doc               String?
     especie_doc           String?
     aceite                String?
-    data_proces           DateTime?   @db.Date
+    data_proces           DateTime?     @db.Date
     nosso_numero2         String?
     reservado             String?
     carteira              String?
@@ -351,16 +354,17 @@ model Boleto {
     uf_sacado             String?
     email_beneficiario    String?
     cpf_cnpj_beneficiario String?
-    createdAt             DateTime    @default(now())
-    updatedAt             DateTime    @updatedAt
+    createdAt             DateTime      @default(now())
+    updatedAt             DateTime      @updatedAt
     deletedAt             DateTime?
-    contrato              Contrato    @relation(references: [id], fields: [contratoId])
+    contrato              Contrato      @relation(references: [id], fields: [contratoId])
     contratoId            Int
-    conta                 Conta       @relation(fields: [contaId], references: [id])
+    conta                 Conta         @relation(fields: [contaId], references: [id])
     contaId               Int
-    inquilino             Usuario?    @relation(fields: [imobiliariaId, bols_cpf_cnpj], references: [imobiliariaId, documento], onDelete: NoAction, onUpdate: NoAction)
-    imobiliaria           Imobiliaria @relation(fields: [imobiliariaId], references: [id])
+    inquilino             Usuario?      @relation(fields: [imobiliariaId, bols_cpf_cnpj], references: [imobiliariaId, documento], onDelete: NoAction, onUpdate: NoAction)
+    imobiliaria           Imobiliaria   @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId         Int
+    Notificacao           Notificacao[]
 }
 
 model Recibo {
@@ -808,4 +812,55 @@ model TagTarefa {
     tarefas       Tarefa[]
     imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId Int?
+}
+
+model TipoEnvioNotificacao {
+    id               Int                @id @default(autoincrement())
+    descricao        String
+    status           Int?
+    RegraNotificacao RegraNotificacao[]
+    Notificacao      Notificacao[]
+}
+
+model CanalMidia {
+    id          Int           @id @default(autoincrement())
+    descricao   String
+    status      Int?
+    Notificacao Notificacao[]
+}
+
+model RegraNotificacao {
+    id             Int                   @id @default(autoincrement())
+    imobiliaria    Imobiliaria?          @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId  Int?
+    tipoEnvio      TipoEnvioNotificacao? @relation(fields: [tipoEnvioId], references: [id])
+    tipoEnvioId    Int?
+    diasReferencia Int?
+    assunto        String?
+    mensagem       String                @db.Text
+    horaEnvio      DateTime              @db.Time()
+    Notificacao    Notificacao[]
+}
+
+model Notificacao {
+    id               String                @id @default(cuid())
+    regraNotificao   RegraNotificacao?     @relation(fields: [regraNotificaoId], references: [id])
+    regraNotificaoId Int?
+    usuario          Usuario?              @relation(fields: [usuarioId], references: [id])
+    usuarioId        Int?
+    assunto          String?               @db.VarChar(90)
+    mensagem         String?               @db.Text
+    documento        String?               @db.LongText
+    canalMidia       CanalMidia?           @relation(fields: [canalMidiaId], references: [id])
+    canalMidiaId     Int?
+    tipoEnvio        TipoEnvioNotificacao? @relation(fields: [tipoEnvioId], references: [id])
+    tipoEnvioId      Int?
+    boleto           Boleto?               @relation(fields: [boletoId], references: [id])
+    boletoId         Int?
+    contrato         Contrato?             @relation(fields: [contratoId], references: [id])
+    contratoId       Int?
+    dataEnvio        DateTime?
+    createdAt        DateTime              @default(now())
+    updatedAt        DateTime?             @updatedAt
+    deletedAt        DateTime?
 }

@@ -12,7 +12,11 @@ import {
 } from "react-icons/fa";
 import { FiTag } from "react-icons/fi";
 import { HiOutlineDocumentText } from "react-icons/hi";
-import { MdCategory, MdDashboard } from "react-icons/md";
+import {
+    MdCategory,
+    MdDashboard,
+    MdOutlineNotificationsActive,
+} from "react-icons/md";
 import { TbForms } from "react-icons/tb";
 import { MenuItem } from "./Menuitem";
 
@@ -188,6 +192,13 @@ const menu = [
         titulo: "Cadastros",
         href: "/admin/cadastros",
         icon: BsFillGearFill,
+        cargos: ["adm"],
+        modulos: ["adm.imobiliarias"],
+    },
+    {
+        titulo: "Notificações",
+        href: "/admin/notificacao",
+        icon: MdOutlineNotificationsActive,
         cargos: ["adm"],
         modulos: ["adm.imobiliarias"],
     },
