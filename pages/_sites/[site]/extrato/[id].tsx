@@ -3400,7 +3400,9 @@ const Extrato = ({ extrato }) => {
                     <div class="container">
                         <div class="row">
                             <div class="col-xs-12">
-                                <h3 style="text-align:center;">${extrato.imobiliaria?.razaoSocial}<br> Extrato do
+                                <h3 style="text-align:center;">${
+                                    extrato.imobiliaria?.razaoSocial
+                                }<br> Extrato do
                                     período: ${extrato.periodo}</h3>
                             </div>
                         </div>
@@ -3410,20 +3412,37 @@ const Extrato = ({ extrato }) => {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-3">Contrato: ${extrato.contrato?.codigo}</div>
-                            <div class="col-xs-3">Parcela: ${extrato.parcela}</div>
-                            <div class="col-xs-3">Depósito: ${extrato.dataDeposito && formatoData(extrato.dataDeposito)}</div>
+                            <div class="col-xs-3">Contrato: ${
+                                extrato.contrato?.codigo
+                            }</div>
+                            <div class="col-xs-3">Parcela: ${
+                                extrato.parcela
+                            }</div>
+                            <div class="col-xs-3">Depósito: ${
+                                extrato.dataDeposito &&
+                                formatoData(extrato.dataDeposito)
+                            }</div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-5">Locatário: ${extrato.proprietario?.nome}</div>
-                            <div class="col-xs-4">Documento: ${extrato.proprietario?.documento}</div>
+                            <div class="col-xs-5">Locatário: ${
+                                extrato.proprietario?.nome
+                            }</div>
+                            <div class="col-xs-4">Documento: ${
+                                extrato.proprietario?.documento
+                            }</div>
                         </div>
                         <div class="row">
                             <div class="col-xs-6"></div>
-                            <div class="col-xs-6">Responsável: ${extrato.responsavel}</div>
+                            <div class="col-xs-6">Responsável: ${
+                                extrato.responsavel
+                            }</div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12">Imóvel: ${extrato.contrato?.imovel.endereco}, ${extrato.contrato?.imovel.bairro}, ${extrato.contrato?.imovel.cidade}/${extrato.contrato?.imovel.estado}</div>
+                            <div class="col-xs-12">Imóvel: ${
+                                extrato.contrato?.imovel.endereco
+                            }, ${extrato.contrato?.imovel.bairro}, ${
+                        extrato.contrato?.imovel.cidade
+                    }/${extrato.contrato?.imovel.estado}</div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
@@ -3446,41 +3465,68 @@ const Extrato = ({ extrato }) => {
                                     ${extrato.itens.map((item) => {
                                         return `<tr>
                                         <td>${item.descricao}</td>
-                                        <td style="text-align: right;">${formatoValor(item.valor)}</td>
-                                    </tr>`
+                                        <td style="text-align: right;">${formatoValor(
+                                            Number(item.valor)
+                                        )}</td>
+                                    </tr>`;
                                     })}
                        
                                     <tr style="background-color: #e6e6e6;">
                                         <td class="text-bold" style="border-top:1px solid black;border-bottom:1px solid black;">
-                                            Vencimento: ${extrato.vencimento && formatoData(extrato.vencimento)}</td>
+                                            Vencimento: ${
+                                                extrato.vencimento &&
+                                                formatoData(extrato.vencimento)
+                                            }</td>
                                         <td colspan="1" style="border-top:1px solid black;border-bottom:1px solid black;text-align: right;">
-                                            Total: ${formatoValor(extrato.itens.reduce((acc,item) => item.valor+acc,0))}</td>
+                                            Total: ${formatoValor(
+                                                extrato.itens.reduce(
+                                                    (acc, item) =>
+                                                        Number(item.valor) +
+                                                        acc,
+                                                    0
+                                                )
+                                            )}</td>
                                     </tr>
-                                    ${extrato.observacao1 && `<tr>
+                                    ${
+                                        extrato.observacao1 &&
+                                        `<tr>
                                     <td colspan="2">
                                         Informações
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">${extrato.observacao1}</td>
-                                </tr>` }
+                                </tr>`
+                                    }
 
-                                ${extrato.observacao2 && `
+                                ${
+                                    extrato.observacao2 &&
+                                    `
                                 <tr>
                                     <td colspan="2">${extrato.observacao2}</td>
-                                </tr>` }
-                                ${extrato.observacao3 && `
+                                </tr>`
+                                }
+                                ${
+                                    extrato.observacao3 &&
+                                    `
                                 <tr>
                                     <td colspan="2">${extrato.observacao3}</td>
-                                </tr>` }
-                                ${extrato.observacao4 && `
+                                </tr>`
+                                }
+                                ${
+                                    extrato.observacao4 &&
+                                    `
                                 <tr>
                                     <td colspan="2">${extrato.observacao4}</td>
-                                </tr>` }
-                                ${extrato.observacao5 && `
+                                </tr>`
+                                }
+                                ${
+                                    extrato.observacao5 &&
+                                    `
                                 <tr>
                                     <td colspan="2">${extrato.observacao5}</td>
-                                </tr>` }
+                                </tr>`
+                                }
                                         
                                    
                                     </tbody>
@@ -3508,13 +3554,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
         },
         include: {
             imobiliaria: true,
-            itens:true,
-            contrato:{
-                include:{
-                    imovel:true
-                }
+            itens: true,
+            contrato: {
+                include: {
+                    imovel: true,
+                },
             },
-            proprietario:true
+            proprietario: true,
         },
     });
     let extrato = JSON.parse(JSON.stringify(response));

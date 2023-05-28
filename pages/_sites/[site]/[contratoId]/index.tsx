@@ -458,6 +458,8 @@ const Dashbord: NextPage = ({ boletos, extratos }) => {
                         mt={4}
                         borderTopWidth={1}
                         borderTopColor="gray.100"
+                        bg="green.500"
+                        borderBottomRadius="2xl"
                         fontSize="sm"
                         align="center"
                         justify="center"
@@ -470,7 +472,7 @@ const Dashbord: NextPage = ({ boletos, extratos }) => {
                                 align="center"
                                 gridGap={4}
                                 justify="center"
-                                color="blue.500"
+                                color="white"
                             >
                                 <Icon as={IoHelpBuoy} fontSize="xl" />
                                 <Box textAlign="center">

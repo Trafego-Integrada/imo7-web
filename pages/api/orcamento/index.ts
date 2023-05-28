@@ -9,14 +9,9 @@ handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
-        let {
-            filtro,
-            pagina, 
-            linhas, chamadoId
-            
-        } = req.query;
+        let { filtro, pagina, linhas, chamadoId } = req.query;
         let filtroQuery = {};
-      
+
         if (filtro) {
             filtroQuery = {
                 ...filtroQuery,
@@ -29,7 +24,7 @@ handle.get(async (req, res) => {
                 ],
             };
         }
-      
+
         let paginacao = {};
         if (pagina && linhas) {
             paginacao = {
@@ -40,31 +35,31 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-       
-        if(chamadoId) {
+
+        if (chamadoId) {
             filtroQuery = {
                 ...filtroQuery,
-                chamadoId:Number(chamadoId)
-            }
+                chamadoId: Number(chamadoId),
+            };
         }
         const data = await prisma.orcamento.findMany({
             where: {
                 ...filtroQuery,
-                
-                imobiliariaId:req.user.imobiliariaId
+
+                imobiliariaId: req.user.imobiliariaId,
             },
             ...paginacao,
-            include:{
-                prestador:true,
-                solicitante:true,
-                chamado:true
-            }
+            include: {
+                prestador: true,
+                solicitante: true,
+                chamado: true,
+            },
         });
         const total = await prisma.orcamento.count({
             where: {
                 ...filtroQuery,
-                
-                imobiliariaId:req.user.imobiliariaId
+
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
         res.send({
@@ -85,36 +80,49 @@ handle.get(async (req, res) => {
 handle.post(async (req, res) => {
     try {
         const {
-           dataVisita, observacoes, prestador, solicitante, valor,status, chamadoId
+            dataVisita,
+            observacoes,
+            prestador,
+            solicitante,
+            valor,
+            status,
+            chamadoId,
         } = req.body;
 
         const data = await prisma.orcamento.create({
             data: {
-                dataVisita:dataVisita ? moment(dataVisita).format():null,
+                dataVisita: dataVisita ? moment(dataVisita).format() : null,
                 observacoes,
-                prestador:{
-                    connect:{
-                        id:prestador.id
-                    }
+                prestador: {
+                    connect: {
+                        id: prestador.id,
+                    },
                 },
-                valor:valor.replace(',','.'),
+                valor: valor.replace(",", "."),
                 status,
-                solicitante:{
-                    connect:{
-                        id: solicitante.id
-                    }
+                solicitante: {
+                    connect: {
+                        id: solicitante.id,
+                    },
                 },
-                chamado:chamadoId ? {
-                    connect:{
-                        id:Number(chamadoId)
-                    }
-                }:{}
+                chamado: chamadoId
+                    ? {
+                          connect: {
+                              id: Number(chamadoId),
+                          },
+                      }
+                    : {},
+                imobiliaria: {
+                    connect: {
+                        id: req.user.imobiliariaId,
+                    },
+                },
             },
         });
-        if(chamadoId) {
+        if (chamadoId) {
             await prisma.historicoChamado.create({
-                data:{
-                    descricao:'Criou um orçamento',
+                data: {
+                    descricao: "Criou um orçamento",
                     chamado: {
                         connect: {
                             id: Number(chamadoId),
@@ -125,14 +133,11 @@ handle.post(async (req, res) => {
                             id: req.user.id,
                         },
                     },
-                }
-            })
+                },
+            });
         }
-       
 
         res.send(data);
-           
-      
     } catch (error) {
         res.status(500).send({
             success: false,

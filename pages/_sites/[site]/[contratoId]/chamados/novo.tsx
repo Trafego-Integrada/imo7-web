@@ -55,9 +55,15 @@ const AbrirChamado: NextPage = () => {
         listarDepartamentos
     );
     const { data: assuntos } = useQuery(
-        ["assuntos", { departamentoId: watch("departamento")?.id }],
-        listarAssuntos
+        ["assuntos", { departamentoId: watch("departamentoId") }],
+        listarAssuntos,
+        {
+            enabled: !!watch("departamentoId"),
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
     );
+    console.log(watch("departamentoId"));
     return (
         <LayoutPainel>
             <Box

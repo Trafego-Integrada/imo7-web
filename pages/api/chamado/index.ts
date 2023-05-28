@@ -38,8 +38,7 @@ handle.get(async (req, res) => {
                 OR: [
                     {
                         titulo: {
-                                contains: query,
-                            
+                            contains: query,
                         },
                     },
                     {
@@ -231,12 +230,8 @@ handle.get(async (req, res) => {
 
 handle.post(async (req, res) => {
     try {
-        console.log(req.user)
         const {
-            departamentoId,
             assuntoId,
-            departamento,
-            assunto,
             titulo,
             mensagem,
             contratoId,
@@ -248,9 +243,10 @@ handle.post(async (req, res) => {
             complementoImovel,
             enderecoImovel,
             numeroImovel,
-            estadoImovel,codigoImovel
+            estadoImovel,
+            codigoImovel,
         } = req.body;
-        
+
         const data = await prisma.chamado.create({
             data: {
                 assunto: {
@@ -265,11 +261,13 @@ handle.post(async (req, res) => {
                         id: req.user.id,
                     },
                 },
-                contrato: contratoId? {
-                    connect: {
-                        id: Number(contratoId),
-                    },
-                }:{},
+                contrato: contratoId
+                    ? {
+                          connect: {
+                              id: Number(contratoId),
+                          },
+                      }
+                    : {},
                 conta: {
                     connect: {
                         id: req.user?.imobiliaria?.contaId,
@@ -279,25 +277,26 @@ handle.post(async (req, res) => {
                     connect: {
                         id: req.user?.imobiliariaId,
                     },
-                },responsavel:{
-                    connect:{
-                        id:req.user.id
-                    }
+                },
+                responsavel: {
+                    connect: {
+                        id: req.user.id,
+                    },
                 },
                 codigoImovel,
                 bairroImovel,
-            cepImovel,
-            cidadeImovel,
-            codigoContrato,
-            complementoImovel,
-            enderecoImovel,
-            numeroImovel,
-            estadoImovel
+                cepImovel,
+                cidadeImovel,
+                codigoContrato,
+                complementoImovel,
+                enderecoImovel,
+                numeroImovel,
+                estadoImovel,
             },
         });
-        if(!participantes && mensagem) {
+        if (!participantes && mensagem) {
             await prisma.conversaChamado.create({
-                data:{
+                data: {
                     chamado: {
                         connect: {
                             id: data.id,
@@ -308,10 +307,10 @@ handle.post(async (req, res) => {
                             id: req.user.id,
                         },
                     },
-                    participantes:{
-                        connect:{
-                            id:req.user.id
-                        }
+                    participantes: {
+                        connect: {
+                            id: req.user.id,
+                        },
                     },
                     interacoes: {
                         create: {
@@ -328,11 +327,10 @@ handle.post(async (req, res) => {
                             },
                         },
                     },
-                }
-            })
+                },
+            });
         }
-
-        if(participantes) {
+        if (participantes) {
             const conversa = await prisma.conversaChamado.create({
                 data: {
                     chamado: {
@@ -376,6 +374,22 @@ handle.post(async (req, res) => {
                 },
             });
         }
+
+        await prisma.historicoChamado.create({
+            data: {
+                chamado: {
+                    connect: {
+                        id: data.id,
+                    },
+                },
+                usuario: {
+                    connect: {
+                        id: req.user.id,
+                    },
+                },
+                descricao: `${req.user.nome} abriu o chamado`,
+            },
+        });
         res.send(data);
     } catch (error) {
         res.status(500).send({

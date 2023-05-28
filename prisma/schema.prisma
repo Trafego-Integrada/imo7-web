@@ -190,6 +190,7 @@ model Imobiliaria {
     TagTarefa             TagTarefa[]
     Tarefa                Tarefa[]
     Pessoa                Pessoa[]
+    Orcamento             Orcamento[]
 }
 
 model Imovel {
@@ -498,7 +499,7 @@ model Chamado {
 
 model HistoricoChamado {
     id        Int       @id @default(autoincrement())
-    descricao String?
+    descricao String?   @db.LongText
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
@@ -741,20 +742,22 @@ model Pessoa {
 }
 
 model Orcamento {
-    id            String    @id @default(cuid())
+    id            String       @id @default(cuid())
     valor         Decimal?
     dataVisita    DateTime?
-    observacoes   String?   @db.LongText
+    observacoes   String?      @db.LongText
     status        String?
-    createdAt     DateTime  @default(now())
-    updatedAt     DateTime? @updatedAt
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime?    @updatedAt
     deletedAt     DateTime?
-    prestador     Pessoa?   @relation(fields: [prestadorId], references: [id])
+    prestador     Pessoa?      @relation(fields: [prestadorId], references: [id])
     prestadorId   String?
-    chamado       Chamado?  @relation(fields: [chamadoId], references: [id])
+    chamado       Chamado?     @relation(fields: [chamadoId], references: [id])
     chamadoId     Int?
-    solicitante   Usuario   @relation(fields: [solicitanteId], references: [id])
+    solicitante   Usuario      @relation(fields: [solicitanteId], references: [id])
     solicitanteId Int
+    imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId Int?
 }
 
 enum PrioridadeTarefa {

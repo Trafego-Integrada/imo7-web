@@ -88,6 +88,7 @@ const FichasCadastrais = () => {
                     ? true
                     : false,
                 adm: usuario?.cargos?.includes("adm") ? true : false,
+                status: true,
             },
         ],
         listarUsuarios

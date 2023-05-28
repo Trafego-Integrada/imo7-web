@@ -50,6 +50,7 @@ const ModalBase = ({ chamadoId, contratoId }, ref) => {
             });
             queryClient.invalidateQueries("conversas");
             queryClient.invalidateQueries("interacoes");
+            queryClient.invalidateQueries("historicosChamado");
             onClose();
             reset({ mensagem: "" });
         } catch (error) {

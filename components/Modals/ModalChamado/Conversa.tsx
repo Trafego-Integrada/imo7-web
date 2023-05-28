@@ -170,9 +170,13 @@ export function Conversa({ data, chamado }) {
                                     <Text>{item.mensagem}</Text>
                                 )}
                             </Box>
-                            <Text ml={2} fontSize="xs" color="gray.400">
-                                {moment(item.createdAt).startOf("d").fromNow()}
-                            </Text>
+                            <Tooltip
+                                label={moment(item.createdAt).format("LLLL")}
+                            >
+                                <Text ml={2} fontSize="xs" color="gray.400">
+                                    {moment(item.createdAt).fromNow()}
+                                </Text>
+                            </Tooltip>
                         </Box>
                     </Flex>
                 ))}

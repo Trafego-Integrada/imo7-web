@@ -10,7 +10,7 @@ import {
     PaginationContainer,
     PaginationNext,
     PaginationPrevious,
-    usePagination
+    usePagination,
 } from "@ajna/pagination";
 import {
     Box,
@@ -28,7 +28,7 @@ import {
     Text,
     Th,
     Thead,
-    Tr
+    Tr,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -48,7 +48,7 @@ const Cobrancas = () => {
             total: total,
             initialState: { currentPage: 1, pageSize: 15 },
         });
-        
+
     const { data, isLoading, isFetching } = useQuery(
         [
             "boletos",
@@ -297,18 +297,18 @@ const Cobrancas = () => {
                                             <Td>{item.contrato?.codigo}</Td>
                                             <Td>{item.parcela}</Td>
                                             <Td>
-                                                {item.vencimento &&formatoData(
-                                                    item.vencimento
-                                                )}
+                                                {item.vencimento &&
+                                                    formatoData(
+                                                        item.vencimento
+                                                    )}
                                             </Td>
                                             <Td>
-                                                {item.dataDeposito &&formatoData(
-                                                    item.dataDeposito
-                                                )}
+                                                {item.dataDeposito &&
+                                                    formatoData(
+                                                        item.dataDeposito
+                                                    )}
                                             </Td>
-                                            <Td>
-                                                {item.proprietario?.nome}
-                                            </Td>
+                                            <Td>{item.proprietario?.nome}</Td>
                                             <Td>
                                                 {
                                                     item.contrato?.imovel
@@ -330,11 +330,18 @@ const Cobrancas = () => {
                                                 </Grid>
                                             </Td>
                                             <Td>
-                                                {formatoValor(item.itens?.reduce((acc,item) => item.valor + acc,0))}
+                                                {formatoValor(
+                                                    item.itens?.reduce(
+                                                        (acc, item) =>
+                                                            Number(item.valor) +
+                                                            acc,
+                                                        0
+                                                    )
+                                                )}
                                             </Td>
                                             <Td>
                                                 <Link
-                                                     href={`https://www.imo7.com.br/api/extrato/${item.id}/pdf`}
+                                                    href={`https://www.imo7.com.br/api/extrato/${item.id}/pdf`}
                                                     // href={`http://localhost:3000/api/extrato/${item.id}/pdf`}
                                                     target="_blank"
                                                     passHref
@@ -358,7 +365,10 @@ const Cobrancas = () => {
                             </Tbody>
                         </Table>
                         <Flex justify="center" py={4} align="center" gap={4}>
-                            <Text> Página {currentPage} de {pages.length}</Text>
+                            <Text>
+                                {" "}
+                                Página {currentPage} de {pages.length}
+                            </Text>
                             <Pagination
                                 pagesCount={pagesCount}
                                 currentPage={currentPage}
