@@ -21,6 +21,13 @@ import { TbForms } from "react-icons/tb";
 import { MenuItem } from "./Menuitem";
 
 const menu = [
+        {
+        titulo: "Regua",
+        href: "/admin/regua",
+        icon: MdOutlineRule,
+        cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.regua"],
+    },
     {
         titulo: "Tarefas",
         href: "/admin/tarefas",
@@ -116,6 +123,7 @@ const menu = [
         cargos: ["imobiliaria"],
         modulos: ["imobiliaria.imoveis"],
     },
+
     {
         titulo: "Cadastros",
         icon: BsFillGearFill,
@@ -152,6 +160,7 @@ const menu = [
             },
         ],
     },
+    
     {
         titulo: "Configurações",
         href: "/admin/configuracoes",
@@ -206,10 +215,12 @@ const menu = [
 
 export const Listagemmenu = () => {
     const { usuario } = useAuth();
+    
     return (
         <>
             <List display="flex" flexDir="column">
                 {menu.map((item) => {
+                    
                     if (
                         item.cargos.length == 0 ||
                         (isArray(usuario?.cargos) &&
