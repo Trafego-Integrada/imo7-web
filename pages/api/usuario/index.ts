@@ -8,6 +8,7 @@ handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
+        console.log(req.headers);
         const { imobiliaria } = req.headers;
         let {
             filtro,
@@ -23,7 +24,7 @@ handle.get(async (req, res) => {
             adm,
             contaId,
             imobiliariaId,
-            status
+            status,
         } = req.query;
         let filtroQuery = {};
         imobiliariaId = req.user.imobiliariaId
@@ -148,7 +149,7 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-        if (imobiliaria != 'null' && imobiliaria) {
+        if (imobiliaria != "null" && imobiliaria) {
             filtroQuery = {
                 ...filtroQuery,
                 imobiliaria: { url: imobiliaria },
@@ -157,10 +158,10 @@ handle.get(async (req, res) => {
         if (status) {
             filtroQuery = {
                 ...filtroQuery,
-                status:JSON.parse(status),
+                status: JSON.parse(status),
             };
-        } 
-        console.log(filtroQuery)
+        }
+        console.log(filtroQuery);
         const data = await prisma.usuario.findMany({
             where: {
                 ...filtroQuery,
@@ -222,9 +223,9 @@ handle.post(async (req, res) => {
                 },
             },
         });
-        console.log(contaId)
+        console.log(contaId);
         if (!contaId && !imobiliariaId) {
-            console.log(1)
+            console.log(1);
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {
@@ -238,7 +239,7 @@ handle.post(async (req, res) => {
                         status,
                         cargos: {
                             connect: {
-                                codigo:"adm"
+                                codigo: "adm",
                             },
                         },
                     },
@@ -254,7 +255,7 @@ handle.post(async (req, res) => {
                         senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
                         cargos: {
                             connect: {
-                                codigo:"adm"
+                                codigo: "adm",
                             },
                         },
                     },
@@ -262,7 +263,7 @@ handle.post(async (req, res) => {
                 res.send(data);
             }
         } else if (contaId) {
-            console.log(2)
+            console.log(2);
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {
@@ -281,7 +282,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                codigo:"conta"
+                                codigo: "conta",
                             },
                         },
                     },
@@ -303,7 +304,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                codigo:"conta"
+                                codigo: "conta",
                             },
                         },
                     },
@@ -312,7 +313,7 @@ handle.post(async (req, res) => {
                 res.send(data);
             }
         } else if (imobiliariaId) {
-            console.log(3)
+            console.log(3);
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {
@@ -331,7 +332,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                codigo:"imobiliaria"
+                                codigo: "imobiliaria",
                             },
                         },
                     },
@@ -352,7 +353,7 @@ handle.post(async (req, res) => {
                         },
                         cargos: {
                             connect: {
-                                codigo:"imobiliaria"
+                                codigo: "imobiliaria",
                             },
                         },
                     },

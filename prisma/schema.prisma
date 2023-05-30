@@ -819,14 +819,20 @@ model TipoEnvioNotificacao {
     descricao        String
     status           Int?
     RegraNotificacao RegraNotificacao[]
-    Notificacao      Notificacao[]
+    notificacao      Notificacao[]
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime?          @updatedAt
+    deletedAt        DateTime?
 }
 
 model CanalMidia {
     id          Int           @id @default(autoincrement())
     descricao   String
     status      Int?
-    Notificacao Notificacao[]
+    notificacao Notificacao[]
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime?     @updatedAt
+    deletedAt   DateTime?
 }
 
 model RegraNotificacao {
@@ -838,8 +844,11 @@ model RegraNotificacao {
     diasReferencia Int?
     assunto        String?
     mensagem       String                @db.Text
-    horaEnvio      DateTime              @db.Time()
-    Notificacao    Notificacao[]
+    horaEnvio      DateTime?             @db.Time()
+    createdAt      DateTime              @default(now())
+    updatedAt      DateTime?             @updatedAt
+    deletedAt      DateTime?
+    notificacao    Notificacao[]
 }
 
 model Notificacao {
@@ -859,6 +868,7 @@ model Notificacao {
     boletoId         Int?
     contrato         Contrato?             @relation(fields: [contratoId], references: [id])
     contratoId       Int?
+    status           Int                   @default(1)
     dataEnvio        DateTime?
     createdAt        DateTime              @default(now())
     updatedAt        DateTime?             @updatedAt

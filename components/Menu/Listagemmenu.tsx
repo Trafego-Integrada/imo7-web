@@ -199,8 +199,8 @@ const menu = [
         titulo: "Notificações",
         href: "/admin/notificacao",
         icon: MdOutlineNotificationsActive,
-        cargos: ["adm"],
-        modulos: ["adm.imobiliarias"],
+        cargos: ["imobiliaria", "adm"],
+        modulos: ["imobiliaria.configuracoes"],
     },
 ];
 
