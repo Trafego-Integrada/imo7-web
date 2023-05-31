@@ -9,12 +9,8 @@ handle.use(checkAuth);
 
 handle.get(async (req, res) => {
     try {
-        let {
-            filtro,
-            pagina, 
-            linhas,query, tipoCadastro, categoria
-            
-        } = req.query;
+        let { filtro, pagina, linhas, query, tipoCadastro, categoria } =
+            req.query;
         let filtroQuery = {};
 
         let paginacao = {};
@@ -28,11 +24,14 @@ handle.get(async (req, res) => {
             };
         }
 
-        const data = await prisma.regua.findMany(   {
+        const data = await prisma.regraNotificacao.findMany({
             where: {
                 ...filtroQuery,
-                
-                imobiliariaId:req.user.imobiliariaId
+
+                imobiliariaId: req.user.imobiliariaId,
+            },
+            include: {
+                tipoEnvio: true,
             },
             ...paginacao,
             // include:{
@@ -41,27 +40,55 @@ handle.get(async (req, res) => {
             //     chamado:true
             // }
         });
-        const total = await prisma.orcamento.count({
+        const total = await prisma.regraNotificacao.count({
             where: {
                 ...filtroQuery,
-                
-                imobiliariaId:req.user.imobiliariaId
+
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
         res.send({
             success: true,
-            data: {
-                total,
-                data,
-            },
+            data,
+            total,
         });
-        
-    } catch(err) {
+    } catch (err) {
         res.status(500).send({
             success: false,
             message: err.message,
         });
     }
+});
 
+//CREATE
+handle.post(async (req, res) => {
+    try {
+        console.log("foi");
+        const { tipo, dias, assunto, mensagem, hora } = req.body;
+        const imobiliaria = req.user.imobiliariaId;
+        const data = await prisma.regraNotificacao.create({
+            data: {
+                imobiliariaId: imobiliaria,
+                tipoEnvioId: Number(tipo),
+                diasReferencia: Number(dias),
+                assunto: assunto,
+                mensagem: mensagem,
+                horaEnvio: hora || null,
+            },
+        });
 
+        res.send({
+            data,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({
+            success: false,
+            message: err.message,
+        });
+    }
+});
+
+//Selecionar ou buscar
+// handle.get('
 export default handle;

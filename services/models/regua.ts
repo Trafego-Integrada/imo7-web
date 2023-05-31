@@ -1,29 +1,28 @@
 import { api } from "@/services/apiClient";
 
-export const listarAssuntos = async ({ queryKey }) => {
-    const { data } = await api.get("assunto", {
+export const listaregras = async ({ queryKey }) => {
+    const { data } = await api.get("regua", {
         params: queryKey[1],
     });
     return data;
 };
 
-export const buscarAssunto = async (id) => {
-    const { data } = await api.get("assunto/" + id);
+export const buscar = async (id) => {
+    const { data } = await api.get("regua/" + id);
     return data;
 };
 
-export const cadastrarAssunto = async (form) => {
-    const { data } = await api.post("assunto", form);
+export const cadastrarRegua = async (form) => {
+    const { data } = await api.post("regua", form);
     return data;
 };
 
-export const atualizarAssunto = async ({ id, ...rest }) => {
-    const { data } = await api.post("assunto/" + id, { ...rest });
+export const atualizarRegua = async ({ id, ...rest }) => {
+    const { data } = await api.post("regua/" + id, { ...rest });
     return data;
 };
 
-export const excluirAssunto = async (id) => {
-    const { data } = await api.delete("assunto/" + id);
+export const excluirRegua = async (id) => {
+    const { data } = await api.delete("regua/" + id);
     return data;
 };
-

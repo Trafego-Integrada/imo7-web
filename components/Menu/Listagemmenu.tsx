@@ -16,6 +16,7 @@ import {
     MdCategory,
     MdDashboard,
     MdOutlineNotificationsActive,
+    MdOutlineRule,
 } from "react-icons/md";
 import { TbForms } from "react-icons/tb";
 import { MenuItem } from "./Menuitem";
