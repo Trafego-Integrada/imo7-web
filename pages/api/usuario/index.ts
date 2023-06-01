@@ -8,6 +8,7 @@ handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
+        console.log(req.headers);
         const { imobiliaria } = req.headers;
         let {
             filtro,
