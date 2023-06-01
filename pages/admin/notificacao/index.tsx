@@ -20,7 +20,9 @@ import { useQuery } from "react-query";
 import moment from "moment";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
-const Notificacao = () => {
+import { InferGetServerSidePropsType } from "next";
+
+const Notificacao = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const [filtro, setFiltro] = useState({
         filtro: {},
     });
@@ -51,7 +53,7 @@ const Notificacao = () => {
                             templateColumns={{
                                 sm: "repeat(1, 1fr)",
                                 md: "repeat(2, 1fr)",
-                                lg: "repeat(5, 1fr)",
+                                lg: "repeat(4, 1fr)",
                             }}
                         >
                             <GridItem>
@@ -106,9 +108,9 @@ const Notificacao = () => {
                                 </FormSelect>
                             </GridItem>
 
-                            <GridItem>
+                            <GridItem colSpan={4} textAlign={"right"}>
                                 <Button
-                                    mt={8}
+                                    
                                     size="md"
                                     bg="none"
                                     border="1px solid red"
@@ -125,8 +127,8 @@ const Notificacao = () => {
                                 </Button>
 
                                 <Button
-                                    mt="8"
                                     ml="5"
+                                    
                                     size="md"
                                     bg="none"
                                     border="1px solid black"
