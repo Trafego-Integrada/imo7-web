@@ -21,6 +21,9 @@ handle.get(async (req, res) => {
         });
 
         res.send({
+            tipo: data.tipoEnvioId,
+            dias: data.diasReferencia,
+            hora: data.horaEnvio ?? "",
             ...data,
         });
     } catch (error) {
@@ -31,53 +34,46 @@ handle.get(async (req, res) => {
     }
 });
 
-
-
 //UPDATE
 handle.post(async (req, res) => {
     try {
         const { id } = req.query;
+        console.log("update", id);
         const { tipo, dias, assunto, mensagem, hora } = req.body;
-        const imobiliaria = req.user.imobiliariaId;
         const data = await prisma.regraNotificacao.update({
-             where: {
+            where: {
                 id: Number(id),
-                },
+            },
             data: {
-                imobiliariaId: imobiliaria,
                 tipoEnvioId: tipo,
-                diasReferencia: dias,
+                diasReferencia: Number(dias),
                 assunto: assunto,
                 mensagem: mensagem,
-                horaEnvio: hora ?? null
+                horaEnvio: hora || null,
             },
         });
 
-    res.send{
-        data
-    }
+        res.send({
+            ...data,
+        });
     } catch (error) {
-         res.status(500).send({
+        console.error(error);
+        res.status(500).send({
             success: false,
-            message: err.message,
+            message: error.message,
         });
     }
-
-
 });
 //DELETE
-
-handle.delete(async(req, res) => {
+handle.delete(async (req, res) => {
     //softdelete
-    const {id} = req.query;
-    const data = await prisma.regraNotificacao.update({
-        where: {id: Number(id)},
-        data:{
-            deletedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-        }
-    })
+    const { id } = req.query;
+    console.log("delete", id);
+    const data = await prisma.regraNotificacao.delete({
+        where: { id: Number(id) },
+    });
 
     res.send(data);
-})
+});
 
 export default handle;

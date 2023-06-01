@@ -8,6 +8,7 @@ import { atualizarRegua, buscar, cadastrarRegua } from "@/services/models/regua"
 import { queryClient } from "@/services/queryClient";
 
 
+
 const ModalBase = ({idRegra}, ref) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -27,6 +28,7 @@ const ModalBase = ({idRegra}, ref) => {
     const buscarRegua = useMutation(buscar, {
         onSuccess: (data) => {
             reset(data);
+            reset();
             onOpen();
         },
     });
@@ -34,6 +36,7 @@ const ModalBase = ({idRegra}, ref) => {
      const cadastrar = useMutation(cadastrarRegua, {
         onSuccess: () => {
             queryClient.invalidateQueries(["regua"]);
+            reset();
             toast({ title: "Cadastrado com sucesso", status: "success" });
             onClose();
         },
@@ -41,10 +44,13 @@ const ModalBase = ({idRegra}, ref) => {
     const atualizar = useMutation(atualizarRegua, {
         onSuccess: () => {
             queryClient.invalidateQueries(["regua"]);
+             reset();
             toast({ title: "Atualizado com sucesso", status: "success" });
             onClose();
         },
     });
+
+    
 
      const onSubmit = async (data) => {
         try {
@@ -60,8 +66,13 @@ const ModalBase = ({idRegra}, ref) => {
 
     
     useImperativeHandle(ref, () => ({
-        onOpen: () => {
-            onOpen();
+    onOpen: async(id = null) => {
+            if (id) {
+                await buscarRegua.mutateAsync(id)
+                onOpen();
+            } else {
+                onOpen();
+            }
         },
     }));
 
