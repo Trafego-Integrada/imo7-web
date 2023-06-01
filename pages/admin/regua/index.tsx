@@ -45,6 +45,7 @@ const Regua = (props: InferGetServerSidePropsType<typeof getServerSideProps>)=>{
                 <Table variant="striped" mt={5} bg="white" borderRadius={20}>
                     <Thead>
                         <Th>Tipo de Envio</Th>
+                        <Th>Canal Mídia</Th>
                         <Th>Referencia de dias</Th>
                         <Th>Assunto</Th>
                         <Th>Mensagem</Th>
@@ -54,12 +55,13 @@ const Regua = (props: InferGetServerSidePropsType<typeof getServerSideProps>)=>{
                     <Tbody>
                         {isLoading && (
                             <Tr> 
-                                <Td><Spinner/></Td>
+                                <Td colSpan={7}><Spinner/></Td>
                             </Tr>
                         )}
                         {reg?.data?.map(r => (
                             <Tr>
                                 <Td>{r.tipoEnvio.descricao}</Td>
+                                <Td>{r.canalMidia?.descricao}</Td>
                                 <Td>{r.diasReferencia}</Td>
                                 <Td>{r.assunto}</Td>
                                 <Td>{r.mensagem}</Td>

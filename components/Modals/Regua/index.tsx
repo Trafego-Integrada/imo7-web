@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "react-query"
 import InputMask from "react-input-mask"
 import { atualizarRegua, buscar, cadastrarRegua } from "@/services/models/regua";
 import { queryClient } from "@/services/queryClient";
+import { listarCanalMidia } from "@/services/models/canalMidia";
 
 
 
@@ -13,6 +14,7 @@ const ModalBase = ({idRegra}, ref) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { data } = useQuery("tipoEnvioNotificacao", tipoNotificacao)
+    const { data:canal } = useQuery("canalMidia", listarCanalMidia)
 
      const {
         control,
@@ -26,13 +28,11 @@ const ModalBase = ({idRegra}, ref) => {
 
 
     const buscarRegua = useMutation(buscar, {
-        onSuccess: (data) => {
-            reset(data);
-            reset();
+        onSuccess: (data) => {     
+             reset(data);
             onOpen();
         },
     });
-
      const cadastrar = useMutation(cadastrarRegua, {
         onSuccess: () => {
             queryClient.invalidateQueries(["regua"]);
@@ -67,10 +67,15 @@ const ModalBase = ({idRegra}, ref) => {
     
     useImperativeHandle(ref, () => ({
     onOpen: async(id = null) => {
+        
             if (id) {
-                await buscarRegua.mutateAsync(id)
+                // console.log("current    ",ref.current.value);
+                 await buscarRegua.mutateAsync(id)
+                
                 onOpen();
             } else {
+                reset({});
+                reset();
                 onOpen();
             }
         },
@@ -103,6 +108,18 @@ const ModalBase = ({idRegra}, ref) => {
                         <Input {...register("dias")}/>
                 </FormControl>
                 </GridItem>
+
+                <GridItem colSpan="3">
+                         <FormControl isRequired>
+                    <FormLabel>Canal Mídia</FormLabel>
+                        <Select placeholder='Selecione' {...register("canalMidia")}>
+                        {canal?.map(tp => (
+                            <option value={tp.id}>{tp.descricao}</option>
+                        ))}
+
+                        </Select>
+                </FormControl>
+                    </GridItem>
                 <GridItem colSpan="6">
 
                 <FormControl isRequired>

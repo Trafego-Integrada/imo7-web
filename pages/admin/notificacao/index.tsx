@@ -28,7 +28,9 @@ const Notificacao = (props: InferGetServerSidePropsType<typeof getServerSideProp
     });
 
     const { data, isFetching, isLoading } = useQuery(
-        ["noticacao"],
+        ["noticacao",{
+            ...filtro
+        }],
         listarNotificacoes
     );
 
@@ -89,6 +91,13 @@ const Notificacao = (props: InferGetServerSidePropsType<typeof getServerSideProp
                                     label="Tipo de Midia"
                                     bg="white"
                                     placeholder="Selecione..."
+                                     onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            tipo: e.target.value,
+                                        })
+                                    }
+
                                 >
                                     <option value="1">E-mail</option>
                                     <option value="2">WhatsApp</option>
@@ -101,6 +110,12 @@ const Notificacao = (props: InferGetServerSidePropsType<typeof getServerSideProp
                                     label="Status"
                                     bg="white"
                                     placeholder="Selecione..."
+                                     onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            status: e.target.value,
+                                        })
+                                    }
                                 >
                                     <option value="1">Aguardando</option>
                                     <option value="2">Enviado</option>

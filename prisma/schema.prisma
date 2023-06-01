@@ -826,13 +826,15 @@ model TipoEnvioNotificacao {
 }
 
 model CanalMidia {
-    id          Int           @id @default(autoincrement())
-    descricao   String
-    status      Int?
-    notificacao Notificacao[]
-    createdAt   DateTime      @default(now())
-    updatedAt   DateTime?     @updatedAt
-    deletedAt   DateTime?
+    id               Int                @id @default(autoincrement())
+    descricao        String
+    assunto          String?
+    status           Int?
+    notificacao      Notificacao[]
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime?          @updatedAt
+    deletedAt        DateTime?
+    RegraNotificacao RegraNotificacao[]
 }
 
 model RegraNotificacao {
@@ -841,6 +843,8 @@ model RegraNotificacao {
     imobiliariaId  Int?
     tipoEnvio      TipoEnvioNotificacao? @relation(fields: [tipoEnvioId], references: [id])
     tipoEnvioId    Int?
+    canalMidia     CanalMidia?           @relation(fields: [canalMidiaId], references: [id])
+    canalMidiaId   Int?
     diasReferencia Int?
     assunto        String?
     mensagem       String                @db.Text

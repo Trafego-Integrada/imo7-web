@@ -24,6 +24,7 @@ handle.get(async (req, res) => {
             tipo: data.tipoEnvioId,
             dias: data.diasReferencia,
             hora: data.horaEnvio ?? "",
+            canalMidia: data.canalMidiaId,
             ...data,
         });
     } catch (error) {

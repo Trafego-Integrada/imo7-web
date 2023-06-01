@@ -32,6 +32,7 @@ handle.get(async (req, res) => {
             },
             include: {
                 tipoEnvio: true,
+                canalMidia: true,
             },
             ...paginacao,
             // include:{
@@ -64,7 +65,7 @@ handle.get(async (req, res) => {
 handle.post(async (req, res) => {
     try {
         console.log("foi");
-        const { tipo, dias, assunto, mensagem, hora } = req.body;
+        const { tipo, dias, assunto, mensagem, hora, canalMidia } = req.body;
         const imobiliaria = req.user.imobiliariaId;
         const data = await prisma.regraNotificacao.create({
             data: {
@@ -74,6 +75,7 @@ handle.post(async (req, res) => {
                 assunto: assunto,
                 mensagem: mensagem,
                 horaEnvio: hora || null,
+                canalMidiaId: Number(canalMidia),
             },
         });
 
