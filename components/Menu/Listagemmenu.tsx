@@ -12,11 +12,23 @@ import {
 } from "react-icons/fa";
 import { FiTag } from "react-icons/fi";
 import { HiOutlineDocumentText } from "react-icons/hi";
-import { MdCategory, MdDashboard } from "react-icons/md";
+import {
+    MdCategory,
+    MdDashboard,
+    MdOutlineNotificationsActive,
+    MdOutlineRule,
+} from "react-icons/md";
 import { TbForms } from "react-icons/tb";
 import { MenuItem } from "./Menuitem";
 
 const menu = [
+        {
+        titulo: "Regua",
+        href: "/admin/regua",
+        icon: MdOutlineRule,
+        cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.regua"],
+    },
     {
         titulo: "Tarefas",
         href: "/admin/tarefas",
@@ -112,6 +124,7 @@ const menu = [
         cargos: ["imobiliaria"],
         modulos: ["imobiliaria.imoveis"],
     },
+
     {
         titulo: "Cadastros",
         icon: BsFillGearFill,
@@ -148,6 +161,7 @@ const menu = [
             },
         ],
     },
+    
     {
         titulo: "Configurações",
         href: "/admin/configuracoes",
@@ -191,14 +205,23 @@ const menu = [
         cargos: ["adm"],
         modulos: ["adm.imobiliarias"],
     },
+    {
+        titulo: "Notificações",
+        href: "/admin/notificacao",
+        icon: MdOutlineNotificationsActive,
+        cargos: ["imobiliaria", "adm"],
+        modulos: ["imobiliaria.configuracoes"],
+    },
 ];
 
 export const Listagemmenu = () => {
     const { usuario } = useAuth();
+    
     return (
         <>
             <List display="flex" flexDir="column">
                 {menu.map((item) => {
+                    
                     if (
                         item.cargos.length == 0 ||
                         (isArray(usuario?.cargos) &&
