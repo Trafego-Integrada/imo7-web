@@ -3,6 +3,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { deleteCookie } from "cookies-next";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { api } from "@/services/apiClient";
+import { useToast } from "@chakra-ui/react";
 
 type SignInCredentials = {
     documento: string;
@@ -43,6 +44,7 @@ export async function signOut(ctx = null) {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+    const toast = useToast();
     const [usuario, setUsuario] = useState<Usuario>({} as Usuario);
     const autenticado = !!usuario;
 

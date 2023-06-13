@@ -356,6 +356,37 @@ handle.post(async (req, res) => {
             },
         });
 
+        const reguas = await prisma.reguaCobranca.findMany({
+            where: {
+                tipo: "boleto",
+                imobiliariaId: Number(imobiliariaId),
+            },
+        });
+
+        if (reguas.length > 0) {
+            await Promise.all(
+                reguas.map(async (regua) => {
+                    await prisma.filaEnvio.create({
+                        data: {
+                            nomeDestinatario: nome_razao_sacado,
+                            destinatario: email_sacado,
+                            parametros: {
+                                idBoleto: boleto.id,
+                            },
+                            reguaCobranca: {
+                                connect: {
+                                    id: regua.id,
+                                },
+                            },
+                            previsaoEnvio: moment(data_vencimen)
+                                .subtract(regua.dias, "days")
+                                .format(),
+                        },
+                    });
+                })
+            );
+        }
+
         res.send(boleto);
     }
 });

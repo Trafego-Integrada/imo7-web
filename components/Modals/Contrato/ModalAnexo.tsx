@@ -1,10 +1,15 @@
 import { formatoData, formatoValor } from "@/helpers/helpers";
-import { anexarArquivoContrato } from "@/services/models/contrato";
+import {
+    anexarArquivoContrato,
+    buscarAnexoContrato,
+    listarParticipantesContratos,
+} from "@/services/models/contrato";
 import { queryClient } from "@/services/queryClient";
 import {
     Box,
     Button,
     Flex,
+    GridItem,
     Heading,
     List,
     ListItem,
@@ -21,11 +26,12 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { forwardRef, useImperativeHandle, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useDropzone } from "react-dropzone";
 import { FormInput } from "@/components/Form/FormInput";
+import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 
 const ModalBase = ({ contratoId, chamadoId }, ref) => {
     const router = useRouter();
@@ -42,12 +48,19 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
     const [contrato, setContrato] = useState({});
 
     const {
+        control,
         reset,
         watch,
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm();
+
+    const buscar = useMutation(buscarAnexoContrato, {
+        onSuccess: (data) => {
+            reset(data);
+        },
+    });
 
     const upload = useMutation(anexarArquivoContrato, {
         onSuccess: () => {
@@ -69,9 +82,15 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
     };
     useImperativeHandle(ref, () => ({
         onOpen: async (id = null) => {
-            setNome("");
+            if(id) {
+                setNome("");
+                setFile([]);
+                onOpen();
+            } else {
+                setNome("");
             setFile([]);
             onOpen();
+            }
         },
     }));
 
@@ -80,6 +99,20 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
             {file.path} - {file.size} bytes
         </ListItem>
     ));
+    const { data: participantes } = useQuery(
+        [
+            "participantesContrato",
+            {
+                contratoId,
+            },
+        ],
+        listarParticipantesContratos,
+        {
+            enabled: !!contratoId,
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
+    );
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -115,6 +148,38 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
                             <Heading size="md">Anexo</Heading>
                             <List>{files}</List>
                         </Box>
+                        <GridItem colSpan={2}>
+                            <Controller
+                                control={control}
+                                name="usuariosPermitidos"
+                                render={({ field }) => (
+                                    <FormMultiSelect
+                                        size="sm"
+                                        {...field}
+                                        isMulti
+                                        options={participantes && participantes}
+                                        getOptionLabel={(e) =>
+                                            e.nome +
+                                            (e.contratosInquilino.length
+                                                ? " (Inquilino)"
+                                                : e.contratosProprietario.length
+                                                ? " (Proproprietário)"
+                                                : e.contratosFiador.length
+                                                ? " (Fiador)"
+                                                : "?")
+                                        }
+                                        getOptionValue={(e) => e.id}
+                                        placeholder="Selecione os participantes"
+                                        error={
+                                            errors.usuariosPermitidos?.message
+                                        }
+                                        disabled={
+                                            watch("contrato") ? false : true
+                                        }
+                                    />
+                                )}
+                            />
+                        </GridItem>
                     </ModalBody>
 
                     <ModalFooter>

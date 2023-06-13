@@ -2,6 +2,7 @@ import { FormDateRange } from "@/components/Form/FormDateRange";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
+import { ModalBoleto } from "@/components/Modals/ModalBoleto";
 import { formatoData, formatoValor } from "@/helpers/helpers";
 import { listarBoletos } from "@/services/models/boleto";
 import { withSSRAuth } from "@/utils/withSSRAuth";
@@ -10,7 +11,7 @@ import {
     PaginationContainer,
     PaginationNext,
     PaginationPrevious,
-    usePagination
+    usePagination,
 } from "@ajna/pagination";
 import {
     Box,
@@ -32,7 +33,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiEye } from "react-icons/fi";
 import { VscFilePdf } from "react-icons/vsc";
 import { useQuery } from "react-query";
 
@@ -293,9 +294,10 @@ const Cobrancas = () => {
                                         <Tr key={item.id}>
                                             <Td>{item.contrato?.codigo}</Td>
                                             <Td>
-                                                {item.data_vencimen && formatoData(
-                                                    item.data_vencimen
-                                                )}
+                                                {item.data_vencimen &&
+                                                    formatoData(
+                                                        item.data_vencimen
+                                                    )}
                                             </Td>
                                             <Td>
                                                 {item.contrato?.inquilinos?.map(
@@ -330,17 +332,30 @@ const Cobrancas = () => {
                                                 {formatoValor(item.valor_doc2)}
                                             </Td>
                                             <Td>
-                                                <Link
-                                                    href={`https://www.imo7.com.br/api/boleto/${item.id}/pdf`}
-                                                    target="_blank"
-                                                    passHref
-                                                >
+                                                <Flex gap={2}>
                                                     <IconButton
-                                                        size="sm"
-                                                        as={VscFilePdf}
-                                                        color="red"
+                                                        size="xs"
+                                                        as={FiEye}
+                                                        onClick={() =>
+                                                            modal.current.onOpen(
+                                                                item.id
+                                                            )
+                                                        }
                                                     />
-                                                </Link>
+                                                    {item.barcode && (
+                                                        <Link
+                                                            href={`https://www.imo7.com.br/api/boleto/${item.id}/pdf`}
+                                                            target="_blank"
+                                                            passHref
+                                                        >
+                                                            <IconButton
+                                                                size="xs"
+                                                                as={VscFilePdf}
+                                                                color="red"
+                                                            />
+                                                        </Link>
+                                                    )}
+                                                </Flex>
                                             </Td>
                                         </Tr>
                                     ))
@@ -354,7 +369,10 @@ const Cobrancas = () => {
                             </Tbody>
                         </Table>
                         <Flex justify="center" py={4} align="center" gap={4}>
-                            <Text> Página {currentPage} de {pages.length}</Text>
+                            <Text>
+                                {" "}
+                                Página {currentPage} de {pages.length}
+                            </Text>
                             <Pagination
                                 pagesCount={pagesCount}
                                 currentPage={currentPage}
@@ -382,6 +400,7 @@ const Cobrancas = () => {
                         </Flex>
                     </Box>
                 </Box>
+                <ModalBoleto ref={modal} />
             </Layout>
         </>
     );

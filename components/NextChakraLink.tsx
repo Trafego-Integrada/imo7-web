@@ -1,37 +1,17 @@
 import { PropsWithChildren } from "react";
 import NextLink from "next/link";
 import { LinkProps as NextLinkProps } from "next/link";
-import {
-    Link as ChakraLink,
-    LinkProps as ChakraLinkProps,
-} from "@chakra-ui/react";
+import { Link } from "@chakra-ui/react";
 
 export type NextChakraLinkProps = PropsWithChildren<
     NextLinkProps & Omit<ChakraLinkProps, "as">
 >;
 
 //  Has to be a new component because both chakra and next share the `as` keyword
-export const NextChakraLink = ({
-    href,
-    as,
-    replace,
-    scroll,
-    shallow,
-    prefetch,
-    children,
-    ...chakraProps
-}: NextChakraLinkProps) => {
+export const NextChakraLink = ({ children, ...props }: NextChakraLinkProps) => {
     return (
-        <NextLink
-            passHref={true}
-            href={href}
-            as={as}
-            replace={replace}
-            scroll={scroll}
-            shallow={shallow}
-            prefetch={prefetch}
-        >
-            <ChakraLink {...chakraProps}>{children}</ChakraLink>
-        </NextLink>
+        <Link as={NextLink} {...props}>
+            {children}
+        </Link>
     );
 };

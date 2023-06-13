@@ -12,16 +12,19 @@ handle.get(async (req, res) => {
     try {
         let {
             query,
-            pagina, 
+            pagina,
             linhas,
             chamadoId,
             dataCriacao,
             dataVencimento,
-            dataEntrega,status,codigoContrato,codigoImovel, responsaveis
-            
+            dataEntrega,
+            status,
+            codigoContrato,
+            codigoImovel,
+            responsaveis,
         } = req.query;
-        let filtroQuery: Prisma.TarefaWhereInput = {AND:[]};
-      
+        let filtroQuery: Prisma.TarefaWhereInput = { AND: [] };
+
         if (query) {
             filtroQuery = {
                 ...filtroQuery,
@@ -39,7 +42,7 @@ handle.get(async (req, res) => {
                 ],
             };
         }
-      
+
         let paginacao = {};
         if (pagina && linhas) {
             paginacao = {
@@ -50,37 +53,37 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
-        if(chamadoId) {
+        if (chamadoId) {
             filtroQuery = {
                 ...filtroQuery,
-                chamadoId:Number(chamadoId)
-            }
+                chamadoId: Number(chamadoId),
+            };
         }
-        if(status) {
+        if (status) {
             filtroQuery = {
                 ...filtroQuery,
-                status
-            }
+                status,
+            };
         }
-        if(codigoImovel) {
+        if (codigoImovel) {
             filtroQuery = {
                 ...filtroQuery,
-                chamado:{
-                    codigoImovel:{
-                        contains:codigoImovel
-                    }
-                }
-            }
+                chamado: {
+                    codigoImovel: {
+                        contains: codigoImovel,
+                    },
+                },
+            };
         }
-        if(codigoContrato) {
+        if (codigoContrato) {
             filtroQuery = {
                 ...filtroQuery,
-                chamado:{
-                    codigoContrato:{
-                        contains:codigoContrato
-                    }
-                }
-            }
+                chamado: {
+                    codigoContrato: {
+                        contains: codigoContrato,
+                    },
+                },
+            };
         }
         if (responsaveis) {
             responsaveis = JSON.parse(responsaveis);
@@ -90,14 +93,14 @@ handle.get(async (req, res) => {
                     ...filtroQuery.AND,
                     {
                         responsaveis: {
-                            some:{
-                                id:{
-                                    in:responsaveis.map(r => {
-                                        return r.id
-                                    })
-                                }
-                            }
-                        }
+                            some: {
+                                id: {
+                                    in: responsaveis.map((r) => {
+                                        return r.id;
+                                    }),
+                                },
+                            },
+                        },
                     },
                 ],
             };
@@ -130,7 +133,9 @@ handle.get(async (req, res) => {
                     {
                         dataVencimento: {
                             gte: dataVencimento[0]
-                                ? moment(dataVencimento[0]).startOf("d").format()
+                                ? moment(dataVencimento[0])
+                                      .startOf("d")
+                                      .format()
                                 : null,
                             lte: dataVencimento[1]
                                 ? moment(dataVencimento[1]).endOf("d").format()
@@ -162,21 +167,21 @@ handle.get(async (req, res) => {
         const data = await prisma.tarefa.findMany({
             where: {
                 ...filtroQuery,
-                imobiliariaId:req.user.imobiliariaId
+                imobiliariaId: req.user.imobiliariaId,
             },
             ...paginacao,
-            include:{
-                departamento:true,
-                membros:true,
-                responsaveis:true,
-                tags:true,
-                chamado:true
-            }
+            include: {
+                departamento: true,
+                membros: true,
+                responsaveis: true,
+                tags: true,
+                chamado: true,
+            },
         });
         const total = await prisma.tarefa.count({
             where: {
                 ...filtroQuery,
-                imobiliariaId:req.user.imobiliariaId
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
         res.send({
@@ -197,71 +202,115 @@ handle.get(async (req, res) => {
 handle.post(async (req, res) => {
     try {
         const {
-           dataEntrega, dataVencimento, departamento, descricao, prioridade, titulo, status,
-           membros,responsaveis, tipoServico, chamadoId, tags
+            dataEntrega,
+            dataVencimento,
+            departamento,
+            descricao,
+            prioridade,
+            titulo,
+            status,
+            membros,
+            responsaveis,
+            tipoServico,
+            chamadoId,
+            tags,
+            contrato,
+            imovel,
         } = req.body;
 
         const data = await prisma.tarefa.create({
             data: {
-                dataEntrega:dataEntrega?moment(dataEntrega).format():null,
-                dataVencimento:dataVencimento?moment(dataVencimento).format():null,
-                departamento:departamento ?{
-                    connect:{
-                        id:departamento.id
-                    }
-                }:{},
+                dataEntrega: dataEntrega ? moment(dataEntrega).format() : null,
+                dataVencimento: dataVencimento
+                    ? moment(dataVencimento).format()
+                    : null,
+                departamento: departamento
+                    ? {
+                          connect: {
+                              id: departamento.id,
+                          },
+                      }
+                    : {},
                 descricao,
                 prioridade,
-                titulo, 
+                titulo,
                 status,
-                membros:membros && membros.length > 0 ? {
-                    connect:membros.map(item => {
-                        return {
-                            id:item.id
-                        }
-                    })
-                } :{},
-                responsaveis:responsaveis && responsaveis.length> 0 ?{
-                    connect:responsaveis.map(item => {
-                        return {
-                            id:item.id
-                        }
-                    })
-                }:{},tipoServico, chamado:chamadoId? {
-                    connect:{
-                        id:Number(chamadoId)
-                    }
-                } : {},
-                tags: tags&& tags.length > 0 ? {
-                    connectOrCreate: tags.map(tag => {
-                        return {
-                            where:{
-                                id:tag.id? tag.id : '0'
-                            },
-                            create:{
-                                nome: tag.value ? tag.value :tag.nome,
-                                imobiliaria:{
-                                    connect:{
-                                        id:req.user.imobiliariaId
-                                    }
-                                }
-                            }
+                membros:
+                    membros && membros.length > 0
+                        ? {
+                              connect: membros.map((item) => {
+                                  return {
+                                      id: item.id,
+                                  };
+                              }),
+                          }
+                        : {},
+                responsaveis:
+                    responsaveis && responsaveis.length > 0
+                        ? {
+                              connect: responsaveis.map((item) => {
+                                  return {
+                                      id: item.id,
+                                  };
+                              }),
+                          }
+                        : {},
+                tipoServico,
+                chamado: chamadoId
+                    ? {
+                          connect: {
+                              id: Number(chamadoId),
+                          },
+                      }
+                    : {},
+                tags:
+                    tags && tags.length > 0
+                        ? {
+                              connectOrCreate: tags.map((tag) => {
+                                  return {
+                                      where: {
+                                          id: tag.id ? tag.id : "0",
+                                      },
+                                      create: {
+                                          nome: tag.value
+                                              ? tag.value
+                                              : tag.nome,
+                                          imobiliaria: {
+                                              connect: {
+                                                  id: req.user.imobiliariaId,
+                                              },
+                                          },
+                                      },
+                                  };
+                              }),
+                          }
+                        : {},
 
-                        }
-                    })}:{},
-                    
-                
-                imobiliaria:{
-                    connect:{
-                        id:req.user.imobiliariaId
-                    }
-                }
+                imobiliaria: {
+                    connect: {
+                        id: req.user.imobiliariaId,
+                    },
+                },
+                contrato: contrato
+                    ? {
+                          connect: {
+                              id: Number(contrato.id),
+                          },
+                      }
+                    : {},
+                imovel: imovel
+                    ? {
+                          connect: {
+                              id: Number(imovel.id),
+                          },
+                      }
+                    : {},
             },
         });
-        if(chamadoId) {
+        if (chamadoId) {
             await prisma.historicoChamado.create({
-                data:{
-                    descricao:'Criou uma tarefa # '+data.id,
+                data: {
+                    descricao: "Criou uma tarefa # " + data.id,
                     chamado: {
                         connect: {
                             id: Number(chamadoId),
@@ -272,12 +321,10 @@ handle.post(async (req, res) => {
                             id: req.user.id,
                         },
                     },
-                }
-            })
+                },
+            });
         }
         res.send(data);
-           
-      
     } catch (error) {
         res.status(500).send({
             success: false,

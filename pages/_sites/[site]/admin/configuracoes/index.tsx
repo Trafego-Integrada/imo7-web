@@ -12,6 +12,7 @@ import {
     Flex,
     Grid,
     GridItem,
+    Heading,
     Icon,
     IconButton,
     Image,
@@ -33,6 +34,7 @@ import { useForm } from "react-hook-form";
 import { FiTrash } from "react-icons/fi";
 import { useMutation } from "react-query";
 import * as yup from "yup";
+import { Envio } from "./envio";
 const schema = yup.object().shape({
     razaoSocial: yup.string().required("Campo obrigatório"),
     nomeFantasia: yup.string().required("Campo obrigatório"),
@@ -140,16 +142,7 @@ const Configuracoes = () => {
     return (
         <>
             <Layout title="Configurações">
-                <Box as="form" onSubmit={handleSubmit(onSubmit)} p={5}>
-                    <Flex justifyContent="flex-end" gap={3}>
-                        <Button
-                            colorScheme="blue"
-                            isLoading={isSubmitting}
-                            type="submit"
-                        >
-                            Atualizar
-                        </Button>
-                    </Flex>
+                <Box p={5}>
                     <Box p={5}>
                         <Tabs
                             size="sm"
@@ -160,532 +153,495 @@ const Configuracoes = () => {
                         >
                             <TabList>
                                 <Tab value="dados">Dados</Tab>
-                                <Tab value="contato">Contato</Tab>
-                                <Tab value="endereco">Endereço</Tab>
                                 <Tab value="envio">Envio</Tab>
                                 <Tab value="segundaVia">2º Via de boletos</Tab>
                                 <Tab value="fichas">Fichas Cadastrais</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel px={0}>
-                                    <Box bg="white" p={4}>
-                                        <Grid gap={5}>
-                                            <GridItem>
-                                                <Grid gridTemplateColumns="repeat(2,1fr)">
-                                                    <GridItem
-                                                        as={Flex}
-                                                        align="center"
+                                    <Flex
+                                        flexDir="column"
+                                        gap={4}
+                                        as="form"
+                                        id="formImobiliaria"
+                                        onSubmit={handleSubmit(onSubmit)}
+                                    >
+                                        <Box bg="white" p={4}>
+                                            <Flex
+                                                align="center"
+                                                justify="space-between"
+                                                mb={4}
+                                            >
+                                                <Box>
+                                                    <Heading size="md">
+                                                        Dados da Imobiliária
+                                                    </Heading>
+                                                    <Text
+                                                        fontSize="sm"
+                                                        color="gray"
                                                     >
-                                                        <Text>
-                                                            Razão Social
-                                                        </Text>
-                                                    </GridItem>
-                                                    <GridItem>
-                                                        <FormInput
-                                                            size="sm"
-                                                            placeholder="digite a razão social..."
-                                                            bg="white"
-                                                            {...register(
-                                                                "razaoSocial"
-                                                            )}
-                                                            error={
-                                                                errors
-                                                                    .razaoSocial
-                                                                    ?.message
-                                                            }
-                                                        />
-                                                    </GridItem>
-                                                </Grid>
-                                            </GridItem>
-                                            <GridItem>
-                                                <Grid gridTemplateColumns="repeat(2,1fr)">
-                                                    <GridItem
-                                                        as={Flex}
-                                                        align="center"
-                                                    >
-                                                        <Text>
-                                                            Nome Fantasia
-                                                        </Text>
-                                                    </GridItem>
-                                                    <GridItem>
-                                                        <FormInput
-                                                            size="sm"
-                                                            placeholder="digite o nome fantasia..."
-                                                            bg="white"
-                                                            {...register(
-                                                                "nomeFantasia"
-                                                            )}
-                                                            error={
-                                                                errors
-                                                                    .razaoSocial
-                                                                    ?.message
-                                                            }
-                                                        />
-                                                    </GridItem>
-                                                </Grid>
-                                            </GridItem>
-                                            <GridItem>
-                                                <Grid gridTemplateColumns="repeat(2,1fr)">
-                                                    <GridItem
-                                                        as={Flex}
-                                                        align="center"
-                                                    >
-                                                        <Text>CNPJ </Text>
-                                                    </GridItem>
-                                                    <GridItem>
-                                                        <FormInput
-                                                            size="sm"
-                                                            placeholder="digite o CNPJ..."
-                                                            bg="white"
-                                                            {...register(
-                                                                "cnpj"
-                                                            )}
-                                                            error={
-                                                                errors.cnpj
-                                                                    ?.message
-                                                            }
-                                                        />
-                                                    </GridItem>
-                                                </Grid>
-                                            </GridItem>
-                                            <GridItem>
-                                                <Grid gridTemplateColumns="repeat(2,1fr)">
-                                                    <GridItem
-                                                        as={Flex}
-                                                        align="center"
-                                                    >
-                                                        <Text>
-                                                            Inscrição Estadual{" "}
-                                                        </Text>
-                                                    </GridItem>
-                                                    <GridItem>
-                                                        <FormInput
-                                                            size="sm"
-                                                            placeholder="digite a sua inscrição estadual..."
-                                                            bg="white"
-                                                            {...register("ie")}
-                                                            error={
-                                                                errors.ie
-                                                                    ?.message
-                                                            }
-                                                        />
-                                                    </GridItem>
-                                                </Grid>
-                                            </GridItem>
-                                        </Grid>
-
-                                        <Grid gridTemplateColumns="repeat(2,1fr)">
-                                            <GridItem as={Flex} align="center">
-                                                <Text>Logo</Text>
-                                            </GridItem>
-                                            <GridItem>
-                                                {watch("logo") && (
-                                                    <Box pos="relative">
-                                                        <IconButton
-                                                            top={0}
-                                                            colorScheme="red"
-                                                            pos="absolute"
-                                                            icon={
-                                                                <Icon
-                                                                    as={FiTrash}
-                                                                />
-                                                            }
-                                                            zIndex={0}
-                                                            onClick={() => {
-                                                                setValue(
-                                                                    "removerlogo",
-                                                                    true
-                                                                );
-                                                                setValue(
-                                                                    "logo",
-                                                                    null
-                                                                );
-                                                            }}
-                                                        />
-                                                        <Image
-                                                            src={watch("logo")}
-                                                        />
-                                                    </Box>
-                                                )}
-                                                <Flex
-                                                    mt={4}
-                                                    p={12}
-                                                    borderWidth={2}
-                                                    borderStyle="dashed"
-                                                    align="center"
-                                                    {...getRootProps({
-                                                        className: "dropzone",
-                                                    })}
-                                                    justify="center"
-                                                >
-                                                    <input
-                                                        {...getInputProps()}
-                                                    />
-                                                    <Text color="gray">
-                                                        Arraste o arquivo ou
-                                                        clique aqui
+                                                        Informe os dados
+                                                        cadastrais da
+                                                        imobiliária
                                                     </Text>
-                                                </Flex>
-                                                <Box mt={4}>
-                                                    <List>{logos}</List>
                                                 </Box>
-                                            </GridItem>
-                                            <GridItem as={Flex} align="center">
-                                                <Text>Background Login</Text>
-                                            </GridItem>
-                                            <GridItem>
-                                                {watch("bg") && (
-                                                    <Box pos="relative">
-                                                        <IconButton
-                                                            top={0}
-                                                            colorScheme="red"
-                                                            pos="absolute"
-                                                            icon={
-                                                                <Icon
-                                                                    as={FiTrash}
-                                                                />
-                                                            }
-                                                            zIndex={0}
-                                                            onClick={() => {
-                                                                setValue(
-                                                                    "removerBg",
-                                                                    true
-                                                                );
-                                                                setValue(
-                                                                    "bg",
-                                                                    null
-                                                                );
-                                                            }}
-                                                        />
-                                                        <Image
-                                                            src={watch("bg")}
-                                                        />
-                                                    </Box>
-                                                )}
-                                                <Flex
-                                                    mt={4}
-                                                    p={12}
-                                                    borderWidth={2}
-                                                    borderStyle="dashed"
-                                                    align="center"
-                                                    {...getRootPropsBg({
-                                                        className: "dropzone",
-                                                    })}
-                                                    justify="center"
+                                                <Button
+                                                    type="submit"
+                                                    isLoading={isSubmitting}
+                                                    size="sm"
+                                                    id="formImobiliaria"
+                                                    colorScheme="blue"
                                                 >
-                                                    <input
-                                                        {...getInputPropsBg()}
-                                                    />
-                                                    <Text color="gray">
-                                                        Arraste o arquivo ou
-                                                        clique aqui
+                                                    Salvar
+                                                </Button>
+                                            </Flex>
+                                            <Grid gap={5}>
+                                                <GridItem>
+                                                    <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                        <GridItem
+                                                            as={Flex}
+                                                            align="center"
+                                                        >
+                                                            <Text>
+                                                                Razão Social
+                                                            </Text>
+                                                        </GridItem>
+                                                        <GridItem>
+                                                            <FormInput
+                                                                size="sm"
+                                                                placeholder="digite a razão social..."
+                                                                bg="white"
+                                                                {...register(
+                                                                    "razaoSocial"
+                                                                )}
+                                                                error={
+                                                                    errors
+                                                                        .razaoSocial
+                                                                        ?.message
+                                                                }
+                                                            />
+                                                        </GridItem>
+                                                    </Grid>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                        <GridItem
+                                                            as={Flex}
+                                                            align="center"
+                                                        >
+                                                            <Text>
+                                                                Nome Fantasia
+                                                            </Text>
+                                                        </GridItem>
+                                                        <GridItem>
+                                                            <FormInput
+                                                                size="sm"
+                                                                placeholder="digite o nome fantasia..."
+                                                                bg="white"
+                                                                {...register(
+                                                                    "nomeFantasia"
+                                                                )}
+                                                                error={
+                                                                    errors
+                                                                        .razaoSocial
+                                                                        ?.message
+                                                                }
+                                                            />
+                                                        </GridItem>
+                                                    </Grid>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                        <GridItem
+                                                            as={Flex}
+                                                            align="center"
+                                                        >
+                                                            <Text>CNPJ </Text>
+                                                        </GridItem>
+                                                        <GridItem>
+                                                            <FormInput
+                                                                size="sm"
+                                                                placeholder="digite o CNPJ..."
+                                                                bg="white"
+                                                                {...register(
+                                                                    "cnpj"
+                                                                )}
+                                                                error={
+                                                                    errors.cnpj
+                                                                        ?.message
+                                                                }
+                                                            />
+                                                        </GridItem>
+                                                    </Grid>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                        <GridItem
+                                                            as={Flex}
+                                                            align="center"
+                                                        >
+                                                            <Text>
+                                                                Inscrição
+                                                                Estadual{" "}
+                                                            </Text>
+                                                        </GridItem>
+                                                        <GridItem>
+                                                            <FormInput
+                                                                size="sm"
+                                                                placeholder="digite a sua inscrição estadual..."
+                                                                bg="white"
+                                                                {...register(
+                                                                    "ie"
+                                                                )}
+                                                                error={
+                                                                    errors.ie
+                                                                        ?.message
+                                                                }
+                                                            />
+                                                        </GridItem>
+                                                    </Grid>
+                                                </GridItem>
+                                            </Grid>
+
+                                            <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                <GridItem
+                                                    as={Flex}
+                                                    align="center"
+                                                >
+                                                    <Text>Logo</Text>
+                                                </GridItem>
+                                                <GridItem>
+                                                    {watch("logo") && (
+                                                        <Box pos="relative">
+                                                            <IconButton
+                                                                top={0}
+                                                                colorScheme="red"
+                                                                pos="absolute"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiTrash
+                                                                        }
+                                                                    />
+                                                                }
+                                                                zIndex={0}
+                                                                onClick={() => {
+                                                                    setValue(
+                                                                        "removerlogo",
+                                                                        true
+                                                                    );
+                                                                    setValue(
+                                                                        "logo",
+                                                                        null
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Image
+                                                                src={watch(
+                                                                    "logo"
+                                                                )}
+                                                            />
+                                                        </Box>
+                                                    )}
+                                                    <Flex
+                                                        mt={4}
+                                                        p={12}
+                                                        borderWidth={2}
+                                                        borderStyle="dashed"
+                                                        align="center"
+                                                        {...getRootProps({
+                                                            className:
+                                                                "dropzone",
+                                                        })}
+                                                        justify="center"
+                                                    >
+                                                        <input
+                                                            {...getInputProps()}
+                                                        />
+                                                        <Text color="gray">
+                                                            Arraste o arquivo ou
+                                                            clique aqui
+                                                        </Text>
+                                                    </Flex>
+                                                    <Box mt={4}>
+                                                        <List>{logos}</List>
+                                                    </Box>
+                                                </GridItem>
+                                                <GridItem
+                                                    as={Flex}
+                                                    align="center"
+                                                >
+                                                    <Text>
+                                                        Background Login
                                                     </Text>
+                                                </GridItem>
+                                                <GridItem>
+                                                    {watch("bg") && (
+                                                        <Box pos="relative">
+                                                            <IconButton
+                                                                top={0}
+                                                                colorScheme="red"
+                                                                pos="absolute"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiTrash
+                                                                        }
+                                                                    />
+                                                                }
+                                                                zIndex={0}
+                                                                onClick={() => {
+                                                                    setValue(
+                                                                        "removerBg",
+                                                                        true
+                                                                    );
+                                                                    setValue(
+                                                                        "bg",
+                                                                        null
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Image
+                                                                src={watch(
+                                                                    "bg"
+                                                                )}
+                                                            />
+                                                        </Box>
+                                                    )}
+                                                    <Flex
+                                                        mt={4}
+                                                        p={12}
+                                                        borderWidth={2}
+                                                        borderStyle="dashed"
+                                                        align="center"
+                                                        {...getRootPropsBg({
+                                                            className:
+                                                                "dropzone",
+                                                        })}
+                                                        justify="center"
+                                                    >
+                                                        <input
+                                                            {...getInputPropsBg()}
+                                                        />
+                                                        <Text color="gray">
+                                                            Arraste o arquivo ou
+                                                            clique aqui
+                                                        </Text>
+                                                    </Flex>
+                                                    <Box mt={4}>
+                                                        <List>{bgs}</List>
+                                                    </Box>
+                                                </GridItem>
+                                            </Grid>
+                                        </Box>
+                                        <Box>
+                                            <Box bg="white" p={5}>
+                                                <Flex
+                                                    align="center"
+                                                    justify="space-between"
+                                                    mb={4}
+                                                >
+                                                    <Box>
+                                                        <Heading size="md">
+                                                            Contato
+                                                        </Heading>
+                                                        <Text
+                                                            fontSize="sm"
+                                                            color="gray"
+                                                        >
+                                                            Informe os dados de
+                                                            contato
+                                                        </Text>
+                                                    </Box>
+                                                    <Button
+                                                        type="submit"
+                                                        isLoading={isSubmitting}
+                                                        size="sm"
+                                                        id="formImobiliaria"
+                                                        colorScheme="blue"
+                                                    >
+                                                        Salvar
+                                                    </Button>
                                                 </Flex>
-                                                <Box mt={4}>
-                                                    <List>{bgs}</List>
-                                                </Box>
-                                            </GridItem>
-                                        </Grid>
-                                    </Box>
+                                                <Grid
+                                                    gap={5}
+                                                    templateColumns={{
+                                                        sm: "repeat(1, 1fr)",
+                                                        md: "repeat(2, 1fr)",
+                                                        lg: "repeat(3, 1fr)",
+                                                    }}
+                                                >
+                                                    <GridItem>
+                                                        <FormInput
+                                                            label="Email para contato"
+                                                            placeholder="digite o email para o contato..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "email"
+                                                            )}
+                                                            error={
+                                                                errors.email
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            label="Site"
+                                                            placeholder="endereço do seu site..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "site"
+                                                            )}
+                                                            error={
+                                                                errors.site
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            label="Telefone"
+                                                            placeholder="ex: (99) 99999-9999..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "telefone"
+                                                            )}
+                                                            error={
+                                                                errors.telefone
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                </Grid>
+                                            </Box>
+                                        </Box>{" "}
+                                        <Box>
+                                            <Box bg="white" p={5}>
+                                                <Flex
+                                                    align="center"
+                                                    justify="space-between"
+                                                    mb={4}
+                                                >
+                                                    <Box>
+                                                        <Heading size="md">
+                                                            Endereço
+                                                        </Heading>
+                                                        <Text
+                                                            fontSize="sm"
+                                                            color="gray"
+                                                        >
+                                                            Informe o endereço
+                                                            da imobiliária
+                                                        </Text>
+                                                    </Box>
+                                                    <Button
+                                                        type="submit"
+                                                        isLoading={isSubmitting}
+                                                        size="sm"
+                                                        id="formImobiliaria"
+                                                        colorScheme="blue"
+                                                    >
+                                                        Salvar
+                                                    </Button>
+                                                </Flex>
+                                                <Grid
+                                                    gap={5}
+                                                    templateColumns={{
+                                                        sm: "repeat(1, 1fr)",
+                                                        md: "repeat(2, 1fr)",
+                                                        lg: "repeat(3, 1fr)",
+                                                    }}
+                                                >
+                                                    <GridItem>
+                                                        <FormInput
+                                                            label="CEP"
+                                                            placeholder="ex: 13-386-092..."
+                                                            bg="white"
+                                                            {...register("cep")}
+                                                            error={
+                                                                errors.cep
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            label="Rua"
+                                                            placeholder="digite o nome da rua..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "endereco"
+                                                            )}
+                                                            error={
+                                                                errors.endereco
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            label="Número"
+                                                            placeholder="digite o número da casa..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "numero"
+                                                            )}
+                                                            error={
+                                                                errors.numero
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            label="Bairro"
+                                                            placeholder="digite o nome do bairro..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "bairro"
+                                                            )}
+                                                            error={
+                                                                errors.bairro
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            label="Cidade"
+                                                            placeholder="digite o nome da cidade..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "cidade"
+                                                            )}
+                                                            error={
+                                                                errors.cidade
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormInput
+                                                            label="Estado"
+                                                            placeholder="digite o nome do estado..."
+                                                            bg="white"
+                                                            {...register(
+                                                                "estado"
+                                                            )}
+                                                            error={
+                                                                errors.estado
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </GridItem>
+                                                </Grid>
+                                            </Box>
+                                        </Box>
+                                    </Flex>
                                 </TabPanel>
                                 <TabPanel>
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        >
-                                            Informações contato
-                                        </Text>
-                                        <Box bg="white" p={5}>
-                                            <Grid
-                                                gap={5}
-                                                templateColumns={{
-                                                    sm: "repeat(1, 1fr)",
-                                                    md: "repeat(2, 1fr)",
-                                                    lg: "repeat(3, 1fr)",
-                                                }}
-                                            >
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Email para contato"
-                                                        placeholder="digite o email para o contato..."
-                                                        bg="white"
-                                                        {...register("email")}
-                                                        error={
-                                                            errors.email
-                                                                ?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Site"
-                                                        placeholder="endereço do seu site..."
-                                                        bg="white"
-                                                        {...register("site")}
-                                                        error={
-                                                            errors.site?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Telefone"
-                                                        placeholder="ex: (99) 99999-9999..."
-                                                        bg="white"
-                                                        {...register(
-                                                            "telefone"
-                                                        )}
-                                                        error={
-                                                            errors.telefone
-                                                                ?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                            </Grid>
-                                        </Box>
-                                    </Box>
-                                </TabPanel>
-                                <TabPanel>
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        >
-                                            Informações do endereço
-                                        </Text>
-                                        <Box bg="white" p={5}>
-                                            <Grid
-                                                gap={5}
-                                                templateColumns={{
-                                                    sm: "repeat(1, 1fr)",
-                                                    md: "repeat(2, 1fr)",
-                                                    lg: "repeat(3, 1fr)",
-                                                }}
-                                            >
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="CEP"
-                                                        placeholder="ex: 13-386-092..."
-                                                        bg="white"
-                                                        {...register("cep")}
-                                                        error={
-                                                            errors.cep?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Rua"
-                                                        placeholder="digite o nome da rua..."
-                                                        bg="white"
-                                                        {...register(
-                                                            "endereco"
-                                                        )}
-                                                        error={
-                                                            errors.endereco
-                                                                ?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Número"
-                                                        placeholder="digite o número da casa..."
-                                                        bg="white"
-                                                        {...register("numero")}
-                                                        error={
-                                                            errors.numero
-                                                                ?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Bairro"
-                                                        placeholder="digite o nome do bairro..."
-                                                        bg="white"
-                                                        {...register("bairro")}
-                                                        error={
-                                                            errors.bairro
-                                                                ?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Cidade"
-                                                        placeholder="digite o nome da cidade..."
-                                                        bg="white"
-                                                        {...register("cidade")}
-                                                        error={
-                                                            errors.cidade
-                                                                ?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                                <GridItem>
-                                                    <FormInput
-                                                        label="Estado"
-                                                        placeholder="digite o nome do estado..."
-                                                        bg="white"
-                                                        {...register("estado")}
-                                                        error={
-                                                            errors.estado
-                                                                ?.message
-                                                        }
-                                                    />
-                                                </GridItem>
-                                            </Grid>
-                                        </Box>
-                                    </Box>
-                                </TabPanel>
-                                <TabPanel>
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        >
-                                            Informações de envio
-                                        </Text>
-                                        <Box bg="white" p={5}>
-                                            <Checkbox size="lg">
-                                                Enviar e-mail?
-                                            </Checkbox>
-                                        </Box>
-                                    </Box>
-
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        >
-                                            Configurações dos boletos
-                                        </Text>
-                                        <Box bg="white" p={5}>
-                                            <Grid
-                                                display="flex"
-                                                alignItems="flex-end"
-                                                gap={5}
-                                                templateColumns={{
-                                                    sm: "repeat(1, 1fr)",
-                                                    md: "repeat(2, 1fr)",
-                                                    lg: "repeat(3, 1fr)",
-                                                }}
-                                            >
-                                                <GridItem w="100%">
-                                                    <FormInput
-                                                        label='Deixar o boleto disponível para download por quantos dias após a data "não receber após"?'
-                                                        placeholder="ex: 5..."
-                                                        bg="white"
-                                                    />
-                                                </GridItem>
-                                                <GridItem w="100%">
-                                                    <FormInput
-                                                        label="E-mail de envio (* Configurar no SMTP)"
-                                                        placeholder="ex dev@trafegointegrada.com.br..."
-                                                        bg="white"
-                                                    />
-                                                </GridItem>
-                                                <GridItem w="100%">
-                                                    <FormInput
-                                                        label="Email de resposta"
-                                                        placeholder="ex dev@trafegointegrada.com.br..."
-                                                        bg="white"
-                                                    />
-                                                </GridItem>
-                                            </Grid>
-                                        </Box>
-                                    </Box>
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        >
-                                            Configurações dos extratos
-                                        </Text>
-                                        <Box bg="white" p={5}>
-                                            <Grid
-                                                display="flex"
-                                                alignItems="flex-end"
-                                                gap={5}
-                                                templateColumns={{
-                                                    sm: "repeat(1, 1fr)",
-                                                    md: "repeat(2, 1fr)",
-                                                    lg: "repeat(3, 1fr)",
-                                                }}
-                                            >
-                                                <GridItem w="100%">
-                                                    <FormInput
-                                                        label="Assunto dos emails"
-                                                        placeholder="digite o assunto que ira aparecer..."
-                                                        bg="white"
-                                                    />
-                                                </GridItem>
-                                                <GridItem w="100%">
-                                                    <FormInput
-                                                        label="E-mail de envio (* Configurar no SMTP)"
-                                                        placeholder="ex dev@trafegointegrada.com.br..."
-                                                        bg="white"
-                                                    />
-                                                </GridItem>
-                                                <GridItem w="100%">
-                                                    <FormInput
-                                                        label="Email de resposta"
-                                                        placeholder="ex dev@trafegointegrada.com.br..."
-                                                        bg="white"
-                                                    />
-                                                </GridItem>
-                                            </Grid>
-                                        </Box>
-                                    </Box>
-
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        >
-                                            Configurações dos relatórios
-                                        </Text>
-                                        <Box bg="white" p={5}>
-                                            <FormInput
-                                                label="Email que recebem os relátorios (separados por vírgula)"
-                                                placeholder="dev@trafegointegrada.com.br;"
-                                                bg="white"
-                                            />
-                                        </Box>
-                                    </Box>
-
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        >
-                                            Acesso
-                                        </Text>
-                                        <Box bg="white" p={5}>
-                                            <FormInput
-                                                label="Url de acesso"
-                                                bg="white"
-                                                {...register("url")}
-                                                error={errors.url?.message}
-                                            />
-                                        </Box>
-                                    </Box>
+                                    <Envio />
                                 </TabPanel>
 
                                 <TabPanel>

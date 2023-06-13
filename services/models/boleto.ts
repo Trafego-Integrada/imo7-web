@@ -21,6 +21,11 @@ export const atualizarBoleto = async ({ id, ...rest }) => {
 };
 
 export const excluirBoleto = async (id) => {
-    const { data } = await api.post("boleto/" + id);
+    const { data } = await api.delete("boleto/" + id);
+    return data;
+};
+
+export const buscarBoletoRapido = async (form) => {
+    const { data } = await api.post("boleto/boletoRapido", form);
     return data;
 };

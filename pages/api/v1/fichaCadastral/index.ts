@@ -4,7 +4,7 @@ import { Prisma } from "@prisma/client";
 import moment from "moment";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import { json2xml } from 'xml-js';
+import { json2xml } from "xml-js";
 
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
 handle.use(cors);
@@ -20,10 +20,10 @@ handle.get(async (req, res) => {
             identificacao,
             deletedAt,
             codigo,
-            imobiliariaId,xml
+            imobiliariaId,
+            xml,
         } = req.query;
         let filtroQuery: Prisma.FichaCadastralWhereInput = { AND: [] };
-
         if (tipoFicha) {
             filtroQuery = {
                 ...filtroQuery,
@@ -42,7 +42,6 @@ handle.get(async (req, res) => {
                 deletedAt: null,
             };
         }
-
         if (query) {
             filtroQuery = {
                 ...filtroQuery,
@@ -193,18 +192,17 @@ handle.get(async (req, res) => {
                 ],
             };
         }
-        if(!imobiliariaId) {
+        if (!imobiliariaId) {
             res.status(400).send({
-                message:"Informe o ID da Imobiliária"
-            })
+                message: "Informe o ID da Imobiliária",
+            });
         }
-        console.log(filtroQuery);
         const data = await prisma.fichaCadastral.findMany({
             where: {
                 ...filtroQuery,
 
                 imobiliaria: {
-                    id: Number(imobiliariaId)
+                    id: Number(imobiliariaId),
                 },
             },
             include: {
@@ -217,32 +215,33 @@ handle.get(async (req, res) => {
             where: {
                 ...filtroQuery,
                 imobiliaria: {
-                    id: Number(imobiliariaId)
+                    id: Number(imobiliariaId),
                 },
             },
         });
-        if(xml == "1") {
+        if (xml == "1") {
             const jsonObj = {
-                "name": "'Garage'",
-                "teste": [
-                  { color: "'red'", maxSpeed: "120", age: "2" },
-                ],
-              };
-              
-              const json = JSON.stringify({fichas:data});
-              
-            const xml = json2xml(json, {compact: true, ignoreComment: true, spaces: 4});
-              
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'text/xml')
-              
-              
-              const xmlRes = `<?xml version="1.0" encoding="UTF-8"?>
+                name: "'Garage'",
+                teste: [{ color: "'red'", maxSpeed: "120", age: "2" }],
+            };
+
+            const json = JSON.stringify({ fichas: data });
+
+            const xml = json2xml(json, {
+                compact: true,
+                ignoreComment: true,
+                spaces: 4,
+            });
+
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "text/xml");
+
+            const xmlRes = `<?xml version="1.0" encoding="UTF-8"?>
               <root> 
               ${xml}
-              </root>`
-          
-            res.end(xmlRes)
+              </root>`;
+
+            res.end(xmlRes);
         } else {
             res.send({ data, total: count });
         }
@@ -253,8 +252,5 @@ handle.get(async (req, res) => {
         });
     }
 });
-
-
-
 
 export default handle;

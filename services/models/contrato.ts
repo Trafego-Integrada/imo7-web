@@ -35,6 +35,20 @@ export const listarParticipantesContratos = async ({ queryKey }) => {
     return data;
 };
 
+export const buscarAnexoContrato = async (id) => {
+    const { data } = await api.get("anexo/" + id);
+    return data;
+};
+
+export const atualizarAnexoContrato = async (body) => {
+    const { data } = await api.post("anexo/" + body.id, body, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return data;
+};
+
 export const anexarArquivoContrato = async (body) => {
     const { data } = await api.post("anexo", body, {
         headers: {

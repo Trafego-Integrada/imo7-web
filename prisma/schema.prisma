@@ -58,7 +58,7 @@ model Usuario {
     interacoesChamado     InteracaoChamado[]
     conversas             ConversaChamado[]
     conversasCriador      ConversaChamado[]        @relation("CriadorConversa")
-    Anexo                 Anexo[]
+    Anexo                 Anexo[]                  @relation("Usuario")
     hashsRecuperacao      RecuperarSenha[]
     Recibo                Recibo[]
     modulos               Modulo[]
@@ -78,6 +78,7 @@ model Usuario {
     departamentoChamadoId Int?
     Tarefa                Tarefa[]
     Notificacao           Notificacao[]
+    anexosPermitidos      Anexo[]                  @relation("AnexosPermitidos")
 
     @@unique([imobiliariaId, documento])
 }
@@ -154,24 +155,43 @@ model Token {
 }
 
 model Imobiliaria {
-    id                    Int                    @id @default(autoincrement())
-    codigo                String?
-    razaoSocial           String
-    nomeFantasia          String?
-    cnpj                  String                 @unique
-    ie                    String?
-    logo                  String?
-    bg                    String?
-    email                 String?
-    site                  String?
-    telefone              String?
-    cep                   String?
-    endereco              String?
-    numero                String?
-    bairro                String?
-    cidade                String?
-    estado                String?
-    url                   String?
+    id           Int     @id @default(autoincrement())
+    codigo       String?
+    razaoSocial  String
+    nomeFantasia String?
+    cnpj         String  @unique
+    ie           String?
+    logo         String?
+    bg           String?
+    email        String?
+    site         String?
+    telefone     String?
+    cep          String?
+    endereco     String?
+    numero       String?
+    bairro       String?
+    cidade       String?
+    estado       String?
+    url          String?
+
+    smtpHost    String?
+    smtpPort    Int?
+    smtpUser    String?
+    smtpPass    String?
+    smtpSecure  Boolean?
+    smtpFrom    String?
+    smtpReplyTo String?
+
+    enviarEmail    Boolean?
+    enviarWhatsapp Boolean?
+
+    diasDownloadBoleto Int?
+    emailEnvioBoleto   String?
+
+    emailEnvioExtrato    String?
+    emailAssuntoExtrato  String?
+    emailMensagemExtrato String? @db.LongText
+
     createdAt             DateTime               @default(now())
     updatedAt             DateTime               @updatedAt
     deletedAt             DateTime?
@@ -191,11 +211,57 @@ model Imobiliaria {
     TagTarefa             TagTarefa[]
     Tarefa                Tarefa[]
     Pessoa                Pessoa[]
-<<<<<<< HEAD
     Orcamento             Orcamento[]
-=======
     RegraNotificacao      RegraNotificacao[]
->>>>>>> c30878a94354e195121d01fd043e899f11990ee8
+    reguasCobranca        ReguaCobranca[]
+    FilaEnvio             FilaEnvio[]
+}
+
+enum TipoReguaCobranca {
+    boleto
+    extrato
+}
+
+enum TipoEnvioReguaCobranca {
+    antesVencimento
+    diaVencimento
+}
+
+enum FormaEnvioReguaCobranca {
+    email
+    whatsapp
+}
+
+model ReguaCobranca {
+    id            String                  @id @default(uuid())
+    tipo          TipoReguaCobranca
+    tipoEnvio     TipoEnvioReguaCobranca?
+    formaEnvio    FormaEnvioReguaCobranca
+    dias          Int?
+    assunto       String?
+    conteudo      String?                 @db.LongText
+    createdAt     DateTime                @default(now())
+    updatedAt     DateTime?               @updatedAt
+    deletedAt     DateTime?
+    imobiliaria   Imobiliaria?            @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId Int?
+    filas         FilaEnvio[]
+}
+
+model FilaEnvio {
+    id               String        @id @default(uuid())
+    previsaoEnvio    DateTime?
+    dataEnvio        DateTime?
+    nomeDestinatario String
+    destinatario     String
+    parametros       Json?
+    createdAt        DateTime      @default(now())
+    updatedAt        DateTime?     @updatedAt
+    deletedAt        DateTime?
+    reguaCobranca    ReguaCobranca @relation(fields: [reguaCobrancaId], references: [id])
+    reguaCobrancaId  String
+    imobiliaria      Imobiliaria?  @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId    Int?
 }
 
 model Imovel {
@@ -247,6 +313,7 @@ model Imovel {
     contrato        Contrato?                @relation(fields: [contratoId], references: [id])
     contratoId      Int?                     @unique
     FichaCadastral  FichaCadastral[]
+    Tarefa          Tarefa[]
 }
 
 model ProprietariosOnImoveis {
@@ -299,6 +366,7 @@ model Contrato {
     Recibo            Recibo[]
     imovel            Imovel?
     Notificacao       Notificacao[]
+    Tarefa            Tarefa[]
 }
 
 model Boleto {
@@ -556,12 +624,13 @@ model Anexo {
     contratoId         Int?
     chamado            Chamado?          @relation(references: [id], fields: [chamadoId])
     chamadoId          Int?
-    usuario            Usuario?          @relation(fields: [usuarioId], references: [id])
+    usuario            Usuario?          @relation("Usuario", fields: [usuarioId], references: [id])
     usuarioId          Int?
     conversa           ConversaChamado?  @relation(fields: [conversaChamadoId], references: [id])
     conversaChamadoId  Int?
     interacao          InteracaoChamado? @relation(fields: [interacaoChamadoId], references: [id])
     interacaoChamadoId Int?
+    usuariosPermitidos Usuario[]         @relation("AnexosPermitidos")
 }
 
 enum StatusChamado {
@@ -635,6 +704,7 @@ model FichaCadastral {
     responsavelId          Int?
     imovel                 Imovel?                       @relation(fields: [imovelId], references: [id])
     imovelId               Int?
+    importadaJb            Boolean?                      @default(false)
 }
 
 model FichaCadastralPreenchimento {
@@ -806,6 +876,10 @@ model Tarefa {
     criadorId             Int?
     imobiliaria           Imobiliaria?         @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId         Int?
+    contrato              Contrato?            @relation(fields: [contratoId], references: [id])
+    contratoId            Int?
+    imovel                Imovel?              @relation(fields: [imovelId], references: [id])
+    imovelId              Int?
 }
 
 model TagTarefa {

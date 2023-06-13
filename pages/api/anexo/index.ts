@@ -69,7 +69,14 @@ handle.post(async (req, res) => {
     try {
         const { id } = req.query;
 
-        const { contratoId, usuarioId, chamadoId, conversaId, nome } = req.body;
+        const {
+            contratoId,
+            usuarioId,
+            chamadoId,
+            conversaId,
+            nome,
+            usuariosPermitidos,
+        } = req.body;
         const { anexos } = req.files;
         console.log(req.body);
         const client = new os.ObjectStorageClient({
@@ -158,6 +165,17 @@ handle.post(async (req, res) => {
                                         id: req.user.id,
                                     },
                                 },
+                                usuariosPermitidos: usuariosPermitidos
+                                    ? {
+                                          connect: usuariosPermitidos.map(
+                                              (item) => {
+                                                  return {
+                                                      id: item.id,
+                                                  };
+                                              }
+                                          ),
+                                      }
+                                    : {},
                             },
                         });
                         if (conversaId && chamadoId) {
@@ -186,10 +204,10 @@ handle.post(async (req, res) => {
                                     },
                                 },
                             });
-                        } 
-                        if(chamadoId) {
+                        }
+                        if (chamadoId) {
                             await prisma.historicoChamado.create({
-                                data:{
+                                data: {
                                     chamado: {
                                         connect: {
                                             id: Number(chamadoId),
@@ -200,10 +218,14 @@ handle.post(async (req, res) => {
                                             id: req.user.id,
                                         },
                                     },
-                                    descricao:`Arquivo anexado: ${nome ? nome : ''} <a href="${process.env.NEXT_PUBLIC_URL_STORAGE +
-                                        nameLocation}" target="_blank">Visualizar arquivo</a>`
-                                }
-                            })
+                                    descricao: `Arquivo anexado: ${
+                                        nome ? nome : ""
+                                    } <a href="${
+                                        process.env.NEXT_PUBLIC_URL_STORAGE +
+                                        nameLocation
+                                    }" target="_blank">Visualizar arquivo</a>`,
+                                },
+                            });
                         }
                     }
                 })
@@ -244,7 +266,7 @@ handle.post(async (req, res) => {
                         nome,
                         anexo:
                             process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
-                            contrato: contratoId
+                        contrato: contratoId
                             ? {
                                   connect: {
                                       id: Number(contratoId),
@@ -298,10 +320,10 @@ handle.post(async (req, res) => {
                             },
                         },
                     });
-                } 
-                if(chamadoId) {
+                }
+                if (chamadoId) {
                     await prisma.historicoChamado.create({
-                        data:{
+                        data: {
                             chamado: {
                                 connect: {
                                     id: Number(chamadoId),
@@ -312,10 +334,14 @@ handle.post(async (req, res) => {
                                     id: req.user.id,
                                 },
                             },
-                            descricao:`Arquivo anexado: ${nome ? nome : ''} <a href="${process.env.NEXT_PUBLIC_URL_STORAGE +
-                                nameLocation}" target="_blank">Visualizar arquivo</a>`
-                        }
-                    })
+                            descricao: `Arquivo anexado: ${
+                                nome ? nome : ""
+                            } <a href="${
+                                process.env.NEXT_PUBLIC_URL_STORAGE +
+                                nameLocation
+                            }" target="_blank">Visualizar arquivo</a>`,
+                        },
+                    });
                 }
             }
         }

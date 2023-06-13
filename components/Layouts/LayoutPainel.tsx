@@ -28,7 +28,6 @@ export const LayoutPainel = ({ children }) => {
         ],
         listarContratos
     );
-    console.log(router);
     return (
         <Box bg="gray.100" minH="100vh">
             <Stack as="aside" bg="blue.600">
@@ -204,6 +203,22 @@ export const LayoutPainel = ({ children }) => {
                                     _hover={{ fontWeight: "bold" }}
                                 >
                                     Chamados
+                                </NextChakraLink>
+                            )}
+                        {router.query.contratoId &&
+                            router.query.contratoId != "undefined" && (
+                                <NextChakraLink
+                                    href={`/${router.query.contratoId}/meu-contrato`}
+                                    fontWeight={
+                                        router.asPath ==
+                                        `/${router.query.contratoId}/meu-contrato`
+                                            ? "bold"
+                                            : "normal"
+                                    }
+                                    letterSpacing="wider"
+                                    _hover={{ fontWeight: "bold" }}
+                                >
+                                    Meu Contrato
                                 </NextChakraLink>
                             )}
                     </Flex>

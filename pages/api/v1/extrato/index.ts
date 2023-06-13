@@ -73,7 +73,11 @@ handle.post(async (req, res) => {
                         data: eval(itens).map((item) => {
                             return {
                                 descricao: item.descricao,
-                                valor: Number(item.valor.replaceAll('.','').replace(',','.')),
+                                valor: Number(
+                                    item.valor
+                                        .replaceAll(".", "")
+                                        .replace(",", ".")
+                                ),
                             };
                         }),
                     },
@@ -87,6 +91,36 @@ handle.post(async (req, res) => {
                 proprietario: true,
             },
         });
+
+        const reguas = await prisma.reguaCobranca.findMany({
+            where: {
+                tipo: "extrato",
+                imobiliariaId: Number(imobiliariaId),
+            },
+        });
+
+        if (reguas.length > 0) {
+            await Promise.all(
+                reguas.map(async (regua) => {
+                    await prisma.filaEnvio.create({
+                        data: {
+                            nomeDestinatario: data.proprietario.nome,
+                            destinatario: data.proprietario.email,
+                            parametros: {
+                                extrato: data,
+                            },
+                            reguaCobranca: {
+                                connect: {
+                                    id: regua.id,
+                                },
+                            },
+                            previsaoEnvio: moment().add(1, "days").format(),
+                        },
+                    });
+                })
+            );
+        }
+
         res.send(data);
     } catch (error) {
         res.status(500).send(error.message);

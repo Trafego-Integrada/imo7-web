@@ -6,12 +6,9 @@ const handle = nextConnect();
 import { cors } from "@/middleware/cors";
 handle.use(cors);
 handle.use(checkAuth);
-
 handle.get(async (req, res) => {
     try {
-        let { filtro, pagina, linhas, query, tipoCadastro, categoria } =
-            req.query;
-        let filtroQuery = {};
+        let { pagina, linhas } = req.query;
 
         let paginacao = {};
         if (pagina && linhas) {
@@ -24,65 +21,25 @@ handle.get(async (req, res) => {
             };
         }
 
-        const data = await prisma.regraNotificacao.findMany({
+        const data = await prisma.reguaCobranca.findMany({
             where: {
-                ...filtroQuery,
-
                 imobiliariaId: req.user.imobiliariaId,
             },
-            include: {
-                tipoEnvio: true,
-                canalMidia: true,
-            },
             ...paginacao,
-            // include:{
-            //     prestador:true,
-            //     solicitante:true,
-            //     chamado:true
-            // }
         });
-        const total = await prisma.regraNotificacao.count({
+        const total = await prisma.reguaCobranca.count({
             where: {
-                ...filtroQuery,
-
                 imobiliariaId: req.user.imobiliariaId,
             },
         });
         res.send({
             success: true,
-            data,
-            total,
-        });
-    } catch (err) {
-        res.status(500).send({
-            success: false,
-            message: err.message,
-        });
-    }
-});
-
-//CREATE
-handle.post(async (req, res) => {
-    try {
-        const { tipo, dias, assunto, mensagem, hora, canalMidia } = req.body;
-        const imobiliaria = req.user.imobiliariaId;
-        const data = await prisma.regraNotificacao.create({
             data: {
-                imobiliariaId: imobiliaria,
-                tipoEnvioId: Number(tipo),
-                diasReferencia: Number(dias),
-                assunto: assunto,
-                mensagem: mensagem,
-                horaEnvio: hora || null,
-                canalMidiaId: Number(canalMidia),
+                total,
+                data,
             },
         });
-
-        res.send({
-            data,
-        });
     } catch (error) {
-        console.error(error);
         res.status(500).send({
             success: false,
             message: error.message,
@@ -90,6 +47,46 @@ handle.post(async (req, res) => {
     }
 });
 
-//Selecionar ou buscar
-// handle.get('
+handle.post(async (req, res) => {
+    try {
+        const { tipo, tipoEnvio, formaEnvio, assunto, conteudo } = req.body;
+
+        const count = await prisma.reguaCobranca.count({
+            where: {
+                formaEnvio,
+                imobiliariaId: req.user.imobiliariaId,
+                deletedAt: null,
+            },
+        });
+        if (count >= 3) {
+            return res.status(400).json({
+                success: false,
+                errorCode: "U01",
+                message: "Você já possui 3 reguas cadastradas",
+            });
+        }
+        const data = await prisma.reguaCobranca.create({
+            data: {
+                tipo,
+                tipoEnvio,
+                formaEnvio,
+                assunto,
+                conteudo,
+                imobiliaria: {
+                    connect: {
+                        id: req.user.imobiliariaId,
+                    },
+                },
+            },
+        });
+
+        res.send(data);
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error.message,
+        });
+    }
+});
+
 export default handle;

@@ -3,7 +3,9 @@ import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormTextarea } from "@/components/Form/FormTextarea";
 import { useAuth } from "@/hooks/useAuth";
+import { listarContratos } from "@/services/models/contrato";
 import { listarDepartamentos } from "@/services/models/departamento";
+import { listarImoveis } from "@/services/models/imovel";
 import { listarPessoas } from "@/services/models/pessoa";
 import { listarTagsTarefa } from "@/services/models/tagTarefa";
 
@@ -130,7 +132,8 @@ const ModalBase = ({ chamadoId }, ref) => {
         listarDepartamentos
     );
     const { data: tags } = useQuery(["tags", {}], listarTagsTarefa);
-
+    const { data: contratos } = useQuery(["contratos", {}], listarContratos);
+    const { data: imoveis } = useQuery(["imoveis", {}], listarImoveis);
     const handleKeyDown: KeyboardEventHandler = (event) => {
         if (!watch("tags")) return;
         switch (event.key) {
@@ -278,6 +281,56 @@ const ModalBase = ({ chamadoId }, ref) => {
                                                     error={
                                                         errors.responsaveis
                                                             ?.message
+                                                    }
+                                                    {...field}
+                                                />
+                                            )}
+                                        />
+                                    </GridItem>
+
+                                    <GridItem>
+                                        <Controller
+                                            control={control}
+                                            name="contrato"
+                                            render={({ field }) => (
+                                                <FormMultiSelect
+                                                    size="sm"
+                                                    label="Contrato"
+                                                    placeholder="Ref. Contrato"
+                                                    options={
+                                                        contratos?.data?.data
+                                                    }
+                                                    getOptionLabel={(e) =>
+                                                        `${e.codigo} - ${e.imovel?.endereco}`
+                                                    }
+                                                    getOptionValue={(e) => e.id}
+                                                    error={
+                                                        errors.contrato?.message
+                                                    }
+                                                    {...field}
+                                                />
+                                            )}
+                                        />
+                                    </GridItem>
+
+                                    <GridItem>
+                                        <Controller
+                                            control={control}
+                                            name="imovel"
+                                            render={({ field }) => (
+                                                <FormMultiSelect
+                                                    size="sm"
+                                                    label="Imovel"
+                                                    placeholder="Ref. Imovel"
+                                                    options={
+                                                        imoveis?.data?.data
+                                                    }
+                                                    getOptionLabel={(e) =>
+                                                        `${e.codigo} - ${e.endereco}`
+                                                    }
+                                                    getOptionValue={(e) => e.id}
+                                                    error={
+                                                        errors.imovel?.message
                                                     }
                                                     {...field}
                                                 />

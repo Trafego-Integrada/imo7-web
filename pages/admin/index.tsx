@@ -36,7 +36,7 @@ const Home = () => {
 
     return (
         <>
-            <Layout title="Contratos">
+            <Layout>
                 <Box p={5}></Box>
             </Layout>
         </>

@@ -227,7 +227,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     gap={2}
                                 >
                                     {item.campos
-                                        .filter((i) => modelo.campos[i.codigo])
+                                        .filter(
+                                            (i) =>
+                                                modelo.campos[i.codigo] &&
+                                                modelo?.campos[i.codigo]?.exibir
+                                        )
                                         .map((campo) => (
                                             <GridItem
                                                 key={campo.id}

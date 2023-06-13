@@ -7,7 +7,6 @@ import nextConnect from "next-connect";
 
 const handle = nextConnect();
 
-
 handle.use(cors);
 handle.use(checkAuth);
 
@@ -31,6 +30,7 @@ handle.get(async (req, res) => {
             dataVencimento,
             dataCriacao,
             imobiliariaId,
+            barcode,
         } = req.query;
         imobiliariaId = req.user.imobiliariaId
             ? req.user.imobiliariaId
@@ -260,7 +260,14 @@ handle.get(async (req, res) => {
                 },
             };
         }
-        console.log('111',filtroQuery.AND)
+        if (barcode) {
+            filtroQuery = {
+                ...filtroQuery,
+                barcode: {
+                    not: null,
+                },
+            };
+        }
         const data = await prisma.boleto.findMany({
             where: {
                 ...filtroQuery,

@@ -9,7 +9,7 @@
         "lint": "next lint",
         "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
         "ssh": "ssh ubuntu@140.238.181.195",
-        "db": "ssh -i C:/Users/gabri/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aa6y4iel74gakw5fviheerfp2y4de5stix7uqt2wmtopaa@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
+        "db": "ssh -i C:/Users/gabri/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aabvq73o5cvcav6wrkw6jdgkjqahhbkhrt2f5b47uggfla@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",
@@ -24,6 +24,7 @@
         "@react-pdf/renderer": "^3.1.4",
         "@types/bcryptjs": "^2.4.2",
         "@types/jsonwebtoken": "^8.5.2",
+        "@types/nodemailer": "^6.4.8",
         "@wojtekmaj/react-daterange-picker": "^4.2.0",
         "axios": "^0.21.4",
         "bcryptjs": "^2.4.3",

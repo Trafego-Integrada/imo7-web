@@ -87,6 +87,35 @@ export const tipoFicha = (tipo) => {
     }
 };
 
+export const tipoEnvioReguaCobranca = (tipo) => {
+    switch (tipo) {
+        case "antesVencimento":
+            return "Antes do Vencimento";
+        case "diaVencimento":
+            return "Dia do Vencimento";
+    }
+};
+
+export const tipoReguaCobranca = (tipo) => {
+    switch (tipo) {
+        case "boleto":
+            return "Boleto";
+        case "extrato":
+            return "Extrato";
+    }
+};
+
+export const formaEnvioReguaCobranca = (tipo) => {
+    switch (tipo) {
+        case "email":
+            return "E-mail";
+        case "sms":
+            return "SMS";
+        case "whatsapp":
+            return "WhatsApp";
+    }
+};
+
 export const arrayStatusFicha = [
     {
         label: "Aguardando Preenchimento",

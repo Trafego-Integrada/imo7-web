@@ -28,7 +28,7 @@ const Chamados: NextPage = () => {
     const router = useRouter();
     const { usuario, signOut } = useAuth();
     const { data: contratos } = useQuery(
-        ["boletos", { contratoId: router.query.contratoId }],
+        ["boletos", { contratoId: router.query.contratoId, barcode: true }],
         listarBoletos
     );
     return (
