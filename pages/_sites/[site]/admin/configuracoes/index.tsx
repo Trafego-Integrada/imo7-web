@@ -1,7 +1,7 @@
 import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
-import { Envio } from "@/components/Pages/Admin/Configuracoes/envio";
+import { Envio } from "@/components/Pages/Admin/Configuracoes/Envio";
 import { FichasCadastrais } from "@/components/Pages/Admin/Configuracoes/FichasCadastrais";
 import { useAuth } from "@/hooks/useAuth";
 import { show, update } from "@/services/models/imobiliaria";
