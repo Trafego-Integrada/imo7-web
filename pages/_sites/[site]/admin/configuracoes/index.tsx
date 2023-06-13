@@ -34,7 +34,6 @@ import { useForm } from "react-hook-form";
 import { FiTrash } from "react-icons/fi";
 import { useMutation } from "react-query";
 import * as yup from "yup";
-import { Envio } from "./envio";
 const schema = yup.object().shape({
     razaoSocial: yup.string().required("Campo obrigatório"),
     nomeFantasia: yup.string().required("Campo obrigatório"),
