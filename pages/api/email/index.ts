@@ -7,7 +7,7 @@ import nextConnect from "next-connect";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
-handler.get(async (req, res) => {
+handler.post(async (req, res) => {
     try {
         const { from, to, bcc, subject, body, headers } = req.body;
         const email = await mail.sendMail({
