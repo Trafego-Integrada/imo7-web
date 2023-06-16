@@ -27,7 +27,7 @@ handler.get(async (req, res) => {
         await Promise.all(
             filaEnvio.map(async (item) => {
                 const email = await mail.sendMail({
-                    from: "IMO7 <contato@imo7.com.br>",
+                    from: "IMO7 <contato@trafegoimoveis.com.br>",
                     to: `${item.nomeDestinatario} <${item.destinatario}>`,
                     subject: item.reguaCobranca?.assunto
                         ? item.reguaCobranca?.assunto
