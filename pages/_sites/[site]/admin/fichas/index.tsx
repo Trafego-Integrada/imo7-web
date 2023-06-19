@@ -15,6 +15,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { excluirFicha, listarFichas } from "@/services/models/fichaCadastral";
 import { listarUsuarios } from "@/services/models/usuario";
 import { queryClient } from "@/services/queryClient";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 import {
     Box,
     Button,
@@ -620,3 +621,11 @@ const FichasCadastrais = () => {
 };
 
 export default FichasCadastrais;
+export const getServerSideProps = withSSRAuth(
+    async (ctx) => {
+        return {
+            props: {},
+        };
+    },
+    { cargos: ["imobiliaria", "adm", "conta"] }
+);

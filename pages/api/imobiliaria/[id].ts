@@ -95,7 +95,7 @@ handle.post(async (req, res) => {
             site,
             numero,
             smtpHost,
-            smtpPort: smtpPort ? Number(smtpPort) : null,
+            smtpPort,
             smtpUser,
             smtpPass,
             smtpSecure: JSON.parse(smtpSecure),

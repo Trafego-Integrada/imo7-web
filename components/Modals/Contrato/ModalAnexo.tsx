@@ -1,6 +1,7 @@
 import { formatoData, formatoValor } from "@/helpers/helpers";
 import {
     anexarArquivoContrato,
+    atualizarAnexoContrato,
     buscarAnexoContrato,
     listarParticipantesContratos,
 } from "@/services/models/contrato";
@@ -72,24 +73,45 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
             onClose();
         },
     });
-    const onUpload = async (event) => {
+    const atualizar = useMutation(atualizarAnexoContrato, {
+        onSuccess: () => {
+            toast({
+                title: "Arquivo anexado com sucesso",
+                status: "success",
+            });
+            queryClient.invalidateQueries(["anexos"]);
+            onClose();
+        },
+    });
+    const onUpload = async (data) => {
         const formData = new FormData();
         contratoId && formData.append("contratoId", contratoId);
         chamadoId && formData.append("chamadoId", chamadoId);
-        formData.append("nome", nome);
+        formData.append("nome", data.nome);
+        data.usuariosPermitidos &&
+            formData.append(
+                "usuariosPermitidos",
+                JSON.stringify(data.usuariosPermitidos)
+            );
         formData.append("anexos", file[0]);
-        await upload.mutateAsync(formData);
+        if (data.id) {
+            formData.append("id", data.id);
+            await atualizar.mutateAsync(formData);
+        } else {
+            await upload.mutateAsync(formData);
+        }
     };
     useImperativeHandle(ref, () => ({
         onOpen: async (id = null) => {
-            if(id) {
+            if (id) {
+                buscar.mutate(id);
                 setNome("");
                 setFile([]);
                 onOpen();
             } else {
                 setNome("");
-            setFile([]);
-            onOpen();
+                setFile([]);
+                onOpen();
             }
         },
     }));
@@ -122,28 +144,32 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
 
                     <ModalCloseButton />
 
-                    <ModalBody>
+                    <ModalBody
+                        as="form"
+                        id="formAnexo"
+                        onSubmit={handleSubmit(onUpload)}
+                    >
                         <Box>
                             <FormInput
                                 label="Nome do Anexo"
-                                value={nome}
-                                onChange={(e) => setNome(e.target.value)}
-                                error={!nome && "Dê um nome para o arquivo"}
+                                {...register("nome")}
                             />
                         </Box>
-                        <Flex
-                            mt={4}
-                            p={12}
-                            borderWidth={2}
-                            borderStyle="dashed"
-                            align="center"
-                            {...getRootProps({ className: "dropzone" })}
-                        >
-                            <input {...getInputProps()} />
-                            <Text color="gray">
-                                Arraste o arquivo ou clique aqui
-                            </Text>
-                        </Flex>
+                        {!watch("id") && (
+                            <Flex
+                                mt={4}
+                                p={12}
+                                borderWidth={2}
+                                borderStyle="dashed"
+                                align="center"
+                                {...getRootProps({ className: "dropzone" })}
+                            >
+                                <input {...getInputProps()} />
+                                <Text color="gray">
+                                    Arraste o arquivo ou clique aqui
+                                </Text>
+                            </Flex>
+                        )}
                         <Box mt={4}>
                             <Heading size="md">Anexo</Heading>
                             <List>{files}</List>
@@ -160,11 +186,12 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
                                         options={participantes && participantes}
                                         getOptionLabel={(e) =>
                                             e.nome +
-                                            (e.contratosInquilino.length
+                                            (e.contratosInquilino?.length
                                                 ? " (Inquilino)"
-                                                : e.contratosProprietario.length
+                                                : e.contratosProprietario
+                                                      ?.length
                                                 ? " (Proproprietário)"
-                                                : e.contratosFiador.length
+                                                : e.contratosFiador?.length
                                                 ? " (Fiador)"
                                                 : "?")
                                         }
@@ -187,9 +214,9 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
                             Fechar
                         </Button>
                         <Button
+                            form="formAnexo"
+                            type="submit"
                             colorScheme="blue"
-                            onClick={() => onUpload()}
-                            disabled={!nome || file.length == 0 ? true : false}
                         >
                             Anexar
                         </Button>

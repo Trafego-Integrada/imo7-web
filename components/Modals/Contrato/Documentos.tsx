@@ -24,7 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useRef } from "react";
-import { FiDownload, FiEye, FiTrash } from "react-icons/fi";
+import { FiDownload, FiEdit, FiEdit2, FiEye, FiTrash } from "react-icons/fi";
 import { RiAddLine } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
 import { ModalAnexo } from "./ModalAnexo";
@@ -89,7 +89,17 @@ export const Documentos = ({ contratoId }) => {
                             <Td>{formatoData(item.createdAt, "DATA_HORA")}</Td>
                             <Td>
                                 <Flex>
-                                    {" "}
+                                    <Tooltip label="Download">
+                                        <IconButton
+                                            size="sm"
+                                            icon={<Icon as={FiEdit} />}
+                                            onClick={() =>
+                                                modalAnexo.current.onOpen(
+                                                    item.id
+                                                )
+                                            }
+                                        />
+                                    </Tooltip>
                                     <NextChakraLink
                                         href={item.anexo}
                                         target="_blank"

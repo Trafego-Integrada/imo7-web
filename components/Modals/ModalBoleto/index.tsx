@@ -174,6 +174,7 @@ const ModalBase = ({}, ref) => {
                                 href={`https://www.imo7.com.br/api/boleto/${watch(
                                     "id"
                                 )}/pdf`}
+                                target="_blank"
                             >
                                 Visualizar PDF
                             </Button>

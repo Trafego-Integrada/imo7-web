@@ -1,30 +1,25 @@
 import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
-import { NextChakraLink } from "@/components/NextChakraLink";
 import { formatoData, formatoValor } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
 import prisma from "@/lib/prisma";
-import { listarChamados } from "@/services/models/chamado";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import {
-    Badge,
-    Box,
-    Button,
     Flex,
     Grid,
     GridItem,
     Heading,
     Icon,
     IconButton,
+    Link,
+    List,
+    ListItem,
     Text,
 } from "@chakra-ui/react";
-import moment from "moment";
+import jwtDecode from "jwt-decode";
 import { NextPage } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { FaCopy, FaEye, FaGrinWink, FaPrint } from "react-icons/fa";
+import { parseCookies } from "nookies";
 import { FiEye } from "react-icons/fi";
-import { IoHelpBuoy } from "react-icons/io5";
-import { useQuery } from "react-query";
 
 const Dashbord: NextPage = ({ contrato }) => {
     const { usuario } = useAuth();
@@ -45,7 +40,8 @@ const Dashbord: NextPage = ({ contrato }) => {
                 <GridItem bg="white" rounded="xl" px={4} py={2}>
                     <Text>Data de Início</Text>
                     <Text fontWeight="bold" fontSize="lg">
-                        {formatoData(contrato?.dataInicio)}
+                        {contrato?.dataInicio &&
+                            formatoData(contrato?.dataInicio)}
                     </Text>
                 </GridItem>
                 <GridItem bg="white" rounded="xl" px={4} py={2}>
@@ -85,6 +81,34 @@ const Dashbord: NextPage = ({ contrato }) => {
                         {formatoValor(contrato?.valorAluguel)}
                     </Text>
                 </GridItem>
+                {contrato?.anexos?.length > 0 && (
+                    <GridItem
+                        colSpan={{ lg: 3 }}
+                        bg="white"
+                        rounded="xl"
+                        px={4}
+                        py={2}
+                    >
+                        <Text>Documentos</Text>
+                        <List>
+                            {contrato?.anexos?.map((anexo) => (
+                                <ListItem key={anexo.id}>
+                                    <Flex align="center">
+                                        <IconButton
+                                            icon={<Icon as={FiEye} />}
+                                            as={Link}
+                                            href={anexo.anexo}
+                                            target="_blank"
+                                            variant="ghost"
+                                            size="sm"
+                                        />
+                                        <Text ml={2}>{anexo.nome}</Text>
+                                    </Flex>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </GridItem>
+                )}
             </Grid>
         </LayoutPainel>
     );
@@ -95,6 +119,12 @@ export default Dashbord;
 export const getServerSideProps = withSSRAuth(async (ctx) => {
     try {
         const { contratoId, site } = ctx.query;
+        const cookies = parseCookies(ctx);
+        const token = cookies["imo7.token"];
+
+        const user = jwtDecode<{ permissoes: string[]; cargos: string[] }>(
+            token
+        );
         const contrato = await prisma.contrato.findUnique({
             where: {
                 id: Number(contratoId),
@@ -103,8 +133,18 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
                 proprietarios: true,
                 inquilinos: true,
                 imovel: true,
+                anexos: {
+                    where: {
+                        usuariosPermitidos: {
+                            some: {
+                                id: Number(user.sub),
+                            },
+                        },
+                    },
+                },
             },
         });
+        console.log(contrato);
         return {
             props: {
                 contrato: JSON.parse(JSON.stringify(contrato)),

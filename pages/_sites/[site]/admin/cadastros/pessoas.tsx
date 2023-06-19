@@ -236,3 +236,11 @@ const Configuracoes = () => {
     );
 };
 export default Configuracoes;
+export const getServerSideProps = withSSRAuth(
+    async (ctx) => {
+        return {
+            props: {},
+        };
+    },
+    { cargos: ["imobiliaria", "adm", "conta"] }
+);

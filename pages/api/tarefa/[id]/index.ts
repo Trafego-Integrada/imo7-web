@@ -82,43 +82,47 @@ handle.post(async (req, res) => {
                           }),
                       }
                     : { set: [] },
-            tags: {
-                set:
-                    tags.length > 0
-                        ? tags
-                              .filter((e) => e.id)
-                              .map((tag) => {
-                                  return {
-                                      id: tag.id,
-                                  };
-                              })
-                        : {},
-                create:
-                    tags.length > 0
-                        ? tags
-                              .filter((e) => e.label)
-                              .map((tag) => {
-                                  return {
-                                      nome: tag.label,
-                                      imobiliariaId: req.user.imobiliariaId,
-                                  };
-                              })
-                        : {},
-                contrato: contrato
+            tags:
+                tags.length > 0
                     ? {
-                          connect: {
-                              id: Number(contrato.id),
-                          },
+                          set:
+                              tags.length > 0
+                                  ? tags
+                                        .filter((e) => e.id)
+                                        .map((tag) => {
+                                            return {
+                                                id: tag.id,
+                                            };
+                                        })
+                                  : {},
+                          create:
+                              tags.length > 0
+                                  ? tags
+                                        .filter((e) => e.label)
+                                        .map((tag) => {
+                                            return {
+                                                nome: tag.label,
+                                                imobiliariaId:
+                                                    req.user.imobiliariaId,
+                                            };
+                                        })
+                                  : {},
                       }
-                    : { disconnect: {} },
-                imovel: imovel
-                    ? {
-                          connect: {
-                              id: Number(imovel.id),
-                          },
-                      }
-                    : { disconnect: {} },
-            },
+                    : {},
+            contrato: contrato
+                ? {
+                      connect: {
+                          id: Number(contrato.id),
+                      },
+                  }
+                : { disconnect: true },
+            imovel: imovel
+                ? {
+                      connect: {
+                          id: Number(imovel.id),
+                      },
+                  }
+                : { disconnect: true },
         },
     });
     if (data.chamadoId) {

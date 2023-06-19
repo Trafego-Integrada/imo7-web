@@ -510,6 +510,18 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
                 imobiliaria: {
                     url: site,
                 },
+                AND: [
+                    {
+                        barcode: {
+                            not: null,
+                        },
+                    },
+                    {
+                        barcode: {
+                            not: "",
+                        },
+                    },
+                ],
             },
             include: {
                 contrato: {

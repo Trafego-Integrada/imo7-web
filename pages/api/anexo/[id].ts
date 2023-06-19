@@ -8,13 +8,22 @@ const handler = nextConnect();
 import { cors } from "@/middleware/cors";
 import moment from "moment";
 import slug from "slug";
+import { checkAuth } from "@/middleware/checkAuth";
+import { multiparty } from "@/middleware/multipart";
+
 handler.use(cors);
+handler.use(checkAuth);
+handler.use(multiparty);
+
 handler.get(async (req, res) => {
     try {
         const { id } = req.query;
         const data = await prisma.anexo.findUnique({
             where: {
                 id: Number(id),
+            },
+            include: {
+                usuariosPermitidos: true,
             },
         });
         res.send(data);
@@ -34,6 +43,7 @@ handler.post(async (req, res) => {
             nome,
             usuariosPermitidos,
         } = req.body;
+        console.log(JSON.parse(usuariosPermitidos));
         const { anexos } = req.files;
         const client = new os.ObjectStorageClient({
             authenticationDetailsProvider: providerStorage,
@@ -50,7 +60,26 @@ handler.post(async (req, res) => {
             bucketName: bucket,
         };
         const getBucketResponse = await client.getBucket(getBucketRequest);
+        const anexo = await prisma.anexo.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                nome,
 
+                usuariosPermitidos: usuariosPermitidos
+                    ? {
+                          connect: JSON.parse(usuariosPermitidos).map(
+                              (item) => {
+                                  return {
+                                      id: item.id,
+                                  };
+                              }
+                          ),
+                      }
+                    : {},
+            },
+        });
         if (anexos) {
             const extension = anexos.name.slice(
                 (Math.max(0, anexos.name.lastIndexOf(".")) || Infinity) + 1
@@ -118,11 +147,13 @@ handler.post(async (req, res) => {
                         },
                         usuariosPermitidos: usuariosPermitidos
                             ? {
-                                  connect: usuariosPermitidos.map((item) => {
-                                      return {
-                                          id: item.id,
-                                      };
-                                  }),
+                                  connect: JSON.parse(usuariosPermitidos).map(
+                                      (item) => {
+                                          return {
+                                              id: item.id,
+                                          };
+                                      }
+                                  ),
                               }
                             : {},
                     },

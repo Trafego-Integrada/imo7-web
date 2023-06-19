@@ -41,7 +41,7 @@ export const buscarAnexoContrato = async (id) => {
 };
 
 export const atualizarAnexoContrato = async (body) => {
-    const { data } = await api.post("anexo/" + body.id, body, {
+    const { data } = await api.post("anexo/" + body.get("id"), body, {
         headers: {
             "Content-Type": "multipart/form-data",
         },

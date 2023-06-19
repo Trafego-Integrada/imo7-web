@@ -1,67 +1,156 @@
 import { emailBoleto, emailExtrato } from "@/lib/layoutEmail";
 import prisma from "@/lib/prisma";
+import { checkAuth } from "@/middleware/checkAuth";
+import { cors } from "@/middleware/cors";
 import { mail } from "@/services/mail";
+import { Prisma } from "@prisma/client";
 import moment from "moment";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
-
+handler.use(cors);
+handler.use(checkAuth);
 handler.get(async (req, res) => {
     try {
-        const filaEnvio = await prisma.filaEnvio.findMany({
-            where: {
-                previsaoEnvio: {
-                    gte: moment().startOf("D").format(),
-                    lte: moment().endOf("D").format(),
+        let {
+            query,
+            dataEnvio,
+            previsaoEnvio,
+            createdAt,
+            nomeDestinatario,
+            destinatario,
+        } = req.query;
+        let filtroQuery: Prisma.FilaEnvioWhereInput = {};
+        if (query) {
+            filtroQuery = {
+                ...filtroQuery,
+                OR: [
+                    ...filtroQuery.OR,
+                    {
+                        nomeDestinatario: {
+                            contains: query,
+                        },
+                    },
+                    {
+                        destinatario: {
+                            contains: query,
+                        },
+                    },
+                    {
+                        assunto: {
+                            contains: query,
+                        },
+                    },
+                ],
+            };
+        }
+        if (nomeDestinatario) {
+            filtroQuery = {
+                ...filtroQuery,
+                nomeDestinatario: {
+                    contains: nomeDestinatario,
                 },
-                dataEnvio: null,
+            };
+        }
+        if (destinatario) {
+            filtroQuery = {
+                ...filtroQuery,
+                destinatario: {
+                    contains: destinatario,
+                },
+            };
+        }
+        if (dataEnvio) {
+            dataEnvio = JSON.parse(dataEnvio);
+            if (!filtroQuery.AND) {
+                filtroQuery = {
+                    ...filtroQuery,
+                    AND: [],
+                };
+            }
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery?.AND,
+                    {
+                        dataEnvio: {
+                            gte: dataEnvio[0]
+                                ? moment(dataEnvio[0]).startOf("d").format()
+                                : null,
+                            lte: dataEnvio[1]
+                                ? moment(dataEnvio[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
+            };
+        }
+        if (createdAt) {
+            createdAt = JSON.parse(createdAt);
+            if (!filtroQuery.AND) {
+                filtroQuery = {
+                    ...filtroQuery,
+                    AND: [],
+                };
+            }
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery?.AND,
+                    {
+                        createdAt: {
+                            gte: createdAt[0]
+                                ? moment(createdAt[0]).startOf("d").format()
+                                : null,
+                            lte: createdAt[1]
+                                ? moment(createdAt[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
+            };
+        }
+        if (previsaoEnvio) {
+            previsaoEnvio = JSON.parse(previsaoEnvio);
+            if (!filtroQuery.AND) {
+                filtroQuery = {
+                    ...filtroQuery,
+                    AND: [],
+                };
+            }
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery?.AND,
+                    {
+                        previsaoEnvio: {
+                            gte: previsaoEnvio[0]
+                                ? moment(previsaoEnvio[0]).startOf("d").format()
+                                : null,
+                            lte: previsaoEnvio[1]
+                                ? moment(previsaoEnvio[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
+            };
+        }
+        const data = await prisma.filaEnvio.findMany({
+            where: {
+                ...filtroQuery,
+                imobiliariaId: req.user?.imobiliariaId,
             },
             include: {
                 reguaCobranca: true,
                 imobiliaria: true,
             },
-            take: 500,
+        });
+        const total = await prisma.filaEnvio.count({
+            where: {},
         });
 
-        await Promise.all(
-            filaEnvio.map(async (item) => {
-                const email = await mail.sendMail({
-                    from: "IMO7 <contato@trafegoimoveis.com.br>",
-                    to: `${item.nomeDestinatario} <${item.destinatario}>`,
-                    subject: item.reguaCobranca?.assunto
-                        ? item.reguaCobranca?.assunto
-                        : item.reguaCobranca.tipo == "boleto"
-                        ? "2ª via de boleto online"
-                        : "Resumo do extrato",
-                    html:
-                        item.reguaCobranca.tipo === "boleto"
-                            ? emailBoleto({
-                                  conteudo: item.reguaCobranca.conteudo,
-                                  imobiliaria: item?.imobiliaria,
-                                  nomeDestinatario: item.nomeDestinatario,
-                                  ...item.parametros,
-                              })
-                            : item.reguaCobranca.tipo == "extrato"
-                            ? emailExtrato({
-                                  imobiliaria: item?.imobiliaria,
-                                  nomeDestinatario: item?.nomeDestinatario,
-                                  ...item.parametros,
-                              })
-                            : "",
-                });
-                await prisma.filaEnvio.update({
-                    where: {
-                        id: item.id,
-                    },
-                    data: {
-                        dataEnvio: new Date(),
-                    },
-                });
-            })
-        );
-
-        return res.send({ success: true });
+        return res.send({ data, total });
     } catch (error) {
         return res.status(500).send({
             error: true,

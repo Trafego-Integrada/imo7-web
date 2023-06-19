@@ -175,7 +175,7 @@ model Imobiliaria {
     url          String?
 
     smtpHost    String?
-    smtpPort    Int?
+    smtpPort    String?
     smtpUser    String?
     smtpPass    String?
     smtpSecure  Boolean?

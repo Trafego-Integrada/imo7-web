@@ -16,10 +16,22 @@ handle.post(async (req, res) => {
 
         const data = await prisma.boleto.findMany({
             where: {
-                bols_cpf_cnpj: documento,
+                bols_cpf_cnpj: documento.replace(/\D/g, ""),
                 imobiliaria: {
                     codigo: site,
                 },
+                AND: [
+                    {
+                        barcode: {
+                            not: "",
+                        },
+                    },
+                    {
+                        barcode: {
+                            not: null,
+                        },
+                    },
+                ],
             },
             include: {
                 conta: true,

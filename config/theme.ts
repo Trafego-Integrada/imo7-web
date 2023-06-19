@@ -20,7 +20,6 @@ export const theme = extendTheme({
     },
     colors: {
         bluelight: "#2F80ED",
-        orange: "#F2994A",
         graydark: "#4F4F4F",
         graylight: "#F0F0F0",
     },

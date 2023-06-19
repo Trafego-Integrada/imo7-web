@@ -263,9 +263,19 @@ handle.get(async (req, res) => {
         if (barcode) {
             filtroQuery = {
                 ...filtroQuery,
-                barcode: {
-                    not: null,
-                },
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        barcode: {
+                            not: null,
+                        },
+                    },
+                    {
+                        barcode: {
+                            not: "",
+                        },
+                    },
+                ],
             };
         }
         const data = await prisma.boleto.findMany({
