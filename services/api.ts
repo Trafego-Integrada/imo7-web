@@ -30,17 +30,10 @@ export function setupApiClient(ctx = null) {
     });
     api.interceptors.request.use((request) => {
         let cookies = parseCookies(null);
-<<<<<<< HEAD
-        console.log(cookies);
-        let host;
-        if (typeof window !== "undefined") {
-            console.log(window.location);
-=======
         // console.log(cookies)
         let host;
         if (typeof window !== "undefined") {
             // console.log(window.location)
->>>>>>> 0f8bdaf27cb548ef32dd664e3c151b4536b275e5
             host = window.location.host;
             host = host.split(".")[0];
         }
