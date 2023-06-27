@@ -100,7 +100,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
             setError(error.message);
         }
     };
-<<<<<<< HEAD
     useEffect(() => {
         setFocus("documento");
     }, []);
@@ -165,45 +164,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                         atualize seus dados cadastrais
                                     </Text>
                                 </Box>
-=======
-
-    console.log("imobiliaria")
-    console.log(imobiliaria)
-    return (
-        <Stack bg="gray.50" w="100vw" h="100vh">
-            <Grid templateColumns="repeat(3, 1fr)" w="full" h="full">
-                
-                <GridItem
-                    colSpan={2}
-                    display={{ base: "none", lg: "flex" }}
-                    bg="blue.500"
-                    bgImg={imobiliaria.bg? imobiliaria.bg : null}
-                    bgPos="center"
-                    alignItems="center"
-                    justifyContent="center"
-                    bgSize="cover"
-                    p={4}
-                ></GridItem>
-                <GridItem colSpan={1}>
-                    <VStack
-                        as="form"
-                        onSubmit={handleSubmit(onSubmit)}
-                        w={{ base: "100vw", lg: "full" }}
-                        h="full"
-                        align="center"
-                        justify="center"
-                        gridGap={4}
-                        p={4}
-                    >
-                        <Box px={8} py={4}>
-                            {imobiliaria.logo ? (
-                                <Image
-                                    h={40}
-                                    objectFit="contain"
-                                    src={imobiliaria.logo}
-                                    alt={imobiliaria.nomeFantasia}
-                                />
->>>>>>> 0f8bdaf27cb548ef32dd664e3c151b4536b275e5
                             ) : (
                                 <Text>Para entrar, informe seu CPF</Text>
                             )}
