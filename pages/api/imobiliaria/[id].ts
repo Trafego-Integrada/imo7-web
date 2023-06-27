@@ -10,6 +10,7 @@ import * as os from "oci-objectstorage";
 import slug from "slug";
 
 const handle = nextConnect();
+
 export const config = {
     api: {
         bodyParser: false,
