@@ -22,11 +22,21 @@ handle.get(async (req, res) => {
             codigo,
             imobiliariaId,
             xml,
+            importadaJb,
         } = req.query;
         let filtroQuery: Prisma.FichaCadastralWhereInput = { AND: [] };
         if (tipoFicha) {
             filtroQuery = {
                 ...filtroQuery,
+                modelo: {
+                    tipo: tipoFicha,
+                },
+            };
+        }
+        if (importadaJb) {
+            filtroQuery = {
+                ...filtroQuery,
+                importadaJb: importadaJb == "1" ? true : false,
             };
         }
         if (deletedAt) {
@@ -169,9 +179,7 @@ handle.get(async (req, res) => {
                 AND: [
                     ...filtroQuery.AND,
                     {
-                        status: {
-                            in: status,
-                        },
+                        status:""
                     },
                 ],
             };

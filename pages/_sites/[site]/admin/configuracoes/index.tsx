@@ -643,30 +643,77 @@ const Configuracoes = () => {
                                 <TabPanel>
                                     <Envio />
                                 </TabPanel>
-
-                                <TabPanel>
-                                    <Box>
-                                        <Text
-                                            mb={5}
-                                            mt={5}
-                                            fontSize="2xl"
-                                            fontWeight="500"
-                                        >
-                                            Regras para emissão de 2º Via
-                                            boletos
-                                        </Text>
-                                        <Box bg="white" p={5}>
-                                            <FormSelect
-                                                bg="white"
-                                                label="Tipo de emissão"
-                                                placeholder="selecione..."
+                                <TabPanel px={0}>
+                                    <Flex
+                                        flexDir="column"
+                                        gap={4}
+                                        as="form"
+                                        id="formImobiliaria"
+                                        onSubmit={handleSubmit(onSubmit)}
+                                    >
+                                        <Box bg="white" p={4}>
+                                            <Flex
+                                                align="center"
+                                                justify="space-between"
+                                                mb={4}
                                             >
-                                                <option value="">
-                                                    Utilizando CPF & Nº contrato
-                                                </option>
-                                            </FormSelect>
+                                                <Box>
+                                                    <Heading size="md">
+                                                        2ª Via de Boletos
+                                                    </Heading>
+                                                </Box>
+                                                <Button
+                                                    type="submit"
+                                                    isLoading={isSubmitting}
+                                                    size="sm"
+                                                    id="formImobiliaria"
+                                                    colorScheme="blue"
+                                                >
+                                                    Salvar
+                                                </Button>
+                                            </Flex>
+                                            <Grid gap={5}>
+                                                <GridItem>
+                                                    <Grid gridTemplateColumns="repeat(2,1fr)">
+                                                        <GridItem>
+                                                            <Text
+                                                                fontWeight="bold"
+                                                                fontSize="sm"
+                                                            >
+                                                                Disponibilidade
+                                                                para download
+                                                            </Text>
+                                                            <Text
+                                                                fontSize="xs"
+                                                                color="gray"
+                                                            >
+                                                                Quantos dias o
+                                                                boleto ficará
+                                                                disponível para
+                                                                download após o
+                                                                vencimento?
+                                                            </Text>
+                                                        </GridItem>
+                                                        <GridItem>
+                                                            <FormInput
+                                                                size="sm"
+                                                                placeholder="Informe a quantidade de dias para download do boleto..."
+                                                                bg="white"
+                                                                {...register(
+                                                                    "diasDownloadBoleto"
+                                                                )}
+                                                                error={
+                                                                    errors
+                                                                        .razaoSocial
+                                                                        ?.message
+                                                                }
+                                                            />
+                                                        </GridItem>
+                                                    </Grid>
+                                                </GridItem>
+                                            </Grid>
                                         </Box>
-                                    </Box>
+                                    </Flex>
                                 </TabPanel>
                                 <TabPanel>
                                     <FichasCadastrais />

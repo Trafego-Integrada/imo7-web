@@ -60,6 +60,8 @@ handle.post(async (req, res) => {
         emailEnvioExtrato,
         emailAssuntoExtrato,
         emailMensagemExtrato,
+        enviarEmail,
+        enviarWhatsapp,
     } = req.body;
     const { logo, bg } = req.files;
     let limparLogo = {};
@@ -108,6 +110,8 @@ handle.post(async (req, res) => {
             emailEnvioExtrato,
             emailAssuntoExtrato,
             emailMensagemExtrato,
+            enviarEmail: JSON.parse(enviarEmail),
+            enviarWhatsapp: JSON.parse(enviarWhatsapp),
             ...limparLogo,
             ...limparBg,
         },

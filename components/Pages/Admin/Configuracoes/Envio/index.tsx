@@ -120,6 +120,53 @@ export const Envio = () => {
                     <Box bg="white" p={4}>
                         <Flex align="center" justify="space-between" mb={4}>
                             <Box>
+                                <Heading size="md">Ativação</Heading>
+                                <Text fontSize="sm" color="gray">
+                                    Ative ou desative o envio de e-mails e
+                                    whatsapp
+                                </Text>
+                            </Box>
+                            <Button
+                                type="submit"
+                                isLoading={isSubmitting}
+                                size="sm"
+                                id="formEnvio"
+                                colorScheme="blue"
+                            >
+                                Salvar
+                            </Button>
+                        </Flex>
+                        <Grid
+                            gridTemplateColumns={{
+                                base: "repeat(1,1fr)",
+                                lg: "repeat(1,1fr)",
+                            }}
+                        >
+                            <GridItem>
+                                <Checkbox
+                                    size="sm"
+                                    placeholder="Digite o e-mail do remetente"
+                                    isChecked={watch("enviarEmail")}
+                                    {...register("enviarEmail")}
+                                >
+                                    Enviar e-mail
+                                </Checkbox>
+                            </GridItem>
+                            <GridItem as={Grid}>
+                                <Checkbox
+                                    size="sm"
+                                    placeholder="Digite o e-mail do remetente"
+                                    isChecked={watch("enviarWhatsapp")}
+                                    {...register("enviarWhatsapp")}
+                                >
+                                    Enviar whatsapp
+                                </Checkbox>
+                            </GridItem>
+                        </Grid>
+                    </Box>
+                    <Box bg="white" p={4}>
+                        <Flex align="center" justify="space-between" mb={4}>
+                            <Box>
                                 <Heading size="md">Boletos</Heading>
                                 <Text fontSize="sm" color="gray">
                                     Configure o envio de boletos

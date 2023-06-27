@@ -115,7 +115,6 @@ handle.post(async (req, res) => {
                 },
                 update: {
                     codigo: Number(boleto.bols_codl),
-
                     inquilinos: {
                         connectOrCreate: {
                             where: {
@@ -369,7 +368,7 @@ handle.post(async (req, res) => {
                     await prisma.filaEnvio.create({
                         data: {
                             nomeDestinatario: nome_razao_sacado,
-                            destinatario: email_sacado,
+                            destinatario: ,
                             parametros: {
                                 idBoleto: boleto.id,
                             },
