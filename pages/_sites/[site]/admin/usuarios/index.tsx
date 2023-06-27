@@ -36,7 +36,7 @@ import { useAuth } from "hooks/useAuth";
 
 const Usuarios = ({}) => {
     const { usuario } = useAuth();
-    console.log(usuario);
+    // console.log(usuario);
     return (
         <>
             <Layout title="Usuários">

@@ -15,25 +15,32 @@ export function setupApiClient(ctx = null) {
     let host;
 
     if (typeof window !== "undefined") {
-        console.log(window.location);
+        // console.log(window.location);
         host = window.location.host;
         host = host.split(".")[0];
     }
 
+    const url = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : "http://localhost:3000/api/"
+
     const api = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_API_URL
-            ? process.env.NEXT_PUBLIC_API_URL
-            : "http://localhost:3000/api/",
+        baseURL: url,
         headers: {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
         },
     });
     api.interceptors.request.use((request) => {
         let cookies = parseCookies(null);
+<<<<<<< HEAD
         console.log(cookies);
         let host;
         if (typeof window !== "undefined") {
             console.log(window.location);
+=======
+        // console.log(cookies)
+        let host;
+        if (typeof window !== "undefined") {
+            // console.log(window.location)
+>>>>>>> 0f8bdaf27cb548ef32dd664e3c151b4536b275e5
             host = window.location.host;
             host = host.split(".")[0];
         }
@@ -57,13 +64,18 @@ export function setupApiClient(ctx = null) {
         (error: AxiosError) => {
             if (error.response?.status === 401) {
                 if (error.response.data?.code === "token.expired") {
+<<<<<<< HEAD
                     console.log("expirou");
+=======
+                    // console.log('expirou')
+>>>>>>> 0f8bdaf27cb548ef32dd664e3c151b4536b275e5
                     cookies = parseCookies();
                     let host;
                     if (typeof window !== "undefined") {
                         host = window.location.host;
                         host = host.split(".")[0];
                     }
+<<<<<<< HEAD
                     console.log(host);
                     const {
                         "imo7.refreshToken": refreshToken,
@@ -72,6 +84,13 @@ export function setupApiClient(ctx = null) {
                     const originalConfig = error.config;
                     if (!isRefreshing) {
                         console.log("expirou 2");
+=======
+                    // console.log(host)
+                    const { "imo7.refreshToken": refreshToken,"imo7.token":token } = cookies;
+                    const originalConfig = error.config;
+                    if (!isRefreshing) {
+                        // console.log('expirou 2')
+>>>>>>> 0f8bdaf27cb548ef32dd664e3c151b4536b275e5
                         isRefreshing = true;
                         api.post("auth/refresh", {
                             refreshToken,

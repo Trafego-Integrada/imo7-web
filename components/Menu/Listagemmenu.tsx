@@ -65,6 +65,22 @@ const menu = [
         icon: FaHandHoldingUsd,
         cargos: ["imobiliaria"],
         modulos: ["imobiliaria.cobrancas"],
+        subMenus: [
+            {
+                titulo: "Boletos",
+                href: "/admin/extratos",
+                icon: HiOutlineDocumentText,
+                cargos: ["imobiliaria"],
+                modulos: ["imobiliaria.cobrancas"],
+            },
+            {
+                titulo: "Validações Faciais",
+                href: "/admin/validacoesfaciais",
+                icon: HiOutlineDocumentText,
+                cargos: ["imobiliaria"],
+                modulos: ["imobiliaria.validacoesfaciais"],
+            },
+        ],
     },
     {
         titulo: "Inquilinos",

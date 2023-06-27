@@ -961,3 +961,15 @@ model Notificacao {
     updatedAt        DateTime?             @updatedAt
     deletedAt        DateTime?
 }
+
+model validacaofacial {
+    id            Int       @id @default(autoincrement())
+    imobiliariaId Int?      @db.UnsignedInt
+    cpf           String?   @db.VarChar(11)
+    pin           String?   @db.VarChar(50)
+    resultado     String?   @db.LongText
+    createAt      DateTime? @default(now())
+    updatedAt     DateTime? @updatedAt
+    deletedAt     DateTime?
+    status        Int       @default(0)
+}

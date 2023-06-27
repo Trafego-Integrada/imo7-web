@@ -117,7 +117,7 @@ const FichasCadastrais = () => {
             },
         });
     };
-    console.log(usuario);
+    // console.log(usuario);
     return (
         <Layout>
             <Box p={4}>
