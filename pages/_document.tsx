@@ -15,8 +15,10 @@ class MyDocument extends Document {
     render() {
         return (
             <Html>
-                <Head></Head>
-                <body>
+                <Head>
+                    
+                </Head>
+                <body> 
                     <ColorModeScript initialColorMode="light" />
                     <Main />
                     <NextScript />

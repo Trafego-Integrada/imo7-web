@@ -15,15 +15,15 @@ export function setupApiClient(ctx = null) {
     let host;
 
     if (typeof window !== "undefined") {
-        console.log(window.location);
+        // console.log(window.location);
         host = window.location.host;
         host = host.split(".")[0];
     }
 
+    const url = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : "http://localhost:3000/api/"
+
     const api = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_API_URL
-            ? process.env.NEXT_PUBLIC_API_URL
-            : "http://localhost:3000/api/",
+        baseURL: url,
         headers: {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
            
@@ -31,10 +31,10 @@ export function setupApiClient(ctx = null) {
     });
     api.interceptors.request.use((request) => {
         let cookies = parseCookies(null);
-        console.log(cookies)
+        // console.log(cookies)
         let host;
         if (typeof window !== "undefined") {
-            console.log(window.location)
+            // console.log(window.location)
             host = window.location.host;
             host = host.split(".")[0];
         }
@@ -59,18 +59,18 @@ export function setupApiClient(ctx = null) {
             
             if (error.response?.status === 401) {
                 if (error.response.data?.code === "token.expired") {
-                    console.log('expirou')
+                    // console.log('expirou')
                     cookies = parseCookies();
                     let host;
                     if (typeof window !== "undefined") {
                         host = window.location.host;
                         host = host.split(".")[0];
                     }
-                    console.log(host)
+                    // console.log(host)
                     const { "imo7.refreshToken": refreshToken,"imo7.token":token } = cookies;
                     const originalConfig = error.config;
                     if (!isRefreshing) {
-                        console.log('expirou 2')
+                        // console.log('expirou 2')
                         isRefreshing = true;
                         api.post("auth/refresh", { refreshToken, imobiliaria:host != "localhost:3000" &&
                         host != "imo7.com.br" &&

@@ -103,7 +103,7 @@ const ModalBase = ({}, ref) => {
             }
         },
     }));
-    console.log(watch());
+    // console.log(watch());
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -226,7 +226,8 @@ const ModalBase = ({}, ref) => {
                                                     p={4}
                                                 >
                                                     <Heading size="sm">
-                                                        {item.nome}1
+                                                        {item.nome}
+                                                        
                                                     </Heading>
                                                     <Grid
                                                         mt={4}
@@ -236,6 +237,11 @@ const ModalBase = ({}, ref) => {
                                                         }}
                                                         gap={4}
                                                     >
+                                                        {item?.campos?.map(
+                                                            (i) => {
+                                                                    console.log(i);
+                                                            }
+                                                        )}
                                                         {item?.campos?.map(
                                                             (i) => (
                                                                 <GridItem
@@ -251,6 +257,23 @@ const ModalBase = ({}, ref) => {
                                                                         <Text fontSize="xs">
                                                                             {
                                                                                 i.nome
+                                                                            }
+                                                                            { (i.nome.indexOf("CPF") >=  0) && 
+                                                                                <span>
+                                                                                    <Text>
+                                                                                    <a 
+                                                                                            href={"javascript:navigator.clipboard.writeText('http://imperium.localhost:3000/validacao-facial?cpf="+ (watch("preenchimento")?.find((p) => p.campoFichaCadastralCodigo == i.codigo)?.valor)  +"')"} 
+                                                                                            style={{color: "blue"}}>
+                                                                                            Link validar CPF
+                                                                                    </a>
+                                                                                    </Text>
+                                                                              <Tag
+                                                                                    colorScheme="green"
+                                                                                    size="sm"
+                                                                                >
+                                                                                    Facial validado 94%
+                                                                                </Tag>
+                                                                                </span>
                                                                             }
                                                                         </Text>
                                                                         {watch(
@@ -269,6 +292,7 @@ const ModalBase = ({}, ref) => {
                                                                             >
                                                                                 Aprovado
                                                                             </Tag>
+                                                                           
                                                                         ) : watch(
                                                                               "preenchimento"
                                                                           )?.find(

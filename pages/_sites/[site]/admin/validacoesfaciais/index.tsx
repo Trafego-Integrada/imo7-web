@@ -15,7 +15,7 @@ import {
 } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
 import { excluirFicha, listarFichas } from "@/services/models/fichaCadastral";
-import { listarUsuarios } from "@/services/models/usuario";
+import { listarValidacoesFaciais } from "@/services/models/validacaofacial";
 import { queryClient } from "@/services/queryClient";
 import {
     Box,
@@ -36,6 +36,7 @@ import {
     Tr,
     useToast,
 } from "@chakra-ui/react";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
@@ -44,6 +45,7 @@ import { FiEdit, FiEye, FiLink, FiPlus, FiTrash } from "react-icons/fi";
 import { MdOutlineVerifiedUser, MdAccessibilityNew } from "react-icons/md";
 import { exportToExcel } from "react-json-to-excel";
 import { useMutation, useQuery } from "react-query";
+
 const filtroPadrao = {
     query: "",
     identificacao: "",
@@ -53,76 +55,44 @@ const filtroPadrao = {
     responsaveis: [],
 };
 const FichasCadastrais = () => {
-    const { usuario } = useAuth();
-    const [filtro, setFiltro] = useState(filtroPadrao);
-    const toast = useToast();
-    const router = useRouter();
-    const modal = useRef();
-    const modalExcluir = useRef();
-    const modalRevisar = useRef();
-    const modalValidar = useRef();
+
+    const { usuario }           = useAuth();
+    const [filtro, setFiltro]   = useState(filtroPadrao);
+    const toast                 = useToast();
+    const router                = useRouter();
+    const modal                 = useRef();
+    const modalExcluir          = useRef();
+    const modalRevisar          = useRef();
+    const modalValidar          = useRef();
+
     const { data: fichas } = useQuery(
         [
             "fichas",
             {
                 ...filtro,
-                createdAt: filtro.createdAt[0]
-                    ? JSON.stringify(filtro.createdAt)
-                    : null,
-                updatedAt: filtro.updatedAt[0]
-                    ? JSON.stringify(filtro.updatedAt)
-                    : null,
-                status: filtro.status[0] ? JSON.stringify(filtro.status) : null,
-                responsaveis: filtro.responsaveis[0]
-                    ? JSON.stringify(filtro.responsaveis)
-                    : null,
+                createdAt: filtro.createdAt[0] ? JSON.stringify(filtro.createdAt) : null,
+                updatedAt: filtro.updatedAt[0] ? JSON.stringify(filtro.updatedAt) : null,
+                // status: filtro.status[0] ? JSON.stringify(filtro.status) : null,
+                // responsaveis: filtro.responsaveis[0] ? JSON.stringify(filtro.responsaveis) : null,
             },
         ],
-        listarFichas
+        listarValidacoesFaciais
     );
-    const { data: responsaveis } = useQuery(
-        [
-            "listaResponsaveis",
-            {
-                imobiliariaId: usuario?.imobiliariaId,
-                contaId: usuario?.conta?.id,
-                admConta: usuario?.cargos?.includes("conta") ? true : false,
-                admImobiliaria: usuario?.cargos?.includes("imobiliaria")
-                    ? true
-                    : false,
-                adm: usuario?.cargos?.includes("adm") ? true : false,
-            },
-        ],
-        listarUsuarios
-    );
-    const excluir = useMutation(excluirFicha);
 
-    const onDelete = async (id) => {
-        await excluir.mutateAsync(id, {
-            onSuccess: () => {
-                toast({
-                    title: "Ficha excluida",
-                    duration: 3000,
-                    status: "success",
-                });
-                queryClient.invalidateQueries(["fichas"]);
-            },
-        });
-    };
-    // console.log(usuario);
     return (
         <Layout>
             <Box p={4}>
                 <Box mb={6}>
                     <Heading size="md" color="gray.600">
-                        Fichas Cadastrais
+                        Validações faciais
                     </Heading>
                     <Text color="gray" fontSize="sm" fontStyle="italic">
-                        Gere e gerêncie as fichas cadastrais
+                        Acompanhe o extrato de validações faciais
                     </Text>
                 </Box>
+
                 <Box>
-                    <Box bg="white" p={4} mb={4}>
+                    {/* <Box bg="white" p={4} mb={4}>
                         <Flex align="center" justify="space-between">
                             <Heading size="sm" mb={2}>
                                 Filtro avançado
@@ -224,8 +194,10 @@ const FichasCadastrais = () => {
                                 getOptionValue={(e) => e.id}
                             />
                         </Flex>
-                    </Box>
-                    <Flex
+                    </Box> */}
+
+
+                    {/* <Flex
                         justify="space-between"
                         align="center"
                         bg="white"
@@ -294,17 +266,19 @@ const FichasCadastrais = () => {
                                 </Button>
                             )}
                         </Flex>
-                    </Flex>
+                    </Flex> */}
+
                     <Box bg="white" mt={4} p={4}>
                         <TableContainer>
                             <Table size="sm">
                                 <Thead>
                                     <Tr>
-                                        <Th w={44}>ID</Th>
-                                        <Th w={44}>Tipo</Th>
-                                        <Th>Nome</Th>
-                                        <Th w={44}>Preenchimento</Th>
-                                        <Th w={44}>Responsável</Th>
+                                        <Th>ID</Th>
+                                        {/* <Th w={44}>Tipo</Th> */}
+                                        <Th>CPF</Th>
+                                        <Th>TOKEN</Th>
+                                        <Th w={44}>SIMILARIDADE</Th>
+                                        {/* <Th w={44}>Responsável</Th> */}
                                         <Th w={24}>Criado em</Th>
                                         <Th w={24}>Última atualização</Th>
                                         <Th w={44}>Status</Th>
@@ -315,71 +289,23 @@ const FichasCadastrais = () => {
                                     {fichas?.data?.length > 0 ? (
                                         fichas.data.map((item) => (
                                             <Tr key={item.id}>
-                                                <Td># {item.codigo}</Td>
-                                                <Td>
-                                                    {tipoFicha(
-                                                        item.modelo?.tipo
-                                                    )}
-                                                    <br />
-                                                    {item.modelo?.nome}
-                                                </Td>
+                                                <Td># {item.id}</Td>
+                                                <Td>{item.cpf}</Td>
                                                 <Td>
                                                     <Text fontWeight="bold">
-                                                        {item.nome}
-                                                    </Text>
-                                                    <Text>
-                                                        {item.descricao}
+                                                        {JSON.parse(item.resultado)?.token}
                                                     </Text>
                                                 </Td>
                                                 <Td>
-                                                    <Box pos="relative">
-                                                        <Tooltip
-                                                            label={`${
-                                                                item.preenchimento.filter(
-                                                                    (i) =>
-                                                                        i.valor
-                                                                ).length
-                                                            } de ${
-                                                                item
-                                                                    .preenchimento
-                                                                    .length
-                                                            } campos preenchidos`}
-                                                        >
+                                                    {item.status == 1 && 
+                                                     <Box pos="relative">
+                                                        <Tooltip label={"L1"}>
                                                             <Box>
                                                                 <Progress
                                                                     size="lg"
-                                                                    value={
-                                                                        item.preenchimento.filter(
-                                                                            (
-                                                                                i
-                                                                            ) =>
-                                                                                i.valor
-                                                                        ).length
-                                                                    }
-                                                                    max={
-                                                                        item
-                                                                            .preenchimento
-                                                                            .length >
-                                                                        0
-                                                                            ? item
-                                                                                  .preenchimento
-                                                                                  .length
-                                                                            : 100
-                                                                    }
-                                                                    colorScheme={
-                                                                        item.preenchimento.filter(
-                                                                            (
-                                                                                i
-                                                                            ) =>
-                                                                                i.valor
-                                                                        )
-                                                                            .length ==
-                                                                        item
-                                                                            .preenchimento
-                                                                            .length
-                                                                            ? "green"
-                                                                            : "yellow"
-                                                                    }
+                                                                    value={JSON.parse(item.resultado)?.biometria_face?.similaridade * 100}
+                                                                    max={100}
+                                                                    colorScheme={"green"}
                                                                 />
                                                             </Box>
                                                         </Tooltip>
@@ -393,48 +319,30 @@ const FichasCadastrais = () => {
                                                             <Text
                                                                 textAlign="center"
                                                                 fontSize="xs"
-                                                                color={
-                                                                    Number(
-                                                                        (item.preenchimento.filter(
-                                                                            (
-                                                                                i
-                                                                            ) =>
-                                                                                i.valor
-                                                                        )
-                                                                            .length /
-                                                                            item
-                                                                                .preenchimento
-                                                                                .length) *
-                                                                            100
-                                                                    ).toFixed(
-                                                                        0
-                                                                    ) == 100
-                                                                        ? "white"
-                                                                        : ""
-                                                                }
+                                                                color={"white"}
                                                             >
-                                                                {Number(
-                                                                    (item.preenchimento.filter(
-                                                                        (i) =>
-                                                                            i.valor
-                                                                    ).length /
-                                                                        item
-                                                                            .preenchimento
-                                                                            .length) *
-                                                                        100
-                                                                ).toFixed(2)}
-                                                                % preenchida
+                                                                 
+                                                                {parseInt(JSON.parse(item.resultado)?.biometria_face?.similaridade * 100)} %
                                                             </Text>
                                                         </Flex>
+                                                        <Text
+                                                                textAlign="center"
+                                                                fontSize="xs"
+                                                                color={"green"}
+                                                            >
+                                                                 
+                                                                 {JSON.parse(item.resultado)?.biometria_face?.probabilidade}
+                                                            </Text>
                                                     </Box>
+                                                    }
                                                 </Td>
 
-                                                <Td>
+                                                {/* <Td>
                                                     {item.responsavel?.nome}
-                                                </Td>
+                                                </Td> */}
                                                 <Td>
                                                     {formatoData(
-                                                        item.createdAt,
+                                                        item.createAt,
                                                         "DATA_HORA"
                                                     )}
                                                 </Td>
@@ -445,7 +353,9 @@ const FichasCadastrais = () => {
                                                     )}
                                                 </Td>
                                                 <Td>
-                                                    {statusFicha(item.status)}
+                                                    <Text color={"blue"}>{item.status==0?"Aguardando":""}</Text>
+                                                    <Text color={"red"}>{item.status==-1?"Falha na verificação":""}</Text>
+                                                    <Text color={"green"}>{item.status==1?"Sucesso na verificação":""}</Text>
                                                 </Td>
                                                 <Td>
                                                     {" "}
@@ -470,7 +380,7 @@ const FichasCadastrais = () => {
                                                             />
                                                         </Tooltip> */}
 
-                                                    {usuario?.permissoes?.includes(
+                                                    {/* {usuario?.permissoes?.includes(
                                                         "imobiliaria.fichas.revisar"
                                                     ) && (
                                                         <Tooltip label="Revisar Ficha">
@@ -492,8 +402,8 @@ const FichasCadastrais = () => {
                                                                 }
                                                             />
                                                         </Tooltip>
-                                                    )}
-                                                    {usuario?.permissoes?.includes(
+                                                    )} */}
+                                                    {/* {usuario?.permissoes?.includes(
                                                         "imobiliaria.fichas.editar"
                                                     ) && (
                                                         <Tooltip label="Editar Ficha">
@@ -515,8 +425,8 @@ const FichasCadastrais = () => {
                                                                 }
                                                             />
                                                         </Tooltip>
-                                                    )}
-                                                    <Tooltip label="Copiar URL da Ficha">
+                                                    )} */}
+                                                    {/* <Tooltip label="Copiar URL da Ficha">
                                                         <IconButton
                                                             size="sm"
                                                             variant="ghost"
@@ -534,8 +444,8 @@ const FichasCadastrais = () => {
                                                                 });
                                                             }}
                                                         />
-                                                    </Tooltip>
-                                                    <Tooltip label="Visualizar Ficha">
+                                                    </Tooltip> */}
+                                                    {/* <Tooltip label="Visualizar Ficha">
                                                         <Link
                                                             href={`/fichaCadastral/${item.id}`}
                                                             target="_blank"
@@ -552,8 +462,8 @@ const FichasCadastrais = () => {
                                                                 }
                                                             />
                                                         </Link>
-                                                    </Tooltip>
-                                                    <Tooltip label="Exportar para Excel">
+                                                    </Tooltip> */}
+                                                    {/* <Tooltip label="Exportar para Excel">
                                                         <IconButton
                                                             size="sm"
                                                             variant="ghost"
@@ -572,8 +482,9 @@ const FichasCadastrais = () => {
                                                                 )
                                                             }
                                                         />
-                                                    </Tooltip>
-                                                    <Tooltip label="Gerar PDF">
+                                                    </Tooltip> */}
+
+                                                    {/* <Tooltip label="Gerar PDF">
                                                         <Link
                                                             href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
                                                             target="_blank"
@@ -591,8 +502,9 @@ const FichasCadastrais = () => {
                                                                 }
                                                             />
                                                         </Link>
-                                                    </Tooltip>
-                                                    {usuario?.permissoes?.includes(
+                                                    </Tooltip> */}
+
+                                                    {/* {usuario?.permissoes?.includes(
                                                         "imobiliaria.fichas.excluir"
                                                     ) && (
                                                         <Tooltip label="Excluir Ficha">
@@ -614,7 +526,7 @@ const FichasCadastrais = () => {
                                                                 }}
                                                             />
                                                         </Tooltip>
-                                                    )}
+                                                    )} */}
                                                 </Td>
                                             </Tr>
                                         ))
@@ -625,7 +537,8 @@ const FichasCadastrais = () => {
                                                 textAlign="center"
                                                 color="gray"
                                             >
-                                                Não encontramos fichas
+                                                <br/>
+                                                Não encontramos registros
                                             </Td>
                                         </Tr>
                                     )}
@@ -635,11 +548,10 @@ const FichasCadastrais = () => {
                     </Box>
                 </Box>
             </Box>
-            <ModalFichaCadastral ref={modal} />
+            {/* <ModalFichaCadastral ref={modal} />
             <ModalRevisaoFichaCadastral ref={modalRevisar} />
             <ModalValidar ref={modalValidar} />
-
-            <Excluir ref={modalExcluir} onDelete={onDelete} />
+            <Excluir ref={modalExcluir} onDelete={onDelete} /> */}
         </Layout>
     );
 };

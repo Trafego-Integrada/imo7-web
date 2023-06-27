@@ -80,14 +80,18 @@ const SignIn: NextPage = ({ imobiliaria }) => {
             setError(error.message);
         }
     };
+
+    console.log("imobiliaria")
+    console.log(imobiliaria)
     return (
         <Stack bg="gray.50" w="100vw" h="100vh">
             <Grid templateColumns="repeat(3, 1fr)" w="full" h="full">
+                
                 <GridItem
                     colSpan={2}
                     display={{ base: "none", lg: "flex" }}
                     bg="blue.500"
-                    bgImg={imobiliaria.bg ? imobiliaria.bg : null}
+                    bgImg={imobiliaria.bg? imobiliaria.bg : null}
                     bgPos="center"
                     alignItems="center"
                     justifyContent="center"

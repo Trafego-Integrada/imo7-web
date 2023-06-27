@@ -141,7 +141,7 @@ const ModalBase = ({ chamadoId }, ref) => {
                 event.preventDefault();
         }
     };
-    console.log(watch());
+    // console.log(watch());
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="4xl">
