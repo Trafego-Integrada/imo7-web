@@ -368,7 +368,7 @@ handle.post(async (req, res) => {
                     await prisma.filaEnvio.create({
                         data: {
                             nomeDestinatario: nome_razao_sacado,
-                            destinatario: ,
+                            destinatario: email_sacado,
                             parametros: {
                                 idBoleto: boleto.id,
                             },
