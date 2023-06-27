@@ -57,33 +57,18 @@ export function setupApiClient(ctx = null) {
         (error: AxiosError) => {
             if (error.response?.status === 401) {
                 if (error.response.data?.code === "token.expired") {
-<<<<<<< HEAD
-                    console.log("expirou");
-=======
                     // console.log('expirou')
->>>>>>> 0f8bdaf27cb548ef32dd664e3c151b4536b275e5
                     cookies = parseCookies();
                     let host;
                     if (typeof window !== "undefined") {
                         host = window.location.host;
                         host = host.split(".")[0];
                     }
-<<<<<<< HEAD
-                    console.log(host);
-                    const {
-                        "imo7.refreshToken": refreshToken,
-                        "imo7.token": token,
-                    } = cookies;
-                    const originalConfig = error.config;
-                    if (!isRefreshing) {
-                        console.log("expirou 2");
-=======
                     // console.log(host)
                     const { "imo7.refreshToken": refreshToken,"imo7.token":token } = cookies;
                     const originalConfig = error.config;
                     if (!isRefreshing) {
                         // console.log('expirou 2')
->>>>>>> 0f8bdaf27cb548ef32dd664e3c151b4536b275e5
                         isRefreshing = true;
                         api.post("auth/refresh", {
                             refreshToken,
