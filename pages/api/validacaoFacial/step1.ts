@@ -51,6 +51,7 @@ handler.post(async (req, res) => {
 
   console.log("APOS SET PHOTO")
   console.log(PHOTO)
+
   if(PHOTO != "OK") {
     console.log("PHOTO IS DIFF OK")
   }
@@ -198,8 +199,7 @@ const setPhoto = async (access_token: string, pin: string, cpf: number, photoBas
   photoBase64 = photoBase64.substring("data:image/jpeg;base64,".length);
 
   /*  SALVAR FOTO LOCALMENTE PARA DEBUG */
-
-  // require("fs").writeFile("out.png", photoBase64, 'base64', (err) => {
+  // require("fs").writeFile("out.jpg", photoBase64, 'base64', (err) => {
   //   console.log("Photo To Disk")
   //   console.log(err);
   // });
