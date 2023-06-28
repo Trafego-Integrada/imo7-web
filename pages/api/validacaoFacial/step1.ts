@@ -44,7 +44,16 @@ handler.post(async (req, res) => {
      res.status(200).send({status: 0, message: "Falha no envio da foto - 1"});
      return;
   }
-  
+
+  const fotoUrl =   await uploadPhoto(req.body.imobiliariaId, req.body.foto);
+    
+  console.log("FOTO URL")
+  console.log(fotoUrl)
+
+  if(!fotoUrl) {
+    return res.status(200).send({status: 0, message: "Falha no envio da foto - WRITE FAILED "});
+  }
+
   console.log(1);
 
   const PHOTO = await setPhoto(ACCESS_TOKEN, PIN, req.body.cpf, req.body.foto);
@@ -68,14 +77,6 @@ handler.post(async (req, res) => {
 
   try { 
 
-    const fotoUrl =   await uploadPhoto(req.body.imobiliariaId, req.body.foto);
-    
-    console.log("FOTO URL")
-    console.log(fotoUrl)
-
-    if(!fotoUrl) {
-      return res.status(200).send({status: 0, message: "Falha no envio da foto - 2"});
-    }
 
     let data = {
       imobiliariaId:  req.body.imobiliariaId,
