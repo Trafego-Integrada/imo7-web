@@ -972,4 +972,5 @@ model validacaofacial {
     updatedAt     DateTime? @updatedAt
     deletedAt     DateTime?
     status        Int       @default(0)
+    fotoUrl      String?    @db.LongText
 }

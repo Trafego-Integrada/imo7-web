@@ -35,6 +35,7 @@ import {
     Tooltip,
     Tr,
     useToast,
+    Image
 } from "@chakra-ui/react";
 
 import Link from "next/link";
@@ -276,13 +277,13 @@ const FichasCadastrais = () => {
                                         <Th>ID</Th>
                                         {/* <Th w={44}>Tipo</Th> */}
                                         <Th>CPF</Th>
+                                        <Th>FOTO</Th>
                                         <Th>TOKEN</Th>
-                                        <Th w={44}>SIMILARIDADE</Th>
+                                        <Th>SIMILARIDADE</Th>
                                         {/* <Th w={44}>Responsável</Th> */}
-                                        <Th w={24}>Criado em</Th>
-                                        <Th w={24}>Última atualização</Th>
-                                        <Th w={44}>Status</Th>
-                                        <Th w={24}></Th>
+                                        <Th>Criado em</Th>
+                                        <Th>Última atualização</Th>
+                                        <Th>Status</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
@@ -291,6 +292,14 @@ const FichasCadastrais = () => {
                                             <Tr key={item.id}>
                                                 <Td># {item.id}</Td>
                                                 <Td>{item.cpf}</Td>
+                                                <Td>
+                                                <Image
+                                                            borderRadius='full'
+                                                            src={item.fotoUrl}
+                                                            alt='Dan Abramov'
+                                                />
+                                                    
+                                                </Td>
                                                 <Td>
                                                     <Text fontWeight="bold">
                                                         {JSON.parse(item.resultado)?.token}
@@ -305,7 +314,7 @@ const FichasCadastrais = () => {
                                                                     size="lg"
                                                                     value={JSON.parse(item.resultado)?.biometria_face?.similaridade * 100}
                                                                     max={100}
-                                                                    colorScheme={"green"}
+                                                                    colorScheme={(JSON.parse(item.resultado)?.biometria_face?.probabilidade.indexOf("Altíssima ") >= 0 ? "green" : "red")}
                                                                 />
                                                             </Box>
                                                         </Tooltip>
@@ -319,7 +328,7 @@ const FichasCadastrais = () => {
                                                             <Text
                                                                 textAlign="center"
                                                                 fontSize="xs"
-                                                                color={"white"}
+                                                                color={(JSON.parse(item.resultado)?.biometria_face?.probabilidade.indexOf("Altíssima ") >= 0 ? "white" : "red")}
                                                             >
                                                                  
                                                                 {parseInt(JSON.parse(item.resultado)?.biometria_face?.similaridade * 100)} %
@@ -328,9 +337,8 @@ const FichasCadastrais = () => {
                                                         <Text
                                                                 textAlign="center"
                                                                 fontSize="xs"
-                                                                color={"green"}
+                                                                color={(JSON.parse(item.resultado)?.biometria_face?.probabilidade.indexOf("Altíssima ") >= 0 ? "green" : "red")}
                                                             >
-                                                                 
                                                                  {JSON.parse(item.resultado)?.biometria_face?.probabilidade}
                                                             </Text>
                                                     </Box>

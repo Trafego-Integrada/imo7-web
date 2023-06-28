@@ -40,7 +40,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import moment from "moment";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FiDownload, FiEye } from "react-icons/fi";
@@ -104,6 +104,10 @@ const ModalBase = ({}, ref) => {
         },
     }));
     // console.log(watch());
+
+    const router = useRouter()
+
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -262,16 +266,17 @@ const ModalBase = ({}, ref) => {
                                                                                 <span>
                                                                                     <Text>
                                                                                     <a 
-                                                                                            href={"javascript:navigator.clipboard.writeText('http://imperium.localhost:3000/validacao-facial?cpf="+ (watch("preenchimento")?.find((p) => p.campoFichaCadastralCodigo == i.codigo)?.valor)  +"')"} 
+                                                                                            href={"javascript:navigator.clipboard.writeText('http://" + router.query.site + ".imo7.com.br/validacao-facial?cpf="+ (watch("preenchimento")?.find((p) => p.campoFichaCadastralCodigo == i.codigo)?.valor)  +"')"} 
                                                                                             style={{color: "blue"}}>
-                                                                                            Link validar CPF
+                                                                                            Link Validar CPF
                                                                                     </a>
                                                                                     </Text>
-                                                                              <Tag
-                                                                                    colorScheme="green"
+
+                                                                                <Tag
+                                                                                    colorScheme="red"
                                                                                     size="sm"
                                                                                 >
-                                                                                    Facial validado 94%
+                                                                                    Não validado
                                                                                 </Tag>
                                                                                 </span>
                                                                             }

@@ -282,7 +282,7 @@ const ValidacaoFacial : NextPage = ({ imobiliaria }) => {
                                     }
                                 </div>
                             </Box>  
-                                <br/><Text m={3}  fontSize='sm'>111º ETAPA - Posicione sua face dentro da marcação e clique em Tirar Foto.</Text>
+                                <br/><Text m={3}  fontSize='sm'>1º ETAPA - Posicione sua face dentro da marcação e clique em Tirar Foto.</Text>
                                 <Center>
                                     {photo == null && 
                                         <Button
