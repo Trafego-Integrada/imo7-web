@@ -252,7 +252,7 @@ let stream = await navigator.mediaDevices.getUserMedia(constraints);
                         <GridItem w='100%'  >
                             <Box maxW='sm' bg="white"  borderRadius='lg' overflow='hidden' borderWidth='1px' borderRadius='lg'>
                                 <Box maxW='sm'  borderRadius='lg' overflow='hidden' borderWidth='1px' borderRadius='lg'> 
-                                <div style={{position: "relative", width: "160" , height: "120"}}>
+                                <div style={{position: "relative"}}>
                                     {photo == null && 
                                         <>
                                         <Webcam
