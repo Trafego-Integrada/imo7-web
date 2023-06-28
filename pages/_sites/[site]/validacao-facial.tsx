@@ -112,23 +112,23 @@ const ValidacaoFacial : NextPage = ({ imobiliaria }) => {
 
     const checkResolution = async () => {
 
-    let constraints = { 
-        video: { 
-            width:  { ideal: 1280 }, 
-            height: { ideal: 720 } 
-        }
-    };
+//     let constraints = { 
+//         video: { 
+//             width:  { ideal: 1280 }, 
+//             height: { ideal: 720 } 
+//         }
+//     };
 
-let stream = await navigator.mediaDevices.getUserMedia(constraints);
+// let stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-    let stream_settings = stream.getVideoTracks()[0].getSettings();
+//     let stream_settings = stream.getVideoTracks()[0].getSettings();
 
-    // actual width & height of the camera video
-    let stream_width = stream_settings.width;
-    let stream_height = stream_settings.height;
+//     // actual width & height of the camera video
+//     let stream_width = stream_settings.width;
+//     let stream_height = stream_settings.height;
 
-    console.log('Width: ' + stream_width + 'px');
-    console.log('Height: ' + stream_height + 'px');
+//     console.log('Width: ' + stream_width + 'px');
+//     console.log('Height: ' + stream_height + 'px');
 
 }
 
