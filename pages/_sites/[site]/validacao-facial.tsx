@@ -50,10 +50,6 @@ import { CameraOptions, useFaceDetection } from 'react-use-face-detection';
 import FaceDetection from '@mediapipe/face_detection';
 import { Camera } from '@mediapipe/camera_utils';
 
-const videoConstraints = {
-    width: 720,
-    height: 720,
-  };
 
 /*!
 *	Gerador e Validador de CPF v1.0.0
@@ -267,7 +263,6 @@ let stream = await navigator.mediaDevices.getUserMedia(constraints);
                                             screenshotQuality={1}
                                             minScreenshotWidth={1280}
                                             minScreenshotHeight={960}
-                                            videoConstraints={videoConstraints}
                                             style={{
                                                 // position: "absolute",
                                                 // objectFit: "cover",
