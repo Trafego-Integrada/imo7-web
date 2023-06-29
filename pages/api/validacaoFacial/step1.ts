@@ -53,7 +53,9 @@ handler.post(async (req, res) => {
 
   console.log("PIN OK")
 
-  const fotoUrl =   await uploadPhoto(req.body.imobiliariaId, req.body.foto);
+  // const fotoUrl =   await uploadPhoto(req.body.imobiliariaId, req.body.foto);
+
+  const fotoUrl = "";
     
   console.log("FOTO URL")
   console.log(fotoUrl)
@@ -134,7 +136,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
   const extension     = "jpg";
   const nameLocation  = `imobiliarias/${imobiliariaId}/validacaoFacial/${slug(`${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`)}.${extension}`;
 
-  // const folder  = "d:\\";
+ //  const folder  = "d:\\";
   const folder  = "/tmp/";
   const filepath = folder + new Date().getTime() + "." + extension
 
