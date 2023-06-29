@@ -36,11 +36,16 @@ handler.post(async (req, res) => {
   // console.log("req.query")
   // console.log(req.query)
 
+
+
   console.log("req.files")
   console.log(req.files)
 
   console.log("req.body")
   console.log(req.body)
+
+  console.log("req")
+  console.log(req)
 
   const ACCESS_TOKEN = await getToken();
 
