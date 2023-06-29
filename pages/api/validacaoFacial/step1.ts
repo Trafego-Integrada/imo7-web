@@ -36,6 +36,12 @@ handler.post(async (req, res) => {
   // console.log("req.query")
   // console.log(req.query)
 
+  console.log("req.files")
+  console.log(req.files)
+
+  console.log("req.body")
+  console.log(req.body)
+
   const ACCESS_TOKEN = await getToken();
 
   const PIN = await getPin(ACCESS_TOKEN, req.body.cpf);
