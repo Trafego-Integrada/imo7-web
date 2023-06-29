@@ -136,8 +136,8 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
   console.log("filepath = " + filepath)
 
-  console.log("photoBase64")
-  console.log(photoBase64)
+  // console.log("photoBase64")
+  // console.log(photoBase64)
 
   let base64Image = photoBase64.split(';base64,').pop();
 
@@ -150,8 +150,6 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
   console.log("writeFile -> result")
   console.log(result)
-
-
 
   const stats       = statSync(filepath);
   const nodeFsBlob  = new os.NodeFSBlob(filepath, stats.size);
