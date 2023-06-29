@@ -112,7 +112,7 @@ handler.post(async (req, res) => {
 const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => { 
 
   console.log("uploadPhoto");
-  
+
   const client = new os.ObjectStorageClient({authenticationDetailsProvider: providerStorage});
   const bucket = "imo7-standard-storage";
 
@@ -123,7 +123,11 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
   const getBucketRequest: os.requests.GetBucketRequest = { namespaceName: namespace, bucketName: bucket };
 
+  console.log("getBucketResponse -> start")
+
   const getBucketResponse = await client.getBucket(getBucketRequest);
+
+  
 
   const extension     = "jpg";
   const nameLocation  = `imobiliarias/${imobiliariaId}/validacaoFacial/${slug(`${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`)}.${extension}`;
@@ -134,6 +138,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
   let base64Image = photoBase64.split(';base64,').pop();
 
+  console.log("writeFile -> start")
 
     let result = await fsp.writeFile(filepath, base64Image, {encoding: 'base64'});
 
@@ -148,6 +153,9 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
           objectName: nameLocation,
           contentLength: stats.size,
       };
+
+      console.log("putObject -> start")
+  
   
       const putObjectResponse = await client.putObject(putObjectRequest);
 
@@ -157,14 +165,25 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
           namespaceName: namespace,
       };
       
+      console.log("getObject -> start")
+
       const getObjectResponse = await client.getObject(getObjectRequest);
+
+      console.log("getObject -> after")
   
       if (getObjectResponse) {
+
         console.log("ARQUIVO ONLINE")
         console.log(process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation)
-
         return process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation;
+
+      } else { 
+
+        console.log("getObjectResponse")
+        console.log(getObjectResponse)
+
       }
+      
       return ""
 }
 
