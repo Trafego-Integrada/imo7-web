@@ -53,6 +53,9 @@ handler.post(async (req, res) => {
 
   console.log("PIN OK")
 
+  await savePhoto(req.body.imobiliariaId, req.body.foto);
+  
+
   // const fotoUrl =   await uploadPhoto(req.body.imobiliariaId, req.body.foto);
     
   // console.log("FOTO URL")
@@ -114,6 +117,31 @@ handler.post(async (req, res) => {
   return res.status(200).send({status: 0, message: "Falha na validação"});
 
 });
+
+
+const savePhoto = async (imobiliariaId: string, photoBase64: string) => { 
+
+  console.log("savePhoto");
+
+  const extension     = "jpg";
+
+  //  const folder  = "d:\\";
+  const folder  = "/tmp/";
+  const filepath = folder + new Date().getTime() + "." + extension
+  
+  console.log("filepath = " + filepath)
+
+  let base64Image = photoBase64.split(';base64,').pop();
+
+  console.log("writeFile -> start")
+
+  let result = await fsp.writeFile(filepath, base64Image, {encoding: 'base64'});
+
+  console.log("writeFile -> end")
+
+  console.log("filepath = " + filepath)
+
+}
 
 const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => { 
 
