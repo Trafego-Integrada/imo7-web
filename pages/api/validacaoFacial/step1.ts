@@ -158,8 +158,8 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
   console.log("writeFile -> result")
   console.log(result)
 
-  console.log("delay 5 seconds")
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  // console.log("delay 5 seconds")
+  // await new Promise(resolve => setTimeout(resolve, 5000));
 
   const stats       = statSync(filepath);
   const nodeFsBlob  = new os.NodeFSBlob(filepath, stats.size);
@@ -174,7 +174,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
   const putObjectRequest: os.requests.PutObjectRequest = {
       namespaceName:  namespace,
       bucketName:     bucket,
-      putObjectBody:  JSON.stringify(objectData),
+      putObjectBody:  objectData,
       objectName:     nameLocation,
       contentLength:  stats.size,
   };
@@ -321,69 +321,5 @@ handler.get(async (req, res) => {
     return res.status(200).send("GET NOT FOUND");
 });
 
-
-
-const b64toBlob = (b64Data, contentType='', sliceSize=512) => {
-  const byteCharacters = atob(b64Data);
-  const byteArrays = [];
-
-  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-    const byteNumbers = new Array(slice.length);
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
-    }
-
-    const byteArray = new Uint8Array(byteNumbers);
-    byteArrays.push(byteArray);
-  }
-
-  const blob = new Blob(byteArrays, {type: contentType});
-  return blob;
-}
-
-function base64toBlob(base64Data, contentType) {
-  contentType = contentType || '';
-  var sliceSize = 1024;
-  var byteCharacters = atob(base64Data);
-  var bytesLength = byteCharacters.length;
-  var slicesCount = Math.ceil(bytesLength / sliceSize);
-  var byteArrays = new Array(slicesCount);
-
-  for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
-      var begin = sliceIndex * sliceSize;
-      var end = Math.min(begin + sliceSize, bytesLength);
-
-      var bytes = new Array(end - begin);
-      for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
-          bytes[i] = byteCharacters[offset].charCodeAt(0);
-      }
-      byteArrays[sliceIndex] = new Uint8Array(bytes);
-  }
-  return new Blob(byteArrays, { type: contentType });
-}
-
-function convertBase64ToBlob(base64Image: string) {
-  // Split into two parts
-  const parts = base64Image.split(';base64,');
-
-  // Hold the content type
-  const imageType = parts[0].split(':')[1];
-
-  // Decode Base64 string
-  const decodedData = atob(parts[1]);
-
-  // Create UNIT8ARRAY of size same as row data length
-  const uInt8Array = new Uint8Array(decodedData.length);
-
-  // Insert all character code into uInt8Array
-  for (let i = 0; i < decodedData.length; ++i) {
-    uInt8Array[i] = decodedData.charCodeAt(i);
-  }
-
-  // Return BLOB image after conversion
-  return new Blob([uInt8Array], { type: imageType });
-}
 
 export default handler;
