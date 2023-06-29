@@ -54,15 +54,15 @@ handler.post(async (req, res) => {
   console.log("PIN OK")
 
   // const fotoUrl =   await uploadPhoto(req.body.imobiliariaId, req.body.foto);
+    
+  // console.log("FOTO URL")
+  // console.log(fotoUrl)
+
+  // if(!fotoUrl) {
+  //   return res.status(200).send({status: 0, message: "Falha no envio da foto - WRITE FAILED "});
+  // }
 
   const fotoUrl = "";
-    
-  console.log("FOTO URL")
-  console.log(fotoUrl)
-
-  if(!fotoUrl) {
-    return res.status(200).send({status: 0, message: "Falha no envio da foto - WRITE FAILED "});
-  }
 
   console.log(1);
 

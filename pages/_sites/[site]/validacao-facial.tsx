@@ -260,7 +260,7 @@ const ValidacaoFacial : NextPage = ({ imobiliaria }) => {
                                             mirrored={true}
                                             screenshotFormat="image/jpeg"
                                             ref={webcamRef}
-                                            screenshotQuality={0.2}
+                                            screenshotQuality={1}
                                             minScreenshotWidth={1280}
                                             minScreenshotHeight={960}
                                             style={{
