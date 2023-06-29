@@ -136,13 +136,14 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
   const folder  = "/tmp/";
   const filepath = folder + new Date().getTime() + "." + extension
 
+  console.log("filepath = " + filepath)
+
+
   let base64Image = photoBase64.split(';base64,').pop();
 
   console.log("writeFile -> start")
 
   let result = await fsp.writeFile(filepath, base64Image, {encoding: 'base64'});
-
-  console.log("filepath = " + filepath)
 
   const stats     = statSync(filepath);
   const nodeFsBlob = new os.NodeFSBlob(filepath, stats.size);
@@ -156,12 +157,15 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
           contentLength: stats.size,
       };
 
-  console.log("putObjectRequest")
-  console.log(putObjectRequest)
+  // console.log("putObjectRequest")
+  // console.log(putObjectRequest)
 
       console.log("putObject -> start")
-  
-      const putObjectResponse = await client.putObject(putObjectRequest);
+
+    const putObjectResponse = await client.putObject(putObjectRequest);
+
+    console.log("putObjectResponse")
+    console.log(putObjectResponse);
 
       const getObjectRequest: os.requests.GetObjectRequest = {
           objectName: nameLocation,
