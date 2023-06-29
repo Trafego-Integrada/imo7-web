@@ -10,7 +10,7 @@ import prisma from "@/lib/prisma";
 import { providerStorage } from "@/lib/storage";
 import { multiparty } from "@/middleware/multipart";
 import * as os from "oci-objectstorage";
-import slug from "slug";
+import slug from "slug"; 
 import moment from "moment";
 import fs from 'fs';
 import { statSync } from "fs";
