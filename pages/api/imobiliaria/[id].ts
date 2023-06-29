@@ -142,7 +142,7 @@ handle.post(async (req, res) => {
             `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`
         )}.${extension}`;
         // Create read stream to file
-        const stats = statSync(logo.path);
+        const stats     = statSync(logo.path);
         const nodeFsBlob = new os.NodeFSBlob(logo.path, stats.size);
         const objectData = await nodeFsBlob.getData();
 

@@ -50,6 +50,7 @@ import { CameraOptions, useFaceDetection } from 'react-use-face-detection';
 import FaceDetection from '@mediapipe/face_detection';
 import { Camera } from '@mediapipe/camera_utils';
 
+
 /*!
 *	Gerador e Validador de CPF v1.0.0
 *	https://github.com/tiagoporto/gerador-validador-cpf
@@ -84,6 +85,7 @@ const ValidacaoFacial : NextPage = ({ imobiliaria }) => {
 
     useEffect(() => {
         // check();
+        checkResolution()
         setWindowStatus(1)
     }, [])
 
@@ -107,6 +109,28 @@ const ValidacaoFacial : NextPage = ({ imobiliaria }) => {
         // 1    = sucesso 
         
     }
+
+    const checkResolution = async () => {
+
+//     let constraints = { 
+//         video: { 
+//             width:  { ideal: 1280 }, 
+//             height: { ideal: 720 } 
+//         }
+//     };
+
+// let stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+//     let stream_settings = stream.getVideoTracks()[0].getSettings();
+
+//     // actual width & height of the camera video
+//     let stream_width = stream_settings.width;
+//     let stream_height = stream_settings.height;
+
+//     console.log('Width: ' + stream_width + 'px');
+//     console.log('Height: ' + stream_height + 'px');
+
+}
 
     const onSubmit = async (data) => {
         
@@ -183,7 +207,7 @@ const ValidacaoFacial : NextPage = ({ imobiliaria }) => {
       });
 
     const capture = React.useCallback(() => {
-            const imageSrc = webcamRef.current.getScreenshot();
+            const imageSrc = webcamRef.current.getScreenshot({width: 1280, height: 960});
             setPhoto(imageSrc);
     }, [webcamRef] );
 
@@ -235,15 +259,15 @@ const ValidacaoFacial : NextPage = ({ imobiliaria }) => {
                                             forceScreenshotSourceSize={true}
                                             mirrored={true}
                                             screenshotFormat="image/jpeg"
-                                            screenshotQuality= {1}
                                             ref={webcamRef}
+                                            screenshotQuality={1}
+                                            minScreenshotWidth={1280}
+                                            minScreenshotHeight={960}
                                             style={{
                                                 // position: "absolute",
                                                 // objectFit: "cover",
-                                                margin: 0,
+                                                // margin: 0,
                                             }}
-                                            width={1280}
-                                            height={720}
                                             />
                                         {boundingBox.map((box, index) => (
                                         <div
