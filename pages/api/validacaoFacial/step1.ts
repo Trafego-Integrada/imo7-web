@@ -192,14 +192,20 @@ const getPin = async (access_token: string, cpf: number)  => {
         }
       }
     );
+
+    console.log("res pin")
+    console.log(resPin)
+
+    return resPin.data;
+
   } catch(e) {
 
     console.log("GET PIN CATCH")
     console.log(e)
-
+    return e;
   }
 
-  return resPin.data;
+ 
 }
 
 const setPhoto = async (access_token: string, pin: string, cpf: number, photoBase64: string) => {
