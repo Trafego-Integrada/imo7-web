@@ -18,14 +18,14 @@ const fsp = require("fs").promises;
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
-// export const config = {
-//   api: {
-//       bodyParser: false,
-//   },
-// };
+export const config = {
+  api: {
+      bodyParser: false,
+  },
+};
 
 handler.use(cors);
-// handler.use(multiparty);
+handler.use(multiparty);
 
 handler.post(async (req, res) => { 
 
