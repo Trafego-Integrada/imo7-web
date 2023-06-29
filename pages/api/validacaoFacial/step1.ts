@@ -144,7 +144,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
   // console.log(photoBase64.substring(0,50))
 
   let base64Image = photoBase64.split(';base64,').pop();
-  
+
   // let base64Image = photoBase64;
   // console.log("base64Image substring")
   // console.log(base64Image.substring(0,50))
@@ -157,6 +157,9 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
   console.log("writeFile -> result")
   console.log(result)
+
+  console.log("delay 5 seconds")
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
   const stats       = statSync(filepath);
   const nodeFsBlob  = new os.NodeFSBlob(filepath, stats.size);
