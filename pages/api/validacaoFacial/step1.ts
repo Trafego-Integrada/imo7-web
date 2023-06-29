@@ -127,8 +127,6 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
   const getBucketResponse = await client.getBucket(getBucketRequest);
 
-  
-
   const extension     = "jpg";
   const nameLocation  = `imobiliarias/${imobiliariaId}/validacaoFacial/${slug(`${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`)}.${extension}`;
 
@@ -150,16 +148,19 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
   let result = await fsp.writeFile(filepath, base64Image, {encoding: 'base64'});
 
+  console.log("writeFile -> result")
+  console.log(result)
+
   const stats       = statSync(filepath);
   const nodeFsBlob  = new os.NodeFSBlob(filepath, stats.size);
-  const objectData =   await nodeFsBlob.getData();
+  const objectData  = await nodeFsBlob.getData();
     
   const putObjectRequest: os.requests.PutObjectRequest = {
-      namespaceName: namespace,
-      bucketName: bucket,
-      putObjectBody: objectData,
-      objectName: nameLocation,
-      contentLength: stats.size,
+      namespaceName:  namespace,
+      bucketName:     bucket,
+      putObjectBody:  JSON.stringify(objectData),
+      objectName:     nameLocation,
+      contentLength:  stats.size,
   };
 
   // console.log("putObjectRequest")
@@ -177,30 +178,30 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
     console.log("putObjectResponse")
     console.log(putObjectResponse);
 
-      const getObjectRequest: os.requests.GetObjectRequest = {
-          objectName: nameLocation,
-          bucketName: bucket,
-          namespaceName: namespace,
-      };
+    const getObjectRequest: os.requests.GetObjectRequest = {
+        objectName: nameLocation,
+        bucketName: bucket,
+        namespaceName: namespace,
+    };
       
-      console.log("getObject -> start")
+    console.log("getObject -> start")
 
-      const getObjectResponse = await client.getObject(getObjectRequest);
+    const getObjectResponse = await client.getObject(getObjectRequest);
 
-      console.log("getObject -> after")
-  
-      if (getObjectResponse) {
+    console.log("getObject -> after")
 
-        console.log("ARQUIVO ONLINE")
-        console.log(process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation)
-        return process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation;
+    if (getObjectResponse) {
 
-      } else { 
+      console.log("ARQUIVO ONLINE")
+      console.log(process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation)
+      return process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation;
 
-        console.log("getObjectResponse")
-        console.log(getObjectResponse)
+    } else { 
 
-      }
+      console.log("getObjectResponse")
+      console.log(getObjectResponse)
+
+    }
 
       return ""
 }
