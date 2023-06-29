@@ -40,10 +40,14 @@ handler.post(async (req, res) => {
 
   const PIN = await getPin(ACCESS_TOKEN, req.body.cpf);
 
+  console.log("PIN = " + PIN)
+
   if(req.body["foto"] === undefined || req.body["foto"] == "") {
      res.status(200).send({status: 0, message: "Falha no envio da foto - 1"});
      return;
   }
+
+  console.log("PIN OK")
 
   const fotoUrl =   await uploadPhoto(req.body.imobiliariaId, req.body.foto);
     
@@ -107,6 +111,8 @@ handler.post(async (req, res) => {
 
 const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => { 
 
+  console.log("uploadPhoto");
+  
   const client = new os.ObjectStorageClient({authenticationDetailsProvider: providerStorage});
   const bucket = "imo7-standard-storage";
 
@@ -180,6 +186,7 @@ const getPin = async (access_token: string, cpf: number)  => {
   console.log("Get Pin CPF = " + cpf);
 
   try { 
+
     const resPin = await axios.post(
       'https://gateway.apiserpro.serpro.gov.br/biovalid/v1/token',
       '',
@@ -195,6 +202,7 @@ const getPin = async (access_token: string, cpf: number)  => {
 
     console.log("res pin")
     console.log(resPin)
+    console.log(resPin.data)
 
     return resPin.data;
 
