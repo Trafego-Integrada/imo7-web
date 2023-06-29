@@ -164,6 +164,8 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
   const nodeFsBlob  = new os.NodeFSBlob(filepath, stats.size);
   const objectData  = await nodeFsBlob.getData();
 
+  
+  console.log("photoBase64.lenght = " + photoBase64?.length)
   console.log("base64Image.lenght = " + base64Image?.length)
   console.log("stats.size = " + stats.size)
   console.log(stats)
