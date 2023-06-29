@@ -151,9 +151,14 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
   console.log("writeFile -> result")
   console.log(result)
 
+
+
   const stats       = statSync(filepath);
   const nodeFsBlob  = new os.NodeFSBlob(filepath, stats.size);
   const objectData  = await nodeFsBlob.getData();
+
+  console.log("stats.size = " + stats.size)
+  console.log(stats)
     
   const putObjectRequest: os.requests.PutObjectRequest = {
       namespaceName:  namespace,
