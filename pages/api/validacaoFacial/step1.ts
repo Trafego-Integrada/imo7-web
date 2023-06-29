@@ -140,11 +140,13 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
   console.log("writeFile -> start")
 
-    let result = await fsp.writeFile(filepath, base64Image, {encoding: 'base64'});
+  let result = await fsp.writeFile(filepath, base64Image, {encoding: 'base64'});
 
-      const stats     = statSync(filepath);
-      const nodeFsBlob = new os.NodeFSBlob(filepath, stats.size);
-      const objectData = await nodeFsBlob.getData();
+  console.log("filepath = " + filepath)
+
+  const stats     = statSync(filepath);
+  const nodeFsBlob = new os.NodeFSBlob(filepath, stats.size);
+  const objectData = await nodeFsBlob.getData();
     
       const putObjectRequest: os.requests.PutObjectRequest = {
           namespaceName: namespace,
@@ -154,8 +156,10 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
           contentLength: stats.size,
       };
 
+  console.log("putObjectRequest")
+  console.log(putObjectRequest)
+
       console.log("putObject -> start")
-  
   
       const putObjectResponse = await client.putObject(putObjectRequest);
 
@@ -183,7 +187,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
         console.log(getObjectResponse)
 
       }
-      
+
       return ""
 }
 
