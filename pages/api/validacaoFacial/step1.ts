@@ -162,7 +162,12 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
       console.log("putObject -> start")
 
+      try { 
     const putObjectResponse = await client.putObject(putObjectRequest);
+    } catch(e) {
+      console.log("putObject -> catch")
+      console.log(e)
+    }
 
     console.log("putObjectResponse")
     console.log(putObjectResponse);
