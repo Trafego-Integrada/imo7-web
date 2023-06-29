@@ -178,18 +178,27 @@ const getToken = async () => {
 
 const getPin = async (access_token: string, cpf: number)  => {
   console.log("Get Pin CPF = " + cpf);
-  const resPin = await axios.post(
-    'https://gateway.apiserpro.serpro.gov.br/biovalid/v1/token',
-    '',
-    {
-      params: {
-        'cpf': cpf
-      },
-      headers: {
-        'Authorization': 'Bearer ' + access_token
+
+  try { 
+    const resPin = await axios.post(
+      'https://gateway.apiserpro.serpro.gov.br/biovalid/v1/token',
+      '',
+      {
+        params: {
+          'cpf': cpf
+        },
+        headers: {
+          'Authorization': 'Bearer ' + access_token
+        }
       }
-    }
-  );
+    );
+  } catch(e) {
+
+    console.log("GET PIN CATCH")
+    console.log(e)
+
+  }
+
   return resPin.data;
 }
 
