@@ -145,10 +145,13 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
   console.log("filepath = " + filepath)
 
-  // console.log("photoBase64")
-  // console.log(photoBase64)
+  console.log("photoBase64 substring")
+  console.log(photoBase64.substring(0,50))
 
   let base64Image = photoBase64.split(';base64,').pop();
+
+  console.log("base64Image substring")
+  console.log(base64Image.substring(0,50))
 
   // console.log("base64Image")
   // console.log(base64Image)
