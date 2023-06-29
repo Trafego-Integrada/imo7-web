@@ -20,12 +20,14 @@ const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
 export const config = {
   api: {
-      bodyParser: false,
+    bodyParser: {
+      sizeLimit: '10mb' // Set desired value here
+   }
   },
 };
 
 handler.use(cors);
-handler.use(multiparty);
+// handler.use(multiparty);
 
 handler.post(async (req, res) => { 
 
@@ -36,16 +38,12 @@ handler.post(async (req, res) => {
   // console.log("req.query")
   // console.log(req.query)
 
+  // console.log("req.files")
+  // console.log(req.files)
 
+  // console.log("req.body")
+  // console.log(req.body)
 
-  console.log("req.files")
-  console.log(req.files)
-
-  console.log("req.body")
-  console.log(req.body)
-
-  console.log("req")
-  console.log(req)
 
   const ACCESS_TOKEN = await getToken();
 
