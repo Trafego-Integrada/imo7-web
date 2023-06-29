@@ -149,18 +149,19 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
   const nodeFsBlob = new os.NodeFSBlob(filepath, stats.size);
   const objectData = await nodeFsBlob.getData();
     
-      const putObjectRequest: os.requests.PutObjectRequest = {
-          namespaceName: namespace,
-          bucketName: bucket,
-          putObjectBody: objectData,
-          objectName: nameLocation,
-          contentLength: stats.size,
-      };
+  const putObjectRequest: os.requests.PutObjectRequest = {
+      namespaceName: namespace,
+      bucketName: bucket,
+      putObjectBody: objectData,
+      objectName: nameLocation,
+      contentLength: stats.size,
+      duplex: "half"
+  };
 
   // console.log("putObjectRequest")
   // console.log(putObjectRequest)
 
-      console.log("putObject -> start")
+   console.log("putObject -> start")
 
       try { 
     const putObjectResponse = await client.putObject(putObjectRequest);
