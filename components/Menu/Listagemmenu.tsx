@@ -15,6 +15,7 @@ import { HiOutlineDocumentText } from "react-icons/hi";
 import {
     MdCategory,
     MdDashboard,
+    MdNewspaper,
     MdOutlineNotificationsActive,
     MdOutlineRule,
 } from "react-icons/md";
@@ -222,9 +223,9 @@ const menu = [
         modulos: ["adm.imobiliarias"],
     },
     {
-        titulo: "Notificações",
-        href: "/admin/notificacao",
-        icon: MdOutlineNotificationsActive,
+        titulo: "Fila de Envio",
+        href: "/admin/filaEnvio",
+        icon: MdNewspaper,
         cargos: ["imobiliaria", "adm"],
         modulos: ["imobiliaria.configuracoes"],
     },

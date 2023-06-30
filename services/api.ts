@@ -20,7 +20,9 @@ export function setupApiClient(ctx = null) {
         host = host.split(".")[0];
     }
 
-    const url = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : "http://localhost:3000/api/"
+    const url = process.env.NEXT_PUBLIC_API_URL
+        ? process.env.NEXT_PUBLIC_API_URL
+        : "http://localhost:3000/api/";
 
     const api = axios.create({
         baseURL: url,
@@ -42,6 +44,7 @@ export function setupApiClient(ctx = null) {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
             imobiliaria:
                 host != "localhost:3000" &&
+                host != "dev.imo7.com.br" &&
                 host != "imo7.com.br" &&
                 host != "imo7"
                     ? host
@@ -65,7 +68,10 @@ export function setupApiClient(ctx = null) {
                         host = host.split(".")[0];
                     }
                     // console.log(host)
-                    const { "imo7.refreshToken": refreshToken,"imo7.token":token } = cookies;
+                    const {
+                        "imo7.refreshToken": refreshToken,
+                        "imo7.token": token,
+                    } = cookies;
                     const originalConfig = error.config;
                     if (!isRefreshing) {
                         // console.log('expirou 2')
