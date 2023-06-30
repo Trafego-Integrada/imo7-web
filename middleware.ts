@@ -44,6 +44,7 @@ export default function middleware(req: NextRequest) {
                   .replace(`.imobiliariasimob.com.br`, "")
                   .replace(`.imo7.com.br`, "")
                   .replace(`www.imo7.com.br`, "")
+                  .replace(`dev.imo7.com.br`, "")
             : hostname.replace(`.localhost:3000`, "");
     // rewrites for app pages
     if (currentHost == "app") {
@@ -97,6 +98,8 @@ export default function middleware(req: NextRequest) {
         url.pathname = url.pathname.replace("/_sites/www/", "/");
     } else if (url.pathname.includes("/_sites/www/")) {
         url.pathname = url.pathname.replace("/_sites/www/", "/");
+    } else if (url.pathname.includes("/_sites/dev.imo7.com.br/")) {
+        url.pathname = url.pathname.replace("/_sites/dev.imo7.com.br/", "/");
     }
 
     return NextResponse.rewrite(url);
