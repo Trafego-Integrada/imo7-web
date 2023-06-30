@@ -102,6 +102,8 @@ export default function middleware(req: NextRequest) {
         url.pathname = url.pathname.replace("/_sites/dev.imo7.com.br/", "/");
     } else if (url.pathname.includes("/_sites/dev/")) {
         url.pathname = url.pathname.replace("/_sites/dev/", "/");
+    } else if (url.pathname.includes(".dev")) {
+        url.pathname = url.pathname.replace(".dev", "");
     }
     console.log(url);
 
