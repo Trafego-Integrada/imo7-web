@@ -247,10 +247,12 @@ handle.post(async (req, res) => {
             const objectData = await nodeFsBlob.getData();
             const imageData = fs.readFileSync(anexos.path);
             const base64Data = imageData.toString("base64");
+
+            const buff = Buffer.from(base64Data, "base64");
             const putObjectRequest: os.requests.PutObjectRequest = {
                 namespaceName: namespace,
                 bucketName: bucket,
-                putObjectBody: base64Data,
+                putObjectBody: buff,
                 objectName: nameLocation,
                 contentLength: stats.size,
             };
