@@ -4,224 +4,232 @@ import { getUser } from "@/services/database/user";
 import { NextApiRequestWithUser } from "@/types/auth";
 import nextConnect from "next-connect";
 import { cors } from "@/middleware/cors";
-import axios from 'axios';
+import axios from "axios";
 import prisma from "@/lib/prisma";
 
 import { providerStorage } from "@/lib/storage";
 import { multiparty } from "@/middleware/multipart";
 import * as os from "oci-objectstorage";
-import slug from "slug"; 
+import slug from "slug";
 import moment from "moment";
-import fs from 'fs';
+import fs from "fs";
 import { statSync } from "fs";
-const fsp = require("fs").promises;
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
 export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb' // Set desired value here
-   }
-  },
+    api: {
+        bodyParser: {
+            sizeLimit: "10mb", // Set desired value here
+        },
+    },
 };
 
 handler.use(cors);
 // handler.use(multiparty);
 
-handler.post(async (req, res) => { 
+handler.post(async (req, res) => {
+    // console.log("req")
+    // console.log(req);
+    console.log("req.body");
+    console.log(req.body);
+    console.log("req.query");
+    console.log(req.query);
+    console.log("req.files");
+    console.log(req.files);
 
-  // console.log("req")
-  // console.log(req);
-  console.log("req.body")
-  console.log(req.body);
-  console.log("req.query")
-  console.log(req.query)
-  console.log("req.files")
-  console.log(req.files)
+    const ACCESS_TOKEN = await getToken();
 
-  const ACCESS_TOKEN = await getToken();
+    const PIN = await getPin(ACCESS_TOKEN, req.body.cpf);
 
-  const PIN = await getPin(ACCESS_TOKEN, req.body.cpf);
+    console.log("PIN = " + PIN);
 
-  console.log("PIN = " + PIN)
-
-  if(req.body["foto"] === undefined || req.body["foto"] == "") {
-     res.status(200).send({status: 0, message: "Falha no envio da foto - 1"});
-     return;
-  }
-
-  console.log("PIN OK")
-
-  await savePhoto(req.body.imobiliariaId, req.body.foto);
-  
-
-  // const fotoUrl =   await uploadPhoto(req.body.imobiliariaId, req.body.foto);
-    
-  // console.log("FOTO URL")
-  // console.log(fotoUrl)
-
-  // if(!fotoUrl) {
-  //   return res.status(200).send({status: 0, message: "Falha no envio da foto - WRITE FAILED "});
-  // }
-
-  const fotoUrl = "";
-
-  console.log(1);
-
-  const PHOTO = await setPhoto(ACCESS_TOKEN, PIN, req.body.cpf, req.body.foto);
-
-  console.log("APOS SET PHOTO")
-  console.log(PHOTO)
-
-  if(PHOTO != "OK") {
-    console.log("PHOTO IS DIFF OK")
-  }
-
-  if(PHOTO != "OK") {
-     console.log("DIFF OK")
-     res.status(200).send({status: 0, message: PHOTO.mensagem});
-     return;
-  }
-
-  console.log("PHOTO RESPONSE")
-  console.log(PHOTO)
-  console.log(2);
-
-  try { 
-
-
-    let data = {
-      imobiliariaId:  req.body.imobiliariaId,
-      cpf:            req.body.cpf,
-      pin:            PIN,
-      fotoUrl:        fotoUrl
+    if (req.body["foto"] === undefined || req.body["foto"] == "") {
+        res.status(200).send({
+            status: 0,
+            message: "Falha no envio da foto - 1",
+        });
+        return;
     }
 
-    const resValidacaoFacial = await prisma.validacaofacial.create({data: data});
-    const id = resValidacaoFacial.id;
+    console.log("PIN OK");
 
-    if(id) {
-      return res.status(200).send({status: 1, message: "Validação enviada com sucesso."});
+    await savePhoto(req.body.imobiliariaId, req.body.foto);
+
+    let fotoUrl = await uploadPhoto(req.body.imobiliariaId, req.body.foto);
+
+    console.log("FOTO URL");
+    console.log(fotoUrl);
+
+    if (!fotoUrl) {
+        return res.status(200).send({
+            status: 0,
+            message: "Falha no envio da foto - WRITE FAILED ",
+        });
     }
 
-    return res.status(200).send({status: 0, message: "Falha no banco de dados."});
+    console.log(1);
 
-  } catch(error) {
+    const PHOTO = await setPhoto(
+        ACCESS_TOKEN,
+        PIN,
+        req.body.cpf,
+        req.body.foto
+    );
 
-    console.log("catch error")
-    console.log(error)
+    console.log("APOS SET PHOTO");
+    console.log(PHOTO);
 
-  }
-  
-  return res.status(200).send({status: 0, message: "Falha na validação"});
+    if (PHOTO != "OK") {
+        console.log("PHOTO IS DIFF OK");
+    }
 
+    if (PHOTO != "OK") {
+        console.log("DIFF OK");
+        res.status(200).send({ status: 0, message: PHOTO.mensagem });
+        return;
+    }
+
+    console.log("PHOTO RESPONSE");
+    console.log(PHOTO);
+    console.log(2);
+
+    try {
+        let data = {
+            imobiliariaId: req.body.imobiliariaId,
+            cpf: req.body.cpf,
+            pin: PIN,
+            fotoUrl: fotoUrl,
+        };
+
+        const resValidacaoFacial = await prisma.validacaofacial.create({
+            data: data,
+        });
+        const id = resValidacaoFacial.id;
+
+        if (id) {
+            return res
+                .status(200)
+                .send({ status: 1, message: "Validação enviada com sucesso." });
+        }
+
+        return res
+            .status(200)
+            .send({ status: 0, message: "Falha no banco de dados." });
+    } catch (error) {
+        console.log("catch error");
+        console.log(error);
+
+        return res
+            .status(200)
+            .send({ status: 0, message: "Falha na validação" });
+    }
 });
 
+const savePhoto = async (imobiliariaId: string, photoBase64: string) => {
+    console.log("savePhoto");
 
-const savePhoto = async (imobiliariaId: string, photoBase64: string) => { 
+    const extension = "jpg";
 
-  console.log("savePhoto");
+    //  const folder  = "d:\\";
+    const folder = "/tmp/";
+    const filepath = folder + new Date().getTime() + "." + extension;
 
-  const extension     = "jpg";
+    console.log("filepath = " + filepath);
 
-  //  const folder  = "d:\\";
-  const folder  = "/tmp/";
-  const filepath = folder + new Date().getTime() + "." + extension
-  
-  console.log("filepath = " + filepath)
+    let base64Image = photoBase64.split(";base64,").pop();
+    console.log(base64Image);
+    console.log("writeFile -> start");
+    let buff = Buffer.from(base64Image, "base64");
+    let result = await fs.writeFileSync(filepath, buff, "base64");
 
-  let base64Image = photoBase64.split(';base64,').pop();
+    console.log("Result", result);
+    console.log("writeFile -> end");
+    console.log("filepath = " + filepath);
+};
 
-  console.log("writeFile -> start")
+const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
+    console.log("uploadPhoto");
 
-  let result = await fsp.writeFile(filepath, base64Image, {encoding: 'base64'});
+    const client = new os.ObjectStorageClient({
+        authenticationDetailsProvider: providerStorage,
+    });
+    const bucket = "imo7-standard-storage";
 
-  console.log("writeFile -> end")
+    const request: os.requests.GetNamespaceRequest = {};
+    const response = await client.getNamespace(request);
 
-  console.log("filepath = " + filepath)
+    const namespace = response.value;
 
-}
+    const getBucketRequest: os.requests.GetBucketRequest = {
+        namespaceName: namespace,
+        bucketName: bucket,
+    };
 
-const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => { 
+    console.log("getBucketResponse -> start");
 
-  console.log("uploadPhoto");
+    const getBucketResponse = await client.getBucket(getBucketRequest);
 
-  const client = new os.ObjectStorageClient({authenticationDetailsProvider: providerStorage});
-  const bucket = "imo7-standard-storage";
+    const extension = "jpg";
+    const nameLocation = `imobiliarias/${imobiliariaId}/validacaoFacial/${slug(
+        `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`
+    )}.${extension}`;
 
-  const request: os.requests.GetNamespaceRequest = {};
-  const response = await client.getNamespace(request);
+    //  const folder  = "d:\\";
+    const folder = "/tmp/";
+    const filepath = folder + new Date().getTime() + "." + extension;
 
-  const namespace = response.value;
+    console.log("filepath = " + filepath);
 
-  const getBucketRequest: os.requests.GetBucketRequest = { namespaceName: namespace, bucketName: bucket };
+    // console.log("photoBase64 substring")
+    // console.log(photoBase64.substring(0,50))
 
-  console.log("getBucketResponse -> start")
+    let base64Image = photoBase64.split(";base64,").pop();
 
-  const getBucketResponse = await client.getBucket(getBucketRequest);
+    // let base64Image = photoBase64;
+    // console.log("base64Image substring")
+    // console.log(base64Image.substring(0,50))
+    // console.log("base64Image")
+    // console.log(base64Image)
 
-  const extension     = "jpg";
-  const nameLocation  = `imobiliarias/${imobiliariaId}/validacaoFacial/${slug(`${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`)}.${extension}`;
+    console.log("writeFile -> start");
 
- //  const folder  = "d:\\";
-  const folder  = "/tmp/";
-  const filepath = folder + new Date().getTime() + "." + extension
+    let buff = Buffer.from(base64Image, "base64");
+    let result = await fs.writeFileSync(filepath, buff, {
+        encoding: "base64",
+    });
 
-  console.log("filepath = " + filepath)
+    console.log("writeFile -> result");
+    console.log(result);
 
-  // console.log("photoBase64 substring")
-  // console.log(photoBase64.substring(0,50))
+    // console.log("delay 5 seconds")
+    // await new Promise(resolve => setTimeout(resolve, 5000));
 
-  let base64Image = photoBase64.split(';base64,').pop();
+    const stats = statSync(filepath);
+    const nodeFsBlob = new os.NodeFSBlob(filepath, stats.size);
+    const objectData = await nodeFsBlob.getData();
 
-  // let base64Image = photoBase64;
-  // console.log("base64Image substring")
-  // console.log(base64Image.substring(0,50))
-  // console.log("base64Image")
-  // console.log(base64Image)
+    console.log("photoBase64.lenght = " + photoBase64?.length);
+    console.log("base64Image.lenght = " + base64Image?.length);
+    console.log("stats.size = " + stats.size);
+    console.log(stats);
 
-  console.log("writeFile -> start")
+    const putObjectRequest: os.requests.PutObjectRequest = {
+        namespaceName: namespace,
+        bucketName: bucket,
+        putObjectBody: objectData,
+        objectName: nameLocation,
+        contentLength: stats.size,
+    };
 
-  let result = await fsp.writeFile(filepath, base64Image, {encoding: 'base64'});
+    // console.log("putObjectRequest")
+    // console.log(putObjectRequest)
 
-  console.log("writeFile -> result")
-  console.log(result)
+    console.log("putObject -> start");
 
-  // console.log("delay 5 seconds")
-  // await new Promise(resolve => setTimeout(resolve, 5000));
-
-  const stats       = statSync(filepath);
-  const nodeFsBlob  = new os.NodeFSBlob(filepath, stats.size);
-  const objectData  = await nodeFsBlob.getData();
-
-  
-  console.log("photoBase64.lenght = " + photoBase64?.length)
-  console.log("base64Image.lenght = " + base64Image?.length)
-  console.log("stats.size = " + stats.size)
-  console.log(stats)
-    
-  const putObjectRequest: os.requests.PutObjectRequest = {
-      namespaceName:  namespace,
-      bucketName:     bucket,
-      putObjectBody:  objectData,
-      objectName:     nameLocation,
-      contentLength:  stats.size,
-  };
-
-  // console.log("putObjectRequest")
-  // console.log(putObjectRequest)
-
-   console.log("putObject -> start")
-
-      try { 
     const putObjectResponse = await client.putObject(putObjectRequest);
-    } catch(e) {
-      console.log("putObject -> catch")
-      console.log(e)
-    }
 
-    console.log("putObjectResponse")
+    console.log("putObjectResponse");
     console.log(putObjectResponse);
 
     const getObjectRequest: os.requests.GetObjectRequest = {
@@ -229,127 +237,110 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
         bucketName: bucket,
         namespaceName: namespace,
     };
-      
-    console.log("getObject -> start")
+
+    console.log("getObject -> start");
 
     const getObjectResponse = await client.getObject(getObjectRequest);
 
-    console.log("getObject -> after")
+    console.log("getObject -> after");
 
     if (getObjectResponse) {
-
-      console.log("ARQUIVO ONLINE")
-      console.log(process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation)
-      return process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation;
-
-    } else { 
-
-      console.log("getObjectResponse")
-      console.log(getObjectResponse)
-
+        console.log("ARQUIVO ONLINE");
+        console.log(process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation);
+        return process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation;
+    } else {
+        console.log("getObjectResponse");
+        console.log(getObjectResponse);
     }
 
-      return ""
-}
+    return "";
+};
 
-const getToken = async () => { 
-  const resToken = await axios.post( 'https://gateway.apiserpro.serpro.gov.br/token',
-    new URLSearchParams({
-        'grant_type': 'client_credentials'
-    }),
-    {
-        headers: {
-        'authorization': 'Basic dTNoS1hUWF8zemZfczlNRExSY0lVUW5TMVlJYTpBSFRPVmR1THB5TThKMjhRcncxN2dHcXlOeFlh'
-        }
+const getToken = async () => {};
+
+const getPin = async (access_token: string, cpf: number) => {
+    console.log("Get Pin CPF = " + cpf);
+
+    try {
+        const resPin = await axios.post(
+            "https://gateway.apiserpro.serpro.gov.br/biovalid/v1/token",
+            "",
+            {
+                params: {
+                    cpf: cpf,
+                },
+                headers: {
+                    Authorization: "Bearer " + access_token,
+                },
+            }
+        );
+
+        console.log("res pin");
+        console.log(resPin);
+        console.log(resPin.data);
+
+        return resPin.data;
+    } catch (e) {
+        console.log("GET PIN CATCH");
+        console.log(e);
+        return e;
     }
-  );
-  return resToken.data.access_token; 
-}
+};
 
-const getPin = async (access_token: string, cpf: number)  => {
-  console.log("Get Pin CPF = " + cpf);
+const setPhoto = async (
+    access_token: string,
+    pin: string,
+    cpf: number,
+    photoBase64: string
+) => {
+    console.log("setPhoto");
 
-  try { 
+    photoBase64 = photoBase64.substring("data:image/jpeg;base64,".length);
 
-    const resPin = await axios.post(
-      'https://gateway.apiserpro.serpro.gov.br/biovalid/v1/token',
-      '',
-      {
-        params: {
-          'cpf': cpf
-        },
-        headers: {
-          'Authorization': 'Bearer ' + access_token
-        }
-      }
-    );
+    /*  SALVAR FOTO LOCALMENTE PARA DEBUG */
+    // require("fs").writeFile("out.jpg", photoBase64, 'base64', (err) => {
+    //   console.log("Photo To Disk")
+    //   console.log(err);
+    // });
 
-    console.log("res pin")
-    console.log(resPin)
-    console.log(resPin.data)
+    /* USAR FOTO LOCAL COM QUALIDADE PARA TESTE */
+    // const fs = require('fs').promises;
+    // photoBase64 = await fs.readFile('foto.jpeg', {encoding: 'base64'});
 
-    return resPin.data;
+    const response = await axios
+        .put(
+            "https://gateway.apiserpro.serpro.gov.br/biovalid/v1/liveness",
+            {
+                selfie: photoBase64,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + access_token,
+                    "x-cpf": cpf,
+                    "x-pin": pin,
+                    "x-device": "Computador",
+                },
+            }
+        )
+        .catch((error) => {
+            console.log("error");
+            console.log(error.response.data);
 
-  } catch(e) {
+            return error.response;
+        });
 
-    console.log("GET PIN CATCH")
-    console.log(e)
-    return e;
-  }
+    // console.log("response")
+    // console.log(response)
+    // console.log("response.data")
+    console.log("RESPONSE");
+    console.log(response.data);
 
- 
-}
-
-const setPhoto = async (access_token: string, pin: string, cpf: number, photoBase64: string) => {
-
-  console.log("setPhoto");
-
-  photoBase64 = photoBase64.substring("data:image/jpeg;base64,".length);
-
-  /*  SALVAR FOTO LOCALMENTE PARA DEBUG */
-  // require("fs").writeFile("out.jpg", photoBase64, 'base64', (err) => {
-  //   console.log("Photo To Disk")
-  //   console.log(err);
-  // });
-
-  /* USAR FOTO LOCAL COM QUALIDADE PARA TESTE */ 
-  // const fs = require('fs').promises;
-  // photoBase64 = await fs.readFile('foto.jpeg', {encoding: 'base64'});
-
-  const response = await axios.put(
-    'https://gateway.apiserpro.serpro.gov.br/biovalid/v1/liveness',
-    {
-      'selfie': photoBase64
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + access_token,
-        'x-cpf': cpf,
-        'x-pin': pin,
-        'x-device': 'Computador'
-      }
-    }
-  ).catch( (error) => {
-
-    console.log("error")
-    console.log(error.response.data)
-
-    return error.response;
-  });
-
-  // console.log("response")
-  // console.log(response)
-  // console.log("response.data")
-  console.log("RESPONSE")
-  console.log(response.data)
-
-  return response.data; 
-}
+    return response.data;
+};
 
 handler.get(async (req, res) => {
     return res.status(200).send("GET NOT FOUND");
 });
-
 
 export default handler;
