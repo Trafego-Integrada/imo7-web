@@ -14,6 +14,7 @@ import slug from "slug";
 import moment from "moment";
 import fs from "fs";
 import { statSync } from "fs";
+import { encodeBase64 } from "bcryptjs";
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
@@ -29,17 +30,8 @@ handler.use(cors);
 // handler.use(multiparty);
 
 handler.post(async (req, res) => {
-    // console.log("req")
-    // console.log(req);
-    console.log("req.body");
-    console.log(req.body);
-    console.log("req.query");
-    console.log(req.query);
-    console.log("req.files");
-    console.log(req.files);
-
     const ACCESS_TOKEN = await getToken();
-
+    console.log(ACCESS_TOKEN);
     const PIN = await getPin(ACCESS_TOKEN, req.body.cpf);
 
     console.log("PIN = " + PIN);
@@ -213,11 +205,12 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
     console.log("base64Image.lenght = " + base64Image?.length);
     console.log("stats.size = " + stats.size);
     console.log(stats);
+    console.log("objectData.lenght = ", objectData);
 
     const putObjectRequest: os.requests.PutObjectRequest = {
         namespaceName: namespace,
         bucketName: bucket,
-        putObjectBody: objectData,
+        putObjectBody: buff,
         objectName: nameLocation,
         contentLength: stats.size,
     };
@@ -256,7 +249,31 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
     return "";
 };
 
-const getToken = async () => {};
+const getToken = async () => {
+    try {
+        const buffer = Buffer.from(
+            "u3hKXTX_3zf_s9MDLRcIUQnS1YIa:AHTOVduLpyM8J28Qrw17gGqyNxYa",
+            "utf-8"
+        );
+
+        const data = await axios.post(
+            "https://gateway.apiserpro.serpro.gov.br/token",
+            "grant_type=client_credentials",
+            {
+                headers: {
+                    Authorization: "Basic " + buffer.toString("base64"),
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            }
+        );
+        console.log(data);
+        return data.data.access_token;
+    } catch (e) {
+        console.log("GET PIN CATCH");
+        console.log(e);
+        return e;
+    }
+};
 
 const getPin = async (access_token: string, cpf: number) => {
     console.log("Get Pin CPF = " + cpf);
@@ -306,7 +323,7 @@ const setPhoto = async (
     /* USAR FOTO LOCAL COM QUALIDADE PARA TESTE */
     // const fs = require('fs').promises;
     // photoBase64 = await fs.readFile('foto.jpeg', {encoding: 'base64'});
-
+    console.log("teste", access_token);
     const response = await axios
         .put(
             "https://gateway.apiserpro.serpro.gov.br/biovalid/v1/liveness",
