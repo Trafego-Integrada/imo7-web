@@ -10,7 +10,7 @@ import moment from "moment";
 import slug from "slug";
 import { checkAuth } from "@/middleware/checkAuth";
 import { multiparty } from "@/middleware/multipart";
-
+import fs from "fs";
 handler.use(cors);
 handler.use(checkAuth);
 handler.use(multiparty);
@@ -84,20 +84,24 @@ handler.post(async (req, res) => {
             const extension = anexos.name.slice(
                 (Math.max(0, anexos.name.lastIndexOf(".")) || Infinity) + 1
             );
+
             const nameLocation = `anexo/${slug(
                 `${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
                 }`
             )}.${extension}`;
+
             // Create read stream to file
             const stats = statSync(anexos.path);
             const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
             const objectData = await nodeFsBlob.getData();
-
+            const imageData = fs.readFileSync(anexos.path);
+            const base64Data = imageData.toString("base64");
+            // let buff = Buffer.from(base64Image, "base64");
             const putObjectRequest: os.requests.PutObjectRequest = {
                 namespaceName: namespace,
                 bucketName: bucket,
-                putObjectBody: objectData,
+                putObjectBody: base64Data,
                 objectName: nameLocation,
                 contentLength: stats.size,
             };
