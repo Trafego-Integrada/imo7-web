@@ -15,6 +15,7 @@ import prisma from "@/lib/prisma";
 import { providerStorage } from "@/lib/storage";
 import chamado from "@/v1/chamado";
 import { checkAuth } from "@/middleware/checkAuth";
+import fs from "fs";
 
 export const config = {
     api: {
@@ -111,11 +112,12 @@ handle.post(async (req, res) => {
                     const stats = statSync(foto.path);
                     const nodeFsBlob = new os.NodeFSBlob(foto.path, stats.size);
                     const objectData = await nodeFsBlob.getData();
-
+                    const imageData = fs.readFileSync(foto.path);
+                    const base64Data = imageData.toString("base64");
                     const putObjectRequest: os.requests.PutObjectRequest = {
                         namespaceName: namespace,
                         bucketName: bucket,
-                        putObjectBody: objectData,
+                        putObjectBody: base64Data,
                         objectName: nameLocation,
                         contentLength: stats.size,
                     };
@@ -243,11 +245,12 @@ handle.post(async (req, res) => {
             const stats = statSync(anexos.path);
             const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
             const objectData = await nodeFsBlob.getData();
-
+            const imageData = fs.readFileSync(anexos.path);
+            const base64Data = imageData.toString("base64");
             const putObjectRequest: os.requests.PutObjectRequest = {
                 namespaceName: namespace,
                 bucketName: bucket,
-                putObjectBody: objectData,
+                putObjectBody: base64Data,
                 objectName: nameLocation,
                 contentLength: stats.size,
             };

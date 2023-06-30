@@ -8,7 +8,7 @@ import moment from "moment";
 import nextConnect from "next-connect";
 import * as os from "oci-objectstorage";
 import slug from "slug";
-
+import fs from "fs";
 const handle = nextConnect();
 
 export const config = {
@@ -142,14 +142,15 @@ handle.post(async (req, res) => {
             `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`
         )}.${extension}`;
         // Create read stream to file
-        const stats     = statSync(logo.path);
+        const stats = statSync(logo.path);
         const nodeFsBlob = new os.NodeFSBlob(logo.path, stats.size);
         const objectData = await nodeFsBlob.getData();
-
+        const imageData = fs.readFileSync(logo.path);
+        const base64Data = imageData.toString("base64");
         const putObjectRequest: os.requests.PutObjectRequest = {
             namespaceName: namespace,
             bucketName: bucket,
-            putObjectBody: objectData,
+            putObjectBody: base64Data,
             objectName: nameLocation,
             contentLength: stats.size,
         };
@@ -184,11 +185,12 @@ handle.post(async (req, res) => {
         const stats = statSync(bg.path);
         const nodeFsBlob = new os.NodeFSBlob(bg.path, stats.size);
         const objectData = await nodeFsBlob.getData();
-
+        const imageData = fs.readFileSync(bg.path);
+        const base64Data = imageData.toString("base64");
         const putObjectRequest: os.requests.PutObjectRequest = {
             namespaceName: namespace,
             bucketName: bucket,
-            putObjectBody: objectData,
+            putObjectBody: base64Data,
             objectName: nameLocation,
             contentLength: stats.size,
         };
