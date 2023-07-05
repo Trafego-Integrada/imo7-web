@@ -266,7 +266,8 @@ const ModalBase = ({}, ref) => {
                                                                                 <span>
                                                                                     <Text>
                                                                                     <a 
-                                                                                            href={"javascript:navigator.clipboard.writeText('http://" + router.query.site + ".imo7.com.br/validacao-facial?cpf="+ (watch("preenchimento")?.find((p) => p.campoFichaCadastralCodigo == i.codigo)?.valor)  +"')"} 
+                                                                                            onClick={() => { toast({title: 'URL Copiada'}) }}
+                                                                                            href={"javascript:navigator.clipboard.writeText('http://" + router.query.site + ".imo7.com.br/validacao-facial?cpf="+ (watch("preenchimento")?.find((p) => p.campoFichaCadastralCodigo == i.codigo)?.valor.replaceAll(".", "").replaceAll("-",""))  +"')"} 
                                                                                             style={{color: "blue"}}>
                                                                                             Link Validar CPF
                                                                                     </a>

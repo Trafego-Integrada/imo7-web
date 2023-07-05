@@ -30,9 +30,14 @@ handler.use(cors);
 // handler.use(multiparty);
 
 handler.post(async (req, res) => {
+
     const ACCESS_TOKEN = await getToken();
+    
     console.log(ACCESS_TOKEN);
-    const PIN = await getPin(ACCESS_TOKEN, req.body.cpf);
+
+    const cpf = req.body.cpf.replaceAll("-", "").replaceAll(".", "");
+
+    const PIN = await getPin(ACCESS_TOKEN, cpf);
 
     console.log("PIN = " + PIN);
 
@@ -65,7 +70,7 @@ handler.post(async (req, res) => {
     const PHOTO = await setPhoto(
         ACCESS_TOKEN,
         PIN,
-        req.body.cpf,
+        cpf,
         req.body.foto
     );
 
@@ -89,7 +94,7 @@ handler.post(async (req, res) => {
     try {
         let data = {
             imobiliariaId: req.body.imobiliariaId,
-            cpf: req.body.cpf,
+            cpf: cpf,
             pin: PIN,
             fotoUrl: fotoUrl,
         };
