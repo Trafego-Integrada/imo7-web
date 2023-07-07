@@ -81,7 +81,7 @@ const Imobiliarias = () => {
                             {imobiliarias && imobiliarias.length ? (
                                 imobiliarias.map((item, key) => (
                                     <Tr key={key}>
-                                        <Td>{item?.id}
+                                        <Td>{item?.id}</Td>
                                         <Td>{item.conta?.nome}</Td>
                                         <Td>{item.razaoSocial}</Td>
                                         <Td>{item.codigo}</Td>
