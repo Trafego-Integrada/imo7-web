@@ -69,7 +69,6 @@ handler.post(async (req, res) => {
                 const getObjectResponse = await client.getObject(
                     getObjectRequest
                 );
-                console.log(getObjectResponse);
                 if (getObjectResponse) {
                     await prisma.fichaCadastral.update({
                         where: {
