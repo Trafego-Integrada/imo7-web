@@ -365,7 +365,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         }
                                                         style={
                                                             {
-                                                                objectFit: "cover",
+                                                                // objectFit: "cover",
                                                                 maxWidth: "none",
                                                                 maxHeight: "none",
                                                             }
@@ -422,7 +422,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                 }}>
                                                     <img src={photo}
                                                         style={{
-                                                            objectFit: "cover",
+                                                            // objectFit: "cover",
                                                             maxWidth: "none",
                                                             maxHeight: "none",
                                                             
