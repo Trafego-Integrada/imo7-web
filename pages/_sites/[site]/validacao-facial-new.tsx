@@ -342,7 +342,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                         borderWidth="1px"
                                         borderRadius="lg"
                                     >
-                                        <div style={{ position: "relative" }}>
+                                        <div style={{ position: "relative" ,   height: "350px"}}>
                                             {photo == null && (
                                                 <>
                                                     <Webcam
@@ -361,12 +361,14 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         }
                                                         style={
                                                             {
-                                                                // position: "absolute",
-                                                                // objectFit: "cover",
-                                                                // margin: 0,
+                                                                // width: "350px",
+                                                                height: "350px",
+                                                                position: "contain",
+                                                                objectFit: "cover",
+                                                                //  margin: 0,
                                                                 // width: streamWidth,
                                                                 // height: streamHeight
-                                                                aspectRatio: (streamWidth/streamHeight)
+                                                                // aspectRatio: (streamWidth/streamHeight)
                                                             }
                                                         }
                                                     />
@@ -404,8 +406,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                     <div
                                                         className="camera-face-overlay"
                                                         style={{
-                                                            borderColor:
-                                                                "outline",
+                                                            borderColor: "outline",
                                                             marginLeft: "15%",
                                                             marginRight: "15%",
                                                             marginTop: "0%",
@@ -415,8 +416,14 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                 </>
                                             )}
                                             {photo != null && (
-                                                <div>
-                                                    <img src={photo} maxWidth={streamWidth} maxHeight={streamHeight} style={{  width: "auto", height: "auto", aspectRatio: (streamWidth/streamHeight)}} />
+                                                <div style={{ height: "350px"}}>
+                                                    <img src={photo}
+                                                        style={{
+                                                            maxWidth: "auto",
+                                                            height: "350px",
+                                                            position: "contain",
+                                                            objectFit: "cover",
+                                                            }} />
                                                     <div
                                                         className="camera-face-overlay"
                                                         style={{
