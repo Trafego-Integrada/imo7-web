@@ -340,18 +340,7 @@ export const emailBoleto = ({
                                                 </td>
                                             </tr>
 											
-                                            ${
-                                                complemento &&
-                                                `<tr>
-                                                    <td valign="top" class="bodyContent" bgcolor="#FFFFFF"
-                                                        style="border-collapse: collapse; background: #FFFFFF;">
-                                                        <div class="std_content00" align="left"
-                                                            style="color: #505050; font-family: 'Arial', sans-serif; font-size: 14px; line-height: 150%; text-align: left;">
-                                                            <p>${complemento}</p>
-                                                        </div>
-                                                    </td>
-                                                </tr>`
-                                            }
+                                          
 											
                                         </table>
                                     </td>

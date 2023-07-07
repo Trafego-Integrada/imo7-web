@@ -28,38 +28,42 @@ handler.get(async (req, res) => {
         await Promise.all(
             filaEnvio.map(async (item) => {
                 if (item.reguaCobranca?.formaEnvio === "email") {
-                    // const email = await mail.sendMail({
-                    //     from: "IMO7 <contato@trafegoimoveis.com.br>",
-                    //     to: `${item.nomeDestinatario} <${item.destinatario}>`,
-                    //     subject: item.reguaCobranca?.assunto
-                    //         ? item.reguaCobranca?.assunto
-                    //         : item.reguaCobranca.tipo == "boleto"
-                    //         ? "2ª via de boleto online"
-                    //         : "Resumo do extrato",
-                    //     html:
-                    //         item.reguaCobranca.tipo === "boleto"
-                    //             ? emailBoleto({
-                    //                   conteudo: item.reguaCobranca.conteudo,
-                    //                   imobiliaria: item?.imobiliaria,
-                    //                   nomeDestinatario: item.nomeDestinatario,
-                    //                   ...item.parametros,
-                    //               })
-                    //             : item.reguaCobranca.tipo == "extrato"
-                    //             ? emailExtrato({
-                    //                   imobiliaria: item?.imobiliaria,
-                    //                   nomeDestinatario: item?.nomeDestinatario,
-                    //                   ...item.parametros,
-                    //               })
-                    //             : "",
-                    // });
-                    // await prisma.filaEnvio.update({
-                    //     where: {
-                    //         id: item.id,
-                    //     },
-                    //     data: {
-                    //         dataEnvio: new Date(),
-                    //     },
-                    // });
+                    const email = await mail.sendMail({
+                        from: `${item.imobiliaria?.nomeFantasia} <contato@imo7.com.br>`,
+                        to: `${item.nomeDestinatario} <${item.destinatario}>`,
+                        replyTo:
+                            item.reguaCobranca?.tipo == "boleto"
+                                ? `${item.imobiliaria?.nomeFantasia} <${item.imobiliaria?.emailEnvioBoleto}>`
+                                : `${item.imobiliaria?.nomeFantasia} <${item.imobiliaria?.emailEnvioExtrato}>`,
+                        subject: item.reguaCobranca?.assunto
+                            ? item.reguaCobranca?.assunto
+                            : item.reguaCobranca.tipo == "boleto"
+                            ? "2ª via de boleto online"
+                            : "Resumo do extrato",
+                        html:
+                            item.reguaCobranca.tipo === "boleto"
+                                ? emailBoleto({
+                                      conteudo: item.reguaCobranca.conteudo,
+                                      imobiliaria: item?.imobiliaria,
+                                      nomeDestinatario: item.nomeDestinatario,
+                                      ...item.parametros,
+                                  })
+                                : item.reguaCobranca.tipo == "extrato"
+                                ? emailExtrato({
+                                      imobiliaria: item?.imobiliaria,
+                                      nomeDestinatario: item?.nomeDestinatario,
+                                      ...item.parametros,
+                                  })
+                                : "",
+                    });
+                    await prisma.filaEnvio.update({
+                        where: {
+                            id: item.id,
+                        },
+                        data: {
+                            dataEnvio: new Date(),
+                        },
+                    });
                 } else if (
                     item.reguaCobranca?.formaEnvio === "whatsapp" &&
                     item.imobiliaria?.idInstanciaWhatsapp &&

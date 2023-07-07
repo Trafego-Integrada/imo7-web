@@ -69,7 +69,11 @@ handle.post(async (req, res) => {
                         data: eval(itens).map((item) => {
                             return {
                                 descricao: item.descricao,
-                                valor: Number(item.valor.replaceAll('.','').replace(',','.')),
+                                valor: Number(
+                                    item.valor
+                                        .replaceAll(".", "")
+                                        .replace(",", ".")
+                                ),
                             };
                         }),
                     },

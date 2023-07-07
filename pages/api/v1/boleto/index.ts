@@ -362,7 +362,7 @@ handle.post(async (req, res) => {
             },
         });
 
-        if (reguas.length > 0) {
+        if (envia_email && reguas.length > 0) {
             await Promise.all(
                 reguas.map(async (regua) => {
                     await prisma.filaEnvio.create({

@@ -44,7 +44,7 @@ handle.post(async (req, res) => {
                 observacao5,
                 parcela: Number(parcela),
                 periodo,
-                vencimento: dataDeposito
+                vencimento: vencimento
                     ? moment(vencimento, "DD/MM/YYYY").format()
                     : null,
                 responsavel,
