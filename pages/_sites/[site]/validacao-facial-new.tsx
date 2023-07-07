@@ -260,13 +260,17 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
             return (
                 <Stack
                     maxH="100%"
-                    minW="calc(100vh)"
-                    minH="calc(100vh)"
+                    // minW="calc(100vh)"
+                    // minH="calc(100vh)"
                     style={{ margin: 0 }}
                     bg="gray.100"
                 >
-                    <Container minW="calc(100vh)" minH="calc(100vh)">
-                        <Center minW="calc(100vh)" minH="calc(100vh)">
+                    <Container 
+                        // minW="calc(100vh)" minH="calc(100vh)"
+                        >
+                        <Center 
+                            // minW="calc(100vh)" minH="calc(100vh)"
+                            >
                             É necessário informar um CPF válido.
                         </Center>
                     </Container>
@@ -289,15 +293,19 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
         return (
             <Stack
                 maxH="100%"
-                minW="calc(100vh)"
-                minH="calc(100vh)"
+                // minW="calc(100vh)"
+                // minH="calc(100vh)"
                 style={{ margin: 0 }}
                 bg="gray.100"
                 as="form"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <Container minW="calc(100vh)" minH="calc(100vh)">
-                    <Center minW="calc(100vh)" minH="calc(100vh)">
+                <Container 
+                    // minW="calc(100vh)" minH="calc(100vh)"
+                    >
+                    <Center 
+                        // minW="calc(100vh)" minH="calc(100vh)"
+                        >
                         <Grid
                             templateColumns={{
                                 base: "repeat(1, 1fr)",
