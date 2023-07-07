@@ -112,11 +112,14 @@ function cpfMask(v) {
 }
 
 const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
-    const router = useRouter();
 
-    const [photo, setPhoto] = useState();
-    const [windowStatus, setWindowStatus] = useState(null);
-    const [step, setStep] = useState(1);
+    const router                            = useRouter();
+    const [photo, setPhoto]                 = useState();
+    const [windowStatus, setWindowStatus]   = useState(null);
+    const [step, setStep]                   = useState(1);
+
+    const [streamWidth, setStreamWidth]      = useState();
+    const [streamHeight, setStreamHeight]    = useState();
 
     const {
         register,
@@ -155,19 +158,25 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
     };
 
     const checkResolution = async () => {
-        //     let constraints = {
-        //         video: {
-        //             width:  { ideal: 1280 },
-        //             height: { ideal: 720 }
-        //         }
-        //     };
-        // let stream = await navigator.mediaDevices.getUserMedia(constraints);
-        //     let stream_settings = stream.getVideoTracks()[0].getSettings();
-        //     // actual width & height of the camera video
-        //     let stream_width = stream_settings.width;
-        //     let stream_height = stream_settings.height;
-        //     console.log('Width: ' + stream_width + 'px');
-        //     console.log('Height: ' + stream_height + 'px');
+
+        let constraints = {
+            video: {
+                width:  { ideal: 1280 },
+                height: { ideal: 720 }
+            }
+        };
+
+        let stream = await navigator.mediaDevices.getUserMedia(constraints);
+            let stream_settings = stream.getVideoTracks()[0].getSettings();
+            // actual width & height of the camera video
+            let stream_width = stream_settings.width;
+            let stream_height = stream_settings.height;
+
+            setStreamWidth(stream_width)
+            setStreamHeight(stream_height)
+
+            console.log('Width: ' + stream_width + 'px');
+            console.log('Height: ' + stream_height + 'px');
     };
 
     const onSubmit = async (data) => {
@@ -355,6 +364,9 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                                 // position: "absolute",
                                                                 // objectFit: "cover",
                                                                 // margin: 0,
+                                                                // width: streamWidth,
+                                                                // height: streamHeight
+                                                                aspectRatio: (streamWidth/streamHeight)
                                                             }
                                                         }
                                                     />
@@ -404,7 +416,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                             )}
                                             {photo != null && (
                                                 <div>
-                                                    <img src={photo} />
+                                                    <img src={photo} style={{ aspectRatio: (streamWidth/streamHeight)}} />
                                                     <div
                                                         className="camera-face-overlay"
                                                         style={{
