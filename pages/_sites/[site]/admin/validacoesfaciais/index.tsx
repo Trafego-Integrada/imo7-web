@@ -296,7 +296,8 @@ const FichasCadastrais = () => {
                                                 <Image
                                                             borderRadius='full'
                                                             src={item.fotoUrl}
-                                                            alt='Dan Abramov'
+                                                            width={20}
+                                                            height={20}
                                                 />
                                                     
                                                 </Td>
