@@ -27,7 +27,6 @@ import {
 
 import { FormInput } from "@/components/Form/FormInput";
 import prisma from "@/lib/prisma";
-import Head from 'next/head'
 
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
@@ -46,12 +45,12 @@ import { NextChakraLink } from "@/components/NextChakraLink";
 import { api } from "@/services/apiClient";
 import { useRouter } from "next/router";
 
+
+
 import Webcam from "react-webcam";
 import { CameraOptions, useFaceDetection } from "react-use-face-detection";
 import FaceDetection from "@mediapipe/face_detection";
 import { Camera } from "@mediapipe/camera_utils";
-
-
 
 /*!
  *	Gerador e Validador de CPF v1.0.0
@@ -112,14 +111,10 @@ function cpfMask(v) {
 }
 
 const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
+    const router = useRouter();
 
-    const router                            = useRouter();
-    const [photo, setPhoto]                 = useState();
-    const [windowStatus, setWindowStatus]   = useState(null);
-    const [step, setStep]                   = useState(1);
-
-    const [streamWidth, setStreamWidth]      = useState();
-    const [streamHeight, setStreamHeight]    = useState();
+    const [photo, setPhoto] = useState();
+    const [windowStatus, setWindowStatus] = useState(null);
 
     const {
         register,
@@ -129,9 +124,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
     } = useForm();
 
     useEffect(() => {
-        // document.querySelector("meta[name=viewport]").setAttribute(
-        //     'content', 
-        //     'width=device-width, initial-scale=1');
         // check();
         checkResolution();
         setWindowStatus(1);
@@ -140,7 +132,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
     const [error, setError] = useState(null);
 
     const check = async () => {
-
         const response = await api.get("validacaoFacial/check", {
             imobiliariaId: imobiliaria.id,
             cpf: router.query.cpf,
@@ -158,29 +149,22 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
     };
 
     const checkResolution = async () => {
-
-        let constraints = {
-            video: {
-                width:  { ideal: 1280 },
-                height: { ideal: 720 }
-            }
-        };
-
-        let stream = await navigator.mediaDevices.getUserMedia(constraints);
-            let stream_settings = stream.getVideoTracks()[0].getSettings();
-            // actual width & height of the camera video
-            let stream_width = stream_settings.width;
-            let stream_height = stream_settings.height;
-
-            setStreamWidth(stream_width)
-            setStreamHeight(stream_height)
-
-            // console.log('Width: ' + stream_width + 'px');
-            // console.log('Height: ' + stream_height + 'px');
+        //     let constraints = {
+        //         video: {
+        //             width:  { ideal: 1280 },
+        //             height: { ideal: 720 }
+        //         }
+        //     };
+        // let stream = await navigator.mediaDevices.getUserMedia(constraints);
+        //     let stream_settings = stream.getVideoTracks()[0].getSettings();
+        //     // actual width & height of the camera video
+        //     let stream_width = stream_settings.width;
+        //     let stream_height = stream_settings.height;
+        //     console.log('Width: ' + stream_width + 'px');
+        //     console.log('Height: ' + stream_height + 'px');
     };
 
     const onSubmit = async (data) => {
-
         try {
             setError(null);
 
@@ -207,12 +191,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
     };
 
     if (typeof window === "undefined") {
-        return (<div>
-                    <Head>
-                        {/* <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/> */}
-                    </Head>
-                    Loading...
-                </div>);
+        return <div>Loading...</div>;
     } else {
         const { webcamRef, boundingBox, isLoading, detected, facesDetected } =
             useFaceDetection({
@@ -256,8 +235,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
 
         const capture = React.useCallback(() => {
             const imageSrc = webcamRef.current.getScreenshot({
-                // width: 1280,
-                // height: 960,
+                width: 1280,
+                height: 960,
             });
             setPhoto(imageSrc);
         }, [webcamRef]);
@@ -269,17 +248,13 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
             return (
                 <Stack
                     maxH="100%"
-                    // minW="calc(100vh)"
-                    // minH="calc(100vh)"
+                    minW="calc(100vh)"
+                    minH="calc(100vh)"
                     style={{ margin: 0 }}
                     bg="gray.100"
                 >
-                    <Container 
-                        // minW="calc(100vh)" minH="calc(100vh)"
-                        >
-                        <Center 
-                            // minW="calc(100vh)" minH="calc(100vh)"
-                            >
+                    <Container minW="calc(100vh)" minH="calc(100vh)">
+                        <Center minW="calc(100vh)" minH="calc(100vh)">
                             É necessário informar um CPF válido.
                         </Center>
                     </Container>
@@ -302,30 +277,25 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
         return (
             <Stack
                 maxH="100%"
-                // minW="calc(100vh)"
-                // minH="calc(100vh)"
+                minW="calc(100vh)"
+                minH="calc(100vh)"
                 style={{ margin: 0 }}
                 bg="gray.100"
                 as="form"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <Container 
-                    // minW="calc(100vh)" minH="calc(100vh)"
-                    >
-                    <Center 
-                        // minW="calc(100vh)" minH="calc(100vh)"
-                        >
+
+                <Container minW="calc(100vh)" minH="calc(100vh)">
+                    <Center minW="calc(100vh)" minH="calc(100vh)">
                         <Grid
                             templateColumns={{
                                 base: "repeat(1, 1fr)",
                                 sm: "repeat(1, 1fr)",
-                                md: "repeat(1, 1fr)",
-                                lg: "repeat(1, 1fr)",
+                                md: "repeat(2, 1fr)",
+                                lg: "repeat(2, 1fr)",
                             }}
                             gap={6}
                         >
-
-                            { step == 2 && 
                             <GridItem w="100%">
                                 <Box
                                     maxW="sm"
@@ -342,11 +312,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                         borderWidth="1px"
                                         borderRadius="lg"
                                     >
-                                        <div style={{ 
-                                                position: "relative" ,  width:"350px",  height: "350px",   
-                                                display: "flex", 
-                                                justifyContent: "center"
-                                                }}>
+                                        <div style={{ position: "relative" }}>
                                             {photo == null && (
                                                 <>
                                                     <Webcam
@@ -357,13 +323,17 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         screenshotFormat="image/jpeg"
                                                         ref={webcamRef}
                                                         screenshotQuality={1}
-                                                        // minScreenshotWidth={ streamWidth }
-                                                        // minScreenshotHeight={ streamHeight}
+                                                        minScreenshotWidth={
+                                                            1280
+                                                        }
+                                                        minScreenshotHeight={
+                                                            960
+                                                        }
                                                         style={
                                                             {
-                                                                objectFit: "cover",
-                                                                // maxWidth: "500%",
-                                                                // maxHeight: "500%",
+                                                                // position: "absolute",
+                                                                // objectFit: "cover",
+                                                                // margin: 0,
                                                             }
                                                         }
                                                     />
@@ -401,7 +371,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                     <div
                                                         className="camera-face-overlay"
                                                         style={{
-                                                            borderColor: "outline",
+                                                            borderColor:
+                                                                "outline",
                                                             marginLeft: "15%",
                                                             marginRight: "15%",
                                                             marginTop: "0%",
@@ -411,22 +382,13 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                 </>
                                             )}
                                             {photo != null && (
-                                                <div style={{ 
-                                                        width: "350px", height: "350px",
-                                                        display: "flex", 
-                                                        justifyContent: "center"
-                                                }}>
-                                                    <img src={photo}
-                                                        style={{
-                                                            objectFit: "cover",
-                                                            // maxWidth: "500%",
-                                                            // maxHeight: "500%",
-                                                            
-                                                            }} />
+                                                <div>
+                                                    <img src={photo} />
                                                     <div
                                                         className="camera-face-overlay"
                                                         style={{
-                                                            borderColor: "outline",
+                                                            borderColor:
+                                                                "outline",
                                                             marginLeft: "15%",
                                                             marginRight: "15%",
                                                             marginTop: "0%",
@@ -437,31 +399,11 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                             )}
                                         </div>
                                     </Box>
-                                    <Box
-                                    px={8}
-                                    py={4}
-                                    w="100%"
-                                    h="100%"
-                                    bg="white"
-                                    borderRadius="lg"
-                                >
-                                        {error && (
-                                        <Flex
-                                            color="red"
-                                            borderWidth={1}
-                                            borderColor="red"
-                                        >
-                                            <Text w="full" textAlign="center">
-                                                {error}
-                                            </Text>
-                                        </Flex>
-                                    )}
-
+                                    <br />
                                     <Text m={3} fontSize="sm">
-                                        Posicione seu rosto próxima a camera, <br/> dentro da
-                                        marcação, clique em  <br/>  TIRAR FOTO  e depois em VALIDAR.
+                                        1º ETAPA - Posicione sua face dentro da
+                                        marcação e clique em Tirar Foto.
                                     </Text>
-                                    <br/>
                                     <Center>
                                         {photo == null && (
                                             <Button
@@ -478,13 +420,12 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                     />
                                                 }
                                                 onClick={capture}
-                                                style={{  display: "inherit", marginLeft: "auto", marginRight: "10" }}
                                             >
-                                                TIRAR FOTO
+                                                Tirar Foto
                                             </Button>
                                         )}
 
-                                        {photo != null &&
+                                        {photo != null && (
                                             <Button
                                                 type="button"
                                                 borderRadius={0}
@@ -499,40 +440,15 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                     />
                                                 }
                                                 onClick={() => setPhoto(null)}
-                                                style={{  display: "inherit", marginLeft: "10", marginRight: "auto" }}
                                             >
-                                                REFAZER
+                                                Refazer Foto
                                             </Button>
-                                        }
-
-{photo != null &&
-                                            <Button
-                                                type="submit"
-                                                borderRadius={0}
-                                                colorScheme="blue"
-                                                rightIcon={
-                                                    <Icon as={FaSignInAlt} />
-                                                }
-                                                spinner={
-                                                    <BeatLoader
-                                                        size={8}
-                                                        color="white"
-                                                    />
-                                                }
-                                                style={{  display: "inherit", marginLeft: "auto", marginRight: "10" }}
-                                            >
-                                                VALIDAR
-                                            </Button>
-                                        }
- 
+                                        )}
                                     </Center>
-                                    </Box>
                                     <br />
                                 </Box>
                             </GridItem>
-                            }
 
-                            { step == 1 && 
                             <GridItem w="100%">
                                 <Box
                                     px={8}
@@ -542,11 +458,11 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                     bg="white"
                                     borderRadius="lg"
                                 >
-                                    <div style={{ height: 160}}>
+                                    <div style={{ height: 160 }}>
                                         {imobiliaria.logo ? (
                                             <Image
                                                 h={40}
-                                                style={{margin: "0 auto"}}
+                                                objectFit="contain"
                                                 src={imobiliaria.logo}
                                                 alt={imobiliaria.nomeFantasia}
                                             />
@@ -562,11 +478,20 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                     </div>
                                     <br />
 
-                                
+                                    {error && (
+                                        <Flex
+                                            color="red"
+                                            borderWidth={1}
+                                            borderColor="red"
+                                        >
+                                            <Text w="full" textAlign="center">
+                                                {error}
+                                            </Text>
+                                        </Flex>
+                                    )}
 
                                     <Text fontSize="sm">
-                                         Verifique se o CPF está correto antes <br/> 
-                                          de prosseguir ou informe a imobiliária.
+                                        2º ETAPA - Clique em continuar.
                                     </Text>
 
                                     <br />
@@ -580,7 +505,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                 h={6}
                                             />
                                         }
-                                        style={{fontWeight: "bold"}}
                                         placeholder="Seu CPF"
                                         {...register("documento")}
                                         error={errors.documento?.message}
@@ -589,8 +513,9 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                     />
 
                                     <br />
+                                    <Center>
                                         <Button
-                                            type="button"
+                                            type="submit"
                                             borderRadius={0}
                                             colorScheme="blue"
                                             rightIcon={
@@ -602,12 +527,10 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                     color="white"
                                                 />
                                             }
-                                            onClick={() => setStep(2)}
-                                            style={{  display: "inherit", marginLeft: "auto", marginRight: "10" }}
                                         >
-                                            CONTINUAR
+                                            Continuar
                                         </Button>
-                                    
+                                    </Center>
                                     {/* 
     <p>{`Loading: ${isLoading}`}</p>
     <p>{`Face Detected: ${detected}`}</p>
@@ -617,7 +540,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
 */}
                                 </Box>
                             </GridItem>
-                            }
                         </Grid>
                     </Center>
                 </Container>
