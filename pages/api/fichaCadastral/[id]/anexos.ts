@@ -2,8 +2,6 @@ import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
 import { providerStorage } from "@/lib/storage";
 import * as os from "oci-objectstorage";
-
-const handler = nextConnect();
 import { cors } from "@/middleware/cors";
 import { checkAuth } from "@/middleware/checkAuth";
 import { multiparty } from "@/middleware/multipart";
@@ -12,13 +10,13 @@ import { statSync } from "fs";
 import slug from "slug";
 import fs from "fs";
 
+const handler = nextConnect();
 handler.use(cors);
 handler.use(multiparty);
 handler.post(async (req, res) => {
     try {
         const { id } = req.query;
-        console.log(id);
-        console.log(req.files);
+
         const client = new os.ObjectStorageClient({
             authenticationDetailsProvider: providerStorage,
         });
@@ -34,10 +32,9 @@ handler.post(async (req, res) => {
             bucketName: bucket,
         };
         const getBucketResponse = await client.getBucket(getBucketRequest);
-        console.log(getBucketResponse);
+
         await Promise.all(
             Object.entries(req.files).map(async (i) => {
-                console.log(i);
                 const extension = i[1].name.slice(
                     (Math.max(0, i[1].name.lastIndexOf(".")) || Infinity) + 1
                 );
@@ -62,7 +59,6 @@ handler.post(async (req, res) => {
                 const putObjectResponse = await client.putObject(
                     putObjectRequest
                 );
-                console.log(putObjectResponse);
                 const getObjectRequest: os.requests.GetObjectRequest = {
                     objectName: nameLocation,
                     bucketName: bucket,
@@ -71,7 +67,6 @@ handler.post(async (req, res) => {
                 const getObjectResponse = await client.getObject(
                     getObjectRequest
                 );
-                console.log(getObjectResponse);
                 if (getObjectResponse) {
                     await prisma.fichaCadastral.update({
                         where: {
@@ -109,11 +104,10 @@ handler.post(async (req, res) => {
             })
         );
 
-        res.send();
+        return res.send();
     } catch (error) {
-        console.log(error);
         console.log(error?.response);
-        res.status(500).send({
+        return res.status(500).send({
             success: false,
             message: error.message,
         });
