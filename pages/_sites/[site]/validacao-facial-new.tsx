@@ -416,12 +416,11 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                             )}
                                             {photo != null && (
                                                 <div>
-                                                    <img src={photo} style={{ aspectRatio: (streamWidth/streamHeight)}} />
+                                                    <img src={photo} maxWidth={streamWidth} maxHeight={streamHeight} style={{  width: "auto", height: "auto", aspectRatio: (streamWidth/streamHeight)}} />
                                                     <div
                                                         className="camera-face-overlay"
                                                         style={{
-                                                            borderColor:
-                                                                "outline",
+                                                            borderColor: "outline",
                                                             marginLeft: "15%",
                                                             marginRight: "15%",
                                                             marginTop: "0%",
