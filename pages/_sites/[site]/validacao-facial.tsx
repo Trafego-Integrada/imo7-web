@@ -45,6 +45,8 @@ import { NextChakraLink } from "@/components/NextChakraLink";
 import { api } from "@/services/apiClient";
 import { useRouter } from "next/router";
 
+
+
 import Webcam from "react-webcam";
 import { CameraOptions, useFaceDetection } from "react-use-face-detection";
 import FaceDetection from "@mediapipe/face_detection";
@@ -282,6 +284,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                 as="form"
                 onSubmit={handleSubmit(onSubmit)}
             >
+
                 <Container minW="calc(100vh)" minH="calc(100vh)">
                     <Center minW="calc(100vh)" minH="calc(100vh)">
                         <Grid

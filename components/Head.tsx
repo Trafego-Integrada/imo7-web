@@ -10,6 +10,7 @@ export const Head = ({ title, description, keywords }) => {
                 type="image/svg"
             />
             <link rel="icon" href="/favicon-dark.svg" type="image/svg" />
+            
         </NextHead>
     );
 };

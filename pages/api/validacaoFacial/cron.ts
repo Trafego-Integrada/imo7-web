@@ -32,6 +32,9 @@ handler.get(async (req, res) => {
     if(data.length == 0)
         res.send({status: 0, msg: "Sem registros"});
 
+
+    // loop 
+
     const id                = data[0].id;
 
     const ACCESS_TOKEN      = await getToken();

@@ -16,6 +16,15 @@ import fs from "fs";
 import { statSync } from "fs";
 import { encodeBase64 } from "bcryptjs";
 
+var FOLDER;
+
+if(process.platform == "linux")
+FOLDER  = "/tmp/";
+else 
+FOLDER  = "d:\\";
+
+
+
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
 export const config = {
@@ -128,9 +137,7 @@ const savePhoto = async (imobiliariaId: string, photoBase64: string) => {
 
     const extension = "jpg";
 
-    //  const folder  = "d:\\";
-    const folder = "/tmp/";
-    const filepath = folder + new Date().getTime() + "." + extension;
+    const filepath = FOLDER + new Date().getTime() + "." + extension;
 
     console.log("filepath = " + filepath);
 
@@ -172,9 +179,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
         `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`
     )}.${extension}`;
 
-    //  const folder  = "d:\\";
-    const folder = "/tmp/";
-    const filepath = folder + new Date().getTime() + "." + extension;
+    const filepath = FOLDER + new Date().getTime() + "." + extension;
 
     console.log("filepath = " + filepath);
 
