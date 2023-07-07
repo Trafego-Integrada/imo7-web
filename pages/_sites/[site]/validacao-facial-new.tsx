@@ -342,7 +342,11 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                         borderWidth="1px"
                                         borderRadius="lg"
                                     >
-                                        <div style={{ position: "relative" ,   height: "350px"}}>
+                                        <div style={{ 
+                                                position: "relative" ,  width:"350px",  height: "350px",   
+                                                display: "flex", 
+                                                justifyContent: "center"
+                                                }}>
                                             {photo == null && (
                                                 <>
                                                     <Webcam
@@ -361,14 +365,10 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         }
                                                         style={
                                                             {
-                                                                // width: "350px",
-                                                                height: "350px",
-                                                                position: "contain",
                                                                 objectFit: "cover",
-                                                                //  margin: 0,
-                                                                // width: streamWidth,
-                                                                // height: streamHeight
-                                                                // aspectRatio: (streamWidth/streamHeight)
+                                                                objectPosition: "center",
+                                                                maxWidth: "none",
+                                                                maxHeight: "none",
                                                             }
                                                         }
                                                     />
@@ -416,13 +416,18 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                 </>
                                             )}
                                             {photo != null && (
-                                                <div style={{ height: "350px"}}>
+                                                <div style={{ 
+                                                        width: "350px", height: "350px",
+                                                        display: "flex", 
+                                                        justifyContent: "center"
+                                                }}>
                                                     <img src={photo}
                                                         style={{
-                                                            maxWidth: "auto",
-                                                            height: "350px",
-                                                            position: "contain",
                                                             objectFit: "cover",
+                                                            objectPosition: "center",
+                                                            maxWidth: "none",
+                                                            maxHeight: "none",
+                                                            
                                                             }} />
                                                     <div
                                                         className="camera-face-overlay"
@@ -459,8 +464,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                     )}
 
                                     <Text m={3} fontSize="sm">
-                                        2º ETAPA
-                                        <br/><br/>
                                         Posicione seu rosto próxima a camera, dentro da
                                         marcação, clique em TIRAR FOTO e depois em VALIDAR.
                                     </Text>
@@ -568,8 +571,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                 
 
                                     <Text fontSize="sm">
-                                        1º ETAPA 
-                                        <br/> <br/> 
                                          Verifique se o CPF está correto antes <br/> 
                                           de prosseguir ou informe a imobiliária.
                                     </Text>
