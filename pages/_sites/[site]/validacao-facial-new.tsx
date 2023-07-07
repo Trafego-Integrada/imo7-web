@@ -175,8 +175,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
             setStreamWidth(stream_width)
             setStreamHeight(stream_height)
 
-            console.log('Width: ' + stream_width + 'px');
-            console.log('Height: ' + stream_height + 'px');
+            // console.log('Width: ' + stream_width + 'px');
+            // console.log('Height: ' + stream_height + 'px');
     };
 
     const onSubmit = async (data) => {
@@ -256,8 +256,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
 
         const capture = React.useCallback(() => {
             const imageSrc = webcamRef.current.getScreenshot({
-                width: 1280,
-                height: 960,
+                // width: 1280,
+                // height: 960,
             });
             setPhoto(imageSrc);
         }, [webcamRef]);
@@ -357,8 +357,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         screenshotFormat="image/jpeg"
                                                         ref={webcamRef}
                                                         screenshotQuality={1}
-                                                        minScreenshotWidth={ streamWidth }
-                                                        minScreenshotHeight={ streamHeight}
+                                                        // minScreenshotWidth={ streamWidth }
+                                                        // minScreenshotHeight={ streamHeight}
                                                         style={
                                                             {
                                                                 objectFit: "cover",
