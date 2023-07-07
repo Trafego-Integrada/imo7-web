@@ -200,7 +200,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
     if (typeof window === "undefined") {
         return (<div>
                     <Head>
-                        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+                        {/* <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/> */}
                     </Head>
                     Loading...
                 </div>);
