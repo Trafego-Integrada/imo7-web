@@ -362,8 +362,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         style={
                                                             {
                                                                 objectFit: "cover",
-                                                                maxWidth: "none",
-                                                                maxHeight: "none",
+                                                                maxWidth: "100%",
+                                                                maxHeight: "100%",
                                                             }
                                                         }
                                                     />
@@ -419,8 +419,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                     <img src={photo}
                                                         style={{
                                                             objectFit: "cover",
-                                                            maxWidth: "none",
-                                                            maxHeight: "none",
+                                                            maxWidth: "100%",
+                                                            maxHeight: "100%",
                                                             
                                                             }} />
                                                     <div
@@ -458,8 +458,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                     )}
 
                                     <Text m={3} fontSize="sm">
-                                        Posicione seu rosto próxima a camera, dentro da
-                                        marcação, clique em TIRAR FOTO e depois em VALIDAR.
+                                        Posicione seu rosto próxima a camera, <br/> dentro da
+                                        marcação, clique em  <br/>  TIRAR FOTO  e depois em VALIDAR.
                                     </Text>
                                     <br/>
                                     <Center>
