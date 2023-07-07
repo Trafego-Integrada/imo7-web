@@ -357,15 +357,11 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         screenshotFormat="image/jpeg"
                                                         ref={webcamRef}
                                                         screenshotQuality={1}
-                                                        minScreenshotWidth={
-                                                            1280
-                                                        }
-                                                        minScreenshotHeight={
-                                                            960
-                                                        }
+                                                        minScreenshotWidth={ streamWidth }
+                                                        minScreenshotHeight={ streamHeight}
                                                         style={
                                                             {
-                                                                // objectFit: "cover",
+                                                                objectFit: "cover",
                                                                 maxWidth: "none",
                                                                 maxHeight: "none",
                                                             }
@@ -422,7 +418,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                 }}>
                                                     <img src={photo}
                                                         style={{
-                                                            // objectFit: "cover",
+                                                            objectFit: "cover",
                                                             maxWidth: "none",
                                                             maxHeight: "none",
                                                             
@@ -505,7 +501,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                 onClick={() => setPhoto(null)}
                                                 style={{  display: "inherit", marginLeft: "10", marginRight: "auto" }}
                                             >
-                                                REFAZER FOTO
+                                                REFAZER
                                             </Button>
                                         }
 
