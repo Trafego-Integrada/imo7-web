@@ -105,7 +105,6 @@ export default function middleware(req: NextRequest) {
     } else if (url.pathname.includes(".dev")) {
         url.pathname = url.pathname.replace(".dev", "");
     }
-    console.log(url);
 
     return NextResponse.rewrite(url);
 }

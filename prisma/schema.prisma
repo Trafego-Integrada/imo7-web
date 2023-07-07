@@ -265,6 +265,10 @@ model FilaEnvio {
     reguaCobrancaId  String
     imobiliaria      Imobiliaria?  @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId    Int?
+    boleto           Boleto?       @relation(fields: [boletoId], references: [id])
+    boletoId         Int?
+    extrato          Extrato?      @relation(fields: [extratoId], references: [id])
+    extratoId        Int?
 }
 
 model Imovel {
@@ -440,6 +444,7 @@ model Boleto {
     imobiliaria           Imobiliaria   @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId         Int
     Notificacao           Notificacao[]
+    filaEnvio             FilaEnvio[]
 }
 
 model Recibo {
@@ -499,6 +504,7 @@ model Extrato {
     conta         Conta?        @relation(fields: [contaId], references: [id])
     contaId       Int?
     itens         ItemExtrato[]
+    filaEnvio     FilaEnvio[]
 }
 
 model ItemExtrato {

@@ -8,10 +8,10 @@ import nextConnect from "next-connect";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.use(cors);
-handler.get(async(req, res) => {
-    const {documento} = req.query
+handler.get(async (req, res) => {
+    const { documento } = req.query;
     const { imobiliaria } = req.headers;
-    
+
     const user = await getUser({ documento, imobiliaria });
     if (!user) {
         return res.status(401).json({
@@ -29,13 +29,14 @@ handler.get(async(req, res) => {
     return res.json({
         id: user.id,
         nome: user.nome,
-        atualizar:user.senhaHash? false:true
+        atualizar: user.senhaHash ? false : true,
     });
-})
+});
+
 handler.post(async (req, res) => {
     const { imobiliaria } = req.headers;
     const { documento, password } = req.body as CreateSessionDTO;
- 
+
     const user = await getUser({ documento: documento, imobiliaria });
     if (!user) {
         return res.status(401).json({

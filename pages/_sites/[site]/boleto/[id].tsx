@@ -1,3 +1,4 @@
+import { formatoData } from "@/helpers/helpers";
 import pdf from "@/lib/pdf";
 import prisma from "@/lib/prisma";
 import { Flex } from "@chakra-ui/react";
@@ -251,9 +252,9 @@ const Boleto = ({ boleto }) => {
         </td>
         <td width="160px">
             <div class="titulo">Vencimento</div>
-            <div class="conteudo rtl">${
+            <div class="conteudo rtl">${formatoData(
                 boleto.data_vencimen
-            }<?php echo $dadosboleto['data_vencimen'] ?></div>
+            )}<?php echo $dadosboleto['data_vencimen'] ?></div>
         </td>
     </tr>
     <tr>
@@ -393,9 +394,9 @@ const Boleto = ({ boleto }) => {
         </td>
         <td width="155px">
             <div class="titulo">Vencimento</div>
-            <div class="conteudo rtl">${
+            <div class="conteudo rtl">${formatoData(
                 boleto.data_vencimen
-            }<?php echo $dadosboleto['data_vencimen'] ?></div>
+            )}<?php echo $dadosboleto['data_vencimen'] ?></div>
         </td>
     </tr>
     <tr>

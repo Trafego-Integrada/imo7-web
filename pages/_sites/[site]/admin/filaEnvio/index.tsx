@@ -1,12 +1,18 @@
 import { Excluir } from "@/components/AlertDialogs/Excluir";
+import { FormDateRange } from "@/components/Form/FormDateRange";
 import { FormInput } from "@/components/Form/FormInput";
 import { Layout } from "@/components/Layout/layout";
 import { ModalContratos } from "@/components/Modals/contratos";
 import { FiltroContratos } from "@/components/Pages/FIltroContratos";
 import { FiltroFilaEnvio } from "@/components/Pages/FiltroFilaEnvio";
+import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
 import { formatoData } from "@/helpers/helpers";
 import { listarContratos } from "@/services/models/contrato";
-import { excluirFilaEnvio, listarFilaEnvio } from "@/services/models/filaEnvio";
+import {
+    excluirFilaEnvio,
+    excluirVariosFilaEnvio,
+    listarFilaEnvio,
+} from "@/services/models/filaEnvio";
 import { queryClient } from "@/services/queryClient";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import {
@@ -18,7 +24,10 @@ import {
 } from "@ajna/pagination";
 import {
     Box,
+    Button,
+    Checkbox,
     Flex,
+    GridItem,
     Icon,
     IconButton,
     Spinner,
@@ -42,16 +51,23 @@ const Home = () => {
     const toast = useToast();
     const modal = useRef();
     const [total, setTotal] = useState();
+    const [selecionados, setSelecionados] = useState([]);
     const [filtro, setFiltro] = useState({
         previsaoEnvio: [null, null],
         dataEnvio: [null, null],
         createdAt: [null, null],
     });
-    const { currentPage, setCurrentPage, pagesCount, pages, pageSize } =
-        usePagination({
-            total: total,
-            initialState: { currentPage: 1, pageSize: 15 },
-        });
+    const {
+        currentPage,
+        setCurrentPage,
+        pagesCount,
+        pages,
+        pageSize,
+        setPageSize,
+    } = usePagination({
+        total: total,
+        initialState: { currentPage: 1, pageSize: 15 },
+    });
     const { data, isLoading, isFetching } = useQuery(
         [
             "filaEnvio",
@@ -93,182 +109,299 @@ const Home = () => {
             },
         });
     };
+    const deleteMany = useMutation(excluirVariosFilaEnvio, {
+        onSuccess: () => {
+            queryClient.invalidateQueries("filaEnvio");
+            toast({
+                title: "Sucesso",
+                description: "Itens da fila excluídos com sucesso",
+                status: "success",
+                duration: 3000,
+            });
+        },
+    });
 
+    const onDeleteMany = () => {
+        deleteMany.mutate(JSON.stringify(selecionados));
+        setSelecionados([]);
+    };
     return (
         <>
             <Layout title="Fila de Envio">
                 <Box p={5}>
-                    <FiltroFilaEnvio filtro={filtro} setFiltro={setFiltro} />
-
-                    <Box bg="white" overflowX="auto" p={5} mt={5}>
-                        <Flex gap={4} align="center" justify="space-between">
-                            <Text fontSize="sm" color="gray">
-                                <Text as="span" fontWeight="bold">
-                                    {total}
-                                </Text>{" "}
-                                itens da fila de envio
-                            </Text>
-                            <Flex align="center" gap={2}>
-                                <FormInput
+                    <TabelaPadrao
+                        acoes={
+                            <>
+                                <Button
                                     size="sm"
-                                    bg="white"
-                                    maxW={96}
-                                    placeholder="Busca rápida..."
-                                    onChange={(e) =>
-                                        setFiltro({
-                                            ...filtro,
-                                            filtro: {
-                                                ...filtro.filtro,
-                                                query: e.target.value,
-                                            },
-                                        })
+                                    leftIcon={<FiTrash />}
+                                    colorScheme="red"
+                                    variant="outline"
+                                    disabled={
+                                        selecionados.length ? false : true
                                     }
-                                    rightElement={
-                                        isFetching && <Spinner size="sm" />
-                                    }
-                                />
-                            </Flex>
-                        </Flex>
-
-                        <Table variant="striped" mt={5} size="sm">
-                            <Thead>
-                                <Tr>
-                                    <Th>Previsão</Th>
-                                    <Th>Enviado em</Th>
-                                    <Th>Destinatário</Th>
-                                    <Th>Assunto</Th>
-                                    <Th></Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {isLoading ? (
-                                    <Tr>
-                                        <Td colSpan={6} textAlign="center">
-                                            <Spinner />
-                                        </Td>
-                                    </Tr>
-                                ) : data && data.data.length > 0 ? (
-                                    data.data.map((item) => (
-                                        <Tr key={item.id}>
-                                            <Td>
-                                                {formatoData(
-                                                    item.previsaoEnvio,
-                                                    "DATA_HORA"
-                                                )}
-                                            </Td>
-                                            <Td>
-                                                {item.dataEnvio &&
-                                                    formatoData(
-                                                        item.dataEnvio,
-                                                        "DATA_HORA"
-                                                    )}
-                                            </Td>
-                                            <Td>
-                                                <Text>
-                                                    {item.nomeDestinatario}
-                                                </Text>
-                                                <Text>{item.destinatario}</Text>
-                                            </Td>
-                                            <Td>
-                                                <Text
-                                                    fontWeight="bold"
-                                                    color="gray.600"
-                                                    mb={1}
-                                                >
-                                                    {
-                                                        item.reguaCobranca
-                                                            ?.assunto
-                                                    }
-                                                </Text>
-                                                <Flex gap={2}>
-                                                    <Tag
-                                                        colorScheme="orange"
-                                                        textTransform="capitalize"
-                                                    >
-                                                        {
-                                                            item.reguaCobranca
-                                                                ?.tipo
-                                                        }
-                                                    </Tag>
-                                                    <Tag
-                                                        colorScheme="orange"
-                                                        textTransform="capitalize"
-                                                    >
-                                                        {
-                                                            item.reguaCobranca
-                                                                ?.formaEnvio
-                                                        }
-                                                    </Tag>
-                                                </Flex>
-                                            </Td>
-                                            <Td></Td>
-                                            <Td>
-                                                {!item.dataEnvio && (
-                                                    <Tooltip label="Excluir item">
-                                                        <IconButton
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            icon={
-                                                                <Icon
-                                                                    as={
-                                                                        FiTrash2
-                                                                    }
-                                                                />
-                                                            }
-                                                            color="red"
-                                                            onClick={() =>
-                                                                modalExcluir.current.onOpen(
-                                                                    item.id
-                                                                )
-                                                            }
-                                                            aria-label="Abrir"
-                                                        />
-                                                    </Tooltip>
-                                                )}
-                                            </Td>
-                                        </Tr>
-                                    ))
-                                ) : (
-                                    <Tr>
-                                        <Td colSpan={6} textAlign="center">
-                                            Não há contratos cadastrados ou
-                                            resultados para o filtro selecionado
-                                        </Td>
-                                    </Tr>
-                                )}
-                            </Tbody>
-                        </Table>
-                        <Flex justify="center" py={4} align="center" gap={4}>
-                            <Text>
-                                {" "}
-                                Página {currentPage} de {pages.length}
-                            </Text>
-                            <Pagination
-                                pagesCount={pagesCount}
-                                currentPage={currentPage}
-                                onPageChange={setCurrentPage}
-                            >
-                                <PaginationContainer gridGap={4}>
-                                    <PaginationPrevious
-                                        as={IconButton}
-                                        icon={<Icon as={FiArrowLeft} />}
-                                    ></PaginationPrevious>
-                                    {/* <PaginationPageGroup gridGap={4}>
-                                        {pages.map((page: number) => (
-                                            <PaginationPage
-                                                key={`pagination_page_${page}`}
-                                                page={page}
-                                            />
-                                        ))}
-                                    </PaginationPageGroup> */}
-                                    <PaginationNext
-                                        as={IconButton}
-                                        icon={<Icon as={FiArrowRight} />}
-                                    ></PaginationNext>
-                                </PaginationContainer>
-                            </Pagination>
-                        </Flex>
-                    </Box>
+                                    onClick={onDeleteMany}
+                                >
+                                    Excluir Selecionados
+                                </Button>
+                            </>
+                        }
+                        isLoading={isLoading}
+                        paginatorProps={{
+                            currentPage,
+                            pagesCount,
+                            setCurrentPage,
+                            pages,
+                            pageSize,
+                            setPageSize,
+                        }}
+                        head={[
+                            {
+                                value: (
+                                    <Checkbox
+                                        isChecked={
+                                            data?.data?.data
+                                                ?.map((item) => item.id)
+                                                .filter(
+                                                    (item) =>
+                                                        !selecionados.includes(
+                                                            item
+                                                        )
+                                                ).length == 0
+                                                ? true
+                                                : false
+                                        }
+                                        onChange={(e) =>
+                                            setSelecionados(
+                                                e.target.checked
+                                                    ? JSON.parse(e.target.value)
+                                                    : []
+                                            )
+                                        }
+                                        value={JSON.stringify(
+                                            data?.data?.data?.map(
+                                                (item) => item.id
+                                            )
+                                        )}
+                                    />
+                                ),
+                                w: 12,
+                            },
+                            {
+                                value: "Ações",
+                                w: 12,
+                                textAlign: "center",
+                            },
+                            {
+                                value: "Previsão",
+                                w: 24,
+                            },
+                            {
+                                value: "Data envio",
+                                w: 24,
+                            },
+                            {
+                                value: "Destinatário",
+                                w: 72,
+                            },
+                            {
+                                value: "Assunto",
+                            },
+                        ]}
+                        data={
+                            data?.data?.length > 0
+                                ? data?.data?.map((item, key) => [
+                                      {
+                                          value: (
+                                              <Checkbox
+                                                  isChecked={selecionados.includes(
+                                                      item.id
+                                                  )}
+                                                  onChange={(e) => {
+                                                      if (e.target.checked) {
+                                                          setSelecionados([
+                                                              ...selecionados,
+                                                              item.id,
+                                                          ]);
+                                                      } else {
+                                                          setSelecionados(
+                                                              selecionados.filter(
+                                                                  (i) =>
+                                                                      i !==
+                                                                      item.id
+                                                              )
+                                                          );
+                                                      }
+                                                  }}
+                                              />
+                                          ),
+                                      },
+                                      {
+                                          value: (
+                                              <Flex gap={2} justify="center">
+                                                  {!item.dataEnvio && (
+                                                      <Tooltip label="Excluir item">
+                                                          <IconButton
+                                                              variant="ghost"
+                                                              size="sm"
+                                                              icon={
+                                                                  <Icon
+                                                                      as={
+                                                                          FiTrash2
+                                                                      }
+                                                                  />
+                                                              }
+                                                              color="red"
+                                                              onClick={() =>
+                                                                  modalExcluir.current.onOpen(
+                                                                      item.id
+                                                                  )
+                                                              }
+                                                              aria-label="Abrir"
+                                                          />
+                                                      </Tooltip>
+                                                  )}
+                                              </Flex>
+                                          ),
+                                      },
+                                      {
+                                          value: formatoData(
+                                              item.previsaoEnvio,
+                                              "DATA_HORA"
+                                          ),
+                                      },
+                                      {
+                                          value:
+                                              item.dataEnvio &&
+                                              formatoData(
+                                                  item.dataEnvio,
+                                                  "DATA_HORA"
+                                              ),
+                                      },
+                                      {
+                                          value: (
+                                              <>
+                                                  <Text>
+                                                      {item.nomeDestinatario}
+                                                  </Text>
+                                                  <Text>
+                                                      {item.destinatario}
+                                                  </Text>
+                                              </>
+                                          ),
+                                      },
+                                      {
+                                          value: (
+                                              <>
+                                                  <Text
+                                                      fontWeight="bold"
+                                                      color="gray.600"
+                                                      mb={1}
+                                                  >
+                                                      {
+                                                          item.reguaCobranca
+                                                              ?.assunto
+                                                      }
+                                                  </Text>
+                                                  <Flex gap={2}>
+                                                      <Tag
+                                                          colorScheme="orange"
+                                                          textTransform="capitalize"
+                                                      >
+                                                          {
+                                                              item.reguaCobranca
+                                                                  ?.tipo
+                                                          }
+                                                      </Tag>
+                                                      <Tag
+                                                          colorScheme="orange"
+                                                          textTransform="capitalize"
+                                                      >
+                                                          {
+                                                              item.reguaCobranca
+                                                                  ?.formaEnvio
+                                                          }
+                                                      </Tag>
+                                                  </Flex>
+                                              </>
+                                          ),
+                                      },
+                                  ])
+                                : []
+                        }
+                        filtroAvancado={
+                            <>
+                                <GridItem>
+                                    <FormInput
+                                        size="sm"
+                                        label="Nome do Destinatario"
+                                        placeholder="digite um nome..."
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                nomeDestinatario:
+                                                    e.target.value,
+                                            })
+                                        }
+                                    />
+                                </GridItem>
+                                <GridItem>
+                                    <FormInput
+                                        size="sm"
+                                        label="E-mail do destinatario"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                destinatario: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </GridItem>
+                                <GridItem>
+                                    <FormDateRange
+                                        size="sm"
+                                        label="Previsão de envio"
+                                        startDate={filtro?.previsaoEnvio[0]}
+                                        endDate={filtro?.previsaoEnvio[1]}
+                                        onChange={(e) => {
+                                            setFiltro({
+                                                ...filtro,
+                                                previsaoEnvio: e,
+                                            });
+                                        }}
+                                    />
+                                </GridItem>
+                                <GridItem>
+                                    <FormDateRange
+                                        size="sm"
+                                        label="Data do Envio"
+                                        startDate={filtro?.dataEnvio[0]}
+                                        endDate={filtro?.dataEnvio[1]}
+                                        onChange={(e) => {
+                                            setFiltro({
+                                                ...filtro,
+                                                dataEnvio: e,
+                                            });
+                                        }}
+                                    />
+                                </GridItem>
+                                <GridItem>
+                                    <FormDateRange
+                                        size="sm"
+                                        label="Data de Criação"
+                                        startDate={filtro?.createdAt[0]}
+                                        endDate={filtro?.createdAt[1]}
+                                        onChange={(e) => {
+                                            setFiltro({
+                                                ...filtro,
+                                                createdAt: e,
+                                            });
+                                        }}
+                                    />
+                                </GridItem>
+                            </>
+                        }
+                    />
                 </Box>
             </Layout>
             <ModalContratos ref={modal} />

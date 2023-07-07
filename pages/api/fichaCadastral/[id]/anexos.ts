@@ -10,6 +10,7 @@ import { multiparty } from "@/middleware/multipart";
 import moment from "moment";
 import { statSync } from "fs";
 import slug from "slug";
+import fs from "fs";
 
 handler.use(cors);
 handler.use(multiparty);
@@ -49,11 +50,12 @@ handler.post(async (req, res) => {
                 const stats = statSync(i[1].path);
                 const nodeFsBlob = new os.NodeFSBlob(i[1].path, stats.size);
                 const objectData = await nodeFsBlob.getData();
-
+                const imageData = fs.readFileSync(i[1].path);
+                const base64Data = imageData.toString("base64");
                 const putObjectRequest: os.requests.PutObjectRequest = {
                     namespaceName: namespace,
                     bucketName: bucket,
-                    putObjectBody: objectData,
+                    putObjectBody: base64Data,
                     objectName: nameLocation,
                     contentLength: stats.size,
                 };

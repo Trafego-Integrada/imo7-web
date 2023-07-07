@@ -3,8 +3,10 @@ import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
 import { ModalBoleto } from "@/components/Modals/ModalBoleto";
+import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
 import { formatoData, formatoValor } from "@/helpers/helpers";
-import { listarBoletos } from "@/services/models/boleto";
+import { excluirVariosBoletos, listarBoletos } from "@/services/models/boleto";
+import { queryClient } from "@/services/queryClient";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import {
     Pagination,
@@ -16,6 +18,7 @@ import {
 import {
     Box,
     Button,
+    Checkbox,
     Circle,
     Flex,
     Grid,
@@ -30,25 +33,39 @@ import {
     Th,
     Thead,
     Tr,
+    useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { FiArrowLeft, FiArrowRight, FiEye } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiEye, FiTrash } from "react-icons/fi";
 import { VscFilePdf } from "react-icons/vsc";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 const Cobrancas = () => {
+    const toast = useToast();
     const modal = useRef();
     const [total, setTotal] = useState();
     const [filtro, setFiltro] = useState({
         dataVencimento: [null, null],
         dataCriacao: [null, null],
     });
-    const { currentPage, setCurrentPage, pagesCount, pages, pageSize } =
-        usePagination({
-            total: total,
-            initialState: { currentPage: 1, pageSize: 15 },
-        });
+    const [selecionados, setSelecionados] = useState([]);
+
+    const {
+        currentPage,
+        setCurrentPage,
+        pagesCount,
+        pages,
+        pageSize,
+        setPageSize,
+    } = usePagination({
+        total: total,
+        limits: {
+            inner: 2,
+            outer: 2,
+        },
+        initialState: { currentPage: 1, pageSize: 15 },
+    });
     const { data, isLoading, isFetching } = useQuery(
         [
             "boletos",
@@ -71,22 +88,227 @@ const Cobrancas = () => {
             },
         }
     );
+
+    const deleteMany = useMutation(excluirVariosBoletos, {
+        onSuccess: () => {
+            queryClient.invalidateQueries("boletos");
+            toast({
+                title: "Sucesso",
+                description: "Boletos excluídos com sucesso",
+                status: "success",
+                duration: 3000,
+            });
+        },
+    });
+
+    const onDeleteMany = () => {
+        deleteMany.mutate(JSON.stringify(selecionados));
+        setSelecionados([]);
+    };
     return (
         <>
             <Layout title="Cobranças">
                 <Box p={5}>
-                    <Box bg="white" p={5}>
-                        <Grid gap={5}>
-                            <Grid
-                                templateColumns={{
-                                    sm: "repeat(1, 1fr)",
-                                    md: "repeat(2, 1fr)",
-                                    lg: "repeat(5, 1fr)",
-                                }}
-                                gap={5}
-                            >
+                    <TabelaPadrao
+                        acoes={
+                            <>
+                                <Button
+                                    size="sm"
+                                    leftIcon={<FiTrash />}
+                                    colorScheme="red"
+                                    variant="outline"
+                                    disabled={
+                                        selecionados.length ? false : true
+                                    }
+                                    onClick={onDeleteMany}
+                                >
+                                    Excluir Selecionados
+                                </Button>
+                            </>
+                        }
+                        isLoading={isLoading}
+                        paginatorProps={{
+                            currentPage,
+                            pagesCount,
+                            setCurrentPage,
+                            pages,
+                            pageSize,
+                            setPageSize,
+                        }}
+                        head={[
+                            {
+                                value: (
+                                    <Checkbox
+                                        isChecked={
+                                            data?.data?.data
+                                                ?.map((item) => item.id)
+                                                .filter(
+                                                    (item) =>
+                                                        !selecionados.includes(
+                                                            item
+                                                        )
+                                                ).length == 0
+                                                ? true
+                                                : false
+                                        }
+                                        onChange={(e) =>
+                                            setSelecionados(
+                                                e.target.checked
+                                                    ? JSON.parse(e.target.value)
+                                                    : []
+                                            )
+                                        }
+                                        value={JSON.stringify(
+                                            data?.data?.data?.map(
+                                                (item) => item.id
+                                            )
+                                        )}
+                                    />
+                                ),
+                            },
+                            {
+                                value: "Ações",
+                                w: 12,
+                                textAlign: "center",
+                            },
+                            {
+                                value: "Nº Contrato",
+                                w: 12,
+                            },
+                            {
+                                value: "Vencimento",
+                                w: 12,
+                            },
+                            {
+                                value: "Inquilinos",
+                            },
+                            {
+                                value: "Endereço",
+                            },
+                            {
+                                value: "Valor",
+                            },
+                        ]}
+                        data={
+                            data?.data?.data?.length > 0
+                                ? data?.data?.data?.map((item, key) => [
+                                      {
+                                          value: (
+                                              <Checkbox
+                                                  isChecked={selecionados.includes(
+                                                      item.id
+                                                  )}
+                                                  onChange={(e) => {
+                                                      if (e.target.checked) {
+                                                          setSelecionados([
+                                                              ...selecionados,
+                                                              item.id,
+                                                          ]);
+                                                      } else {
+                                                          setSelecionados(
+                                                              selecionados.filter(
+                                                                  (i) =>
+                                                                      i !==
+                                                                      item.id
+                                                              )
+                                                          );
+                                                      }
+                                                  }}
+                                              />
+                                          ),
+                                      },
+                                      {
+                                          value: (
+                                              <Flex gap={2} justify="center">
+                                                  <IconButton
+                                                      size="sm"
+                                                      icon={<FiEye />}
+                                                      variant="ghost"
+                                                      colorScheme="blue"
+                                                      onClick={() =>
+                                                          modal.current.onOpen(
+                                                              item.id
+                                                          )
+                                                      }
+                                                  />
+                                                  {item.barcode && (
+                                                      <Link
+                                                          href={`https://www.imo7.com.br/api/boleto/${item.id}/pdf`}
+                                                          target="_blank"
+                                                          passHref
+                                                      >
+                                                          <IconButton
+                                                              size="sm"
+                                                              icon={
+                                                                  <VscFilePdf />
+                                                              }
+                                                              variant="ghost"
+                                                              color="red"
+                                                          />
+                                                      </Link>
+                                                  )}
+                                              </Flex>
+                                          ),
+                                      },
+                                      {
+                                          value: item.contrato?.codigo,
+                                      },
+                                      {
+                                          value: formatoData(
+                                              item.data_vencimen
+                                          ),
+                                      },
+                                      {
+                                          value: item.contrato?.inquilinos?.map(
+                                              (i) => (
+                                                  <Text key={i.id}>
+                                                      {i.nome}
+                                                  </Text>
+                                              )
+                                          ),
+                                      },
+                                      {
+                                          value: (
+                                              <>
+                                                  {
+                                                      item.contrato?.imovel
+                                                          ?.endereco
+                                                  }
+                                                  ,{" "}
+                                                  {
+                                                      item.contrato?.imovel
+                                                          ?.numero
+                                                  }
+                                                  ,{" "}
+                                                  {
+                                                      item.contrato?.imovel
+                                                          ?.bairro
+                                                  }
+                                                  ,{" "}
+                                                  {
+                                                      item.contrato?.imovel
+                                                          ?.cidade
+                                                  }
+                                                  /
+                                                  {
+                                                      item.contrato?.imovel
+                                                          ?.estado
+                                                  }
+                                              </>
+                                          ),
+                                          whiteSpace: "pre-wrap",
+                                      },
+                                      {
+                                          value: formatoValor(item.valor_doc2),
+                                      },
+                                  ])
+                                : []
+                        }
+                        filtroAvancado={
+                            <>
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Nº do contrato"
                                         placeholder="digite um número..."
                                         bg="white"
@@ -100,6 +322,7 @@ const Cobrancas = () => {
                                 </GridItem>
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Nome do inquilino"
                                         placeholder="digite o nome do inquilino..."
                                         bg="white"
@@ -113,6 +336,7 @@ const Cobrancas = () => {
                                 </GridItem>
                                 <GridItem>
                                     <FormDateRange
+                                        size="sm"
                                         label="Data Vencimento"
                                         startDate={filtro?.dataVencimento[0]}
                                         endDate={filtro?.dataVencimento[1]}
@@ -126,6 +350,7 @@ const Cobrancas = () => {
                                 </GridItem>
                                 <GridItem>
                                     <FormDateRange
+                                        size="sm"
                                         label="Data de Criação"
                                         startDate={filtro?.dataCriacao[0]}
                                         endDate={filtro?.dataCriacao[1]}
@@ -139,6 +364,7 @@ const Cobrancas = () => {
                                 </GridItem>
                                 <GridItem>
                                     <FormSelect
+                                        size="sm"
                                         label="status"
                                         bg="white"
                                         placeholder="Selecione..."
@@ -146,9 +372,9 @@ const Cobrancas = () => {
                                         <option value="">Aberto</option>
                                     </FormSelect>
                                 </GridItem>
-
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Rua"
                                         placeholder="digite o nome da rua..."
                                         bg="white"
@@ -162,6 +388,7 @@ const Cobrancas = () => {
                                 </GridItem>
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Número"
                                         placeholder="digite o número da rua..."
                                         bg="white"
@@ -175,6 +402,7 @@ const Cobrancas = () => {
                                 </GridItem>
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Bairro"
                                         placeholder="digite o nome do bairro..."
                                         bg="white"
@@ -188,6 +416,7 @@ const Cobrancas = () => {
                                 </GridItem>
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Cidade"
                                         placeholder="digite o nome da cidade..."
                                         bg="white"
@@ -201,6 +430,7 @@ const Cobrancas = () => {
                                 </GridItem>
                                 <GridItem>
                                     <FormInput
+                                        size="sm"
                                         label="Estado"
                                         placeholder="digite o nome do estado..."
                                         bg="white"
@@ -212,193 +442,9 @@ const Cobrancas = () => {
                                         }
                                     />
                                 </GridItem>
-                            </Grid>
-                        </Grid>
-                        <Box
-                            w="100%"
-                            mt={5}
-                            display="flex"
-                            gap={5}
-                            justifyContent="flex-end"
-                        >
-                            <Button
-                                size="md"
-                                bg="none"
-                                border="1px solid red"
-                                _hover={{
-                                    bg: "red",
-                                    color: "white",
-                                    cursor: "pointer",
-                                }}
-                                _focus={{ bg: "none" }}
-                                _active={{ bg: "none" }}
-                                color="red"
-                                onClick={() =>
-                                    setFiltro({
-                                        dataVencimento: [null, null],
-                                        dataCriacao: [null, null],
-                                    })
-                                }
-                            >
-                                Limpar Filtro
-                            </Button>
-                        </Box>
-                    </Box>
-
-                    <Box bg="white" overflowX="auto" p={5} mt={5}>
-                        <Flex gap={4} align="center" justify="space-between">
-                            <Text fontSize="sm" color="gray">
-                                <Text as="span" fontWeight="bold">
-                                    {total}
-                                </Text>{" "}
-                                boletos
-                            </Text>
-                            <Flex align="center" gap={2}>
-                                <FormInput
-                                    bg="white"
-                                    maxW={96}
-                                    placeholder="Busca rápida..."
-                                    onChange={(e) =>
-                                        setFiltro({
-                                            ...filtro,
-                                            query: e.target.value,
-                                        })
-                                    }
-                                    rightElement={
-                                        isFetching && <Spinner size="sm" />
-                                    }
-                                />
-                            </Flex>
-                        </Flex>
-                        <Table size="sm" variant="striped" mt={5} bg="white">
-                            <Thead>
-                                <Tr>
-                                    <Th>Nº do contrato</Th>
-                                    <Th>Data de vencimento</Th>
-                                    <Th>Inquilino principal</Th>
-                                    <Th>Endereço</Th>
-                                    <Th>Status</Th>
-                                    <Th>Valor</Th>
-                                    <Th>Boletos</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {isLoading ? (
-                                    <Tr>
-                                        <Td colSpan={6} textAlign="center">
-                                            <Spinner />
-                                        </Td>
-                                    </Tr>
-                                ) : data && data.data.data.length > 0 ? (
-                                    data.data.data.map((item) => (
-                                        <Tr key={item.id}>
-                                            <Td>{item.contrato?.codigo}</Td>
-                                            <Td>
-                                                {item.data_vencimen &&
-                                                    formatoData(
-                                                        item.data_vencimen
-                                                    )}
-                                            </Td>
-                                            <Td>
-                                                {item.contrato?.inquilinos?.map(
-                                                    (i) => (
-                                                        <Text key={i.id}>
-                                                            {i.nome}
-                                                        </Text>
-                                                    )
-                                                )}
-                                            </Td>
-                                            <Td>
-                                                {
-                                                    item.contrato?.imovel
-                                                        ?.endereco
-                                                }
-                                                ,{" "}
-                                                {item.contrato?.imovel?.numero},{" "}
-                                                {item.contrato?.imovel?.bairro},{" "}
-                                                {item.contrato?.imovel?.cidade}/
-                                                {item.contrato?.imovel?.estado}
-                                            </Td>
-                                            <Td>
-                                                <Grid gap={2}>
-                                                    <Circle
-                                                        size="5"
-                                                        bg="green"
-                                                    />
-                                                    <Text>Ativo</Text>
-                                                </Grid>
-                                            </Td>
-                                            <Td>
-                                                {formatoValor(item.valor_doc2)}
-                                            </Td>
-                                            <Td>
-                                                <Flex gap={2}>
-                                                    <IconButton
-                                                        size="xs"
-                                                        as={FiEye}
-                                                        onClick={() =>
-                                                            modal.current.onOpen(
-                                                                item.id
-                                                            )
-                                                        }
-                                                    />
-                                                    {item.barcode && (
-                                                        <Link
-                                                            href={`https://www.imo7.com.br/api/boleto/${item.id}/pdf`}
-                                                            target="_blank"
-                                                            passHref
-                                                        >
-                                                            <IconButton
-                                                                size="xs"
-                                                                as={VscFilePdf}
-                                                                color="red"
-                                                            />
-                                                        </Link>
-                                                    )}
-                                                </Flex>
-                                            </Td>
-                                        </Tr>
-                                    ))
-                                ) : (
-                                    <Tr>
-                                        <Td colSpan={7} textAlign="center">
-                                            Não encontramos boletos cadastrados
-                                        </Td>
-                                    </Tr>
-                                )}
-                            </Tbody>
-                        </Table>
-                        <Flex justify="center" py={4} align="center" gap={4}>
-                            <Text>
-                                {" "}
-                                Página {currentPage} de {pages.length}
-                            </Text>
-                            <Pagination
-                                pagesCount={pagesCount}
-                                currentPage={currentPage}
-                                onPageChange={setCurrentPage}
-                            >
-                                <PaginationContainer gridGap={4}>
-                                    <PaginationPrevious
-                                        as={IconButton}
-                                        icon={<Icon as={FiArrowLeft} />}
-                                    ></PaginationPrevious>
-                                    {/* <PaginationPageGroup gridGap={4}>
-                                        {pages.map((page: number) => (
-                                            <PaginationPage
-                                                key={`pagination_page_${page}`}
-                                                page={page}
-                                            />
-                                        ))}
-                                    </PaginationPageGroup> */}
-                                    <PaginationNext
-                                        as={IconButton}
-                                        icon={<Icon as={FiArrowRight} />}
-                                    ></PaginationNext>
-                                </PaginationContainer>
-                            </Pagination>
-                        </Flex>
-                    </Box>
+                            </>
+                        }
+                    />
                 </Box>
                 <ModalBoleto ref={modal} />
             </Layout>

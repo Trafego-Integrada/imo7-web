@@ -130,9 +130,6 @@ const ModalBase = ({}, ref) => {
                         <Button variant="ghost" onClick={onClose}>
                             Fechar
                         </Button>
-                        <Button colorScheme="blue" mr={3}>
-                            Confirmar
-                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

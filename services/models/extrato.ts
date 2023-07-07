@@ -1,4 +1,4 @@
-import { api } from "@/services/apiClient"
+import { api } from "@/services/apiClient";
 
 export const listarExtratos = async ({ queryKey }) => {
     const { data } = await api.get("extrato", { params: queryKey[1] });
@@ -21,6 +21,15 @@ export const atualizarExtrato = async ({ id, ...rest }) => {
 };
 
 export const excluirExtrato = async (id) => {
-    const { data } = await api.post("extrato/" + id);
+    const { data } = await api.delete("extrato/" + id);
+    return data;
+};
+
+export const excluirVariosExtratos = async (ids) => {
+    const { data } = await api.delete("extrato", {
+        params: {
+            ids,
+        },
+    });
     return data;
 };

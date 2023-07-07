@@ -27,6 +27,7 @@ handle.get(async (req, res) => {
             linhas,
             contratoId,
             dataVencimento,
+            dataDeposito,
             dataCriacao,
             imobiliariaId,
         } = req.query;
@@ -210,11 +211,40 @@ handle.get(async (req, res) => {
                         data_vencimen: {
                             gte: dataVencimento[0]
                                 ? moment(dataVencimento[0])
+                                      .utc()
                                       .startOf("d")
                                       .format()
                                 : null,
                             lte: dataVencimento[1]
-                                ? moment(dataVencimento[1]).endOf("d").format()
+                                ? moment(dataVencimento[1])
+                                      .utc()
+                                      .endOf("d")
+                                      .format()
+                                : null,
+                        },
+                    },
+                ],
+            };
+        }
+        if (dataDeposito) {
+            dataDeposito = JSON.parse(dataDeposito);
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        dataDeposito: {
+                            gte: dataDeposito[0]
+                                ? moment(dataDeposito[0])
+                                      .utc()
+                                      .startOf("d")
+                                      .format()
+                                : null,
+                            lte: dataDeposito[1]
+                                ? moment(dataDeposito[1])
+                                      .utc()
+                                      .endOf("d")
+                                      .format()
                                 : null,
                         },
                     },
@@ -230,10 +260,16 @@ handle.get(async (req, res) => {
                     {
                         createdAt: {
                             gte: dataCriacao[0]
-                                ? moment(dataCriacao[0]).startOf("d").format()
+                                ? moment(dataCriacao[0])
+                                      .utc()
+                                      .startOf("d")
+                                      .format()
                                 : null,
                             lte: dataCriacao[1]
-                                ? moment(dataCriacao[1]).endOf("d").format()
+                                ? moment(dataCriacao[1])
+                                      .utc()
+                                      .endOf("d")
+                                      .format()
                                 : null,
                         },
                     },
@@ -269,20 +305,21 @@ handle.get(async (req, res) => {
                     include: {
                         imovel: true,
                         inquilinos: true,
-                        proprietarios:true
+                        proprietarios: true,
                     },
                 },
                 imobiliaria: true,
                 proprietario: true,
-                itens:true
+                itens: true,
             },
-            orderBy:{
-                createdAt:'desc'
-            }
+            orderBy: {
+                createdAt: "desc",
+            },
         });
         const total = await prisma.extrato.count({
             where: {
                 ...filtroQuery,
+                deletedAt: null,
             },
         });
         res.send({
@@ -297,6 +334,33 @@ handle.get(async (req, res) => {
         res.status(500).send({
             success: false,
             message: error.message,
+        });
+    }
+});
+
+handle.delete(async (req, res) => {
+    try {
+        const { ids } = req.query;
+        let arrayIds = JSON.parse(ids);
+
+        if (!arrayIds.length) {
+            return res
+                .status(400)
+                .send({ success: false, message: "Nenhum id informado" });
+        }
+
+        await prisma.extrato.deleteMany({
+            where: {
+                id: {
+                    in: arrayIds,
+                },
+            },
+        });
+        return res.send({ success: true });
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error?.message,
         });
     }
 });

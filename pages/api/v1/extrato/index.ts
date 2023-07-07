@@ -32,6 +32,7 @@ handle.post(async (req, res) => {
             imobiliariaId,
             itens,
         } = req.body;
+
         const data = await prisma.extrato.create({
             data: {
                 dataDeposito: dataDeposito
@@ -99,7 +100,7 @@ handle.post(async (req, res) => {
             },
         });
 
-        if (reguas.length > 0) {
+        if (reguas.length > 0 && data.imobiliaria?.enviarEmail) {
             await Promise.all(
                 reguas.map(async (regua) => {
                     await prisma.filaEnvio.create({
@@ -115,6 +116,11 @@ handle.post(async (req, res) => {
                                 },
                             },
                             previsaoEnvio: moment().add(1, "days").format(),
+                            extrato: {
+                                connect: {
+                                    id: data?.id,
+                                },
+                            },
                         },
                     });
                 })
