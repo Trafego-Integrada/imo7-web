@@ -298,7 +298,8 @@ const FichasCadastrais = () => {
                                                             src={item.fotoUrl}
                                                             width={20}
                                                             height={20}
-                                                />
+                                                            style={{objectFit: "cover"}}
+                                                    />
                                                     
                                                 </Td>
                                                 <Td>
