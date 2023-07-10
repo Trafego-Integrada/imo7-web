@@ -16,12 +16,6 @@ const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
 handler.use(cors);
 
-function getKey(header, callback){
-    client.getSigningKey(header.kid, function(err, key) {
-        var signingKey = key.publicKey || key.rsaPublicKey;
-        callback(null, signingKey);
-    });
-}
 
 
 handler.get(async (req, res) => {
@@ -56,6 +50,13 @@ handler.get(async (req, res) => {
         var client  = jwksClient({jwksUri: 'https://d-biodata.estaleiro.serpro.gov.br/api/v1/jwks' });
         let token   = response;
         let options = { algorithms: 'RS512' }
+
+        function getKey(header, callback){
+            client.getSigningKey(header.kid, function(err, key) {
+                var signingKey = key.publicKey || key.rsaPublicKey;
+                callback(null, signingKey);
+            });
+        }
 
         console.log("try verify")
 
