@@ -68,14 +68,19 @@ const FichasCadastrais = () => {
 
    const getFacialColor = (msg) => {
 
-        if(msg.indexOf("Altíssima ") >= 0) { 
+        if(msg.indexOf("Altíssima") >= 0) { 
                 return "green"
         }
 
-        if(msg.indexOf("Alta ") >= 0 ) { 
+        if(msg.indexOf("Alta") >= 0 ) { 
             return "blue"
         }
- return "red";
+
+        if(msg.indexOf("Baixa") >= 0) { 
+            return "orange"
+        }
+
+        return "red";
    }
 
     const { data: fichas } = useQuery(
