@@ -64,9 +64,9 @@ const FichasCadastrais = () => {
     const modal                 = useRef();
     const modalExcluir          = useRef();
     const modalRevisar          = useRef();
-    const modalValidar          = useRef();
+    const modalValidar          = useRef();   
 
-    const getColor(msg) => {
+   const getFacialColor = (msg) => {
 
         if(msg.indexOf("Altíssima ") >= 0) { 
                 return "green"
@@ -75,9 +75,8 @@ const FichasCadastrais = () => {
         if(msg.indexOf("Alta ") >= 0 ) { 
             return "blue"
         }
-
-        return "red"
-    }
+ return "red";
+   }
 
     const { data: fichas } = useQuery(
         [
@@ -329,7 +328,7 @@ const FichasCadastrais = () => {
                                                                     size="lg"
                                                                     value={JSON.parse(item.resultado)?.biometria_face?.similaridade * 100}
                                                                     max={100}
-                                                                    colorScheme={getColor(JSON.parse(item.resultado)?.biometria_face?.probabilidade)}
+                                                                    colorScheme={getFacialColor(JSON.parse(item.resultado)?.biometria_face?.probabilidade)}
                                                                 />
                                                             </Box>
                                                         </Tooltip>
@@ -343,7 +342,7 @@ const FichasCadastrais = () => {
                                                             <Text
                                                                 textAlign="center"
                                                                 fontSize="xs"
-                                                                color={getColor(JSON.parse(item.resultado)?.biometria_face?.probabilidade}
+                                                                color={getFacialColor(JSON.parse(item.resultado)?.biometria_face?.probabilidade)}
                                                             >
                                                                  
                                                                 {parseInt(JSON.parse(item.resultado)?.biometria_face?.similaridade * 100)} %
@@ -352,7 +351,7 @@ const FichasCadastrais = () => {
                                                         <Text
                                                                 textAlign="center"
                                                                 fontSize="xs"
-                                                                color={getColor(JSON.parse(item.resultado)?.biometria_face?.probabilidade}
+                                                                color={getFacialColor(JSON.parse(item.resultado)?.biometria_face?.probabilidade)}
                                                             >
                                                                  {JSON.parse(item.resultado)?.biometria_face?.probabilidade}
                                                             </Text>
