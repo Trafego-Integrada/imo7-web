@@ -58,13 +58,13 @@ handler.get(async (req, res) => {
             });
         }
 
-        console.log("try verify")
+        // console.log("try verify")
 
         try {
 
             jwt.verify(token, getKey, options, async (err, decoded) => {
 
-                console.log("jwt verified")
+                // console.log("jwt verified")
 
                 // failed 
                 if(err) { 
@@ -80,7 +80,7 @@ handler.get(async (req, res) => {
                 //  return res.send({status: -1, msg: "Try Again"});
                 } 
 
-                console.log("try update")
+                // console.log("try update")
 
                 // success 
                 const dataUpdate = await prisma.validacaofacial.update({
