@@ -16,11 +16,21 @@ const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
 handler.use(cors);
 
+function getKey(header, callback){
+    client.getSigningKey(header.kid, function(err, key) {
+        var signingKey = key.publicKey || key.rsaPublicKey;
+        callback(null, signingKey);
+    });
+}
+
+
 handler.get(async (req, res) => {
+
+    const ACCESS_TOKEN      = await getToken();
 
     const data = await prisma.validacaofacial.findMany(
     { 
-            take: 1,
+            take: 5,
             where: { status: 0 },
             orderBy: {
                 updatedAt: 'asc'
@@ -28,59 +38,57 @@ handler.get(async (req, res) => {
     });
 
     console.log("Registros encontrados  = " + data.length)
-
-    if(data.length == 0)
+ 
+    if(data.length == 0) {
         res.send({status: 0, msg: "Sem registros"});
-
-
-    // loop 
-
-    const id                = data[0].id;
-
-    const ACCESS_TOKEN      = await getToken();
-
-    const response          = await getResponse(ACCESS_TOKEN, data[0].cpf, data[0].pin);
-    const responseDecoded   = Buffer.from(response, 'base64').toString('utf8') 
-
-    var client = jwksClient({jwksUri: 'https://d-biodata.estaleiro.serpro.gov.br/api/v1/jwks' });
-
-    function getKey(header, callback){
-        client.getSigningKey(header.kid, function(err, key) {
-            var signingKey = key.publicKey || key.rsaPublicKey;
-            callback(null, signingKey);
-        });
+        return
     }
+        
+    data.forEach(async(resData) => {
+  
+        const id                = resData.id;
 
-    let token   = response;
-    let options = { algorithms: 'RS512' }
+        const response          = await getResponse(ACCESS_TOKEN, resData.cpf, resData.pin);
+        const responseDecoded   = Buffer.from(response, 'base64').toString('utf8') 
 
-    jwt.verify(token, getKey, options, async (err, decoded) => {
+        var client = jwksClient({jwksUri: 'https://d-biodata.estaleiro.serpro.gov.br/api/v1/jwks' });
 
-        // failed 
-        if(err) { 
+        let token   = response;
+        let options = { algorithms: 'RS512' }
 
+        jwt.verify(token, getKey, options, async (err, decoded) => {
+
+            // failed 
+            if(err) { 
+
+                const dataUpdate = await prisma.validacaofacial.update({
+                    where: { id: Number(id) },
+                    data: {
+                        resultado: JSON.stringify(err),
+                        status: -1
+                    }
+                })
+                
+                return res.send({status: -1, msg: "Try Again"});
+            } 
+
+            // success 
             const dataUpdate = await prisma.validacaofacial.update({
                 where: { id: Number(id) },
                 data: {
-                    resultado: JSON.stringify(err),
-                    status: -1
+                    resultado: JSON.stringify(decoded),
+                    status: 1
                 }
             })
-            
-            return res.send({status: -1});
-        } 
 
-        // success 
-        const dataUpdate = await prisma.validacaofacial.update({
-            where: { id: Number(id) },
-            data: {
-                resultado: JSON.stringify(decoded),
-                status: 1
-            }
-        })
-        return res.send({status: 1});
+            // return res.send({status: 1});
+
+        });
 
     });
+
+
+    res.send({status: 1, msg: "Finished"});
 
 });
 
