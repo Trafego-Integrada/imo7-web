@@ -53,10 +53,11 @@ handler.get(async (req, res) => {
         const response          = await getResponse(ACCESS_TOKEN, resData.cpf, resData.pin);
         const responseDecoded   = Buffer.from(response, 'base64').toString('utf8') 
 
-        var client = jwksClient({jwksUri: 'https://d-biodata.estaleiro.serpro.gov.br/api/v1/jwks' });
-
+        var client  = jwksClient({jwksUri: 'https://d-biodata.estaleiro.serpro.gov.br/api/v1/jwks' });
         let token   = response;
         let options = { algorithms: 'RS512' }
+
+        console.log("try verify")
 
         jwt.verify(token, getKey, options, async (err, decoded) => {
 
