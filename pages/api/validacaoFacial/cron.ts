@@ -59,38 +59,45 @@ handler.get(async (req, res) => {
 
         console.log("try verify")
 
-        jwt.verify(token, getKey, options, async (err, decoded) => {
+        try {
 
-            console.log("jwt verified")
+            jwt.verify(token, getKey, options, async (err, decoded) => {
 
-            // failed 
-            if(err) { 
+                console.log("jwt verified")
 
+                // failed 
+                if(err) { 
+
+                    const dataUpdate = await prisma.validacaofacial.update({
+                        where: { id: Number(id) },
+                        data: {
+                            resultado: JSON.stringify(err),
+                            status: -1
+                        }
+                    })
+                    
+                //  return res.send({status: -1, msg: "Try Again"});
+                } 
+
+                console.log("try update")
+
+                // success 
                 const dataUpdate = await prisma.validacaofacial.update({
                     where: { id: Number(id) },
                     data: {
-                        resultado: JSON.stringify(err),
-                        status: -1
+                        resultado: JSON.stringify(decoded),
+                        status: 1
                     }
                 })
-                
-                return res.send({status: -1, msg: "Try Again"});
-            } 
 
-            console.log("try update")
+                // return res.send({status: 1});
 
-            // success 
-            const dataUpdate = await prisma.validacaofacial.update({
-                where: { id: Number(id) },
-                data: {
-                    resultado: JSON.stringify(decoded),
-                    status: 1
-                }
-            })
+            }); 
 
-            // return res.send({status: 1});
-
-        });
+        } catch(e) {
+            console.log("Catch")
+            console.log(e)
+        }
 
     });
 
