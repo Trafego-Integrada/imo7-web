@@ -19,7 +19,7 @@ handler.use(cors);
 handler.get(async (req, res) => {
     const ACCESS_TOKEN = await getToken();
 
-    const data = await prisma.validacaofacial.findMany({
+    const data = await prisma.validacaoFacial.findMany({
         take: 5,
         where: { status: 0 },
         orderBy: {
@@ -69,7 +69,7 @@ handler.get(async (req, res) => {
 
                 // failed
                 if (err) {
-                    const dataUpdate = await prisma.validacaofacial.update({
+                    const dataUpdate = await prisma.validacaoFacial.update({
                         where: { id: Number(id) },
                         data: {
                             resultado: JSON.stringify(err),
@@ -83,7 +83,7 @@ handler.get(async (req, res) => {
                 // console.log("try update")
 
                 // success
-                const dataUpdate = await prisma.validacaofacial.update({
+                const dataUpdate = await prisma.validacaoFacial.update({
                     where: { id: Number(id) },
                     data: {
                         resultado: JSON.stringify(decoded),
@@ -135,14 +135,8 @@ const getResponse = async (accessToken: string, cpf: string, pin: string) => {
             }
         );
 
-        // console.log("response")
-        // console.log(response)
-
         return response.data;
     } catch (error) {
-        // console.log("error")
-        // console.log(error.response.data);
-
         return error.response.data;
     }
 };
