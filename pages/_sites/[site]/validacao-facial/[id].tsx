@@ -275,18 +275,18 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
         });
         const images = useMemo(
             () => [
-                "/img/image1.png",
-                "/img/image2.png",
-                "/img/image3.png",
-                "/img/image4.png",
-                "/img/image5.png",
-                "/img/image6.png",
-                "/img/image7.png",
-                "/img/image8.png",
-                "/img/image9.png",
-                "/img/image10.png",
-                "/img/image11.png",
-                "/img/image12.png",
+                "https://www.imo7.com.br/img/image1.png",
+                "https://www.imo7.com.br/img/image2.png",
+                "https://www.imo7.com.br/img/image3.png",
+                "https://www.imo7.com.br/img/image4.png",
+                "https://www.imo7.com.br/img/image5.png",
+                "https://www.imo7.com.br/img/image6.png",
+                "https://www.imo7.com.br/img/image7.png",
+                "https://www.imo7.com.br/img/image8.png",
+                "https://www.imo7.com.br/img/image9.png",
+                "https://www.imo7.com.br/img/image10.png",
+                "https://www.imo7.com.br/img/image11.png",
+                "https://www.imo7.com.br/img/image12.png",
             ],
             []
         );
@@ -367,7 +367,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                                 <Box
                                                     key={image}
                                                     className="each-slide-effect"
-                                                    bgImg={`http://localhost:3000${image}`}
+                                                    bgImg={`${image}`}
                                                     h={52}
                                                     bgSize="contain"
                                                     bgRepeat="no-repeat"
