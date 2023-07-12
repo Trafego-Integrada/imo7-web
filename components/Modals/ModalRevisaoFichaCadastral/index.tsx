@@ -10,7 +10,7 @@ import {
     cadastrarFicha,
 } from "@/services/models/fichaCadastral";
 import { listarFichas } from "@/services/models/modeloFicha";
-import { cadastrarValidacao } from "@/services/models/validacaoFacial";
+import { cadastrarValidacao } from "@/services/models/validacaofacial";
 import { queryClient } from "@/services/queryClient";
 import {
     Avatar,
