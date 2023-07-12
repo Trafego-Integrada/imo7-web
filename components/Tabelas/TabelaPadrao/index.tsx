@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { Filtro } from "./Filtro";
 import { Paginacao } from "./Paginacao";
 import { Tabela, TabelaProps } from "./Tabela";
@@ -10,6 +10,7 @@ export const TabelaPadrao = ({
     data,
     filtroAvancado,
     paginatorProps,
+    total,
     isLoading,
     acoes,
 }: TabelaPadraoProps) => {
@@ -17,7 +18,15 @@ export const TabelaPadrao = ({
         <Flex gap={4} flexDir="column">
             <Filtro filtroAvancado={filtroAvancado} />
             <Box p={4} bg="white">
-                <Flex>{acoes}</Flex>
+                <Flex justify="space-between" align="center">
+                    <Text fontSize="xs" color="gray">
+                        <Text as="span" fontWeight="bold" color="gray.700">
+                            {total}
+                        </Text>{" "}
+                        registros encontrados
+                    </Text>
+                    {acoes}
+                </Flex>
                 <Paginacao {...paginatorProps} />
                 <Tabela head={head} data={data} isLoading={isLoading} />
                 <Paginacao {...paginatorProps} />

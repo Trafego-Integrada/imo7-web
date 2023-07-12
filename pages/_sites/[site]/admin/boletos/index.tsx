@@ -126,6 +126,7 @@ const Cobrancas = () => {
                                 </Button>
                             </>
                         }
+                        total={total}
                         isLoading={isLoading}
                         paginatorProps={{
                             currentPage,

@@ -23,7 +23,23 @@ handle.get(async (req, res) => {
 
 handle.put(async (req, res) => {
     const { id } = req.query;
-    const { nome, email, documento, imobiliariaId, senha } = req.body;
+    const {
+        nome,
+        email,
+        documento,
+        imobiliariaId,
+        senha,
+        profissao,
+        endereco,
+        cidade,
+        bairro,
+        cep,
+        estado,
+        celular,
+        telefone,
+        whatsapp,
+        naoEnviarWhatsapp,
+    } = req.body;
     const data = await prisma.usuario.update({
         where: {
             id: Number(id),
@@ -40,7 +56,9 @@ handle.put(async (req, res) => {
             cep,
             estado,
             celular,
-            fone,
+            telefone,
+            whatsapp,
+            naoEnviarWhatsapp: naoEnviarWhatsapp == "1" ? true : false,
             senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
         },
     });

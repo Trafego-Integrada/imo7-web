@@ -45,8 +45,8 @@ handler.post(async (req, res) => {
                 )}.${extension}`;
                 // Create read stream to file
                 const stats = statSync(i[1].path);
-                const nodeFsBlob = new os.NodeFSBlob(i[1].path, stats.size);
-                const objectData = await nodeFsBlob.getData();
+                //const nodeFsBlob = new os.NodeFSBlob(i[1].path, stats.size);
+                //const objectData = await nodeFsBlob.getData();
                 const imageData = fs.readFileSync(i[1].path);
                 const base64Data = imageData.toString("base64");
                 const putObjectRequest: os.requests.PutObjectRequest = {
@@ -54,7 +54,7 @@ handler.post(async (req, res) => {
                     bucketName: bucket,
                     putObjectBody: base64Data,
                     objectName: nameLocation,
-                    contentLength: stats.size,
+                    // contentLength: stats.size,
                 };
                 const putObjectResponse = await client.putObject(
                     putObjectRequest

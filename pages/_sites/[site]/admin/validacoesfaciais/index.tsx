@@ -35,7 +35,7 @@ import {
     Tooltip,
     Tr,
     useToast,
-    Image
+    Image,
 } from "@chakra-ui/react";
 
 import Link from "next/link";
@@ -56,23 +56,26 @@ const filtroPadrao = {
     responsaveis: [],
 };
 const FichasCadastrais = () => {
-
-    const { usuario }           = useAuth();
-    const [filtro, setFiltro]   = useState(filtroPadrao);
-    const toast                 = useToast();
-    const router                = useRouter();
-    const modal                 = useRef();
-    const modalExcluir          = useRef();
-    const modalRevisar          = useRef();
-    const modalValidar          = useRef();
+    const { usuario } = useAuth();
+    const [filtro, setFiltro] = useState(filtroPadrao);
+    const toast = useToast();
+    const router = useRouter();
+    const modal = useRef();
+    const modalExcluir = useRef();
+    const modalRevisar = useRef();
+    const modalValidar = useRef();
 
     const { data: fichas } = useQuery(
         [
             "fichas",
             {
                 ...filtro,
-                createdAt: filtro.createdAt[0] ? JSON.stringify(filtro.createdAt) : null,
-                updatedAt: filtro.updatedAt[0] ? JSON.stringify(filtro.updatedAt) : null,
+                createdAt: filtro.createdAt[0]
+                    ? JSON.stringify(filtro.createdAt)
+                    : null,
+                updatedAt: filtro.updatedAt[0]
+                    ? JSON.stringify(filtro.updatedAt)
+                    : null,
                 // status: filtro.status[0] ? JSON.stringify(filtro.status) : null,
                 // responsaveis: filtro.responsaveis[0] ? JSON.stringify(filtro.responsaveis) : null,
             },
@@ -197,7 +200,6 @@ const FichasCadastrais = () => {
                         </Flex>
                     </Box> */}
 
-
                     {/* <Flex
                         justify="space-between"
                         align="center"
@@ -293,57 +295,109 @@ const FichasCadastrais = () => {
                                                 <Td># {item.id}</Td>
                                                 <Td>{item.cpf}</Td>
                                                 <Td>
-                                                <Image
-                                                            borderRadius='full'
-                                                            src={item.fotoUrl}
-                                                            width={20}
-                                                            height={20}
-                                                />
-                                                    
+                                                    <Image
+                                                        borderRadius="full"
+                                                        src={item.fotoUrl}
+                                                        width={20}
+                                                        height={20}
+                                                    />
                                                 </Td>
                                                 <Td>
                                                     <Text fontWeight="bold">
-                                                        {JSON.parse(item.resultado)?.token}
+                                                        {
+                                                            JSON.parse(
+                                                                item.resultado
+                                                            )?.token
+                                                        }
                                                     </Text>
                                                 </Td>
                                                 <Td>
-                                                    {item.status == 1 && 
-                                                     <Box pos="relative">
-                                                        <Tooltip label={"L1"}>
-                                                            <Box>
-                                                                <Progress
-                                                                    size="lg"
-                                                                    value={JSON.parse(item.resultado)?.biometria_face?.similaridade * 100}
-                                                                    max={100}
-                                                                    colorScheme={(JSON.parse(item.resultado)?.biometria_face?.probabilidade.indexOf("Altíssima ") >= 0 ? "green" : "red")}
-                                                                />
-                                                            </Box>
-                                                        </Tooltip>
-                                                        <Flex
-                                                            pos="absolute"
-                                                            top="0"
-                                                            justify="center"
-                                                            mx="auto"
-                                                            w="full"
-                                                        >
+                                                    {item.status == 1 && (
+                                                        <Box pos="relative">
+                                                            <Tooltip
+                                                                label={"L1"}
+                                                            >
+                                                                <Box>
+                                                                    <Progress
+                                                                        size="lg"
+                                                                        value={
+                                                                            JSON.parse(
+                                                                                item.resultado
+                                                                            )
+                                                                                ?.biometria_face
+                                                                                ?.similaridade *
+                                                                            100
+                                                                        }
+                                                                        max={
+                                                                            100
+                                                                        }
+                                                                        colorScheme={
+                                                                            JSON.parse(
+                                                                                item.resultado
+                                                                            )?.biometria_face?.probabilidade.indexOf(
+                                                                                "Altíssima "
+                                                                            ) >=
+                                                                            0
+                                                                                ? "green"
+                                                                                : "red"
+                                                                        }
+                                                                    />
+                                                                </Box>
+                                                            </Tooltip>
+                                                            <Flex
+                                                                pos="absolute"
+                                                                top="0"
+                                                                justify="center"
+                                                                mx="auto"
+                                                                w="full"
+                                                            >
+                                                                <Text
+                                                                    textAlign="center"
+                                                                    fontSize="xs"
+                                                                    color={
+                                                                        JSON.parse(
+                                                                            item.resultado
+                                                                        )?.biometria_face?.probabilidade.indexOf(
+                                                                            "Altíssima "
+                                                                        ) >= 0
+                                                                            ? "white"
+                                                                            : "red"
+                                                                    }
+                                                                >
+                                                                    {parseInt(
+                                                                        JSON.parse(
+                                                                            item.resultado
+                                                                        )
+                                                                            ?.biometria_face
+                                                                            ?.similaridade *
+                                                                            100
+                                                                    )}{" "}
+                                                                    %
+                                                                </Text>
+                                                            </Flex>
                                                             <Text
                                                                 textAlign="center"
                                                                 fontSize="xs"
-                                                                color={(JSON.parse(item.resultado)?.biometria_face?.probabilidade.indexOf("Altíssima ") >= 0 ? "white" : "red")}
+                                                                color={
+                                                                    JSON.parse(
+                                                                        item.resultado
+                                                                    )?.biometria_face?.probabilidade.indexOf(
+                                                                        "Altíssima "
+                                                                    ) >= 0
+                                                                        ? "green"
+                                                                        : "red"
+                                                                }
                                                             >
-                                                                 
-                                                                {parseInt(JSON.parse(item.resultado)?.biometria_face?.similaridade * 100)} %
+                                                                {
+                                                                    JSON.parse(
+                                                                        item.resultado
+                                                                    )
+                                                                        ?.biometria_face
+                                                                        ?.probabilidade
+                                                                }
                                                             </Text>
-                                                        </Flex>
-                                                        <Text
-                                                                textAlign="center"
-                                                                fontSize="xs"
-                                                                color={(JSON.parse(item.resultado)?.biometria_face?.probabilidade.indexOf("Altíssima ") >= 0 ? "green" : "red")}
-                                                            >
-                                                                 {JSON.parse(item.resultado)?.biometria_face?.probabilidade}
-                                                            </Text>
-                                                    </Box>
-                                                    }
+                                                        </Box>
+                                                    )}
                                                 </Td>
 
                                                 {/* <Td>
@@ -362,14 +416,25 @@ const FichasCadastrais = () => {
                                                     )}
                                                 </Td>
                                                 <Td>
-                                                    <Text color={"blue"}>{item.status==0?"Aguardando":""}</Text>
-                                                    <Text color={"red"}>{item.status==-1?"Falha na verificação":""}</Text>
-                                                    <Text color={"green"}>{item.status==1?"Sucesso na verificação":""}</Text>
+                                                    <Text color={"blue"}>
+                                                        {item.status == 0
+                                                            ? "Aguardando"
+                                                            : ""}
+                                                    </Text>
+                                                    <Text color={"red"}>
+                                                        {item.status == -1
+                                                            ? "Falha na verificação"
+                                                            : ""}
+                                                    </Text>
+                                                    <Text color={"green"}>
+                                                        {item.status == 1
+                                                            ? "Sucesso na verificação"
+                                                            : ""}
+                                                    </Text>
                                                 </Td>
                                                 <Td>
                                                     {" "}
-
-                                                        {/* <Tooltip label="Validar CPF">
+                                                    {/* <Tooltip label="Validar CPF">
                                                             <IconButton
                                                                 colorScheme="green"
                                                                 size="sm"
@@ -388,7 +453,6 @@ const FichasCadastrais = () => {
                                                                 }
                                                             />
                                                         </Tooltip> */}
-
                                                     {/* {usuario?.permissoes?.includes(
                                                         "imobiliaria.fichas.revisar"
                                                     ) && (
@@ -492,7 +556,6 @@ const FichasCadastrais = () => {
                                                             }
                                                         />
                                                     </Tooltip> */}
-
                                                     {/* <Tooltip label="Gerar PDF">
                                                         <Link
                                                             href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
@@ -512,7 +575,6 @@ const FichasCadastrais = () => {
                                                             />
                                                         </Link>
                                                     </Tooltip> */}
-
                                                     {/* {usuario?.permissoes?.includes(
                                                         "imobiliaria.fichas.excluir"
                                                     ) && (
@@ -546,7 +608,7 @@ const FichasCadastrais = () => {
                                                 textAlign="center"
                                                 color="gray"
                                             >
-                                                <br/>
+                                                <br />
                                                 Não encontramos registros
                                             </Td>
                                         </Tr>

@@ -16,6 +16,7 @@ handler.get(async (req, res) => {
                 preenchimento: {
                     include: {
                         campo: true,
+                        validacaoFacial: true,
                     },
                 },
                 responsavel: true,

@@ -24,3 +24,11 @@ export const excluirUsuario = async (id) => {
     const { data } = await api.post("usuario/" + id);
     return data;
 };
+export const excluirVariosUsuarios = async (ids) => {
+    const { data } = await api.delete("usuario", {
+        params: {
+            ids,
+        },
+    });
+    return data;
+};

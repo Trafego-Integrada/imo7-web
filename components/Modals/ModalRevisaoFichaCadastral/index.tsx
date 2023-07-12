@@ -2,6 +2,7 @@ import { FormInput } from "@/components/Form/FormInput";
 import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormTextarea } from "@/components/Form/FormTextarea";
+import { useAuth } from "@/hooks/useAuth";
 import { listarCategoriaCampoFichas } from "@/services/models/categoriaCampoFicha";
 import {
     atualizarFicha,
@@ -9,8 +10,10 @@ import {
     cadastrarFicha,
 } from "@/services/models/fichaCadastral";
 import { listarFichas } from "@/services/models/modeloFicha";
+import { cadastrarValidacao } from "@/services/models/validacaoFacial";
 import { queryClient } from "@/services/queryClient";
 import {
+    Avatar,
     Box,
     Button,
     Flex,
@@ -26,6 +29,14 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Popover,
+    PopoverArrow,
+    PopoverBody,
+    PopoverCloseButton,
+    PopoverContent,
+    PopoverHeader,
+    PopoverTrigger,
+    Progress,
     Tab,
     TabList,
     TabPanel,
@@ -43,13 +54,20 @@ import Link from "next/link";
 import { Router, useRouter } from "next/router";
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FiDownload, FiEye } from "react-icons/fi";
+import {
+    FiAlertCircle,
+    FiCheck,
+    FiCheckCircle,
+    FiDownload,
+    FiEye,
+} from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
 import { ModalPreview } from "../Preview";
 import { AnaliseCampo } from "./AnaliseCampo";
 const schema = yup.object({});
 const ModalBase = ({}, ref) => {
+    const { usuario } = useAuth();
     const preview = useRef();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const toast = useToast();
@@ -105,9 +123,23 @@ const ModalBase = ({}, ref) => {
     }));
     // console.log(watch());
 
-    const router = useRouter()
+    const router = useRouter();
 
+    const cadastrarValidacaoFacial = useMutation(cadastrarValidacao);
 
+    const onCadastrarValidacao = async ({
+        fichaCadastralId,
+        cpf,
+        campoFichaCadastralCodigo,
+    }) => {
+        await cadastrarValidacaoFacial.mutateAsync({
+            fichaCadastralId,
+            cpf,
+            campoFichaCadastralCodigo,
+        });
+        buscar.mutate(fichaCadastralId);
+    };
+    console.log(router, usuario);
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -231,7 +263,6 @@ const ModalBase = ({}, ref) => {
                                                 >
                                                     <Heading size="sm">
                                                         {item.nome}
-                                                        
                                                     </Heading>
                                                     <Grid
                                                         mt={4}
@@ -243,7 +274,7 @@ const ModalBase = ({}, ref) => {
                                                     >
                                                         {item?.campos?.map(
                                                             (i) => {
-                                                                    console.log(i);
+                                                                console.log(i);
                                                             }
                                                         )}
                                                         {item?.campos?.map(
@@ -261,27 +292,253 @@ const ModalBase = ({}, ref) => {
                                                                         <Text fontSize="xs">
                                                                             {
                                                                                 i.nome
-                                                                            }
-                                                                            { (i.nome.indexOf("CPF") >=  0) && 
-                                                                                <span>
-                                                                                    <Text>
-                                                                                    <a 
-                                                                                            onClick={() => { toast({title: 'URL Copiada'}) }}
-                                                                                            href={"javascript:navigator.clipboard.writeText('http://" + router.query.site + ".imo7.com.br/validacao-facial?cpf="+ (watch("preenchimento")?.find((p) => p.campoFichaCadastralCodigo == i.codigo)?.valor.replaceAll(".", "").replaceAll("-",""))  +"')"} 
-                                                                                            style={{color: "blue"}}>
-                                                                                            Link Validar CPF
-                                                                                    </a>
-                                                                                    </Text>
-
-                                                                                <Tag
-                                                                                    colorScheme="red"
-                                                                                    size="sm"
-                                                                                >
-                                                                                    Não validado
-                                                                                </Tag>
-                                                                                </span>
-                                                                            }
+                                                                            }{" "}
+                                                                            {i.nome.indexOf(
+                                                                                "CPF"
+                                                                            ) >=
+                                                                                0 && (
+                                                                                <>
+                                                                                    {watch(
+                                                                                        "preenchimento"
+                                                                                    )?.find(
+                                                                                        (
+                                                                                            p
+                                                                                        ) =>
+                                                                                            p.campoFichaCadastralCodigo ==
+                                                                                            i.codigo
+                                                                                    )
+                                                                                        ?.validacaoFacial
+                                                                                        .length >
+                                                                                    0 ? (
+                                                                                        <Text as="span">
+                                                                                            {watch(
+                                                                                                "preenchimento"
+                                                                                            )
+                                                                                                ?.find(
+                                                                                                    (
+                                                                                                        p
+                                                                                                    ) =>
+                                                                                                        p.campoFichaCadastralCodigo ==
+                                                                                                        i.codigo
+                                                                                                )
+                                                                                                ?.validacaoFacial.map(
+                                                                                                    (
+                                                                                                        item
+                                                                                                    ) => (
+                                                                                                        <>
+                                                                                                            {item.status ==
+                                                                                                                1 && (
+                                                                                                                <Popover>
+                                                                                                                    <PopoverTrigger>
+                                                                                                                        <Button
+                                                                                                                            variant="ghost"
+                                                                                                                            size="xs"
+                                                                                                                            colorScheme={
+                                                                                                                                JSON.parse(
+                                                                                                                                    item.resultado
+                                                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                    "Altíssima "
+                                                                                                                                ) >=
+                                                                                                                                0
+                                                                                                                                    ? "green"
+                                                                                                                                    : "red"
+                                                                                                                            }
+                                                                                                                            leftIcon={
+                                                                                                                                JSON.parse(
+                                                                                                                                    item.resultado
+                                                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                    "Altíssima "
+                                                                                                                                ) >=
+                                                                                                                                0 ? (
+                                                                                                                                    <FiCheckCircle />
+                                                                                                                                ) : (
+                                                                                                                                    <FiAlertCircle />
+                                                                                                                                )
+                                                                                                                            }
+                                                                                                                        >
+                                                                                                                            Validado
+                                                                                                                        </Button>
+                                                                                                                    </PopoverTrigger>
+                                                                                                                    <PopoverContent>
+                                                                                                                        <PopoverArrow />
+                                                                                                                        <PopoverCloseButton />
+                                                                                                                        <PopoverHeader>
+                                                                                                                            Validação
+                                                                                                                            Facial
+                                                                                                                        </PopoverHeader>
+                                                                                                                        <PopoverBody>
+                                                                                                                            <Flex
+                                                                                                                                flexDir="column"
+                                                                                                                                align="center"
+                                                                                                                                justify="center"
+                                                                                                                                gap={
+                                                                                                                                    4
+                                                                                                                                }
+                                                                                                                            >
+                                                                                                                                <Avatar
+                                                                                                                                    src={
+                                                                                                                                        item.fotoUrl
+                                                                                                                                    }
+                                                                                                                                    size="2xl"
+                                                                                                                                />
+                                                                                                                                <Box pos="relative">
+                                                                                                                                    <Box>
+                                                                                                                                        <Progress
+                                                                                                                                            w="full"
+                                                                                                                                            size="lg"
+                                                                                                                                            value={
+                                                                                                                                                JSON.parse(
+                                                                                                                                                    item.resultado
+                                                                                                                                                )
+                                                                                                                                                    ?.biometria_face
+                                                                                                                                                    ?.similaridade *
+                                                                                                                                                100
+                                                                                                                                            }
+                                                                                                                                            max={
+                                                                                                                                                100
+                                                                                                                                            }
+                                                                                                                                            colorScheme={
+                                                                                                                                                JSON.parse(
+                                                                                                                                                    item.resultado
+                                                                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                                    "Altíssima "
+                                                                                                                                                ) >=
+                                                                                                                                                0
+                                                                                                                                                    ? "green"
+                                                                                                                                                    : "red"
+                                                                                                                                            }
+                                                                                                                                        />
+                                                                                                                                    </Box>
+                                                                                                                                    <Flex
+                                                                                                                                        pos="absolute"
+                                                                                                                                        top="0"
+                                                                                                                                        justify="center"
+                                                                                                                                        mx="auto"
+                                                                                                                                        w="full"
+                                                                                                                                    >
+                                                                                                                                        <Text
+                                                                                                                                            textAlign="center"
+                                                                                                                                            fontSize="xs"
+                                                                                                                                            color={
+                                                                                                                                                JSON.parse(
+                                                                                                                                                    item.resultado
+                                                                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                                    "Altíssima "
+                                                                                                                                                ) >=
+                                                                                                                                                0
+                                                                                                                                                    ? "white"
+                                                                                                                                                    : "red"
+                                                                                                                                            }
+                                                                                                                                        >
+                                                                                                                                            {parseInt(
+                                                                                                                                                JSON.parse(
+                                                                                                                                                    item.resultado
+                                                                                                                                                )
+                                                                                                                                                    ?.biometria_face
+                                                                                                                                                    ?.similaridade *
+                                                                                                                                                    100
+                                                                                                                                            )}{" "}
+                                                                                                                                            %
+                                                                                                                                        </Text>
+                                                                                                                                    </Flex>
+                                                                                                                                    <Text
+                                                                                                                                        textAlign="center"
+                                                                                                                                        fontSize="xs"
+                                                                                                                                        color={
+                                                                                                                                            JSON.parse(
+                                                                                                                                                item.resultado
+                                                                                                                                            )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                                "Altíssima "
+                                                                                                                                            ) >=
+                                                                                                                                            0
+                                                                                                                                                ? "green"
+                                                                                                                                                : "red"
+                                                                                                                                        }
+                                                                                                                                    >
+                                                                                                                                        {
+                                                                                                                                            JSON.parse(
+                                                                                                                                                item.resultado
+                                                                                                                                            )
+                                                                                                                                                ?.biometria_face
+                                                                                                                                                ?.probabilidade
+                                                                                                                                        }
+                                                                                                                                    </Text>
+                                                                                                                                </Box>
+                                                                                                                            </Flex>
+                                                                                                                        </PopoverBody>
+                                                                                                                    </PopoverContent>
+                                                                                                                </Popover>
+                                                                                                            )}
+                                                                                                            <Link
+                                                                                                                href={{
+                                                                                                                    pathname:
+                                                                                                                        "/validacao-facial/[id]",
+                                                                                                                    query: {
+                                                                                                                        id: item.id,
+                                                                                                                    },
+                                                                                                                }}
+                                                                                                                target="_blank"
+                                                                                                            >
+                                                                                                                <Text color="blue">
+                                                                                                                    Link
+                                                                                                                    Validação
+                                                                                                                    Facial
+                                                                                                                </Text>
+                                                                                                            </Link>
+                                                                                                        </>
+                                                                                                    )
+                                                                                                )}
+                                                                                        </Text>
+                                                                                    ) : (
+                                                                                        <Button
+                                                                                            size="xs"
+                                                                                            onClick={() =>
+                                                                                                onCadastrarValidacao(
+                                                                                                    {
+                                                                                                        campoFichaCadastralCodigo:
+                                                                                                            watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.campoFichaCadastralCodigo,
+                                                                                                        cpf: watch(
+                                                                                                            "preenchimento"
+                                                                                                        )?.find(
+                                                                                                            (
+                                                                                                                p
+                                                                                                            ) =>
+                                                                                                                p.campoFichaCadastralCodigo ==
+                                                                                                                i.codigo
+                                                                                                        )
+                                                                                                            ?.valor,
+                                                                                                        fichaCadastralId:
+                                                                                                            watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.fichaCadastralId,
+                                                                                                    }
+                                                                                                )
+                                                                                            }
+                                                                                        >
+                                                                                            Validação
+                                                                                            Facial
+                                                                                        </Button>
+                                                                                    )}
+                                                                                </>
+                                                                            )}
                                                                         </Text>
+                                                                        {}
                                                                         {watch(
                                                                             "preenchimento"
                                                                         )?.find(
@@ -298,7 +555,6 @@ const ModalBase = ({}, ref) => {
                                                                             >
                                                                                 Aprovado
                                                                             </Tag>
-                                                                           
                                                                         ) : watch(
                                                                               "preenchimento"
                                                                           )?.find(
