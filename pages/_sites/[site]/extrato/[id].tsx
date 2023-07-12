@@ -3108,6 +3108,7 @@ const Extrato = ({ extrato }) => {
                     
                             @-ms-viewport {
                                 width: device-width;
+                                
                             }
                     
                             .visible-xs,

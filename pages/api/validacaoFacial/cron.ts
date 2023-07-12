@@ -17,8 +17,10 @@ const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 handler.use(cors);
 
 handler.get(async (req, res) => {
-    const data = await prisma.validacaoFacial.findMany({
-        take: 1,
+    const ACCESS_TOKEN = await getToken();
+
+    const data = await prisma.validacaofacial.findMany({
+        take: 5,
         where: { status: 0 },
         orderBy: {
             updatedAt: "asc",
@@ -27,52 +29,77 @@ handler.get(async (req, res) => {
 
     console.log("Registros encontrados  = " + data.length);
 
-    if (data.length == 0) res.send({ status: 0, msg: "Sem registros" });
-
-    const id = data[0].id;
-
-    const ACCESS_TOKEN = await getToken();
-
-    const response = await getResponse(ACCESS_TOKEN, data[0].cpf, data[0].pin);
-    console.log(response);
-    var client = jwksClient({
-        jwksUri: "https://d-biodata.estaleiro.serpro.gov.br/api/v1/jwks",
-    });
-
-    function getKey(header, callback) {
-        client.getSigningKey(header.kid, function (err, key) {
-            var signingKey = key.publicKey || key.rsaPublicKey;
-            callback(null, signingKey);
-        });
+    if (data.length == 0) {
+        res.send({ status: 0, msg: "Sem registros" });
+        return;
     }
 
-    let token = response;
-    let options = { algorithms: "RS512" };
+    data.forEach(async (resData) => {
+        console.log("Registro ID = " + resData.id);
 
-    jwt.verify(token, getKey, options, async (err, decoded) => {
-        // failed
-        if (err) {
-            const dataUpdate = await prisma.validacaoFacial.update({
-                where: { id },
-                data: {
-                    resultado: JSON.stringify(err),
-                    status: -1,
-                },
+        const id = resData.id;
+
+        const response = await getResponse(
+            ACCESS_TOKEN,
+            resData.cpf,
+            resData.pin
+        );
+        const responseDecoded = Buffer.from(response, "base64").toString(
+            "utf8"
+        );
+
+        var client = jwksClient({
+            jwksUri: "https://d-biodata.estaleiro.serpro.gov.br/api/v1/jwks",
+        });
+        let token = response;
+        let options = { algorithms: "RS512" };
+
+        function getKey(header, callback) {
+            client.getSigningKey(header.kid, function (err, key) {
+                var signingKey = key.publicKey || key.rsaPublicKey;
+                callback(null, signingKey);
             });
-
-            return res.send({ status: -1 });
         }
 
-        // success
-        const dataUpdate = await prisma.validacaoFacial.update({
-            where: { id },
-            data: {
-                resultado: JSON.stringify(decoded),
-                status: 1,
-            },
-        });
-        return res.send({ status: 1 });
+        // console.log("try verify")
+
+        try {
+            jwt.verify(token, getKey, options, async (err, decoded) => {
+                // console.log("jwt verified")
+
+                // failed
+                if (err) {
+                    const dataUpdate = await prisma.validacaofacial.update({
+                        where: { id: Number(id) },
+                        data: {
+                            resultado: JSON.stringify(err),
+                            status: -1,
+                        },
+                    });
+
+                    //  return res.send({status: -1, msg: "Try Again"});
+                }
+
+                // console.log("try update")
+
+                // success
+                const dataUpdate = await prisma.validacaofacial.update({
+                    where: { id: Number(id) },
+                    data: {
+                        resultado: JSON.stringify(decoded),
+                        status: 1,
+                    },
+                });
+
+                // return res.send({status: 1});
+            });
+        } catch (e) {
+            console.log("Catch");
+            console.log(e);
+        }
     });
+
+    res.send({ status: 1, msg: "Finished" });
 });
 
 export default handler;
