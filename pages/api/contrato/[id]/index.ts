@@ -11,7 +11,11 @@ handle.get(async (req, res) => {
             id: Number(id),
         },
         include: {
-            anexos: true,
+            anexos: {
+                where: {
+                    deletedAt: null,
+                },
+            },
             boletos: true,
             chamados: {
                 include: {

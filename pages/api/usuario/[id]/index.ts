@@ -72,6 +72,8 @@ handle.post(async (req, res) => {
         modulos,
         permissoes,
         status,
+        whatsapp,
+        naoEnviarWhatsapp,
     } = req.body;
 
     let atualizarSenha = {};
@@ -93,6 +95,8 @@ handle.post(async (req, res) => {
             email,
             celular,
             telefone,
+            whatsapp,
+            naoEnviarWhatsapp,
             profissao,
             status,
             modulos:

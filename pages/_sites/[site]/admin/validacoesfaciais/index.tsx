@@ -276,7 +276,7 @@ const FichasCadastrais = () => {
                             <Table size="sm">
                                 <Thead>
                                     <Tr>
-                                        <Th>ID</Th>
+                                        <Th>Ações</Th>
                                         {/* <Th w={44}>Tipo</Th> */}
                                         <Th>CPF</Th>
                                         <Th>FOTO</Th>
@@ -292,15 +292,181 @@ const FichasCadastrais = () => {
                                     {fichas?.data?.length > 0 ? (
                                         fichas.data.map((item) => (
                                             <Tr key={item.id}>
-                                                <Td># {item.id}</Td>
+                                                <Td>
+                                                    {" "}
+                                                    {/* <Tooltip label="Validar CPF">
+                                                            <IconButton
+                                                                colorScheme="green"
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            MdAccessibilityNew
+                                                                        }
+                                                                    />
+                                                                }
+                                                                onClick={() =>
+                                                                    modalValidar.current.onOpen(
+                                                                        item.id
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Tooltip> */}
+                                                    {usuario?.permissoes?.includes(
+                                                        "imobiliaria.fichas.revisar"
+                                                    ) && (
+                                                        <Tooltip label="Revisar Ficha">
+                                                            <IconButton
+                                                                colorScheme="green"
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            MdOutlineVerifiedUser
+                                                                        }
+                                                                    />
+                                                                }
+                                                                onClick={() =>
+                                                                    modalRevisar.current.onOpen(
+                                                                        item.fichaCadastralId
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Tooltip>
+                                                    )}
+                                                    {/* {usuario?.permissoes?.includes(
+                                                        "imobiliaria.fichas.editar"
+                                                    ) && (
+                                                        <Tooltip label="Editar Ficha">
+                                                            <IconButton
+                                                                colorScheme="blue"
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiEdit
+                                                                        }
+                                                                    />
+                                                                }
+                                                                onClick={() =>
+                                                                    modal.current.onOpen(
+                                                                        item.id
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Tooltip>
+                                                    )} */}
+                                                    {/* <Tooltip label="Copiar URL da Ficha">
+                                                        <IconButton
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            icon={
+                                                                <Icon
+                                                                    as={FiLink}
+                                                                />
+                                                            }
+                                                            onClick={() => {
+                                                                navigator.clipboard.writeText(
+                                                                    `${window.location.origin}/fichaCadastral/${item.id}`
+                                                                );
+                                                                toast({
+                                                                    title: "URL Copiada",
+                                                                });
+                                                            }}
+                                                        />
+                                                    </Tooltip> */}
+                                                    {/* <Tooltip label="Visualizar Ficha">
+                                                        <Link
+                                                            href={`/fichaCadastral/${item.id}`}
+                                                            target="_blank"
+                                                        >
+                                                            <IconButton
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiEye
+                                                                        }
+                                                                    />
+                                                                }
+                                                            />
+                                                        </Link>
+                                                    </Tooltip> */}
+                                                    {/* <Tooltip label="Exportar para Excel">
+                                                        <IconButton
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            icon={
+                                                                <Icon
+                                                                    as={
+                                                                        FaFileExcel
+                                                                    }
+                                                                />
+                                                            }
+                                                            onClick={() =>
+                                                                exportToExcel(
+                                                                    item.preenchimento,
+                                                                    "ficha-cadastral-" +
+                                                                        item.id
+                                                                )
+                                                            }
+                                                        />
+                                                    </Tooltip> */}
+                                                    {/* <Tooltip label="Gerar PDF">
+                                                        <Link
+                                                            href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
+                                                            target="_blank"
+                                                            passHref
+                                                        >
+                                                            <IconButton
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FaFilePdf
+                                                                        }
+                                                                    />
+                                                                }
+                                                            />
+                                                        </Link>
+                                                    </Tooltip> */}
+                                                    {/* {usuario?.permissoes?.includes(
+                                                        "imobiliaria.fichas.excluir"
+                                                    ) && (
+                                                        <Tooltip label="Excluir Ficha">
+                                                            <IconButton
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                icon={
+                                                                    <Icon
+                                                                        as={
+                                                                            FiTrash
+                                                                        }
+                                                                    />
+                                                                }
+                                                                colorScheme="red"
+                                                                onClick={() => {
+                                                                    modalExcluir.current.onOpen(
+                                                                        item.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </Tooltip>
+                                                    )} */}
+                                                </Td>
                                                 <Td>{item.cpf}</Td>
                                                 <Td>
                                                     <Image
-                                                        borderRadius="full"
+                                                        borderRadius="2xl"
                                                         src={item.fotoUrl}
                                                         width={20}
                                                         height={20}
-                                                        ZZ
+                                                        objectFit="cover"
                                                     />
                                                 </Td>
                                                 <Td>
@@ -433,173 +599,6 @@ const FichasCadastrais = () => {
                                                             : ""}
                                                     </Text>
                                                 </Td>
-                                                <Td>
-                                                    {" "}
-                                                    {/* <Tooltip label="Validar CPF">
-                                                            <IconButton
-                                                                colorScheme="green"
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            MdAccessibilityNew
-                                                                        }
-                                                                    />
-                                                                }
-                                                                onClick={() =>
-                                                                    modalValidar.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            />
-                                                        </Tooltip> */}
-                                                    {/* {usuario?.permissoes?.includes(
-                                                        "imobiliaria.fichas.revisar"
-                                                    ) && (
-                                                        <Tooltip label="Revisar Ficha">
-                                                            <IconButton
-                                                                colorScheme="green"
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            MdOutlineVerifiedUser
-                                                                        }
-                                                                    />
-                                                                }
-                                                                onClick={() =>
-                                                                    modalRevisar.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            />
-                                                        </Tooltip>
-                                                    )} */}
-                                                    {/* {usuario?.permissoes?.includes(
-                                                        "imobiliaria.fichas.editar"
-                                                    ) && (
-                                                        <Tooltip label="Editar Ficha">
-                                                            <IconButton
-                                                                colorScheme="blue"
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiEdit
-                                                                        }
-                                                                    />
-                                                                }
-                                                                onClick={() =>
-                                                                    modal.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            />
-                                                        </Tooltip>
-                                                    )} */}
-                                                    {/* <Tooltip label="Copiar URL da Ficha">
-                                                        <IconButton
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={FiLink}
-                                                                />
-                                                            }
-                                                            onClick={() => {
-                                                                navigator.clipboard.writeText(
-                                                                    `${window.location.origin}/fichaCadastral/${item.id}`
-                                                                );
-                                                                toast({
-                                                                    title: "URL Copiada",
-                                                                });
-                                                            }}
-                                                        />
-                                                    </Tooltip> */}
-                                                    {/* <Tooltip label="Visualizar Ficha">
-                                                        <Link
-                                                            href={`/fichaCadastral/${item.id}`}
-                                                            target="_blank"
-                                                        >
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiEye
-                                                                        }
-                                                                    />
-                                                                }
-                                                            />
-                                                        </Link>
-                                                    </Tooltip> */}
-                                                    {/* <Tooltip label="Exportar para Excel">
-                                                        <IconButton
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={
-                                                                        FaFileExcel
-                                                                    }
-                                                                />
-                                                            }
-                                                            onClick={() =>
-                                                                exportToExcel(
-                                                                    item.preenchimento,
-                                                                    "ficha-cadastral-" +
-                                                                        item.id
-                                                                )
-                                                            }
-                                                        />
-                                                    </Tooltip> */}
-                                                    {/* <Tooltip label="Gerar PDF">
-                                                        <Link
-                                                            href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
-                                                            target="_blank"
-                                                            passHref
-                                                        >
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FaFilePdf
-                                                                        }
-                                                                    />
-                                                                }
-                                                            />
-                                                        </Link>
-                                                    </Tooltip> */}
-                                                    {/* {usuario?.permissoes?.includes(
-                                                        "imobiliaria.fichas.excluir"
-                                                    ) && (
-                                                        <Tooltip label="Excluir Ficha">
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiTrash
-                                                                        }
-                                                                    />
-                                                                }
-                                                                colorScheme="red"
-                                                                onClick={() => {
-                                                                    modalExcluir.current.onOpen(
-                                                                        item.id
-                                                                    );
-                                                                }}
-                                                            />
-                                                        </Tooltip>
-                                                    )} */}
-                                                </Td>
                                             </Tr>
                                         ))
                                     ) : (
@@ -620,6 +619,8 @@ const FichasCadastrais = () => {
                     </Box>
                 </Box>
             </Box>
+
+            <ModalRevisaoFichaCadastral ref={modalRevisar} />
             {/* <ModalFichaCadastral ref={modal} />
             <ModalRevisaoFichaCadastral ref={modalRevisar} />
             <ModalValidar ref={modalValidar} />

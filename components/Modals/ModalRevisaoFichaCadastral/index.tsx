@@ -60,6 +60,7 @@ import {
     FiCheckCircle,
     FiDownload,
     FiEye,
+    FiLink,
 } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
@@ -469,22 +470,36 @@ const ModalBase = ({}, ref) => {
                                                                                                                     </PopoverContent>
                                                                                                                 </Popover>
                                                                                                             )}
-                                                                                                            <Link
-                                                                                                                href={{
-                                                                                                                    pathname:
-                                                                                                                        "/validacao-facial/[id]",
-                                                                                                                    query: {
-                                                                                                                        id: item.id,
-                                                                                                                    },
-                                                                                                                }}
-                                                                                                                target="_blank"
-                                                                                                            >
-                                                                                                                <Text color="blue">
+
+                                                                                                            <Tooltip label="Copiar URL da Ficha">
+                                                                                                                <Button
+                                                                                                                    size="xs"
+                                                                                                                    variant="ghost"
+                                                                                                                    colorScheme="blue"
+                                                                                                                    leftIcon={
+                                                                                                                        <Icon
+                                                                                                                            as={
+                                                                                                                                FiLink
+                                                                                                                            }
+                                                                                                                        />
+                                                                                                                    }
+                                                                                                                    onClick={() => {
+                                                                                                                        navigator.clipboard.writeText(
+                                                                                                                            `${window.location.origin}/validacao-facial/${item.id}`
+                                                                                                                        );
+                                                                                                                        toast(
+                                                                                                                            {
+                                                                                                                                title: "URL Copiada",
+                                                                                                                            }
+                                                                                                                        );
+                                                                                                                    }}
+                                                                                                                >
+                                                                                                                    Copiar
                                                                                                                     Link
+                                                                                                                    da
                                                                                                                     Validação
-                                                                                                                    Facial
-                                                                                                                </Text>
-                                                                                                            </Link>
+                                                                                                                </Button>
+                                                                                                            </Tooltip>
                                                                                                         </>
                                                                                                     )
                                                                                                 )}

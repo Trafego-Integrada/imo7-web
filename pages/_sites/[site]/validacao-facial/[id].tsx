@@ -25,6 +25,9 @@ import {
     StepSeparator,
     StepStatus,
     useSteps,
+    Alert,
+    AlertIcon,
+    AlertTitle,
 } from "@chakra-ui/react";
 
 import { Slide } from "react-slideshow-image";
@@ -265,9 +268,9 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
         // );
         // }
         const steps = [
+            { title: "Confirmação" },
             { title: "Instruções" },
             { title: "Foto" },
-            { title: "Confirmação" },
         ];
         const { activeStep, setActiveStep } = useSteps({
             index: 1,
@@ -346,7 +349,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                     </Step>
                                 ))}
                             </Stepper>
-                            {activeStep == 1 && (
+                            {activeStep == 2 && (
                                 <>
                                     <Heading size="lg" mb={4} color="gray.700">
                                         Exemplos de imagens de face
@@ -378,7 +381,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                     </Box>
                                 </>
                             )}
-                            {activeStep == 2 && (
+                            {activeStep == 3 && (
                                 <Flex justify="center">
                                     <Box
                                         maxW="sm"
@@ -416,7 +419,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                                                 1280
                                                             }
                                                             minScreenshotHeight={
-                                                                960
+                                                                1920
                                                             }
                                                             style={
                                                                 {
@@ -476,7 +479,10 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                                 )}
                                                 {photo != null && (
                                                     <div>
-                                                        <img src={photo} />
+                                                        <Image
+                                                            src={photo}
+                                                            objectFit="contain"
+                                                        />
                                                         <div
                                                             className="camera-face-overlay"
                                                             style={{
@@ -551,7 +557,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                     </Box>
                                 </Flex>
                             )}
-                            {activeStep == 3 && (
+                            {activeStep == 1 && (
                                 <GridItem w="100%">
                                     <Box
                                         px={8}
@@ -585,21 +591,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                         </div>
                                         <br />
 
-                                        {error && (
-                                            <Flex
-                                                color="red"
-                                                borderWidth={1}
-                                                borderColor="red"
-                                            >
-                                                <Text
-                                                    w="full"
-                                                    textAlign="center"
-                                                >
-                                                    {error}
-                                                </Text>
-                                            </Flex>
-                                        )}
-
                                         <Text fontSize="sm">
                                             Confira seu CPF e continue para
                                             enviar para validação.
@@ -625,6 +616,14 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                         />
                                     </Box>
                                 </GridItem>
+                            )}
+                            {error && (
+                                <Alert status="warning" my={4}>
+                                    <AlertIcon />
+                                    <AlertTitle w="full" textAlign="center">
+                                        {error}
+                                    </AlertTitle>
+                                </Alert>
                             )}
                             <Flex justify="space-between" mt={12}>
                                 <Button

@@ -15,15 +15,12 @@ import moment from "moment";
 import fs from "fs";
 import { statSync } from "fs";
 import { encodeBase64 } from "bcryptjs";
+import { removerCaracteresEspeciais } from "@/helpers/helpers";
 
 var FOLDER;
 
-if(process.platform == "linux")
-FOLDER  = "/tmp/";
-else 
-FOLDER  = "d:\\";
-
-
+if (process.platform == "linux") FOLDER = "/tmp/";
+else FOLDER = "d:\\";
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
@@ -210,7 +207,7 @@ const getPin = async (access_token: string, cpf: number) => {
             "",
             {
                 params: {
-                    cpf: cpf,
+                    cpf: removerCaracteresEspeciais(cpf),
                 },
                 headers: {
                     Authorization: "Bearer " + access_token,
@@ -242,7 +239,7 @@ const setPhoto = async (
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + access_token,
-                    "x-cpf": cpf,
+                    "x-cpf": removerCaracteresEspeciais(cpf),
                     "x-pin": pin,
                     "x-device": "Computador",
                 },

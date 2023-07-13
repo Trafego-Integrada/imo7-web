@@ -105,6 +105,13 @@ const menu = [
         modulos: ["imobiliaria.fichas"],
         subMenus: [
             {
+                titulo: "Fichas",
+                href: "/admin/fichas",
+                icon: TbForms,
+                cargos: ["imobiliaria"],
+                modulos: ["imobiliaria.fichas"],
+            },
+            {
                 titulo: "Fichas Excluídas",
                 href: "/admin/fichas/excluidas",
                 icon: HiOutlineDocumentText,

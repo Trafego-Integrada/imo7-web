@@ -70,7 +70,7 @@ handler.get(async (req, res) => {
                 // failed
                 if (err) {
                     const dataUpdate = await prisma.validacaoFacial.update({
-                        where: { id: Number(id) },
+                        where: { id },
                         data: {
                             resultado: JSON.stringify(err),
                             status: -1,
@@ -84,7 +84,7 @@ handler.get(async (req, res) => {
 
                 // success
                 const dataUpdate = await prisma.validacaoFacial.update({
-                    where: { id: Number(id) },
+                    where: { id },
                     data: {
                         resultado: JSON.stringify(decoded),
                         status: 1,
