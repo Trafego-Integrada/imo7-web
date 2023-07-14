@@ -506,6 +506,20 @@ const FichasCadastrais = () => {
                                                                             ) >=
                                                                             0
                                                                                 ? "green"
+                                                                                : JSON.parse(
+                                                                                      item.resultado
+                                                                                  )?.biometria_face?.probabilidade.indexOf(
+                                                                                      "Alta "
+                                                                                  ) >=
+                                                                                  0
+                                                                                ? "blue"
+                                                                                : JSON.parse(
+                                                                                      item.resultado
+                                                                                  )?.biometria_face?.probabilidade.indexOf(
+                                                                                      "Baixa "
+                                                                                  ) >=
+                                                                                  0
+                                                                                ? "orange"
                                                                                 : "red"
                                                                         }
                                                                     />

@@ -215,7 +215,7 @@ const Inquilinos = () => {
                                                       variant="ghost"
                                                       colorScheme="blue"
                                                       onClick={() =>
-                                                          modal.current.onOpen(
+                                                          modalinquilinos.current.onOpen(
                                                               item.id
                                                           )
                                                       }
