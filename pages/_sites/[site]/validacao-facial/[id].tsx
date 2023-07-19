@@ -323,8 +323,9 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                             minH="100vh"
                             justify="center"
                             flexDir="column"
+                            py={24}
                         >
-                            <Stepper index={activeStep} mb={12}>
+                            <Stepper index={activeStep} mb={12} overflow="auto">
                                 {steps.map((step, index) => (
                                     <Step key={index}>
                                         <StepIndicator>
