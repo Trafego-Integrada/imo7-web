@@ -310,7 +310,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                             {photo == null && (
                                                 <>
                                                     <Webcam
-                                                        mirrored={true}
+                                                        audio={false}
                                                         screenshotFormat="image/jpeg"
                                                         ref={webcamRef}
                                                         screenshotQuality={1}
