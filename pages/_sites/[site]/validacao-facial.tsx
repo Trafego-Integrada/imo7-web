@@ -290,9 +290,30 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                             }}
                             gap={6}
                         >
+                            <Webcam
+                                audio={false}
+                                screenshotFormat="image/jpeg"
+                                ref={webcamRef}
+                                screenshotQuality={1}
+                                style={
+                                    {
+                                        // position: "absolute",
+                                        // objectFit: "cover",
+                                        // margin: 0,
+                                    }
+                                }
+                                width={480}
+                                height={720}
+                                videoConstraints={{
+                                    width: { min: 480 },
+                                    height: {
+                                        min: 720,
+                                    },
+                                    facingMode: "user",
+                                }}
+                            />
                             <GridItem w="100%">
                                 <Box
-                                    maxW="sm"
                                     bg="white"
                                     borderRadius="lg"
                                     overflow="hidden"

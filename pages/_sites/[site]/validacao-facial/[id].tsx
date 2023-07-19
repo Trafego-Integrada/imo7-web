@@ -249,10 +249,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
             });
 
         const capture = React.useCallback(() => {
-            const imageSrc = webcamRef.current.getScreenshot({
-                width: 1280,
-                height: 960,
-            });
+            const imageSrc = webcamRef.current.getScreenshot();
             setPhoto(imageSrc);
         }, [webcamRef]);
 
@@ -406,20 +403,11 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                                 {photo == null && (
                                                     <>
                                                         <Webcam
-                                                            forceScreenshotSourceSize={
-                                                                true
-                                                            }
                                                             mirrored={true}
                                                             screenshotFormat="image/jpeg"
                                                             ref={webcamRef}
                                                             screenshotQuality={
                                                                 1
-                                                            }
-                                                            minScreenshotWidth={
-                                                                1280
-                                                            }
-                                                            minScreenshotHeight={
-                                                                1920
                                                             }
                                                             style={
                                                                 {
