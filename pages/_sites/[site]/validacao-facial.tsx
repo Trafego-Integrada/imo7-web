@@ -232,10 +232,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
             });
 
         const capture = React.useCallback(() => {
-            const imageSrc = webcamRef.current.getScreenshot({
-                width: 1280,
-                height: 1980,
-            });
+            const imageSrc = webcamRef.current.getScreenshot();
             setPhoto(imageSrc);
         }, [webcamRef]);
 
@@ -313,24 +310,10 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                             {photo == null && (
                                                 <>
                                                     <Webcam
-                                                        forceScreenshotSourceSize={
-                                                            true
-                                                        }
                                                         mirrored={true}
                                                         screenshotFormat="image/jpeg"
                                                         ref={webcamRef}
                                                         screenshotQuality={1}
-                                                        minScreenshotWidth={
-                                                            1280
-                                                        }
-                                                        minScreenshotHeight={
-                                                            1280
-                                                        }
-                                                        videoConstraints={{
-                                                            width: 1280,
-                                                            height: 1280,
-                                                            facingMode: "user",
-                                                        }}
                                                         style={
                                                             {
                                                                 // position: "absolute",
