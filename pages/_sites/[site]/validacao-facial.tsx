@@ -321,6 +321,15 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                                 // margin: 0,
                                                             }
                                                         }
+                                                        width={480}
+                                                        height={720}
+                                                        videoConstraints={{
+                                                            width: { min: 480 },
+                                                            height: {
+                                                                min: 720,
+                                                            },
+                                                            facingMode: "user",
+                                                        }}
                                                     />
                                                     {boundingBox.map(
                                                         (box, index) => (
