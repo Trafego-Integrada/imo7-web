@@ -320,6 +320,17 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         screenshotFormat="image/jpeg"
                                                         ref={webcamRef}
                                                         screenshotQuality={1}
+                                                        minScreenshotWidth={
+                                                            1280
+                                                        }
+                                                        minScreenshotHeight={
+                                                            1280
+                                                        }
+                                                        videoConstraints={{
+                                                            width: 1280,
+                                                            height: 1280,
+                                                            facingMode: "user",
+                                                        }}
                                                         style={
                                                             {
                                                                 // position: "absolute",
