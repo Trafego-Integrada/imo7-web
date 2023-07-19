@@ -33,6 +33,8 @@ model Usuario {
     documento             String
     telefone              String?
     celular               String?
+    whatsapp              String?
+    naoEnviarWhatsapp     Boolean?                 @default(false)
     profissao             String?
     senhaHash             String?
     cep                   String?
@@ -218,6 +220,7 @@ model Imobiliaria {
     RegraNotificacao      RegraNotificacao[]
     reguasCobranca        ReguaCobranca[]
     FilaEnvio             FilaEnvio[]
+    ValidacaoFacial       ValidacaoFacial[]
 }
 
 enum TipoReguaCobranca {
@@ -265,6 +268,10 @@ model FilaEnvio {
     reguaCobrancaId  String
     imobiliaria      Imobiliaria?  @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId    Int?
+    boleto           Boleto?       @relation(fields: [boletoId], references: [id])
+    boletoId         Int?
+    extrato          Extrato?      @relation(fields: [extratoId], references: [id])
+    extratoId        Int?
 }
 
 model Imovel {
@@ -440,6 +447,7 @@ model Boleto {
     imobiliaria           Imobiliaria   @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId         Int
     Notificacao           Notificacao[]
+    filaEnvio             FilaEnvio[]
 }
 
 model Recibo {
@@ -499,6 +507,7 @@ model Extrato {
     conta         Conta?        @relation(fields: [contaId], references: [id])
     contaId       Int?
     itens         ItemExtrato[]
+    filaEnvio     FilaEnvio[]
 }
 
 model ItemExtrato {
@@ -708,6 +717,7 @@ model FichaCadastral {
     imovel                 Imovel?                       @relation(fields: [imovelId], references: [id])
     imovelId               Int?
     importadaJb            Boolean?                      @default(false)
+    ValidacaoFacial        ValidacaoFacial[]
 }
 
 model FichaCadastralPreenchimento {
@@ -718,6 +728,7 @@ model FichaCadastralPreenchimento {
     valor                     String?             @db.LongText
     motivoReprovacao          String?
     aprovado                  Boolean             @default(false)
+    validacaoFacial           ValidacaoFacial[]
 
     @@id([fichaCadastralId, campoFichaCadastralCodigo])
 }
@@ -962,15 +973,21 @@ model Notificacao {
     deletedAt        DateTime?
 }
 
-model validacaofacial {
-    id            Int       @id @default(autoincrement())
-    imobiliariaId Int?      @db.UnsignedInt
-    cpf           String?   @db.VarChar(11)
-    pin           String?   @db.VarChar(50)
-    resultado     String?   @db.LongText
-    createAt      DateTime? @default(now())
-    updatedAt     DateTime? @updatedAt
-    deletedAt     DateTime?
-    status        Int       @default(0)
-    fotoUrl       String?   @db.LongText
+model ValidacaoFacial {
+    id                                                   String                       @id @default(uuid())
+    imobiliariaId                                        Int?
+    cpf                                                  String?                      @db.VarChar(11)
+    pin                                                  String?                      @db.VarChar(50)
+    resultado                                            String?                      @db.LongText
+    createAt                                             DateTime?                    @default(now())
+    updatedAt                                            DateTime?                    @updatedAt
+    deletedAt                                            DateTime?
+    status                                               Int                          @default(0)
+    fotoUrl                                              String?                      @db.LongText
+    ficha                                                FichaCadastral?              @relation(fields: [fichaCadastralId], references: [id])
+    fichaCadastralId                                     String?
+    preenchimento                                        FichaCadastralPreenchimento? @relation(fields: [fichaCadastralPreenchimentoFichaCadastralId, fichaCadastralPreenchimentoCampoFichaCadastralCodigo], references: [fichaCadastralId, campoFichaCadastralCodigo])
+    fichaCadastralPreenchimentoFichaCadastralId          String?
+    fichaCadastralPreenchimentoCampoFichaCadastralCodigo String?
+    imobiliaria                                          Imobiliaria?                 @relation(fields: [imobiliariaId], references: [id])
 }

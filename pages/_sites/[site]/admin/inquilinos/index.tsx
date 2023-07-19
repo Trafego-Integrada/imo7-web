@@ -10,6 +10,7 @@ import {
 import {
     Box,
     Button,
+    Checkbox,
     Flex,
     Grid,
     GridItem,
@@ -22,30 +23,52 @@ import {
     Th,
     Thead,
     Tr,
+    useToast,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiEye, FiTrash } from "react-icons/fi";
 import { MdPageview } from "react-icons/md";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { FormInput } from "@/components/Form/FormInput";
 import { Layout } from "@/components/Layout/layout";
 import { ModalInquilinos } from "@/components/Modals/inquilinos";
-import { listarUsuarios } from "@/services/models/usuario";
+import {
+    excluirVariosUsuarios,
+    listarUsuarios,
+} from "@/services/models/usuario";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import { Usuario } from "@/components/Modals/Usuario";
+import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
+import { queryClient } from "@/services/queryClient";
+import { excluirVariosBoletos } from "@/services/models/boleto";
+import { FormDateRange } from "@/components/Form/FormDateRange";
+import { formatoData, formatoValor } from "@/helpers/helpers";
 
 const Inquilinos = () => {
     const modalinquilinos = useRef();
+    const toast = useToast();
     const [total, setTotal] = useState();
     const [filtro, setFiltro] = useState({});
-    const { currentPage, setCurrentPage, pagesCount, pages, pageSize } =
-        usePagination({
-            total: total,
-            initialState: { currentPage: 1, pageSize: 15 },
-        });
-    const { data, isLoading, isFetching } = useQuery(
+    const [selecionados, setSelecionados] = useState([]);
+
+    const {
+        currentPage,
+        setCurrentPage,
+        pagesCount,
+        pages,
+        pageSize,
+        setPageSize,
+    } = usePagination({
+        total: total,
+        limits: {
+            inner: 1,
+            outer: 2,
+        },
+        initialState: { currentPage: 1, pageSize: 15 },
+    });
+    const { data, isLoading } = useQuery(
         [
-            "usuarios",
+            "inquilinos",
             {
                 ...filtro,
                 linhas: pageSize,
@@ -60,208 +83,217 @@ const Inquilinos = () => {
             },
         }
     );
+    const deleteMany = useMutation(excluirVariosUsuarios, {
+        onSuccess: () => {
+            queryClient.invalidateQueries("inquilinos");
+            toast({
+                title: "Sucesso",
+                description: "Inquilinos excluídos com sucesso",
+                status: "success",
+                duration: 3000,
+            });
+        },
+    });
+
+    const onDeleteMany = () => {
+        deleteMany.mutate(JSON.stringify(selecionados));
+        setSelecionados([]);
+    };
     return (
         <>
             <Layout title="Inquilinos">
                 <Box p={5}>
-                    <Box bg="graylight" p={5}>
-                        <Grid
-                            gap={5}
-                            templateColumns={{
-                                sm: "repeat(1, 1fr)",
-                                md: "repeat(2, 1fr)",
-                                lg: "repeat(4, 1fr)",
-                            }}
-                        >
-                            <GridItem>
-                                <FormInput
-                                    label="Inquilino"
-                                    placeholder="digite o nome do inquilino..."
-                                    bg="white"
-                                    value={filtro.nome}
-                                    onChange={(e) =>
-                                        setFiltro({
-                                            ...filtro,
-                                            nome: e.target.value,
-                                        })
+                    <TabelaPadrao
+                        acoes={
+                            <>
+                                <Button
+                                    size="sm"
+                                    leftIcon={<FiTrash />}
+                                    colorScheme="red"
+                                    variant="outline"
+                                    disabled={
+                                        selecionados.length ? false : true
                                     }
-                                />
-                            </GridItem>
-                            <GridItem>
-                                <FormInput
-                                    label="CPF/CNPJ"
-                                    placeholder="digite o cpf ou cnpj..."
-                                    bg="white"
-                                    value={filtro.documento}
-                                    onChange={(e) =>
-                                        setFiltro({
-                                            ...filtro,
-                                            documento: e.target.value,
-                                        })
-                                    }
-                                />
-                            </GridItem>
-                            <GridItem>
-                                <FormInput
-                                    label="Contrato"
-                                    placeholder="digite o número do contrato..."
-                                    bg="white"
-                                />
-                            </GridItem>
-                            <GridItem>
-                                <FormInput
-                                    label="Telefone"
-                                    placeholder="digite um telefone..."
-                                    bg="white"
-                                    value={filtro.telefone}
-                                    onChange={(e) =>
-                                        setFiltro({
-                                            ...filtro,
-                                            telefone: e.target.value,
-                                        })
-                                    }
-                                />
-                            </GridItem>
-                        </Grid>
-                        <Box
-                            w="100%"
-                            mt={5}
-                            display="flex"
-                            gap={5}
-                            justifyContent="flex-end"
-                        >
-                            <Button
-                                size="md"
-                                bg="none"
-                                border="1px solid red"
-                                _hover={{
-                                    bg: "red",
-                                    color: "white",
-                                    cursor: "pointer",
-                                }}
-                                _focus={{ bg: "none" }}
-                                _active={{ bg: "none" }}
-                                color="red"
-                                onClick={() => {
-                                    setFiltro({
-                                        nome: "",
-                                        documento: "",
-                                        telefone: "",
-                                        filtro: "",
-                                    });
-                                }}
-                            >
-                                Limpar Filtro
-                            </Button>
-
-                            <Button
-                                size="md"
-                                bg="none"
-                                border="1px solid black"
-                                _hover={{
-                                    bg: "black",
-                                    color: "white",
-                                    cursor: "pointer",
-                                }}
-                                _focus={{ bg: "none" }}
-                                _active={{ bg: "none" }}
-                                color="black"
-                            >
-                                Filtrar
-                            </Button>
-                        </Box>
-                    </Box>
-
-                    <Box bg="graylight" overflowX="auto" p={5} mt={5}>
-                        <Box p={5} bg="white">
-                            <FormInput
-                                bg="white"
-                                w="max"
-                                placeholder="Busca rápida..."
-                                value={filtro.filtro}
-                                onChange={(e) =>
-                                    setFiltro({
-                                        ...filtro,
-                                        filtro: e.target.value,
-                                    })
-                                }
-                            />
-                        </Box>
-                        <Table size="sm" variant="striped" mt={5} bg="white">
-                            <Thead>
-                                <Tr>
-                                    <Th>Inquilino</Th>
-                                    <Th>CPF/CNPJ</Th>
-                                    <Th>Contrato</Th>
-                                    <Th>Fone</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {isLoading ? (
-                                    <Tr>
-                                        <Td colSpan={6} textAlign="center">
-                                            <Spinner />
-                                        </Td>
-                                    </Tr>
-                                ) : data && data.data.data.length > 0 ? (
-                                    data.data.data.map((item) => (
-                                        <Tr key={item.key}>
-                                            <Td>{item.nome}</Td>
-                                            <Td>{item.documento}</Td>
-                                            <Td>?</Td>
-                                            <Td>
-                                                {item.telefone} / {item.celular}
-                                            </Td>
-                                            <Td>
-                                                <IconButton
-                                                    as={MdPageview}
-                                                    color="bluelight"
-                                                    onClick={() =>
-                                                        modalinquilinos.current.onOpen(
-                                                            item.id
+                                    onClick={onDeleteMany}
+                                >
+                                    Excluir Selecionados
+                                </Button>
+                            </>
+                        }
+                        total={total}
+                        isLoading={isLoading}
+                        paginatorProps={{
+                            currentPage,
+                            pagesCount,
+                            setCurrentPage,
+                            pages,
+                            pageSize,
+                            setPageSize,
+                        }}
+                        head={[
+                            {
+                                value: (
+                                    <Checkbox
+                                        isChecked={
+                                            data?.data?.data
+                                                ?.map((item) => item.id)
+                                                .filter(
+                                                    (item) =>
+                                                        !selecionados.includes(
+                                                            item
                                                         )
-                                                    }
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    ))
-                                ) : (
-                                    <Tr>
-                                        <Td colSpan={6} textAlign="center">
-                                            Não há contratos cadastrados ou
-                                            resultados para o filtro selecionado
-                                        </Td>
-                                    </Tr>
-                                )}
-                            </Tbody>
-                        </Table>
-                        <Flex justify="center" py={4}>
-                            <Pagination
-                                pagesCount={pagesCount}
-                                currentPage={currentPage}
-                                onPageChange={setCurrentPage}
-                            >
-                                <PaginationContainer gridGap={4}>
-                                    <PaginationPrevious
-                                        as={IconButton}
-                                        icon={<Icon as={FiArrowLeft} />}
-                                    ></PaginationPrevious>
-                                    {/* <PaginationPageGroup gridGap={4}>
-                                        {pages.map((page: number) => (
-                                            <PaginationPage
-                                                key={`pagination_page_${page}`}
-                                                page={page}
-                                            />
-                                        ))}
-                                    </PaginationPageGroup> */}
-                                    <PaginationNext
-                                        as={IconButton}
-                                        icon={<Icon as={FiArrowRight} />}
-                                    ></PaginationNext>
-                                </PaginationContainer>
-                            </Pagination>
-                        </Flex>
-                    </Box>
+                                                ).length == 0
+                                                ? true
+                                                : false
+                                        }
+                                        onChange={(e) =>
+                                            setSelecionados(
+                                                e.target.checked
+                                                    ? JSON.parse(e.target.value)
+                                                    : []
+                                            )
+                                        }
+                                        value={JSON.stringify(
+                                            data?.data?.data?.map(
+                                                (item) => item.id
+                                            )
+                                        )}
+                                    />
+                                ),
+                                w: 12,
+                            },
+                            {
+                                value: "Ações",
+                                w: 12,
+                                textAlign: "center",
+                            },
+                            {
+                                value: "Inquilino",
+                            },
+                            {
+                                value: "CPF/CNPJ",
+                                w: 12,
+                            },
+                            {
+                                value: "Telefones",
+                            },
+                        ]}
+                        data={
+                            data?.data?.data?.length > 0
+                                ? data?.data?.data?.map((item, key) => [
+                                      {
+                                          value: (
+                                              <Checkbox
+                                                  isChecked={selecionados.includes(
+                                                      item.id
+                                                  )}
+                                                  onChange={(e) => {
+                                                      if (e.target.checked) {
+                                                          setSelecionados([
+                                                              ...selecionados,
+                                                              item.id,
+                                                          ]);
+                                                      } else {
+                                                          setSelecionados(
+                                                              selecionados.filter(
+                                                                  (i) =>
+                                                                      i !==
+                                                                      item.id
+                                                              )
+                                                          );
+                                                      }
+                                                  }}
+                                              />
+                                          ),
+                                      },
+                                      {
+                                          value: (
+                                              <Flex gap={2} justify="center">
+                                                  <IconButton
+                                                      size="sm"
+                                                      icon={<FiEye />}
+                                                      variant="ghost"
+                                                      colorScheme="blue"
+                                                      onClick={() =>
+                                                          modalinquilinos.current.onOpen(
+                                                              item.id
+                                                          )
+                                                      }
+                                                  />
+                                              </Flex>
+                                          ),
+                                      },
+                                      {
+                                          value: item.nome,
+                                      },
+                                      {
+                                          value: item.documento,
+                                      },
+                                      {
+                                          value: (
+                                              <>
+                                                  {item.telefone} /{" "}
+                                                  {item.celular}
+                                              </>
+                                          ),
+                                      },
+                                  ])
+                                : []
+                        }
+                        filtroAvancado={
+                            <>
+                                <GridItem>
+                                    <FormInput
+                                        label="Inquilino"
+                                        placeholder="digite o nome do inquilino..."
+                                        bg="white"
+                                        value={filtro.nome}
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                nome: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </GridItem>
+                                <GridItem>
+                                    <FormInput
+                                        label="CPF/CNPJ"
+                                        placeholder="digite o cpf ou cnpj..."
+                                        bg="white"
+                                        value={filtro.documento}
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                documento: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </GridItem>
+                                <GridItem>
+                                    <FormInput
+                                        label="Contrato"
+                                        placeholder="digite o número do contrato..."
+                                        bg="white"
+                                    />
+                                </GridItem>
+                                <GridItem>
+                                    <FormInput
+                                        label="Telefone"
+                                        placeholder="digite um telefone..."
+                                        bg="white"
+                                        value={filtro.telefone}
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                telefone: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </GridItem>
+                            </>
+                        }
+                    />
                 </Box>
 
                 <Usuario ref={modalinquilinos} />

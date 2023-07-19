@@ -69,6 +69,7 @@ const Imobiliarias = () => {
                     <Table variant="striped" size="sm">
                         <Thead>
                             <Tr>
+                                <Th>ID</Th>
                                 <Th w={24}>Conta</Th>
                                 <Th>Razão Social</Th>
                                 <Th w={12}>Código</Th>
@@ -80,6 +81,7 @@ const Imobiliarias = () => {
                             {imobiliarias && imobiliarias.length ? (
                                 imobiliarias.map((item, key) => (
                                     <Tr key={key}>
+                                        <Td>{item?.id}</Td>
                                         <Td>{item.conta?.nome}</Td>
                                         <Td>{item.razaoSocial}</Td>
                                         <Td>{item.codigo}</Td>

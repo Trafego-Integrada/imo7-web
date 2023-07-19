@@ -353,6 +353,9 @@ handle.post(async (req, res) => {
                     },
                 },
             },
+            include: {
+                imobiliaria: true,
+            },
         });
 
         const reguas = await prisma.reguaCobranca.findMany({
@@ -362,7 +365,11 @@ handle.post(async (req, res) => {
             },
         });
 
-        if (envia_email && reguas.length > 0) {
+        if (
+            reguas.length > 0 &&
+            boleto.envia_email == "1" &&
+            boleto.imobiliaria?.enviarEmail
+        ) {
             await Promise.all(
                 reguas.map(async (regua) => {
                     await prisma.filaEnvio.create({
@@ -380,6 +387,11 @@ handle.post(async (req, res) => {
                             previsaoEnvio: moment(data_vencimen)
                                 .subtract(regua.dias, "days")
                                 .format(),
+                            boleto: {
+                                connect: {
+                                    id: boleto?.id,
+                                },
+                            },
                         },
                     });
                 })

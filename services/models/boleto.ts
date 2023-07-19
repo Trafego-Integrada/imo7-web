@@ -25,6 +25,15 @@ export const excluirBoleto = async (id) => {
     return data;
 };
 
+export const excluirVariosBoletos = async (ids) => {
+    const { data } = await api.delete("boleto", {
+        params: {
+            ids,
+        },
+    });
+    return data;
+};
+
 export const buscarBoletoRapido = async (form) => {
     const { data } = await api.post("boleto/boletoRapido", form);
     return data;

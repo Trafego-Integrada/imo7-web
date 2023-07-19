@@ -3,9 +3,10 @@ import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
 import { Prisma } from "@prisma/client";
 import moment from "moment";
+import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 
-const handle = nextConnect();
+const handle = nextConnect<NextApiRequest, NextApiResponse>();
 
 handle.use(cors);
 handle.use(checkAuth);
@@ -212,11 +213,15 @@ handle.get(async (req, res) => {
                         data_vencimen: {
                             gte: dataVencimento[0]
                                 ? moment(dataVencimento[0])
+                                      .utc()
                                       .startOf("d")
                                       .format()
                                 : null,
                             lte: dataVencimento[1]
-                                ? moment(dataVencimento[1]).endOf("d").format()
+                                ? moment(dataVencimento[1])
+                                      .utc()
+                                      .endOf("d")
+                                      .format()
                                 : null,
                         },
                     },
@@ -232,10 +237,16 @@ handle.get(async (req, res) => {
                     {
                         createdAt: {
                             gte: dataCriacao[0]
-                                ? moment(dataCriacao[0]).startOf("d").format()
+                                ? moment(dataCriacao[0])
+                                      .utc()
+                                      .startOf("d")
+                                      .format()
                                 : null,
                             lte: dataCriacao[1]
-                                ? moment(dataCriacao[1]).endOf("d").format()
+                                ? moment(dataCriacao[1])
+                                      .utc()
+                                      .endOf("d")
+                                      .format()
                                 : null,
                         },
                     },
@@ -298,6 +309,7 @@ handle.get(async (req, res) => {
         const total = await prisma.boleto.count({
             where: {
                 ...filtroQuery,
+                deletedAt: null,
             },
         });
         res.send({
@@ -311,6 +323,33 @@ handle.get(async (req, res) => {
         res.status(500).send({
             success: false,
             message: error.message,
+        });
+    }
+});
+
+handle.delete(async (req, res) => {
+    try {
+        const { ids } = req.query;
+        let arrayIds = JSON.parse(ids);
+
+        if (!arrayIds.length) {
+            return res
+                .status(400)
+                .send({ success: false, message: "Nenhum id informado" });
+        }
+
+        await prisma.boleto.deleteMany({
+            where: {
+                id: {
+                    in: arrayIds,
+                },
+            },
+        });
+        return res.send({ success: true });
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error?.message,
         });
     }
 });

@@ -8,44 +8,44 @@ import { Prisma } from "@prisma/client";
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
 
 handle.get(async (req, res) => {
-    const {imobiliariaId,fiadores, proprietarios, inquilinos} = req.query
+    const { imobiliariaId, fiadores, proprietarios, inquilinos } = req.query;
 
-    let query:Prisma.UsuarioWhereInput ={}
+    let query: Prisma.UsuarioWhereInput = {};
 
-    if(imobiliariaId){
+    if (imobiliariaId) {
         query = {
             ...query,
-            imobiliariaId:Number(imobiliariaId)
-        }
+            imobiliariaId: Number(imobiliariaId),
+        };
     }
-    if(fiadores){
+    if (fiadores) {
         query = {
             ...query,
-            contratosFiador:{
-                some:{}
-            }
-        }
+            contratosFiador: {
+                some: {},
+            },
+        };
     }
-    if(inquilinos){
+    if (inquilinos) {
         query = {
             ...query,
-            contratosInquilino:{
-                some:{}
-            }
-        }
+            contratosInquilino: {
+                some: {},
+            },
+        };
     }
-    if(proprietarios){
+    if (proprietarios) {
         query = {
             ...query,
-            contratosProprietario:{
-                some:{}
-            }
-        }
+            contratosProprietario: {
+                some: {},
+            },
+        };
     }
     const data = await prisma.usuario.findMany({
-        where:{
-            ...query
-        }
+        where: {
+            ...query,
+        },
     });
     res.send(data);
 });
@@ -66,6 +66,8 @@ handle.post(async (req, res) => {
             estado,
             celular,
             telefone,
+            whatsapp,
+            naoEnviarWhatsapp,
         } = req.body;
 
         const usuarioExiste = await prisma.usuario.findFirst({
@@ -92,6 +94,8 @@ handle.post(async (req, res) => {
                     estado,
                     celular,
                     telefone,
+                    whatsapp,
+                    naoEnviarWhatsapp: naoEnviarWhatsapp == "1" ? true : false,
                     senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
                 },
             });

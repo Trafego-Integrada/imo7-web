@@ -1,16 +1,17 @@
 import { api } from "@/services/apiClient";
 
 export const listarValidacoesFaciais = async ({ queryKey }) => {
-
-    console.log("listarValidacoesFaciais")
+    console.log("listarValidacoesFaciais");
 
     try {
-         const { data } = await api.get("validacaoFacial", { params: queryKey[1] });
-         return data;
-    }catch(e) {
-        console.log("error")
-        console.log(e)
-        return null; 
+        const { data } = await api.get("validacaoFacial", {
+            params: queryKey[1],
+        });
+        return data;
+    } catch (e) {
+        console.log("error");
+        console.log(e);
+        return null;
     }
 };
 
@@ -19,10 +20,10 @@ export const buscarValidacoesFaciais = async (id) => {
     return data;
 };
 
-// export const cadastrarUsuario = async (form) => {
-//     const { data } = await api.post("usuario", form);
-//     return data;
-// };
+export const cadastrarValidacao = async (form) => {
+    const { data } = await api.post("validacaoFacial", form);
+    return data;
+};
 
 // export const atualizarUsuario = async ({ id, ...rest }) => {
 //     const { data } = await api.post("usuario/" + id, { ...rest });

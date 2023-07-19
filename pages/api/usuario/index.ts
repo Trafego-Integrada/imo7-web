@@ -162,7 +162,6 @@ handle.get(async (req, res) => {
                 status: JSON.parse(status),
             };
         }
-        console.log(filtroQuery);
         const data = await prisma.usuario.findMany({
             where: {
                 ...filtroQuery,
@@ -172,6 +171,7 @@ handle.get(async (req, res) => {
         const total = await prisma.usuario.count({
             where: {
                 ...filtroQuery,
+                deletedAt: null,
             },
         });
         res.send({
@@ -370,5 +370,30 @@ handle.post(async (req, res) => {
         });
     }
 });
+handle.delete(async (req, res) => {
+    try {
+        const { ids } = req.query;
+        let arrayIds = JSON.parse(ids);
 
+        if (!arrayIds.length) {
+            return res
+                .status(400)
+                .send({ success: false, message: "Nenhum id informado" });
+        }
+
+        await prisma.usuario.deleteMany({
+            where: {
+                id: {
+                    in: arrayIds,
+                },
+            },
+        });
+        return res.send({ success: true });
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error?.message,
+        });
+    }
+});
 export default handle;

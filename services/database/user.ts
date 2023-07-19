@@ -7,7 +7,6 @@ export async function getUsers() {
 }
 
 export async function getUser({ documento, imobiliaria }: GetUserProps) {
-    console.log(documento, imobiliaria);
     const user = await prisma.usuario.findFirst({
         where: {
             OR: [

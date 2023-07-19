@@ -1,20 +1,14 @@
 import { Tag } from "@chakra-ui/react";
+import moment from "moment";
 
 export const formatoData = (data, tipo = "DATA") => {
     switch (tipo) {
         case "DATA":
-            return Intl.DateTimeFormat("pt-BR", { dateStyle: "short" }).format(
-                new Date(data)
-            );
+            return moment(data).utc().format("DD/MM/YYYY");
         case "DATA_HORA":
-            return Intl.DateTimeFormat("pt-BR", {
-                dateStyle: "short",
-                timeStyle: "short",
-            }).format(new Date(data));
+            return moment(data).utc().format("DD/MM/YYYY HH:mm:ss");
         default:
-            return Intl.DateTimeFormat("pt-BR", { dateStyle: "medium" }).format(
-                new Date(data)
-            );
+            return moment(data).utc().format("DD [de] MMMM [de] YYYY");
     }
 };
 
@@ -142,3 +136,6 @@ export const arrayStatusFicha = [
         value: "arquivada",
     },
 ];
+export function removerCaracteresEspeciais(string) {
+    return string.replace(/[^a-zA-Z0-9]/g, "");
+}

@@ -18,6 +18,7 @@ import {
     Checkbox,
     Grid,
     GridItem,
+    Heading,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -49,7 +50,6 @@ import * as yup from "yup";
 const schema = yup.object({
     nome: yup.string().required("Campo Obrigatório"),
     documento: yup.string().required("Campo Obrigatório"),
-    email: yup.string().required("Campo Obrigatório"),
     senha: yup.string(),
     confirmarSenha: yup
         .string()
@@ -136,7 +136,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                 <ModalContent minW="60%">
                     <ModalCloseButton />
                     <ModalBody>
-                        <Tabs variant="unstyled">
+                        <Tabs variant="solid-rounded" size="sm">
                             <TabList>
                                 <Tab>Dados</Tab>
                                 {watch('cargos')?.find(i =>  i=='imobiliaria' || i=='conta'|| i=='adm') &&<Tab>Permissões</Tab>}
@@ -160,7 +160,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                     : true
                                             }
                                         >
-                                            Contratos (Inquilino)
+                                            Contratos (Proprietário)
                                         </Tab>
                                         <Tab
                                             hidden={
@@ -170,7 +170,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                     : true
                                             }
                                         >
-                                            Contratos (Inquilino)
+                                            Contratos (Fiador)
                                         </Tab>
                                     </>
                                 )}
@@ -178,7 +178,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                             <TabPanels>
                                 <TabPanel>
                                     <Grid
-                                        gap={5}
+                                        gap={4}
                                         templateColumns={{
                                             sm: "repeat(1, 1fr)",
                                             md: "repeat(2, 1fr)",
@@ -189,7 +189,8 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                         onSubmit={handleSubmit(onSubmit)}
                                     >
                                         <GridItem>
-                                            <FormInput
+                                            <FormInput 
+                                                size="sm"
                                                 label="Nome"
                                                 placeholder="..."
                                                 {...register("nome")}
@@ -198,6 +199,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
+                                                size="sm"
                                                 label="CPF"
                                                 placeholder="..."
                                                 {...register("documento")}
@@ -208,7 +210,8 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
-                                                label="Email"
+                                                size="sm"
+                                                label="E-mail"
                                                 placeholder="..."
                                                 {...register("email")}
                                                 error={errors.email?.message}
@@ -216,7 +219,8 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
-                                                label="telefone"
+                                                size="sm"
+                                                label="Telefone"
                                                 placeholder="..."
                                                 {...register("telefone")}
                                                 error={errors.telefone?.message}
@@ -224,7 +228,8 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
-                                                label="celular"
+                                                size="sm"
+                                                label="Celular"
                                                 placeholder="..."
                                                 {...register("celular")}
                                                 error={errors.celular?.message}
@@ -232,27 +237,29 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                         </GridItem>
                                         <GridItem>
                                             <FormInput
-                                                type="password"
-                                                label="Senha"
+                                                size="sm"
+                                                label="Whatsapp"
                                                 placeholder="..."
-                                                {...register("senha")}
-                                                error={errors.senha?.message}
-                                                autocomplete="new-password"
+                                                {...register("whatsapp")}
+                                                error={errors.whatsapp?.message}
                                             />
                                         </GridItem>
                                         <GridItem>
-                                            <FormInput
-                                                type="password"
-                                                label="Confirmar senha"
+                                            <Switch
+                                                size="sm"
+                                                label="naoEnviarWhatsapp"
                                                 placeholder="..."
-                                                {...register("confirmarSenha")}
+                                                {...register("naoEnviarWhatsapp")}
                                                 error={
-                                                    errors.confirmarSenha
+                                                    errors.naoEnviarWhatsapp
                                                         ?.message
                                                 }
-                                            />
-                                        </GridItem><GridItem>
+                                            >Não enviar whatsapp</Switch>
+                                        </GridItem>
+                                        
+                                        <GridItem>
                                             <Switch
+                                                size="sm"
                                                 label="Status"
                                                 placeholder="..."
                                                 {...register("status")}
@@ -263,6 +270,40 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                             >Ativo</Switch>
                                         </GridItem>
                                     </Grid>
+                                    <Box  mt={4}>
+                                        <Heading size="sm" mb={4} color="gray">Atualizar senha</Heading>
+                                        <Grid gap={5}
+                                        templateColumns={{
+                                            sm: "repeat(1, 1fr)",
+                                            md: "repeat(2, 1fr)",
+                                            lg: "repeat(3, 1fr)",
+                                        }}>
+                                        <GridItem>
+                                            <FormInput
+                                                size="sm"
+                                                type="password"
+                                                label="Senha"
+                                                placeholder="..."
+                                                {...register("senha")}
+                                                error={errors.senha?.message}
+                                                autocomplete="new-password"
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <FormInput
+                                                size="sm"
+                                                type="password"
+                                                label="Confirmar senha"
+                                                placeholder="..."
+                                                {...register("confirmarSenha")}
+                                                error={
+                                                    errors.confirmarSenha
+                                                        ?.message
+                                                }
+                                            />
+                                        </GridItem>
+                                    </Grid>
+                                    </Box>
                                 </TabPanel>
                                 {watch('cargos')?.find(i => i=='imobiliaria' || i=='conta'|| i=='adm') &&<TabPanel>
                                     <Accordion allowMultiple>
@@ -898,13 +939,12 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                         </Tabs>
                     </ModalBody>
 
-                    <ModalFooter>
-                        <Button variant="ghost" onClick={onClose}>
+                    <ModalFooter gap={4}>
+                        <Button size="sm" variant="ghost" onClick={onClose}>
                             Fechar
                         </Button>
-                        <Button
+                        <Button size="sm"
                             colorScheme="blue"
-                            mr={3}
                             type="submit"
                             isLoading={isSubmitting}
                             form="formUsuario"

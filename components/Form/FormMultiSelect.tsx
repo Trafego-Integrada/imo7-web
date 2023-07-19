@@ -1,27 +1,17 @@
 import {
-    Button,
     FormControl,
     FormErrorIcon,
     FormErrorMessage,
     FormHelperText,
     FormLabel,
-    Icon,
-    Input,
-    InputGroup,
     InputLeftAddon,
     InputLeftElement,
     InputRightAddon,
     InputRightElement,
 } from "@chakra-ui/react";
-import { forwardRef, useState } from "react";
-import { css } from "@emotion/react";
-import {
-    AsyncCreatableSelect,
-    AsyncSelect,
-    CreatableSelect,
-    Select,
-} from "chakra-react-select";
+import { CreatableSelect, Select } from "chakra-react-select";
 import { useRouter } from "next/router";
+import { forwardRef, useState } from "react";
 
 const InputBase = (
     {
@@ -36,7 +26,6 @@ const InputBase = (
         children,
         rightElementWidth,
         placeholder,
-        size,
         ...rest
     },
     ref
@@ -45,53 +34,39 @@ const InputBase = (
     const handleClick = () => setShow(!show);
     const router = useRouter();
     return (
-        <FormControl isInvalid={error ? true : false} size={size} {...rest}>
-            {label && <FormLabel fontSize={size}>{label}</FormLabel>}
-            <InputGroup size={size}>
-                {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
-                {leftElement && (
-                    <InputLeftElement>{leftElement}</InputLeftElement>
-                )}
-                {create ? (
-                    <CreatableSelect
-                        ref={ref}
-                        size={size}
-                        placeholder={
-                            placeholder ? placeholder : "Selecione...."
-                        }
-                        {...rest}
-                        chakraStyles={{
-                            container: (_, { selectProps: { width } }) => ({
-                                width: "full",
-                            }),
-                        }}
-                    />
-                ) : (
-                    <Select
-                        ref={ref}
-                        size={size}
-                        placeholder={
-                            placeholder ? placeholder : "Selecione...."
-                        }
-                        {...rest}
-                        chakraStyles={{
-                            container: (_, { selectProps: { width } }) => ({
-                                width: "full",
-                            }),
-                        }}
-                    />
-                )}
-                {rightAddon && (
-                    <InputRightAddon {...rightAddon.props}>
-                        {rightAddon}
-                    </InputRightAddon>
-                )}
-                {rightElement && (
-                    <InputRightElement width={rightElementWidth}>
-                        {rightElement}
-                    </InputRightElement>
-                )}
-            </InputGroup>
+        <FormControl isInvalid={error ? true : false} pos="relative">
+            {label && <FormLabel>{label}</FormLabel>}
+            {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
+            {leftElement && <InputLeftElement>{leftElement}</InputLeftElement>}
+            {create ? (
+                <CreatableSelect
+                    ref={ref}
+                    placeholder={placeholder ? placeholder : "Selecione..."}
+                    chakraStyles={{
+                        container: (_, { selectProps: { width } }) => ({
+                            width: "full",
+                        }),
+                    }}
+                    {...rest}
+                />
+            ) : (
+                <Select
+                    ref={ref}
+                    placeholder={placeholder ? placeholder : "Selecione..."}
+                    chakraStyles={{
+                        container: () => ({
+                            width: "full",
+                        }),
+                    }}
+                    {...rest}
+                />
+            )}
+            {rightAddon && <InputRightAddon>{rightAddon}</InputRightAddon>}
+            {rightElement && (
+                <InputRightElement width={rightElementWidth}>
+                    {rightElement}
+                </InputRightElement>
+            )}
             {error && (
                 <FormErrorMessage>
                     <FormErrorIcon />

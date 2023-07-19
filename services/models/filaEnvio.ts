@@ -26,3 +26,12 @@ export const excluirFilaEnvio = async (id) => {
     const { data } = await api.delete("filaEnvio/" + id);
     return data;
 };
+
+export const excluirVariosFilaEnvio = async (ids) => {
+    const { data } = await api.delete("filaEnvio", {
+        params: {
+            ids,
+        },
+    });
+    return data;
+};

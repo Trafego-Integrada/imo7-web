@@ -74,13 +74,6 @@ const menu = [
                 cargos: ["imobiliaria"],
                 modulos: ["imobiliaria.cobrancas"],
             },
-            {
-                titulo: "Validações Faciais",
-                href: "/admin/validacoesfaciais",
-                icon: HiOutlineDocumentText,
-                cargos: ["imobiliaria"],
-                modulos: ["imobiliaria.validacoesfaciais"],
-            },
         ],
     },
     {
@@ -112,11 +105,25 @@ const menu = [
         modulos: ["imobiliaria.fichas"],
         subMenus: [
             {
+                titulo: "Fichas",
+                href: "/admin/fichas",
+                icon: TbForms,
+                cargos: ["imobiliaria"],
+                modulos: ["imobiliaria.fichas"],
+            },
+            {
                 titulo: "Fichas Excluídas",
                 href: "/admin/fichas/excluidas",
                 icon: HiOutlineDocumentText,
                 cargos: ["imobiliaria"],
                 modulos: ["imobiliaria.fichas.excluidas"],
+            },
+            {
+                titulo: "Validações Faciais",
+                href: "/admin/validacoesfaciais",
+                icon: HiOutlineDocumentText,
+                cargos: ["imobiliaria"],
+                modulos: ["imobiliaria.validacoesfaciais"],
             },
         ],
     },
