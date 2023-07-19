@@ -234,7 +234,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
         const capture = React.useCallback(() => {
             const imageSrc = webcamRef.current.getScreenshot({
                 width: 1280,
-                height: 960,
+                height: 1280,
             });
             setPhoto(imageSrc);
         }, [webcamRef]);
