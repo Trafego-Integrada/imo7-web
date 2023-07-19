@@ -313,9 +313,9 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                             {photo == null && (
                                                 <>
                                                     <Webcam
-                                                        forceScreenshotSourceSize={
-                                                            true
-                                                        }
+                                                        // forceScreenshotSourceSize={
+                                                        //     true
+                                                        // }
                                                         mirrored={true}
                                                         screenshotFormat="image/jpeg"
                                                         ref={webcamRef}
