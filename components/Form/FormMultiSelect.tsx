@@ -4,6 +4,7 @@ import {
     FormErrorMessage,
     FormHelperText,
     FormLabel,
+    InputGroup,
     InputLeftAddon,
     InputLeftElement,
     InputRightAddon,
@@ -36,37 +37,51 @@ const InputBase = (
     return (
         <FormControl isInvalid={error ? true : false} pos="relative">
             {label && <FormLabel>{label}</FormLabel>}
-            {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
-            {leftElement && <InputLeftElement>{leftElement}</InputLeftElement>}
-            {create ? (
-                <CreatableSelect
-                    ref={ref}
-                    placeholder={placeholder ? placeholder : "Selecione..."}
-                    chakraStyles={{
-                        container: (_, { selectProps: { width } }) => ({
-                            width: "full",
-                        }),
-                    }}
-                    {...rest}
-                />
-            ) : (
-                <Select
-                    ref={ref}
-                    placeholder={placeholder ? placeholder : "Selecione..."}
-                    chakraStyles={{
-                        container: () => ({
-                            width: "full",
-                        }),
-                    }}
-                    {...rest}
-                />
-            )}
-            {rightAddon && <InputRightAddon>{rightAddon}</InputRightAddon>}
-            {rightElement && (
-                <InputRightElement width={rightElementWidth}>
-                    {rightElement}
-                </InputRightElement>
-            )}
+            <InputGroup size={rest.size}>
+                {leftAddon && (
+                    <InputLeftAddon {...leftAddon.props}>
+                        {leftAddon}
+                    </InputLeftAddon>
+                )}
+                {leftElement && (
+                    <InputLeftElement {...leftElement.props}>
+                        {leftElement}
+                    </InputLeftElement>
+                )}
+                {create ? (
+                    <CreatableSelect
+                        ref={ref}
+                        placeholder={placeholder ? placeholder : "Selecione..."}
+                        chakraStyles={{
+                            container: (_, { selectProps: { width } }) => ({
+                                width: "full",
+                            }),
+                        }}
+                        {...rest}
+                    />
+                ) : (
+                    <Select
+                        ref={ref}
+                        placeholder={placeholder ? placeholder : "Selecione..."}
+                        chakraStyles={{
+                            container: () => ({
+                                width: "full",
+                            }),
+                        }}
+                        {...rest}
+                    />
+                )}
+                {rightAddon && (
+                    <InputRightAddon {...rightAddon.props}>
+                        {rightAddon}
+                    </InputRightAddon>
+                )}
+                {rightElement && (
+                    <InputRightElement {...rightElement.props}>
+                        {rightElement}
+                    </InputRightElement>
+                )}
+            </InputGroup>
             {error && (
                 <FormErrorMessage>
                     <FormErrorIcon />

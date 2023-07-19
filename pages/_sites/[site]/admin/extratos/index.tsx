@@ -77,6 +77,9 @@ const Cobrancas = () => {
                 dataVencimento: filtro.dataVencimento[0]
                     ? JSON.stringify(filtro.dataVencimento)
                     : null,
+                dataDeposito: filtro.dataDeposito[0]
+                    ? JSON.stringify(filtro.dataDeposito)
+                    : null,
                 dataCriacao: filtro.dataCriacao[0]
                     ? JSON.stringify(filtro.dataCriacao)
                     : null,

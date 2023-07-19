@@ -49,7 +49,7 @@ handle.get(async (req, res) => {
                         },
                     },
                     {
-                        data_vencimen: {
+                        vencimento: {
                             contains: query,
                         },
                     },
@@ -208,7 +208,7 @@ handle.get(async (req, res) => {
                 AND: [
                     ...filtroQuery.AND,
                     {
-                        data_vencimen: {
+                        vencimento: {
                             gte: dataVencimento[0]
                                 ? moment(dataVencimento[0])
                                       .utc()

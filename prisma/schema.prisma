@@ -76,8 +76,7 @@ model Usuario {
     tarefasMembro         Tarefa[]                 @relation("MembrosTarefa")
     HistoricoChamado      HistoricoChamado[]
     Orcamento             Orcamento[]
-    DepartamentoChamado   DepartamentoChamado?     @relation(fields: [departamentoChamadoId], references: [id])
-    departamentoChamadoId Int?
+    DepartamentoChamado   DepartamentoChamado[]
     Tarefa                Tarefa[]
     Notificacao           Notificacao[]
     anexosPermitidos      Anexo[]                  @relation("AnexosPermitidos")
