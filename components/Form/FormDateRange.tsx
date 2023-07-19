@@ -38,6 +38,7 @@ const InputBase = (
             isInvalid={error}
             isRequired={required}
             size={size}
+            zIndex="dropdown"
             {...rest}
         >
             {label && <FormLabel fontSize={size}>{label}</FormLabel>}
@@ -56,6 +57,7 @@ const InputBase = (
                     dateFormat="dd/MM/yyyy"
                     isClearable={true}
                     size={size}
+                    zIndex="dropdown"
                     {...rest}
                 />
 
