@@ -326,6 +326,11 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         minScreenshotHeight={
                                                             960
                                                         }
+                                                        videoConstraints={{
+                                                            width: 1280,
+                                                            height: 720,
+                                                            facingMode: "user",
+                                                        }}
                                                         style={
                                                             {
                                                                 // position: "absolute",
