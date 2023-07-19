@@ -28,7 +28,7 @@ import {
 import { FormInput } from "@/components/Form/FormInput";
 import prisma from "@/lib/prisma";
 
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
 import { withSSRGuest } from "@/utils/withSSRGuests";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -191,46 +191,46 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
     if (typeof window === "undefined") {
         return <div>Loading...</div>;
     } else {
-        const { webcamRef, boundingBox, isLoading, detected, facesDetected } =
-            useFaceDetection({
-                faceDetectionOptions: {
-                    model: "short",
-                },
-                // handleOnResults: (res) => {
-                // console.log(res)
-                // console.log(res.detections.length)
-                // if detect 1 face
-                // if(res.detections.length == 1) {
-                // check position
-                // "detections": [
-                //     {
-                //         "boundingBox": {
-                //             "xCenter": 0.47900864481925964,
-                //             "yCenter": 0.6954250335693359,
-                //             "height": 0.42745697498321533,
-                //             "width": 0.3206149935722351,
-                //             "rotation": 0,
-                //             "rectId": 0
-                //         },
-                // if(res.detections.boundingBox.xCenter) {}
-                // if(res.detections.boundingBox.yCenter) {}
-                // if(res.detections.boundingBox.height) {}
-                // if(res.detections.boundingBox.width) {}
-                // take foto
-                // call capture
-                // redirect to next step
-                // location.href = "http://www.google.com.br";
-                // }
-                // },
-                // faceDetection: new FaceDetection.FaceDetection({
-                //      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
-                // }) ,
-                camera: ({ mediaSrc, onFrame }: CameraOptions) =>
-                    new Camera(mediaSrc, {
-                        onFrame,
-                    }),
-            });
-
+        // const { webcamRef, boundingBox, isLoading, detected, facesDetected } =
+        //     useFaceDetection({
+        //         faceDetectionOptions: {
+        //             model: "short",
+        //         },
+        //         // handleOnResults: (res) => {
+        //         // console.log(res)
+        //         // console.log(res.detections.length)
+        //         // if detect 1 face
+        //         // if(res.detections.length == 1) {
+        //         // check position
+        //         // "detections": [
+        //         //     {
+        //         //         "boundingBox": {
+        //         //             "xCenter": 0.47900864481925964,
+        //         //             "yCenter": 0.6954250335693359,
+        //         //             "height": 0.42745697498321533,
+        //         //             "width": 0.3206149935722351,
+        //         //             "rotation": 0,
+        //         //             "rectId": 0
+        //         //         },
+        //         // if(res.detections.boundingBox.xCenter) {}
+        //         // if(res.detections.boundingBox.yCenter) {}
+        //         // if(res.detections.boundingBox.height) {}
+        //         // if(res.detections.boundingBox.width) {}
+        //         // take foto
+        //         // call capture
+        //         // redirect to next step
+        //         // location.href = "http://www.google.com.br";
+        //         // }
+        //         // },
+        //         // faceDetection: new FaceDetection.FaceDetection({
+        //         //      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
+        //         // }) ,
+        //         camera: ({ mediaSrc, onFrame }: CameraOptions) =>
+        //             new Camera(mediaSrc, {
+        //                 onFrame,
+        //             }),
+        //     });
+        const webcamRef = Reactl.useRef(null);
         const capture = React.useCallback(() => {
             const imageSrc = webcamRef.current.getScreenshot();
             setPhoto(imageSrc);
