@@ -127,7 +127,10 @@ const ModalBase = ({}, ref) => {
                                 <Text fontSize="sm">Data de Vencimento</Text>
                                 <Text fontWeight="bold">
                                     {watch("data_vencimen") &&
-                                        formatoData(watch("data_vencimen"))}
+                                        formatoData(
+                                            watch("data_vencimen"),
+                                            false
+                                        )}
                                 </Text>
                             </GridItem>
                             <GridItem>

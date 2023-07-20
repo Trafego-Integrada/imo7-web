@@ -230,7 +230,8 @@ const ModalBase = ({}, ref) => {
                                                 <Text>
                                                     {watch("dataInicio") &&
                                                         formatoData(
-                                                            watch("dataInicio")
+                                                            watch("dataInicio"),
+                                                            false
                                                         )}
                                                 </Text>
                                             </Box>
@@ -243,7 +244,9 @@ const ModalBase = ({}, ref) => {
                                                 <Text>
                                                     {watch("dataFim") &&
                                                         formatoData(
-                                                            watch("dataFim")
+                                                            watch("dataFim"),
+                                                            "DATA",
+                                                            false
                                                         )}
                                                 </Text>
                                             </Box>
@@ -277,7 +280,8 @@ const ModalBase = ({}, ref) => {
                                                         formatoData(
                                                             watch(
                                                                 "dataReajuste"
-                                                            )
+                                                            ),
+                                                            false
                                                         )}
                                                 </Text>
                                             </Box>

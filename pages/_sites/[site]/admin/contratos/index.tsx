@@ -243,14 +243,19 @@ const Home = () => {
 
                                   {
                                       value: item.dataInicio
-                                          ? formatoData(item.dataInicio, "DATA")
+                                          ? formatoData(
+                                                item.dataInicio,
+                                                "DATA",
+                                                false
+                                            )
                                           : "Não informada",
                                   },
                                   {
                                       value: item.dataReajuste
                                           ? formatoData(
                                                 item.dataReajuste,
-                                                "DATA"
+                                                "DATA",
+                                                false
                                             )
                                           : "Não informada",
                                   },
