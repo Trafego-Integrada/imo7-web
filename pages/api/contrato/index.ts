@@ -33,9 +33,7 @@ handle.get(async (req, res) => {
             dataCriacao,
             imobiliariaId,
         } = req.query;
-        let filtroQuery: Prisma.ContratoWhereInput = {
-            
-        };
+        let filtroQuery: Prisma.ContratoWhereInput = {};
         imobiliariaId = req.user.imobiliariaId
             ? req.user.imobiliariaId
             : Number(imobiliariaId);
@@ -104,11 +102,11 @@ handle.get(async (req, res) => {
             };
         }
         if (vencimento) {
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -120,11 +118,11 @@ handle.get(async (req, res) => {
         }
         if (dataReajuste) {
             dataReajuste = JSON.parse(dataReajuste);
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -144,12 +142,12 @@ handle.get(async (req, res) => {
             };
         }
         if (dataInicio) {
-            dataInicio = JSON.parse(dataInicio); 
-            if(!filtroQuery.AND){
-                filtroQuery={
+            dataInicio = JSON.parse(dataInicio);
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -170,11 +168,11 @@ handle.get(async (req, res) => {
         }
         if (dataFim) {
             dataFim = JSON.parse(dataFim);
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -195,11 +193,11 @@ handle.get(async (req, res) => {
         }
         if (dataCriacao) {
             dataCriacao = JSON.parse(dataCriacao);
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -219,11 +217,11 @@ handle.get(async (req, res) => {
             };
         }
         if (proprietario) {
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -242,11 +240,11 @@ handle.get(async (req, res) => {
             };
         }
         if (inquilino) {
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -265,11 +263,11 @@ handle.get(async (req, res) => {
             };
         }
         if (fiador) {
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -288,11 +286,11 @@ handle.get(async (req, res) => {
             };
         }
         if (endereco) {
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -309,11 +307,11 @@ handle.get(async (req, res) => {
             };
         }
         if (numero) {
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -330,11 +328,11 @@ handle.get(async (req, res) => {
             };
         }
         if (bairro) {
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -351,11 +349,11 @@ handle.get(async (req, res) => {
             };
         }
         if (cidade) {
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -372,11 +370,11 @@ handle.get(async (req, res) => {
             };
         }
         if (estado) {
-            if(!filtroQuery.AND){
-                filtroQuery={
+            if (!filtroQuery.AND) {
+                filtroQuery = {
                     ...filtroQuery,
-                    AND:[]
-                }
+                    AND: [],
+                };
             }
             filtroQuery = {
                 ...filtroQuery,
@@ -393,7 +391,6 @@ handle.get(async (req, res) => {
             };
         }
         if (proprietarioId) {
-            
             filtroQuery = {
                 ...filtroQuery,
                 OR: [
@@ -478,5 +475,30 @@ handle.get(async (req, res) => {
         });
     }
 });
+handle.delete(async (req, res) => {
+    try {
+        const { ids } = req.query;
+        let arrayIds = JSON.parse(ids);
 
+        if (!arrayIds.length) {
+            return res
+                .status(400)
+                .send({ success: false, message: "Nenhum id informado" });
+        }
+
+        await prisma.contrato.deleteMany({
+            where: {
+                id: {
+                    in: arrayIds,
+                },
+            },
+        });
+        return res.send({ success: true });
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error?.message,
+        });
+    }
+});
 export default handle;

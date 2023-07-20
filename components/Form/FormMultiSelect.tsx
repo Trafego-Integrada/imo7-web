@@ -27,6 +27,7 @@ const InputBase = (
         children,
         rightElementWidth,
         placeholder,
+        size,
         ...rest
     },
     ref
@@ -35,9 +36,15 @@ const InputBase = (
     const handleClick = () => setShow(!show);
     const router = useRouter();
     return (
-        <FormControl isInvalid={error ? true : false} pos="relative">
+        <FormControl
+            isInvalid={error ? true : false}
+            size={size}
+            {...rest}
+            pos="relative"
+            zIndex="dropdown"
+        >
             {label && <FormLabel>{label}</FormLabel>}
-            <InputGroup size={rest.size}>
+            <InputGroup size={size}>
                 {leftAddon && (
                     <InputLeftAddon {...leftAddon.props}>
                         {leftAddon}
@@ -66,6 +73,7 @@ const InputBase = (
                         chakraStyles={{
                             container: () => ({
                                 width: "full",
+                                zIndex: "dropdown",
                             }),
                         }}
                         {...rest}

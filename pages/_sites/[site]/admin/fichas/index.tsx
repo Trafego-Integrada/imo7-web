@@ -413,17 +413,31 @@ const FichasCadastrais = () => {
                                                                         : ""
                                                                 }
                                                             >
-                                                                {Number(
-                                                                    (item.preenchimento.filter(
-                                                                        (i) =>
-                                                                            i.valor
-                                                                    ).length /
-                                                                        item
-                                                                            .preenchimento
-                                                                            .length) *
-                                                                        100
-                                                                ).toFixed(2)}
-                                                                % preenchida
+                                                                {item.preenchimento.filter(
+                                                                    (i) =>
+                                                                        i.valor
+                                                                ).length
+                                                                    ? Number(
+                                                                          (item.preenchimento.filter(
+                                                                              (
+                                                                                  i
+                                                                              ) =>
+                                                                                  i.valor
+                                                                          )
+                                                                              .length /
+                                                                              item
+                                                                                  .preenchimento
+                                                                                  .length) *
+                                                                              100
+                                                                      ).toFixed(
+                                                                          2
+                                                                      )
+                                                                    : Number(
+                                                                          0
+                                                                      ).toFixed(
+                                                                          2
+                                                                      )}
+                                                                % preenchida {}
                                                             </Text>
                                                         </Flex>
                                                     </Box>

@@ -25,6 +25,14 @@ export const excluirContrato = async (id) => {
     return data;
 };
 
+export const excluirVariosContratos = async (ids) => {
+    const { data } = await api.delete("contrato", {
+        params: {
+            ids,
+        },
+    });
+    return data;
+};
 export const listarParticipantesContratos = async ({ queryKey }) => {
     const { data } = await api.get(
         "contrato/" + queryKey[1].contratoId + "/participante",

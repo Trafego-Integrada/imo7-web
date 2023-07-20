@@ -297,6 +297,17 @@ handle.post(async (req, res) => {
                                 id: req.user.id,
                             },
                         },
+                        usuariosPermitidos: usuariosPermitidos
+                            ? {
+                                  connect: JSON.parse(usuariosPermitidos).map(
+                                      (item) => {
+                                          return {
+                                              id: item.id,
+                                          };
+                                      }
+                                  ),
+                              }
+                            : {},
                     },
                 });
                 if (conversaId && chamadoId) {

@@ -256,12 +256,20 @@ const Cobrancas = () => {
                                       },
                                       {
                                           value: item.vencimento
-                                              ? formatoData(item.vencimento)
+                                              ? formatoData(
+                                                    item.vencimento,
+                                                    "DATA",
+                                                    false
+                                                )
                                               : "Não informada",
                                       },
                                       {
                                           value: item.dataDeposito
-                                              ? formatoData(item.dataDeposito)
+                                              ? formatoData(
+                                                    item.dataDeposito,
+                                                    "DATA",
+                                                    false
+                                                )
                                               : "Não informada",
                                       },
                                       {

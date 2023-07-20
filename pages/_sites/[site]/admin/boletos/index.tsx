@@ -256,7 +256,9 @@ const Cobrancas = () => {
                                       },
                                       {
                                           value: formatoData(
-                                              item.data_vencimen
+                                              item.data_vencimen,
+                                              "DATA",
+                                              false
                                           ),
                                       },
                                       {

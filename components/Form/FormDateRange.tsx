@@ -57,7 +57,6 @@ const InputBase = (
                     dateFormat="dd/MM/yyyy"
                     isClearable={true}
                     size={size}
-                    zIndex="dropdown"
                     {...rest}
                 />
 

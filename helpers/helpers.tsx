@@ -1,14 +1,14 @@
 import { Tag } from "@chakra-ui/react";
 import moment from "moment";
 
-export const formatoData = (data, tipo = "DATA") => {
+export const formatoData = (data, tipo = "DATA", utc = true) => {
     switch (tipo) {
         case "DATA":
-            return moment(data).utc().format("DD/MM/YYYY");
+            return moment(data).utc(utc).format("DD/MM/YYYY");
         case "DATA_HORA":
-            return moment(data).utc().format("DD/MM/YYYY HH:mm:ss");
+            return moment(data).utc(utc).format("DD/MM/YYYY HH:mm:ss");
         default:
-            return moment(data).utc().format("DD [de] MMMM [de] YYYY");
+            return moment(data).utc(utc).format("DD [de] MMMM [de] YYYY");
     }
 };
 

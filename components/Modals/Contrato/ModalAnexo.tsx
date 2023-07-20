@@ -103,14 +103,13 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
     };
     useImperativeHandle(ref, () => ({
         onOpen: async (id = null) => {
+            reset({});
+            setNome("");
+            setFile([]);
             if (id) {
                 buscar.mutate(id);
-                setNome("");
-                setFile([]);
                 onOpen();
             } else {
-                setNome("");
-                setFile([]);
                 onOpen();
             }
         },
