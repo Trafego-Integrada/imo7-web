@@ -203,6 +203,16 @@ const ModalBase = ({}, ref) => {
                                             md: "repeat(2, 1fr)",
                                             lg: "repeat(3, 1fr)",
                                         }}
+                                    ></Grid>
+
+                                    <Title children="Gerais" />
+                                    <Grid
+                                        gap={5}
+                                        templateColumns={{
+                                            sm: "repeat(1, 1fr)",
+                                            md: "repeat(2, 1fr)",
+                                            lg: "repeat(3, 1fr)",
+                                        }}
                                     >
                                         <GridItem>
                                             <Box>
@@ -212,7 +222,19 @@ const ModalBase = ({}, ref) => {
                                                 <Text>{watch("codigo")}</Text>
                                             </Box>
                                         </GridItem>
-
+                                        <GridItem>
+                                            <Box>
+                                                <Text fontSize="sm">
+                                                    Data de Início
+                                                </Text>
+                                                <Text>
+                                                    {watch("dataInicio") &&
+                                                        formatoData(
+                                                            watch("dataInicio")
+                                                        )}
+                                                </Text>
+                                            </Box>
+                                        </GridItem>
                                         <GridItem>
                                             <Box>
                                                 <Text fontSize="sm">
@@ -237,17 +259,6 @@ const ModalBase = ({}, ref) => {
                                                 </Text>
                                             </Box>
                                         </GridItem>
-                                    </Grid>
-
-                                    <Title children="Gerais" />
-                                    <Grid
-                                        gap={5}
-                                        templateColumns={{
-                                            sm: "repeat(1, 1fr)",
-                                            md: "repeat(2, 1fr)",
-                                            lg: "repeat(3, 1fr)",
-                                        }}
-                                    >
                                         <GridItem>
                                             <Box>
                                                 <Text fontSize="sm">
@@ -259,12 +270,14 @@ const ModalBase = ({}, ref) => {
                                         <GridItem>
                                             <Box>
                                                 <Text fontSize="sm">
-                                                    Data de Início
+                                                    Data Reajuste
                                                 </Text>
                                                 <Text>
-                                                    {watch("dataInicio") &&
+                                                    {watch("dataReajuste") &&
                                                         formatoData(
-                                                            watch("dataInicio")
+                                                            watch(
+                                                                "dataReajuste"
+                                                            )
                                                         )}
                                                 </Text>
                                             </Box>

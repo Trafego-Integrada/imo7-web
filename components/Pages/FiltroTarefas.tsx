@@ -54,8 +54,8 @@ export const FiltroTarefas = ({ setFiltro, filtro }) => {
                     <GridItem>
                         <FormInput
                             size="sm"
-                            label="Codigo imovel"
-                            placeholder="Codigo imovel"
+                            label="Codigo do Imóvel"
+                            placeholder="Codigo imóvel"
                             onChange={(e) =>
                                 setFiltro({
                                     ...filtro,

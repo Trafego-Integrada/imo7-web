@@ -321,7 +321,7 @@ const Cobrancas = () => {
                                 <GridItem>
                                     <FormInput
                                         size="sm"
-                                        label="Nº do contrato"
+                                        label="Nº do Contrato"
                                         placeholder="digite um número..."
                                         bg="white"
                                         onChange={(e) =>
