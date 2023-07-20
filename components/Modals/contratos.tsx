@@ -231,6 +231,7 @@ const ModalBase = ({}, ref) => {
                                                     {watch("dataInicio") &&
                                                         formatoData(
                                                             watch("dataInicio"),
+                                                            "DATA",
                                                             false
                                                         )}
                                                 </Text>
