@@ -37,6 +37,7 @@ handle.post(async (req, res) => {
         proprietarios,
         inquilinos,
         fiadores,
+        dataReajuste,
     } = req.body;
 
     const existe = await prisma.contrato.findFirst({
@@ -74,6 +75,9 @@ handle.post(async (req, res) => {
             diaVencimento: diaVencimento ? Number(diaVencimento) : null,
             diaRecebimento: diaRecebimento ? Number(diaRecebimento) : null,
             diaDeposito: diaDeposito ? Number(diaDeposito) : null,
+            dataReajuste: dataReajuste
+                ? moment(dataReajuste, "DD/MM/YYYY").format()
+                : null,
             observacoes,
             imobiliaria: {
                 connect: {

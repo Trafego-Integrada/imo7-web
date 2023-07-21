@@ -140,6 +140,7 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
                                 id: Number(user.sub),
                             },
                         },
+                        deletedAt: null,
                     },
                 },
             },

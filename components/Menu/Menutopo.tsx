@@ -13,6 +13,7 @@ import {
     Grid,
     GridItem,
     Icon,
+    IconButton,
     InputGroup,
     InputRightElement,
     Menu,
@@ -28,7 +29,7 @@ import { useAuth } from "hooks/useAuth";
 import React from "react";
 import { BiPowerOff, BiSupport } from "react-icons/bi";
 import { BsFillGearFill, BsSearch } from "react-icons/bs";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { MdMenu, MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { RiAccountCircleFill, RiMenu3Fill } from "react-icons/ri";
 import { FiltroTopo } from "@/components/FiltroTopo";
 import { FormInput } from "@/components/Form/FormInput";
@@ -45,9 +46,9 @@ export const Menutopo = ({ namepage, subnamepage }) => {
         <>
             <Box
                 display={{ sm: "flex", md: "none" }}
-                w="100%"
+                w="full"
                 bg="bluelight"
-                h="100px"
+                h={12}
                 alignItems="center"
                 p={5}
             >
@@ -71,9 +72,13 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                         alignItems="center"
                         justifyContent="flex-end"
                     >
-                        <Button ref={btnRef} bg="orange" onClick={onOpen}>
-                            <RiMenu3Fill color="white" size={"20px"} />
-                        </Button>
+                        <IconButton
+                            ref={btnRef}
+                            icon={<MdMenu />}
+                            colorScheme="orange"
+                            onClick={onOpen}
+                            variant="gray"
+                        />
                     </GridItem>
                 </Grid>
 

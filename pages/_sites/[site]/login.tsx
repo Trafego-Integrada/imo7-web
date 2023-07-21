@@ -114,15 +114,13 @@ const SignIn: NextPage = ({ imobiliaria }) => {
             w="100vw"
             h="100vh"
         >
-            {imobiliaria?.bg}
             <Container maxW="container.lg" as={Flex} h="full" align="center">
-                <Grid templateColumns="repeat(3, 1fr)" gap={4}>
-                    <GridItem colSpan={1}>
+                <Grid templateColumns={{ lg: "repeat(3, 1fr)" }} gap={4}>
+                    <GridItem colSpan={{ lg: 1 }}>
                         <VStack
                             bg="white"
                             as="form"
                             onSubmit={handleSubmit(onSubmit)}
-                            w={{ base: "100vw", lg: "full" }}
                             h="full"
                             align="center"
                             justify="center"
@@ -172,7 +170,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                     color="red"
                                     borderWidth={1}
                                     borderColor="red"
-                                    w={96}
                                     p={2}
                                 >
                                     <Text w="full" textAlign="center">
@@ -181,7 +178,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                 </Flex>
                             )}
                             <FormInput
-                                w={96}
                                 type="text"
                                 leftElement={
                                     <Icon as={MdFingerprint} w={6} h={6} />
@@ -194,7 +190,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                             {usuario && !usuario?.atualizar ? (
                                 <FormInput
                                     type="password"
-                                    w={96}
                                     leftElement={
                                         <Icon as={CgPassword} w={6} h={6} />
                                     }
@@ -205,7 +200,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                             ) : usuario && usuario.atualizar ? (
                                 <>
                                     <FormInput
-                                        w={96}
                                         leftElement={
                                             <Icon
                                                 as={FiPaperclip}
@@ -218,7 +212,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                         error={errors.contrato?.message}
                                     />
                                     <FormInput
-                                        w={96}
                                         leftElement={
                                             <Icon as={FiMail} w={6} h={6} />
                                         }
@@ -228,7 +221,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                     />
                                     <FormInput
                                         mask="(99) 9 9999-9999"
-                                        w={96}
                                         leftElement={
                                             <Icon as={FiPhone} w={6} h={6} />
                                         }
@@ -238,7 +230,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                     />
                                     <FormInput
                                         type="password"
-                                        w={96}
                                         leftElement={
                                             <Icon as={CgPassword} w={6} h={6} />
                                         }
@@ -248,7 +239,6 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                     />
                                     <FormInput
                                         type="password"
-                                        w={96}
                                         leftElement={
                                             <Icon as={CgPassword} w={6} h={6} />
                                         }
@@ -340,7 +330,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                         </VStack>
                     </GridItem>
                     <GridItem
-                        colSpan={2}
+                        colSpan={{ lg: 2 }}
                         bgImg={imobiliaria.bg ? imobiliaria.bg : null}
                         bgPos="center"
                         alignItems="center"
@@ -351,7 +341,13 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                         <Heading color="blue.700" size="md" mb={6}>
                             Veja também estas opções
                         </Heading>
-                        <Grid gridTemplateColumns="repeat(3,1fr)" gap={4}>
+                        <Grid
+                            gridTemplateColumns={{
+                                base: "repeat(2,1fr)",
+                                lg: "repeat(3,1fr)",
+                            }}
+                            gap={4}
+                        >
                             <NextChakraLink
                                 href={{ pathname: "/boletoRapido" }}
                                 target="_blank"

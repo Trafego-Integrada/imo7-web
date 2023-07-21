@@ -4,10 +4,10 @@ import { Menutopo } from "@/components/Menu/Menutopo";
 
 export const Layout = ({ title, subtitle, children }) => {
     return (
-        <Box minH="100vh" h="full" bg="gray.200">
+        <Box w="100vw" minH="100vh" h="full" bg="gray.200">
             <Flex h="full">
                 <Menulateral />
-                <Box w={{ sm: "", md: "calc(100% - 100px)" }}>
+                <Box w="full">
                     <Menutopo namepage={title} subnamepage={subtitle} />
                     <Box bg="gray.200">{children}</Box>
                 </Box>
