@@ -21,34 +21,15 @@ handle.get(async (req, res) => {
     res.send(data);
 });
 
-handle.put(async (req, res) => {
-    const { id } = req.query;
-    const {
-        nome,
-        email,
-        documento,
-        imobiliariaId,
-        senha,
-        profissao,
-        endereco,
-        cidade,
-        bairro,
-        cep,
-        estado,
-        celular,
-        telefone,
-        whatsapp,
-        naoEnviarWhatsapp,
-    } = req.body;
-    const data = await prisma.usuario.update({
-        where: {
-            id: Number(id),
-        },
-        data: {
+handle.post(async (req, res) => {
+    try {
+        const { id } = req.query;
+        const {
             nome,
             email,
             documento,
             imobiliariaId,
+            senha,
             profissao,
             endereco,
             cidade,
@@ -58,11 +39,38 @@ handle.put(async (req, res) => {
             celular,
             telefone,
             whatsapp,
-            naoEnviarWhatsapp: naoEnviarWhatsapp == "1" ? true : false,
-            senhaHash: senha ? bcrypt.hashSync(senha, 10) : null,
-        },
-    });
-    res.send(data);
+            naoEnviarWhatsapp,
+        } = req.body;
+
+        const data = await prisma.usuario.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                nome,
+                email,
+                documento,
+                imobiliariaId: Number(imobiliariaId),
+                profissao,
+                endereco,
+                cidade,
+                bairro,
+                cep,
+                estado,
+                celular,
+                telefone,
+                whatsapp,
+                naoEnviarWhatsapp: naoEnviarWhatsapp == "1" ? true : false,
+            },
+        });
+
+        res.send(data);
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error.message,
+        });
+    }
 });
 
 handle.delete(async (req, res) => {

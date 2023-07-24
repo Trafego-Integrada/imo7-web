@@ -3,6 +3,7 @@ import {
     Button,
     Collapse,
     Container,
+    Divider,
     Flex,
     Grid,
     GridItem,
@@ -18,6 +19,7 @@ import {
     PopoverFooter,
     PopoverHeader,
     PopoverTrigger,
+    Spinner,
     Stat,
     StatArrow,
     StatGroup,
@@ -35,6 +37,8 @@ import {
     useRadio,
     useRadioGroup,
 } from "@chakra-ui/react";
+import { Chart } from "react-google-charts";
+
 import React, { useRef, useState } from "react";
 import { IoIosRemoveCircle } from "react-icons/io";
 import {
@@ -51,6 +55,10 @@ import { Layout } from "@/components/Layout/layout";
 import { ModalContratos } from "@/components/Modals/contratos";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import { BsCalendarWeek } from "react-icons/bs";
+import { useQuery } from "react-query";
+import { dadosDashboard } from "@/services/models/dashboard";
+import { formatoData, formatoValor, statusTarefa } from "@/helpers/helpers";
+import moment from "moment";
 
 const Home = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
@@ -58,6 +66,9 @@ const Home = () => {
     const [filtro, setFiltro] = useState({
         periodo: "semanal",
     });
+
+    const { data, isLoading } = useQuery(["dashboard", filtro], dadosDashboard);
+
     const options = [
         {
             label: "Últimos 7 dias",
@@ -77,18 +88,21 @@ const Home = () => {
         },
         {
             label: "Último ano",
-            value: "atual",
+            value: "anual",
         },
-        {
-            label: "Personalizado",
-            value: "personalizado",
-        },
+        // {
+        //     label: "Personalizado",
+        //     value: "personalizado",
+        // },
     ];
 
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: "periodo",
         defaultValue: "semanal",
-        onChange: (v) => setFiltro({ ...filtro, periodo: v }),
+        onChange: (v) => {
+            setFiltro({ ...filtro, periodo: v });
+            onClose();
+        },
     });
 
     const group = getRootProps();
@@ -124,11 +138,10 @@ const Home = () => {
             </Box>
         );
     }
-    console.log(filtro);
     return (
         <>
             <Layout>
-                <Container maxW="container.lg" p={5}>
+                <Container maxW="container.xl" p={5}>
                     <Flex mb={4}>
                         <Popover placement="top-start" isOpen={isOpen}>
                             <PopoverTrigger>
@@ -140,7 +153,11 @@ const Home = () => {
                                     zIndex={20}
                                     onClick={onOpen}
                                 >
-                                    Últimos 7 dias
+                                    {
+                                        options.find(
+                                            (i) => i.value == filtro.periodo
+                                        )?.label
+                                    }
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent
@@ -180,54 +197,432 @@ const Home = () => {
                                     >
                                         Desistir
                                     </Button>
-                                    <Button
-                                        size="xs"
-                                        colorScheme="blue"
-                                        leftIcon={<MdCheck />}
-                                    >
-                                        Aplicar
-                                    </Button>
                                 </PopoverFooter>
                             </PopoverContent>
                         </Popover>
                     </Flex>
-                    <Grid>
-                        <GridItem>
-                            <Heading size="md" color="gray" mb={4}>
+                    <Grid
+                        gap={4}
+                        gridTemplateColumns={{
+                            base: "repeat(1,1fr)",
+                            lg: "repeat(4,1fr)",
+                        }}
+                    >
+                        <GridItem colSpan={{ lg: 1 }}>
+                            <Box>
+                                <Heading size="sm" color="gray" mb={2}>
+                                    Fichas Cadastrais
+                                </Heading>
+                                <Flex p={4} bg="white" h="full" align="center">
+                                    <Chart
+                                        chartType="PieChart"
+                                        width={"200px"}
+                                        data={[
+                                            ["Aguardando", "teste"],
+                                            [
+                                                "Aguardando",
+                                                data?.fichasCadastrais?.filter(
+                                                    (i) =>
+                                                        i.status == "aguardando"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Preenchidas",
+                                                data?.fichasCadastrais?.filter(
+                                                    (i) =>
+                                                        i.status == "preenchida"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Em análise",
+                                                data?.fichasCadastrais?.filter(
+                                                    (i) =>
+                                                        i.status == "em_analise"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Reprovadas",
+                                                data?.fichasCadastrais?.filter(
+                                                    (i) =>
+                                                        i.status == "reprovada"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Aprovadas",
+                                                data?.fichasCadastrais?.filter(
+                                                    (i) =>
+                                                        i.status == "aprovada"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Arquivadas",
+                                                data?.fichasCadastrais?.filter(
+                                                    (i) =>
+                                                        i.status == "arquivada"
+                                                )?.length,
+                                            ],
+                                        ]}
+                                        options={{
+                                            legend: "none",
+                                            pieHole: 0.4,
+                                            is3D: false,
+                                            colors: [
+                                                "orange",
+                                                "yellow",
+                                                "blue",
+                                                "red",
+                                                "green",
+                                                "gray",
+                                            ],
+                                            width: 200,
+                                            height: 200,
+                                        }}
+                                        style={{ padding: 0 }}
+                                    />
+                                    <Flex flexDir="column" gap={1}>
+                                        <Button size="xs" colorScheme="orange">
+                                            <Text
+                                                as="span"
+                                                mr={3}
+                                                fontWeight="bold"
+                                            >
+                                                {
+                                                    data?.fichasCadastrais?.filter(
+                                                        (i) =>
+                                                            i.status ==
+                                                            "aguardando"
+                                                    )?.length
+                                                }
+                                            </Text>
+                                            Aguardando
+                                        </Button>
+                                        <Button size="xs" colorScheme="yellow">
+                                            <Text
+                                                as="span"
+                                                mr={3}
+                                                fontWeight="bold"
+                                            >
+                                                {
+                                                    data?.fichasCadastrais?.filter(
+                                                        (i) =>
+                                                            i.status ==
+                                                            "preenchida"
+                                                    )?.length
+                                                }
+                                            </Text>
+                                            Preenchidas
+                                        </Button>
+                                        <Button size="xs" colorScheme="blue">
+                                            <Text
+                                                as="span"
+                                                mr={3}
+                                                fontWeight="bold"
+                                            >
+                                                {
+                                                    data?.fichasCadastrais?.filter(
+                                                        (i) =>
+                                                            i.status ==
+                                                            "em_analise"
+                                                    )?.length
+                                                }
+                                            </Text>
+                                            Em análise
+                                        </Button>
+                                        <Button size="xs" colorScheme="red">
+                                            <Text
+                                                as="span"
+                                                mr={3}
+                                                fontWeight="bold"
+                                            >
+                                                {
+                                                    data?.fichasCadastrais?.filter(
+                                                        (i) =>
+                                                            i.status ==
+                                                            "reprovada"
+                                                    )?.length
+                                                }
+                                            </Text>
+                                            Reprovadas
+                                        </Button>
+                                        <Button size="xs" colorScheme="green">
+                                            <Text
+                                                as="span"
+                                                mr={3}
+                                                fontWeight="bold"
+                                            >
+                                                {
+                                                    data?.fichasCadastrais?.filter(
+                                                        (i) =>
+                                                            i.status ==
+                                                            "aprovada"
+                                                    )?.length
+                                                }
+                                            </Text>
+                                            Aprovadas
+                                        </Button>
+
+                                        <Button size="xs">
+                                            <Text
+                                                as="span"
+                                                mr={3}
+                                                fontWeight="bold"
+                                            >
+                                                {
+                                                    data?.fichasCadastrais?.filter(
+                                                        (i) =>
+                                                            i.status ==
+                                                            "arquivada"
+                                                    )?.length
+                                                }
+                                            </Text>
+                                            Arquivadas
+                                        </Button>
+                                    </Flex>
+                                </Flex>
+                            </Box>
+                        </GridItem>
+                        <GridItem colSpan={{ lg: 2 }}>
+                            <Heading size="sm" color="gray" mb={2}>
+                                Próximas Tarefas
+                            </Heading>
+                            <Box bg="white" h="full" p={4}>
+                                <Table size="sm">
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Tarefa</Th>
+                                            <Th>Contrato</Th>
+                                            <Th>Data</Th>
+                                            <Th>Status</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {data?.tarefas.length > 0 ? (
+                                            data?.tarefas
+                                                .slice(0, 5)
+                                                .map((item) => (
+                                                    <Tr
+                                                        key={item.id}
+                                                        fontSize="xs"
+                                                    >
+                                                        <Td fontSize="xs">
+                                                            {item.titulo}
+                                                        </Td>
+                                                        <Td fontSize="xs">
+                                                            {
+                                                                item.contrato
+                                                                    ?.codigo
+                                                            }
+                                                        </Td>
+                                                        <Td fontSize="xs">
+                                                            {formatoData(
+                                                                item.dataVencimento
+                                                            )}
+                                                        </Td>
+                                                        <Td fontSize="xs">
+                                                            {statusTarefa(
+                                                                item.status
+                                                            )}
+                                                        </Td>
+                                                    </Tr>
+                                                ))
+                                        ) : (
+                                            <Tr>
+                                                <Td colSpan={4}>
+                                                    Não há tarefas
+                                                </Td>
+                                            </Tr>
+                                        )}
+                                    </Tbody>
+                                </Table>
+                            </Box>
+                        </GridItem>
+                        <GridItem colSpan={{ lg: 1 }}>
+                            <Heading size="sm" color="gray" mb={2}>
+                                Tarefas
+                            </Heading>
+                            <Flex flexDir="column" h="full" gap={2}>
+                                <Box bg="white" h="full" p={4}>
+                                    <Heading size="sm" textAlign="center">
+                                        Em aberto
+                                    </Heading>
+                                    <Divider my={2} />
+                                    <Text textAlign="center">
+                                        {data?.tarefas?.reduce((a, i) => {
+                                            if (
+                                                moment(i.dataVencimento) <=
+                                                moment()
+                                            ) {
+                                                return a + 1;
+                                            } else {
+                                                return a;
+                                            }
+                                        }, 0)}
+                                    </Text>
+                                </Box>
+                                <Box bg="white" h="full" p={4}>
+                                    <Heading size="sm" textAlign="center">
+                                        Em atraso
+                                    </Heading>
+                                    <Divider my={2} />
+                                    <Text textAlign="center" fontSize="xl">
+                                        {data?.tarefas?.reduce((a, i) => {
+                                            if (
+                                                moment(i.dataVencimento) <
+                                                moment()
+                                            ) {
+                                                return a + 1;
+                                            } else {
+                                                return a;
+                                            }
+                                        }, 0)}
+                                    </Text>
+                                </Box>
+                            </Flex>
+                        </GridItem>
+                        <GridItem colSpan={{ lg: 2 }}>
+                            <Heading size="sm" color="gray" mb={2}>
+                                Contratos
+                            </Heading>
+                            <StatGroup gap={2}>
+                                <Stat bg="white" p={4}>
+                                    <StatLabel>Contratos à reajustar</StatLabel>
+                                    <StatNumber>
+                                        {isLoading ? (
+                                            <Spinner />
+                                        ) : (
+                                            data?.contratosReajuste
+                                        )}
+                                    </StatNumber>
+                                    {/* <StatHelpText>
+                                        <StatArrow type="decrease" />
+                                        9.05%
+                                    </StatHelpText> */}
+                                </Stat>
+                                <Stat bg="white" p={4}>
+                                    <StatLabel>Contratos Iniciados</StatLabel>
+                                    <StatNumber>
+                                        {isLoading ? (
+                                            <Spinner />
+                                        ) : (
+                                            data?.contratosInicio
+                                        )}
+                                    </StatNumber>
+                                    {/* <StatHelpText>
+                                        <StatArrow type="increase" />
+                                        23.36%
+                                    </StatHelpText> */}
+                                </Stat>
+                                <Stat bg="white" p={4}>
+                                    <StatLabel>Contratos Finalizados</StatLabel>
+                                    <StatNumber>
+                                        {isLoading ? (
+                                            <Spinner />
+                                        ) : (
+                                            data?.contratosFim
+                                        )}
+                                    </StatNumber>
+                                    {/* <StatHelpText>
+                                        <StatArrow type="decrease" />
+                                        9.05%
+                                    </StatHelpText> */}
+                                </Stat>
+                            </StatGroup>
+                        </GridItem>
+                        <GridItem colSpan={{ lg: 2 }}>
+                            <Heading size="sm" color="gray" mb={2}>
                                 Boletos
                             </Heading>
                             <StatGroup gap={2}>
                                 <Stat bg="white" p={4}>
-                                    <StatLabel>Boletos emitidos</StatLabel>
-                                    <StatNumber>345,670</StatNumber>
-                                    <StatHelpText>
-                                        <StatArrow type="increase" />
-                                        23.36%
-                                    </StatHelpText>
-                                </Stat>
-                                <Stat bg="white" p={4}>
-                                    <StatLabel>Boletos à receber</StatLabel>
-                                    <StatNumber>45</StatNumber>
-                                    <StatHelpText>
+                                    <StatLabel>Boletos cadastrados</StatLabel>
+                                    <StatNumber>
+                                        {isLoading ? (
+                                            <Spinner />
+                                        ) : (
+                                            data?.boletos?.length
+                                        )}
+                                    </StatNumber>
+                                    {/* <StatHelpText>
                                         <StatArrow type="decrease" />
                                         9.05%
-                                    </StatHelpText>
+                                    </StatHelpText> */}
                                 </Stat>
                                 <Stat bg="white" p={4}>
                                     <StatLabel>E-mails enviados</StatLabel>
-                                    <StatNumber>345,670</StatNumber>
-                                    <StatHelpText>
+                                    <StatNumber>
+                                        {isLoading ? (
+                                            <Spinner />
+                                        ) : (
+                                            data?.emailBoletoEnviados
+                                        )}
+                                    </StatNumber>
+                                    {/* <StatHelpText>
                                         <StatArrow type="increase" />
                                         23.36%
-                                    </StatHelpText>
+                                    </StatHelpText> */}
                                 </Stat>
                                 <Stat bg="white" p={4}>
                                     <StatLabel>Whatsapps enviados</StatLabel>
-                                    <StatNumber>45</StatNumber>
-                                    <StatHelpText>
+                                    <StatNumber>
+                                        {isLoading ? (
+                                            <Spinner />
+                                        ) : (
+                                            data?.whatsappBoletoEnviados
+                                        )}
+                                    </StatNumber>
+                                    {/* <StatHelpText>
                                         <StatArrow type="decrease" />
                                         9.05%
-                                    </StatHelpText>
+                                    </StatHelpText> */}
+                                </Stat>
+                            </StatGroup>
+                        </GridItem>
+                        <GridItem colSpan={{ lg: 2 }}>
+                            <Heading size="sm" color="gray" mb={2}>
+                                Extratos
+                            </Heading>
+                            <StatGroup gap={2}>
+                                <Stat bg="white" p={4}>
+                                    <StatLabel>Extratos cadastrados</StatLabel>
+                                    <StatNumber>
+                                        {isLoading ? (
+                                            <Spinner />
+                                        ) : (
+                                            data?.extratos?.length
+                                        )}
+                                    </StatNumber>
+                                    {/* <StatHelpText>
+                                        <StatArrow type="decrease" />
+                                        9.05%
+                                    </StatHelpText> */}
+                                </Stat>
+                                <Stat bg="white" p={4}>
+                                    <StatLabel>E-mails enviados</StatLabel>
+                                    <StatNumber>
+                                        {isLoading ? (
+                                            <Spinner />
+                                        ) : (
+                                            data?.emailExtratoEnviados
+                                        )}
+                                    </StatNumber>
+                                    {/* <StatHelpText>
+                                        <StatArrow type="increase" />
+                                        23.36%
+                                    </StatHelpText> */}
+                                </Stat>
+                                <Stat bg="white" p={4}>
+                                    <StatLabel>Whatsapps enviados</StatLabel>
+                                    <StatNumber>
+                                        {isLoading ? (
+                                            <Spinner />
+                                        ) : (
+                                            data?.whatsappExtratoEnviados
+                                        )}
+                                    </StatNumber>
+                                    {/* <StatHelpText>
+                                        <StatArrow type="decrease" />
+                                        9.05%
+                                    </StatHelpText> */}
                                 </Stat>
                             </StatGroup>
                         </GridItem>

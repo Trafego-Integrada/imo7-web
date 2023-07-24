@@ -29,6 +29,7 @@ import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
 import { ModalContratos } from "@/components/Modals/contratos";
 import { withSSRAuth } from "@/utils/withSSRAuth";
+import { useQuery } from "react-query";
 
 const Home = () => {
     const { isOpen, onToggle } = useDisclosure();

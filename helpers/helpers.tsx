@@ -26,7 +26,46 @@ export function includesAll(arr: any[], items: any[]) {
     }
     return true;
 }
-
+export const statusTarefa = (status) => {
+    switch (status) {
+        case "finalizada":
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Finalizada
+                </Tag>
+            );
+        case "aberta":
+            return (
+                <Tag colorScheme="blue" size="sm">
+                    Aberta
+                </Tag>
+            );
+        case "em_analise":
+            return (
+                <Tag colorScheme="orange" size="sm">
+                    Em análise
+                </Tag>
+            );
+        case "aprovada":
+            return (
+                <Tag colorScheme="green" size="sm">
+                    Aprovado
+                </Tag>
+            );
+        case "reprovada":
+            return (
+                <Tag colorScheme="red" size="sm">
+                    Reprovada
+                </Tag>
+            );
+        case "arquivada":
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Arquivada
+                </Tag>
+            );
+    }
+};
 export const statusFicha = (status) => {
     switch (status) {
         case "aguardando":
