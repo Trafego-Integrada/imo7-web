@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
 import moment from "moment";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -6,6 +7,7 @@ import nextConnect from "next-connect";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.use(cors);
+handler.use(checkAuth);
 handler.get(async (req, res) => {
     try {
         const { periodo } = req.query;
@@ -60,6 +62,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
         });
 
@@ -72,6 +75,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
             include: {
                 itens: true,
@@ -91,6 +95,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
         });
 
@@ -107,6 +112,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
         });
 
@@ -123,6 +129,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
         });
 
@@ -139,6 +146,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
         });
 
@@ -151,6 +159,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
         });
 
@@ -166,6 +175,7 @@ handler.get(async (req, res) => {
                 status: {
                     notIn: ["finalizada"],
                 },
+                contaId: req.user.contaId,
             },
         });
 
@@ -178,6 +188,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
         });
 
@@ -190,6 +201,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
         });
 
@@ -202,6 +214,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
+                contaId: req.user.contaId,
             },
         });
         return res.send({
