@@ -62,7 +62,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 
@@ -75,7 +75,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
             include: {
                 itens: true,
@@ -95,7 +95,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 
@@ -112,7 +112,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 
@@ -129,7 +129,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 
@@ -146,7 +146,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 
@@ -159,7 +159,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 
@@ -175,7 +175,7 @@ handler.get(async (req, res) => {
                 status: {
                     notIn: ["finalizada"],
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 
@@ -188,7 +188,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 
@@ -201,7 +201,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 
@@ -214,7 +214,7 @@ handler.get(async (req, res) => {
                         .format(),
                     lte: moment().endOf(abreviacaoPeriodo).format(),
                 },
-                contaId: req.user.contaId,
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
         return res.send({
