@@ -21,9 +21,16 @@ import {
     Box,
     Button,
     Flex,
+    Grid,
+    GridItem,
     Heading,
     Icon,
     IconButton,
+    Menu,
+    MenuButton,
+    MenuIcon,
+    MenuItem,
+    MenuList,
     Progress,
     Table,
     TableContainer,
@@ -40,10 +47,20 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
-import { FiEdit, FiEye, FiLink, FiPlus, FiTrash } from "react-icons/fi";
+import {
+    FiCheck,
+    FiEdit,
+    FiEye,
+    FiLink,
+    FiPlus,
+    FiTrash,
+} from "react-icons/fi";
 import { MdOutlineVerifiedUser, MdAccessibilityNew } from "react-icons/md";
 import { exportToExcel } from "react-json-to-excel";
 import { useMutation, useQuery } from "react-query";
+import { CiCircleMore } from "react-icons/ci";
+import { RiMore2Line } from "react-icons/ri";
+import { CgMoreVerticalAlt } from "react-icons/cg";
 const filtroPadrao = {
     query: "",
     identificacao: "",
@@ -136,100 +153,116 @@ const FichasCadastrais = () => {
                                 Limpar filtro
                             </Button>
                         </Flex>
-                        <Flex gap={2} flexDir={{ lg: "row", base: "column" }}>
-                            <FormInput
-                                size="sm"
-                                minW={32}
-                                label="Codigo"
-                                placeholder="Por codigo"
-                                value={filtro.codigo}
-                                onChange={(e) =>
-                                    setFiltro({
-                                        ...filtro,
-                                        codigo: e.target.value,
-                                    })
-                                }
-                            />
-                            <FormInput
-                                size="sm"
-                                minW={96}
-                                label="Identificação"
-                                placeholder="Por nome, cpf/cnpj, telefone ou e-mail"
-                                value={filtro.identificacao}
-                                onChange={(e) =>
-                                    setFiltro({
-                                        ...filtro,
-                                        identificacao: e.target.value,
-                                    })
-                                }
-                            />
-                            <FormDateRange
-                                minW={44}
-                                size="sm"
-                                label="Data de Criação"
-                                startDate={filtro?.createdAt[0]}
-                                endDate={filtro?.createdAt[1]}
-                                onChange={(e) => {
-                                    setFiltro({
-                                        ...filtro,
-                                        createdAt: e,
-                                    });
-                                }}
-                            />
-                            <FormDateRange
-                                minW={44}
-                                size="sm"
-                                label="Data de Atualização"
-                                startDate={filtro?.updatedAt[0]}
-                                endDate={filtro?.updatedAt[1]}
-                                onChange={(e) => {
-                                    setFiltro({
-                                        ...filtro,
-                                        updatedAt: e,
-                                    });
-                                }}
-                            />
-                            <FormMultiSelect
-                                placeholder="Selecione..."
-                                minW={44}
-                                size="sm"
-                                label="Status"
-                                value={arrayStatusFicha.filter((i) =>
-                                    filtro.status.includes(i.value)
-                                )}
-                                onChange={(e) => {
-                                    setFiltro({
-                                        ...filtro,
-                                        status: e.map((i) => i.value),
-                                    });
-                                }}
-                                isMulti
-                                options={arrayStatusFicha}
-                            />
-                            <FormMultiSelect
-                                minW={44}
-                                size="sm"
-                                label="Responsável"
-                                value={filtro.responsaveis}
-                                onChange={(e) => {
-                                    setFiltro({
-                                        ...filtro,
-                                        responsaveis: e,
-                                    });
-                                }}
-                                isMulti
-                                placeholder="Selecione..."
-                                options={responsaveis?.data?.data}
-                                getOptionLabel={(e) => e.nome}
-                                getOptionValue={(e) => e.id}
-                            />
-                        </Flex>
+                        <Grid
+                            gridTemplateColumns={{
+                                sm: "repeat(3,1fr)",
+                                md: "repeat(4,1fr)",
+                                lg: "repeat(4,1fr)",
+                                xl: "repeat(6,1fr)",
+                            }}
+                            gap={2}
+                        >
+                            <GridItem>
+                                <FormInput
+                                    size="sm"
+                                    label="Codigo"
+                                    placeholder="Por codigo"
+                                    value={filtro.codigo}
+                                    onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            codigo: e.target.value,
+                                        })
+                                    }
+                                />
+                            </GridItem>
+                            <GridItem>
+                                <FormInput
+                                    size="sm"
+                                    label="Identificação"
+                                    placeholder="Por nome, cpf/cnpj, telefone ou e-mail"
+                                    value={filtro.identificacao}
+                                    onChange={(e) =>
+                                        setFiltro({
+                                            ...filtro,
+                                            identificacao: e.target.value,
+                                        })
+                                    }
+                                />
+                            </GridItem>
+                            <GridItem>
+                                <FormDateRange
+                                    size="sm"
+                                    label="Data de Criação"
+                                    startDate={filtro?.createdAt[0]}
+                                    endDate={filtro?.createdAt[1]}
+                                    onChange={(e) => {
+                                        setFiltro({
+                                            ...filtro,
+                                            createdAt: e,
+                                        });
+                                    }}
+                                />
+                            </GridItem>
+                            <GridItem>
+                                <FormDateRange
+                                    size="sm"
+                                    label="Data de Atualização"
+                                    startDate={filtro?.updatedAt[0]}
+                                    endDate={filtro?.updatedAt[1]}
+                                    onChange={(e) => {
+                                        setFiltro({
+                                            ...filtro,
+                                            updatedAt: e,
+                                        });
+                                    }}
+                                />
+                            </GridItem>
+                            <GridItem>
+                                <FormMultiSelect
+                                    placeholder="Selecione..."
+                                    size="sm"
+                                    label="Status"
+                                    value={arrayStatusFicha.filter((i) =>
+                                        filtro.status.includes(i.value)
+                                    )}
+                                    onChange={(e) => {
+                                        setFiltro({
+                                            ...filtro,
+                                            status: e.map((i) => i.value),
+                                        });
+                                    }}
+                                    isMulti
+                                    options={arrayStatusFicha}
+                                />
+                            </GridItem>
+                            <GridItem>
+                                <FormMultiSelect
+                                    size="sm"
+                                    label="Responsável"
+                                    value={filtro.responsaveis}
+                                    onChange={(e) => {
+                                        setFiltro({
+                                            ...filtro,
+                                            responsaveis: e,
+                                        });
+                                    }}
+                                    isMulti
+                                    placeholder="Selecione..."
+                                    options={responsaveis?.data?.data}
+                                    getOptionLabel={(e) => e.nome}
+                                    getOptionValue={(e) => e.id}
+                                />
+                            </GridItem>
+                        </Grid>
                     </Box>
                     <Flex
                         justify="space-between"
                         align="center"
                         bg="white"
+                        wrap="wrap"
                         p={4}
+                        gap={2}
                     >
                         <Flex gap={4} align="center">
                             <Flex gap={4}>
@@ -300,7 +333,8 @@ const FichasCadastrais = () => {
                             <Table size="sm">
                                 <Thead>
                                     <Tr>
-                                        <Th w={44}>ID</Th>
+                                        <Th w={12}>Ações</Th>
+                                        <Th w={12}>ID</Th>
                                         <Th w={44}>Tipo</Th>
                                         <Th>Nome</Th>
                                         <Th w={44}>Preenchimento</Th>
@@ -308,14 +342,116 @@ const FichasCadastrais = () => {
                                         <Th w={24}>Criado em</Th>
                                         <Th w={24}>Última atualização</Th>
                                         <Th w={44}>Status</Th>
-                                        <Th w={24}></Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
                                     {fichas?.data?.length > 0 ? (
                                         fichas.data.map((item) => (
                                             <Tr key={item.id}>
-                                                <Td># {item.codigo}</Td>
+                                                <Td>
+                                                    <Menu>
+                                                        <MenuButton>
+                                                            <IconButton
+                                                                icon={
+                                                                    <CgMoreVerticalAlt />
+                                                                }
+                                                                size="xs"
+                                                                rounded="full"
+                                                                colorScheme="blue"
+                                                                variant="outline"
+                                                            />
+                                                        </MenuButton>
+                                                        <MenuList>
+                                                            <MenuItem
+                                                                icon={
+                                                                    <MdOutlineVerifiedUser />
+                                                                }
+                                                                onClick={() =>
+                                                                    modalRevisar.current.onOpen(
+                                                                        item.id
+                                                                    )
+                                                                }
+                                                            >
+                                                                Revisar Ficha
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                icon={
+                                                                    <FiEdit />
+                                                                }
+                                                                onClick={() =>
+                                                                    modal.current.onOpen(
+                                                                        item.id
+                                                                    )
+                                                                }
+                                                            >
+                                                                Editar Ficha
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                icon={
+                                                                    <FiLink />
+                                                                }
+                                                                onClick={() => {
+                                                                    navigator.clipboard.writeText(
+                                                                        `${window.location.origin}/fichaCadastral/${item.id}`
+                                                                    );
+                                                                    toast({
+                                                                        title: "URL Copiada",
+                                                                    });
+                                                                }}
+                                                            >
+                                                                Copiar URL da
+                                                                Ficha
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                as={Link}
+                                                                icon={<FiEye />}
+                                                                href={`/fichaCadastral/${item.id}`}
+                                                                target="_blank"
+                                                            >
+                                                                Visualizar Ficha
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                icon={
+                                                                    <FaFileExcel />
+                                                                }
+                                                                onClick={() =>
+                                                                    exportToExcel(
+                                                                        item.preenchimento,
+                                                                        "ficha-cadastral-" +
+                                                                            item.id
+                                                                    )
+                                                                }
+                                                            >
+                                                                Exportar para
+                                                                Excel
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                as={Link}
+                                                                icon={
+                                                                    <FaFilePdf />
+                                                                }
+                                                                href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
+                                                                target="_blank"
+                                                                passHref
+                                                            >
+                                                                Gerar PDF
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                icon={
+                                                                    <FiTrash />
+                                                                }
+                                                                onClick={() => {
+                                                                    modalExcluir.current.onOpen(
+                                                                        item.id
+                                                                    );
+                                                                }}
+                                                            >
+                                                                Excluir Ficha
+                                                            </MenuItem>
+                                                        </MenuList>
+                                                    </Menu>
+                                                </Td>
+                                                <Td w={12}># {item.codigo}</Td>
                                                 <Td>
                                                     {tipoFicha(
                                                         item.modelo?.tipo
@@ -461,27 +597,8 @@ const FichasCadastrais = () => {
                                                 <Td>
                                                     {statusFicha(item.status)}
                                                 </Td>
-                                                <Td>
-                                                    {" "}
-                                                    {/* <Tooltip label="Validar CPF">
-                                                            <IconButton
-                                                                colorScheme="green"
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            MdAccessibilityNew
-                                                                        }
-                                                                    />
-                                                                }
-                                                                onClick={() =>
-                                                                    modalValidar.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            />
-                                                        </Tooltip> */}
+                                                {/* <Td>
+                                                    
                                                     {usuario?.permissoes?.includes(
                                                         "imobiliaria.fichas.revisar"
                                                     ) && (
@@ -627,7 +744,7 @@ const FichasCadastrais = () => {
                                                             />
                                                         </Tooltip>
                                                     )}
-                                                </Td>
+                                                </Td> */}
                                             </Tr>
                                         ))
                                     ) : (
@@ -650,7 +767,6 @@ const FichasCadastrais = () => {
             <ModalFichaCadastral ref={modal} />
             <ModalRevisaoFichaCadastral ref={modalRevisar} />
             <ModalValidar ref={modalValidar} />
-
             <Excluir ref={modalExcluir} onDelete={onDelete} />
         </Layout>
     );

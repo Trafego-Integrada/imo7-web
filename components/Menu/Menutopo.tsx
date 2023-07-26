@@ -116,7 +116,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                 ml={{ base: "0px" }}
                 w="100%"
                 bg="bluelight"
-                h="100px"
+                h={12}
                 alignItems="center"
             >
                 <Grid templateColumns="repeat(3, 1fr)" w="100%" p={5}>
@@ -171,8 +171,9 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                                     <Avatar
                                         name={usuario?.nome}
                                         src={usuario?.avatar}
+                                        size="sm"
                                     />
-                                    <MdOutlineKeyboardArrowDown size="30" />
+                                    <MdOutlineKeyboardArrowDown />
                                 </Flex>
                             </MenuButton>
                             <MenuList>

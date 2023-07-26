@@ -65,14 +65,14 @@ const ModalBase = ({}, ref) => {
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent minW="60%">
+                <ModalContent minW="90%">
                     <ModalHeader>Contrato Nº {watch("codigo")} </ModalHeader>
 
                     <ModalCloseButton />
 
                     <ModalBody>
                         <Tabs variant="solid-rounded" size="sm">
-                            <TabList gap={2} overflow="auto">
+                            <TabList gap={2} overflow="auto" wrap="wrap">
                                 <Tab>Dados</Tab>
                                 {usuario?.permissoes?.find(
                                     (m) =>

@@ -6,6 +6,7 @@ import {
     Box,
     Button,
     Flex,
+    FormLabel,
     Grid,
     GridItem,
     Heading,
@@ -119,11 +120,19 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
                 p={4}
                 gridTemplateColumns={{
                     base: "repeat(1,1fr)",
-                    lg: "repeat(3,1fr)",
+                    lg: "repeat(12,1fr)",
                 }}
                 gap={4}
             >
-                <GridItem>
+                <GridItem colSpan={{ base: 1, lg: 1 }}>
+                    <FormLabel fontSize="sm">Status</FormLabel>
+                    <Switch
+                        size="sm"
+                        {...register(`status`)}
+                        isChecked={watch("status")}
+                    />
+                </GridItem>
+                <GridItem colSpan={{ base: 1, lg: 2 }}>
                     <FormSelect label="Tipo" {...register("tipo")} size="sm">
                         <option value="inquilino">Cadastro de Inquilino</option>
                         <option value="proprietario">
@@ -133,17 +142,17 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
                         <option value="imovel">Cadastro de Imóvel</option>
                     </FormSelect>
                 </GridItem>
-                <GridItem colSpan={{ base: 1, lg: 2 }}>
+                <GridItem colSpan={{ base: 1, lg: 9 }}>
                     <FormInput label="Nome" {...register("nome")} size="sm" />
                 </GridItem>
-                <GridItem colSpan={{ base: 1, lg: 3 }}>
+                <GridItem colSpan={{ base: 1, lg: 12 }}>
                     <FormInput
                         label="Descrição"
                         {...register("descricao")}
                         size="sm"
                     />
                 </GridItem>
-                <GridItem colSpan={{ base: 1, lg: 3 }}>
+                <GridItem colSpan={{ base: 1, lg: 12 }}>
                     <Box>
                         <Text fontSize="sm" mb={2}>
                             Instruções

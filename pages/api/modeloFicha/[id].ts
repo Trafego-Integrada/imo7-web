@@ -1,11 +1,10 @@
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
-import { providerStorage } from "@/lib/storage";
-import * as os from "oci-objectstorage";
-
 const handler = nextConnect();
 import { cors } from "@/middleware/cors";
+
 handler.use(cors);
+
 handler.get(async (req, res) => {
     try {
         const { id } = req.query;
@@ -15,6 +14,7 @@ handler.get(async (req, res) => {
                 id,
             },
         });
+
         res.send(data);
     } catch (error) {
         console.log(error);
@@ -24,9 +24,10 @@ handler.get(async (req, res) => {
         });
     }
 });
+
 handler.post(async (req, res) => {
     try {
-        const { tipo, nome, descricao, campos, instrucoes, checkbox } =
+        const { tipo, nome, descricao, campos, instrucoes, checkbox, status } =
             req.body;
 
         const data = await prisma.modeloFichaCadastral.update({
@@ -39,6 +40,7 @@ handler.post(async (req, res) => {
                 descricao,
                 campos,
                 instrucoes,
+                status,
                 checkbox: checkbox ? checkbox : [],
                 checkbox: checkbox ? checkbox : [],
             },

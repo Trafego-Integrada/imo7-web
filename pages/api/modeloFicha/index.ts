@@ -26,6 +26,7 @@ handle.get(async (req, res) => {
                 imobiliaria: {
                     id: req.user.imobiliariaId,
                 },
+                status: true,
             },
             orderBy: {
                 id: "desc",
@@ -35,6 +36,7 @@ handle.get(async (req, res) => {
         const count = await prisma.modeloFichaCadastral.count({
             where: {
                 ...filtroQuery,
+                status: true,
             },
         });
 

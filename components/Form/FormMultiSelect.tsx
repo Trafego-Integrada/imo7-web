@@ -43,7 +43,7 @@ const InputBase = (
             pos="relative"
             zIndex="dropdown"
         >
-            {label && <FormLabel>{label}</FormLabel>}
+            {label && <FormLabel fontSize={size}>{label}</FormLabel>}
             <InputGroup size={size}>
                 {leftAddon && (
                     <InputLeftAddon {...leftAddon.props}>

@@ -70,6 +70,7 @@ export const FiltroTopo = () => {
                         color="white"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
+                        size="sm"
                     />
                 </PopoverTrigger>
                 <PopoverContent w="xl" rounded="none">

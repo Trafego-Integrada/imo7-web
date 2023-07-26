@@ -4,15 +4,14 @@ import Link from "next/link";
 export const Logo = () => {
     return (
         <>
-            <Link href="./">
+            <Link href="/admin" passHref>
                 <Box
                     zIndex={10}
                     borderBottom="1px solid rgba(255,255,255,0.2)"
-                    minH="100px"
+                    minH={12}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    p={4}
                 >
                     <Flex fontSize="2xl" fontWeight="bold" letterSpacing="2px">
                         <Text color="white">Imo</Text>

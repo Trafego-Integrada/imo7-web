@@ -668,6 +668,7 @@ model ModeloFichaCadastral {
     campos         Json?
     arquivos       Json?
     checkbox       Json?
+    status         Boolean?         @default(true)
     createdAt      DateTime         @default(now())
     updatedAt      DateTime?        @updatedAt
     deletedAt      DateTime?

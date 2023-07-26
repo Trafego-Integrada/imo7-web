@@ -49,14 +49,23 @@ const InputBase = (
                 {leftElement && (
                     <InputLeftElement p={0}>{leftElement}</InputLeftElement>
                 )}
+                <style>
+                    {`
+                        .react-datepicker-wrapper {
+                            width:100%;
+                        }
+                    `}
+                </style>
                 <Input
                     ref={ref}
                     as={DatePicker}
+                    placeholderText="Selecione a data"
                     selectsRange={true}
                     locale="pt-BR"
                     dateFormat="dd/MM/yyyy"
                     isClearable={true}
                     size={size}
+                    width="full"
                     {...rest}
                 />
 
