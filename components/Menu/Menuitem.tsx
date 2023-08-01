@@ -61,6 +61,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                                 }}
                                 _focus={{ bg: "none", border: "none" }}
                                 _active={{ bg: "none", border: "none" }}
+                                color="white"
                                 onClick={handleToggle}
                             >
                                 {show ? (
@@ -74,7 +75,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                 </Box>
 
                 {subMenus && (
-                    <Collapse in={show} pos>
+                    <Collapse in={show}>
                         <List display="flex" flexDir="column">
                             {subMenus.map((item, key) => (
                                 <ListItem
@@ -88,6 +89,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                                     leftIcon={<Icon as={BsCircle} />}
                                     onClick={() => router.push(item.href)}
                                     fontSize="sm"
+                                    color="white"
                                 >
                                     {item.titulo}
                                 </ListItem>
@@ -148,6 +150,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                                 leftIcon={<Icon as={BsCircle} />}
                                 onClick={() => router.push(item.href)}
                                 fontSize="sm"
+                                color="white"
                             >
                                 {item.titulo}
                             </ListItem>

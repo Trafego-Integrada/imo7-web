@@ -45,36 +45,28 @@ handler.get(async (req, res) => {
             }
         }
 
-        console.log(
-            valorSubstr,
-            periodoSubstr,
-            abreviacaoPeriodo,
-            moment().subtract(1, "M").startOf("d").format(),
-            moment().endOf(abreviacaoPeriodo).format()
-        );
-
         const boletos = await prisma.boleto.findMany({
             where: {
-                data_vencimen: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
-                },
+                // data_vencimen: {
+                //     gte: moment()
+                //         .subtract(valorSubstr, periodoSubstr)
+                //         .startOf(abreviacaoPeriodo)
+                //         .format(),
+                //     lte: moment().endOf(abreviacaoPeriodo).format(),
+                // },
                 imobiliariaId: req.user.imobiliariaId,
             },
         });
 
         const extratos = await prisma.extrato.findMany({
             where: {
-                dataDeposito: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
-                },
+                // dataDeposito: {
+                //     gte: moment()
+                //         .subtract(valorSubstr, periodoSubstr)
+                //         .startOf(abreviacaoPeriodo)
+                //         .format(),
+                //     lte: moment().endOf(abreviacaoPeriodo).format(),
+                // },
                 imobiliariaId: req.user.imobiliariaId,
             },
             include: {
@@ -88,13 +80,13 @@ handler.get(async (req, res) => {
                     formaEnvio: "email",
                     tipo: "boleto",
                 },
-                dataEnvio: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
-                },
+                // dataEnvio: {
+                //     gte: moment()
+                //         .subtract(valorSubstr, periodoSubstr)
+                //         .startOf(abreviacaoPeriodo)
+                //         .format(),
+                //     lte: moment().endOf(abreviacaoPeriodo).format(),
+                // },
                 imobiliariaId: req.user.imobiliariaId,
             },
         });
@@ -105,13 +97,13 @@ handler.get(async (req, res) => {
                     formaEnvio: "whatsapp",
                     tipo: "boleto",
                 },
-                dataEnvio: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
-                },
+                // dataEnvio: {
+                //     gte: moment()
+                //         .subtract(valorSubstr, periodoSubstr)
+                //         .startOf(abreviacaoPeriodo)
+                //         .format(),
+                //     lte: moment().endOf(abreviacaoPeriodo).format(),
+                // },
                 imobiliariaId: req.user.imobiliariaId,
             },
         });
@@ -122,13 +114,13 @@ handler.get(async (req, res) => {
                     formaEnvio: "email",
                     tipo: "extrato",
                 },
-                dataEnvio: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
-                },
+                // dataEnvio: {
+                //     gte: moment()
+                //         .subtract(valorSubstr, periodoSubstr)
+                //         .startOf(abreviacaoPeriodo)
+                //         .format(),
+                //     lte: moment().endOf(abreviacaoPeriodo).format(),
+                // },
                 imobiliariaId: req.user.imobiliariaId,
             },
         });
@@ -139,39 +131,39 @@ handler.get(async (req, res) => {
                     formaEnvio: "whatsapp",
                     tipo: "extrato",
                 },
-                dataEnvio: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
-                },
+                // dataEnvio: {
+                //     gte: moment()
+                //         .subtract(valorSubstr, periodoSubstr)
+                //         .startOf(abreviacaoPeriodo)
+                //         .format(),
+                //     lte: moment().endOf(abreviacaoPeriodo).format(),
+                // },
                 imobiliariaId: req.user.imobiliariaId,
             },
         });
 
         const fichasCadastrais = await prisma.fichaCadastral.findMany({
             where: {
-                createdAt: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
-                },
+                // createdAt: {
+                //     gte: moment()
+                //         .subtract(valorSubstr, periodoSubstr)
+                //         .startOf(abreviacaoPeriodo)
+                //         .format(),
+                //     lte: moment().endOf(abreviacaoPeriodo).format(),
+                // },
                 imobiliariaId: req.user.imobiliariaId,
             },
         });
 
         const tarefas = await prisma.tarefa.findMany({
             where: {
-                dataVencimento: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
-                },
+                // dataVencimento: {
+                //     gte: moment()
+                //         .subtract(valorSubstr, periodoSubstr)
+                //         .startOf(abreviacaoPeriodo)
+                //         .format(),
+                //     lte: moment().endOf(abreviacaoPeriodo).format(),
+                // },
                 status: {
                     notIn: ["finalizada"],
                 },
@@ -182,11 +174,8 @@ handler.get(async (req, res) => {
         const contratosReajuste = await prisma.contrato.count({
             where: {
                 dataReajuste: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
+                    gte: moment().startOf("D").format(),
+                    lte: moment().add(30, "d").endOf("M").format(),
                 },
                 imobiliariaId: req.user.imobiliariaId,
             },
@@ -195,11 +184,8 @@ handler.get(async (req, res) => {
         const contratosInicio = await prisma.contrato.count({
             where: {
                 dataInicio: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
+                    gte: moment().subtract(30, "d").startOf("D").format(),
+                    lte: moment().endOf("D").format(),
                 },
                 imobiliariaId: req.user.imobiliariaId,
             },
@@ -208,11 +194,8 @@ handler.get(async (req, res) => {
         const contratosFim = await prisma.contrato.count({
             where: {
                 dataFim: {
-                    gte: moment()
-                        .subtract(valorSubstr, periodoSubstr)
-                        .startOf(abreviacaoPeriodo)
-                        .format(),
-                    lte: moment().endOf(abreviacaoPeriodo).format(),
+                    gte: moment().startOf("D").format(),
+                    lte: moment().add(30, "d").endOf("D").format(),
                 },
                 imobiliariaId: req.user.imobiliariaId,
             },

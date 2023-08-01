@@ -45,7 +45,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import {
     FiCheck,
@@ -61,6 +61,7 @@ import { useMutation, useQuery } from "react-query";
 import { CiCircleMore } from "react-icons/ci";
 import { RiMore2Line } from "react-icons/ri";
 import { CgMoreVerticalAlt } from "react-icons/cg";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 const filtroPadrao = {
     query: "",
     identificacao: "",
@@ -69,9 +70,17 @@ const filtroPadrao = {
     status: [],
     responsaveis: [],
 };
-const FichasCadastrais = () => {
+const FichasCadastrais = ({ query }) => {
     const { usuario } = useAuth();
-    const [filtro, setFiltro] = useState(filtroPadrao);
+    const [filtro, setFiltro] = useState({
+        ...filtroPadrao,
+        status:
+            query?.status && Array.isArray(query.status)
+                ? query?.status
+                : query?.status
+                ? [query?.status]
+                : [],
+    });
     const toast = useToast();
     const router = useRouter();
     const modal = useRef();
@@ -127,6 +136,7 @@ const FichasCadastrais = () => {
         });
     };
     // console.log(usuario);
+
     return (
         <Layout>
             <Box p={4}>
@@ -773,3 +783,11 @@ const FichasCadastrais = () => {
 };
 
 export default FichasCadastrais;
+
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+    return {
+        props: {
+            query: ctx.query,
+        },
+    };
+});

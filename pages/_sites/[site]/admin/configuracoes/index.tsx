@@ -155,7 +155,6 @@ const Configuracoes = () => {
                                 <Tab value="dados">Dados</Tab>
                                 <Tab value="envio">Envio</Tab>
                                 <Tab value="segundaVia">2º Via de boletos</Tab>
-                                <Tab value="fichas">Fichas Cadastrais</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel px={0}>

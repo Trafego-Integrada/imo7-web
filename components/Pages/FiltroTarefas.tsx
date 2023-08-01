@@ -1,19 +1,4 @@
-import {
-    Box,
-    Button,
-    Collapse,
-    Flex,
-    Grid,
-    GridItem,
-    Icon,
-    Text,
-    useDisclosure,
-} from "@chakra-ui/react";
-import {
-    MdOutlineKeyboardArrowDown,
-    MdOutlineKeyboardArrowUp,
-} from "react-icons/md";
-import { FormDate } from "@/components/Form/FormDate";
+import { Box, Button, Grid, GridItem, useDisclosure } from "@chakra-ui/react";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormDateRange } from "../Form/FormDateRange";
@@ -22,7 +7,6 @@ import { listarUsuarios } from "@/services/models/usuario";
 import { useQuery } from "react-query";
 
 export const FiltroTarefas = ({ setFiltro, filtro }) => {
-    const { isOpen, onToggle } = useDisclosure();
     const { data: responsaveis } = useQuery(
         ["responsaveis", { admImobiliaria: true, status: true }],
         listarUsuarios

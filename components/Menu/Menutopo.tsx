@@ -125,17 +125,12 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                             gap={1}
                             color="white"
                             display="flex"
-                            alignItems="center"
+                            align="center"
+                            h="full"
                         >
-                            <Text fontSize="3xl" letterSpacing={"2px"}>
+                            <Text fontSize="lg" letterSpacing={"2px"}>
                                 {namepage}
                             </Text>
-                            {subnamepage > "0" ? (
-                                <Text fontSize="3xl">|</Text>
-                            ) : (
-                                ""
-                            )}
-                            <Text fontSize="1xl">{subnamepage}</Text>
                         </Flex>
                     </GridItem>
 

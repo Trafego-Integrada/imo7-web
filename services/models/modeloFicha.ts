@@ -26,3 +26,12 @@ export const excluirFicha = async (id) => {
     const { data } = await api.delete("modeloFicha/" + id);
     return data;
 };
+
+export const excluirVariasFichas = async (ids) => {
+    const { data } = await api.delete("modeloFicha", {
+        params: {
+            ids,
+        },
+    });
+    return data;
+};

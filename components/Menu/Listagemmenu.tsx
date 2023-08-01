@@ -116,6 +116,13 @@ const menu = [
                 cargos: ["imobiliaria"],
                 modulos: ["imobiliaria.validacoesfaciais"],
             },
+            {
+                titulo: "Modelos de Fichas",
+                href: "/admin/fichas/modelos",
+                icon: HiOutlineDocumentText,
+                cargos: ["imobiliaria"],
+                modulos: ["imobiliaria.fichas.modelos"],
+            },
         ],
     },
     {

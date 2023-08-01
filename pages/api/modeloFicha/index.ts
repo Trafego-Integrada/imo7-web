@@ -11,13 +11,16 @@ handle.use(checkAuth);
 
 handle.get(async (req, res) => {
     try {
-        const { contratoId } = req.query;
+        let { contratoId, status = true } = req.query;
         let filtroQuery = {};
         if (contratoId) {
             filtroQuery = {
                 ...filtroQuery,
                 contratoId: Number(contratoId),
             };
+        }
+        if (status) {
+            status = JSON.parse(status);
         }
 
         const data = await prisma.modeloFichaCadastral.findMany({
@@ -26,21 +29,24 @@ handle.get(async (req, res) => {
                 imobiliaria: {
                     id: req.user.imobiliariaId,
                 },
-                status: true,
+                status,
             },
             orderBy: {
                 id: "desc",
             },
         });
 
-        const count = await prisma.modeloFichaCadastral.count({
+        const total = await prisma.modeloFichaCadastral.count({
             where: {
                 ...filtroQuery,
-                status: true,
+                imobiliaria: {
+                    id: req.user.imobiliariaId,
+                },
+                status,
             },
         });
 
-        res.send({ data, total: count });
+        res.send({ data, total });
     } catch (error) {
         res.status(500).send({
             success: false,
@@ -76,6 +82,34 @@ handle.post(async (req, res) => {
         });
     }
 });
+
+handle.delete(async (req, res) => {
+    try {
+        const { ids } = req.query;
+        let arrayIds = JSON.parse(ids);
+
+        if (!arrayIds.length) {
+            return res
+                .status(400)
+                .send({ success: false, message: "Nenhum id informado" });
+        }
+
+        await prisma.modeloFichaCadastral.deleteMany({
+            where: {
+                id: {
+                    in: arrayIds,
+                },
+            },
+        });
+        return res.send({ success: true });
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error?.message,
+        });
+    }
+});
+
 function compareStreams(stream1: st.Readable, stream2: st.Readable): boolean {
     return streamToString(stream1) === streamToString(stream2);
 }

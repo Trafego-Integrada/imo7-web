@@ -59,6 +59,7 @@ import { useQuery } from "react-query";
 import { dadosDashboard } from "@/services/models/dashboard";
 import { formatoData, formatoValor, statusTarefa } from "@/helpers/helpers";
 import moment from "moment";
+import Link from "next/link";
 
 const Home = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
@@ -142,7 +143,7 @@ const Home = () => {
         <>
             <Layout>
                 <Container maxW="container.xl" p={5}>
-                    <Flex mb={4}>
+                    {/* <Flex mb={4}>
                         <Popover placement="top-start" isOpen={isOpen}>
                             <PopoverTrigger>
                                 <Button
@@ -200,7 +201,7 @@ const Home = () => {
                                 </PopoverFooter>
                             </PopoverContent>
                         </Popover>
-                    </Flex>
+                    </Flex> */}
                     <Grid
                         gap={4}
                         gridTemplateColumns={{
@@ -280,103 +281,168 @@ const Home = () => {
                                         style={{ padding: 0 }}
                                     />
                                     <Flex flexDir="column" gap={1}>
-                                        <Button size="xs" colorScheme="orange">
-                                            <Text
-                                                as="span"
-                                                mr={3}
-                                                fontWeight="bold"
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/fichas",
+                                                query: {
+                                                    status: "aguardando",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="orange"
                                             >
-                                                {
-                                                    data?.fichasCadastrais?.filter(
-                                                        (i) =>
-                                                            i.status ==
-                                                            "aguardando"
-                                                    )?.length
-                                                }
-                                            </Text>
-                                            Aguardando
-                                        </Button>
-                                        <Button size="xs" colorScheme="yellow">
-                                            <Text
-                                                as="span"
-                                                mr={3}
-                                                fontWeight="bold"
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.fichasCadastrais?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "aguardando"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Aguardando
+                                            </Button>
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/fichas",
+                                                query: {
+                                                    status: "preenchida",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="yellow"
                                             >
-                                                {
-                                                    data?.fichasCadastrais?.filter(
-                                                        (i) =>
-                                                            i.status ==
-                                                            "preenchida"
-                                                    )?.length
-                                                }
-                                            </Text>
-                                            Preenchidas
-                                        </Button>
-                                        <Button size="xs" colorScheme="blue">
-                                            <Text
-                                                as="span"
-                                                mr={3}
-                                                fontWeight="bold"
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.fichasCadastrais?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "preenchida"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Preenchidas
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/fichas",
+                                                query: {
+                                                    status: "em_analise",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="blue"
                                             >
-                                                {
-                                                    data?.fichasCadastrais?.filter(
-                                                        (i) =>
-                                                            i.status ==
-                                                            "em_analise"
-                                                    )?.length
-                                                }
-                                            </Text>
-                                            Em análise
-                                        </Button>
-                                        <Button size="xs" colorScheme="red">
-                                            <Text
-                                                as="span"
-                                                mr={3}
-                                                fontWeight="bold"
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.fichasCadastrais?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "em_analise"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Em análise
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/fichas",
+                                                query: {
+                                                    status: "reprovada",
+                                                },
+                                            }}
+                                        >
+                                            <Button size="xs" colorScheme="red">
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.fichasCadastrais?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "reprovada"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Reprovadas
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/fichas",
+                                                query: {
+                                                    status: "aprovada",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="green"
                                             >
-                                                {
-                                                    data?.fichasCadastrais?.filter(
-                                                        (i) =>
-                                                            i.status ==
-                                                            "reprovada"
-                                                    )?.length
-                                                }
-                                            </Text>
-                                            Reprovadas
-                                        </Button>
-                                        <Button size="xs" colorScheme="green">
-                                            <Text
-                                                as="span"
-                                                mr={3}
-                                                fontWeight="bold"
-                                            >
-                                                {
-                                                    data?.fichasCadastrais?.filter(
-                                                        (i) =>
-                                                            i.status ==
-                                                            "aprovada"
-                                                    )?.length
-                                                }
-                                            </Text>
-                                            Aprovadas
-                                        </Button>
-
-                                        <Button size="xs">
-                                            <Text
-                                                as="span"
-                                                mr={3}
-                                                fontWeight="bold"
-                                            >
-                                                {
-                                                    data?.fichasCadastrais?.filter(
-                                                        (i) =>
-                                                            i.status ==
-                                                            "arquivada"
-                                                    )?.length
-                                                }
-                                            </Text>
-                                            Arquivadas
-                                        </Button>
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.fichasCadastrais?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "aprovada"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Aprovadas
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/fichas",
+                                                query: {
+                                                    status: "arquivada",
+                                                },
+                                            }}
+                                        >
+                                            <Button size="xs">
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.fichasCadastrais?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "arquivada"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Arquivadas
+                                            </Button>{" "}
+                                        </Link>
                                     </Flex>
                                 </Flex>
                             </Box>
@@ -385,7 +451,7 @@ const Home = () => {
                             <Heading size="sm" color="gray" mb={2}>
                                 Próximas Tarefas
                             </Heading>
-                            <Box bg="white" h="full" p={4}>
+                            <Box bg="white" p={4}>
                                 <Table size="sm">
                                     <Thead>
                                         <Tr>
@@ -440,8 +506,8 @@ const Home = () => {
                             <Heading size="sm" color="gray" mb={2}>
                                 Tarefas
                             </Heading>
-                            <Flex flexDir="column" h="full" gap={2}>
-                                <Box bg="white" h="full" p={4}>
+                            <Flex flexDir="column" gap={2}>
+                                <Box bg="white" p={4}>
                                     <Heading size="sm" textAlign="center">
                                         Em aberto
                                     </Heading>
@@ -459,7 +525,7 @@ const Home = () => {
                                         }, 0)}
                                     </Text>
                                 </Box>
-                                <Box bg="white" h="full" p={4}>
+                                <Box bg="white" p={4}>
                                     <Heading size="sm" textAlign="center">
                                         Em atraso
                                     </Heading>
@@ -493,10 +559,9 @@ const Home = () => {
                                             data?.contratosReajuste
                                         )}
                                     </StatNumber>
-                                    {/* <StatHelpText>
-                                        <StatArrow type="decrease" />
-                                        9.05%
-                                    </StatHelpText> */}
+                                    <StatHelpText fontSize="xs">
+                                        Nos próximos 30 dias
+                                    </StatHelpText>
                                 </Stat>
                                 <Stat bg="white" p={4}>
                                     <StatLabel>Contratos Iniciados</StatLabel>
@@ -507,13 +572,12 @@ const Home = () => {
                                             data?.contratosInicio
                                         )}
                                     </StatNumber>
-                                    {/* <StatHelpText>
-                                        <StatArrow type="increase" />
-                                        23.36%
-                                    </StatHelpText> */}
+                                    <StatHelpText fontSize="xs">
+                                        Nos últimos 30 dias
+                                    </StatHelpText>
                                 </Stat>
                                 <Stat bg="white" p={4}>
-                                    <StatLabel>Contratos Finalizados</StatLabel>
+                                    <StatLabel>Contratos à finalizar</StatLabel>
                                     <StatNumber>
                                         {isLoading ? (
                                             <Spinner />
@@ -521,10 +585,9 @@ const Home = () => {
                                             data?.contratosFim
                                         )}
                                     </StatNumber>
-                                    {/* <StatHelpText>
-                                        <StatArrow type="decrease" />
-                                        9.05%
-                                    </StatHelpText> */}
+                                    <StatHelpText fontSize="xs">
+                                        Nos próximos 30 dias
+                                    </StatHelpText>
                                 </Stat>
                             </StatGroup>
                         </GridItem>
