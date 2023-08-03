@@ -1,4 +1,4 @@
-import { formatoData } from "@/helpers/helpers";
+import { formatoData, removerCaracteresEspeciais } from "@/helpers/helpers";
 import pdf from "@/lib/pdf";
 import prisma from "@/lib/prisma";
 import { Flex } from "@chakra-ui/react";
@@ -14,7 +14,7 @@ const Boleto = ({ boleto }) => {
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>${boleto.beneficiario}</title>
+<title>${boleto?.beneficiario}</title>
 <style type="text/css">
     @media print {
         .noprint {
@@ -193,18 +193,18 @@ const Boleto = ({ boleto }) => {
         <td valign="bottom" class="noborder nopadding" width="175px">
             <div class="logobanco" style="padding:15px;">
                 
-                    <img src="${boleto.imobiliaria?.logo}" width="75px">
+                    <img src="${boleto?.imobiliaria?.logo}" width="75px">
                 
             </div>
         </td>
         <td valign="bottom" class="noborder nopadding" width="175px">
             <div class="conteudo" style="text-align:right;padding:15px;font:Helvetica;font-size:10px;
             font-weight:bold;">
-            ${boleto.imobiliaria?.endereco}, Nº ${
-                        boleto.imobiliaria?.numero
-                    }, ${boleto.imobiliaria?.bairro}, ${
-                        boleto.imobiliaria?.cidade
-                    }/ ${boleto.imobiliaria?.estado}
+            ${boleto?.imobiliaria?.endereco}, Nº ${
+                        boleto?.imobiliaria?.numero
+                    }, ${boleto?.imobiliaria?.bairro}, ${
+                        boleto?.imobiliaria?.cidade
+                    }/ ${boleto?.imobiliaria?.estado}
                </div>
         </td>
     </tr>
@@ -217,64 +217,48 @@ const Boleto = ({ boleto }) => {
             <div class="logocontainer">
                 <div class="logobanco">
                     <img src="/img/boleto/logo-${
-                        boleto.field_cod_banco &&
-                        boleto.field_cod_banco?.slice(0, 3)
+                        boleto?.field_cod_banco &&
+                        boleto?.field_cod_banco?.slice(0, 3)
                     }.jpg">
                 </div>
-                <div class="codbanco">${
-                    boleto.field_cod_banco
-                }<?php echo $dadosboleto['field_cod_banco'] ?></div>
+                <div class="codbanco">${boleto?.field_cod_banco}</div>
             </div>
-            <div class="linha-digitavel">${
-                boleto.linha_digitavel
-            }<?php echo $dadosboleto['linha_digitavel'] ?></div>
+            <div class="linha-digitavel">${boleto?.linha_digitavel}</div>
             </div>
         </td>
     </tr>
     <tr>
         <td colspan="2" width="250px">
             <div class="titulo">Beneficiário</div>
-            <div class="conteudo">${
-                boleto.beneficiario
-            }<?php echo $dadosboleto['beneficiario'] ?></div>
+            <div class="conteudo">${boleto?.beneficiario}</div>
         </td>
         <td>
             <div class="titulo">CPF/CNPJ</div>
-            <div class="conteudo">${
-                boleto.cpf_cnpj_beneficiario
-            }<?= $dadosboleto['cpf_cnpj_beneficiario'] ?></div>
+            <div class="conteudo">${boleto?.cpf_cnpj_beneficiario}</div>
         </td>
         <td width="120px">
             <div class="titulo">Agência/Cód. Beneficiário</div>
-            <div class="conteudo rtl">${
-                boleto.ag_cod_beneficiar
-            }<?php echo $dadosboleto['ag_cod_beneficiar'] ?></div>
+            <div class="conteudo rtl">${boleto?.ag_cod_beneficiar}</div>
         </td>
         <td width="160px">
             <div class="titulo">Vencimento</div>
             <div class="conteudo rtl">${formatoData(
-                boleto.data_vencimen
-            )}<?php echo $dadosboleto['data_vencimen'] ?></div>
+                boleto?.data_vencimen
+            )}</div>
         </td>
     </tr>
     <tr>
         <td colspan="3">
             <div class="titulo">Pagador</div>
-            <div class="conteudo">${
-                boleto.sacado2_nome
-            }<?php echo $dadosboleto['sacado2_nome'] ?></div>
+            <div class="conteudo">${boleto?.sacado2_nome}</div>
         </td>
         <td>
             <div class="titulo">Nº documento</div>
-            <div class="conteudo rtl">${
-                boleto.num_doc2
-            }<?php echo $dadosboleto['num_doc2'] ?></div>
+            <div class="conteudo rtl">${boleto?.num_doc2}</div>
         </td>
         <td>
             <div class="titulo">Nosso número</div>
-            <div class="conteudo rtl">${
-                boleto.nosso_numero2
-            }<?php echo $dadosboleto['nosso_numero2'] ?></div>
+            <div class="conteudo rtl">${boleto?.nosso_numero2}</div>
         </td>
     </tr>
     <tr>
@@ -285,25 +269,25 @@ const Boleto = ({ boleto }) => {
         <td>
             <div class="titulo">Quantidade</div>
             <div class="conteudo rtl">${
-                boleto.qtd2
+                boleto?.qtd2
             }<?php echo $dadosboleto['qtd2'] ?></div>
         </td>
         <td>
             <div class="titulo">Valor</div>
             <div class="conteudo rtl">${
-                boleto.xvalor
+                boleto?.xvalor
             }<?php if($dadosboleto['xvalor']!=0) {echo $dadosboleto['xvalor'];} ?></div>
         </td>
         <td>
             <div class="titulo">(-) Descontos / Abatimentos</div>
             <div class="conteudo rtl">${
-                boleto.desconto2
+                boleto?.desconto2
             }<?php if($dadosboleto['desconto2']!=0) {echo $dadosboleto['desconto2'];} ?></div>
         </td>
         <td>
             <div class="titulo">(=) Valor Documento</div>
             <div class="conteudo rtl">${
-                boleto.valor_doc2
+                boleto?.valor_doc2
             }<?php echo number_format($dadosboleto['valor_doc2'] - $dadosboleto['desconto2'], 2,',','.') ?></div>
         </td>
     </tr>
@@ -315,19 +299,19 @@ const Boleto = ({ boleto }) => {
         <td>
             <div class="titulo">(-) Outras deduções</div>
             <div class="conteudo">${
-                boleto.outras_deducoes2
+                boleto?.outras_deducoes2
             }<?php if($dadosboleto['outras_deducoes2']!=0) {echo $dadosboleto['outras_deducoes2'];} ?></div>
         </td>
         <td>
             <div class="titulo">(+) Outros acréscimos</div>
             <div class="conteudo rtl">${
-                boleto.outros_acrescimos2
+                boleto?.outros_acrescimos2
             }<?php if($dadosboleto['outros_acrescimos2']!=0) {echo $dadosboleto['outros_acrescimos2'];} ?></div>
         </td>
         <td>
             <div class="titulo">(=) Valor cobrado</div>
             <div class="conteudo rtl">${
-                boleto.valorcobrado2
+                boleto?.valorcobrado2
             }<?php number_format($dadosboleto['valorcobrado2'] - $dadosboleto['valorcobrado2'], 2,',','.') ?></div>
         </td>
     </tr>
@@ -370,17 +354,17 @@ const Boleto = ({ boleto }) => {
         <div style="display:flex; align-items:center">
         <div class="logocontainer">
             <div class="logobanco">
-                <img src="/img/boleto/logo-${boleto.field_cod_banco?.slice(
+                <img src="/img/boleto/logo-${boleto?.field_cod_banco?.slice(
                     0,
                     3
                 )}.jpg">
             </div>
             <div class="codbanco">${
-                boleto.field_cod_banco
+                boleto?.field_cod_banco
             }<?php echo $dadosboleto['field_cod_banco'] ?></div>
         </div>
         <div class="linha-digitavel">${
-            boleto.linha_digitavel
+            boleto?.linha_digitavel
         }<?php echo $dadosboleto['linha_digitavel'] ?></div>
         </div>
         </td>
@@ -389,13 +373,13 @@ const Boleto = ({ boleto }) => {
         <td colspan="5">
             <div class="titulo">Local de pagamento</div>
             <div class="conteudo">${
-                boleto.local_pgto1
+                boleto?.local_pgto1
             }<?php echo $dadosboleto['local_pgto1'] ?></div>
         </td>
         <td width="155px">
             <div class="titulo">Vencimento</div>
             <div class="conteudo rtl">${formatoData(
-                boleto.data_vencimen
+                boleto?.data_vencimen
             )}<?php echo $dadosboleto['data_vencimen'] ?></div>
         </td>
     </tr>
@@ -403,57 +387,57 @@ const Boleto = ({ boleto }) => {
         <td colspan="4">
             <div class="titulo">Beneficiário</div>
             <div class="conteudo">${
-                boleto.beneficiario
+                boleto?.beneficiario
             }<?php echo $dadosboleto['beneficiario'] ?></div>
         </td>
         <td>
             <div class="titulo">CPF/CNPJ</div>
             <div class="conteudo">${
-                boleto.cpf_cnpj_beneficiario
+                boleto?.cpf_cnpj_beneficiario
             }<?= $dadosboleto['cpf_cnpj_beneficiario'] ?></div>
         </td>
         <td>
             <div class="titulo">Agência/Cód. Beneficiário</div>
             <div class="conteudo rtl">${
-                boleto.ag_cod_beneficiar
+                boleto?.ag_cod_beneficiar
             }<?php echo $dadosboleto['ag_cod_beneficiar'] ?></div>
         </td>
     </tr>
     <tr>
         <td width="110px">
             <div class="titulo">Data do documento</div>
-            <div class="conteudo">${
-                boleto.data_doc
-            }<?php echo $dadosboleto['data_doc'] ?></div>
+            <div class="conteudo">${formatoData(
+                boleto?.data_doc
+            )}<?php echo $dadosboleto['data_doc'] ?></div>
         </td>
         <td width="120px">
             <div class="titulo">Nº documento</div>
             <div class="conteudo">${
-                boleto.num_doc2
+                boleto?.num_doc2
             }<?php echo $dadosboleto['num_doc2'] ?></div>
         </td>
         <td width="60px">
             <div class="titulo">Espécie doc.</div>
             <div class="conteudo">${
-                boleto.especie_doc
+                boleto?.especie_doc
             }<?php echo $dadosboleto['especie_doc'] ?></div>
         </td>
         <td>
             <div class="titulo">Aceite</div>
             <div class="conteudo">${
-                boleto.aceite
+                boleto?.aceite
             }<?php echo $dadosboleto['aceite'] ?></div>
         </td>
         <td width="110px">
             <div class="titulo">Data processamento</div>
-            <div class="conteudo">${
-                boleto.data_proces
-            }<?php echo $dadosboleto['data_proces'] ?></div>
+            <div class="conteudo">${formatoData(
+                boleto?.data_proces
+            )}<?php echo $dadosboleto['data_proces'] ?></div>
         </td>
         <td>
             <div class="titulo">Nosso número</div>
             <div class="conteudo rtl">${
-                boleto.nosso_numero2
+                boleto?.nosso_numero2
             }<?php echo $dadosboleto['nosso_numero2'] ?></div>
         </td>
     </tr>
@@ -465,7 +449,7 @@ const Boleto = ({ boleto }) => {
         <td>
             <div class="titulo">Carteira</div>
             <div class="conteudo">${
-                boleto.carteira
+                boleto?.carteira
             }<?php echo $dadosboleto['carteira'] ?></div>
         </td>
         <td>
@@ -475,19 +459,19 @@ const Boleto = ({ boleto }) => {
         <td>
             <div class="titulo">Quantidade</div>
             <div class="conteudo">${
-                boleto.qtd2
+                boleto?.qtd2
             }<?php echo $dadosboleto['qtd2'] ?></div>
         </td>
         <td>
             <div class="titulo">Valor</div>
             <div class="conteudo">${
-                boleto.xvalor
+                boleto?.xvalor
             }<?php if($dadosboleto['xvalor']!=0){echo $dadosboleto['xvalor'];} ?></div>
         </td>
         <td>
             <div class="titulo">(=) Valor Documento</div>
             <div class="conteudo rtl">${
-                boleto.valor_doc2
+                boleto?.valor_doc2
             }<?php echo number_format($dadosboleto['valor_doc2'], 2,',','.') ?></div>
         </td>
     </tr>
@@ -498,71 +482,71 @@ const Boleto = ({ boleto }) => {
         <td>
             <div class="titulo">(-) Descontos / Abatimentos</div>
             <div class="conteudo rtl">${
-                boleto.desconto2
+                boleto?.desconto2
             }<?php if($dadosboleto['desconto2']!=0){echo $dadosboleto['desconto2'];} ?></div>
         </td>
     </tr>
     <tr>
         <td colspan="5" class="notopborder">
             <div class="conteudo">${
-                boleto.instrucoes1
+                boleto?.instrucoes1
             }<?php echo $dadosboleto['instrucoes1']; ?></div>
             <div class="conteudo">${
-                boleto.instrucoes2
+                boleto?.instrucoes2
             }<?php echo $dadosboleto['instrucoes2']; ?></div>
         </td>
         <td>
             <div class="titulo">(-) Outras deduções</div>
             <div class="conteudo rtl">${
-                boleto.outras_deducoes2
+                boleto?.outras_deducoes2
             }<?php if($dadosboleto['outras_deducoes2']!=0) {echo $dadosboleto['outras_deducoes2'];} ?></div>
         </td>
     </tr>
     <tr>
         <td colspan="5" class="notopborder">
             <div class="conteudo">${
-                boleto.instrucoes3
+                boleto?.instrucoes3
             }<?php echo $dadosboleto['instrucoes3']; ?></div>
             <div class="conteudo">${
-                boleto.instrucoes4
+                boleto?.instrucoes4
             }<?php echo $dadosboleto['instrucoes4']; ?></div>
         </td>
         <td>
             <div class="titulo">(+) Mora / Multa</div>
             <div class="conteudo rtl">${
-                boleto.valorcobrado2
+                boleto?.valorcobrado2
             }<?php if($dadosboleto['mora_multa2']!=0){echo $dadosboleto['mora_multa2'];} ?></div>
         </td>
     </tr>
     <tr>
         <td colspan="5" class="notopborder">
             <div class="conteudo">${
-                boleto.valorcobrado2
+                boleto?.valorcobrado2
             }<?php echo $dadosboleto['instrucoes5']; ?></div>
             <div class="conteudo">${
-                boleto.valorcobrado2
+                boleto?.valorcobrado2
             }<?php echo $dadosboleto['instrucoes6']; ?></div>
         </td>
         <td>
             <div class="titulo">(+) Outros acréscimos</div>
             <div class="conteudo rtl">${
-                boleto.valorcobrado2
+                boleto?.valorcobrado2
             }<?php if($dadosboleto['outros_acrescimos2']!=0){echo $dadosboleto['outros_acrescimos2'];} ?></div>
         </td>
     </tr>
     <tr>
         <td colspan="5" class="notopborder">
             <div class="conteudo">${
-                boleto.valorcobrado2
+                boleto?.valorcobrado2
             }<?php echo $dadosboleto['instrucoes7']; ?></div>
             <div class="conteudo">${
-                boleto.valorcobrado2
+                boleto?.valorcobrado2
             }<?php echo $dadosboleto['instrucoes8']; ?></div>
         </td>
         <td>
             <div class="titulo">(=) Valor cobrado</div>
             <div class="conteudo rtl">${
-                boleto.valorcobrado2
+                boleto?.valorcobrado2
             }<?php if($dadosboleto['valorcobrado2']!=0){echo $dadosboleto['valorcobrado2'];} ?></div>
         </td>
     </tr>
@@ -570,12 +554,12 @@ const Boleto = ({ boleto }) => {
         <td colspan="5">
             <div class="titulo">Pagador</div>
             <div class="conteudo">${
-                boleto.sacado2_nome
+                boleto?.sacado2_nome
             } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  CPF/CNPJ: ${
-                        boleto.bols_cpf_cnpj
+                        boleto?.bols_cpf_cnpj
                     }</div>
-            <div class="conteudo">${boleto.sacado2_endereco}</div>
-            <div class="conteudo">${boleto.sacado2_city_uf_cep}</div>
+            <div class="conteudo">${boleto?.sacado2_endereco}</div>
+            <div class="conteudo">${boleto?.sacado2_city_uf_cep}</div>
         </td>
         <td class="noleftborder">
             <div class="titulo" style="margin-top: 50px">Cód. Baixa</div>
@@ -584,7 +568,7 @@ const Boleto = ({ boleto }) => {
     <tr>
         <td colspan="4" class="noleftborder">
             <div class="titulo" style="display: none">Sacador/Avalista
-                <div class="conteudo sacador">${boleto.beneficiario}</div>
+                <div class="conteudo sacador">${boleto?.beneficiario}</div>
             </div>
         </td>
         <td colspan="2" class="norightborder noleftborder">
@@ -598,8 +582,14 @@ const Boleto = ({ boleto }) => {
 </html>`,
                 }}
             ></div>
+
             <Flex justify="center">
-                <Barcode value={boleto.linha_digitavel} width={1} height={44} />
+                <Barcode
+                    value={boleto.barcode}
+                    height={50}
+                    format="CODE128"
+                    displayValue={false}
+                />
             </Flex>
         </>
     );
@@ -611,7 +601,7 @@ const Page = ({ boleto }) => {
 export default Page;
 export const getServerSideProps = async ({ req, res, query }) => {
     const { id } = query;
-    const response = await prisma.boleto.findUnique({
+    const response = await prisma.boleto?.findUnique({
         where: {
             id: Number(id),
         },
@@ -632,7 +622,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
         // without this header, your browse will open the pdf directly
         res.setHeader(
             "Content-disposition",
-            `attachment; filename=${boleto.id}.pdf`
+            `attachment; filename=${boleto?.id}.pdf`
         );
 
         // set content type
