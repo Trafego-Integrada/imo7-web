@@ -48,6 +48,7 @@ handle.get(async (req, res) => {
             },
             include: {
                 categoria: true,
+                dependencia: true,
             },
         });
 
@@ -97,6 +98,14 @@ handle.post(async (req, res) => {
                 camposEndereco: camposEndereco ? camposEndereco : {},
 
                 opcoes: opcoes ? opcoes : [],
+                dependencia: dependencia
+                    ? {
+                          connect: {
+                              id: dependencia.id,
+                          },
+                      }
+                    : {},
+                dependenciaValor,
             },
         });
         res.send(data);

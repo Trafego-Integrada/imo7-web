@@ -1,11 +1,11 @@
 import {
-    Drawer,
-    DrawerBody,
-    DrawerCloseButton,
-    DrawerContent,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
     Flex,
     Grid,
     GridItem,
@@ -58,7 +58,7 @@ const schema = yup.object().shape({
     ordem: yup.string().required("Campo obrigatório"),
 });
 
-const DrawerBase = ({}, ref) => {
+const ModalBase = ({}, ref) => {
     const toast = useToast();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const {
@@ -127,21 +127,25 @@ const DrawerBase = ({}, ref) => {
         listarCategoriaCampoFichas
     );
     const { data: campos } = useQuery(["listaCampos", {}], listarCampos);
+    console.log(watch());
     return (
-        <Drawer isOpen={isOpen} onClose={onClose} placement="right" size="lg">
-            <DrawerOverlay />
-            <DrawerContent>
-                <DrawerHeader>
-                    Categorias de Campos
-                    <DrawerCloseButton />
-                </DrawerHeader>
-                <DrawerBody
+        <Modal isOpen={isOpen} onClose={onClose} placement="right" size="3xl">
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>
+                    Cadastro de Campo
+                    <ModalCloseButton />
+                </ModalHeader>
+                <ModalBody
                     as="form"
                     id="categoria-form"
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <Box>
-                        <Grid gridTemplateColumns="repeat(1, 1fr)" gap={4}>
+                        <Grid
+                            gridTemplateColumns={{ lg: "repeat(3, 1fr)" }}
+                            gap={4}
+                        >
                             <GridItem>
                                 <FormInput
                                     size="sm"
@@ -362,11 +366,61 @@ const DrawerBase = ({}, ref) => {
                                         </GridItem>
                                     )}
                                 </>
+                            )}{" "}
+                            <GridItem colSpan={{ lg: 2 }} colStart={{ lg: 1 }}>
+                                <Controller
+                                    control={control}
+                                    name="dependencia"
+                                    render={({ field }) => (
+                                        <FormMultiSelect
+                                            {...field}
+                                            size="sm"
+                                            label="Dependencia"
+                                            placeholder="Selecione..."
+                                            options={campos?.data}
+                                            getOptionLabel={(e) => e.nome}
+                                            getOptionValue={(e) => e.id}
+                                            description="Informe o campo que deve estar preenchido para que este campo seja ativado"
+                                        />
+                                    )}
+                                />
+                            </GridItem>
+                            {watch("dependencia.opcoes")?.length > 0 && (
+                                <GridItem colSpan={{ lg: 1 }}>
+                                    <Controller
+                                        control={control}
+                                        name="dependenciaValor"
+                                        render={({ field }) => (
+                                            <FormSelect
+                                                {...field}
+                                                size="sm"
+                                                label="Opção requerida"
+                                                placeholder="Selecione..."
+                                            >
+                                                {watch("dependencia.opcoes")
+                                                    .length > 0 ? (
+                                                    watch(
+                                                        "dependencia.opcoes"
+                                                    ).map((i) => (
+                                                        <option
+                                                            key={i}
+                                                            value={i}
+                                                        >
+                                                            {i}
+                                                        </option>
+                                                    ))
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </FormSelect>
+                                        )}
+                                    />
+                                </GridItem>
                             )}
                         </Grid>
                     </Box>
-                </DrawerBody>
-                <DrawerFooter>
+                </ModalBody>
+                <ModalFooter>
                     <Button
                         type="submit"
                         form="categoria-form"
@@ -375,10 +429,10 @@ const DrawerBase = ({}, ref) => {
                     >
                         Salvar
                     </Button>
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     );
 };
 
-export const DrawerCampo = forwardRef(DrawerBase);
+export const ModalCampo = forwardRef(ModalBase);

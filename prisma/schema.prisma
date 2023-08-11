@@ -718,6 +718,8 @@ model FichaCadastral {
     imovelId               Int?
     importadaJb            Boolean?                      @default(false)
     ValidacaoFacial        ValidacaoFacial[]
+    dataAprovacao          DateTime?
+    dataReprovacao         DateTime?
 }
 
 model FichaCadastralPreenchimento {
@@ -773,12 +775,16 @@ model CampoFichaCadastral {
     mask                        String?
     cep                         Boolean                       @default(false)
     camposEndereco              Json?
+    dependenciaValor            String?
     createdAt                   DateTime                      @default(now())
     updatedAt                   DateTime?                     @updatedAt
     deletedAt                   DateTime?
     categoria                   CategoriaCampoFichaCadastral? @relation(fields: [categoriaId], references: [id])
     categoriaId                 String?
     FichaCadastralPreenchimento FichaCadastralPreenchimento[]
+    dependencia                 CampoFichaCadastral?          @relation("CampoDependencia", fields: [dependenciaId], references: [id])
+    dependenciaId               String?
+    dependencias                CampoFichaCadastral[]         @relation("CampoDependencia")
 
     @@unique([codigo, categoriaId])
 }

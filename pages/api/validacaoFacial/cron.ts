@@ -21,7 +21,15 @@ handler.get(async (req, res) => {
 
     const data = await prisma.validacaoFacial.findMany({
         take: 5,
-        where: { status: 0, fotoUrl: null },
+        where: {
+            status: 0,
+            fotoUrl: {
+                not: null,
+            },
+            resultado: {
+                not: null,
+            },
+        },
         orderBy: {
             updatedAt: "asc",
         },

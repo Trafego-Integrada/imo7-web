@@ -64,8 +64,8 @@ handle.post(async (req, res) => {
         email,
         documento,
         celular,
-        password,
-        confirmPassword,
+        senha,
+        confirmarSenha,
         telefone,
         profissao,
         cargos,
@@ -77,12 +77,12 @@ handle.post(async (req, res) => {
     } = req.body;
 
     let atualizarSenha = {};
-    if (password && confirmPassword) {
-        if (password != confirmPassword) {
+    if (senha && confirmarSenha) {
+        if (senha != confirmarSenha) {
             res.status(401).send("As senhas não conferem");
         }
         atualizarSenha = {
-            password: bcrypt.hashSync(password, 10),
+            senhaHash: bcrypt.hashSync(senha, 10),
         };
     }
 

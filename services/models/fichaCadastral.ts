@@ -38,6 +38,15 @@ export const excluirFicha = async (id) => {
     return data;
 };
 
+export const excluirVariasFichas = async (ids) => {
+    const { data } = await api.delete("fichaCadastral", {
+        params: {
+            ids,
+        },
+    });
+    return data;
+};
+
 export const aprovaCampo = async ({ fichaId, campoCodigo }) => {
     const { data } = await api.post(
         "fichaCadastral/" + fichaId + "/aprovarCampo",

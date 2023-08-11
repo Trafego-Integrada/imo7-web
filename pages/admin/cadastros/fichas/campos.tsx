@@ -48,7 +48,7 @@ import {
     excluirCampoFicha,
     listarCampoFichas,
 } from "@/services/models/campoFicha";
-import { DrawerCampo } from "@/components/Drawers/Cadastros/FichaCadastral/DrawerCampo";
+import { ModalCampo } from "@/components/Drawers/Cadastros/FichaCadastral/DrawerCampo";
 
 const Configuracoes = () => {
     const [ficha, setFicha] = useState("");
@@ -215,7 +215,7 @@ const Configuracoes = () => {
                         </TableContainer>
                     </Box>
                 </Box>
-                <DrawerCampo ref={drawer} />
+                <ModalCampo ref={drawer} />
                 <Excluir
                     ref={modalExcluir}
                     titulo="Excluir campo"

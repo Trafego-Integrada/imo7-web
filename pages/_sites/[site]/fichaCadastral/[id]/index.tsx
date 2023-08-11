@@ -227,11 +227,32 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     gap={2}
                                 >
                                     {item.campos
-                                        .filter(
-                                            (i) =>
-                                                modelo.campos[i.codigo] &&
-                                                modelo?.campos[i.codigo]?.exibir
-                                        )
+                                        .filter((i) => {
+                                            if (
+                                                (modelo.campos[i.codigo] &&
+                                                    modelo?.campos[i.codigo]
+                                                        ?.exibir &&
+                                                    !i.dependencia) ||
+                                                (modelo.campos[i.codigo] &&
+                                                    modelo?.campos[i.codigo]
+                                                        ?.exibir &&
+                                                    ((i.dependencia?.codigo &&
+                                                        !i.dependenciaValor &&
+                                                        watch(
+                                                            `preenchimento.${i.dependencia?.codigo}`
+                                                        )) ||
+                                                        (i.dependencia
+                                                            ?.codigo &&
+                                                            i.dependenciaValor ==
+                                                                watch(
+                                                                    `preenchimento.${i.dependencia?.codigo}`
+                                                                ))))
+                                            ) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        })
                                         .map((campo) => (
                                             <GridItem
                                                 key={campo.id}
@@ -777,6 +798,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
                 },
                 orderBy: {
                     ordem: "asc",
+                },
+                include: {
+                    dependencia: true,
                 },
             },
         },

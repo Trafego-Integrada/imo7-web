@@ -2,6 +2,7 @@ import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
 const handler = nextConnect();
 import { cors } from "@/middleware/cors";
+import moment from "moment";
 handler.use(cors);
 
 handler.get(async (req, res) => {
@@ -109,6 +110,31 @@ handler.post(async (req, res) => {
                 },
             };
         }
+        const dadosAntigos = await prisma.fichaCadastral.findUnique({
+            where: {
+                id: req.query.id,
+            },
+        });
+
+        if (dadosAntigos.status != "aprovada" && status == "aprovada") {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                dataAprovacao: moment().format(),
+            };
+        }
+        if (dadosAntigos.status != "reprovada" && status == "reprovada") {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                dataReprovacao: moment().format(),
+            };
+        }
+        if (status != "aprovada" && status != "reprovada") {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                dataReprovacao: null,
+                dataAprovacao: null,
+            };
+        }
 
         const data = await prisma.fichaCadastral.update({
             where: {
@@ -120,7 +146,6 @@ handler.post(async (req, res) => {
                         id: modelo.id,
                     },
                 },
-
                 descricao,
                 nome,
                 documento,

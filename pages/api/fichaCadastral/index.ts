@@ -22,6 +22,8 @@ handle.get(async (req, res) => {
             deletedAt,
             codigo,
             importada,
+            pagina,
+            linhas,
         } = req.query;
         let filtroQuery: Prisma.FichaCadastralWhereInput = { AND: [] };
 
@@ -206,6 +208,16 @@ handle.get(async (req, res) => {
                 importadaJb: true,
             };
         }
+        let paginacao = {};
+        if (pagina && linhas) {
+            paginacao = {
+                take: Number(linhas),
+                skip:
+                    pagina && pagina > 1
+                        ? Number(pagina) * Number(linhas) - Number(linhas)
+                        : 0,
+            };
+        }
         const data = await prisma.fichaCadastral.findMany({
             where: {
                 ...filtroQuery,
@@ -223,6 +235,7 @@ handle.get(async (req, res) => {
                 modelo: true,
                 responsavel: true,
             },
+            ...paginacao,
         });
 
         const count = await prisma.fichaCadastral.count({

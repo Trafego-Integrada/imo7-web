@@ -14,12 +14,18 @@ import {
     tipoFicha,
 } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
-import { excluirFicha, listarFichas } from "@/services/models/fichaCadastral";
+import {
+    excluirFicha,
+    excluirVariasFichas,
+    listarFichas,
+} from "@/services/models/fichaCadastral";
 import { listarUsuarios } from "@/services/models/usuario";
 import { queryClient } from "@/services/queryClient";
 import {
+    Avatar,
     Box,
     Button,
+    Checkbox,
     Flex,
     Grid,
     GridItem,
@@ -62,16 +68,19 @@ import { CiCircleMore } from "react-icons/ci";
 import { RiMore2Line } from "react-icons/ri";
 import { CgMoreVerticalAlt } from "react-icons/cg";
 import { withSSRAuth } from "@/utils/withSSRAuth";
+import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
+import { usePagination } from "@ajna/pagination";
 const filtroPadrao = {
     query: "",
     identificacao: "",
     createdAt: [null, null],
     updatedAt: [null, null],
-    status: [],
+    status: ["aguardando"],
     responsaveis: [],
 };
 const FichasCadastrais = ({ query }) => {
     const { usuario } = useAuth();
+    const [total, setTotal] = useState();
     const [filtro, setFiltro] = useState({
         ...filtroPadrao,
         status:
@@ -79,7 +88,11 @@ const FichasCadastrais = ({ query }) => {
                 ? query?.status
                 : query?.status
                 ? [query?.status]
-                : [],
+                : ["aguardando"],
+        dataReajuste: [null, null],
+        dataInicio: [null, null],
+        dataFim: [null, null],
+        dataCriacao: [null, null],
     });
     const toast = useToast();
     const router = useRouter();
@@ -87,7 +100,22 @@ const FichasCadastrais = ({ query }) => {
     const modalExcluir = useRef();
     const modalRevisar = useRef();
     const modalValidar = useRef();
-    const { data: fichas } = useQuery(
+    const {
+        currentPage,
+        setCurrentPage,
+        pagesCount,
+        pages,
+        pageSize,
+        setPageSize,
+    } = usePagination({
+        total: total,
+        limits: {
+            inner: 1,
+            outer: 1,
+        },
+        initialState: { currentPage: 1, pageSize: 15 },
+    });
+    const { data: fichas, isLoading } = useQuery(
         [
             "fichas",
             {
@@ -102,9 +130,16 @@ const FichasCadastrais = ({ query }) => {
                 responsaveis: filtro.responsaveis[0]
                     ? JSON.stringify(filtro.responsaveis)
                     : null,
+                linhas: pageSize,
+                pagina: currentPage,
             },
         ],
-        listarFichas
+        listarFichas,
+        {
+            onSuccess: (data) => {
+                setTotal(data.total);
+            },
+        }
     );
     const { data: responsaveis } = useQuery(
         [
@@ -135,8 +170,24 @@ const FichasCadastrais = ({ query }) => {
             },
         });
     };
+    const [selecionados, setSelecionados] = useState([]);
     // console.log(usuario);
+    const deleteMany = useMutation(excluirVariasFichas, {
+        onSuccess: () => {
+            queryClient.invalidateQueries("fichas");
+            toast({
+                title: "Sucesso",
+                description: "Fichas excluídas com sucesso",
+                status: "success",
+                duration: 3000,
+            });
+        },
+    });
 
+    const onDeleteMany = () => {
+        deleteMany.mutate(JSON.stringify(selecionados));
+        setSelecionados([]);
+    };
     return (
         <Layout>
             <Box p={4}>
@@ -338,441 +389,389 @@ const FichasCadastrais = ({ query }) => {
                             )}
                         </Flex>
                     </Flex>
-                    <Box bg="white" mt={4} p={4}>
-                        <TableContainer>
-                            <Table size="sm">
-                                <Thead>
-                                    <Tr>
-                                        <Th w={12}>Ações</Th>
-                                        <Th w={12}>ID</Th>
-                                        <Th w={44}>Tipo</Th>
-                                        <Th>Nome</Th>
-                                        <Th w={44}>Preenchimento</Th>
-                                        <Th w={44}>Responsável</Th>
-                                        <Th w={24}>Criado em</Th>
-                                        <Th w={24}>Última atualização</Th>
-                                        <Th w={44}>Status</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {fichas?.data?.length > 0 ? (
-                                        fichas.data.map((item) => (
-                                            <Tr key={item.id}>
-                                                <Td>
-                                                    <Menu>
-                                                        <MenuButton>
-                                                            <IconButton
-                                                                icon={
-                                                                    <CgMoreVerticalAlt />
-                                                                }
-                                                                size="xs"
-                                                                rounded="full"
-                                                                colorScheme="blue"
-                                                                variant="outline"
-                                                            />
-                                                        </MenuButton>
-                                                        <MenuList>
-                                                            <MenuItem
-                                                                icon={
-                                                                    <MdOutlineVerifiedUser />
-                                                                }
-                                                                onClick={() =>
-                                                                    modalRevisar.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            >
-                                                                Revisar Ficha
-                                                            </MenuItem>
-                                                            <MenuItem
-                                                                icon={
-                                                                    <FiEdit />
-                                                                }
-                                                                onClick={() =>
-                                                                    modal.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            >
-                                                                Editar Ficha
-                                                            </MenuItem>
-                                                            <MenuItem
-                                                                icon={
-                                                                    <FiLink />
-                                                                }
-                                                                onClick={() => {
-                                                                    navigator.clipboard.writeText(
-                                                                        `${window.location.origin}/fichaCadastral/${item.id}`
-                                                                    );
-                                                                    toast({
-                                                                        title: "URL Copiada",
-                                                                    });
-                                                                }}
-                                                            >
-                                                                Copiar URL da
-                                                                Ficha
-                                                            </MenuItem>
-                                                            <MenuItem
-                                                                as={Link}
-                                                                icon={<FiEye />}
-                                                                href={`/fichaCadastral/${item.id}`}
-                                                                target="_blank"
-                                                            >
-                                                                Visualizar Ficha
-                                                            </MenuItem>
-                                                            <MenuItem
-                                                                icon={
-                                                                    <FaFileExcel />
-                                                                }
-                                                                onClick={() =>
-                                                                    exportToExcel(
-                                                                        item.preenchimento,
-                                                                        "ficha-cadastral-" +
-                                                                            item.id
-                                                                    )
-                                                                }
-                                                            >
-                                                                Exportar para
-                                                                Excel
-                                                            </MenuItem>
-                                                            <MenuItem
-                                                                as={Link}
-                                                                icon={
-                                                                    <FaFilePdf />
-                                                                }
-                                                                href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
-                                                                target="_blank"
-                                                                passHref
-                                                            >
-                                                                Gerar PDF
-                                                            </MenuItem>
-                                                            <MenuItem
-                                                                icon={
-                                                                    <FiTrash />
-                                                                }
-                                                                onClick={() => {
-                                                                    modalExcluir.current.onOpen(
-                                                                        item.id
-                                                                    );
-                                                                }}
-                                                            >
-                                                                Excluir Ficha
-                                                            </MenuItem>
-                                                        </MenuList>
-                                                    </Menu>
-                                                </Td>
-                                                <Td w={12}># {item.codigo}</Td>
-                                                <Td>
-                                                    {tipoFicha(
-                                                        item.modelo?.tipo
-                                                    )}
-                                                    <br />
-                                                    {item.modelo?.nome}
-                                                </Td>
-                                                <Td>
-                                                    <Text fontWeight="bold">
-                                                        {item.nome}
-                                                    </Text>
-                                                    <Text>
-                                                        {item.descricao}
-                                                    </Text>
-                                                </Td>
-                                                <Td>
-                                                    <Box pos="relative">
-                                                        <Tooltip
-                                                            label={`${
-                                                                item.preenchimento.filter(
-                                                                    (i) =>
-                                                                        i.valor
-                                                                ).length
-                                                            } de ${
-                                                                item
-                                                                    .preenchimento
-                                                                    .length
-                                                            } campos preenchidos`}
-                                                        >
-                                                            <Box>
-                                                                <Progress
-                                                                    size="lg"
-                                                                    value={
-                                                                        item.preenchimento.filter(
-                                                                            (
-                                                                                i
-                                                                            ) =>
-                                                                                i.valor
-                                                                        ).length
-                                                                    }
-                                                                    max={
-                                                                        item
-                                                                            .preenchimento
-                                                                            .length >
-                                                                        0
-                                                                            ? item
-                                                                                  .preenchimento
-                                                                                  .length
-                                                                            : 100
-                                                                    }
-                                                                    colorScheme={
-                                                                        item.preenchimento.filter(
-                                                                            (
-                                                                                i
-                                                                            ) =>
-                                                                                i.valor
-                                                                        )
-                                                                            .length ==
-                                                                        item
+                </Box>
+                <TabelaPadrao
+                    acoes={
+                        <>
+                            <Button
+                                size="sm"
+                                leftIcon={<FiTrash />}
+                                colorScheme="red"
+                                variant="outline"
+                                disabled={selecionados.length ? false : true}
+                                onClick={onDeleteMany}
+                            >
+                                Excluir Selecionados
+                            </Button>
+                        </>
+                    }
+                    total={total}
+                    isLoading={isLoading}
+                    paginatorProps={{
+                        currentPage,
+                        pagesCount,
+                        setCurrentPage,
+                        pages,
+                        pageSize,
+                        setPageSize,
+                    }}
+                    head={[
+                        {
+                            value: (
+                                <Checkbox
+                                    isChecked={
+                                        fichas?.data
+                                            ?.map((item) => item.id)
+                                            .filter(
+                                                (item) =>
+                                                    !selecionados.includes(item)
+                                            ).length == 0
+                                            ? true
+                                            : false
+                                    }
+                                    onChange={(e) =>
+                                        setSelecionados(
+                                            e.target.checked
+                                                ? JSON.parse(e.target.value)
+                                                : []
+                                        )
+                                    }
+                                    value={JSON.stringify(
+                                        fichas?.data?.data?.map(
+                                            (item) => item.id
+                                        )
+                                    )}
+                                />
+                            ),
+                            w: 4,
+                        },
+                        {
+                            value: "Ações",
+                            w: 12,
+                            textAlign: "center",
+                        },
+                        {
+                            value: "ID",
+                            w: 12,
+                        },
+                        {
+                            value: "Tipo",
+                            w: 12,
+                        },
+                        {
+                            value: "Nome",
+                            w: 12,
+                        },
+                        {
+                            value: "Preenchimento",
+                            w: 12,
+                        },
+                        {
+                            value: "Responsável",
+                            w: 12,
+                        },
+                        {
+                            value: "Criado em",
+                            w: 12,
+                        },
+                        {
+                            value: "Última Atualização",
+                            w: 12,
+                        },
+                        {
+                            value: "Status",
+                            w: 24,
+                        },
+                    ]}
+                    data={
+                        fichas?.data?.length > 0
+                            ? fichas?.data?.map((item, key) => [
+                                  {
+                                      value: (
+                                          <Checkbox
+                                              isChecked={selecionados.includes(
+                                                  item.id
+                                              )}
+                                              onChange={(e) => {
+                                                  if (e.target.checked) {
+                                                      setSelecionados([
+                                                          ...selecionados,
+                                                          item.id,
+                                                      ]);
+                                                  } else {
+                                                      setSelecionados(
+                                                          selecionados.filter(
+                                                              (i) =>
+                                                                  i !== item.id
+                                                          )
+                                                      );
+                                                  }
+                                              }}
+                                          />
+                                      ),
+                                      w: 4,
+                                  },
+                                  {
+                                      value: (
+                                          <Flex gap={2} justify="center">
+                                              <Menu>
+                                                  <MenuButton>
+                                                      <IconButton
+                                                          icon={
+                                                              <CgMoreVerticalAlt />
+                                                          }
+                                                          size="xs"
+                                                          rounded="full"
+                                                          colorScheme="blue"
+                                                          variant="outline"
+                                                      />
+                                                  </MenuButton>
+                                                  <MenuList>
+                                                      <MenuItem
+                                                          icon={
+                                                              <MdOutlineVerifiedUser />
+                                                          }
+                                                          onClick={() =>
+                                                              modalRevisar.current.onOpen(
+                                                                  item.id
+                                                              )
+                                                          }
+                                                      >
+                                                          Revisar Ficha
+                                                      </MenuItem>
+                                                      <MenuItem
+                                                          icon={<FiEdit />}
+                                                          onClick={() =>
+                                                              modal.current.onOpen(
+                                                                  item.id
+                                                              )
+                                                          }
+                                                      >
+                                                          Editar Ficha
+                                                      </MenuItem>
+                                                      <MenuItem
+                                                          icon={<FiLink />}
+                                                          onClick={() => {
+                                                              navigator.clipboard.writeText(
+                                                                  `${window.location.origin}/fichaCadastral/${item.id}`
+                                                              );
+                                                              toast({
+                                                                  title: "URL Copiada",
+                                                              });
+                                                          }}
+                                                      >
+                                                          Copiar URL da Ficha
+                                                      </MenuItem>
+                                                      <MenuItem
+                                                          as={Link}
+                                                          icon={<FiEye />}
+                                                          href={`/fichaCadastral/${item.id}`}
+                                                          target="_blank"
+                                                      >
+                                                          Visualizar Ficha
+                                                      </MenuItem>
+                                                      <MenuItem
+                                                          icon={<FaFileExcel />}
+                                                          onClick={() =>
+                                                              exportToExcel(
+                                                                  item.preenchimento,
+                                                                  "ficha-cadastral-" +
+                                                                      item.id
+                                                              )
+                                                          }
+                                                      >
+                                                          Exportar para Excel
+                                                      </MenuItem>
+                                                      <MenuItem
+                                                          as={Link}
+                                                          icon={<FaFilePdf />}
+                                                          href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
+                                                          target="_blank"
+                                                          passHref
+                                                      >
+                                                          Gerar PDF
+                                                      </MenuItem>
+                                                      <MenuItem
+                                                          icon={<FiTrash />}
+                                                          onClick={() => {
+                                                              modalExcluir.current.onOpen(
+                                                                  item.id
+                                                              );
+                                                          }}
+                                                      >
+                                                          Excluir Ficha
+                                                      </MenuItem>
+                                                  </MenuList>
+                                              </Menu>
+                                          </Flex>
+                                      ),
+                                  },
+                                  {
+                                      value: item?.codigo,
+                                  },
+
+                                  {
+                                      value: (
+                                          <>
+                                              {tipoFicha(item.modelo?.tipo)}
+                                              <br />
+                                              {item.modelo?.nome}
+                                          </>
+                                      ),
+                                  },
+                                  {
+                                      value: (
+                                          <>
+                                              <Text fontWeight="bold">
+                                                  {item.nome}
+                                              </Text>
+                                              <Text>{item.descricao}</Text>
+                                          </>
+                                      ),
+                                  },
+                                  {
+                                      value: (
+                                          <>
+                                              <Box pos="relative">
+                                                  <Tooltip
+                                                      label={`${
+                                                          item.preenchimento.filter(
+                                                              (i) => i.valor
+                                                          ).length
+                                                      } de ${
+                                                          item.preenchimento
+                                                              .length
+                                                      } campos preenchidos`}
+                                                  >
+                                                      <Box>
+                                                          <Progress
+                                                              size="lg"
+                                                              value={
+                                                                  item.preenchimento.filter(
+                                                                      (i) =>
+                                                                          i.valor
+                                                                  ).length
+                                                              }
+                                                              max={
+                                                                  item
+                                                                      .preenchimento
+                                                                      .length >
+                                                                  0
+                                                                      ? item
                                                                             .preenchimento
                                                                             .length
-                                                                            ? "green"
-                                                                            : "yellow"
-                                                                    }
-                                                                />
-                                                            </Box>
-                                                        </Tooltip>
-                                                        <Flex
-                                                            pos="absolute"
-                                                            top="0"
-                                                            justify="center"
-                                                            mx="auto"
-                                                            w="full"
-                                                        >
-                                                            <Text
-                                                                textAlign="center"
-                                                                fontSize="xs"
-                                                                color={
-                                                                    Number(
-                                                                        (item.preenchimento.filter(
-                                                                            (
-                                                                                i
-                                                                            ) =>
-                                                                                i.valor
-                                                                        )
-                                                                            .length /
-                                                                            item
-                                                                                .preenchimento
-                                                                                .length) *
-                                                                            100
-                                                                    ).toFixed(
-                                                                        0
-                                                                    ) == 100
-                                                                        ? "white"
-                                                                        : ""
-                                                                }
-                                                            >
-                                                                {item.preenchimento.filter(
-                                                                    (i) =>
-                                                                        i.valor
-                                                                ).length
-                                                                    ? Number(
-                                                                          (item.preenchimento.filter(
-                                                                              (
-                                                                                  i
-                                                                              ) =>
-                                                                                  i.valor
-                                                                          )
-                                                                              .length /
-                                                                              item
-                                                                                  .preenchimento
-                                                                                  .length) *
-                                                                              100
-                                                                      ).toFixed(
-                                                                          2
-                                                                      )
-                                                                    : Number(
-                                                                          0
-                                                                      ).toFixed(
-                                                                          2
-                                                                      )}
-                                                                % preenchida {}
-                                                            </Text>
-                                                        </Flex>
-                                                    </Box>
-                                                </Td>
-
-                                                <Td>
-                                                    {item.responsavel?.nome}
-                                                </Td>
-                                                <Td>
-                                                    {formatoData(
-                                                        item.createdAt,
-                                                        "DATA_HORA"
-                                                    )}
-                                                </Td>
-                                                <Td>
-                                                    {formatoData(
-                                                        item.updatedAt,
-                                                        "DATA_HORA"
-                                                    )}
-                                                </Td>
-                                                <Td>
-                                                    {statusFicha(item.status)}
-                                                </Td>
-                                                {/* <Td>
-                                                    
-                                                    {usuario?.permissoes?.includes(
-                                                        "imobiliaria.fichas.revisar"
-                                                    ) && (
-                                                        <Tooltip label="Revisar Ficha">
-                                                            <IconButton
-                                                                colorScheme="green"
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            MdOutlineVerifiedUser
-                                                                        }
-                                                                    />
-                                                                }
-                                                                onClick={() =>
-                                                                    modalRevisar.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            />
-                                                        </Tooltip>
-                                                    )}
-                                                    {usuario?.permissoes?.includes(
-                                                        "imobiliaria.fichas.editar"
-                                                    ) && (
-                                                        <Tooltip label="Editar Ficha">
-                                                            <IconButton
-                                                                colorScheme="blue"
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiEdit
-                                                                        }
-                                                                    />
-                                                                }
-                                                                onClick={() =>
-                                                                    modal.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            />
-                                                        </Tooltip>
-                                                    )}
-                                                    <Tooltip label="Copiar URL da Ficha">
-                                                        <IconButton
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={FiLink}
-                                                                />
-                                                            }
-                                                            onClick={() => {
-                                                                navigator.clipboard.writeText(
-                                                                    `${window.location.origin}/fichaCadastral/${item.id}`
-                                                                );
-                                                                toast({
-                                                                    title: "URL Copiada",
-                                                                });
-                                                            }}
-                                                        />
-                                                    </Tooltip>
-                                                    <Tooltip label="Visualizar Ficha">
-                                                        <Link
-                                                            href={`/fichaCadastral/${item.id}`}
-                                                            target="_blank"
-                                                        >
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiEye
-                                                                        }
-                                                                    />
-                                                                }
-                                                            />
-                                                        </Link>
-                                                    </Tooltip>
-                                                    <Tooltip label="Exportar para Excel">
-                                                        <IconButton
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={
-                                                                        FaFileExcel
-                                                                    }
-                                                                />
-                                                            }
-                                                            onClick={() =>
-                                                                exportToExcel(
-                                                                    item.preenchimento,
-                                                                    "ficha-cadastral-" +
-                                                                        item.id
-                                                                )
-                                                            }
-                                                        />
-                                                    </Tooltip>
-                                                    <Tooltip label="Gerar PDF">
-                                                        <Link
-                                                            href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
-                                                            target="_blank"
-                                                            passHref
-                                                        >
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FaFilePdf
-                                                                        }
-                                                                    />
-                                                                }
-                                                            />
-                                                        </Link>
-                                                    </Tooltip>
-                                                    {usuario?.permissoes?.includes(
-                                                        "imobiliaria.fichas.excluir"
-                                                    ) && (
-                                                        <Tooltip label="Excluir Ficha">
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiTrash
-                                                                        }
-                                                                    />
-                                                                }
-                                                                colorScheme="red"
-                                                                onClick={() => {
-                                                                    modalExcluir.current.onOpen(
-                                                                        item.id
-                                                                    );
-                                                                }}
-                                                            />
-                                                        </Tooltip>
-                                                    )}
-                                                </Td> */}
-                                            </Tr>
-                                        ))
-                                    ) : (
-                                        <Tr>
-                                            <Td
-                                                colSpan={8}
-                                                textAlign="center"
-                                                color="gray"
-                                            >
-                                                Não encontramos fichas
-                                            </Td>
-                                        </Tr>
-                                    )}
-                                </Tbody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
-                </Box>
+                                                                      : 100
+                                                              }
+                                                              colorScheme={
+                                                                  item.preenchimento.filter(
+                                                                      (i) =>
+                                                                          i.valor
+                                                                  ).length ==
+                                                                  item
+                                                                      .preenchimento
+                                                                      .length
+                                                                      ? "green"
+                                                                      : "yellow"
+                                                              }
+                                                          />
+                                                      </Box>
+                                                  </Tooltip>
+                                                  <Flex
+                                                      pos="absolute"
+                                                      top="0"
+                                                      justify="center"
+                                                      mx="auto"
+                                                      w="full"
+                                                  >
+                                                      <Text
+                                                          textAlign="center"
+                                                          fontSize="xs"
+                                                          color={
+                                                              Number(
+                                                                  (item.preenchimento.filter(
+                                                                      (i) =>
+                                                                          i.valor
+                                                                  ).length /
+                                                                      item
+                                                                          .preenchimento
+                                                                          .length) *
+                                                                      100
+                                                              ).toFixed(0) ==
+                                                              100
+                                                                  ? "white"
+                                                                  : ""
+                                                          }
+                                                      >
+                                                          {item.preenchimento.filter(
+                                                              (i) => i.valor
+                                                          ).length
+                                                              ? Number(
+                                                                    (item.preenchimento.filter(
+                                                                        (i) =>
+                                                                            i.valor
+                                                                    ).length /
+                                                                        item
+                                                                            .preenchimento
+                                                                            .length) *
+                                                                        100
+                                                                ).toFixed(2)
+                                                              : Number(
+                                                                    0
+                                                                ).toFixed(2)}
+                                                          % preenchida {}
+                                                      </Text>
+                                                  </Flex>
+                                              </Box>
+                                          </>
+                                      ),
+                                  },
+                                  {
+                                      value: (
+                                          <>
+                                              <Tooltip
+                                                  label={
+                                                      item?.responsavel?.nome
+                                                  }
+                                                  hasArrow
+                                              >
+                                                  <Avatar
+                                                      size="xs"
+                                                      name={
+                                                          item?.responsavel
+                                                              ?.nome
+                                                      }
+                                                  />
+                                              </Tooltip>
+                                          </>
+                                      ),
+                                  },
+                                  {
+                                      value: (
+                                          <>
+                                              {formatoData(
+                                                  item.createdAt,
+                                                  "DATA_HORA"
+                                              )}
+                                          </>
+                                      ),
+                                  },
+                                  {
+                                      value: (
+                                          <>
+                                              {formatoData(
+                                                  item.updatedAt,
+                                                  "DATA_HORA"
+                                              )}
+                                          </>
+                                      ),
+                                  },
+                                  {
+                                      value: <>{statusFicha(item.status)}</>,
+                                  },
+                              ])
+                            : []
+                    }
+                />
             </Box>
             <ModalFichaCadastral ref={modal} />
             <ModalRevisaoFichaCadastral ref={modalRevisar} />

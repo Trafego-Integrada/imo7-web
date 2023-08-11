@@ -16,6 +16,7 @@ handler.get(async (req, res) => {
             },
             include: {
                 categoria: true,
+                dependencia: true,
             },
         });
         res.send(data);
@@ -42,6 +43,8 @@ handler.post(async (req, res) => {
             cep,
             camposEndereco,
             opcoes,
+            dependencia,
+            dependenciaValor,
         } = req.body;
         const data = await prisma.campoFichaCadastral.update({
             where: {
@@ -63,6 +66,14 @@ handler.post(async (req, res) => {
                 cep,
                 camposEndereco: camposEndereco ? camposEndereco : {},
                 opcoes: opcoes ? opcoes : [],
+                dependencia: dependencia
+                    ? {
+                          connect: {
+                              id: dependencia.id,
+                          },
+                      }
+                    : { disconnect: {} },
+                dependenciaValor,
             },
         });
         res.send(data);
