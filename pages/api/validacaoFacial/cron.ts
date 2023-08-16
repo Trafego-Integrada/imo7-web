@@ -26,9 +26,7 @@ handler.get(async (req, res) => {
             fotoUrl: {
                 not: null,
             },
-            resultado: {
-                not: null,
-            },
+            resultado: null,
         },
         orderBy: {
             updatedAt: "asc",

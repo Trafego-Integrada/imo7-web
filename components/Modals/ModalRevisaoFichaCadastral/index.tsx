@@ -66,6 +66,7 @@ import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
 import { ModalPreview } from "../Preview";
 import { AnaliseCampo } from "./AnaliseCampo";
+import { Historicos } from "@/components/Pages/Historicos";
 const schema = yup.object({});
 const ModalBase = ({}, ref) => {
     const { usuario } = useAuth();
@@ -157,6 +158,7 @@ const ModalBase = ({}, ref) => {
                         <TabList>
                             {/* <Tab>Geral</Tab> */}
                             {watch("id") && <Tab>Revisão</Tab>}
+                            <Tab>Histórico</Tab>
                         </TabList>
                         <TabPanels>
                             {/* <TabPanel px={0}>
@@ -837,6 +839,12 @@ const ModalBase = ({}, ref) => {
                                         )}
                                     </Grid>
                                 </Box>
+                            </TabPanel>
+                            <TabPanel>
+                                <Historicos
+                                    tabela="FichaCadastral"
+                                    tabelaId={watch("id")}
+                                />
                             </TabPanel>
                         </TabPanels>
                     </Tabs>

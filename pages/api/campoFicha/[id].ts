@@ -72,7 +72,7 @@ handler.post(async (req, res) => {
                               id: dependencia.id,
                           },
                       }
-                    : { disconnect: {} },
+                    : { disconnect: true },
                 dependenciaValor,
             },
         });

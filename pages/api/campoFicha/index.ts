@@ -80,6 +80,8 @@ handle.post(async (req, res) => {
             categoria,
             camposEndereco,
             opcoes,
+            dependencia,
+            dependenciaValor,
         } = req.body;
         const data = await prisma.campoFichaCadastral.create({
             data: {

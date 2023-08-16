@@ -218,6 +218,14 @@ handle.get(async (req, res) => {
                         : 0,
             };
         }
+        if (
+            !req.user.permissoes.includes("imobiliaria.fichas.visualizarTodas")
+        ) {
+            filtroQuery = {
+                ...filtroQuery,
+                responsavelId: req.user.id,
+            };
+        }
         const data = await prisma.fichaCadastral.findMany({
             where: {
                 ...filtroQuery,
@@ -338,6 +346,14 @@ handle.post(async (req, res) => {
                     },
                 },
                 ...dataPreenchimento,
+            },
+        });
+        await prisma.historico.create({
+            data: {
+                descricao: "cadastrou a ficha",
+                tabela: "FichaCadastral",
+                tabelaId: data.id,
+                usuarioId: req.user.id,
             },
         });
         res.send(data);

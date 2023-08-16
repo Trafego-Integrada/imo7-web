@@ -35,6 +35,8 @@ export const checkAuth = async (req, res, next) => {
             include: {
                 conta: true,
                 imobiliaria: true,
+                modulos: true,
+                permissoes: true,
             },
         });
 
@@ -55,6 +57,8 @@ export const checkAuth = async (req, res, next) => {
         }
 
         req.user = user;
+        req.user.modulos = req.user.modulos.map((item) => item.codigo);
+        req.user.permissoes = req.user.permissoes.map((item) => item.codigo);
 
         return next();
     } catch (err) {

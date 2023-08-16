@@ -80,6 +80,7 @@ model Usuario {
     Tarefa                Tarefa[]
     Notificacao           Notificacao[]
     anexosPermitidos      Anexo[]                  @relation("AnexosPermitidos")
+    Historico             Historico[]
 
     @@unique([imobiliariaId, documento])
 }
@@ -739,6 +740,7 @@ enum TipoCampo {
     text
     textarea
     select
+    number
     multiselect
     radio
     checkbox
@@ -996,4 +998,16 @@ model ValidacaoFacial {
     fichaCadastralPreenchimentoFichaCadastralId          String?
     fichaCadastralPreenchimentoCampoFichaCadastralCodigo String?
     imobiliaria                                          Imobiliaria?                 @relation(fields: [imobiliariaId], references: [id])
+}
+
+model Historico {
+    id        String    @id @default(uuid())
+    tabela    String
+    tabelaId  String?
+    usuarioId Int?
+    descricao String?
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @updatedAt
+    deletedAt DateTime?
+    usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
 }

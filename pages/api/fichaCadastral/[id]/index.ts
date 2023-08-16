@@ -3,8 +3,9 @@ import prisma from "@/lib/prisma";
 const handler = nextConnect();
 import { cors } from "@/middleware/cors";
 import moment from "moment";
+import { checkAuth } from "@/middleware/checkAuth";
 handler.use(cors);
-
+handler.use(checkAuth);
 handler.get(async (req, res) => {
     try {
         const { id } = req.query;
@@ -34,6 +35,7 @@ handler.get(async (req, res) => {
 });
 handler.post(async (req, res) => {
     try {
+        const { id } = req.query;
         let {
             modelo,
             descricao,
@@ -66,7 +68,7 @@ handler.post(async (req, res) => {
                         return {
                             where: {
                                 fichaCadastralId_campoFichaCadastralCodigo: {
-                                    fichaCadastralId: req.query.id,
+                                    fichaCadastralId: id,
                                     campoFichaCadastralCodigo: item[0],
                                 },
                             },
@@ -112,7 +114,7 @@ handler.post(async (req, res) => {
         }
         const dadosAntigos = await prisma.fichaCadastral.findUnique({
             where: {
-                id: req.query.id,
+                id: id,
             },
         });
 
@@ -121,12 +123,28 @@ handler.post(async (req, res) => {
                 ...dataPreenchimento,
                 dataAprovacao: moment().format(),
             };
+            await prisma.historico.create({
+                data: {
+                    descricao: "aprovou a ficha",
+                    tabela: "FichaCadastral",
+                    tabelaId: id,
+                    usuarioId: req.user.id,
+                },
+            });
         }
         if (dadosAntigos.status != "reprovada" && status == "reprovada") {
             dataPreenchimento = {
                 ...dataPreenchimento,
                 dataReprovacao: moment().format(),
             };
+            await prisma.historico.create({
+                data: {
+                    descricao: "reprovou a ficha",
+                    tabela: "FichaCadastral",
+                    tabelaId: id,
+                    usuarioId: req.user.id,
+                },
+            });
         }
         if (status != "aprovada" && status != "reprovada") {
             dataPreenchimento = {
@@ -135,10 +153,20 @@ handler.post(async (req, res) => {
                 dataAprovacao: null,
             };
         }
+        if (!dadosAntigos?.motivoReprovacao && motivoReprovacao) {
+            await prisma.historico.create({
+                data: {
+                    descricao: `adicionou o motivo da reprovação: <strong>${motivoReprovacao}</strong>`,
+                    tabela: "FichaCadastral",
+                    tabelaId: id,
+                    usuarioId: req.user.id,
+                },
+            });
+        }
 
         const data = await prisma.fichaCadastral.update({
             where: {
-                id: req.query.id,
+                id: id,
             },
             data: {
                 modelo: {
@@ -164,6 +192,14 @@ handler.post(async (req, res) => {
                 ...dataPreenchimento,
             },
         });
+        await prisma.historico.create({
+            data: {
+                descricao: "atualizou a ficha",
+                tabela: "FichaCadastral",
+                tabelaId: id,
+                usuarioId: req.user.id,
+            },
+        });
         res.send(data);
     } catch (error) {
         res.status(500).send({
@@ -175,9 +211,18 @@ handler.post(async (req, res) => {
 
 handler.delete(async (req, res) => {
     try {
+        const { id } = req.query;
         const data = await prisma.fichaCadastral.delete({
             where: {
-                id: req.query.id,
+                id: id,
+            },
+        });
+        await prisma.historico.create({
+            data: {
+                descricao: `excluiu a ficha`,
+                tabela: "FichaCadastral",
+                tabelaId: id,
+                usuarioId: req.user.id,
             },
         });
         res.send(data);

@@ -9,7 +9,7 @@
         "lint": "next lint",
         "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
         "ssh": "ssh ubuntu@140.238.181.195",
-        "db": "ssh -i C:/Users/gabri/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aacmxqsfi7ddbvsns5xul3eb5w576msykxnhplnotnp7ma@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
+        "db": "ssh -i C:/Users/gabri/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aajdqthqz366gnjodjlvoe2wtkqtdmyhxlhm44bs3tsirq@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",
@@ -20,7 +20,7 @@
         "@emotion/styled": "^11.11.0",
         "@fontsource/rubik": "^4.5.9",
         "@hookform/resolvers": "^2.8.0",
-        "@prisma/client": "^4.10.1",
+        "@prisma/client": "^5.1.1",
         "@react-icons/all-files": "^4.1.0",
         "@react-pdf/renderer": "^3.1.4",
         "@types/bcryptjs": "^2.4.2",
