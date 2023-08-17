@@ -359,6 +359,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                         size="sm"
                                                         label={campo.nome}
                                                         mask={campo.mask}
+                                                        placeholder={`Selecione ${campo.nome}`}
                                                         {...register(
                                                             "preenchimento." +
                                                                 campo.codigo,
