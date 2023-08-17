@@ -598,7 +598,7 @@ const FichasCadastrais = () => {
                                                 </Td> */}
                                                 <Td>
                                                     {formatoData(
-                                                        item.createAt,
+                                                        item.createdAt,
                                                         "DATA_HORA"
                                                     )}
                                                 </Td>
