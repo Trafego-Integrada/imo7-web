@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import {
     atualizarAnexosFicha,
     atualizarFicha,
-} from "@/services/models/fichaCadastral";
+} from "@/services/models/public/fichaCadastral";
 import {
     Alert,
     AlertDescription,
