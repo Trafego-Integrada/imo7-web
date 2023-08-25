@@ -152,7 +152,7 @@ const Home = () => {
                                 Excluir Selecionados
                             </Button>
                             <Flex>
-                                {usuario.permissoes.includes(
+                                {usuario?.permissoes?.includes(
                                     "imobiliaria.processos.cadastrar"
                                 ) && (
                                     <Button
