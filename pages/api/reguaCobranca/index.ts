@@ -49,7 +49,8 @@ handle.get(async (req, res) => {
 
 handle.post(async (req, res) => {
     try {
-        const { tipo, tipoEnvio, formaEnvio, assunto, conteudo } = req.body;
+        const { tipo, tipoEnvio, formaEnvio, assunto, conteudo, dias } =
+            req.body;
 
         const count = await prisma.reguaCobranca.count({
             where: {
@@ -72,6 +73,7 @@ handle.post(async (req, res) => {
                 formaEnvio,
                 assunto,
                 conteudo,
+                dias: dias ? Number(dias) : null,
                 imobiliaria: {
                     connect: {
                         id: req.user.imobiliariaId,

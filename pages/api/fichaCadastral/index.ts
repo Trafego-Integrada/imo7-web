@@ -24,6 +24,7 @@ handle.get(async (req, res) => {
             importada,
             pagina,
             linhas,
+            processoId,
         } = req.query;
         let filtroQuery: Prisma.FichaCadastralWhereInput = { AND: [] };
 
@@ -226,6 +227,12 @@ handle.get(async (req, res) => {
                 responsavelId: req.user.id,
             };
         }
+        if (processoId) {
+            filtroQuery = {
+                ...filtroQuery,
+                processoId,
+            };
+        }
         const data = await prisma.fichaCadastral.findMany({
             where: {
                 ...filtroQuery,
@@ -282,6 +289,9 @@ handle.post(async (req, res) => {
             bairroImovel,
             cidadeImovel,
             estadoImovel,
+            processoId,
+            responsavelId,
+            imovelId,
         } = req.body;
 
         let dataPreenchimento = {};
@@ -345,6 +355,27 @@ handle.post(async (req, res) => {
                         id: req.user.imobiliariaId,
                     },
                 },
+                Processo: processoId
+                    ? {
+                          connect: {
+                              id: processoId,
+                          },
+                      }
+                    : {},
+                imovel: imovelId
+                    ? {
+                          connect: {
+                              id: imovelId,
+                          },
+                      }
+                    : {},
+                responsavel: responsavelId
+                    ? {
+                          connect: {
+                              id: responsavelId,
+                          },
+                      }
+                    : {},
                 ...dataPreenchimento,
             },
         });

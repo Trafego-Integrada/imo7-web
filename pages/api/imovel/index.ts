@@ -80,6 +80,10 @@ handle.get(async (req, res) => {
                         ? Number(pagina) * Number(linhas) - Number(linhas)
                         : 0,
             };
+        } else if (linhas) {
+            paginacao = {
+                take: Number(linhas),
+            };
         }
 
         const data = await prisma.imovel.findMany({

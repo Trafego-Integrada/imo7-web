@@ -20,7 +20,7 @@ handle.get(async (req, res) => {
 
 handle.post(async (req, res) => {
     const { id } = req.query;
-    const { tipo, tipoEnvio, formaEnvio, assunto, conteudo } = req.body;
+    const { tipo, tipoEnvio, formaEnvio, assunto, conteudo, dias } = req.body;
 
     const data = await prisma.reguaCobranca.update({
         where: {
@@ -32,6 +32,7 @@ handle.post(async (req, res) => {
             formaEnvio,
             assunto,
             conteudo,
+            dias: dias ? Number(dias) : null,
         },
     });
     res.send(data);

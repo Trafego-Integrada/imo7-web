@@ -2,112 +2,128 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 async function main() {
-    
     await prisma.cargo.createMany({
         data: [
             {
                 nome: "Administrador",
-                codigo:"adm"
+                codigo: "adm",
             },
             {
                 nome: "Imobiliária",
-                codigo:"imobiliaria"
+                codigo: "imobiliaria",
             },
             {
                 nome: "Conta",
-                codigo:"conta"
+                codigo: "conta",
             },
         ],
-        skipDuplicates:true
+        skipDuplicates: true,
     });
 
     await prisma.modulo.createMany({
-        data:[
+        data: [
             {
-                nome:'Contratos',
-                codigo:'imobiliaria.contratos',
+                nome: "Contratos",
+                codigo: "imobiliaria.contratos",
             },
             {
-                nome:'Cobranças',
-                codigo:'imobiliaria.cobrancas',
+                nome: "Cobranças",
+                codigo: "imobiliaria.cobrancas",
             },
             {
-                nome:'Boletos',
-                codigo:'imobiliaria.cobrancas.boletos',
+                nome: "Boletos",
+                codigo: "imobiliaria.cobrancas.boletos",
             },
             {
-                nome:'Inquilinos',
-                codigo:'imobiliaria.inquilinos',
+                nome: "Inquilinos",
+                codigo: "imobiliaria.inquilinos",
             },
             {
-                nome:'Proprietários',
-                codigo:'imobiliaria.proprietarios',
+                nome: "Proprietários",
+                codigo: "imobiliaria.proprietarios",
             },
             {
-                nome:'Fichas',
-                codigo:'imobiliaria.fichas',
+                nome: "Fichas",
+                codigo: "imobiliaria.fichas",
             },
             {
-                nome:'Fichas Excluidas',
-                codigo:'imobiliaria.fichas.excluidas',
+                nome: "Fichas Excluidas",
+                codigo: "imobiliaria.fichas.excluidas",
             },
             {
-                nome:'Chamados',
-                codigo:'imobiliaria.chamados',
+                nome: "Chamados",
+                codigo: "imobiliaria.chamados",
             },
             {
-                nome:'Imóveis',
-                codigo:'imobiliaria.imoveis',
+                nome: "Imóveis",
+                codigo: "imobiliaria.imoveis",
             },
             {
-                nome:'Configurações',
-                codigo:'imobiliaria.configuracoes',
-            },{
-                nome:'Tarefas',
-                codigo:'imobiliaria.tarefas',
-            },{
-                nome:'Orçamentos',
-                codigo:'imobiliaria.orcamentos',
-            },{
-                nome:'Cadastros',
-                codigo:'imobiliaria.cadastros',
+                nome: "Configurações",
+                codigo: "imobiliaria.configuracoes",
             },
             {
-                nome:'Gerencial',
-                codigo:'adm.gerencial',
+                nome: "Tarefas",
+                codigo: "imobiliaria.tarefas",
             },
             {
-                nome:'Usuários',
-                codigo:'adm.usuarios',
+                nome: "Orçamentos",
+                codigo: "imobiliaria.orcamentos",
             },
             {
-                nome:'Imobiliárias',
-                codigo:'adm.imobiliarias',
+                nome: "Cadastros",
+                codigo: "imobiliaria.cadastros",
+            },
+            {
+                nome: "Gerencial",
+                codigo: "adm.gerencial",
+            },
+            {
+                nome: "Usuários",
+                codigo: "adm.usuarios",
+            },
+            {
+                nome: "Imobiliárias",
+                codigo: "adm.imobiliarias",
+            },
+            {
+                nome: "Processos",
+                codigo: "imobiliaria.processos",
             },
         ],
-        skipDuplicates:true
-    })
+        skipDuplicates: true,
+    });
 
     await prisma.permissao.createMany({
-        data:[
+        data: [
             {
-                nome:"Editar",
-                codigo:"tarefas.editar",
-                moduloCodigo:"imobiliaria.tarefas"
+                nome: "Visualizar",
+                codigo: "imobiliaria.processos.visualizar",
+                moduloCodigo: "imobiliaria.processos",
             },
             {
-                nome:"Excluir",
-                codigo:"tarefas.editar",
-                moduloCodigo:"imobiliaria.tarefas"
+                nome: "Cadastrar",
+                codigo: "imobiliaria.processos.cadastrar",
+                moduloCodigo: "imobiliaria.processos",
             },
             {
-                nome:"Editar Todas",
-                codigo:"tarefas.editarTodas",
-                moduloCodigo:"imobiliaria.tarefas"
+                nome: "Editar",
+                codigo: "imobiliaria.processos.editar",
+                moduloCodigo: "imobiliaria.processos",
+            },
+            {
+                nome: "Excluir",
+                codigo: "imobiliaria.processos.excluir",
+                moduloCodigo: "imobiliaria.processos",
+            },
+            {
+                nome: "Visualizar Todos",
+                codigo: "imobiliaria.processos.visualizarTodos",
+                moduloCodigo: "imobiliaria.processos",
             },
         ],
-        skipDuplicates:true
-    })
+        skipDuplicates: true,
+    });
 
     // await prisma.usuario.create({
     //     data: {

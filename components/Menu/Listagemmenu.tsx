@@ -89,6 +89,13 @@ const menu = [
         modulos: ["imobiliaria.contratos"],
     },
     {
+        titulo: "Processos",
+        href: "/admin/processos",
+        icon: TbForms,
+        cargos: ["imobiliaria"],
+        modulos: ["imobiliaria.processos"],
+    },
+    {
         titulo: "Fichas",
         href: "/admin/fichas",
         icon: TbForms,

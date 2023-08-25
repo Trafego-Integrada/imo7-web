@@ -81,6 +81,7 @@ model Usuario {
     Notificacao           Notificacao[]
     anexosPermitidos      Anexo[]                  @relation("AnexosPermitidos")
     Historico             Historico[]
+    Processo              Processo[]
 
     @@unique([imobiliariaId, documento])
 }
@@ -221,6 +222,7 @@ model Imobiliaria {
     reguasCobranca        ReguaCobranca[]
     FilaEnvio             FilaEnvio[]
     ValidacaoFacial       ValidacaoFacial[]
+    Processo              Processo[]
 }
 
 enum TipoReguaCobranca {
@@ -291,6 +293,7 @@ model Imovel {
     valorVenda      Decimal?
     valorAluguel    Decimal?
     valorCondominio Decimal?
+    valorIPTU       Decimal?
     numeroIptu      String?
     numeroAgua      String?
     numeroEnergia   String?
@@ -324,6 +327,7 @@ model Imovel {
     contratoId      Int?                     @unique
     FichaCadastral  FichaCadastral[]
     Tarefa          Tarefa[]
+    Processo        Processo[]
 }
 
 model ProprietariosOnImoveis {
@@ -377,6 +381,7 @@ model Contrato {
     imovel            Imovel?
     Notificacao       Notificacao[]
     Tarefa            Tarefa[]
+    Processo          Processo[]
 }
 
 model Boleto {
@@ -690,7 +695,7 @@ enum StatusFicha {
 model FichaCadastral {
     id                     String                        @id @default(cuid())
     codigo                 Int?
-    descricao              String
+    descricao              String?
     nome                   String?
     documento              String?
     email                  String?
@@ -721,6 +726,8 @@ model FichaCadastral {
     ValidacaoFacial        ValidacaoFacial[]
     dataAprovacao          DateTime?
     dataReprovacao         DateTime?
+    Processo               Processo?                     @relation(fields: [processoId], references: [id])
+    processoId             String?
 }
 
 model FichaCadastralPreenchimento {
@@ -1010,4 +1017,40 @@ model Historico {
     updatedAt DateTime? @updatedAt
     deletedAt DateTime?
     usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
+}
+
+enum StatusProcesso {
+    EM_ANDAMENTO
+    CANCELADO
+    ARQUIVADO
+    COMPLETO
+    APROVADO
+    REPROVADO
+}
+
+enum TipoProcesso {
+    LOCACAO
+    VENDA
+    COMPRA
+}
+
+model Processo {
+    id            String           @id @default(uuid())
+    tipoProcesso  TipoProcesso     @default(LOCACAO)
+    codigo        Int?
+    imovelId      Int?
+    contratoId    Int?
+    imobiliariaId Int?
+    campos        Json?
+    observacoes   String?          @db.LongText
+    status        StatusProcesso   @default(EM_ANDAMENTO)
+    createdAt     DateTime?        @default(now())
+    updatedAt     DateTime?        @updatedAt
+    deletedAt     DateTime?
+    imovel        Imovel?          @relation(fields: [imovelId], references: [id])
+    contrato      Contrato?        @relation(fields: [contratoId], references: [id])
+    imobiliaria   Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
+    fichas        FichaCadastral[]
+    responsavel   Usuario?         @relation(fields: [responsavelId], references: [id])
+    responsavelId Int?
 }

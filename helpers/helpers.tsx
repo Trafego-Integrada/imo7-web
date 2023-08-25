@@ -106,6 +106,46 @@ export const statusFicha = (status) => {
             );
     }
 };
+export const statusProcesso = (status) => {
+    switch (status) {
+        case "EM_ANDAMENTO":
+            return (
+                <Tag colorScheme="orange" size="sm">
+                    Em andamento
+                </Tag>
+            );
+        case "REPROVADO":
+            return (
+                <Tag colorScheme="red" size="sm">
+                    Reprovado
+                </Tag>
+            );
+        case "COMPLETO":
+            return (
+                <Tag colorScheme="blue" size="sm">
+                    Completo
+                </Tag>
+            );
+        case "APROVADO":
+            return (
+                <Tag colorScheme="green" size="sm">
+                    Aprovado
+                </Tag>
+            );
+        case "CANCELADO":
+            return (
+                <Tag colorScheme="yellow" size="sm">
+                    Cancelado
+                </Tag>
+            );
+        case "ARQUIVADO":
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Arquivada
+                </Tag>
+            );
+    }
+};
 
 export const tipoFicha = (tipo) => {
     switch (tipo) {
