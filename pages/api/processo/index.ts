@@ -315,7 +315,7 @@ handle.post(async (req, res) => {
         });
         const data = await prisma.processo.create({
             data: {
-                codigo: ultimoProcesso.codigo + 1,
+                codigo: ultimoProcesso ? ultimoProcesso?.codigo + 1 : 1,
                 tipoProcesso,
                 campos,
                 status: "EM_ANDAMENTO",
