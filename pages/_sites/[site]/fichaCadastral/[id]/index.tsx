@@ -571,6 +571,109 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                         }
                                                     />
                                                 ) : campo.tipoCampo ==
+                                                  "image" ? (
+                                                    <Flex align="center">
+                                                        <FormInput
+                                                            size="sm"
+                                                            type="file"
+                                                            label={campo.nome}
+                                                            {...register(
+                                                                "arquivos." +
+                                                                    campo.codigo,
+                                                                {
+                                                                    required: {
+                                                                        value:
+                                                                            modelo
+                                                                                .campos[
+                                                                                campo
+                                                                                    .codigo
+                                                                            ]
+                                                                                ?.obrigatorio &&
+                                                                            !watch(
+                                                                                "preenchimento." +
+                                                                                    campo.codigo
+                                                                            )
+                                                                                ? true
+                                                                                : false,
+                                                                        message:
+                                                                            "Campo obrigatório",
+                                                                    },
+                                                                }
+                                                            )}
+                                                            borderColor={
+                                                                watch(
+                                                                    "analise." +
+                                                                        campo.codigo
+                                                                )?.aprovado
+                                                                    ? "green"
+                                                                    : ""
+                                                            }
+                                                            borderWidth={
+                                                                watch(
+                                                                    "analise." +
+                                                                        campo.codigo
+                                                                )?.aprovado
+                                                                    ? 2
+                                                                    : ""
+                                                            }
+                                                            error={
+                                                                errors.arquivos &&
+                                                                errors.arquivos[
+                                                                    campo.codigo
+                                                                ]?.message
+                                                                    ? errors
+                                                                          .arquivos[
+                                                                          campo
+                                                                              .codigo
+                                                                      ]?.message
+                                                                    : watch(
+                                                                          "analise." +
+                                                                              campo.codigo
+                                                                      )
+                                                                          ?.motivoReprovacao
+                                                                    ? "Campo reprovado: " +
+                                                                      watch(
+                                                                          "analise." +
+                                                                              campo.codigo
+                                                                      )
+                                                                          ?.motivoReprovacao
+                                                                    : ""
+                                                            }
+                                                            rightAddon={
+                                                                watch(
+                                                                    "preenchimento." +
+                                                                        campo.codigo
+                                                                ) && (
+                                                                    <Link
+                                                                        href={watch(
+                                                                            "preenchimento." +
+                                                                                campo.codigo
+                                                                        )}
+                                                                        target="_parent"
+                                                                    >
+                                                                        <Button
+                                                                            size="sm"
+                                                                            variant="ghost"
+                                                                            colorScheme="blue"
+                                                                            leftIcon={
+                                                                                <Icon
+                                                                                    as={
+                                                                                        FiEye
+                                                                                    }
+                                                                                />
+                                                                            }
+                                                                            px={
+                                                                                6
+                                                                            }
+                                                                        >
+                                                                            Visualizar
+                                                                        </Button>
+                                                                    </Link>
+                                                                )
+                                                            }
+                                                        />
+                                                    </Flex>
+                                                ) : campo.tipoCampo ==
                                                   "file" ? (
                                                     <Flex align="center">
                                                         <FormInput

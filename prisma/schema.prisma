@@ -753,6 +753,7 @@ enum TipoCampo {
     checkbox
     file
     files
+    image
     datetime
     date
     time
@@ -1034,9 +1035,18 @@ enum TipoProcesso {
     COMPRA
 }
 
+enum TipoFianca {
+    NENHUM
+    SEGURO
+    FIADOR
+    APOLICE
+    CAUCAO
+}
+
 model Processo {
     id            String           @id @default(uuid())
     tipoProcesso  TipoProcesso     @default(LOCACAO)
+    tipoFianca    TipoFianca       @default(NENHUM)
     codigo        Int?
     imovelId      Int?
     contratoId    Int?

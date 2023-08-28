@@ -58,6 +58,34 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                         ficha.preenchimento[campo.codigo]
                                     ).format("DD/MM/YYYY")}
                                 </Text>
+                            ) : campo.tipoCampo === "image" ? (
+                                ficha.preenchimento[campo.codigo] ? (
+                                    <Flex flexDirection="column">
+                                        <Image
+                                            w={32}
+                                            h={44}
+                                            src={
+                                                ficha.preenchimento[
+                                                    campo.codigo
+                                                ]
+                                            }
+                                            objectFit="cover"
+                                            objectPosition="center"
+                                        />
+                                        <Text fontSize="xs" mt={2}>
+                                            ou{" "}
+                                            <Link
+                                                href={
+                                                    ficha.preenchimento[
+                                                        campo.codigo
+                                                    ]
+                                                }
+                                            >
+                                                clique aqui
+                                            </Link>
+                                        </Text>
+                                    </Flex>
+                                ) : null
                             ) : campo.tipoCampo === "file" ? (
                                 ficha.preenchimento[campo.codigo] ? (
                                     <Flex flexDirection="column">

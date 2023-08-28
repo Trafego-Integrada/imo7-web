@@ -249,6 +249,7 @@ handle.get(async (req, res) => {
         const data = await prisma.processo.findMany({
             where: {
                 ...filtroQuery,
+                imobiliariaId: req.user?.imobiliariaId,
             },
             ...paginacao,
             include: {
@@ -266,6 +267,7 @@ handle.get(async (req, res) => {
                                 },
                             },
                         },
+                        preenchimento: true,
                         modelo: true,
                     },
                 },
