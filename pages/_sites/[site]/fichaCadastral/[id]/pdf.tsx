@@ -86,6 +86,31 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                         </Text>
                                     </Flex>
                                 ) : null
+                            ) : campo.tipoCampo === "qrcode" ? (
+                                ficha.preenchimento[campo.codigo] ? (
+                                    <Flex flexDirection="column">
+                                        <QRCode
+                                            size={75}
+                                            value={
+                                                ficha.preenchimento[
+                                                    campo.codigo
+                                                ]
+                                            }
+                                        />
+                                        <Text fontSize="xs" mt={2}>
+                                            Leia o QRCode ou{" "}
+                                            <Link
+                                                href={
+                                                    ficha.preenchimento[
+                                                        campo.codigo
+                                                    ]
+                                                }
+                                            >
+                                                clique aqui
+                                            </Link>
+                                        </Text>
+                                    </Flex>
+                                ) : null
                             ) : campo.tipoCampo === "file" ? (
                                 ficha.preenchimento[campo.codigo] ? (
                                     <Flex flexDirection="column">

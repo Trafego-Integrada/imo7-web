@@ -321,8 +321,8 @@ model Imovel {
     imobiliaria     Imobiliaria              @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId   Int
     proprietarios   ProprietariosOnImoveis[]
-    conta           Conta                    @relation(fields: [contaId], references: [id])
-    contaId         Int
+    conta           Conta?                   @relation(fields: [contaId], references: [id])
+    contaId         Int?
     contrato        Contrato?                @relation(fields: [contratoId], references: [id])
     contratoId      Int?                     @unique
     FichaCadastral  FichaCadastral[]

@@ -195,6 +195,9 @@ const ModalBase = ({}, ref) => {
                                 >
                                     <option value="number">Number</option>
                                     <option value="text">Text</option>
+                                    <option value="qrcode">
+                                        Text (QRCode)
+                                    </option>
                                     <option value="textarea">Textarea</option>
                                     <option value="select">Select</option>
                                     <option value="checkbox">Checkbox</option>

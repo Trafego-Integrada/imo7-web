@@ -35,11 +35,12 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { FiPlus, FiTrash } from "react-icons/fi";
+import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
 import { MdClose, MdSave } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 import { FichasCadastrais } from "./Fichas";
 import { queryClient } from "@/services/queryClient";
+import { formatoValor } from "@/helpers/helpers";
 
 export const EditarProcesso = ({ id, isOpen, onClose }) => {
     const { usuario } = useAuth();
@@ -67,7 +68,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
     };
 
     const { data: imoveis } = useQuery(
-        ["imoveis", { linhas: 20 }],
+        ["imoveis", { noIncludes: true }],
         imo7ApiService("imovel").list
     );
     const campos = [
@@ -185,15 +186,39 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                             ) => i.id}
                                                             rightAddon={
                                                                 <Box p={0}>
-                                                                    <Tooltip label="Cadastrar Imóvel">
+                                                                    <Tooltip
+                                                                        label={
+                                                                            watch(
+                                                                                "imovelId"
+                                                                            )
+                                                                                ? "Editar imóvel"
+                                                                                : "Cadatrar Imóvel"
+                                                                        }
+                                                                    >
                                                                         <IconButton
                                                                             rounded="none"
                                                                             colorScheme="blue"
                                                                             size="sm"
                                                                             icon={
-                                                                                <FiPlus />
+                                                                                watch(
+                                                                                    "imovelId"
+                                                                                ) ? (
+                                                                                    <FiEdit />
+                                                                                ) : (
+                                                                                    <FiPlus />
+                                                                                )
                                                                             }
-                                                                            isDisabled
+                                                                            onClick={() =>
+                                                                                watch(
+                                                                                    "imovelId"
+                                                                                )
+                                                                                    ? modalImovel.current.onOpen(
+                                                                                          watch(
+                                                                                              "imovelId"
+                                                                                          )
+                                                                                      )
+                                                                                    : modalImovel.current.onOpen()
+                                                                            }
                                                                         />
                                                                     </Tooltip>
                                                                 </Box>
@@ -255,7 +280,98 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                 />
                                             </GridItem>
                                         </Grid>
-                                    </Box>
+                                    </Box>{" "}
+                                    {watch("imovelId") && (
+                                        <Box>
+                                            <Heading size="sm" color="gray.700">
+                                                Cadastro do Imóvel
+                                            </Heading>
+                                            <Divider my={2} />{" "}
+                                            <Grid
+                                                gap={4}
+                                                gridTemplateColumns={{
+                                                    lg: "repeat(4,1fr)",
+                                                }}
+                                            >
+                                                <GridItem>
+                                                    <Text
+                                                        fontSize="xs"
+                                                        color="gray"
+                                                    >
+                                                        Valor de Venda
+                                                    </Text>
+                                                    <Text>
+                                                        {formatoValor(
+                                                            imoveis?.data?.data?.find(
+                                                                (i) =>
+                                                                    i.id ==
+                                                                    watch(
+                                                                        "imovelId"
+                                                                    )
+                                                            )?.valorVenda
+                                                        )}
+                                                    </Text>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Text
+                                                        fontSize="xs"
+                                                        color="gray"
+                                                    >
+                                                        Valor de Locação
+                                                    </Text>{" "}
+                                                    <Text>
+                                                        {formatoValor(
+                                                            imoveis?.data?.data?.find(
+                                                                (i) =>
+                                                                    i.id ==
+                                                                    watch(
+                                                                        "imovelId"
+                                                                    )
+                                                            )?.valorAluguel
+                                                        )}
+                                                    </Text>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Text
+                                                        fontSize="xs"
+                                                        color="gray"
+                                                    >
+                                                        Valor IPTU
+                                                    </Text>{" "}
+                                                    <Text>
+                                                        {formatoValor(
+                                                            imoveis?.data?.data?.find(
+                                                                (i) =>
+                                                                    i.id ==
+                                                                    watch(
+                                                                        "imovelId"
+                                                                    )
+                                                            )?.valorIPTU
+                                                        )}
+                                                    </Text>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Text
+                                                        fontSize="xs"
+                                                        color="gray"
+                                                    >
+                                                        Valor Condominio
+                                                    </Text>
+                                                    <Text>
+                                                        {formatoValor(
+                                                            imoveis?.data?.data?.find(
+                                                                (i) =>
+                                                                    i.id ==
+                                                                    watch(
+                                                                        "imovelId"
+                                                                    )
+                                                            )?.valorCondominio
+                                                        )}
+                                                    </Text>
+                                                </GridItem>
+                                            </Grid>
+                                        </Box>
+                                    )}
                                     <Box>
                                         <Heading size="sm" color="gray.700">
                                             Condições
@@ -268,7 +384,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                             }}
                                         >
                                             {campos.map((item, key) => (
-                                                <GridItem key={item.nome}>
+                                                <GridItem key={item.id}>
                                                     <Controller
                                                         control={control}
                                                         name={`campos[${key}].${item.nome}`}
@@ -295,7 +411,6 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                             ))}
                                         </Grid>
                                     </Box>
-
                                     <Box>
                                         <Grid gap={4}>
                                             <GridItem>

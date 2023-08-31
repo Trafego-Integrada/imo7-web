@@ -28,15 +28,16 @@ import {
     Tooltip,
     useToast,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { FiPlus, FiTrash } from "react-icons/fi";
+import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
 import { MdClose, MdSave } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
-
+import { ModalImovel } from "../ModalImovel";
+import { formatoValor } from "@/helpers/helpers";
 export const NovoProcesso = ({ isOpen, onClose, callback }) => {
-    const { usuario } = useAuth();
-    const toast = useToast();
+    const [filtroImovel, setFiltroImovel] = useState("");
+    const modalImovel = useRef();
     const {
         control,
         reset,
@@ -60,8 +61,13 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
     };
 
     const { data: imoveis } = useQuery(
-        ["imoveis", { linhas: 20 }],
-        imo7ApiService("imovel").list
+        ["imoveis", { linhas: 20, query: filtroImovel }],
+        imo7ApiService("imovel").list,
+        {
+            refetchOnMount: false,
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
     );
     const campos = [
         {
@@ -69,11 +75,20 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
             label: "Valor Negociado",
         },
     ];
-    const { data: modelos } = useQuery(["modelosFichas"], listarFichas);
+    const { data: modelos } = useQuery(["modelosFichas"], listarFichas, {
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+    });
 
     const { data: usuarios } = useQuery(
-        ["listaUsuarios", { admImobiliaria: true }],
-        listarUsuarios
+        ["listaUsuarios", { admImobiliaria: true, status: true }],
+        listarUsuarios,
+        {
+            refetchOnMount: false,
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
     );
     useEffect(() => {
         reset();
@@ -82,245 +97,369 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         control,
         name: "fichas",
     });
+
+    const onCallbackImovel = async (imovelId) => {
+        await queryClient.invalidateQueries(["imoveis"]);
+        reset({ ...watch(), imovelId });
+    };
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="3xl">
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>
-                    Novo Processo <ModalCloseButton />
-                </ModalHeader>
-                <ModalBody>
-                    <Flex
-                        as="form"
-                        id="novoProcesso"
-                        onSubmit={handleSubmit(onSubmit)}
-                        flexDir="column"
-                        gap={4}
-                    >
-                        <Box>
-                            <Grid
-                                gridTemplateColumns={{ lg: "repeat(2,1fr)" }}
-                                gap={4}
-                            >
-                                <GridItem colStart={{ lg: 1 }}>
-                                    <FormSelect
-                                        size="sm"
-                                        label="Tipo de Processo"
-                                        {...register("tipoProcesso")}
-                                    >
-                                        <option value="LOCACAO">Locação</option>
-                                        <option value="VENDA">Venda</option>
-                                        <option value="COMPRA">Compra</option>
-                                    </FormSelect>
-                                </GridItem>
-                                <GridItem colStart={{ lg: 1 }}>
-                                    <Controller
-                                        control={control}
-                                        name="imovelId"
-                                        render={({ field }) => (
-                                            <FormMultiSelect
-                                                size="sm"
-                                                label="Imóvel"
-                                                options={imoveis?.data?.data}
-                                                formatOptionLabel={(i) => (
-                                                    <Box>
-                                                        <Text>
-                                                            <Text
-                                                                fontSize="xs"
-                                                                as="span"
-                                                                fontWeight="bold"
-                                                            >
-                                                                Código:
-                                                            </Text>{" "}
-                                                            {i.codigo}
-                                                            <Text
-                                                                as="span"
-                                                                fontSize="xs"
-                                                            >{` - ${i.endereco}, ${i.bairro},${i.cidade}`}</Text>
-                                                        </Text>
-                                                    </Box>
-                                                )}
-                                                getOptionValue={(i) => i.id}
-                                                rightAddon={
-                                                    <Box p={0}>
-                                                        <Tooltip label="Cadastrar Imóvel">
-                                                            <IconButton
-                                                                rounded="none"
-                                                                colorScheme="blue"
-                                                                size="sm"
-                                                                icon={
-                                                                    <FiPlus />
-                                                                }
-                                                                isDisabled
-                                                            />
-                                                        </Tooltip>
-                                                    </Box>
-                                                }
-                                                onChange={(e) =>
-                                                    field.onChange(e.id)
-                                                }
-                                                value={
-                                                    field.value
-                                                        ? imoveis?.data?.data.find(
-                                                              (i) =>
-                                                                  i.id ==
-                                                                  field.value
-                                                          )
-                                                        : null
-                                                }
-                                            />
-                                        )}
-                                    />
-                                </GridItem>
-                                <GridItem>
-                                    <Controller
-                                        control={control}
-                                        name="responsavelId"
-                                        render={({ field }) => (
-                                            <FormMultiSelect
-                                                size="sm"
-                                                label="Responsável"
-                                                options={
-                                                    usuarios &&
-                                                    usuarios.data?.data
-                                                }
-                                                getOptionLabel={(e) => e.nome}
-                                                getOptionValue={(e) => e.id}
-                                                placeholder="Selecione o responsável"
-                                                onChange={(e) =>
-                                                    field.onChange(e.id)
-                                                }
-                                                value={
-                                                    field.value
-                                                        ? usuarios?.data?.data.find(
-                                                              (i) =>
-                                                                  i.id ==
-                                                                  field.value
-                                                          )
-                                                        : null
-                                                }
-                                            />
-                                        )}
-                                    />
-                                </GridItem>
-                            </Grid>
-                        </Box>
-                        <Box>
-                            <Heading size="sm" color="gray.700">
-                                Condições
-                            </Heading>
-                            <Divider my={2} />
-                            <Grid
-                                gap={4}
-                                gridTemplateColumns={{ lg: "repeat(2,1fr)" }}
-                            >
-                                {campos.map((item, key) => (
-                                    <GridItem key={item.nome}>
+        <>
+            <Modal isOpen={isOpen} onClose={onClose} size="3xl">
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>
+                        Novo Processo <ModalCloseButton />
+                    </ModalHeader>
+                    <ModalBody>
+                        <Flex
+                            as="form"
+                            id="novoProcesso"
+                            onSubmit={handleSubmit(onSubmit)}
+                            flexDir="column"
+                            gap={4}
+                        >
+                            <Box>
+                                <Grid
+                                    gridTemplateColumns={{
+                                        lg: "repeat(2,1fr)",
+                                    }}
+                                    gap={4}
+                                >
+                                    <GridItem colStart={{ lg: 1 }}>
+                                        <FormSelect
+                                            size="sm"
+                                            label="Tipo de Processo"
+                                            {...register("tipoProcesso")}
+                                        >
+                                            <option value="LOCACAO">
+                                                Locação
+                                            </option>
+                                            <option value="VENDA">Venda</option>
+                                            <option value="COMPRA">
+                                                Compra
+                                            </option>
+                                        </FormSelect>
+                                    </GridItem>
+                                    <GridItem colStart={{ lg: 1 }}>
                                         <Controller
                                             control={control}
-                                            name={`campos[${key}].${item.nome}`}
+                                            name="imovelId"
                                             render={({ field }) => (
-                                                <FormInputCurrency
+                                                <FormMultiSelect
                                                     size="sm"
-                                                    label={item.label}
-                                                    value={field.value}
-                                                    onValueChange={(v) =>
-                                                        field.onChange(v)
+                                                    label="Imóvel"
+                                                    options={
+                                                        imoveis?.data?.data
+                                                    }
+                                                    formatOptionLabel={(i) => (
+                                                        <Box>
+                                                            <Text>
+                                                                <Text
+                                                                    fontSize="xs"
+                                                                    as="span"
+                                                                    fontWeight="bold"
+                                                                >
+                                                                    Código:
+                                                                </Text>{" "}
+                                                                {i.codigo}
+                                                                <Text
+                                                                    as="span"
+                                                                    fontSize="xs"
+                                                                >{` - ${i.endereco}, ${i.bairro},${i.cidade}`}</Text>
+                                                            </Text>
+                                                        </Box>
+                                                    )}
+                                                    getOptionValue={(i) => i.id}
+                                                    rightAddon={
+                                                        <Box p={0}>
+                                                            <Tooltip
+                                                                label={
+                                                                    watch(
+                                                                        "imovelId"
+                                                                    )
+                                                                        ? "Editar imóvel"
+                                                                        : "Cadatrar Imóvel"
+                                                                }
+                                                            >
+                                                                <IconButton
+                                                                    rounded="none"
+                                                                    colorScheme="blue"
+                                                                    size="sm"
+                                                                    icon={
+                                                                        watch(
+                                                                            "imovelId"
+                                                                        ) ? (
+                                                                            <FiEdit />
+                                                                        ) : (
+                                                                            <FiPlus />
+                                                                        )
+                                                                    }
+                                                                    onClick={() =>
+                                                                        watch(
+                                                                            "imovelId"
+                                                                        )
+                                                                            ? modalImovel.current.onOpen(
+                                                                                  watch(
+                                                                                      "imovelId"
+                                                                                  )
+                                                                              )
+                                                                            : modalImovel.current.onOpen()
+                                                                    }
+                                                                />
+                                                            </Tooltip>
+                                                        </Box>
+                                                    }
+                                                    onChange={(e) =>
+                                                        field.onChange(e.id)
+                                                    }
+                                                    value={
+                                                        field.value
+                                                            ? imoveis?.data?.data.find(
+                                                                  (i) =>
+                                                                      i.id ==
+                                                                      field.value
+                                                              )
+                                                            : null
                                                     }
                                                 />
                                             )}
                                         />
                                     </GridItem>
-                                ))}
-                            </Grid>
-                        </Box>
-                        <Box>
-                            <Flex align="center" justify="space-between">
-                                <Heading size="sm" color="gray.700">
-                                    Fichas Cadastrais
-                                </Heading>
-                                <Tooltip label="Adicionar ficha">
-                                    <IconButton
-                                        colorScheme="blue"
-                                        rounded="full"
-                                        size="xs"
-                                        icon={<FiPlus />}
-                                        onClick={() => append()}
-                                        variant="outline"
-                                    />
-                                </Tooltip>
-                            </Flex>
-                            <Divider my={2} />
-                            <Grid gap={4}>
-                                {fields.map((f, k) => (
-                                    <Flex key={f.id} gap={1}>
+                                    <GridItem>
                                         <Controller
                                             control={control}
-                                            name={`fichas[${k}].modelo`}
+                                            name="responsavelId"
                                             render={({ field }) => (
                                                 <FormMultiSelect
-                                                    {...field}
                                                     size="sm"
-                                                    options={modelos?.data}
-                                                    placeholder="Modelo da Ficha..."
-                                                    error={
-                                                        errors.modelo?.message
+                                                    label="Responsável"
+                                                    options={
+                                                        usuarios &&
+                                                        usuarios.data?.data
                                                     }
                                                     getOptionLabel={(e) =>
-                                                        `${e.tipo} - ${e.nome}`
+                                                        e.nome
                                                     }
                                                     getOptionValue={(e) => e.id}
+                                                    placeholder="Selecione o responsável"
+                                                    onChange={(e) =>
+                                                        field.onChange(e.id)
+                                                    }
+                                                    value={
+                                                        field.value
+                                                            ? usuarios?.data?.data.find(
+                                                                  (i) =>
+                                                                      i.id ==
+                                                                      field.value
+                                                              )
+                                                            : null
+                                                    }
                                                 />
                                             )}
                                         />
-                                        <FormInput
-                                            size="sm"
-                                            placeholder="Digite o nome..."
-                                            {...register(`fichas[${k}].nome`)}
-                                        />
+                                    </GridItem>
+                                </Grid>
+                            </Box>
+                            {watch("imovelId") && (
+                                <Box>
+                                    <Heading size="sm" color="gray.700">
+                                        Cadastro do Imóvel
+                                    </Heading>
+                                    <Divider my={2} />{" "}
+                                    <Grid
+                                        gap={4}
+                                        gridTemplateColumns={{
+                                            lg: "repeat(4,1fr)",
+                                        }}
+                                    >
+                                        <GridItem>
+                                            <Text fontSize="xs" color="gray">
+                                                Valor de Venda
+                                            </Text>
+                                            <Text>
+                                                {formatoValor(
+                                                    imoveis?.data?.data?.find(
+                                                        (i) =>
+                                                            i.id ==
+                                                            watch("imovelId")
+                                                    )?.valorVenda
+                                                )}
+                                            </Text>
+                                        </GridItem>
+                                        <GridItem>
+                                            <Text fontSize="xs" color="gray">
+                                                Valor de Locação
+                                            </Text>{" "}
+                                            <Text>
+                                                {formatoValor(
+                                                    imoveis?.data?.data?.find(
+                                                        (i) =>
+                                                            i.id ==
+                                                            watch("imovelId")
+                                                    )?.valorAluguel
+                                                )}
+                                            </Text>
+                                        </GridItem>
+                                        <GridItem>
+                                            <Text fontSize="xs" color="gray">
+                                                Valor IPTU
+                                            </Text>{" "}
+                                            <Text>
+                                                {formatoValor(
+                                                    imoveis?.data?.data?.find(
+                                                        (i) =>
+                                                            i.id ==
+                                                            watch("imovelId")
+                                                    )?.valorIPTU
+                                                )}
+                                            </Text>
+                                        </GridItem>
+                                        <GridItem>
+                                            <Text fontSize="xs" color="gray">
+                                                Valor Condominio
+                                            </Text>
+                                            <Text>
+                                                {formatoValor(
+                                                    imoveis?.data?.data?.find(
+                                                        (i) =>
+                                                            i.id ==
+                                                            watch("imovelId")
+                                                    )?.valorCondominio
+                                                )}
+                                            </Text>
+                                        </GridItem>
+                                    </Grid>
+                                </Box>
+                            )}
+                            <Box>
+                                <Heading size="sm" color="gray.700">
+                                    Condições
+                                </Heading>
+                                <Divider my={2} />
+                                <Grid
+                                    gap={4}
+                                    gridTemplateColumns={{
+                                        lg: "repeat(2,1fr)",
+                                    }}
+                                >
+                                    {campos.map((item, key) => (
+                                        <GridItem key={item.nome}>
+                                            <Controller
+                                                control={control}
+                                                name={`campos[${key}].${item.nome}`}
+                                                render={({ field }) => (
+                                                    <FormInputCurrency
+                                                        size="sm"
+                                                        label={item.label}
+                                                        value={field.value}
+                                                        onValueChange={(v) =>
+                                                            field.onChange(v)
+                                                        }
+                                                    />
+                                                )}
+                                            />
+                                        </GridItem>
+                                    ))}
+                                </Grid>
+                            </Box>
+                            <Box>
+                                <Flex align="center" justify="space-between">
+                                    <Heading size="sm" color="gray.700">
+                                        Fichas Cadastrais
+                                    </Heading>
+                                    <Tooltip label="Adicionar ficha">
                                         <IconButton
-                                            size="sm"
-                                            icon={<FiTrash />}
-                                            onClick={() => remove(k)}
+                                            colorScheme="blue"
+                                            rounded="full"
+                                            size="xs"
+                                            icon={<FiPlus />}
+                                            onClick={() => append()}
+                                            variant="outline"
                                         />
-                                    </Flex>
-                                ))}
-                            </Grid>
-                        </Box>
-                        <Box>
-                            <Grid gap={4}>
-                                <GridItem>
-                                    <FormTextarea
-                                        size="sm"
-                                        {...register("observacoes")}
-                                        placeholder="Observações"
-                                    />
-                                </GridItem>
-                            </Grid>
-                        </Box>
-                    </Flex>
-                </ModalBody>
-                <ModalFooter>
-                    <Button
-                        size="sm"
-                        leftIcon={<MdClose />}
-                        variant="ghost"
-                        onClick={onClose}
-                    >
-                        Desistir
-                    </Button>
-                    <Button
-                        type="submit"
-                        form="novoProcesso"
-                        size="sm"
-                        leftIcon={<MdSave />}
-                        colorScheme="blue"
-                        isLoading={isSubmitting}
-                    >
-                        Salvar
-                    </Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
+                                    </Tooltip>
+                                </Flex>
+                                <Divider my={2} />
+                                <Grid gap={4}>
+                                    {fields.map((f, k) => (
+                                        <Flex key={f.id} gap={1}>
+                                            <Controller
+                                                control={control}
+                                                name={`fichas[${k}].modelo`}
+                                                render={({ field }) => (
+                                                    <FormMultiSelect
+                                                        {...field}
+                                                        size="sm"
+                                                        options={modelos?.data}
+                                                        placeholder="Modelo da Ficha..."
+                                                        error={
+                                                            errors.modelo
+                                                                ?.message
+                                                        }
+                                                        getOptionLabel={(e) =>
+                                                            `${e.tipo} - ${e.nome}`
+                                                        }
+                                                        getOptionValue={(e) =>
+                                                            e.id
+                                                        }
+                                                    />
+                                                )}
+                                            />
+                                            <FormInput
+                                                size="sm"
+                                                placeholder="Digite o nome..."
+                                                {...register(
+                                                    `fichas[${k}].nome`
+                                                )}
+                                            />
+                                            <IconButton
+                                                size="sm"
+                                                icon={<FiTrash />}
+                                                onClick={() => remove(k)}
+                                            />
+                                        </Flex>
+                                    ))}
+                                </Grid>
+                            </Box>
+                            <Box>
+                                <Grid gap={4}>
+                                    <GridItem>
+                                        <FormTextarea
+                                            size="sm"
+                                            {...register("observacoes")}
+                                            placeholder="Observações"
+                                        />
+                                    </GridItem>
+                                </Grid>
+                            </Box>
+                        </Flex>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            size="sm"
+                            leftIcon={<MdClose />}
+                            variant="ghost"
+                            onClick={onClose}
+                        >
+                            Desistir
+                        </Button>
+                        <Button
+                            type="submit"
+                            form="novoProcesso"
+                            size="sm"
+                            leftIcon={<MdSave />}
+                            colorScheme="blue"
+                            isLoading={isSubmitting}
+                        >
+                            Salvar
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            <ModalImovel
+                ref={modalImovel}
+                callback={(data) => onCallbackImovel(data)}
+            />
+        </>
     );
 };
