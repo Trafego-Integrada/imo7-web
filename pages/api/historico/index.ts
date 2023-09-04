@@ -17,7 +17,7 @@ handle.get(async (req, res) => {
             tabelaId,
         },
         orderBy: {
-            createAt: "asc",
+            createdAt: "asc",
         },
         include: {
             usuario: true,

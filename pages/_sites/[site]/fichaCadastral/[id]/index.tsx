@@ -40,6 +40,7 @@ import "react-quill/dist/quill.snow.css";
 import { buscarEndereco } from "@/lib/buscarEndereco";
 import { GetServerSideProps } from "next";
 import { FormSelect } from "@/components/Form/FormSelect";
+import { formatoValor } from "@/helpers/helpers";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
     console.log(modelo);
     const [schema, setSchema] = useState({});
@@ -185,28 +186,58 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     )}
                 </Box>
 
-                {ficha.imovel ? (
+                <Flex gap={4} my={2}>
+                    {ficha.imovel ? (
+                        <Box p={4} bg="white">
+                            <Text fontSize="sm" color="gray">
+                                Ficha referente ao imóvel:
+                            </Text>
+                            <Text>
+                                {ficha.imovel?.codigo} -{" "}
+                                {ficha.imovel?.endereco}, {ficha.imovel?.bairro}
+                                , {ficha.imovel?.cidade}/{ficha.imovel?.estado}
+                            </Text>
+                        </Box>
+                    ) : ficha.codigoImovel ? (
+                        <Box p={2} bg="white">
+                            <Text fontSize="sm" color="gray">
+                                Ficha referente ao imóvel:
+                            </Text>
+                            <Text>
+                                {ficha.codigoImovel} - {ficha.enderecoImovel} nº{" "}
+                                {ficha.numeroImovel}{" "}
+                                {ficha.complementoImovel &&
+                                    `(${ficha.complementoImovel})`}
+                                , {ficha.bairroImovel}, {ficha.cidadeImovel}/
+                                {ficha.estadoImovel}
+                            </Text>
+                        </Box>
+                    ) : (
+                        ""
+                    )}
                     <Box p={4} bg="white">
+                        <Text fontSize="sm" color="gray">
+                            Valor Negociado
+                        </Text>
                         <Text>
-                            Ficha referente ao imóvel: {ficha.imovel?.codigo} -{" "}
-                            {ficha.imovel?.endereco}, {ficha.imovel?.bairro},{" "}
-                            {ficha.imovel?.cidade}/{ficha.imovel?.estado}
+                            {ficha.Processo?.campos.find((e) => e.valor).valor}
                         </Text>
                     </Box>
-                ) : ficha.codigoImovel ? (
                     <Box p={4} bg="white">
+                        <Text fontSize="sm" color="gray">
+                            Valor Condominio
+                        </Text>
                         <Text>
-                            Ficha referente ao imóvel: {ficha.codigoImovel} -{" "}
-                            {ficha.enderecoImovel} nº {ficha.numeroImovel}{" "}
-                            {ficha.complementoImovel &&
-                                `(${ficha.complementoImovel})`}
-                            , {ficha.bairroImovel}, {ficha.cidadeImovel}/
-                            {ficha.estadoImovel}
+                            {formatoValor(ficha.imovel?.valorCondominio)}
                         </Text>
                     </Box>
-                ) : (
-                    ""
-                )}
+                    <Box p={4} bg="white">
+                        <Text fontSize="sm" color="gray">
+                            Valor IPTU
+                        </Text>
+                        <Text>{formatoValor(ficha.imovel?.valorIPTU)}</Text>
+                    </Box>
+                </Flex>
                 <Grid gap={4}>
                     {campos
                         .filter((i) =>
@@ -871,6 +902,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
                 },
             },
             imovel: true,
+            Processo: true,
         },
     });
     if (ficha?.deletedAt) {

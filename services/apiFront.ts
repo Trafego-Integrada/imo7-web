@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from "next";
 import { parseCookies, setCookie } from "nookies";
 import { signOut } from "@/contexts/AuthContext";
 import { AuthTokenError } from "./errors/AuthTokenError";
+import QueryString from "qs";
 
 let isRefreshing = false;
 let failedRequestQueue: {
@@ -20,6 +21,11 @@ export function setupApiClient(ctx = undefined) {
         headers: {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
         },
+        paramsSerializer: {
+            serialize: (params) => {
+                return QueryString.stringify(params, { arrayFormat: "repeat" });
+            },
+        },
     });
 
     api.interceptors.response.use(
@@ -30,7 +36,7 @@ export function setupApiClient(ctx = undefined) {
             if (error.response?.status === 401) {
                 if (error.response.data?.code === "token.expired") {
                     cookies = parseCookies(ctx);
-                    console.log('expirou')
+                    console.log("expirou");
                     const { "imo7.refreshToken": refreshToken } = cookies;
                     const originalConfig = error.config;
                     if (!isRefreshing) {

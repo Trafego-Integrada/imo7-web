@@ -29,7 +29,7 @@ import { RiAddLine } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
 import { ModalAnexo } from "./ModalAnexo";
 
-export const Documentos = ({ contratoId }) => {
+export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
     const router = useRouter();
     const toast = useToast();
     const modalAnexo = useRef();
@@ -39,6 +39,8 @@ export const Documentos = ({ contratoId }) => {
             "anexos",
             {
                 contratoId,
+                fichaCadastralId,
+                processoId,
             },
         ],
         listarAnexos
@@ -129,7 +131,12 @@ export const Documentos = ({ contratoId }) => {
                     ))}
                 </Tbody>
             </Table>
-            <ModalAnexo ref={modalAnexo} contratoId={contratoId} />{" "}
+            <ModalAnexo
+                ref={modalAnexo}
+                contratoId={contratoId}
+                fichaCadastralId={fichaCadastralId}
+                processoId={processoId}
+            />
             <Excluir
                 ref={modalExcluir}
                 titulo="Excluir anexo"

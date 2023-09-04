@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import jwtDecode from "jwt-decode";
 import { parseCookies, setCookie } from "nookies";
 import { AuthTokenError } from "./errors/AuthTokenError";
-
+import QueryString from "qs";
 let isRefreshing = false;
 let failedRequestQueue: {
     onSuccess: (token: string) => void;
@@ -28,6 +28,11 @@ export function setupApiClient(ctx = null) {
         baseURL: url,
         headers: {
             Authorization: `Bearer ${cookies["imo7.token"]}`,
+        },
+        paramsSerializer: {
+            serialize: (params) => {
+                return QueryString.stringify(params, { arrayFormat: "repeat" });
+            },
         },
     });
     api.interceptors.request.use((request) => {

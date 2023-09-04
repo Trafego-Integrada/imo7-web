@@ -41,7 +41,25 @@ import { useMutation, useQuery } from "react-query";
 import { FichasCadastrais } from "./Fichas";
 import { queryClient } from "@/services/queryClient";
 import { formatoValor } from "@/helpers/helpers";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Documentos } from "../Contrato/Documentos";
 
+const schema = yup.object({
+    tipoProcesso: yup.string().required("Campo obrigatório"),
+    responsavelId: yup.string().required("Campo obrigatório"),
+    imovelId: yup.string().required("Campo obrigatório"),
+    fichas: yup
+        .array()
+        .of(
+            yup.object({
+                modelo: yup.object().required("Campo obrigatório"),
+                nome: yup.string().required("Campo obrigatório"),
+            })
+        )
+        .min(1, "Deve ter no mínimo uma ficha")
+        .required("Campo obrigatório"),
+});
 export const EditarProcesso = ({ id, isOpen, onClose }) => {
     const { usuario } = useAuth();
     const toast = useToast();
@@ -52,7 +70,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm();
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
     const buscar = useMutation(imo7ApiService("processo").get, {
         onSuccess(data, variables, context) {
             reset({ ...data });
@@ -111,6 +131,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                     {watch("fichas")?.length}
                                 </Tag>
                             </Tab>
+                            <Tab>Anexos</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
@@ -131,10 +152,45 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                             <GridItem colStart={{ lg: 1 }}>
                                                 <FormSelect
                                                     size="sm"
+                                                    label="Status do Processo"
+                                                    placeholder="Selecione..."
+                                                    {...register("status")}
+                                                    error={
+                                                        errors?.status?.message
+                                                    }
+                                                >
+                                                    <option value="EM_ANDAMENTO">
+                                                        Em andamento
+                                                    </option>
+                                                    <option value="CANCELADO">
+                                                        Cancelado
+                                                    </option>
+                                                    <option value="ARQUIVADO">
+                                                        Arquivado
+                                                    </option>
+                                                    <option value="COMPLETO">
+                                                        Completo
+                                                    </option>
+                                                    <option value="APROVADO">
+                                                        Compra
+                                                    </option>
+                                                    <option value="REPROVADO">
+                                                        Reprovado
+                                                    </option>
+                                                </FormSelect>
+                                            </GridItem>
+                                            <GridItem colStart={{ lg: 1 }}>
+                                                <FormSelect
+                                                    size="sm"
                                                     label="Tipo de Processo"
+                                                    placeholder="Selecione..."
                                                     {...register(
                                                         "tipoProcesso"
                                                     )}
+                                                    error={
+                                                        errors?.tipoProcesso
+                                                            ?.message
+                                                    }
                                                 >
                                                     <option value="LOCACAO">
                                                         Locação
@@ -147,6 +203,39 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                     </option>
                                                 </FormSelect>
                                             </GridItem>
+                                            {watch("tipoProcesso") ==
+                                                "LOCACAO" && (
+                                                <GridItem>
+                                                    <FormSelect
+                                                        size="sm"
+                                                        placeholder="Selecione..."
+                                                        label="Tipo de Garantia"
+                                                        {...register(
+                                                            "tipoGarantia"
+                                                        )}
+                                                        error={
+                                                            errors?.tipoGarantia
+                                                                ?.message
+                                                        }
+                                                    >
+                                                        <option value="NENHUMA">
+                                                            Nenhuma
+                                                        </option>
+                                                        <option value="SEGURO">
+                                                            Seguro Fiança
+                                                        </option>
+                                                        <option value="FIADOR">
+                                                            Fiador
+                                                        </option>
+                                                        <option value="APOLICE">
+                                                            Apolice
+                                                        </option>
+                                                        <option value="CAUCAO">
+                                                            Caução
+                                                        </option>
+                                                    </FormSelect>
+                                                </GridItem>
+                                            )}
                                             <GridItem colStart={{ lg: 1 }}>
                                                 <Controller
                                                     control={control}
@@ -237,6 +326,10 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                       )
                                                                     : null
                                                             }
+                                                            error={
+                                                                errors?.imovelId
+                                                                    ?.message
+                                                            }
                                                         />
                                                     )}
                                                 />
@@ -275,12 +368,17 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                       )
                                                                     : null
                                                             }
+                                                            error={
+                                                                errors
+                                                                    ?.responsavelId
+                                                                    ?.message
+                                                            }
                                                         />
                                                     )}
                                                 />
                                             </GridItem>
                                         </Grid>
-                                    </Box>{" "}
+                                    </Box>
                                     {watch("imovelId") && (
                                         <Box>
                                             <Heading size="sm" color="gray.700">
@@ -429,6 +527,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                     processoId={id}
                                     imovelId={watch("imovelId")}
                                     responsavelId={watch("responsavelId")}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <Documentos
+                                    processoId={watch("id")}
+                                    data={watch("anexos")}
                                 />
                             </TabPanel>
                         </TabPanels>

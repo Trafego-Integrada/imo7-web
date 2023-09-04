@@ -255,6 +255,9 @@ handle.get(async (req, res) => {
             include: {
                 imovel: true,
                 fichas: {
+                    where: {
+                        deletedAt: null,
+                    },
                     include: {
                         _count: {
                             select: {
@@ -267,8 +270,18 @@ handle.get(async (req, res) => {
                                 },
                             },
                         },
-                        preenchimento: true,
+                        preenchimento: {
+                            include: {
+                                campo: true,
+                                ficha: {
+                                    include: {
+                                        modelo: true,
+                                    },
+                                },
+                            },
+                        },
                         modelo: true,
+                        responsavel: true,
                     },
                 },
                 responsavel: true,
@@ -328,15 +341,15 @@ handle.post(async (req, res) => {
                             modeloFichaCadastralId: f.modelo?.id,
                             nome: f.nome,
                             imobiliariaId: req.user.imobiliariaId,
-                            imovelId,
-                            responsavelId,
+                            imovelId: Number(imovelId),
+                            responsavelId: Number(responsavelId),
                         })),
                     },
                 },
                 observacoes,
                 imovel: {
                     connect: {
-                        id: imovelId,
+                        id: Number(imovelId),
                     },
                 },
                 imobiliaria: {
@@ -346,7 +359,7 @@ handle.post(async (req, res) => {
                 },
                 responsavel: {
                     connect: {
-                        id: responsavelId,
+                        id: Number(responsavelId),
                     },
                 },
             },
@@ -373,6 +386,14 @@ handle.delete(async (req, res) => {
         await prisma.processo.deleteMany({
             where: {
                 id: {
+                    in: arrayIds,
+                },
+            },
+        });
+
+        await prisma.fichaCadastral.deleteMany({
+            where: {
+                processoId: {
                     in: arrayIds,
                 },
             },

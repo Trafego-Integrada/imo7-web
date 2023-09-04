@@ -292,6 +292,7 @@ handle.post(async (req, res) => {
             processoId,
             responsavelId,
             imovelId,
+            observacoes,
         } = req.body;
 
         let dataPreenchimento = {};
@@ -350,6 +351,7 @@ handle.post(async (req, res) => {
                 bairroImovel,
                 cidadeImovel,
                 estadoImovel,
+                observacoes,
                 imobiliaria: {
                     connect: {
                         id: req.user.imobiliariaId,
@@ -395,5 +397,30 @@ handle.post(async (req, res) => {
         });
     }
 });
+handle.delete(async (req, res) => {
+    try {
+        const { ids } = req.query;
+        let arrayIds = JSON.parse(ids);
 
+        if (!arrayIds.length) {
+            return res
+                .status(400)
+                .send({ success: false, message: "Nenhum id informado" });
+        }
+
+        await prisma.fichaCadastral.deleteMany({
+            where: {
+                id: {
+                    in: arrayIds,
+                },
+            },
+        });
+        return res.send({ success: true });
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error?.message,
+        });
+    }
+});
 export default handle;

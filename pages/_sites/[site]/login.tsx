@@ -76,7 +76,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
         } catch (error) {
             toast({
                 title: "Erro ao fazer login",
-                description: error.response.data?.message,
+                description: error.response?.data?.message,
                 status: "error",
                 duration: 9000,
             });

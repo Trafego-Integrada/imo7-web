@@ -28,7 +28,7 @@ export const apiService = (entityName: string, apiInstance: AxiosInstance) => ({
     deleteMany: async (ids) => {
         await apiInstance.delete(`${entityName}`, {
             params: {
-                ids: JSON.stringify(ids),
+                ids,
             },
         });
     },

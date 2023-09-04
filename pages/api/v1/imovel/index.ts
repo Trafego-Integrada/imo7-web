@@ -25,6 +25,7 @@ handle.post(async (req, res) => {
         valorAluguel,
         valorCondominio,
         valorVenda,
+        valorIPTU,
         quartos,
         suites,
         varandas,
@@ -84,6 +85,7 @@ handle.post(async (req, res) => {
             valorAluguel,
             valorCondominio,
             valorVenda,
+            valorIPTU,
             imobiliaria: {
                 connect: {
                     id: Number(imobiliariaId),

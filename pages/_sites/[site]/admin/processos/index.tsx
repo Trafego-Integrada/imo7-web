@@ -42,6 +42,7 @@ import {
     AvatarGroup,
     Box,
     Button,
+    Center,
     Checkbox,
     Divider,
     Flex,
@@ -163,7 +164,7 @@ const Home = () => {
             <Avatar {...props} />
         </Tooltip>
     );
-    const excluirFicha = useMutation(imo7ApiService("ficha").delete);
+    const excluirFicha = useMutation(imo7ApiService("fichaCadastral").delete);
 
     const onDelete = async (id) => {
         await excluirFicha.mutateAsync(id, {
@@ -346,21 +347,24 @@ const Home = () => {
                             data?.data?.data?.map((item, key) => (
                                 <Accordion
                                     key={item.id}
-                                    bg="white"
                                     defaultIndex={0}
                                     allowToggle
                                     allowMultiple
+                                    rounded="lg"
+                                    bg="white"
+                                    shadow="base"
                                 >
-                                    <AccordionItem>
+                                    <AccordionItem border="none">
                                         <AccordionButton
-                                            _expanded={{
-                                                bg: "blue.500",
-                                                color: "white",
-                                            }}
+                                            border="none"
+                                            roundedTop="lg"
                                         >
-                                            <Box>
-                                                <Flex align="center" gap={2}>
-                                                    <Text>#{item?.codigo}</Text>
+                                            <Box fontSize="sm" w="full">
+                                                <Flex
+                                                    align="center"
+                                                    gap={4}
+                                                    w="full"
+                                                >
                                                     <Checkbox
                                                         isChecked={selecionados.includes(
                                                             item.id
@@ -385,24 +389,66 @@ const Home = () => {
                                                                 );
                                                             }
                                                         }}
-                                                    />
-                                                    <Flex
-                                                        gap={2}
-                                                        justify="center"
-                                                        align="center"
-                                                    >
-                                                        <IconButton
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            icon={<FiEye />}
-                                                            onClick={() =>
-                                                                modalProcesso.current.onOpen(
-                                                                    item.id
-                                                                )
-                                                            }
-                                                            aria-label="Abrir"
+                                                    />{" "}
+                                                    <Center>
+                                                        <Divider
+                                                            h={6}
+                                                            orientation="vertical"
                                                         />
-                                                        <>
+                                                    </Center>
+                                                    <IconButton
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        icon={<FiEye />}
+                                                        onClick={() =>
+                                                            modalProcesso.current.onOpen(
+                                                                item.id
+                                                            )
+                                                        }
+                                                        aria-label="Abrir"
+                                                    />
+                                                    <Center>
+                                                        <Divider
+                                                            h={6}
+                                                            orientation="vertical"
+                                                        />
+                                                    </Center>
+                                                    <Text>#{item?.codigo}</Text>
+                                                    <Center>
+                                                        <Divider
+                                                            h={6}
+                                                            orientation="vertical"
+                                                        />
+                                                    </Center>
+                                                    <>
+                                                        {statusProcesso(
+                                                            item.status
+                                                        )}
+                                                    </>
+                                                    <Center>
+                                                        <Divider
+                                                            h={6}
+                                                            orientation="vertical"
+                                                        />
+                                                    </Center>
+                                                    <Center>
+                                                        <Divider
+                                                            h={6}
+                                                            orientation="vertical"
+                                                        />
+                                                    </Center>
+                                                    <Box
+                                                        gap={2}
+                                                        textAlign="left"
+                                                    >
+                                                        <Text
+                                                            fontSize="xs"
+                                                            fontWeight="bold"
+                                                            color="gray"
+                                                        >
+                                                            Imóvel
+                                                        </Text>
+                                                        <Text>
                                                             {
                                                                 item?.imovel
                                                                     ?.codigo
@@ -432,8 +478,14 @@ const Home = () => {
                                                                 item?.imovel
                                                                     ?.estado
                                                             }
-                                                        </>
-                                                    </Flex>
+                                                        </Text>
+                                                    </Box>
+                                                    <Center>
+                                                        <Divider
+                                                            h={6}
+                                                            orientation="vertical"
+                                                        />
+                                                    </Center>
                                                     <Flex>
                                                         <AvatarGroup size="xs">
                                                             {item.fichas?.map(
@@ -447,6 +499,12 @@ const Home = () => {
                                                             )}
                                                         </AvatarGroup>
                                                     </Flex>
+                                                    <Center>
+                                                        <Divider
+                                                            h={6}
+                                                            orientation="vertical"
+                                                        />
+                                                    </Center>
                                                     <>
                                                         <Progress
                                                             height="20px"
@@ -538,7 +596,13 @@ const Home = () => {
                                                                 )}
                                                             </ProgressLabel>
                                                         </Progress>
-                                                    </>{" "}
+                                                    </>
+                                                    <Center>
+                                                        <Divider
+                                                            h={6}
+                                                            orientation="vertical"
+                                                        />
+                                                    </Center>
                                                     <TooltipAvatar
                                                         size="xs"
                                                         name={
@@ -546,11 +610,6 @@ const Home = () => {
                                                                 ?.nome
                                                         }
                                                     />
-                                                    <>
-                                                        {statusProcesso(
-                                                            item.status
-                                                        )}
-                                                    </>
                                                 </Flex>
                                             </Box>
                                             <AccordionIcon />
@@ -562,7 +621,10 @@ const Home = () => {
                                                     {item?.fichas?.map(
                                                         (item) => (
                                                             <Tr>
-                                                                <Td>
+                                                                <Td
+                                                                    p={0}
+                                                                    w={12}
+                                                                >
                                                                     {" "}
                                                                     <Flex
                                                                         gap={2}
@@ -687,29 +749,35 @@ const Home = () => {
                                                                         </Menu>
                                                                     </Flex>
                                                                 </Td>
-                                                                <Td>
+                                                                <Td w={44}>
                                                                     <>
-                                                                        {tipoFicha(
-                                                                            item
-                                                                                .modelo
-                                                                                ?.tipo
-                                                                        )}
-                                                                        <br />
-                                                                        {
-                                                                            item
-                                                                                .modelo
-                                                                                ?.nome
-                                                                        }
+                                                                        <Text>
+                                                                            {
+                                                                                item
+                                                                                    .modelo
+                                                                                    ?.nome
+                                                                            }
+                                                                        </Text>
+                                                                        <Text
+                                                                            fontSize="xs"
+                                                                            color="gray"
+                                                                        >
+                                                                            {tipoFicha(
+                                                                                item
+                                                                                    .modelo
+                                                                                    ?.tipo
+                                                                            )}
+                                                                        </Text>
                                                                     </>
                                                                 </Td>
-                                                                <Td>
+                                                                <Td w={32}>
                                                                     <>
                                                                         <Text fontWeight="bold">
                                                                             {
                                                                                 item.nome
                                                                             }
                                                                         </Text>
-                                                                        <Text>
+                                                                        <Text fontSize="xs">
                                                                             {
                                                                                 item.descricao
                                                                             }
@@ -717,7 +785,23 @@ const Home = () => {
                                                                     </>
                                                                 </Td>
                                                                 <Td>
-                                                                    {" "}
+                                                                    <>
+                                                                        <Tooltip
+                                                                            label={`Responsável: ${item?.responsavel?.nome}`}
+                                                                            hasArrow
+                                                                        >
+                                                                            <Avatar
+                                                                                size="xs"
+                                                                                name={
+                                                                                    item
+                                                                                        ?.responsavel
+                                                                                        ?.nome
+                                                                                }
+                                                                            />
+                                                                        </Tooltip>
+                                                                    </>
+                                                                </Td>
+                                                                <Td>
                                                                     <>
                                                                         <Box pos="relative">
                                                                             <Tooltip
@@ -840,45 +924,6 @@ const Home = () => {
                                                                             </Flex>
                                                                         </Box>
                                                                     </>
-                                                                </Td>
-                                                                <Td>
-                                                                    <>
-                                                                        <Tooltip
-                                                                            label={
-                                                                                item
-                                                                                    ?.responsavel
-                                                                                    ?.nome
-                                                                            }
-                                                                            hasArrow
-                                                                        >
-                                                                            <Avatar
-                                                                                size="xs"
-                                                                                name={
-                                                                                    item
-                                                                                        ?.responsavel
-                                                                                        ?.nome
-                                                                                }
-                                                                            />
-                                                                        </Tooltip>
-                                                                    </>
-                                                                </Td>
-                                                                <Td>
-                                                                    {" "}
-                                                                    {formatoData(
-                                                                        item.createdAt,
-                                                                        "DATA_HORA"
-                                                                    )}
-                                                                </Td>
-                                                                <Td>
-                                                                    {formatoData(
-                                                                        item.updatedAt,
-                                                                        "DATA_HORA"
-                                                                    )}
-                                                                </Td>
-                                                                <Td>
-                                                                    {statusFicha(
-                                                                        item.status
-                                                                    )}
                                                                 </Td>
                                                             </Tr>
                                                         )

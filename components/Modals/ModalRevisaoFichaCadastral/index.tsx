@@ -68,6 +68,7 @@ import * as yup from "yup";
 import { ModalPreview } from "../Preview";
 import { AnaliseCampo } from "./AnaliseCampo";
 import { Historicos } from "@/components/Pages/Historicos";
+import { Documentos } from "../Contrato/Documentos";
 const schema = yup.object({});
 const ModalBase = ({}, ref) => {
     const { usuario } = useAuth();
@@ -159,6 +160,7 @@ const ModalBase = ({}, ref) => {
                         <TabList>
                             {/* <Tab>Geral</Tab> */}
                             {watch("id") && <Tab>Revisão</Tab>}
+                            {watch("id") && <Tab>Anexos</Tab>}
                             <Tab>Histórico</Tab>
                         </TabList>
                         <TabPanels>
@@ -958,6 +960,14 @@ const ModalBase = ({}, ref) => {
                                     </Grid>
                                 </Box>
                             </TabPanel>
+                            <TabPanel>
+                                <Documentos
+                                    fichaCadastralId={watch("id")}
+                                    contratoId={watch("contratoId")}
+                                    data={watch("anexos")}
+                                />
+                            </TabPanel>
+
                             <TabPanel>
                                 <Historicos
                                     tabela="FichaCadastral"

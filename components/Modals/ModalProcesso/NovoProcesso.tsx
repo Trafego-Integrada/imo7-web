@@ -9,6 +9,8 @@ import { listarFichas } from "@/services/models/modeloFicha";
 import { listarUsuarios } from "@/services/models/usuario";
 import { queryClient } from "@/services/queryClient";
 import {
+    Alert,
+    AlertIcon,
     Box,
     Button,
     Divider,
@@ -35,6 +37,26 @@ import { MdClose, MdSave } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 import { ModalImovel } from "../ModalImovel";
 import { formatoValor } from "@/helpers/helpers";
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object({
+    tipoProcesso: yup.string().required("Campo obrigatório"),
+    responsavelId: yup.string().required("Campo obrigatório"),
+    imovelId: yup.string().required("Campo obrigatório"),
+    fichas: yup
+        .array()
+        .of(
+            yup.object({
+                modelo: yup.object().required("Campo obrigatório"),
+                nome: yup.string().required("Campo obrigatório"),
+            })
+        )
+        .min(1, "Deve ter no mínimo uma ficha")
+        .required("Campo obrigatório"),
+});
+
 export const NovoProcesso = ({ isOpen, onClose, callback }) => {
     const [filtroImovel, setFiltroImovel] = useState("");
     const modalImovel = useRef();
@@ -45,7 +67,9 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm();
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
 
     const cadastrar = useMutation(imo7ApiService("processo").create);
     const onSubmit = async (data) => {
@@ -129,7 +153,11 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                         <FormSelect
                                             size="sm"
                                             label="Tipo de Processo"
+                                            placeholder="Selecione..."
                                             {...register("tipoProcesso")}
+                                            error={
+                                                errors?.tipoProcesso?.message
+                                            }
                                         >
                                             <option value="LOCACAO">
                                                 Locação
@@ -140,6 +168,36 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                             </option>
                                         </FormSelect>
                                     </GridItem>
+                                    {watch("tipoProcesso") == "LOCACAO" && (
+                                        <GridItem>
+                                            <FormSelect
+                                                size="sm"
+                                                placeholder="Selecione..."
+                                                label="Tipo de Garantia"
+                                                {...register("tipoGarantia")}
+                                                error={
+                                                    errors?.tipoGarantia
+                                                        ?.message
+                                                }
+                                            >
+                                                <option value="NENHUMA">
+                                                    Nenhuma
+                                                </option>
+                                                <option value="SEGURO">
+                                                    Seguro Fiança
+                                                </option>
+                                                <option value="FIADOR">
+                                                    Fiador
+                                                </option>
+                                                <option value="APOLICE">
+                                                    Apolice
+                                                </option>
+                                                <option value="CAUCAO">
+                                                    Caução
+                                                </option>
+                                            </FormSelect>
+                                        </GridItem>
+                                    )}
                                     <GridItem colStart={{ lg: 1 }}>
                                         <Controller
                                             control={control}
@@ -221,6 +279,10 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                               )
                                                             : null
                                                     }
+                                                    error={
+                                                        errors?.imovelId
+                                                            ?.message
+                                                    }
                                                 />
                                             )}
                                         />
@@ -253,6 +315,10 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                                       field.value
                                                               )
                                                             : null
+                                                    }
+                                                    error={
+                                                        errors?.responsavelId
+                                                            ?.message
                                                     }
                                                 />
                                             )}
@@ -368,16 +434,29 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                         Fichas Cadastrais
                                     </Heading>
                                     <Tooltip label="Adicionar ficha">
-                                        <IconButton
+                                        <Button
+                                            leftIcon={<FiPlus />}
                                             colorScheme="blue"
                                             rounded="full"
                                             size="xs"
                                             icon={<FiPlus />}
                                             onClick={() => append()}
                                             variant="outline"
-                                        />
+                                        >
+                                            Adicionar Ficha
+                                        </Button>
                                     </Tooltip>
-                                </Flex>
+                                </Flex>{" "}
+                                {errors?.fichas?.message && (
+                                    <Alert
+                                        rounded="full"
+                                        my={2}
+                                        status="warning"
+                                    >
+                                        <AlertIcon />
+                                        {errors?.fichas?.message}
+                                    </Alert>
+                                )}
                                 <Divider my={2} />
                                 <Grid gap={4}>
                                     {fields.map((f, k) => (
@@ -392,7 +471,9 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                         options={modelos?.data}
                                                         placeholder="Modelo da Ficha..."
                                                         error={
-                                                            errors.modelo
+                                                            errors?.fichas &&
+                                                            errors?.fichas[k]
+                                                                ?.modelo
                                                                 ?.message
                                                         }
                                                         getOptionLabel={(e) =>
@@ -410,6 +491,11 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                 {...register(
                                                     `fichas[${k}].nome`
                                                 )}
+                                                error={
+                                                    errors?.fichas &&
+                                                    errors?.fichas[k]?.nome
+                                                        ?.message
+                                                }
                                             />
                                             <IconButton
                                                 size="sm"

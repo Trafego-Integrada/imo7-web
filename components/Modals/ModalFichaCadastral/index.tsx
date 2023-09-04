@@ -312,7 +312,7 @@ const ModalBase = ({ processoId, imovelId, responsavelId }, ref) => {
                                             </FormSelect>
                                         </GridItem>
                                         {watch("status") == "reprovada" && (
-                                            <GridItem>
+                                            <GridItem colSpan={{ lg: 2 }}>
                                                 <FormTextarea
                                                     label="Motivo da Reprovação"
                                                     placeholder="Digite o motivo..."
@@ -326,6 +326,13 @@ const ModalBase = ({ processoId, imovelId, responsavelId }, ref) => {
                                                 />
                                             </GridItem>
                                         )}
+                                        <GridItem colSpan={{ lg: 2 }}>
+                                            <FormTextarea
+                                                size="sm"
+                                                {...register("observacoes")}
+                                                placeholder="Observações (será impresso somente no PDF)"
+                                            />
+                                        </GridItem>
                                     </Grid>
                                     {!processoId && (
                                         <Box mt={4}>

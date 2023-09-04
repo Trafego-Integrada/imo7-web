@@ -437,9 +437,7 @@ const FichasCadastrais = ({ query }) => {
                                         )
                                     }
                                     value={JSON.stringify(
-                                        fichas?.data?.data?.map(
-                                            (item) => item.id
-                                        )
+                                        fichas?.data?.map((item) => item.id)
                                     )}
                                 />
                             ),

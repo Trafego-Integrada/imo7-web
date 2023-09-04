@@ -30,7 +30,8 @@ handle.use(multiparty);
 
 handle.get(async (req, res) => {
     try {
-        const { contratoId, chamadoId } = req.query;
+        const { contratoId, chamadoId, processoId, fichaCadastralId } =
+            req.query;
         let filtroQuery = {};
         if (contratoId) {
             filtroQuery = {
@@ -43,6 +44,18 @@ handle.get(async (req, res) => {
             filtroQuery = {
                 ...filtroQuery,
                 chamadoId: Number(chamadoId),
+            };
+        }
+        if (processoId) {
+            filtroQuery = {
+                ...filtroQuery,
+                processoId,
+            };
+        }
+        if (fichaCadastralId) {
+            filtroQuery = {
+                ...filtroQuery,
+                fichaCadastralId,
             };
         }
 
@@ -75,6 +88,8 @@ handle.post(async (req, res) => {
             usuarioId,
             chamadoId,
             conversaId,
+            processoId,
+            fichaCadastralId,
             nome,
             usuariosPermitidos,
         } = req.body;
@@ -159,6 +174,20 @@ handle.post(async (req, res) => {
                                     ? {
                                           connect: {
                                               id: Number(conversaId),
+                                          },
+                                      }
+                                    : {},
+                                processo: processoId
+                                    ? {
+                                          connect: {
+                                              id: processoId,
+                                          },
+                                      }
+                                    : {},
+                                fichaCadastral: fichaCadastralId
+                                    ? {
+                                          connect: {
+                                              id: fichaCadastralId,
                                           },
                                       }
                                     : {},
@@ -289,6 +318,20 @@ handle.post(async (req, res) => {
                             ? {
                                   connect: {
                                       id: Number(conversaId),
+                                  },
+                              }
+                            : {},
+                        processo: processoId
+                            ? {
+                                  connect: {
+                                      id: processoId,
+                                  },
+                              }
+                            : {},
+                        fichaCadastral: fichaCadastralId
+                            ? {
+                                  connect: {
+                                      id: fichaCadastralId,
                                   },
                               }
                             : {},

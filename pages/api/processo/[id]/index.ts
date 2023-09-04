@@ -11,7 +11,25 @@ handle.get(async (req, res) => {
             id,
         },
         include: {
-            fichas: true,
+            fichas: {
+                where: {
+                    deletedAt: null,
+                },
+                include: {
+                    preenchimento: {
+                        include: {
+                            campo: true,
+                            ficha: {
+                                include: {
+                                    modelo: true,
+                                },
+                            },
+                        },
+                    },
+                    modelo: true,
+                    responsavel: true,
+                },
+            },
             imovel: true,
             responsavel: true,
         },
@@ -27,6 +45,7 @@ handle.put(async (req, res) => {
         fichas,
         observacoes,
         responsavelId,
+        status,
     } = req.body;
     const data = await prisma.processo.update({
         where: {
@@ -35,16 +54,16 @@ handle.put(async (req, res) => {
         data: {
             tipoProcesso,
             campos,
-            status: "EM_ANDAMENTO",
+            status,
             observacoes,
             imovel: {
                 connect: {
-                    id: imovelId,
+                    id: Number(imovelId),
                 },
             },
             responsavel: {
                 connect: {
-                    id: responsavelId,
+                    id: Number(responsavelId),
                 },
             },
         },

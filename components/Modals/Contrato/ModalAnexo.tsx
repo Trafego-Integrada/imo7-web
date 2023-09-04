@@ -34,7 +34,10 @@ import { useDropzone } from "react-dropzone";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 
-const ModalBase = ({ contratoId, chamadoId }, ref) => {
+const ModalBase = (
+    { contratoId, chamadoId, fichaCadastralId, processoId },
+    ref
+) => {
     const router = useRouter();
     const [nome, setNome] = useState("");
     const [file, setFile] = useState([]);
@@ -87,6 +90,9 @@ const ModalBase = ({ contratoId, chamadoId }, ref) => {
         const formData = new FormData();
         contratoId && formData.append("contratoId", contratoId);
         chamadoId && formData.append("chamadoId", chamadoId);
+        fichaCadastralId &&
+            formData.append("fichaCadastralId", fichaCadastralId);
+        processoId && formData.append("processoId", processoId);
         formData.append("nome", data.nome);
         data.usuariosPermitidos &&
             formData.append(

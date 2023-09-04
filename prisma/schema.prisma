@@ -648,6 +648,10 @@ model Anexo {
     interacao          InteracaoChamado? @relation(fields: [interacaoChamadoId], references: [id])
     interacaoChamadoId Int?
     usuariosPermitidos Usuario[]         @relation("AnexosPermitidos")
+    processo           Processo?         @relation(fields: [processoId], references: [id])
+    processoId         String?
+    fichaCadastral     FichaCadastral?   @relation(fields: [fichaCadastralId], references: [id])
+    fichaCadastralId   String?
 }
 
 enum StatusChamado {
@@ -728,6 +732,8 @@ model FichaCadastral {
     dataReprovacao         DateTime?
     Processo               Processo?                     @relation(fields: [processoId], references: [id])
     processoId             String?
+    observacoes            String?
+    Anexo                  Anexo[]
 }
 
 model FichaCadastralPreenchimento {
@@ -1035,8 +1041,8 @@ enum TipoProcesso {
     COMPRA
 }
 
-enum TipoFianca {
-    NENHUM
+enum TipoGarantia {
+    NENHUMA
     SEGURO
     FIADOR
     APOLICE
@@ -1046,7 +1052,7 @@ enum TipoFianca {
 model Processo {
     id            String           @id @default(uuid())
     tipoProcesso  TipoProcesso     @default(LOCACAO)
-    tipoFianca    TipoFianca       @default(NENHUM)
+    tipoGarantia  TipoGarantia     @default(NENHUMA)
     codigo        Int?
     imovelId      Int?
     contratoId    Int?
@@ -1063,4 +1069,5 @@ model Processo {
     fichas        FichaCadastral[]
     responsavel   Usuario?         @relation(fields: [responsavelId], references: [id])
     responsavelId Int?
+    Anexo         Anexo[]
 }
