@@ -36,6 +36,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { getAll as getAllContas, listarContas } from "@/services/models/conta";
 import { Select } from "@/components/Forms/Select";
 import { TabelaUsuarios } from "@/components/Tabelas/Usuarios";
+import { queryClient } from "@/services/queryClient";
 
 const schema = yup.object().shape({
     codigo: yup.string().required("O Código é obrigatório"),
@@ -70,6 +71,7 @@ const DrawerBase = ({}, ref) => {
         await showData.mutateAsync(id, {
             onSuccess: (data) => {
                 reset(data);
+                onOpen();
             },
         });
     };
@@ -115,6 +117,7 @@ const DrawerBase = ({}, ref) => {
                             description: "Imobiliária atualizada com sucesso!",
                             status: "success",
                         });
+                        queryClient.invalidateQueries("imobiliarias");
                     },
                 }
             );
@@ -128,6 +131,7 @@ const DrawerBase = ({}, ref) => {
                         description: "Imobiliária cadastrada com sucesso!",
                         status: "success",
                     });
+                    queryClient.invalidateQueries("imobiliarias");
                 },
             });
         }
@@ -135,11 +139,13 @@ const DrawerBase = ({}, ref) => {
 
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
+            reset({});
             if (id) {
                 onShow(id);
+            } else {
+                reset({});
+                onOpen();
             }
-            reset();
-            onOpen();
         },
     }));
     return (

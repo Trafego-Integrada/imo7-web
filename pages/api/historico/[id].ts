@@ -3,16 +3,17 @@ import prisma from "@/lib/prisma";
 
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
+import { checkAuth } from "@/middleware/checkAuth";
 handle.use(cors);
+handle.use(checkAuth);
 handle.get(async (req, res) => {
     const { id } = req.query;
-    const conta = await prisma.conta.findUnique({
+    const conta = await prisma.historico.findUnique({
         where: {
-            id: Number(id),
+            id,
         },
         include: {
-            usuarios: true,
-            imobiliarias: true,
+            usuario: true,
         },
     });
     res.send(conta);
@@ -20,14 +21,22 @@ handle.get(async (req, res) => {
 
 handle.post(async (req, res) => {
     const { id } = req.query;
-    const { codigo, nome } = req.body;
-    const conta = await prisma.conta.update({
+    const { descricao } = req.body;
+    const conta = await prisma.historico.update({
         where: {
-            id: Number(id),
+            id,
         },
         data: {
-            codigo: Number(codigo),
-            nome,
+            descricao,
+        },
+    });
+    res.send(conta);
+});
+handle.delete(async (req, res) => {
+    const { id } = req.query;
+    const conta = await prisma.historico.delete({
+        where: {
+            id,
         },
     });
     res.send(conta);

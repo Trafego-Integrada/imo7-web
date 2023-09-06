@@ -71,7 +71,11 @@ const Ficha = ({ ficha }) => {
     const { data: modelos } = useQuery(["modelosFichas"], listarFichas);
     const { data: campos } = useQuery(
         ["categoriasCampos"],
-        listarCategoriaCampoFichas
+        listarCategoriaCampoFichas,
+        {
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
     );
 
     return (

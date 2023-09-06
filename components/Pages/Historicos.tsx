@@ -3,23 +3,49 @@ import {
     Avatar,
     Box,
     Flex,
+    IconButton,
     List,
     ListItem,
     Text,
     Tooltip,
 } from "@chakra-ui/react";
 import moment from "moment";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
+import { FormTextarea } from "../Form/FormTextarea";
+import { FormInput } from "../Form/FormInput";
+import { useEffect, useState } from "react";
+import { imo7ApiService } from "@/services/apiServiceUsage";
+import { queryClient } from "@/services/queryClient";
+import { FiSend } from "react-icons/fi";
 
 export const Historicos = ({ tabela, tabelaId }) => {
     const { data } = useQuery(
         ["historicos", { tabela, tabelaId }],
-        listarHistoricos
+        listarHistoricos,
+        {
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
     );
+    const [descricao, setDescricao] = useState("");
+    const [eventoTratado, setEventoTratado] = useState(false);
+    const cadastrarHistorico = useMutation(imo7ApiService("historico").create);
 
+    const onCadastrar = async () => {
+        await cadastrarHistorico.mutateAsync({ descricao, tabela, tabelaId });
+        setDescricao("");
+        setEventoTratado(false);
+        queryClient.invalidateQueries(["historicos", { tabela, tabelaId }]);
+    };
+    useEffect(() => {
+        const minhaLista = document.getElementById("minhaLista");
+        if (minhaLista) {
+            minhaLista.scrollTop = minhaLista.scrollHeight;
+        }
+    }, [data]);
     return (
         <Box>
-            <List spacing={2}>
+            <List spacing={2} maxH={96} overflow="auto" id="minhaLista">
                 {data?.map((item) => (
                     <ListItem
                         key={item.id}
@@ -56,6 +82,28 @@ export const Historicos = ({ tabela, tabelaId }) => {
                     </ListItem>
                 ))}
             </List>
+            <Flex py={2}>
+                <FormInput
+                    placeholder="Comente"
+                    value={descricao}
+                    onChange={(e) => setDescricao(e.target.value)}
+                    onKeyPress={(e) => {
+                        console.log(e);
+                        if (e.key == "Enter" && !eventoTratado) {
+                            e.preventDefault();
+                            setEventoTratado(true);
+                            onCadastrar();
+                        }
+                    }}
+                    rightElement={
+                        <IconButton
+                            variant="ghost"
+                            icon={<FiSend />}
+                            onClick={() => onCadastrar()}
+                        />
+                    }
+                />
+            </Flex>
         </Box>
     );
 };

@@ -1,3 +1,4 @@
+import { formatoData, formatoValor } from "@/helpers/helpers";
 import prisma from "@/lib/prisma";
 import {
     Alert,
@@ -14,13 +15,15 @@ import {
     Tbody,
     Td,
     Text,
+    Th,
+    Thead,
     Tr,
 } from "@chakra-ui/react";
 import moment from "moment";
 import Link from "next/link";
 import QRCode from "react-qr-code";
 import "react-quill/dist/quill.snow.css";
-const FichaCadastral = ({ ficha, campos, modelo }) => {
+const FichaCadastral = ({ ficha, campos, modelo, historicos }) => {
     const renderTable = (items) => {
         const rows = [];
         let currentRow = [];
@@ -208,27 +211,28 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             </Table>
         );
     };
+    console.log(ficha);
     return (
-        <Box minH="100vh" p={4}>
-            <Flex align="center" py={4} gap={6}>
+        <Flex minH="100vh" flexDir="column" gap={4}>
+            <Flex align="center" py={0} gap={6}>
                 <Box>
-                    <Image w={150} src={ficha?.imobiliaria?.logo} />
+                    <Image h={70} src={ficha?.imobiliaria?.logo} />
                 </Box>
                 <Box>
-                    <Text>
+                    <Text fontSize="sm">
                         <Text as="span" fontWeight="bold">
                             {ficha?.imobiliaria?.razaoSocial}
                         </Text>{" "}
                         • CNPJ: {ficha?.imobiliaria?.cnpj}
                     </Text>
-                    <Text fontSize="sm">
+                    <Text fontSize="xs">
                         {ficha?.imobiliaria?.endereco},
                         {ficha?.imobiliaria?.bairro},
                         {ficha?.imobiliaria?.cidade}/
                         {ficha?.imobiliaria?.estado} - CEP:{" "}
                         {ficha?.imobiliaria?.cep}
                     </Text>
-                    <Text fontSize="sm">
+                    <Text fontSize="xs">
                         <Text as="span" fontWeight="bold">
                             Fixo:
                         </Text>{" "}
@@ -267,42 +271,97 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     </Alert>
                 )}
             </Box>
-            <Box mb={4}>
-                {ficha.imovel ? (
-                    <Box bg="white">
-                        <Text>
-                            <Text as="span" fontWeight="bold">
-                                Ficha referente ao imóvel:
-                            </Text>{" "}
-                            {ficha.imovel?.codigo} - {ficha.imovel?.endereco},{" "}
-                            {ficha.imovel?.bairro}, {ficha.imovel?.cidade}/
-                            {ficha.imovel?.estado}
-                        </Text>
-                    </Box>
-                ) : ficha.codigoImovel ? (
-                    <Box bg="white">
-                        <Text>
-                            <Text as="span" fontWeight="bold">
-                                Ficha referente ao imóvel:
-                            </Text>{" "}
-                            {ficha.codigoImovel} - {ficha.enderecoImovel} nº{" "}
-                            {ficha.numeroImovel}{" "}
-                            {ficha.complementoImovel &&
-                                `(${ficha.complementoImovel})`}
-                            , {ficha.bairroImovel}, {ficha.cidadeImovel}/
-                            {ficha.estadoImovel}
-                        </Text>
-                    </Box>
-                ) : (
-                    ""
-                )}
-                <Text>
-                    <Text as="span" fontWeight="bold">
-                        Responsável:
-                    </Text>{" "}
-                    {ficha.responsavel?.nome}
-                </Text>
-            </Box>
+            <Grid mb={4} gridTemplateColumns="repeat(4,1fr)">
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="xx-small">Nº Processo:</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                        {" "}
+                        {ficha.Processo?.codigo}
+                    </Text>
+                </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="xs">Responsável:</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                        {ficha.responsavel?.nome}
+                    </Text>
+                </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="xs">Tipo Garantia:</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                        {ficha.Processo?.tipoGarantia}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
+                    {ficha.imovel ? (
+                        <Box bg="white">
+                            <Text fontSize="xs">Imóvel:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {ficha.imovel?.codigo} -{" "}
+                                {ficha.imovel?.endereco}, {ficha.imovel?.bairro}
+                                , {ficha.imovel?.cidade}/{ficha.imovel?.estado}
+                            </Text>
+                        </Box>
+                    ) : ficha.codigoImovel ? (
+                        <Box bg="white">
+                            <Text fontSize="xs">Imóvel:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {ficha?.codigoImovel} - {ficha?.enderecoImovel}{" "}
+                                nº {ficha?.numeroImovel}{" "}
+                                {ficha?.complementoImovel &&
+                                    `(${ficha.complementoImovel})`}
+                                , {ficha?.bairroImovel}, {ficha?.cidadeImovel}/
+                                {ficha?.estadoImovel}
+                            </Text>
+                        </Box>
+                    ) : (
+                        ""
+                    )}
+                </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="xs">Valor Negociado:</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                        {ficha.Processo?.campos.find((c) =>
+                            Object.entries(c).find((i) => i[0] == "valor")
+                        )?.valor &&
+                            formatoValor(
+                                ficha.Processo?.campos
+                                    .find((c) =>
+                                        Object.entries(c).find(
+                                            (i) => i[0] == "valor"
+                                        )
+                                    )
+                                    ?.valor.replace(",", ".")
+                            )}
+                    </Text>
+                </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="xs">Valor Condominio:</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                        {ficha.imovel?.valorCondominio &&
+                            formatoValor(ficha.imovel?.valorCondominio)}
+                    </Text>
+                </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="xs">Valor IPTU:</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                        {ficha.imovel?.valorIPTU &&
+                            formatoValor(ficha.imovel?.valorIPTU)}
+                    </Text>
+                </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="xs">Valor Seguro:</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                        {ficha.imovel?.valorSeguro &&
+                            formatoValor(ficha.imovel?.valorSeguro)}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
+                    <Text fontSize="xs">Observações:</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                        {ficha.Processo?.observacoes}
+                    </Text>
+                </GridItem>
+            </Grid>
             <Grid gap={5}>
                 {campos
                     .filter((i) =>
@@ -410,7 +469,57 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     }}
                 />
             </Box>
-        </Box>
+            <Box>
+                <Heading size="sm" mb={3}>
+                    Anexos Internos
+                </Heading>
+                <Flex gap={4}>
+                    {ficha?.Anexo.map((i) => (
+                        <Flex key={i.id} flexDir="column" gap={2}>
+                            <Text>{i.nome}</Text>
+                            <QRCode size={75} value={i.anexo} />
+
+                            <Text fontSize="xs">
+                                Leia o QRCode
+                                <br />
+                                <Link href={i.anexo}>ou clique aqui</Link>
+                            </Text>
+                        </Flex>
+                    ))}
+                </Flex>
+            </Box>
+            <Box>
+                <Heading size="sm" mb={3}>
+                    Histórico
+                </Heading>
+                <Table size="sm" gap={4} variant="striped">
+                    <Thead>
+                        <Tr>
+                            <Th>Data</Th>
+                            <Th>Usuário</Th>
+                            <Th>Descrição</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {historicos.map((i) => (
+                            <Tr key={i.id}>
+                                <Td w={44}>
+                                    {formatoData(i?.createdAt, "DATA_HORA")}
+                                </Td>
+                                <Td w={44}>{i?.usuario?.nome}</Td>
+                                <Td>
+                                    <Text
+                                        dangerouslySetInnerHTML={{
+                                            __html: i.descricao,
+                                        }}
+                                    ></Text>
+                                </Td>
+                            </Tr>
+                        ))}
+                    </Tbody>
+                </Table>
+            </Box>
+        </Flex>
     );
 };
 
@@ -429,6 +538,21 @@ export const getServerSideProps = async (ctx) => {
                 },
             },
             responsavel: true,
+            imovel: true,
+            Processo: true,
+            Anexo: true,
+        },
+    });
+    const historicos = await prisma.historico.findMany({
+        where: {
+            tabela: "fichaCadastral",
+            tabelaId: ficha.id,
+        },
+        include: {
+            usuario: true,
+        },
+        orderBy: {
+            createdAt: "desc",
         },
     });
     const modelo = await prisma.modeloFichaCadastral.findUnique({
@@ -472,6 +596,7 @@ export const getServerSideProps = async (ctx) => {
             ficha: JSON.parse(JSON.stringify(ficha)),
             modelo: JSON.parse(JSON.stringify(modelo)),
             campos: JSON.parse(JSON.stringify(campos)),
+            historicos: JSON.parse(JSON.stringify(historicos)),
         },
     };
 };

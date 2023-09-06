@@ -108,10 +108,10 @@ const ModalBase = ({}, ref) => {
         }
     };
 
-    const { data: modelos } = useQuery(["modelosFichas"], listarFichas);
     const { data: campos } = useQuery(
         ["categoriasCampos", { tipoFicha: watch("modelo.tipo") }],
-        listarCategoriaCampoFichas
+        listarCategoriaCampoFichas,
+        { refetchOnReconnect: false, refetchOnWindowFocus: false }
     );
 
     useImperativeHandle(ref, () => ({
@@ -125,7 +125,6 @@ const ModalBase = ({}, ref) => {
             }
         },
     }));
-    // console.log(watch());
 
     const router = useRouter();
 
@@ -143,7 +142,6 @@ const ModalBase = ({}, ref) => {
         });
         buscar.mutate(fichaCadastralId);
     };
-    console.log(router, usuario);
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -151,11 +149,7 @@ const ModalBase = ({}, ref) => {
             <ModalContent>
                 <ModalCloseButton />
                 <ModalHeader>Ficha Cadastral</ModalHeader>
-                <ModalBody
-                    id="formRevisarFichaCadastral"
-                    as="form"
-                    onSubmit={handleSubmit(onSubmit)}
-                >
+                <ModalBody>
                     <Tabs>
                         <TabList>
                             {/* <Tab>Geral</Tab> */}
@@ -250,7 +244,14 @@ const ModalBase = ({}, ref) => {
                                 </Box>
                             </TabPanel> */}
                             <TabPanel px={0}>
-                                <Box bg="white" p={4} rounded="lg">
+                                <Box
+                                    id="formRevisarFichaCadastral"
+                                    as="form"
+                                    onSubmit={handleSubmit(onSubmit)}
+                                    bg="white"
+                                    p={4}
+                                    rounded="lg"
+                                >
                                     <Grid gap={4}>
                                         {campos?.data
                                             ?.filter((i) =>
@@ -278,11 +279,6 @@ const ModalBase = ({}, ref) => {
                                                         }}
                                                         gap={4}
                                                     >
-                                                        {item?.campos?.map(
-                                                            (i) => {
-                                                                console.log(i);
-                                                            }
-                                                        )}
                                                         {item?.campos?.map(
                                                             (i) => (
                                                                 <GridItem

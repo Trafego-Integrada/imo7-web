@@ -88,7 +88,6 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         ["imoveis", { linhas: 20, query: filtroImovel }],
         imo7ApiService("imovel").list,
         {
-            refetchOnMount: false,
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
         }
@@ -100,7 +99,6 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         },
     ];
     const { data: modelos } = useQuery(["modelosFichas"], listarFichas, {
-        refetchOnMount: false,
         refetchOnReconnect: false,
         refetchOnWindowFocus: false,
     });
@@ -109,7 +107,6 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         ["listaUsuarios", { admImobiliaria: true, status: true }],
         listarUsuarios,
         {
-            refetchOnMount: false,
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
         }
@@ -209,6 +206,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                     options={
                                                         imoveis?.data?.data
                                                     }
+                                                    isClearable
                                                     formatOptionLabel={(i) => (
                                                         <Box>
                                                             <Text>
@@ -268,7 +266,9 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                         </Box>
                                                     }
                                                     onChange={(e) =>
-                                                        field.onChange(e.id)
+                                                        field.onChange(
+                                                            e?.id ? e.id : null
+                                                        )
                                                     }
                                                     value={
                                                         field.value

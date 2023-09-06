@@ -22,6 +22,7 @@ handle.get(async (req, res) => {
             codigo,
             codigoImovel,
             dataCriacao,
+            status,
         } = req.query;
 
         let filtroQuery: Prisma.ProcessoWhereInput = {};
@@ -73,6 +74,26 @@ handle.get(async (req, res) => {
                             endereco: {
                                 contains: endereco,
                             },
+                        },
+                    },
+                ],
+            };
+        }
+        if (status) {
+            if (!filtroQuery.AND) {
+                filtroQuery = {
+                    ...filtroQuery,
+                    AND: [],
+                };
+            }
+            status = JSON.parse(status);
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        status: {
+                            in: status,
                         },
                     },
                 ],

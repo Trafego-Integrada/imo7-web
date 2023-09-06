@@ -18,17 +18,28 @@ handler.get(async (req, res) => {
     });
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
+
     await page.goto(
-        "https://" +
-            data?.imobiliaria.url +
-            ".imo7.com.br/fichaCadastral/" +
-            id +
-            "/pdf",
+        process.env.NODE_ENV == "production"
+            ? "https://" +
+                  data?.imobiliaria.url +
+                  ".imo7.com.br/fichaCadastral/" +
+                  id +
+                  "/pdf"
+            : "http://" +
+                  data?.imobiliaria.url +
+                  ".localhost:3000/fichaCadastral/" +
+                  id +
+                  "/pdf",
         {
             waitUntil: "networkidle0",
         }
     );
-    const pdf = await page.pdf({ format: "A4" });
+    await page.emulateMediaType("screen");
+    const pdf = await page.pdf({
+        format: "A4",
+        margin: { top: "20px", right: "20px", bottom: "20px", left: "20px" },
+    });
 
     await browser.close();
 

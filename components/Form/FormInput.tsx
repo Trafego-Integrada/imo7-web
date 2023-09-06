@@ -32,12 +32,7 @@ const InputBase = (
     ref
 ) => {
     return (
-        <FormControl
-            isInvalid={error}
-            isRequired={required}
-            {...rest}
-            size={size}
-        >
+        <FormControl isInvalid={error} isRequired={required} size={size}>
             {label && <FormLabel fontSize={size}>{label}</FormLabel>}
             <InputGroup size={size}>
                 {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}

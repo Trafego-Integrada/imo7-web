@@ -134,6 +134,8 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
             onSuccess: (data) => {
                 setTotal(data.total);
             },
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
         }
     );
     const { data: responsaveis } = useQuery(
@@ -149,7 +151,11 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                 adm: usuario?.cargos?.includes("adm") ? true : false,
             },
         ],
-        listarUsuarios
+        listarUsuarios,
+        {
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
     );
     const excluir = useMutation(excluirFicha);
 

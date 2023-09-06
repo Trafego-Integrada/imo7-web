@@ -107,13 +107,23 @@ const ModalBase = ({ processoId, imovelId, responsavelId }, ref) => {
         }
     };
 
-    const { data: modelos } = useQuery(["modelosFichas"], listarFichas);
+    const { data: modelos } = useQuery(["modelosFichas"], listarFichas, {
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+    });
 
     const { data: usuarios } = useQuery(
         ["listaUsuarios", { admImobiliaria: true }],
-        listarUsuarios
+        listarUsuarios,
+        {
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
     );
-    const { data: imoveis } = useQuery(["listarImoveis", {}], listarImoveis);
+    const { data: imoveis } = useQuery(["listarImoveis", {}], listarImoveis, {
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+    });
 
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {

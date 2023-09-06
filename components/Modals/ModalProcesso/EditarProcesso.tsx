@@ -33,7 +33,7 @@ import {
     Tooltip,
     useToast,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
 import { MdClose, MdSave } from "react-icons/md";
@@ -44,6 +44,8 @@ import { formatoValor } from "@/helpers/helpers";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Documentos } from "../Contrato/Documentos";
+import { Historicos } from "@/components/Pages/Historicos";
+import { ModalImovel } from "../ModalImovel";
 
 const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
@@ -63,6 +65,7 @@ const schema = yup.object({
 export const EditarProcesso = ({ id, isOpen, onClose }) => {
     const { usuario } = useAuth();
     const toast = useToast();
+    const modalImovel = useRef();
     const {
         control,
         reset,
@@ -97,16 +100,15 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
             label: "Valor Negociado",
         },
     ];
-    const { data: modelos } = useQuery(["modelosFichas"], listarFichas);
 
     const { data: usuarios } = useQuery(
         ["listaUsuarios", { admImobiliaria: true }],
-        listarUsuarios
+        listarUsuarios,
+        { refetchOnReconnect: false, refetchOnWindowFocus: false }
     );
     useEffect(() => {
         reset();
     }, []);
-    console.log(watch());
     const { fields, append, remove } = useFieldArray({
         control,
         name: "fichas",
@@ -132,6 +134,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                 </Tag>
                             </Tab>
                             <Tab>Anexos</Tab>
+                            <Tab>Históricos</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
@@ -248,6 +251,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                 imoveis?.data
                                                                     ?.data
                                                             }
+                                                            isClearable
                                                             formatOptionLabel={(
                                                                 i
                                                             ) => (
@@ -314,7 +318,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                             }
                                                             onChange={(e) =>
                                                                 field.onChange(
-                                                                    e.id
+                                                                    e?.id
+                                                                        ? e.id
+                                                                        : null
                                                                 )
                                                             }
                                                             value={
@@ -535,6 +541,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                     data={watch("anexos")}
                                 />
                             </TabPanel>
+                            <TabPanel>
+                                <Historicos
+                                    tabela="Historico"
+                                    tabelaId={watch("id")}
+                                />
+                            </TabPanel>
                         </TabPanels>
                     </Tabs>
                 </ModalBody>
@@ -559,6 +571,10 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                     </Button>
                 </ModalFooter>
             </ModalContent>
+            <ModalImovel
+                ref={modalImovel}
+                callback={(data) => onCallbackImovel(data)}
+            />
         </Modal>
     );
 };

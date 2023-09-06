@@ -1,19 +1,17 @@
 import { Excluir } from "@/components/AlertDialogs/Excluir";
 import { FormDateRange } from "@/components/Form/FormDateRange";
 import { FormInput } from "@/components/Form/FormInput";
+import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { Layout } from "@/components/Layout/layout";
 import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
 import { ModalProcesso } from "@/components/Modals/ModalProcesso";
 import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFichaCadastral";
 import { ModalValidar } from "@/components/Modals/ModalValidar";
-import { ModalContratos } from "@/components/Modals/contratos";
-import { FiltroContratos } from "@/components/Pages/FIltroContratos";
-import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
 import { Filtro } from "@/components/Tabelas/TabelaPadrao/Filtro";
 import { TooltipAvatar } from "@/components/TooltipAvatar";
 import {
-    formatoData,
     statusFicha,
+    statusFichaTag,
     statusProcesso,
     tipoFicha,
 } from "@/helpers/helpers";
@@ -40,6 +38,7 @@ import {
     AccordionPanel,
     Avatar,
     AvatarGroup,
+    Badge,
     Box,
     Button,
     Center,
@@ -57,6 +56,7 @@ import {
     ProgressLabel,
     Spinner,
     Table,
+    Tag,
     Tbody,
     Td,
     Text,
@@ -83,7 +83,7 @@ import {
 import { MdOutlineVerifiedUser, MdPageview } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 
-const Home = () => {
+const Home = ({ query }) => {
     const { usuario } = useAuth();
     const toast = useToast();
     const modalProcesso = useRef();
@@ -99,6 +99,12 @@ const Home = () => {
         dataInicio: [null, null],
         dataFim: [null, null],
         dataCriacao: [null, null],
+        status:
+            query?.status && Array.isArray(query.status)
+                ? query?.status
+                : query?.status
+                ? [query?.status]
+                : ["EM_ANDAMENTO"],
     });
     const {
         currentPage,
@@ -132,6 +138,7 @@ const Home = () => {
                 dataCriacao: filtro.dataCriacao[0]
                     ? JSON.stringify(filtro.dataCriacao)
                     : null,
+                status: filtro.status[0] ? JSON.stringify(filtro.status) : null,
                 linhas: pageSize,
                 pagina: currentPage,
             },
@@ -141,6 +148,8 @@ const Home = () => {
             onSuccess: (data) => {
                 setTotal(data.data.total);
             },
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
         }
     );
     const deleteMany = useMutation(imo7ApiService("processo").deleteMany, {
@@ -178,6 +187,32 @@ const Home = () => {
             },
         });
     };
+    const listaStatus = [
+        {
+            label: "Em Andamento",
+            value: "EM_ANDAMENTO",
+        },
+        {
+            label: "Cancelado",
+            value: "CANCELADO",
+        },
+        {
+            label: "Arquivado",
+            value: "ARQUIVADO",
+        },
+        {
+            label: "Completo",
+            value: "COMPLETO",
+        },
+        {
+            label: "Aprovado",
+            value: "APROVADO",
+        },
+        {
+            label: "Reprovado",
+            value: "REPROVADO",
+        },
+    ];
     return (
         <>
             <Layout title="Processos">
@@ -310,6 +345,25 @@ const Home = () => {
                                         }
                                     />
                                 </GridItem>
+                                <GridItem>
+                                    <FormMultiSelect
+                                        size="sm"
+                                        label="Status"
+                                        options={listaStatus}
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                status: e.map((i) => i.value),
+                                            })
+                                        }
+                                        value={listaStatus.filter((e) =>
+                                            filtro.status.find(
+                                                (i) => i == e.value
+                                            )
+                                        )}
+                                        isMulti
+                                    />
+                                </GridItem>
                             </>
                         }
                     />
@@ -431,12 +485,6 @@ const Home = () => {
                                                             orientation="vertical"
                                                         />
                                                     </Center>
-                                                    <Center>
-                                                        <Divider
-                                                            h={6}
-                                                            orientation="vertical"
-                                                        />
-                                                    </Center>
                                                     <Box
                                                         gap={2}
                                                         textAlign="left"
@@ -492,7 +540,7 @@ const Home = () => {
                                                                 (f) => (
                                                                     <TooltipAvatar
                                                                         name={
-                                                                            f.descricao
+                                                                            f.nome
                                                                         }
                                                                     />
                                                                 )
@@ -505,7 +553,7 @@ const Home = () => {
                                                             orientation="vertical"
                                                         />
                                                     </Center>
-                                                    <>
+                                                    {/* <>
                                                         <Progress
                                                             height="20px"
                                                             value={item.fichas?.reduce(
@@ -596,13 +644,13 @@ const Home = () => {
                                                                 )}
                                                             </ProgressLabel>
                                                         </Progress>
-                                                    </>
-                                                    <Center>
+                                                    </> */}
+                                                    {/* <Center>
                                                         <Divider
                                                             h={6}
                                                             orientation="vertical"
                                                         />
-                                                    </Center>
+                                                    </Center> */}
                                                     <TooltipAvatar
                                                         size="xs"
                                                         name={
@@ -620,7 +668,7 @@ const Home = () => {
                                                 <Tbody>
                                                     {item?.fichas?.map(
                                                         (item) => (
-                                                            <Tr>
+                                                            <Tr key={item.id}>
                                                                 <Td
                                                                     p={0}
                                                                     w={12}
@@ -748,6 +796,11 @@ const Home = () => {
                                                                             </MenuList>
                                                                         </Menu>
                                                                     </Flex>
+                                                                </Td>
+                                                                <Td w={12}>
+                                                                    {statusFichaTag(
+                                                                        item.status
+                                                                    )}
                                                                 </Td>
                                                                 <Td w={44}>
                                                                     <>
@@ -1123,3 +1176,10 @@ const Home = () => {
     );
 };
 export default Home;
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+    return {
+        props: {
+            query: ctx.query,
+        },
+    };
+});

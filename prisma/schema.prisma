@@ -294,6 +294,7 @@ model Imovel {
     valorAluguel    Decimal?
     valorCondominio Decimal?
     valorIPTU       Decimal?
+    valorSeguro     Decimal?
     numeroIptu      String?
     numeroAgua      String?
     numeroEnergia   String?

@@ -74,11 +74,21 @@ handle.post(async (req, res) => {
         },
     });
 
-    const usuarioExiste = await prisma.usuario.findUnique({
+    const usuarioExiste = await prisma.usuario.findFirst({
         where: {
-            imobiliariaId_documento: {
-                documento:usuario.documento,
-                imobiliariaId:data.id
+            OR: [
+                {
+                    email: usuario?.email,
+                },
+                {
+                    documento: usuario?.documento,
+                },
+            ],
+            imobiliariaId: data.id,
+            cargos: {
+                some: {
+                    codigo: "imobiliaria",
+                },
             },
         },
     });
@@ -86,8 +96,8 @@ handle.post(async (req, res) => {
         await prisma.usuario.update({
             where: {
                 imobiliariaId_documento: {
-                    documento:usuario.documento,
-                    imobiliariaId:data.id
+                    documento: usuario.documento,
+                    imobiliariaId: data.id,
                 },
             },
             data: {
@@ -101,7 +111,7 @@ handle.post(async (req, res) => {
                 },
                 cargos: {
                     connect: {
-                        id: 2,
+                        codigo: "imobiliaria",
                     },
                 },
             },
@@ -119,7 +129,7 @@ handle.post(async (req, res) => {
                 },
                 cargos: {
                     connect: {
-                        id: 2,
+                        codigo: "imobiliaria",
                     },
                 },
             },

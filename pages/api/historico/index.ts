@@ -23,7 +23,31 @@ handle.get(async (req, res) => {
             usuario: true,
         },
     });
-    res.send(data);
+    return res.send(data);
+});
+
+handle.post(async (req, res) => {
+    try {
+        const { descricao, tabela, tabelaId } = req.body;
+
+        const data = await prisma.historico.create({
+            data: {
+                descricao,
+                tabela,
+                tabelaId,
+                usuario: {
+                    connect: {
+                        id: req.user.id,
+                    },
+                },
+            },
+        });
+        return res.send(data);
+    } catch (error) {
+        return res.status(500).send({
+            message: error.message,
+        });
+    }
 });
 
 export default handle;

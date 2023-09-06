@@ -43,7 +43,11 @@ export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
                 processoId,
             },
         ],
-        listarAnexos
+        listarAnexos,
+        {
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
     );
     const excluir = useMutation(excluirAnexo);
 

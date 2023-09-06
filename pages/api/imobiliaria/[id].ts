@@ -64,6 +64,7 @@ handle.post(async (req, res) => {
             emailMensagemExtrato,
             enviarEmail,
             enviarWhatsapp,
+            contaId,
         } = req.body;
         const { logo, bg } = req.files;
         let limparLogo = {};
@@ -116,6 +117,7 @@ handle.post(async (req, res) => {
                 enviarWhatsapp: JSON.parse(enviarWhatsapp),
                 ...limparLogo,
                 ...limparBg,
+                contaId: Number(contaId),
             },
         });
 

@@ -1,4 +1,4 @@
-import { Tag } from "@chakra-ui/react";
+import { Tag, Tooltip } from "@chakra-ui/react";
 import moment from "moment";
 
 export const formatoData = (data, tipo = "DATA", utc = true) => {
@@ -103,6 +103,46 @@ export const statusFicha = (status) => {
                 <Tag colorScheme="gray" size="sm">
                     Arquivada
                 </Tag>
+            );
+    }
+};
+export const statusFichaTag = (status) => {
+    switch (status) {
+        case "aguardando":
+            return (
+                <Tooltip label="Aguardando Preenchimento">
+                    <Tag colorScheme="blue" size="sm" rounded="full"></Tag>
+                </Tooltip>
+            );
+        case "preenchida":
+            return (
+                <Tooltip label="Preenchida">
+                    <Tag colorScheme="green" size="sm" rounded="full"></Tag>
+                </Tooltip>
+            );
+        case "em_analise":
+            return (
+                <Tooltip label="Em análise">
+                    <Tag colorScheme="orange" size="sm" rounded="full"></Tag>
+                </Tooltip>
+            );
+        case "aprovada":
+            return (
+                <Tooltip label="Aprovado">
+                    <Tag colorScheme="green" size="sm" rounded="full"></Tag>
+                </Tooltip>
+            );
+        case "reprovada":
+            return (
+                <Tooltip label="Reprovada">
+                    <Tag colorScheme="red" size="sm" rounded="full"></Tag>
+                </Tooltip>
+            );
+        case "arquivada":
+            return (
+                <Tooltip label="Arquivada">
+                    <Tag colorScheme="gray" size="sm" rounded="full"></Tag>
+                </Tooltip>
             );
     }
 };

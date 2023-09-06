@@ -35,7 +35,7 @@ handle.post(async (req, res) => {
                 email: usuario.email,
                 cargos: {
                     connect: {
-                        id: 3,
+                        codigo: "adm",
                     },
                 },
             },
@@ -48,7 +48,7 @@ handle.post(async (req, res) => {
                 email: usuario.email,
                 cargos: {
                     connect: {
-                        id: 3,
+                        codigo: "adm",
                     },
                 },
             },
