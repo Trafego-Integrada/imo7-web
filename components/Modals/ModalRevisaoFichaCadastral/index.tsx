@@ -252,7 +252,7 @@ const ModalBase = ({}, ref) => {
                                     p={4}
                                     rounded="lg"
                                 >
-                                    <Grid gap={4} overflow="auto">
+                                    <Grid gap={4}>
                                         <GridItem colSpan={{ lg: 2 }}>
                                             <FormTextarea
                                                 size="sm"
@@ -274,6 +274,7 @@ const ModalBase = ({}, ref) => {
                                                     key={item.id}
                                                     bg="gray.100"
                                                     p={4}
+                                                    overflow="auto"
                                                 >
                                                     <Heading size="sm">
                                                         {item.nome}
