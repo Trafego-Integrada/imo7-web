@@ -2,8 +2,11 @@ import { Excluir } from "@/components/AlertDialogs/Excluir";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { NextChakraLink } from "@/components/NextChakraLink";
 import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
-import { excluirVariosBoletos } from "@/services/models/boleto";
-import { excluirFicha, listarFichas } from "@/services/models/modeloFicha";
+import {
+    excluirFicha,
+    excluirVariasFichas,
+    listarFichas,
+} from "@/services/models/modeloFicha";
 import { queryClient } from "@/services/queryClient";
 import { usePagination } from "@ajna/pagination";
 import {
@@ -72,7 +75,7 @@ export const FichasCadastrais = () => {
             },
         });
     };
-    const deleteMany = useMutation(excluirVariosBoletos, {
+    const deleteMany = useMutation(excluirVariasFichas, {
         onSuccess: () => {
             queryClient.invalidateQueries("modelosFicha");
             toast({

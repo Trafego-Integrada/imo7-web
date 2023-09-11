@@ -41,6 +41,7 @@ import { buscarEndereco } from "@/lib/buscarEndereco";
 import { GetServerSideProps } from "next";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { formatoValor } from "@/helpers/helpers";
+import { Head } from "@/components/Head";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
     console.log(modelo);
     const [schema, setSchema] = useState({});
@@ -122,6 +123,10 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             as="form"
             onSubmit={handleSubmit(onSubmit)}
         >
+            <Head
+                title={ficha?.nome}
+                description={`${modelo.nome} - ${modelo.descricao}`}
+            />
             <Container maxW="container.lg">
                 <Flex
                     align="center"
@@ -186,58 +191,67 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     )}
                 </Box>
 
-                <Flex gap={4} my={2}>
-                    {ficha.imovel ? (
-                        <Box p={4} bg="white">
-                            <Text fontSize="sm" color="gray">
-                                Ficha referente ao imóvel:
-                            </Text>
-                            <Text>
-                                {ficha.imovel?.codigo} -{" "}
-                                {ficha.imovel?.endereco}, {ficha.imovel?.bairro}
-                                , {ficha.imovel?.cidade}/{ficha.imovel?.estado}
-                            </Text>
-                        </Box>
-                    ) : ficha.codigoImovel ? (
-                        <Box p={2} bg="white">
-                            <Text fontSize="sm" color="gray">
-                                Ficha referente ao imóvel:
-                            </Text>
-                            <Text>
-                                {ficha.codigoImovel} - {ficha.enderecoImovel} nº{" "}
-                                {ficha.numeroImovel}{" "}
-                                {ficha.complementoImovel &&
-                                    `(${ficha.complementoImovel})`}
-                                , {ficha.bairroImovel}, {ficha.cidadeImovel}/
-                                {ficha.estadoImovel}
-                            </Text>
-                        </Box>
-                    ) : (
-                        ""
-                    )}
-                    <Box p={4} bg="white">
+                <Grid
+                    gridTemplateColumns={{ lg: "repeat(6,1fr)" }}
+                    gap={4}
+                    my={2}
+                >
+                    <GridItem colSpan={{ lg: 3 }}>
+                        {ficha.imovel ? (
+                            <Box p={4} bg="white">
+                                <Text fontSize="sm" color="gray">
+                                    Ficha referente ao imóvel:
+                                </Text>
+                                <Text>
+                                    {ficha.imovel?.codigo} -{" "}
+                                    {ficha.imovel?.endereco},{" "}
+                                    {ficha.imovel?.bairro},{" "}
+                                    {ficha.imovel?.cidade}/
+                                    {ficha.imovel?.estado}
+                                </Text>
+                            </Box>
+                        ) : ficha.codigoImovel ? (
+                            <Box p={2} bg="white">
+                                <Text fontSize="sm" color="gray">
+                                    Ficha referente ao imóvel:
+                                </Text>
+                                <Text>
+                                    {ficha.codigoImovel} -{" "}
+                                    {ficha.enderecoImovel} nº{" "}
+                                    {ficha.numeroImovel}{" "}
+                                    {ficha.complementoImovel &&
+                                        `(${ficha.complementoImovel})`}
+                                    , {ficha.bairroImovel}, {ficha.cidadeImovel}
+                                    /{ficha.estadoImovel}
+                                </Text>
+                            </Box>
+                        ) : (
+                            ""
+                        )}
+                    </GridItem>
+                    <GridItem p={4} bg="white">
                         <Text fontSize="sm" color="gray">
                             Valor Negociado
                         </Text>
                         <Text>
                             {ficha.Processo?.campos.find((e) => e.valor).valor}
                         </Text>
-                    </Box>
-                    <Box p={4} bg="white">
+                    </GridItem>
+                    <GridItem p={4} bg="white">
                         <Text fontSize="sm" color="gray">
                             Valor Condominio
                         </Text>
                         <Text>
                             {formatoValor(ficha.imovel?.valorCondominio)}
                         </Text>
-                    </Box>
-                    <Box p={4} bg="white">
+                    </GridItem>
+                    <GridItem p={4} bg="white">
                         <Text fontSize="sm" color="gray">
                             Valor IPTU
                         </Text>
                         <Text>{formatoValor(ficha.imovel?.valorIPTU)}</Text>
-                    </Box>
-                </Flex>
+                    </GridItem>
+                </Grid>
                 <Grid gap={4}>
                     {campos
                         .filter((i) =>

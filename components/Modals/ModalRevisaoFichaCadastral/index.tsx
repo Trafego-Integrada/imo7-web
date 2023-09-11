@@ -252,7 +252,14 @@ const ModalBase = ({}, ref) => {
                                     p={4}
                                     rounded="lg"
                                 >
-                                    <Grid gap={4}>
+                                    <Grid gap={4} overflow="auto">
+                                        <GridItem colSpan={{ lg: 2 }}>
+                                            <FormTextarea
+                                                size="sm"
+                                                {...register("observacoes")}
+                                                placeholder="Observações (será impresso somente no PDF)"
+                                            />
+                                        </GridItem>
                                         {campos?.data
                                             ?.filter((i) =>
                                                 i.campos.find(
@@ -279,8 +286,14 @@ const ModalBase = ({}, ref) => {
                                                         }}
                                                         gap={4}
                                                     >
-                                                        {item?.campos?.map(
-                                                            (i) => (
+                                                        {item?.campos
+                                                            ?.filter(
+                                                                (i) =>
+                                                                    watch(
+                                                                        `modelo.campos.${i.codigo}`
+                                                                    )?.exibir
+                                                            )
+                                                            ?.map((i) => (
                                                                 <GridItem
                                                                     key={i.id}
                                                                     colSpan={
@@ -906,8 +919,7 @@ const ModalBase = ({}, ref) => {
                                                                         )}
                                                                     </Text>
                                                                 </GridItem>
-                                                            )
-                                                        )}
+                                                            ))}
                                                     </Grid>
                                                 </Box>
                                             ))}{" "}

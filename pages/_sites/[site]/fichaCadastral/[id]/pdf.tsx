@@ -357,9 +357,13 @@ const FichaCadastral = ({ ficha, campos, modelo, historicos }) => {
                 </GridItem>
                 <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
                     <Text fontSize="xs">Observações:</Text>
-                    <Text fontWeight="bold" fontSize="sm">
-                        {ficha.Processo?.observacoes}
-                    </Text>
+                    <Box
+                        fontWeight="bold"
+                        fontSize="sm"
+                        dangerouslySetInnerHTML={{
+                            __html: ficha?.Processo?.observacoes,
+                        }}
+                    ></Box>
                 </GridItem>
             </Grid>
             <Grid gap={5}>
