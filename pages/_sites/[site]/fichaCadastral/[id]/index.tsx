@@ -234,7 +234,10 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             Valor Negociado
                         </Text>
                         <Text>
-                            {ficha.Processo?.campos.find((e) => e.valor).valor}
+                            {
+                                ficha.Processo?.campos?.find((e) => e.valor)
+                                    ?.valor
+                            }
                         </Text>
                     </GridItem>
                     <GridItem p={4} bg="white">

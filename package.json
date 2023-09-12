@@ -9,7 +9,7 @@
         "lint": "next lint",
         "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
         "ssh": "ssh ubuntu@140.238.181.195",
-        "db": "ssh -i C:/Users/gabri/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aajdqthqz366gnjodjlvoe2wtkqtdmyhxlhm44bs3tsirq@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
+        "db": "ssh -i C:/Users/gabri/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 ocid1.bastionsession.oc1.sa-saopaulo-1.amaaaaaa5w5es6aasxo5gudedickkbgyjwcdqhisccfplt7dkyz5zydf4puq@host.bastion.sa-saopaulo-1.oci.oraclecloud.com"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",
@@ -80,6 +80,7 @@
         "react-icons": "^4.7.1",
         "react-input-mask": "^2.0.4",
         "react-json-to-excel": "^1.0.7",
+        "react-nl2br": "^1.0.4",
         "react-pdf": "^7.1.2",
         "react-qr-code": "^2.0.11",
         "react-query": "^3.24.5",
