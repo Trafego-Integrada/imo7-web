@@ -253,7 +253,7 @@ const ModalBase = ({}, ref) => {
                                     rounded="lg"
                                 >
                                     <Grid gap={4}>
-                                        <GridItem colSpan={{ lg: 2 }}>
+                                        <GridItem>
                                             <FormTextarea
                                                 size="sm"
                                                 {...register("observacoes")}
