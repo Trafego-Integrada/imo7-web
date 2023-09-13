@@ -1,9 +1,12 @@
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
 
-const handle = nextConnect();
 import { cors } from "@/middleware/cors";
+import { checkAuth } from "@/middleware/checkAuth";
+
+const handle = nextConnect();
 handle.use(cors);
+handle.use(checkAuth);
 handle.get(async (req, res) => {
     const { id } = req.query;
     const data = await prisma.processo.findUnique({
@@ -37,38 +40,43 @@ handle.get(async (req, res) => {
     res.send(data);
 });
 handle.put(async (req, res) => {
-    const { id } = req.query;
-    const {
-        tipoProcesso,
-        campos,
-        imovelId,
-        fichas,
-        observacoes,
-        responsavelId,
-        status,
-    } = req.body;
-    const data = await prisma.processo.update({
-        where: {
-            id,
-        },
-        data: {
+    try {
+        const { id } = req.query;
+        const {
             tipoProcesso,
             campos,
-            status,
+            imovelId,
             observacoes,
-            imovel: {
-                connect: {
-                    id: Number(imovelId),
+            responsavelId,
+            status,
+        } = req.body;
+        const data = await prisma.processo.update({
+            where: {
+                id,
+            },
+            data: {
+                tipoProcesso,
+                campos,
+                status,
+                observacoes,
+                imovel: {
+                    connect: {
+                        id: Number(imovelId),
+                    },
+                },
+                responsavel: {
+                    connect: {
+                        id: Number(responsavelId),
+                    },
                 },
             },
-            responsavel: {
-                connect: {
-                    id: Number(responsavelId),
-                },
-            },
-        },
-    });
-    res.send(data);
+        });
+        res.send(data);
+    } catch (error) {
+        res.status(500).send({
+            message: error?.message,
+        });
+    }
 });
 
 handle.delete(async (req, res) => {

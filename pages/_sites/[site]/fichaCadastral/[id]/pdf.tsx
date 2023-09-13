@@ -362,7 +362,7 @@ const FichaCadastral = ({ ficha, campos, modelo, historicos }) => {
                         fontWeight="bold"
                         fontSize="sm"
                         dangerouslySetInnerHTML={{
-                            __html: nl2br(ficha?.Processo?.observacoes),
+                            __html: ficha?.Processo?.observacoes,
                         }}
                     ></Box>
                 </GridItem>

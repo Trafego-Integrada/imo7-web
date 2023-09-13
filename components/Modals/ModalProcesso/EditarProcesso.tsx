@@ -51,16 +51,6 @@ const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
     responsavelId: yup.string().required("Campo obrigatório"),
     imovelId: yup.string().required("Campo obrigatório"),
-    fichas: yup
-        .array()
-        .of(
-            yup.object({
-                modelo: yup.object().required("Campo obrigatório"),
-                nome: yup.string().required("Campo obrigatório"),
-            })
-        )
-        .min(1, "Deve ter no mínimo uma ficha")
-        .required("Campo obrigatório"),
 });
 export const EditarProcesso = ({ id, isOpen, onClose }) => {
     const { usuario } = useAuth();
@@ -140,7 +130,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                             <TabPanel>
                                 <Flex
                                     as="form"
-                                    id="novoProcesso"
+                                    id="formEditarProcesso"
                                     onSubmit={handleSubmit(onSubmit)}
                                     flexDir="column"
                                     gap={4}
@@ -561,7 +551,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                     </Button>
                     <Button
                         type="submit"
-                        form="novoProcesso"
+                        form="formEditarProcesso"
                         size="sm"
                         leftIcon={<MdSave />}
                         colorScheme="blue"
