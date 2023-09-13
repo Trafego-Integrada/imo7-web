@@ -72,9 +72,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         },
     });
     const atualizar = useMutation(imo7ApiService("processo").update);
-    const onSubmit = async (data) => {
+    const onSubmit = async ({ fichas, imovel, responsavel, ...data }) => {
         try {
-            await atualizar.mutateAsync(data);
+            await atualizar.mutateAsync({ ...data });
             queryClient.invalidateQueries(["processos"]);
             onClose();
         } catch (error) {}
