@@ -347,11 +347,13 @@ handle.post(async (req, res) => {
                         id: Number(imobiliariaId),
                     },
                 },
-                contrato: {
-                    connect: {
-                        id: Number(contratoId),
-                    },
-                },
+                contrato: contratoId
+                    ? {
+                          connect: {
+                              id: Number(contratoId),
+                          },
+                      }
+                    : {},
             },
             include: {
                 imobiliaria: true,

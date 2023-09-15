@@ -1,5 +1,6 @@
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
+import moment from "moment";
 
 const handle = nextConnect();
 
@@ -20,7 +21,7 @@ handle.get(async (req, res) => {
     res.send(boleto);
 });
 
-handle.put(async (req, res) => {
+handle.post(async (req, res) => {
     const { id } = req.query;
     const {
         boletos,
@@ -163,11 +164,13 @@ handle.put(async (req, res) => {
                     id: Number(imobiliariaId),
                 },
             },
-            contrato: {
-                connect: {
-                    id: Number(contratoId),
-                },
-            },
+            contrato: contratoId
+                ? {
+                      connect: {
+                          id: Number(contratoId),
+                      },
+                  }
+                : {},
         },
     });
     res.send(boleto);

@@ -98,7 +98,7 @@ export const Historico = ({ chamadoId }) => {
                             </Box>
                         ))}
                     </React.Fragment>
-                ))}
+                ))} 
                 <Button
                     onClick={() => fetchNextPage()}
                     disabled={!hasNextPage || isFetchingNextPage}
