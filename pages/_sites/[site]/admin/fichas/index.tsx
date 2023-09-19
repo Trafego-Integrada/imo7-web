@@ -512,31 +512,67 @@ const FichasCadastrais = ({ query }) => {
                                   {
                                       value: (
                                           <Flex gap={2} justify="center">
+                                              <Tooltip label="Revisar Ficha">
+                                                  <IconButton
+                                                      icon={
+                                                          <MdOutlineVerifiedUser />
+                                                      }
+                                                      size="xs"
+                                                      rounded="full"
+                                                      colorScheme="blue"
+                                                      variant="outline"
+                                                      onClick={() =>
+                                                          modalRevisar.current.onOpen(
+                                                              item.id
+                                                          )
+                                                      }
+                                                  />
+                                              </Tooltip>
+                                              <Tooltip label="Copiar URL da Ficha">
+                                                  <IconButton
+                                                      icon={<FiLink />}
+                                                      size="xs"
+                                                      rounded="full"
+                                                      colorScheme="blue"
+                                                      variant="outline"
+                                                      onClick={() => {
+                                                          navigator.clipboard.writeText(
+                                                              `${window.location.origin}/fichaCadastral/${item.id}`
+                                                          );
+                                                          toast({
+                                                              title: "URL Copiada",
+                                                          });
+                                                      }}
+                                                  />
+                                              </Tooltip>
+                                              <Tooltip label="Gerar PDF">
+                                                  <IconButton
+                                                      size="xs"
+                                                      rounded="full"
+                                                      colorScheme="blue"
+                                                      variant="outline"
+                                                      as={Link}
+                                                      icon={<FaFilePdf />}
+                                                      href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
+                                                      target="_blank"
+                                                      passHref
+                                                  />
+                                              </Tooltip>
                                               <Menu>
-                                                  <MenuButton>
-                                                      <IconButton
-                                                          icon={
-                                                              <CgMoreVerticalAlt />
-                                                          }
-                                                          size="xs"
-                                                          rounded="full"
-                                                          colorScheme="blue"
-                                                          variant="outline"
-                                                      />
-                                                  </MenuButton>
+                                                  <Tooltip label="Mais opções">
+                                                      <MenuButton>
+                                                          <IconButton
+                                                              icon={
+                                                                  <CgMoreVerticalAlt />
+                                                              }
+                                                              size="xs"
+                                                              rounded="full"
+                                                              colorScheme="blue"
+                                                              variant="outline"
+                                                          />
+                                                      </MenuButton>
+                                                  </Tooltip>
                                                   <MenuList>
-                                                      <MenuItem
-                                                          icon={
-                                                              <MdOutlineVerifiedUser />
-                                                          }
-                                                          onClick={() =>
-                                                              modalRevisar.current.onOpen(
-                                                                  item.id
-                                                              )
-                                                          }
-                                                      >
-                                                          Revisar Ficha
-                                                      </MenuItem>
                                                       <MenuItem
                                                           icon={<FiEdit />}
                                                           onClick={() =>
@@ -547,19 +583,7 @@ const FichasCadastrais = ({ query }) => {
                                                       >
                                                           Editar Ficha
                                                       </MenuItem>
-                                                      <MenuItem
-                                                          icon={<FiLink />}
-                                                          onClick={() => {
-                                                              navigator.clipboard.writeText(
-                                                                  `${window.location.origin}/fichaCadastral/${item.id}`
-                                                              );
-                                                              toast({
-                                                                  title: "URL Copiada",
-                                                              });
-                                                          }}
-                                                      >
-                                                          Copiar URL da Ficha
-                                                      </MenuItem>
+
                                                       <MenuItem
                                                           as={Link}
                                                           icon={<FiEye />}
@@ -580,15 +604,7 @@ const FichasCadastrais = ({ query }) => {
                                                       >
                                                           Exportar para Excel
                                                       </MenuItem>
-                                                      <MenuItem
-                                                          as={Link}
-                                                          icon={<FaFilePdf />}
-                                                          href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
-                                                          target="_blank"
-                                                          passHref
-                                                      >
-                                                          Gerar PDF
-                                                      </MenuItem>
+
                                                       <MenuItem
                                                           icon={<FiTrash />}
                                                           onClick={() => {

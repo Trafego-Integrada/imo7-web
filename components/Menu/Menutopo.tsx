@@ -12,10 +12,7 @@ import {
     Flex,
     Grid,
     GridItem,
-    Icon,
     IconButton,
-    InputGroup,
-    InputRightElement,
     Menu,
     MenuButton,
     MenuDivider,
@@ -23,17 +20,15 @@ import {
     MenuItem,
     MenuList,
     Text,
+    useColorMode,
     useDisclosure,
 } from "@chakra-ui/react";
 import { useAuth } from "hooks/useAuth";
 import React from "react";
-import { BiPowerOff, BiSupport } from "react-icons/bi";
-import { BsFillGearFill, BsSearch } from "react-icons/bs";
+import { BiPowerOff } from "react-icons/bi";
 import { MdMenu, MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { RiAccountCircleFill, RiMenu3Fill } from "react-icons/ri";
+import { RiAccountCircleFill } from "react-icons/ri";
 import { FiltroTopo } from "@/components/FiltroTopo";
-import { FormInput } from "@/components/Form/FormInput";
-import { FormSelect } from "@/components/Form/FormSelect";
 import { NextChakraLink } from "@/components/NextChakraLink";
 import { Listagemmenu } from "./Listagemmenu";
 import { Logo } from "./Logo";
@@ -42,6 +37,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
     const { usuario, signOut } = useAuth();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = React.useRef();
+    const { colorMode, toggleColorMode } = useColorMode();
     return (
         <>
             <Box
@@ -149,6 +145,9 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                         alignItems="center"
                         justifyContent="flex-end"
                     >
+                        {/* <Button onClick={toggleColorMode}>
+                            Toggle {colorMode === "light" ? "Dark" : "Light"}
+                        </Button> */}
                         <Menu>
                             <MenuButton
                                 as={Button}

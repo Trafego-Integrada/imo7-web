@@ -23,6 +23,11 @@ handler.get(async (req, res) => {
                 },
                 responsavel: true,
                 imovel: true,
+                _count: {
+                    select: {
+                        Anexo: true,
+                    },
+                },
             },
         });
         res.send(data);

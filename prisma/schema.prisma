@@ -698,7 +698,7 @@ enum StatusFicha {
 }
 
 model FichaCadastral {
-    id                     String                        @id @default(cuid())
+    id                     String                          @id @default(cuid())
     codigo                 Int?
     descricao              String?
     nome                   String?
@@ -713,28 +713,39 @@ model FichaCadastral {
     bairroImovel           String?
     cidadeImovel           String?
     estadoImovel           String?
-    status                 StatusFicha                   @default(aguardando)
-    motivoReprovacao       String?                       @db.LongText
-    createdAt              DateTime                      @default(now())
-    updatedAt              DateTime?                     @updatedAt
+    status                 StatusFicha                     @default(aguardando)
+    motivoReprovacao       String?                         @db.LongText
+    createdAt              DateTime                        @default(now())
+    updatedAt              DateTime?                       @updatedAt
     deletedAt              DateTime?
-    imobiliaria            Imobiliaria                   @relation(fields: [imobiliariaId], references: [id])
+    imobiliaria            Imobiliaria                     @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId          Int
-    modelo                 ModeloFichaCadastral          @relation(fields: [modeloFichaCadastralId], references: [id])
+    modelo                 ModeloFichaCadastral            @relation(fields: [modeloFichaCadastralId], references: [id])
     modeloFichaCadastralId String
     preenchimento          FichaCadastralPreenchimento[]
-    responsavel            Usuario?                      @relation(fields: [responsavelId], references: [id])
+    responsavel            Usuario?                        @relation(fields: [responsavelId], references: [id])
     responsavelId          Int?
-    imovel                 Imovel?                       @relation(fields: [imovelId], references: [id])
+    imovel                 Imovel?                         @relation(fields: [imovelId], references: [id])
     imovelId               Int?
-    importadaJb            Boolean?                      @default(false)
+    importadaJb            Boolean?                        @default(false)
     ValidacaoFacial        ValidacaoFacial[]
     dataAprovacao          DateTime?
     dataReprovacao         DateTime?
-    Processo               Processo?                     @relation(fields: [processoId], references: [id])
+    Processo               Processo?                       @relation(fields: [processoId], references: [id])
     processoId             String?
     observacoes            String?
     Anexo                  Anexo[]
+    motivoReprovacaoFicha  MotivoReprovacaoFichaCadastral? @relation(fields: [motivoReprovacaoId], references: [id])
+    motivoReprovacaoId     String?
+}
+
+model MotivoReprovacaoFichaCadastral {
+    id        String           @id @default(cuid())
+    nome      String?
+    createdAt DateTime         @default(now())
+    updatedAt DateTime?        @updatedAt
+    deletedAt DateTime?
+    fichas    FichaCadastral[]
 }
 
 model FichaCadastralPreenchimento {

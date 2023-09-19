@@ -1,4 +1,4 @@
-import { formatoData, formatoValor } from "@/helpers/helpers";
+import { formatoData, formatoValor, nl2br } from "@/helpers/helpers";
 import prisma from "@/lib/prisma";
 import {
     Alert,
@@ -23,7 +23,6 @@ import moment from "moment";
 import Link from "next/link";
 import QRCode from "react-qr-code";
 import "react-quill/dist/quill.snow.css";
-import nl2br from "react-nl2br";
 const FichaCadastral = ({ ficha, campos, modelo, historicos }) => {
     const renderTable = (items) => {
         const rows = [];
@@ -362,7 +361,7 @@ const FichaCadastral = ({ ficha, campos, modelo, historicos }) => {
                         fontWeight="bold"
                         fontSize="sm"
                         dangerouslySetInnerHTML={{
-                            __html: ficha?.Processo?.observacoes,
+                            __html: nl2br(ficha?.Processo?.observacoes),
                         }}
                     ></Box>
                 </GridItem>

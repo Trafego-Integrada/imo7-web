@@ -200,7 +200,57 @@ handler.get(async (req, res) => {
                 imobiliariaId: req.user.imobiliariaId,
             },
         });
+
+        // Processos
+        const processos = await prisma.processo.findMany({
+            select: {
+                status: true,
+            },
+            where: {
+                // createdAt: {
+                //     gte: moment().startOf("M").format(),
+                //     lte: moment().endOf("d").format(),
+                // },
+                imobiliariaId: req.user.imobiliariaId,
+            },
+        });
+        // Data do mês atual e do mês passado
+        const hoje = new Date();
+
+        // Consulta Prisma para recuperar os processos do mês atual e do mês passado
+        const processosComparativo = await prisma.processo.findMany({
+            where: {
+                createdAt: {
+                    gte: moment().startOf("M").subtract(1, "M").format(),
+                    lte: moment().endOf("M").format(),
+                },
+            },
+        });
+
+        // Contagem de processos por dia
+        const resultados = processosComparativo.reduce((acc, processo) => {
+            const dia = processo.createdAt.getDate();
+            acc[dia] = acc[dia] || {
+                dia: dia.toString(),
+                esteMes: 0,
+                mesPassado: 0,
+            };
+            if (
+                moment(processo.createdAt).format() >=
+                moment().startOf("M").format()
+            ) {
+                acc[dia].esteMes += 1;
+            } else {
+                acc[dia].mesPassado += 1;
+            }
+            return acc;
+        }, {});
+
+        // Converter os resultados em um array de objetos
+        const resposta = Object.values(resultados);
+
         return res.send({
+            processos: { processos, grafico: resposta },
             boletos,
             extratos,
             whatsappBoletoEnviados,

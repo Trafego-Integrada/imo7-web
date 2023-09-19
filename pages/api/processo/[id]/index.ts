@@ -35,6 +35,11 @@ handle.get(async (req, res) => {
             },
             imovel: true,
             responsavel: true,
+            _count: {
+                select: {
+                    Anexo: true,
+                },
+            },
         },
     });
     res.send(data);

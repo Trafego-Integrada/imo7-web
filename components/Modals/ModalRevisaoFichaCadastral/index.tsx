@@ -154,7 +154,14 @@ const ModalBase = ({}, ref) => {
                         <TabList>
                             {/* <Tab>Geral</Tab> */}
                             {watch("id") && <Tab>Revisão</Tab>}
-                            {watch("id") && <Tab>Anexos</Tab>}
+                            {watch("id") && (
+                                <Tab>
+                                    Anexos{" "}
+                                    <Tag colorScheme="blue" size="sm" ml={1}>
+                                        {watch("_count.Anexo")}
+                                    </Tag>
+                                </Tab>
+                            )}
                             <Tab>Histórico</Tab>
                         </TabList>
                         <TabPanels>

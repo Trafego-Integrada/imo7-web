@@ -95,7 +95,7 @@ export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
                             <Td>{formatoData(item.createdAt, "DATA_HORA")}</Td>
                             <Td>
                                 <Flex>
-                                    <Tooltip label="Download">
+                                    <Tooltip label="Editar">
                                         <IconButton
                                             size="sm"
                                             icon={<Icon as={FiEdit} />}

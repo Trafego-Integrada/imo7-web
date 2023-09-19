@@ -123,7 +123,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                     {watch("fichas")?.length}
                                 </Tag>
                             </Tab>
-                            <Tab>Anexos</Tab>
+                            <Tab>
+                                Anexos{" "}
+                                <Tag colorScheme="blue" size="sm" ml={1}>
+                                    {watch("_count.Anexo")}
+                                </Tag>
+                            </Tab>
                             <Tab>Históricos</Tab>
                         </TabList>
                         <TabPanels>

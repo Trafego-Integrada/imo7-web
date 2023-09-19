@@ -60,7 +60,11 @@ import { dadosDashboard } from "@/services/models/dashboard";
 import { formatoData, formatoValor, statusTarefa } from "@/helpers/helpers";
 import moment from "moment";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
+const ColumnChart = dynamic(import("@/components/Charts/ColumnChart"), {
+    ssr: false,
+});
 const Home = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -209,7 +213,347 @@ const Home = () => {
                             lg: "repeat(4,1fr)",
                         }}
                     >
+                        <GridItem colSpan={{ lg: 3 }}>
+                            <Heading size="sm" color="gray" mb={2}>
+                                Próximas Tarefas
+                            </Heading>
+                            <Box bg="white" p={4}>
+                                <Table size="sm">
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Tarefa</Th>
+                                            <Th>Contrato</Th>
+                                            <Th>Data</Th>
+                                            <Th>Status</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {data?.tarefas.length > 0 ? (
+                                            data?.tarefas
+                                                .slice(0, 5)
+                                                .map((item) => (
+                                                    <Tr
+                                                        key={item.id}
+                                                        fontSize="xs"
+                                                    >
+                                                        <Td fontSize="xs">
+                                                            {item.titulo}
+                                                        </Td>
+                                                        <Td fontSize="xs">
+                                                            {
+                                                                item.contrato
+                                                                    ?.codigo
+                                                            }
+                                                        </Td>
+                                                        <Td fontSize="xs">
+                                                            {formatoData(
+                                                                item.dataVencimento
+                                                            )}
+                                                        </Td>
+                                                        <Td fontSize="xs">
+                                                            {statusTarefa(
+                                                                item.status
+                                                            )}
+                                                        </Td>
+                                                    </Tr>
+                                                ))
+                                        ) : (
+                                            <Tr>
+                                                <Td colSpan={4}>
+                                                    Não há tarefas
+                                                </Td>
+                                            </Tr>
+                                        )}
+                                    </Tbody>
+                                </Table>
+                            </Box>
+                        </GridItem>
                         <GridItem colSpan={{ lg: 1 }}>
+                            <Heading size="sm" color="gray" mb={2}>
+                                Tarefas
+                            </Heading>
+                            <Flex flexDir="column" gap={2}>
+                                <Box bg="white" p={4}>
+                                    <Heading size="sm" textAlign="center">
+                                        Em aberto
+                                    </Heading>
+                                    <Divider my={2} />
+                                    <Text textAlign="center">
+                                        {data?.tarefas?.reduce((a, i) => {
+                                            if (
+                                                moment(i.dataVencimento) <=
+                                                moment()
+                                            ) {
+                                                return a + 1;
+                                            } else {
+                                                return a;
+                                            }
+                                        }, 0)}
+                                    </Text>
+                                </Box>
+                                <Box bg="white" p={4}>
+                                    <Heading size="sm" textAlign="center">
+                                        Em atraso
+                                    </Heading>
+                                    <Divider my={2} />
+                                    <Text textAlign="center" fontSize="xl">
+                                        {data?.tarefas?.reduce((a, i) => {
+                                            if (
+                                                moment(i.dataVencimento) <
+                                                moment()
+                                            ) {
+                                                return a + 1;
+                                            } else {
+                                                return a;
+                                            }
+                                        }, 0)}
+                                    </Text>
+                                </Box>
+                            </Flex>
+                        </GridItem>
+                        <GridItem colSpan={{ lg: 2 }}>
+                            <Box>
+                                <Heading size="sm" color="gray" mb={2}>
+                                    Processos
+                                </Heading>
+                                <Flex p={4} bg="white" h="full" align="center">
+                                    <Chart
+                                        chartType="PieChart"
+                                        width={"200px"}
+                                        data={[
+                                            ["teste", "teste"],
+                                            [
+                                                "Em andamento",
+                                                data?.processos?.processos?.filter(
+                                                    (i) =>
+                                                        i.status ==
+                                                        "EM_ANDAMENTO"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Cancelado",
+                                                data?.processos?.processos?.filter(
+                                                    (i) =>
+                                                        i.status == "CANCELADO"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Arquivado",
+                                                data?.processos?.processos?.filter(
+                                                    (i) =>
+                                                        i.status == "ARQUIVADO"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Completo",
+                                                data?.processos?.processos?.filter(
+                                                    (i) =>
+                                                        i.status == "COMPLETO"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Aprovados",
+                                                data?.processos?.processos?.filter(
+                                                    (i) =>
+                                                        i.status == "APROVADO"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Reprovados",
+                                                data?.processos?.processos?.filter(
+                                                    (i) =>
+                                                        i.status == "REPROVADO"
+                                                )?.length,
+                                            ],
+                                        ]}
+                                        options={{
+                                            legend: "none",
+                                            pieHole: 0.4,
+                                            is3D: false,
+                                            colors: [
+                                                "orange",
+                                                "yellow",
+                                                "gray",
+                                                "blue",
+                                                "green",
+                                                "red",
+                                            ],
+                                            width: 200,
+                                            height: 200,
+                                        }}
+                                        style={{ padding: 0 }}
+                                    />
+                                    <Flex flexDir="column" gap={1}>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/processos",
+                                                query: {
+                                                    status: "EM_ANDAMENTO",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="orange"
+                                            >
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.processos?.processos?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "EM_ANDAMENTO"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Em andamento
+                                            </Button>
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/processos",
+                                                query: {
+                                                    status: "CANCELADO",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="yellow"
+                                            >
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.processos?.processos?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "CANCELADO"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Cancelados
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/fichas",
+                                                query: {
+                                                    status: "ARQUIVADO",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="gray"
+                                            >
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.processos?.processos?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "ARQUIVADO"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Arquivados
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/processos",
+                                                query: {
+                                                    status: "COMPLETO",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="blue"
+                                            >
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.processos?.processos?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "COMPLETO"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Completos
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/processos",
+                                                query: {
+                                                    status: "APROVADO",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="green"
+                                            >
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.processos?.processos?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "APROVADO"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Aprovados
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/processos",
+                                                query: {
+                                                    status: "REPROVADO",
+                                                },
+                                            }}
+                                        >
+                                            <Button size="xs" colorScheme="red">
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.processos?.processos?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "REPROVADO"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Reprovados
+                                            </Button>{" "}
+                                        </Link>
+                                    </Flex>
+                                </Flex>
+                            </Box>
+                        </GridItem>
+                        <GridItem colSpan={{ lg: 2 }}>
                             <Box>
                                 <Heading size="sm" color="gray" mb={2}>
                                     Fichas Cadastrais
@@ -447,103 +791,23 @@ const Home = () => {
                                 </Flex>
                             </Box>
                         </GridItem>
-                        <GridItem colSpan={{ lg: 2 }}>
-                            <Heading size="sm" color="gray" mb={2}>
-                                Próximas Tarefas
-                            </Heading>
-                            <Box bg="white" p={4}>
-                                <Table size="sm">
-                                    <Thead>
-                                        <Tr>
-                                            <Th>Tarefa</Th>
-                                            <Th>Contrato</Th>
-                                            <Th>Data</Th>
-                                            <Th>Status</Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {data?.tarefas.length > 0 ? (
-                                            data?.tarefas
-                                                .slice(0, 5)
-                                                .map((item) => (
-                                                    <Tr
-                                                        key={item.id}
-                                                        fontSize="xs"
-                                                    >
-                                                        <Td fontSize="xs">
-                                                            {item.titulo}
-                                                        </Td>
-                                                        <Td fontSize="xs">
-                                                            {
-                                                                item.contrato
-                                                                    ?.codigo
-                                                            }
-                                                        </Td>
-                                                        <Td fontSize="xs">
-                                                            {formatoData(
-                                                                item.dataVencimento
-                                                            )}
-                                                        </Td>
-                                                        <Td fontSize="xs">
-                                                            {statusTarefa(
-                                                                item.status
-                                                            )}
-                                                        </Td>
-                                                    </Tr>
-                                                ))
-                                        ) : (
-                                            <Tr>
-                                                <Td colSpan={4}>
-                                                    Não há tarefas
-                                                </Td>
-                                            </Tr>
-                                        )}
-                                    </Tbody>
-                                </Table>
+                        <GridItem colSpan={{ lg: 4 }} bg="white" p={4}>
+                            <Box>
+                                <Heading
+                                    size="sm"
+                                    color="gray"
+                                    mb={2}
+                                    lineHeight={1}
+                                >
+                                    Comparativo de Processos
+                                </Heading>
+                                <Text fontSize="xs" color="gray" lineHeight={1}>
+                                    Este mês x Mês passado
+                                </Text>
                             </Box>
-                        </GridItem>
-                        <GridItem colSpan={{ lg: 1 }}>
-                            <Heading size="sm" color="gray" mb={2}>
-                                Tarefas
-                            </Heading>
-                            <Flex flexDir="column" gap={2}>
-                                <Box bg="white" p={4}>
-                                    <Heading size="sm" textAlign="center">
-                                        Em aberto
-                                    </Heading>
-                                    <Divider my={2} />
-                                    <Text textAlign="center">
-                                        {data?.tarefas?.reduce((a, i) => {
-                                            if (
-                                                moment(i.dataVencimento) <=
-                                                moment()
-                                            ) {
-                                                return a + 1;
-                                            } else {
-                                                return a;
-                                            }
-                                        }, 0)}
-                                    </Text>
-                                </Box>
-                                <Box bg="white" p={4}>
-                                    <Heading size="sm" textAlign="center">
-                                        Em atraso
-                                    </Heading>
-                                    <Divider my={2} />
-                                    <Text textAlign="center" fontSize="xl">
-                                        {data?.tarefas?.reduce((a, i) => {
-                                            if (
-                                                moment(i.dataVencimento) <
-                                                moment()
-                                            ) {
-                                                return a + 1;
-                                            } else {
-                                                return a;
-                                            }
-                                        }, 0)}
-                                    </Text>
-                                </Box>
-                            </Flex>
+                            {data?.processos?.grafico && (
+                                <ColumnChart data={data?.processos?.grafico} />
+                            )}
                         </GridItem>
                         <GridItem colSpan={{ lg: 2 }}>
                             <Heading size="sm" color="gray" mb={2}>
