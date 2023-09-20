@@ -612,7 +612,7 @@ export const getServerSideProps = async (ctx) => {
     });
     const historicos = await prisma.historico.findMany({
         where: {
-            tabela: "fichaCadastral",
+            tabela: "FichaCadastral",
             tabelaId: ficha.id,
         },
         include: {
@@ -624,7 +624,7 @@ export const getServerSideProps = async (ctx) => {
     });
     const historicosProcesso = await prisma.historico.findMany({
         where: {
-            tabela: "processo",
+            tabela: "Processo",
             tabelaId: ficha?.processoId,
         },
         include: {

@@ -538,7 +538,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                             </TabPanel>
                             <TabPanel>
                                 <Historicos
-                                    tabela="Historico"
+                                    tabela="Processo"
                                     tabelaId={watch("id")}
                                 />
                             </TabPanel>
