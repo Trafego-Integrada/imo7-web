@@ -499,25 +499,27 @@ const FichaCadastral = ({
                     ))}
                 </Flex>
             </Box>
-            <Box>
-                <Heading size="sm" mb={3}>
-                    Anexos do Processo
-                </Heading>
-                <Flex gap={4}>
-                    {processo?.Anexo?.map((i) => (
-                        <Flex key={i.id} flexDir="column" gap={2}>
-                            <Text>{i.nome}</Text>
-                            <QRCode size={75} value={i.anexo} />
+            {processo && (
+                <Box>
+                    <Heading size="sm" mb={3}>
+                        Anexos do Processo
+                    </Heading>
+                    <Flex gap={4}>
+                        {processo?.Anexo?.map((i) => (
+                            <Flex key={i.id} flexDir="column" gap={2}>
+                                <Text>{i.nome}</Text>
+                                <QRCode size={75} value={i.anexo} />
 
-                            <Text fontSize="xs">
-                                Leia o QRCode
-                                <br />
-                                <Link href={i.anexo}>ou clique aqui</Link>
-                            </Text>
-                        </Flex>
-                    ))}
-                </Flex>
-            </Box>
+                                <Text fontSize="xs">
+                                    Leia o QRCode
+                                    <br />
+                                    <Link href={i.anexo}>ou clique aqui</Link>
+                                </Text>
+                            </Flex>
+                        ))}
+                    </Flex>
+                </Box>
+            )}
             <Box>
                 <Heading size="sm" mb={3}>
                     Histórico da Ficha
@@ -549,37 +551,39 @@ const FichaCadastral = ({
                     </Tbody>
                 </Table>
             </Box>
-            <Box>
-                <Heading size="sm" mb={3}>
-                    Histórico do Processo
-                </Heading>
-                <Table size="sm" gap={4} variant="striped">
-                    <Thead>
-                        <Tr>
-                            <Th>Data</Th>
-                            <Th>Usuário</Th>
-                            <Th>Descrição</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {historicosProcesso?.map((i) => (
-                            <Tr key={i.id}>
-                                <Td w={44}>
-                                    {formatoData(i?.createdAt, "DATA_HORA")}
-                                </Td>
-                                <Td w={44}>{i?.usuario?.nome}</Td>
-                                <Td>
-                                    <Text
-                                        dangerouslySetInnerHTML={{
-                                            __html: i.descricao,
-                                        }}
-                                    ></Text>
-                                </Td>
+            {historicosProcesso && (
+                <Box>
+                    <Heading size="sm" mb={3}>
+                        Histórico do Processo
+                    </Heading>
+                    <Table size="sm" gap={4} variant="striped">
+                        <Thead>
+                            <Tr>
+                                <Th>Data</Th>
+                                <Th>Usuário</Th>
+                                <Th>Descrição</Th>
                             </Tr>
-                        ))}
-                    </Tbody>
-                </Table>
-            </Box>
+                        </Thead>
+                        <Tbody>
+                            {historicosProcesso?.map((i) => (
+                                <Tr key={i.id}>
+                                    <Td w={44}>
+                                        {formatoData(i?.createdAt, "DATA_HORA")}
+                                    </Td>
+                                    <Td w={44}>{i?.usuario?.nome}</Td>
+                                    <Td>
+                                        <Text
+                                            dangerouslySetInnerHTML={{
+                                                __html: i.descricao,
+                                            }}
+                                        ></Text>
+                                    </Td>
+                                </Tr>
+                            ))}
+                        </Tbody>
+                    </Table>
+                </Box>
+            )}
         </Flex>
     );
 };
@@ -604,6 +608,7 @@ export const getServerSideProps = async (ctx) => {
             Anexo: true,
         },
     });
+
     let processo = await prisma.processo.findUnique({
         where: { id: ficha?.processoId },
         include: {
@@ -676,8 +681,10 @@ export const getServerSideProps = async (ctx) => {
             modelo: JSON.parse(JSON.stringify(modelo)),
             campos: JSON.parse(JSON.stringify(campos)),
             historicos: JSON.parse(JSON.stringify(historicos)),
-            historicosProcesso: JSON.parse(JSON.stringify(historicosProcesso)),
-            processo: JSON.parse(JSON.stringify(processo)),
+            historicosProcesso: historicosProcesso
+                ? JSON.parse(JSON.stringify(historicosProcesso))
+                : null,
+            processo: processo ? JSON.parse(JSON.stringify(processo)) : null,
         },
     };
 };
