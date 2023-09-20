@@ -608,13 +608,29 @@ export const getServerSideProps = async (ctx) => {
             Anexo: true,
         },
     });
+    let processo = null;
+    let historicosProcesso = null;
+    if (ficha?.processoId) {
+        processo = await prisma.processo.findUnique({
+            where: { id: ficha?.processoId },
+            include: {
+                Anexo: true,
+            },
+        });
+        historicosProcesso = await prisma.historico.findMany({
+            where: {
+                tabela: "Processo",
+                tabelaId: ficha?.processoId,
+            },
+            include: {
+                usuario: true,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+    }
 
-    let processo = await prisma.processo.findUnique({
-        where: { id: ficha?.processoId },
-        include: {
-            Anexo: true,
-        },
-    });
     const historicos = await prisma.historico.findMany({
         where: {
             tabela: "FichaCadastral",
@@ -627,18 +643,7 @@ export const getServerSideProps = async (ctx) => {
             createdAt: "desc",
         },
     });
-    const historicosProcesso = await prisma.historico.findMany({
-        where: {
-            tabela: "Processo",
-            tabelaId: ficha?.processoId,
-        },
-        include: {
-            usuario: true,
-        },
-        orderBy: {
-            createdAt: "desc",
-        },
-    });
+
     const modelo = await prisma.modeloFichaCadastral.findUnique({
         where: {
             id: ficha?.modeloFichaCadastralId,
