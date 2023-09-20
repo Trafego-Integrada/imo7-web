@@ -49,6 +49,7 @@ handle.put(async (req, res) => {
         const { id } = req.query;
         const {
             tipoProcesso,
+            tipoGarantia,
             campos,
             imovelId,
             observacoes,
@@ -61,6 +62,7 @@ handle.put(async (req, res) => {
             },
             data: {
                 tipoProcesso,
+                tipoGarantia,
                 campos,
                 status,
                 observacoes,

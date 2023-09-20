@@ -162,7 +162,8 @@ const ModalBase = ({}, ref) => {
                                     </Tag>
                                 </Tab>
                             )}
-                            <Tab>Histórico</Tab>
+                            <Tab>Histórico da FIcha</Tab>
+                            <Tab>Histórico do Processo</Tab>
                         </TabList>
                         <TabPanels>
                             {/* <TabPanel px={0}>
@@ -295,12 +296,43 @@ const ModalBase = ({}, ref) => {
                                                         gap={4}
                                                     >
                                                         {item?.campos
-                                                            ?.filter(
-                                                                (i) =>
-                                                                    watch(
+                                                            ?.filter((i) => {
+                                                                if (
+                                                                    (watch(
                                                                         `modelo.campos.${i.codigo}`
-                                                                    )?.exibir
-                                                            )
+                                                                    ) &&
+                                                                        watch(
+                                                                            `modelo.campos.${i.codigo}`
+                                                                        )
+                                                                            ?.exibir &&
+                                                                        !i.dependencia) ||
+                                                                    (watch(
+                                                                        `modelo.campos.${i.codigo}`
+                                                                    ) &&
+                                                                        watch(
+                                                                            `modelo.campos.${i.codigo}`
+                                                                        )
+                                                                            ?.exibir &&
+                                                                        ((i
+                                                                            .dependencia
+                                                                            ?.codigo &&
+                                                                            !i.dependenciaValor &&
+                                                                            watch(
+                                                                                `preenchimento.${i.dependencia?.codigo}`
+                                                                            )) ||
+                                                                            (i
+                                                                                .dependencia
+                                                                                ?.codigo &&
+                                                                                i.dependenciaValor ==
+                                                                                    watch(
+                                                                                        `preenchimento.${i.dependencia?.codigo}`
+                                                                                    ))))
+                                                                ) {
+                                                                    return true;
+                                                                } else {
+                                                                    return false;
+                                                                }
+                                                            })
                                                             ?.map((i) => (
                                                                 <GridItem
                                                                     key={i.id}
@@ -988,6 +1020,12 @@ const ModalBase = ({}, ref) => {
                                 <Historicos
                                     tabela="FichaCadastral"
                                     tabelaId={watch("id")}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <Historicos
+                                    tabela="Processo"
+                                    tabelaId={watch("processoId")}
                                 />
                             </TabPanel>
                         </TabPanels>

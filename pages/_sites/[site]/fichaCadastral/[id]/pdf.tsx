@@ -23,7 +23,14 @@ import moment from "moment";
 import Link from "next/link";
 import QRCode from "react-qr-code";
 import "react-quill/dist/quill.snow.css";
-const FichaCadastral = ({ ficha, campos, modelo, historicos }) => {
+const FichaCadastral = ({
+    ficha,
+    campos,
+    modelo,
+    historicos,
+    historicosProcesso,
+    processo,
+}) => {
     const renderTable = (items) => {
         const rows = [];
         let currentRow = [];
@@ -475,7 +482,7 @@ const FichaCadastral = ({ ficha, campos, modelo, historicos }) => {
             </Box>
             <Box>
                 <Heading size="sm" mb={3}>
-                    Anexos Internos
+                    Anexos da Ficha
                 </Heading>
                 <Flex gap={4}>
                     {ficha?.Anexo.map((i) => (
@@ -494,7 +501,26 @@ const FichaCadastral = ({ ficha, campos, modelo, historicos }) => {
             </Box>
             <Box>
                 <Heading size="sm" mb={3}>
-                    Histórico
+                    Anexos do Processo
+                </Heading>
+                <Flex gap={4}>
+                    {processo?.Anexo?.map((i) => (
+                        <Flex key={i.id} flexDir="column" gap={2}>
+                            <Text>{i.nome}</Text>
+                            <QRCode size={75} value={i.anexo} />
+
+                            <Text fontSize="xs">
+                                Leia o QRCode
+                                <br />
+                                <Link href={i.anexo}>ou clique aqui</Link>
+                            </Text>
+                        </Flex>
+                    ))}
+                </Flex>
+            </Box>
+            <Box>
+                <Heading size="sm" mb={3}>
+                    Histórico da Ficha
                 </Heading>
                 <Table size="sm" gap={4} variant="striped">
                     <Thead>
@@ -506,6 +532,37 @@ const FichaCadastral = ({ ficha, campos, modelo, historicos }) => {
                     </Thead>
                     <Tbody>
                         {historicos.map((i) => (
+                            <Tr key={i.id}>
+                                <Td w={44}>
+                                    {formatoData(i?.createdAt, "DATA_HORA")}
+                                </Td>
+                                <Td w={44}>{i?.usuario?.nome}</Td>
+                                <Td>
+                                    <Text
+                                        dangerouslySetInnerHTML={{
+                                            __html: i.descricao,
+                                        }}
+                                    ></Text>
+                                </Td>
+                            </Tr>
+                        ))}
+                    </Tbody>
+                </Table>
+            </Box>
+            <Box>
+                <Heading size="sm" mb={3}>
+                    Histórico do Processo
+                </Heading>
+                <Table size="sm" gap={4} variant="striped">
+                    <Thead>
+                        <Tr>
+                            <Th>Data</Th>
+                            <Th>Usuário</Th>
+                            <Th>Descrição</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {historicosProcesso?.map((i) => (
                             <Tr key={i.id}>
                                 <Td w={44}>
                                     {formatoData(i?.createdAt, "DATA_HORA")}
@@ -547,10 +604,28 @@ export const getServerSideProps = async (ctx) => {
             Anexo: true,
         },
     });
+    let processo = await prisma.processo.findUnique({
+        where: { id: ficha?.processoId },
+        include: {
+            Anexo: true,
+        },
+    });
     const historicos = await prisma.historico.findMany({
         where: {
             tabela: "fichaCadastral",
             tabelaId: ficha.id,
+        },
+        include: {
+            usuario: true,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+    const historicosProcesso = await prisma.historico.findMany({
+        where: {
+            tabela: "processo",
+            tabelaId: ficha?.processoId,
         },
         include: {
             usuario: true,
@@ -601,6 +676,8 @@ export const getServerSideProps = async (ctx) => {
             modelo: JSON.parse(JSON.stringify(modelo)),
             campos: JSON.parse(JSON.stringify(campos)),
             historicos: JSON.parse(JSON.stringify(historicos)),
+            historicosProcesso: JSON.parse(JSON.stringify(historicosProcesso)),
+            processo: JSON.parse(JSON.stringify(processo)),
         },
     };
 };

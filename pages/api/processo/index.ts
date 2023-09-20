@@ -336,6 +336,7 @@ handle.post(async (req, res) => {
     try {
         const {
             tipoProcesso,
+            tipoGarantia,
             campos,
             imovelId,
             fichas,
@@ -354,6 +355,7 @@ handle.post(async (req, res) => {
             data: {
                 codigo: ultimoProcesso ? ultimoProcesso?.codigo + 1 : 1,
                 tipoProcesso,
+                tipoGarantia,
                 campos,
                 status: "EM_ANDAMENTO",
                 fichas: {
