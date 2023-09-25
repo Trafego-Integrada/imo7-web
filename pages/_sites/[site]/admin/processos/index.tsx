@@ -89,6 +89,7 @@ const Home = ({ query }) => {
     const modalProcesso = useRef();
     const modal = useRef();
     const modalExcluir = useRef();
+    const modalExcluirProcesso = useRef();
     const modalRevisar = useRef();
     const modalValidar = useRef();
     const [total, setTotal] = useState();
@@ -374,7 +375,9 @@ const Home = ({ query }) => {
                             colorScheme="red"
                             variant="outline"
                             disabled={selecionados.length ? false : true}
-                            onClick={onDeleteMany}
+                            onClick={() =>
+                                modalExcluirProcesso.current.onOpen()
+                            }
                         >
                             Excluir Selecionados
                         </Button>
@@ -1227,7 +1230,16 @@ const Home = ({ query }) => {
             <ModalFichaCadastral ref={modal} />
             <ModalRevisaoFichaCadastral ref={modalRevisar} />
             <ModalValidar ref={modalValidar} />
-            <Excluir ref={modalExcluir} onDelete={onDelete} />
+            <Excluir
+                ref={modalExcluir}
+                titulo="Excluir ficha"
+                onDelete={onDelete}
+            />
+            <Excluir
+                ref={modalExcluirProcesso}
+                titulo="Excluir processos"
+                onDelete={onDeleteMany}
+            />
         </>
     );
 };

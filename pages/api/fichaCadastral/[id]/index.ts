@@ -62,6 +62,7 @@ handler.post(async (req, res) => {
             cidadeImovel,
             estadoImovel,
             observacoes,
+            motivoReprovacaoId,
         } = req.body;
 
         let dataPreenchimento = {};
@@ -197,6 +198,13 @@ handler.post(async (req, res) => {
                 estadoImovel,
                 ...dataPreenchimento,
                 observacoes,
+                motivoReprovacaoFicha: motivoReprovacaoId
+                    ? {
+                          connect: {
+                              id: motivoReprovacaoId,
+                          },
+                      }
+                    : {},
             },
         });
         await prisma.historico.create({

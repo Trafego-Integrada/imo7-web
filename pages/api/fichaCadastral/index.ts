@@ -293,6 +293,8 @@ handle.post(async (req, res) => {
             responsavelId,
             imovelId,
             observacoes,
+            motivoReprovacaoId,
+            motivoReprovacao,
         } = req.body;
 
         let dataPreenchimento = {};
@@ -352,6 +354,14 @@ handle.post(async (req, res) => {
                 cidadeImovel,
                 estadoImovel,
                 observacoes,
+                motivoReprovacao,
+                motivoReprovacaoFicha: motivoReprovacaoId
+                    ? {
+                          connect: {
+                              id: motivoReprovacaoId,
+                          },
+                      }
+                    : {},
                 imobiliaria: {
                     connect: {
                         id: req.user.imobiliariaId,

@@ -32,17 +32,43 @@ class App extends Component {
                 layout: root.verticalLayout,
             })
         );
+        let cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+        cursor.lineY.set("visible", false);
+        let legend = chart.children.push(
+            am5.Legend.new(root, {
+                centerX: am5.p50,
+                x: am5.p50,
+            })
+        );
+
         let yAxis = chart.yAxes.push(
             am5xy.ValueAxis.new(root, {
-                renderer: am5xy.AxisRendererY.new(root, {}),
+                maxDeviation: 0.3,
+                renderer: am5xy.AxisRendererY.new(root, {
+                    strokeOpacity: 0.1,
+                    minGridDistance: 50,
+                }),
+                numberFormatter: am5.NumberFormatter.new(root, {
+                    numberFormat: "#",
+                    precision: 0, // Isso garante que apenas valores inteiros sejam exibidos
+                }),
+                maxPrecision: 0,
             })
         ); // Create X-Axis
         let xAxis = chart.xAxes.push(
             am5xy.CategoryAxis.new(root, {
-                renderer: am5xy.AxisRendererX.new(root, {}),
+                renderer: am5xy.AxisRendererX.new(root, {
+                    minGridDistance: 30, // Ajusta o espaçamento entre as categorias
+                    cellStartLocation: 0.1,
+                    cellEndLocation: 0.9,
+                }),
                 categoryField: "dia",
+                tooltip: am5.Tooltip.new(root, {
+                    labelText: "Dia {dia}",
+                }),
             })
         );
+
         xAxis.data.setAll(this.props.data);
         // Make stuff animate on load// Create series
         let series2 = chart.series.push(
@@ -51,8 +77,12 @@ class App extends Component {
                 xAxis: xAxis,
                 yAxis: yAxis,
                 valueYField: "mesPassado",
+                sequencedInterpolation: true,
                 categoryXField: "dia",
                 clustered: true,
+                tooltip: am5.Tooltip.new(root, {
+                    labelText: "{mesPassado}",
+                }),
             })
         );
         let series1 = chart.series.push(
@@ -62,14 +92,20 @@ class App extends Component {
                 yAxis: yAxis,
                 valueYField: "esteMes",
                 categoryXField: "dia",
+                sequencedInterpolation: true,
                 clustered: true,
+                tooltip: am5.Tooltip.new(root, {
+                    labelText: "{esteMes}",
+                }),
             })
         );
+
         series1.data.setAll(this.props.data); // Add legend
         series2.data.setAll(this.props.data);
-        let legend = chart.children.push(am5.Legend.new(root, {}));
         legend.data.setAll(chart.series.values);
         // https://www.amcharts.com/docs/v5/concepts/animations/
+        series1.appear(1000);
+        series2.appear(1000);
         chart.appear(1000, 100);
         //this.series = series;
         this.root = root;

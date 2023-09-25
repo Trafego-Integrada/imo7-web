@@ -347,20 +347,36 @@ const ModalBase = ({}, ref) => {
                                                 ))}
 
                                             {watch("status") == "reprovada" && (
-                                                <GridItem>
-                                                    <FormTextarea
-                                                        label="Motivo da Reprovação"
-                                                        placeholder="Digite o motivo..."
-                                                        error={
-                                                            errors
-                                                                .motivoReprovacao
-                                                                ?.message
-                                                        }
-                                                        {...register(
-                                                            "motivoReprovacao"
-                                                        )}
-                                                    />
-                                                </GridItem>
+                                                <>
+                                                    <GridItem>
+                                                        <FormTextarea
+                                                            label="Motivo da Reprovação"
+                                                            placeholder="Digite o motivo..."
+                                                            error={
+                                                                errors
+                                                                    .motivoReprovacao
+                                                                    ?.message
+                                                            }
+                                                            {...register(
+                                                                "motivoReprovacao"
+                                                            )}
+                                                        />
+                                                    </GridItem>
+                                                    <GridItem>
+                                                        <FormTextarea
+                                                            label="Motivo da Reprovação"
+                                                            placeholder="Digite o motivo..."
+                                                            error={
+                                                                errors
+                                                                    .motivoReprovacao
+                                                                    ?.message
+                                                            }
+                                                            {...register(
+                                                                "motivoReprovacao"
+                                                            )}
+                                                        />
+                                                    </GridItem>
+                                                </>
                                             )}
                                         </Grid>
                                     </Box>

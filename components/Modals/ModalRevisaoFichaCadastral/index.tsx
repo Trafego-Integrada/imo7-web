@@ -69,7 +69,15 @@ import { ModalPreview } from "../Preview";
 import { AnaliseCampo } from "./AnaliseCampo";
 import { Historicos } from "@/components/Pages/Historicos";
 import { Documentos } from "../Contrato/Documentos";
-const schema = yup.object({});
+import { imo7ApiService } from "@/services/apiServiceUsage";
+const schema = yup.object({
+    status: yup.string().required("Status é obrigatório"),
+    motivoReprovacaoId: yup.string().when("status", {
+        is: "reprovada", // quando o campo status for igual a 'reprovado'
+        then: yup.string().required("Motivo da Reprovação é obrigatório"), // torna o campo motivoReprovacaoId obrigatório
+        otherwise: yup.string().nullable(), // em outros casos, o campo motivoReprovacaoId não é obrigatório
+    }),
+});
 const ModalBase = ({}, ref) => {
     const { usuario } = useAuth();
     const preview = useRef();
@@ -114,6 +122,12 @@ const ModalBase = ({}, ref) => {
         { refetchOnReconnect: false, refetchOnWindowFocus: false }
     );
 
+    const { data: motivos } = useQuery(
+        ["motivosReprovacao", {}],
+        imo7ApiService("motivoReprovacao").list,
+        { refetchOnReconnect: false, refetchOnWindowFocus: false }
+    );
+    console.log(motivos);
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
             reset({});
@@ -967,7 +981,7 @@ const ModalBase = ({}, ref) => {
                                             <FormSelect
                                                 label="Status"
                                                 placeholder="Selecione o status"
-                                                error={errors.telefone?.message}
+                                                error={errors.status?.message}
                                                 {...register("status")}
                                             >
                                                 <option value="aguardando">
@@ -991,19 +1005,51 @@ const ModalBase = ({}, ref) => {
                                             </FormSelect>
                                         </GridItem>
                                         {watch("status") == "reprovada" && (
-                                            <GridItem>
-                                                <FormTextarea
-                                                    label="Motivo da Reprovação"
-                                                    placeholder="Digite o motivo..."
-                                                    error={
-                                                        errors.motivoReprovacao
-                                                            ?.message
-                                                    }
-                                                    {...register(
-                                                        "motivoReprovacao"
-                                                    )}
-                                                />
-                                            </GridItem>
+                                            <>
+                                                <GridItem>
+                                                    <FormSelect
+                                                        label="Motivo da Reprovação"
+                                                        placeholder="Selecione o motivo"
+                                                        error={
+                                                            errors
+                                                                .motivoReprovacaoId
+                                                                ?.message
+                                                        }
+                                                        {...register(
+                                                            "motivoReprovacaoId"
+                                                        )}
+                                                    >
+                                                        {motivos?.data?.data?.map(
+                                                            (item) => (
+                                                                <option
+                                                                    key={
+                                                                        item.id
+                                                                    }
+                                                                    value={
+                                                                        item.id
+                                                                    }
+                                                                >
+                                                                    {item.nome}
+                                                                </option>
+                                                            )
+                                                        )}
+                                                    </FormSelect>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <FormTextarea
+                                                        label="Observações sobre a reprovação"
+                                                        placeholder="Digite o aqui as observações sobre a reprovação..."
+                                                        error={
+                                                            errors
+                                                                .motivoReprovacao
+                                                                ?.message
+                                                        }
+                                                        {...register(
+                                                            "motivoReprovacao"
+                                                        )}
+                                                    />
+                                                </GridItem>
+                                            </>
                                         )}
                                     </Grid>
                                 </Box>

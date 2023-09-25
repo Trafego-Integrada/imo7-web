@@ -26,7 +26,7 @@ import { ModalChamado } from "@/components/Modals/ModalChamado";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import { useQuery } from "react-query";
 import { listarChamados } from "@/services/models/chamado";
-import { formatoData } from "@/helpers/helpers";
+import { formatoData, tagStatusChamado } from "@/helpers/helpers";
 import { useRouter } from "next/router";
 import { FiBookOpen, FiEye, FiSearch } from "react-icons/fi";
 import { ModalAbrirChamado } from "@/components/Modals/AbrirChamado";
@@ -35,7 +35,9 @@ const Cobrancas = () => {
     const router = useRouter();
     const modalChamado = useRef();
     const abrirChamado = useRef();
-    const [filtro, setFiltro] = useState({});
+    const [filtro, setFiltro] = useState({
+        status: "ABERTO",
+    });
     const { data } = useQuery(["chamados", filtro], listarChamados);
     return (
         <>
@@ -263,7 +265,7 @@ const Cobrancas = () => {
                                         </Td>
 
                                         <Td textAlign="center">
-                                            <Tag>{item.status}</Tag>
+                                            {tagStatusChamado(item.status)}
                                         </Td>
                                         <Td textAlign="center">
                                             <IconButton

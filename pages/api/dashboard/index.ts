@@ -11,7 +11,7 @@ handler.use(checkAuth);
 handler.get(async (req, res) => {
     try {
         const { periodo } = req.query;
-
+        console.log(req.user);
         let abreviacaoPeriodo = "D";
         let valorSubstr = 1;
         let periodoSubstr = "M";
@@ -224,6 +224,7 @@ handler.get(async (req, res) => {
                     gte: moment().startOf("M").subtract(1, "M").format(),
                     lte: moment().endOf("M").format(),
                 },
+                imobiliariaId: req.user.imobiliariaId,
             },
         });
 

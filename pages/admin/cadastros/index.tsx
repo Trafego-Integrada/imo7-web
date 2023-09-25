@@ -66,6 +66,16 @@ const Configuracoes = () => {
                                         Campos
                                     </Button>
                                 </Link>
+                                <Link href="/admin/cadastros/fichas/motivosReprovacao">
+                                    <Button
+                                        w="full"
+                                        variant="outline"
+                                        colorScheme="blue"
+                                    >
+                                        {" "}
+                                        Motivos de Reprovação
+                                    </Button>
+                                </Link>
                             </Flex>
                         </GridItem>
                     </Grid>

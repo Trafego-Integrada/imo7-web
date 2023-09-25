@@ -218,7 +218,6 @@ const FichaCadastral = ({
             </Table>
         );
     };
-    console.log(ficha);
     return (
         <Flex minH="100vh" flexDir="column" gap={4}>
             <Flex align="center" py={0} gap={6}>
@@ -233,7 +232,8 @@ const FichaCadastral = ({
                         • CNPJ: {ficha?.imobiliaria?.cnpj}
                     </Text>
                     <Text fontSize="xs">
-                        {ficha?.imobiliaria?.endereco},
+                        {ficha?.imobiliaria?.endereco}, nº{" "}
+                        {ficha?.imobiliaria?.numero},
                         {ficha?.imobiliaria?.bairro},
                         {ficha?.imobiliaria?.cidade}/
                         {ficha?.imobiliaria?.estado} - CEP:{" "}
@@ -304,8 +304,9 @@ const FichaCadastral = ({
                             <Text fontSize="xs">Imóvel:</Text>
                             <Text fontWeight="bold" fontSize="sm">
                                 {ficha.imovel?.codigo} -{" "}
-                                {ficha.imovel?.endereco}, {ficha.imovel?.bairro}
-                                , {ficha.imovel?.cidade}/{ficha.imovel?.estado}
+                                {ficha.imovel?.endereco}, nº
+                                {ficha.imovel?.numero}, {ficha.imovel?.bairro},{" "}
+                                {ficha.imovel?.cidade}/{ficha.imovel?.estado}
                             </Text>
                         </Box>
                     ) : ficha.codigoImovel ? (

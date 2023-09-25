@@ -36,6 +36,30 @@ export function nl2br(str, is_xhtml) {
     );
 }
 
+export const tagStatusChamado = (status) => {
+    switch (status) {
+        case "ABERTO":
+            return (
+                <Tag colorScheme="orange" size="sm">
+                    Aberto
+                </Tag>
+            );
+
+        case "FINALIZADO":
+            return (
+                <Tag colorScheme="green" size="sm">
+                    Finalizado
+                </Tag>
+            );
+        case "ARQUIVADO":
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Arquivado
+                </Tag>
+            );
+    }
+};
+
 export const statusTarefa = (status) => {
     switch (status) {
         case "finalizada":
