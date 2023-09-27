@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { cors } from "@/middleware/cors";
 import { checkAuth } from "@/middleware/checkAuth";
 import { Prisma } from "@prisma/client";
+import moment from "moment";
 
 const handle = nextConnect();
 handle.use(cors);
@@ -102,16 +103,17 @@ handle.get(async (req, res) => {
                 ],
             };
         }
-        if (
-            !req.user.permissoes.includes(
-                "imobiliaria.processos.visualizarTodos"
-            )
-        ) {
-            filtroQuery = {
-                ...filtroQuery,
-                responsavelId: req.user.id,
-            };
-        }
+        // if (
+        //     !req.user.permissoes.includes(
+        //         "imobiliaria.processos.visualizarTodos"
+        //     )
+        // ) {
+        //     filtroQuery = {
+        //         ...filtroQuery,
+
+        //         responsavelId: req.user.id,
+        //     };
+        // }
         if (numero) {
             if (!filtroQuery.AND) {
                 filtroQuery = {
