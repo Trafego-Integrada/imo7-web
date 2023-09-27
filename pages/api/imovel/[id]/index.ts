@@ -65,6 +65,7 @@ handle.put(async (req, res) => {
         valorCondominio,
         valorIPTU,
         valorVenda,
+        valorSeguro,
         varandas,
     } = req.body;
     const conta = await prisma.imovel.update({
@@ -119,6 +120,9 @@ handle.put(async (req, res) => {
             valorIPTU: valorIPTU ? Number(valorIPTU.replace(",", ".")) : null,
             valorVenda: valorVenda
                 ? Number(valorVenda.replace(",", "."))
+                : null,
+            valorSeguro: valorSeguro
+                ? Number(valorSeguro.replace(",", "."))
                 : null,
             varandas,
         },

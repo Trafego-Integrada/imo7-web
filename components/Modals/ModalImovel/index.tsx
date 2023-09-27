@@ -264,6 +264,27 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             )}
                                         />
                                     </GridItem>
+                                    <GridItem>
+                                        <Controller
+                                            name="valorSeguro"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <FormInputCurrency
+                                                    size="sm"
+                                                    label="Valor Seguro "
+                                                    placeholder="R$"
+                                                    error={
+                                                        errors.valorSeguro
+                                                            ?.message
+                                                    }
+                                                    defaultValue={field.value}
+                                                    onValueChange={(value) => {
+                                                        field.onChange(value);
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                    </GridItem>
                                 </Grid>
                             </Box>
                             <Box>
