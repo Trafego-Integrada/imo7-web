@@ -170,7 +170,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                         Completo
                                                     </option>
                                                     <option value="APROVADO">
-                                                        Compra
+                                                        Aprovado
                                                     </option>
                                                     <option value="REPROVADO">
                                                         Reprovado
