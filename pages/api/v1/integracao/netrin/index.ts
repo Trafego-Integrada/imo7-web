@@ -7,6 +7,14 @@ import { apiNetrinService } from "@/services/apiNetrin";
 import { cors } from "@/middleware/cors";
 import { removerCaracteresEspeciais } from "@/helpers/helpers";
 import { Prisma } from "@prisma/client";
+import puppeteer from "puppeteer";
+import fs from "fs";
+
+import st from "stream";
+import { providerStorage } from "@/lib/storage";
+import slug from "slug";
+import * as os from "oci-objectstorage";
+import { createReadStream, statSync } from "fs";
 
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
 handle.use(cors);
@@ -109,7 +117,119 @@ handle.post(async (req, res) => {
                       }
                     : {},
             },
+            include: {
+                imobiliaria: true,
+            },
         });
+
+        const browser = await puppeteer.launch({ headless: true });
+        const page = await browser.newPage();
+
+        await page.goto(
+            process.env.NODE_ENV == "production"
+                ? "https://" +
+                      data?.imobiliaria.url +
+                      ".imo7.com.br/consultas/" +
+                      data.id +
+                      "/pdf"
+                : "http://" +
+                      data?.imobiliaria.url +
+                      ".localhost:3000/consultas/" +
+                      data.id +
+                      "/pdf",
+            {
+                waitUntil: "networkidle0",
+            }
+        );
+        await page.emulateMediaType("screen");
+        const pdf = await page.pdf({
+            format: "A4",
+            margin: {
+                top: "20px",
+                right: "20px",
+                bottom: "20px",
+                left: "20px",
+            },
+        });
+
+        await browser.close();
+        const client = new os.ObjectStorageClient({
+            authenticationDetailsProvider: providerStorage,
+        });
+        const bucket = "imo7-standard-storage";
+
+        const request: os.requests.GetNamespaceRequest = {};
+        const response = await client.getNamespace(request);
+
+        const namespace = response.value;
+
+        const getBucketRequest: os.requests.GetBucketRequest = {
+            namespaceName: namespace,
+            bucketName: bucket,
+        };
+        const getBucketResponse = await client.getBucket(getBucketRequest);
+
+        const extension = ".pdf";
+        const nameLocation = `anexo/${slug(
+            `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`
+        )}.${extension}`;
+        // Create read stream to file
+        // const stats = statSync(anexos.path);
+        // const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
+        // const objectData = await nodeFsBlob.getData();
+        // const imageData = fs.readFileSync(anexos.path);
+        // const base64Data = imageData.toString("base64");
+
+        // const buff = Buffer.from(base64Data, "base64");
+        const putObjectRequest: os.requests.PutObjectRequest = {
+            namespaceName: namespace,
+            bucketName: bucket,
+            putObjectBody: pdf,
+            objectName: nameLocation,
+            //contentLength: stats.size,
+        };
+        const putObjectResponse = await client.putObject(putObjectRequest);
+
+        const getObjectRequest: os.requests.GetObjectRequest = {
+            objectName: nameLocation,
+            bucketName: bucket,
+            namespaceName: namespace,
+        };
+        const getObjectResponse = await client.getObject(getObjectRequest);
+
+        if (getObjectResponse) {
+            const anexo = await prisma.anexo.create({
+                data: {
+                    nome: `${
+                        data.tipoConsulta == "processos_pf"
+                            ? `Consulta Processos Pessoa Física - CPF: ${data.requisicao?.cpf}`
+                            : data.tipoConsulta == "processos_pj"
+                            ? `Consulta Processos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
+                            : "Consultas"
+                    }`,
+                    anexo: process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
+                    processo: processoId
+                        ? {
+                              connect: {
+                                  id: processoId,
+                              },
+                          }
+                        : {},
+                    fichaCadastral: fichaCadastralId
+                        ? {
+                              connect: {
+                                  id: fichaCadastralId,
+                              },
+                          }
+                        : {},
+                    usuario: {
+                        connect: {
+                            id: req.user.id,
+                        },
+                    },
+                },
+            });
+        }
 
         res.send(data);
     } catch (error) {
