@@ -314,3 +314,80 @@ export function TestaCPF(strCPF: string) {
     if (Resto != parseInt(strCPF.substring(10, 11))) return false;
     return true;
 }
+
+export const tagTipoConsultaNetrin = (tipo) => {
+    switch (tipo) {
+        case "processos_pj":
+            return (
+                <Tag colorScheme="purple" size="sm">
+                    Processos PJ
+                </Tag>
+            );
+        case "processos_pf":
+            return (
+                <Tag colorScheme="blue" size="sm">
+                    Processos PF
+                </Tag>
+            );
+        case "protestos":
+            return (
+                <Tag colorScheme="red" size="sm">
+                    Protestos
+                </Tag>
+            );
+        case "protestos_sp":
+            return (
+                <Tag colorScheme="orange" size="sm">
+                    Protestos SP
+                </Tag>
+            );
+        case "cnd_federal":
+            return (
+                <Tag colorScheme="green" size="sm">
+                    CND Federal
+                </Tag>
+            );
+        case "cnd_estadual":
+            return (
+                <Tag colorScheme="teal" size="sm">
+                    CND Estadual
+                </Tag>
+            );
+        case "cnd_trabalhista_tst":
+            return (
+                <Tag colorScheme="yellow" size="sm">
+                    CND Trabalhista TST
+                </Tag>
+            );
+        case "cnd_trabalhista_mte":
+            return (
+                <Tag colorScheme="pink" size="sm">
+                    CND Trabalhista MTE
+                </Tag>
+            );
+        case "receita_cnpj":
+            return (
+                <Tag colorScheme="cyan" size="sm">
+                    Receita CNPJ
+                </Tag>
+            );
+        case "receita_cnpj_qsa":
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Receita CNPJ QSA
+                </Tag>
+            );
+        case "receita_cpf":
+            return (
+                <Tag colorScheme="brown" size="sm">
+                    Receita CPF
+                </Tag>
+            );
+        default:
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Desconhecido
+                </Tag>
+            );
+    }
+};

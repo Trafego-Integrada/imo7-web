@@ -46,6 +46,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Documentos } from "../Contrato/Documentos";
 import { Historicos } from "@/components/Pages/Historicos";
 import { ModalImovel } from "../ModalImovel";
+import { ConsultasNetrin } from "./ConsultaNetrin";
 
 const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
@@ -114,13 +115,13 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                     Processo Nº {watch("codigo")} <ModalCloseButton />
                 </ModalHeader>
                 <ModalBody>
-                    <Tabs>
+                    <Tabs size="sm">
                         <TabList>
                             <Tab>Dados do Processo</Tab>
                             <Tab>
                                 Fichas{" "}
                                 <Tag ml={2} size="sm" colorScheme="blue">
-                                    {watch("fichas")?.length}
+                                    {watch("_count.fichas")}
                                 </Tag>
                             </Tab>
                             <Tab>
@@ -130,6 +131,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                 </Tag>
                             </Tab>
                             <Tab>Históricos</Tab>
+                            <Tab>
+                                Consultas{" "}
+                                <Tag colorScheme="blue" size="sm" ml={1}>
+                                    {watch("_count.ConsultaNetrin")}
+                                </Tag>
+                            </Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
@@ -541,6 +548,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                     tabela="Processo"
                                     tabelaId={watch("id")}
                                 />
+                            </TabPanel>
+                            <TabPanel>
+                                <ConsultasNetrin processoId={watch("id")} />
                             </TabPanel>
                         </TabPanels>
                     </Tabs>

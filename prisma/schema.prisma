@@ -223,6 +223,7 @@ model Imobiliaria {
     FilaEnvio             FilaEnvio[]
     ValidacaoFacial       ValidacaoFacial[]
     Processo              Processo[]
+    ConsultaNetrin        ConsultaNetrin[]
 }
 
 enum TipoReguaCobranca {
@@ -737,6 +738,7 @@ model FichaCadastral {
     Anexo                  Anexo[]
     motivoReprovacaoFicha  MotivoReprovacaoFichaCadastral? @relation(fields: [motivoReprovacaoId], references: [id])
     motivoReprovacaoId     String?
+    ConsultaNetrin         ConsultaNetrin[]
 }
 
 model MotivoReprovacaoFichaCadastral {
@@ -1063,24 +1065,58 @@ enum TipoGarantia {
 }
 
 model Processo {
-    id            String           @id @default(uuid())
-    tipoProcesso  TipoProcesso     @default(LOCACAO)
-    tipoGarantia  TipoGarantia     @default(NENHUMA)
-    codigo        Int?
-    imovelId      Int?
-    contratoId    Int?
-    imobiliariaId Int?
-    campos        Json?
-    observacoes   String?          @db.LongText
-    status        StatusProcesso   @default(EM_ANDAMENTO)
-    createdAt     DateTime?        @default(now())
-    updatedAt     DateTime?        @updatedAt
-    deletedAt     DateTime?
-    imovel        Imovel?          @relation(fields: [imovelId], references: [id])
-    contrato      Contrato?        @relation(fields: [contratoId], references: [id])
-    imobiliaria   Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
-    fichas        FichaCadastral[]
-    responsavel   Usuario?         @relation(fields: [responsavelId], references: [id])
-    responsavelId Int?
-    Anexo         Anexo[]
+    id             String           @id @default(uuid())
+    tipoProcesso   TipoProcesso     @default(LOCACAO)
+    tipoGarantia   TipoGarantia     @default(NENHUMA)
+    codigo         Int?
+    imovelId       Int?
+    contratoId     Int?
+    imobiliariaId  Int?
+    campos         Json?
+    observacoes    String?          @db.LongText
+    status         StatusProcesso   @default(EM_ANDAMENTO)
+    createdAt      DateTime?        @default(now())
+    updatedAt      DateTime?        @updatedAt
+    deletedAt      DateTime?
+    imovel         Imovel?          @relation(fields: [imovelId], references: [id])
+    contrato       Contrato?        @relation(fields: [contratoId], references: [id])
+    imobiliaria    Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
+    fichas         FichaCadastral[]
+    responsavel    Usuario?         @relation(fields: [responsavelId], references: [id])
+    responsavelId  Int?
+    Anexo          Anexo[]
+    ConsultaNetrin ConsultaNetrin[]
+}
+
+enum TipoConsultaNetrin {
+    processos_pj
+    processos_pf
+    protestos
+    protestos_sp
+    cnd_federal
+    cnd_estadual
+    cnd_trabalhista_tst
+    cnd_trabalhista_mte
+    receita_cnpj
+    receita_cnpJ_qsa
+    receita_cpf
+}
+
+model ConsultaNetrin {
+    id           String             @id @default(uuid())
+    tipoConsulta TipoConsultaNetrin
+    requisicao   Json?
+    retorno      Json?
+    createdAt    DateTime?          @default(now())
+    updatedAt    DateTime?          @updatedAt
+    deletedAt    DateTime?
+
+    imobiliaria   Imobiliaria @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId Int
+
+    processo   Processo? @relation(fields: [processoId], references: [id])
+    processoId String?
+
+    fichaCadastral   FichaCadastral? @relation(fields: [fichaCadastralId], references: [id])
+    fichaCadastralId String?
 }

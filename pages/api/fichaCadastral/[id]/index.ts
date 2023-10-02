@@ -26,6 +26,7 @@ handler.get(async (req, res) => {
                 _count: {
                     select: {
                         Anexo: true,
+                        ConsultaNetrin: true,
                     },
                 },
             },

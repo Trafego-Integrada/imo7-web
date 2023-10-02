@@ -70,6 +70,7 @@ import { AnaliseCampo } from "./AnaliseCampo";
 import { Historicos } from "@/components/Pages/Historicos";
 import { Documentos } from "../Contrato/Documentos";
 import { imo7ApiService } from "@/services/apiServiceUsage";
+import { ConsultasNetrin } from "../ModalProcesso/ConsultaNetrin";
 const schema = yup.object({
     status: yup.string().required("Status é obrigatório"),
     motivoReprovacaoId: yup.string().when("status", {
@@ -164,7 +165,7 @@ const ModalBase = ({}, ref) => {
                 <ModalCloseButton />
                 <ModalHeader>Ficha Cadastral</ModalHeader>
                 <ModalBody>
-                    <Tabs>
+                    <Tabs size="sm">
                         <TabList>
                             {/* <Tab>Geral</Tab> */}
                             {watch("id") && <Tab>Revisão</Tab>}
@@ -178,6 +179,12 @@ const ModalBase = ({}, ref) => {
                             )}
                             <Tab>Histórico da FIcha</Tab>
                             <Tab>Histórico do Processo</Tab>
+                            <Tab>
+                                Consultas{" "}
+                                <Tag colorScheme="blue" size="sm" ml={1}>
+                                    {watch("_count.ConsultaNetrin")}
+                                </Tag>
+                            </Tab>
                         </TabList>
                         <TabPanels>
                             {/* <TabPanel px={0}>
@@ -1072,6 +1079,12 @@ const ModalBase = ({}, ref) => {
                                 <Historicos
                                     tabela="Processo"
                                     tabelaId={watch("processoId")}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <ConsultasNetrin
+                                    fichaCadastralId={watch("id")}
+                                    processoId={watch("processoId")}
                                 />
                             </TabPanel>
                         </TabPanels>

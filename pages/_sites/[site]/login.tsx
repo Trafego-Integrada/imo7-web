@@ -130,7 +130,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                             shadow
                         >
                             <Box px={8} py={4}>
-                                {imobiliaria.logo ? (
+                                {imobiliaria?.logo ? (
                                     <Image
                                         h={40}
                                         objectFit="contain"
@@ -143,7 +143,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                         display="flex"
                                         color="blue.500"
                                     >
-                                        {imobiliaria.nomeFantasia}
+                                        {imobiliaria?.nomeFantasia}
                                     </Heading>
                                 )}
                             </Box>
