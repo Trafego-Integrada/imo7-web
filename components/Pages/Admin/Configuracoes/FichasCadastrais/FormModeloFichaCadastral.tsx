@@ -140,6 +140,9 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
                         </option>
                         <option value="fiador">Cadastro de Fiador</option>
                         <option value="imovel">Cadastro de Imóvel</option>
+                        <option value="comprador">Cadastro de Comprador</option>
+                        <option value="vendedor">Cadastro de Vendedor</option>
+                        <option value="visita">Cadastro de Visita</option>
                     </FormSelect>
                 </GridItem>
                 <GridItem colSpan={{ base: 1, lg: 9 }}>

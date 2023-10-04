@@ -6,6 +6,7 @@ import { checkAuth } from "@/middleware/checkAuth";
 
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
+
 handle.use(cors);
 handle.use(checkAuth);
 
@@ -54,6 +55,7 @@ handle.get(async (req, res) => {
         });
     }
 });
+
 handle.post(async (req, res) => {
     try {
         const { tipo, nome, descricao, campos, instrucoes, checkbox } =

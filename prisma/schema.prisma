@@ -668,6 +668,9 @@ enum TipoFicha {
     proprietario
     fiador
     imovel
+    comprador
+    vendedor
+    visita
 }
 
 model ModeloFichaCadastral {
@@ -1062,6 +1065,7 @@ enum TipoGarantia {
     FIADOR
     APOLICE
     CAUCAO
+    PAGA
 }
 
 model Processo {

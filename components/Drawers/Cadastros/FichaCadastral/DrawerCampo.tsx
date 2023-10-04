@@ -167,6 +167,9 @@ const ModalBase = ({}, ref) => {
                                     </option>
                                     <option value="fiador">Fiador</option>
                                     <option value="imovel">Imóvel</option>
+                                    <option value="comprador">comprador</option>
+                                    <option value="vendedor">Vendedor</option>
+                                    <option value="visita">Visita</option>
                                 </FormSelect>
                             </GridItem>
                             <GridItem>

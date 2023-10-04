@@ -192,6 +192,9 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                 <option value="CAUCAO">
                                                     Caução
                                                 </option>
+                                                <option value="PAGA">
+                                                    Garatia Paga
+                                                </option>
                                             </FormSelect>
                                         </GridItem>
                                     )}

@@ -119,6 +119,15 @@ const Configuracoes = () => {
                                     <option value="imovel">
                                         Cadastro de Imovel
                                     </option>
+                                    <option value="comprador">
+                                        Cadastro de Comprador
+                                    </option>
+                                    <option value="vendedor">
+                                        Cadastro de Vendedor
+                                    </option>{" "}
+                                    <option value="visita">
+                                        Cadastro de Visita
+                                    </option>
                                 </FormSelect>
                                 <FormSelect
                                     size="sm"

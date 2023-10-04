@@ -10,8 +10,8 @@ const breakpoints = createBreakpoints({
 
 export const theme = extendTheme({
     fonts: {
-        heading: "Rubik, sans-serif",
-        body: "Rubik, sans-serif",
+        heading: "Montserrat, sans-serif",
+        body: "Montserrat, sans-serif",
     },
     breakpoints,
     config: {

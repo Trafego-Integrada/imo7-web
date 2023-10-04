@@ -148,7 +148,7 @@ const FichaCadastral = ({ consulta }) => {
                             </Grid>
                         </Flex>
                         <Grid gap={5}>
-                            {consulta?.retorno?.processosCPF?.processos.map(
+                            {consulta?.retorno?.processosCPF?.processos?.map(
                                 (item, k) => (
                                     <GridItem key={k}>
                                         <Grid
@@ -273,7 +273,7 @@ const FichaCadastral = ({ consulta }) => {
                                                     Partes
                                                 </Text>
                                                 <List>
-                                                    {item.partes.map(
+                                                    {item.partes?.map(
                                                         (parte, kp) => (
                                                             <ListItem key={kp}>
                                                                 <Text fontSize="xs">

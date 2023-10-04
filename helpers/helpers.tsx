@@ -231,6 +231,12 @@ export const tipoFicha = (tipo) => {
             return "Cadastro de Fiador";
         case "imovel":
             return "Cadastro de Imóvel";
+        case "comprador":
+            return "Cadastro de Comprador";
+        case "vendedor":
+            return "Cadastro de Vendedor";
+        case "visita":
+            return "Cadastro de Visita";
     }
 };
 
