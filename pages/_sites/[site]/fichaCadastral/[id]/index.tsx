@@ -80,7 +80,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             toast({ title: "Ficha salva", status: "success" });
         } catch (e) {
             console.log(e);
-            toast({ title: "Houve um problema", status: "error" });
+            toast({
+                title: "Houve um problema",
+                description: e.response?.data?.message,
+                status: "error",
+            });
         }
     };
 

@@ -33,79 +33,78 @@ handler.post(async (req, res) => {
         };
         const getBucketResponse = await client.getBucket(getBucketRequest);
 
-        await Promise.all(
-            Object.entries(req.files).map(async (i) => {
-                const extension = i[1].name.slice(
-                    (Math.max(0, i[1].name.lastIndexOf(".")) || Infinity) + 1
-                );
-                const nameLocation = `fichaCadastral/${id}/anexos/${slug(
-                    `${i[0]}-${moment()}${
-                        Math.random() * (999999999 - 100000000) + 100000000
-                    }`
-                )}.${extension}`;
-                // Create read stream to file
-                const stats = statSync(i[1].path);
-                console.log(stats);
-                //const nodeFsBlob = new os.NodeFSBlob(i[1].path, stats.size);
-                //const objectData = await nodeFsBlob.getData();
-                const imageData = fs.readFileSync(i[1].path);
-                console.log(imageData);
-                const base64Data = imageData.toString("base64");
-                const buff = Buffer.from(base64Data, "base64");
-                const putObjectRequest: os.requests.PutObjectRequest = {
-                    namespaceName: namespace,
-                    bucketName: bucket,
-                    putObjectBody: buff,
-                    objectName: nameLocation,
-                    contentLength: stats.size,
-                };
-                const putObjectResponse = await client.putObject(
-                    putObjectRequest
-                );
-                const getObjectRequest: os.requests.GetObjectRequest = {
-                    objectName: nameLocation,
-                    bucketName: bucket,
-                    namespaceName: namespace,
-                };
-                const getObjectResponse = await client.getObject(
-                    getObjectRequest
-                );
-                if (getObjectResponse) {
-                    await prisma.fichaCadastral.update({
-                        where: {
-                            id,
-                        },
-                        data: {
-                            preenchimento: {
-                                upsert: {
-                                    where: {
-                                        fichaCadastralId_campoFichaCadastralCodigo:
-                                            {
-                                                fichaCadastralId: id,
-                                                campoFichaCadastralCodigo: i[0],
-                                            },
-                                    },
+        for await (const i of Object.entries(req.files)) {
+            const extension = i[1].name.slice(
+                (Math.max(0, i[1].name.lastIndexOf(".")) || Infinity) + 1
+            );
+            const nameLocation = `fichaCadastral/${id}/anexos/${slug(
+                `${i[0]}-${moment()}${
+                    Math.random() * (999999999 - 100000000) + 100000000
+                }`
+            )}.${extension}`;
+            // Create read stream to file
+            const stats = statSync(i[1].path);
+            const imageData = fs.readFileSync(i[1].path);
+            console.log(imageData);
+            const base64Data = imageData.toString("base64");
+            const buff = Buffer.from(base64Data, "base64");
+            const putObjectRequest: os.requests.PutObjectRequest = {
+                namespaceName: namespace,
+                bucketName: bucket,
+                putObjectBody: buff,
+                objectName: nameLocation,
+                contentLength: stats.size,
+            };
+            const putObjectResponse = await client.putObject(putObjectRequest);
+            const getObjectRequest: os.requests.GetObjectRequest = {
+                objectName: nameLocation,
+                bucketName: bucket,
+                namespaceName: namespace,
+            };
+            const getObjectResponse = await client.getObject(getObjectRequest);
+            console.log(getObjectResponse);
+            if (getObjectResponse) {
+                if (getObjectResponse.contentLength == 0) {
+                    return res.status(400).send({
+                        message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
+                    });
+                }
+                await prisma.fichaCadastral.update({
+                    where: {
+                        id,
+                    },
+                    data: {
+                        preenchimento: {
+                            upsert: {
+                                where: {
+                                    fichaCadastralId_campoFichaCadastralCodigo:
+                                        {
+                                            fichaCadastralId: id,
+                                            campoFichaCadastralCodigo: i[0],
+                                        },
+                                },
 
-                                    create: {
-                                        campoFichaCadastralCodigo: i[0],
-                                        valor:
-                                            process.env
-                                                .NEXT_PUBLIC_URL_STORAGE +
-                                            nameLocation,
-                                    },
-                                    update: {
-                                        valor:
-                                            process.env
-                                                .NEXT_PUBLIC_URL_STORAGE +
-                                            nameLocation,
-                                    },
+                                create: {
+                                    campoFichaCadastralCodigo: i[0],
+                                    valor:
+                                        process.env.NEXT_PUBLIC_URL_STORAGE +
+                                        nameLocation,
+                                },
+                                update: {
+                                    valor:
+                                        process.env.NEXT_PUBLIC_URL_STORAGE +
+                                        nameLocation,
                                 },
                             },
                         },
-                    });
-                }
-            })
-        );
+                    },
+                });
+            } else {
+                return res.status(400).send({
+                    message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
+                });
+            }
+        }
 
         return res.send();
     } catch (error) {
