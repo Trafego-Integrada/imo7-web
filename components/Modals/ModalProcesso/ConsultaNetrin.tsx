@@ -119,10 +119,10 @@ export const ConsultasNetrin = ({
                             <option value="processos_pf">
                                 Processos Pessoa Física
                             </option>
-                            <option value="prostestos_pf">
+                            <option value="protestos_pf">
                                 Protestos Pessoa Física
                             </option>
-                            <option value="prostestos_pj">
+                            <option value="protestos_pj">
                                 Protestos Pessoa Jurídica
                             </option>
                             <option value="cnd_federal" disabled>
@@ -149,7 +149,7 @@ export const ConsultasNetrin = ({
                         </FormSelect>
                     </GridItem>
                     {(watch("tipoConsulta") == "processos_pf" ||
-                        watch("tipoConsulta") == "prostestos_pf") && (
+                        watch("tipoConsulta") == "protestos_pf") && (
                         <GridItem>
                             <FormInput
                                 size="sm"
@@ -161,7 +161,7 @@ export const ConsultasNetrin = ({
                         </GridItem>
                     )}
                     {(watch("tipoConsulta") == "processos_pj" ||
-                        watch("tipoConsulta") == "prostestos_pj") && (
+                        watch("tipoConsulta") == "protestos_pj") && (
                         <GridItem>
                             <FormInput
                                 size="sm"
