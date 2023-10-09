@@ -335,10 +335,16 @@ export const tagTipoConsultaNetrin = (tipo) => {
                     Processos PF
                 </Tag>
             );
-        case "protestos":
+        case "protestos_pf":
             return (
                 <Tag colorScheme="red" size="sm">
-                    Protestos
+                    Protestos PF
+                </Tag>
+            );
+        case "protestos_pj":
+            return (
+                <Tag colorScheme="red" size="sm">
+                    Protestos PJ
                 </Tag>
             );
         case "protestos_sp":

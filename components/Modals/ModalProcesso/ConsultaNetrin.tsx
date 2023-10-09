@@ -81,6 +81,20 @@ export const ConsultasNetrin = ({
             }
         }
     );
+    const totalProtestos = (protestos) => {
+        let total = 0;
+        Object.entries(protestos)?.map((i) => {
+            console.log("Item", i);
+
+            if (i.length > 1) {
+                i[1].map((i) => {
+                    console.log("Item2", i);
+                    total += i.protestos?.length;
+                });
+            }
+        });
+        return total;
+    };
     return (
         <Flex flexDir="column" gap={4}>
             <Flex
@@ -99,13 +113,17 @@ export const ConsultasNetrin = ({
                             placeholer="Selecione..."
                             {...register("tipoConsulta")}
                         >
-                            <option value="processos_pj">Processos PJ</option>
-                            <option value="processos_pf">Processos PF</option>
-                            <option value="protestos" disabled>
-                                Protestos
+                            <option value="processos_pj">
+                                Processos Pessoa Juridica
                             </option>
-                            <option value="protestos_sp" disabled>
-                                Protestos SP
+                            <option value="processos_pf">
+                                Processos Pessoa Física
+                            </option>
+                            <option value="prostestos_pf">
+                                Protestos Pessoa Física
+                            </option>
+                            <option value="prostestos_pj">
+                                Protestos Pessoa Jurídica
                             </option>
                             <option value="cnd_federal" disabled>
                                 CND Federal
@@ -130,7 +148,8 @@ export const ConsultasNetrin = ({
                             </option>
                         </FormSelect>
                     </GridItem>
-                    {watch("tipoConsulta") == "processos_pf" && (
+                    {(watch("tipoConsulta") == "processos_pf" ||
+                        watch("tipoConsulta") == "prostestos_pf") && (
                         <GridItem>
                             <FormInput
                                 size="sm"
@@ -141,7 +160,8 @@ export const ConsultasNetrin = ({
                             />
                         </GridItem>
                     )}
-                    {watch("tipoConsulta") == "processos_pj" && (
+                    {(watch("tipoConsulta") == "processos_pj" ||
+                        watch("tipoConsulta") == "prostestos_pj") && (
                         <GridItem>
                             <FormInput
                                 size="sm"
@@ -206,7 +226,8 @@ export const ConsultasNetrin = ({
                                     {tagTipoConsultaNetrin(item.tipoConsulta)}
                                 </Td>
                                 <Td>
-                                    {item.tipoConsulta == "processos_pf" ? (
+                                    {item.tipoConsulta == "processos_pf" ||
+                                    item.tipoConsulta == "protestos_pf" ? (
                                         <Text>
                                             <Text as="span" fontWeight="bold">
                                                 CPF:
@@ -215,7 +236,8 @@ export const ConsultasNetrin = ({
                                                 {item?.requisicao?.cpf}
                                             </Text>
                                         </Text>
-                                    ) : item.tipoConsulta == "processos_pj" ? (
+                                    ) : item.tipoConsulta == "processos_pj" ||
+                                      item.tipoConsulta == "protestos_pj" ? (
                                         <Text>
                                             <Text as="span" fontWeight="bold">
                                                 CNPJ:
@@ -252,6 +274,18 @@ export const ConsultasNetrin = ({
                                             </Text>{" "}
                                             <Text as="span" fontStyle="italic">
                                                 processos encontrados
+                                            </Text>
+                                        </Text>
+                                    ) : item.tipoConsulta == "protestos_pf" ? (
+                                        <Text>
+                                            <Text as="span" fontWeight="bold">
+                                                {totalProtestos(
+                                                    item.retorno
+                                                        ?.cenprotProtestos
+                                                )}
+                                            </Text>{" "}
+                                            <Text as="span" fontStyle="italic">
+                                                protestos encontrados
                                             </Text>
                                         </Text>
                                     ) : (

@@ -768,6 +768,8 @@ model FichaCadastralPreenchimento {
 }
 
 enum TipoCampo {
+    cpf
+    cnpj
     text
     textarea
     select
@@ -1095,8 +1097,8 @@ model Processo {
 enum TipoConsultaNetrin {
     processos_pj
     processos_pf
-    protestos
-    protestos_sp
+    protestos_pf
+    protestos_pj
     cnd_federal
     cnd_estadual
     cnd_trabalhista_tst
@@ -1107,12 +1109,12 @@ enum TipoConsultaNetrin {
 }
 
 model ConsultaNetrin {
-    id           String             @id @default(uuid())
-    tipoConsulta TipoConsultaNetrin
+    id           String              @id @default(uuid())
+    tipoConsulta TipoConsultaNetrin?
     requisicao   Json?
     retorno      Json?
-    createdAt    DateTime?          @default(now())
-    updatedAt    DateTime?          @updatedAt
+    createdAt    DateTime?           @default(now())
+    updatedAt    DateTime?           @updatedAt
     deletedAt    DateTime?
 
     imobiliaria   Imobiliaria @relation(fields: [imobiliariaId], references: [id])

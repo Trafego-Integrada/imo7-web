@@ -55,6 +55,9 @@ handle.post(async (req, res) => {
         let requisicaoBody = {
             ...requisicao,
         };
+        let requisicaoBody2 = {
+            ...requisicao,
+        };
 
         if (tipoConsulta == "processos_pf") {
             if (!requisicao.cpf) {
@@ -64,7 +67,7 @@ handle.post(async (req, res) => {
             } else {
                 requisicaoBody = {
                     s: "processos-cpf",
-                    cpf: removerCaracteresEspeciais(requisicao.cpf),
+                    cpf: removerCaracteresEspeciais(requisicao?.cpf),
                 };
             }
         } else if (tipoConsulta == "processos_pj") {
@@ -78,13 +81,57 @@ handle.post(async (req, res) => {
                     cnpj: removerCaracteresEspeciais(requisicao.cnpj),
                 };
             }
+        } else if (tipoConsulta == "protestos_pf") {
+            if (!requisicao.cpf) {
+                return res
+                    .status(400)
+                    .send({ message: "Informe um CPF válido" });
+            } else {
+                requisicaoBody = {
+                    s: "protestos-cenprot",
+                    cpf: removerCaracteresEspeciais(requisicao.cpf),
+                    "govbr-senha": "trafego10",
+                    "govbr-cpf": "30156844850",
+                };
+                requisicaoBody2 = {
+                    s: "protestos-cenprot-sp",
+                    cpf: removerCaracteresEspeciais(requisicao.cpf),
+                    "govbr-senha": "trafego10",
+                    "govbr-cpf": "30156844850",
+                };
+            }
+        } else if (tipoConsulta == "protestos_pj") {
+            if (!requisicao.cnpj) {
+                return res
+                    .status(400)
+                    .send({ message: "Informe um CNPJ válido" });
+            } else {
+                requisicaoBody = {
+                    s: "protestos-cenprot",
+                    cnpj: removerCaracteresEspeciais(requisicao.cnpj),
+                    "govbr-senha": "trafego10",
+                    "govbr-cpf": "30156844850",
+                };
+                requisicaoBody2 = {
+                    s: "protestos-cenprot-sp",
+                    cnpj: removerCaracteresEspeciais(requisicao.cnpj),
+                    "govbr-senha": "trafego10",
+                    "govbr-cpf": "30156844850",
+                };
+            }
         }
 
         // Consulta Netrin
         const retornoNetrin = await apiNetrinService().consultaComposta(
             requisicaoBody
         );
-        console.log(retornoNetrin);
+        if (tipoConsulta == "prostestos_pf") {
+            // Consulta Netrin
+            const retornoNetrin2 = await apiNetrinService().consultaComposta(
+                requisicaoBody
+            );
+            console.log(retornoNetrin2);
+        }
         if (!retornoNetrin) {
             res.status(400).json({
                 success: false,
@@ -205,6 +252,10 @@ handle.post(async (req, res) => {
                             ? `Consulta Processos Pessoa Física - CPF: ${data.requisicao?.cpf}`
                             : data.tipoConsulta == "processos_pj"
                             ? `Consulta Processos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
+                            : data.tipoConsulta == "protestos_pf"
+                            ? `Consulta Protestos Pessoa Física - CPF: ${data.requisicao?.cpf}`
+                            : data.tipoConsulta == "protestos_pj"
+                            ? `Consulta Protestos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
                             : "Consultas"
                     }`,
                     anexo: process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
