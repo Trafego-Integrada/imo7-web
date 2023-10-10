@@ -1052,7 +1052,7 @@ const ModalBase = ({}, ref) => {
                                                                                                 consultarNetrin(
                                                                                                     {
                                                                                                         tipoConsulta:
-                                                                                                            "protestos_f",
+                                                                                                            "protestos_pf",
                                                                                                         requisicao:
                                                                                                             {
                                                                                                                 cpf: watch(
