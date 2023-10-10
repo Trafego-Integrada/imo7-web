@@ -50,7 +50,7 @@ const Base = ({}, ref) => {
             <ModalContent>
                 <ModalCloseButton />
                 <ModalBody>
-                    {url.includes(".pdf") ? (
+                    {url.includes(".pdf") || url.includes("/pdf") ? (
                         <div>
                             <Flex align="center" gap={4} py={2} mb={4}>
                                 <Text>
@@ -78,6 +78,7 @@ const Base = ({}, ref) => {
                                 <Document
                                     file={url}
                                     onLoadSuccess={onDocumentLoadSuccess}
+                                    loading="Carregando..."
                                 >
                                     <Page pageNumber={pageNumber} />
                                 </Document>

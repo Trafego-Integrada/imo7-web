@@ -9,6 +9,7 @@ import {
     Flex,
     Grid,
     GridItem,
+    Icon,
     IconButton,
     Table,
     Tbody,
@@ -22,13 +23,16 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { FiPrinter } from "react-icons/fi";
+import { FiEye, FiPrinter } from "react-icons/fi";
 import { useQuery } from "react-query";
+import { ModalPreview } from "../Preview";
+import { useRef } from "react";
 
 export const ConsultasNetrin = ({
     processoId = null,
     fichaCadastralId = null,
 }) => {
+    const preview = useRef();
     const toast = useToast();
     const {
         watch,
@@ -83,16 +87,19 @@ export const ConsultasNetrin = ({
     );
     const totalProtestos = (protestos) => {
         let total = 0;
-        Object.entries(protestos)?.map((i) => {
-            console.log("Item", i);
+        if (protestos.code != 606) {
+            Object.entries(protestos)?.map((i) => {
+                console.log("Item", i);
 
-            if (i.length > 1) {
-                i[1].map((i) => {
-                    console.log("Item2", i);
-                    total += i.protestos?.length;
-                });
-            }
-        });
+                if (i.length > 1) {
+                    i[1].map((i) => {
+                        console.log("Item2", i);
+                        total += i.protestos?.length;
+                    });
+                }
+            });
+        }
+
         return total;
     };
     return (
@@ -201,23 +208,39 @@ export const ConsultasNetrin = ({
                         {data?.map((item) => (
                             <Tr key={item.id}>
                                 <Td>
-                                    <Tooltip label="Imprimir">
-                                        <Link
-                                            href={{
-                                                pathname:
-                                                    process.env.NODE_ENV ==
-                                                    "production"
-                                                        ? `https://www.imo7.com.br/api/v1/integracao/netrin/${item.id}/pdf`
-                                                        : `http://localhost:3000/api/v1/integracao/netrin/${item.id}/pdf`,
-                                            }}
-                                            target="_blank"
-                                        >
+                                    <Flex gap={1}>
+                                        <Tooltip label="Visualizar Arquivo">
                                             <IconButton
                                                 size="sm"
-                                                icon={<FiPrinter />}
+                                                icon={<Icon as={FiEye} />}
+                                                onClick={() =>
+                                                    preview.current.onOpen(
+                                                        process.env.NODE_ENV ==
+                                                            "production"
+                                                            ? `https://www.imo7.com.br/api/v1/integracao/netrin/${item.id}/pdf`
+                                                            : `http://localhost:3000/api/v1/integracao/netrin/${item.id}/pdf`
+                                                    )
+                                                }
                                             />
-                                        </Link>
-                                    </Tooltip>
+                                        </Tooltip>
+                                        <Tooltip label="Imprimir">
+                                            <Link
+                                                href={{
+                                                    pathname:
+                                                        process.env.NODE_ENV ==
+                                                        "production"
+                                                            ? `https://www.imo7.com.br/api/v1/integracao/netrin/${item.id}/pdf`
+                                                            : `http://localhost:3000/api/v1/integracao/netrin/${item.id}/pdf`,
+                                                }}
+                                                target="_blank"
+                                            >
+                                                <IconButton
+                                                    size="sm"
+                                                    icon={<FiPrinter />}
+                                                />
+                                            </Link>
+                                        </Tooltip>
+                                    </Flex>
                                 </Td>
                                 <Td>
                                     {formatoData(item.createdAt, "DATA_HORA")}
@@ -297,6 +320,7 @@ export const ConsultasNetrin = ({
                     </Tbody>
                 </Table>
             </Flex>
+            <ModalPreview ref={preview} />
         </Flex>
     );
 };

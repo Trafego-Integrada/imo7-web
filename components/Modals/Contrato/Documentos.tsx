@@ -28,8 +28,10 @@ import { FiDownload, FiEdit, FiEdit2, FiEye, FiTrash } from "react-icons/fi";
 import { RiAddLine } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
 import { ModalAnexo } from "./ModalAnexo";
+import { ModalPreview } from "../Preview";
 
 export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
+    const preview = useRef();
     const router = useRouter();
     const toast = useToast();
     const modalAnexo = useRef();
@@ -81,22 +83,34 @@ export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
             <Table variant="striped" size="sm" mt={5} bg="white">
                 <Thead>
                     <Tr>
+                        <Th w={32}></Th>
                         <Th>Anexo</Th>
                         <Th w={32}>Upload feito por</Th>
                         <Th w={44}>Data do upload</Th>
-                        <Th w={32}></Th>
                     </Tr>
                 </Thead>
                 <Tbody>
                     {data?.map((item) => (
                         <Tr key={item.id}>
-                            <Td>{item.nome}</Td>
-                            <Td>{item.usuario?.nome}</Td>
-                            <Td>{formatoData(item.createdAt, "DATA_HORA")}</Td>
                             <Td>
-                                <Flex>
+                                <Flex gap={1}>
+                                    <Tooltip label="Visualizar Arquivo">
+                                        <IconButton
+                                            rounded="full"
+                                            variant="outline"
+                                            size="sm"
+                                            icon={<Icon as={FiEye} />}
+                                            onClick={() =>
+                                                preview.current.onOpen(
+                                                    item.anexo
+                                                )
+                                            }
+                                        />
+                                    </Tooltip>
                                     <Tooltip label="Editar">
                                         <IconButton
+                                            rounded="full"
+                                            variant="outline"
                                             size="sm"
                                             icon={<Icon as={FiEdit} />}
                                             onClick={() =>
@@ -112,6 +126,8 @@ export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
                                     >
                                         <Tooltip label="Download">
                                             <IconButton
+                                                rounded="full"
+                                                variant="outline"
                                                 size="sm"
                                                 icon={<Icon as={FiDownload} />}
                                             />
@@ -119,7 +135,9 @@ export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
                                     </NextChakraLink>
                                     <Tooltip label="Excluir">
                                         <IconButton
-                                            variant="ghost"
+                                            rounded="full"
+                                            variant="outline"
+                                            size="sm"
                                             icon={<Icon as={FiTrash} />}
                                             colorScheme="red"
                                             onClick={() =>
@@ -131,6 +149,9 @@ export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
                                     </Tooltip>
                                 </Flex>
                             </Td>
+                            <Td>{item.nome}</Td>
+                            <Td>{item.usuario?.nome}</Td>
+                            <Td>{formatoData(item.createdAt, "DATA_HORA")}</Td>
                         </Tr>
                     ))}
                 </Tbody>
@@ -146,6 +167,7 @@ export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
                 titulo="Excluir anexo"
                 onDelete={onDelete}
             />
+            <ModalPreview ref={preview} />
         </Box>
     );
 };

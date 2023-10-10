@@ -1,10 +1,11 @@
 import prisma from "@/lib/prisma";
+import { cors } from "@/middleware/cors";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import puppeteer from "puppeteer";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
-
+handler.use(cors);
 handler.get(async (req, res) => {
     const { id } = req.query;
 

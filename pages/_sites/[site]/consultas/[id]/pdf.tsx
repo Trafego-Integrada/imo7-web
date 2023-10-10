@@ -30,16 +30,18 @@ const FichaCadastral = ({ consulta }) => {
     console.log(consulta);
     const totalProtestos = (protestos) => {
         let total = 0;
-        Object.entries(protestos)?.map((i) => {
-            console.log("Item", i);
+        if (protestos.code != 606) {
+            Object.entries(protestos)?.map((i) => {
+                console.log("Item", i);
 
-            if (i.length > 1) {
-                i[1].map((i) => {
-                    console.log("Item2", i);
-                    total += i.protestos?.length;
-                });
-            }
-        });
+                if (i.length > 1) {
+                    i[1].map((i) => {
+                        console.log("Item2", i);
+                        total += i.protestos?.length;
+                    });
+                }
+            });
+        }
         return total;
     };
     return (
@@ -594,166 +596,167 @@ const FichaCadastral = ({ consulta }) => {
                             </Grid>
                         </Flex>
                         <Grid gap={5}>
-                            {Object.entries(
-                                consulta?.retorno?.cenprotProtestos
-                            )?.map((item, k) => {
-                                console.log("Item", item[1]);
-                                return (
-                                    <GridItem as={Grid} gap={4} key={k}>
-                                        <Text>
-                                            Protestos no estado:{" "}
-                                            <strong>{item[0]}</strong>
-                                        </Text>
-                                        {item[1].map((i, k) => (
-                                            <Grid
-                                                key={k}
-                                                mb={4}
-                                                gridTemplateColumns="repeat(4,1fr)"
-                                            >
-                                                <GridItem
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
+                            {consulta?.retorno?.cenprotProtestos?.code != 606 &&
+                                Object.entries(
+                                    consulta?.retorno?.cenprotProtestos
+                                )?.map((item, k) => {
+                                    console.log("Item", item[1]);
+                                    return (
+                                        <GridItem as={Grid} gap={4} key={k}>
+                                            <Text>
+                                                Protestos no estado:{" "}
+                                                <strong>{item[0]}</strong>
+                                            </Text>
+                                            {item[1].map((i, k) => (
+                                                <Grid
+                                                    key={k}
+                                                    mb={4}
+                                                    gridTemplateColumns="repeat(4,1fr)"
                                                 >
-                                                    <Text fontSize="xx-small">
-                                                        Cidade
-                                                    </Text>
-                                                    <Text
-                                                        fontWeight="bold"
-                                                        fontSize="xs"
+                                                    <GridItem
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
                                                     >
-                                                        {i?.cidade}
-                                                    </Text>
-                                                </GridItem>
-                                                <GridItem
-                                                    colSpan={3}
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
-                                                >
-                                                    <Text fontSize="xx-small">
-                                                        Cartório
-                                                    </Text>
-                                                    <Text
-                                                        fontWeight="bold"
-                                                        fontSize="xs"
+                                                        <Text fontSize="xx-small">
+                                                            Cidade
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight="bold"
+                                                            fontSize="xs"
+                                                        >
+                                                            {i?.cidade}
+                                                        </Text>
+                                                    </GridItem>
+                                                    <GridItem
+                                                        colSpan={3}
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
                                                     >
-                                                        {i?.cartorio}
-                                                    </Text>
-                                                </GridItem>
-                                                <GridItem
-                                                    colSpan={3}
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
-                                                >
-                                                    <Text fontSize="xx-small">
-                                                        Endereço
-                                                    </Text>
-                                                    <Text
-                                                        fontWeight="bold"
-                                                        fontSize="xs"
+                                                        <Text fontSize="xx-small">
+                                                            Cartório
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight="bold"
+                                                            fontSize="xs"
+                                                        >
+                                                            {i?.cartorio}
+                                                        </Text>
+                                                    </GridItem>
+                                                    <GridItem
+                                                        colSpan={3}
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
                                                     >
-                                                        {i?.endereco}
-                                                    </Text>
-                                                </GridItem>
-                                                <GridItem
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
-                                                >
-                                                    <Text fontSize="xx-small">
-                                                        Telefone
-                                                    </Text>
-                                                    <Text
-                                                        fontWeight="bold"
-                                                        fontSize="xs"
+                                                        <Text fontSize="xx-small">
+                                                            Endereço
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight="bold"
+                                                            fontSize="xs"
+                                                        >
+                                                            {i?.endereco}
+                                                        </Text>
+                                                    </GridItem>
+                                                    <GridItem
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
                                                     >
-                                                        {i?.telefone}
-                                                    </Text>
-                                                </GridItem>
+                                                        <Text fontSize="xx-small">
+                                                            Telefone
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight="bold"
+                                                            fontSize="xs"
+                                                        >
+                                                            {i?.telefone}
+                                                        </Text>
+                                                    </GridItem>
 
-                                                <GridItem
-                                                    colSpan={4}
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
-                                                >
-                                                    <Text fontSize="xx-small">
-                                                        Protestos
-                                                    </Text>
-                                                    <Table size="sm">
-                                                        <Thead>
-                                                            <Tr>
-                                                                <Th fontSize="xx-small">
-                                                                    Documento
-                                                                </Th>
-                                                                <Th fontSize="xx-small">
-                                                                    Data
-                                                                </Th>
-                                                                <Th fontSize="xx-small">
-                                                                    Data do
-                                                                    Protesto
-                                                                </Th>
-                                                                <Th fontSize="xx-small">
-                                                                    Data de
-                                                                    Vencimento
-                                                                </Th>
-                                                                <Th fontSize="xx-small">
-                                                                    Valor
-                                                                </Th>
-                                                            </Tr>
-                                                        </Thead>
-                                                        <Tbody>
-                                                            {i.protestos?.map(
-                                                                (
-                                                                    protesto,
-                                                                    key
-                                                                ) => (
-                                                                    <Tr
-                                                                        key={
-                                                                            key
-                                                                        }
-                                                                    >
-                                                                        <Td fontSize="xs">
-                                                                            {
-                                                                                protesto.cpfCnpj
+                                                    <GridItem
+                                                        colSpan={4}
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
+                                                    >
+                                                        <Text fontSize="xx-small">
+                                                            Protestos
+                                                        </Text>
+                                                        <Table size="sm">
+                                                            <Thead>
+                                                                <Tr>
+                                                                    <Th fontSize="xx-small">
+                                                                        Documento
+                                                                    </Th>
+                                                                    <Th fontSize="xx-small">
+                                                                        Data
+                                                                    </Th>
+                                                                    <Th fontSize="xx-small">
+                                                                        Data do
+                                                                        Protesto
+                                                                    </Th>
+                                                                    <Th fontSize="xx-small">
+                                                                        Data de
+                                                                        Vencimento
+                                                                    </Th>
+                                                                    <Th fontSize="xx-small">
+                                                                        Valor
+                                                                    </Th>
+                                                                </Tr>
+                                                            </Thead>
+                                                            <Tbody>
+                                                                {i.protestos?.map(
+                                                                    (
+                                                                        protesto,
+                                                                        key
+                                                                    ) => (
+                                                                        <Tr
+                                                                            key={
+                                                                                key
                                                                             }
-                                                                        </Td>
-                                                                        <Td fontSize="xs">
-                                                                            {protesto.data &&
-                                                                                formatoData(
-                                                                                    protesto.data
-                                                                                )}
-                                                                        </Td>
-                                                                        <Td fontSize="xs">
-                                                                            {protesto.dataProtesto &&
-                                                                                formatoData(
-                                                                                    protesto.dataProtesto
-                                                                                )}
-                                                                        </Td>
-                                                                        <Td fontSize="xs">
-                                                                            {protesto.dataVencimento &&
-                                                                                formatoData(
-                                                                                    protesto.dataVencimento
-                                                                                )}
-                                                                        </Td>
-                                                                        <Td fontSize="xs">
-                                                                            {
-                                                                                protesto.valor
-                                                                            }
-                                                                        </Td>
-                                                                    </Tr>
-                                                                )
-                                                            )}
-                                                        </Tbody>
-                                                    </Table>
-                                                </GridItem>
-                                            </Grid>
-                                        ))}
-                                    </GridItem>
-                                );
-                            })}
+                                                                        >
+                                                                            <Td fontSize="xs">
+                                                                                {
+                                                                                    protesto.cpfCnpj
+                                                                                }
+                                                                            </Td>
+                                                                            <Td fontSize="xs">
+                                                                                {protesto.data &&
+                                                                                    formatoData(
+                                                                                        protesto.data
+                                                                                    )}
+                                                                            </Td>
+                                                                            <Td fontSize="xs">
+                                                                                {protesto.dataProtesto &&
+                                                                                    formatoData(
+                                                                                        protesto.dataProtesto
+                                                                                    )}
+                                                                            </Td>
+                                                                            <Td fontSize="xs">
+                                                                                {protesto.dataVencimento &&
+                                                                                    formatoData(
+                                                                                        protesto.dataVencimento
+                                                                                    )}
+                                                                            </Td>
+                                                                            <Td fontSize="xs">
+                                                                                {
+                                                                                    protesto.valor
+                                                                                }
+                                                                            </Td>
+                                                                        </Tr>
+                                                                    )
+                                                                )}
+                                                            </Tbody>
+                                                        </Table>
+                                                    </GridItem>
+                                                </Grid>
+                                            ))}
+                                        </GridItem>
+                                    );
+                                })}
                         </Grid>
                     </Flex>
                 </>
@@ -806,166 +809,167 @@ const FichaCadastral = ({ consulta }) => {
                             </Grid>
                         </Flex>
                         <Grid gap={5}>
-                            {Object.entries(
-                                consulta?.retorno?.cenprotProtestos
-                            )?.map((item, k) => {
-                                console.log("Item", item[1]);
-                                return (
-                                    <GridItem as={Grid} gap={4} key={k}>
-                                        <Text>
-                                            Protestos no estado:{" "}
-                                            <strong>{item[0]}</strong>
-                                        </Text>
-                                        {item[1].map((i, k) => (
-                                            <Grid
-                                                key={k}
-                                                mb={4}
-                                                gridTemplateColumns="repeat(4,1fr)"
-                                            >
-                                                <GridItem
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
+                            {consulta?.retorno?.cenprotProtestos?.code != 606 &&
+                                Object.entries(
+                                    consulta?.retorno?.cenprotProtestos
+                                )?.map((item, k) => {
+                                    console.log("Item", item[1]);
+                                    return (
+                                        <GridItem as={Grid} gap={4} key={k}>
+                                            <Text>
+                                                Protestos no estado:{" "}
+                                                <strong>{item[0]}</strong>
+                                            </Text>
+                                            {item[1].map((i, k) => (
+                                                <Grid
+                                                    key={k}
+                                                    mb={4}
+                                                    gridTemplateColumns="repeat(4,1fr)"
                                                 >
-                                                    <Text fontSize="xx-small">
-                                                        Cidade
-                                                    </Text>
-                                                    <Text
-                                                        fontWeight="bold"
-                                                        fontSize="xs"
+                                                    <GridItem
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
                                                     >
-                                                        {i?.cidade}
-                                                    </Text>
-                                                </GridItem>
-                                                <GridItem
-                                                    colSpan={3}
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
-                                                >
-                                                    <Text fontSize="xx-small">
-                                                        Cartório
-                                                    </Text>
-                                                    <Text
-                                                        fontWeight="bold"
-                                                        fontSize="xs"
+                                                        <Text fontSize="xx-small">
+                                                            Cidade
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight="bold"
+                                                            fontSize="xs"
+                                                        >
+                                                            {i?.cidade}
+                                                        </Text>
+                                                    </GridItem>
+                                                    <GridItem
+                                                        colSpan={3}
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
                                                     >
-                                                        {i?.cartorio}
-                                                    </Text>
-                                                </GridItem>
-                                                <GridItem
-                                                    colSpan={3}
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
-                                                >
-                                                    <Text fontSize="xx-small">
-                                                        Endereço
-                                                    </Text>
-                                                    <Text
-                                                        fontWeight="bold"
-                                                        fontSize="xs"
+                                                        <Text fontSize="xx-small">
+                                                            Cartório
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight="bold"
+                                                            fontSize="xs"
+                                                        >
+                                                            {i?.cartorio}
+                                                        </Text>
+                                                    </GridItem>
+                                                    <GridItem
+                                                        colSpan={3}
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
                                                     >
-                                                        {i?.endereco}
-                                                    </Text>
-                                                </GridItem>
-                                                <GridItem
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
-                                                >
-                                                    <Text fontSize="xx-small">
-                                                        Telefone
-                                                    </Text>
-                                                    <Text
-                                                        fontWeight="bold"
-                                                        fontSize="xs"
+                                                        <Text fontSize="xx-small">
+                                                            Endereço
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight="bold"
+                                                            fontSize="xs"
+                                                        >
+                                                            {i?.endereco}
+                                                        </Text>
+                                                    </GridItem>
+                                                    <GridItem
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
                                                     >
-                                                        {i?.telefone}
-                                                    </Text>
-                                                </GridItem>
+                                                        <Text fontSize="xx-small">
+                                                            Telefone
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight="bold"
+                                                            fontSize="xs"
+                                                        >
+                                                            {i?.telefone}
+                                                        </Text>
+                                                    </GridItem>
 
-                                                <GridItem
-                                                    colSpan={4}
-                                                    borderWidth={1}
-                                                    px={2}
-                                                    py={1}
-                                                >
-                                                    <Text fontSize="xx-small">
-                                                        Protestos
-                                                    </Text>
-                                                    <Table size="sm">
-                                                        <Thead>
-                                                            <Tr>
-                                                                <Th fontSize="xx-small">
-                                                                    Documento
-                                                                </Th>
-                                                                <Th fontSize="xx-small">
-                                                                    Data
-                                                                </Th>
-                                                                <Th fontSize="xx-small">
-                                                                    Data do
-                                                                    Protesto
-                                                                </Th>
-                                                                <Th fontSize="xx-small">
-                                                                    Data de
-                                                                    Vencimento
-                                                                </Th>
-                                                                <Th fontSize="xx-small">
-                                                                    Valor
-                                                                </Th>
-                                                            </Tr>
-                                                        </Thead>
-                                                        <Tbody>
-                                                            {i.protestos?.map(
-                                                                (
-                                                                    protesto,
-                                                                    key
-                                                                ) => (
-                                                                    <Tr
-                                                                        key={
-                                                                            key
-                                                                        }
-                                                                    >
-                                                                        <Td fontSize="xs">
-                                                                            {
-                                                                                protesto.cpfCnpj
+                                                    <GridItem
+                                                        colSpan={4}
+                                                        borderWidth={1}
+                                                        px={2}
+                                                        py={1}
+                                                    >
+                                                        <Text fontSize="xx-small">
+                                                            Protestos
+                                                        </Text>
+                                                        <Table size="sm">
+                                                            <Thead>
+                                                                <Tr>
+                                                                    <Th fontSize="xx-small">
+                                                                        Documento
+                                                                    </Th>
+                                                                    <Th fontSize="xx-small">
+                                                                        Data
+                                                                    </Th>
+                                                                    <Th fontSize="xx-small">
+                                                                        Data do
+                                                                        Protesto
+                                                                    </Th>
+                                                                    <Th fontSize="xx-small">
+                                                                        Data de
+                                                                        Vencimento
+                                                                    </Th>
+                                                                    <Th fontSize="xx-small">
+                                                                        Valor
+                                                                    </Th>
+                                                                </Tr>
+                                                            </Thead>
+                                                            <Tbody>
+                                                                {i.protestos?.map(
+                                                                    (
+                                                                        protesto,
+                                                                        key
+                                                                    ) => (
+                                                                        <Tr
+                                                                            key={
+                                                                                key
                                                                             }
-                                                                        </Td>
-                                                                        <Td fontSize="xs">
-                                                                            {protesto.data &&
-                                                                                formatoData(
-                                                                                    protesto.data
-                                                                                )}
-                                                                        </Td>
-                                                                        <Td fontSize="xs">
-                                                                            {protesto.dataProtesto &&
-                                                                                formatoData(
-                                                                                    protesto.dataProtesto
-                                                                                )}
-                                                                        </Td>
-                                                                        <Td fontSize="xs">
-                                                                            {protesto.dataVencimento &&
-                                                                                formatoData(
-                                                                                    protesto.dataVencimento
-                                                                                )}
-                                                                        </Td>
-                                                                        <Td fontSize="xs">
-                                                                            {
-                                                                                protesto.valor
-                                                                            }
-                                                                        </Td>
-                                                                    </Tr>
-                                                                )
-                                                            )}
-                                                        </Tbody>
-                                                    </Table>
-                                                </GridItem>
-                                            </Grid>
-                                        ))}
-                                    </GridItem>
-                                );
-                            })}
+                                                                        >
+                                                                            <Td fontSize="xs">
+                                                                                {
+                                                                                    protesto.cpfCnpj
+                                                                                }
+                                                                            </Td>
+                                                                            <Td fontSize="xs">
+                                                                                {protesto.data &&
+                                                                                    formatoData(
+                                                                                        protesto.data
+                                                                                    )}
+                                                                            </Td>
+                                                                            <Td fontSize="xs">
+                                                                                {protesto.dataProtesto &&
+                                                                                    formatoData(
+                                                                                        protesto.dataProtesto
+                                                                                    )}
+                                                                            </Td>
+                                                                            <Td fontSize="xs">
+                                                                                {protesto.dataVencimento &&
+                                                                                    formatoData(
+                                                                                        protesto.dataVencimento
+                                                                                    )}
+                                                                            </Td>
+                                                                            <Td fontSize="xs">
+                                                                                {
+                                                                                    protesto.valor
+                                                                                }
+                                                                            </Td>
+                                                                        </Tr>
+                                                                    )
+                                                                )}
+                                                            </Tbody>
+                                                        </Table>
+                                                    </GridItem>
+                                                </Grid>
+                                            ))}
+                                        </GridItem>
+                                    );
+                                })}
                         </Grid>
                     </Flex>
                 </>

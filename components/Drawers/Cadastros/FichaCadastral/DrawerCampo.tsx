@@ -196,6 +196,8 @@ const ModalBase = ({}, ref) => {
                                     {...register("tipoCampo")}
                                     error={errors.tipoCampo?.message}
                                 >
+                                    <option value="cpf">CPF</option>
+                                    <option value="cnpj">CNPJ</option>
                                     <option value="number">Number</option>
                                     <option value="text">Text</option>
                                     <option value="qrcode">
@@ -264,7 +266,9 @@ const ModalBase = ({}, ref) => {
                                     </GridItem>
                                 </>
                             )}
-                            {watch("tipoCampo") == "text" && (
+                            {(watch("tipoCampo") == "text" ||
+                                watch("tipoCampo") == "cpf" ||
+                                watch("tipoCampo") == "cnpj") && (
                                 <>
                                     <GridItem>
                                         <FormInput

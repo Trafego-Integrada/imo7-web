@@ -238,7 +238,7 @@ handle.get(async (req, res) => {
                 ],
             };
         }
-        if (dataCriacao) {
+        if (dataCriacao && dataCriacao[0]) {
             dataCriacao = JSON.parse(dataCriacao);
             if (!filtroQuery.AND) {
                 filtroQuery = {

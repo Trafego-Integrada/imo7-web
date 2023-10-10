@@ -180,6 +180,9 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                 <option value="NENHUMA">
                                                     Nenhuma
                                                 </option>
+                                                <option value="PAGA">
+                                                    Garatia Paga
+                                                </option>
                                                 <option value="SEGURO">
                                                     Seguro Fiança
                                                 </option>
@@ -191,9 +194,6 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                 </option>
                                                 <option value="CAUCAO">
                                                     Caução
-                                                </option>
-                                                <option value="PAGA">
-                                                    Garatia Paga
                                                 </option>
                                             </FormSelect>
                                         </GridItem>

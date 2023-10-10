@@ -481,7 +481,9 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                         )}
                                                     </FormSelect>
                                                 )}
-                                                {campo.tipoCampo == "text" ||
+                                                {campo.tipoCampo == "cnpj" ||
+                                                campo.tipoCampo == "cpf" ||
+                                                campo.tipoCampo == "text" ||
                                                 campo.tipoCampo == "number" ||
                                                 campo.tipoCampo == "qrcode" ? (
                                                     <FormInput

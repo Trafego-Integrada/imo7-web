@@ -226,6 +226,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                         <option value="NENHUMA">
                                                             Nenhuma
                                                         </option>
+                                                        <option value="PAGA">
+                                                            Garantia Paga
+                                                        </option>
                                                         <option value="SEGURO">
                                                             Seguro Fiança
                                                         </option>

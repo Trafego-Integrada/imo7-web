@@ -94,28 +94,21 @@ const menu = [
         icon: TbForms,
         cargos: ["imobiliaria"],
         modulos: ["imobiliaria.processos"],
-    },
-    {
-        titulo: "Fichas",
-        href: "/admin/fichas",
-        icon: TbForms,
-        cargos: ["imobiliaria"],
-        modulos: ["imobiliaria.fichas"],
         subMenus: [
             {
-                titulo: "Fichas",
-                href: "/admin/fichas",
+                titulo: "Lista",
+                href: "/admin/processos",
                 icon: TbForms,
                 cargos: ["imobiliaria"],
-                modulos: ["imobiliaria.fichas"],
+                modulos: ["imobiliaria.processos"],
             },
-            {
-                titulo: "Fichas Excluídas",
-                href: "/admin/fichas/excluidas",
-                icon: HiOutlineDocumentText,
-                cargos: ["imobiliaria"],
-                modulos: ["imobiliaria.fichas.excluidas"],
-            },
+            // {
+            //     titulo: "Fichas Excluídas",
+            //     href: "/admin/fichas/excluidas",
+            //     icon: HiOutlineDocumentText,
+            //     cargos: ["imobiliaria"],
+            //     modulos: ["imobiliaria.fichas.excluidas"],
+            // },
             {
                 titulo: "Validações Faciais",
                 href: "/admin/validacoesfaciais",

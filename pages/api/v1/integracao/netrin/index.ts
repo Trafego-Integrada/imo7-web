@@ -125,7 +125,7 @@ handle.post(async (req, res) => {
         const retornoNetrin = await apiNetrinService().consultaComposta(
             requisicaoBody
         );
-        if (tipoConsulta == "prostestos_pf") {
+        if (tipoConsulta == "protestos_pf") {
             // Consulta Netrin
             const retornoNetrin2 = await apiNetrinService().consultaComposta(
                 requisicaoBody
