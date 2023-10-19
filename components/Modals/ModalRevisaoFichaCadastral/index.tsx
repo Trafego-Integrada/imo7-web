@@ -66,6 +66,7 @@ import {
     FiDownload,
     FiEye,
     FiLink,
+    FiSearch,
 } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
@@ -77,6 +78,7 @@ import { imo7ApiService } from "@/services/apiServiceUsage";
 import { ConsultasNetrin } from "../ModalProcesso/ConsultaNetrin";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { api } from "@/services/apiClient";
+import { removerCaracteresEspeciais } from "@/helpers/helpers";
 const schema = yup.object({
     status: yup.string().required("Status é obrigatório"),
     motivoReprovacaoId: yup.string().when("status", {
@@ -184,6 +186,46 @@ const ModalBase = ({}, ref) => {
             });
         }
     };
+    const { data } = useQuery(
+        [
+            "consultasNetrin",
+            {
+                processoId: watch("processoId"),
+                fichaCadastralId: watch("id"),
+            },
+        ],
+        async ({ queryKey }) => {
+            try {
+                const response = await api.get("v1/integracao/netrin", {
+                    params: {
+                        ...queryKey[1],
+                    },
+                });
+
+                return response?.data;
+            } catch (error) {
+                throw Error(error.message);
+            }
+        }
+    );
+    const totalProtestos = (protestos) => {
+        let total = 0;
+        if (protestos.code != 606) {
+            Object.entries(protestos)?.map((i) => {
+                console.log("Item", i);
+
+                if (i.length > 1) {
+                    i[1].map((i) => {
+                        console.log("Item2", i);
+                        total += i.protestos?.length;
+                    });
+                }
+            });
+        }
+
+        return total;
+    };
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -726,107 +768,182 @@ const ModalBase = ({}, ref) => {
                                                                         </Text>
                                                                         {i.tipoCampo ==
                                                                             "cpf" && (
-                                                                            <>
-                                                                                {watch(
-                                                                                    "preenchimento"
-                                                                                )?.find(
-                                                                                    (
-                                                                                        p
-                                                                                    ) =>
-                                                                                        p.campoFichaCadastralCodigo ==
-                                                                                        i.codigo
-                                                                                )
-                                                                                    ?.validacaoFacial
-                                                                                    .length >
-                                                                                0 ? (
-                                                                                    <Text as="span">
-                                                                                        {watch(
-                                                                                            "preenchimento"
-                                                                                        )
-                                                                                            ?.find(
-                                                                                                (
-                                                                                                    p
-                                                                                                ) =>
-                                                                                                    p.campoFichaCadastralCodigo ==
-                                                                                                    i.codigo
+                                                                            <Flex
+                                                                                gap={
+                                                                                    4
+                                                                                }
+                                                                                align="center"
+                                                                            >
+                                                                                <Box
+                                                                                    minW={
+                                                                                        44
+                                                                                    }
+                                                                                >
+                                                                                    <Text fontSize="xs">
+                                                                                        Validação
+                                                                                        Facial
+                                                                                    </Text>
+                                                                                    {watch(
+                                                                                        "preenchimento"
+                                                                                    )?.find(
+                                                                                        (
+                                                                                            p
+                                                                                        ) =>
+                                                                                            p.campoFichaCadastralCodigo ==
+                                                                                            i.codigo
+                                                                                    )
+                                                                                        ?.validacaoFacial
+                                                                                        .length >
+                                                                                    0 ? (
+                                                                                        <Text as="span">
+                                                                                            {watch(
+                                                                                                "preenchimento"
                                                                                             )
-                                                                                            ?.validacaoFacial.map(
-                                                                                                (
-                                                                                                    item
-                                                                                                ) => (
-                                                                                                    <>
-                                                                                                        {item.status ==
-                                                                                                            1 && (
-                                                                                                            <Popover>
-                                                                                                                <PopoverTrigger>
-                                                                                                                    <Button
-                                                                                                                        variant="ghost"
-                                                                                                                        size="xs"
-                                                                                                                        colorScheme={
-                                                                                                                            JSON.parse(
-                                                                                                                                item.resultado
-                                                                                                                            )?.biometria_face?.probabilidade.indexOf(
-                                                                                                                                "Altíssima "
-                                                                                                                            ) >=
-                                                                                                                            0
-                                                                                                                                ? "green"
-                                                                                                                                : "red"
-                                                                                                                        }
-                                                                                                                        leftIcon={
-                                                                                                                            JSON.parse(
-                                                                                                                                item.resultado
-                                                                                                                            )?.biometria_face?.probabilidade.indexOf(
-                                                                                                                                "Altíssima "
-                                                                                                                            ) >=
-                                                                                                                            0 ? (
-                                                                                                                                <FiCheckCircle />
-                                                                                                                            ) : (
-                                                                                                                                <FiAlertCircle />
-                                                                                                                            )
-                                                                                                                        }
-                                                                                                                    >
-                                                                                                                        Validado
-                                                                                                                    </Button>
-                                                                                                                </PopoverTrigger>
-                                                                                                                <PopoverContent>
-                                                                                                                    <PopoverArrow />
-                                                                                                                    <PopoverCloseButton />
-                                                                                                                    <PopoverHeader>
-                                                                                                                        Validação
-                                                                                                                        Facial
-                                                                                                                    </PopoverHeader>
-                                                                                                                    <PopoverBody>
-                                                                                                                        <Flex
-                                                                                                                            flexDir="column"
-                                                                                                                            align="center"
-                                                                                                                            justify="center"
-                                                                                                                            gap={
-                                                                                                                                4
+                                                                                                ?.find(
+                                                                                                    (
+                                                                                                        p
+                                                                                                    ) =>
+                                                                                                        p.campoFichaCadastralCodigo ==
+                                                                                                        i.codigo
+                                                                                                )
+                                                                                                ?.validacaoFacial.map(
+                                                                                                    (
+                                                                                                        item
+                                                                                                    ) => (
+                                                                                                        <>
+                                                                                                            {item.status ==
+                                                                                                                1 && (
+                                                                                                                <Popover>
+                                                                                                                    <PopoverTrigger>
+                                                                                                                        <Button
+                                                                                                                            variant="ghost"
+                                                                                                                            size="xs"
+                                                                                                                            colorScheme={
+                                                                                                                                JSON.parse(
+                                                                                                                                    item.resultado
+                                                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                    "Altíssima "
+                                                                                                                                ) >=
+                                                                                                                                0
+                                                                                                                                    ? "green"
+                                                                                                                                    : "red"
+                                                                                                                            }
+                                                                                                                            leftIcon={
+                                                                                                                                JSON.parse(
+                                                                                                                                    item.resultado
+                                                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                    "Altíssima "
+                                                                                                                                ) >=
+                                                                                                                                0 ? (
+                                                                                                                                    <FiCheckCircle />
+                                                                                                                                ) : (
+                                                                                                                                    <FiAlertCircle />
+                                                                                                                                )
                                                                                                                             }
                                                                                                                         >
-                                                                                                                            <Avatar
-                                                                                                                                src={
-                                                                                                                                    item.fotoUrl
+                                                                                                                            Validado
+                                                                                                                        </Button>
+                                                                                                                    </PopoverTrigger>
+                                                                                                                    <PopoverContent>
+                                                                                                                        <PopoverArrow />
+                                                                                                                        <PopoverCloseButton />
+                                                                                                                        <PopoverHeader>
+                                                                                                                            Validação
+                                                                                                                            Facial
+                                                                                                                        </PopoverHeader>
+                                                                                                                        <PopoverBody>
+                                                                                                                            <Flex
+                                                                                                                                flexDir="column"
+                                                                                                                                align="center"
+                                                                                                                                justify="center"
+                                                                                                                                gap={
+                                                                                                                                    4
                                                                                                                                 }
-                                                                                                                                size="2xl"
-                                                                                                                            />
-                                                                                                                            <Box pos="relative">
-                                                                                                                                <Box>
-                                                                                                                                    <Progress
+                                                                                                                            >
+                                                                                                                                <Avatar
+                                                                                                                                    src={
+                                                                                                                                        item.fotoUrl
+                                                                                                                                    }
+                                                                                                                                    size="2xl"
+                                                                                                                                />
+                                                                                                                                <Box pos="relative">
+                                                                                                                                    <Box>
+                                                                                                                                        <Progress
+                                                                                                                                            w="full"
+                                                                                                                                            size="lg"
+                                                                                                                                            value={
+                                                                                                                                                JSON.parse(
+                                                                                                                                                    item.resultado
+                                                                                                                                                )
+                                                                                                                                                    ?.biometria_face
+                                                                                                                                                    ?.similaridade *
+                                                                                                                                                100
+                                                                                                                                            }
+                                                                                                                                            max={
+                                                                                                                                                100
+                                                                                                                                            }
+                                                                                                                                            colorScheme={
+                                                                                                                                                JSON.parse(
+                                                                                                                                                    item.resultado
+                                                                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                                    "Altíssima "
+                                                                                                                                                ) >=
+                                                                                                                                                0
+                                                                                                                                                    ? "green"
+                                                                                                                                                    : JSON.parse(
+                                                                                                                                                          item.resultado
+                                                                                                                                                      )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                                          "Alta "
+                                                                                                                                                      ) >=
+                                                                                                                                                      0
+                                                                                                                                                    ? "blue"
+                                                                                                                                                    : JSON.parse(
+                                                                                                                                                          item.resultado
+                                                                                                                                                      )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                                          "Baixa "
+                                                                                                                                                      ) >=
+                                                                                                                                                      0
+                                                                                                                                                    ? "orange"
+                                                                                                                                                    : "red"
+                                                                                                                                            }
+                                                                                                                                        />
+                                                                                                                                    </Box>
+                                                                                                                                    <Flex
+                                                                                                                                        pos="absolute"
+                                                                                                                                        top="0"
+                                                                                                                                        justify="center"
+                                                                                                                                        mx="auto"
                                                                                                                                         w="full"
-                                                                                                                                        size="lg"
-                                                                                                                                        value={
-                                                                                                                                            JSON.parse(
-                                                                                                                                                item.resultado
-                                                                                                                                            )
-                                                                                                                                                ?.biometria_face
-                                                                                                                                                ?.similaridade *
-                                                                                                                                            100
-                                                                                                                                        }
-                                                                                                                                        max={
-                                                                                                                                            100
-                                                                                                                                        }
-                                                                                                                                        colorScheme={
+                                                                                                                                    >
+                                                                                                                                        <Text
+                                                                                                                                            textAlign="center"
+                                                                                                                                            fontSize="xs"
+                                                                                                                                            color={
+                                                                                                                                                JSON.parse(
+                                                                                                                                                    item.resultado
+                                                                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                                                                    "Altíssima "
+                                                                                                                                                ) >=
+                                                                                                                                                0
+                                                                                                                                                    ? "white"
+                                                                                                                                                    : "white"
+                                                                                                                                            }
+                                                                                                                                        >
+                                                                                                                                            {parseInt(
+                                                                                                                                                JSON.parse(
+                                                                                                                                                    item.resultado
+                                                                                                                                                )
+                                                                                                                                                    ?.biometria_face
+                                                                                                                                                    ?.similaridade *
+                                                                                                                                                    100
+                                                                                                                                            )}{" "}
+                                                                                                                                            %
+                                                                                                                                        </Text>
+                                                                                                                                    </Flex>
+                                                                                                                                    <Text
+                                                                                                                                        textAlign="center"
+                                                                                                                                        fontSize="xs"
+                                                                                                                                        color={
                                                                                                                                             JSON.parse(
                                                                                                                                                 item.resultado
                                                                                                                                             )?.biometria_face?.probabilidade.indexOf(
@@ -850,145 +967,74 @@ const ModalBase = ({}, ref) => {
                                                                                                                                                 ? "orange"
                                                                                                                                                 : "red"
                                                                                                                                         }
-                                                                                                                                    />
-                                                                                                                                </Box>
-                                                                                                                                <Flex
-                                                                                                                                    pos="absolute"
-                                                                                                                                    top="0"
-                                                                                                                                    justify="center"
-                                                                                                                                    mx="auto"
-                                                                                                                                    w="full"
-                                                                                                                                >
-                                                                                                                                    <Text
-                                                                                                                                        textAlign="center"
-                                                                                                                                        fontSize="xs"
-                                                                                                                                        color={
-                                                                                                                                            JSON.parse(
-                                                                                                                                                item.resultado
-                                                                                                                                            )?.biometria_face?.probabilidade.indexOf(
-                                                                                                                                                "Altíssima "
-                                                                                                                                            ) >=
-                                                                                                                                            0
-                                                                                                                                                ? "white"
-                                                                                                                                                : "white"
-                                                                                                                                        }
                                                                                                                                     >
-                                                                                                                                        {parseInt(
+                                                                                                                                        {
                                                                                                                                             JSON.parse(
                                                                                                                                                 item.resultado
                                                                                                                                             )
                                                                                                                                                 ?.biometria_face
-                                                                                                                                                ?.similaridade *
-                                                                                                                                                100
-                                                                                                                                        )}{" "}
-                                                                                                                                        %
+                                                                                                                                                ?.probabilidade
+                                                                                                                                        }
                                                                                                                                     </Text>
-                                                                                                                                </Flex>
-                                                                                                                                <Text
-                                                                                                                                    textAlign="center"
-                                                                                                                                    fontSize="xs"
-                                                                                                                                    color={
-                                                                                                                                        JSON.parse(
-                                                                                                                                            item.resultado
-                                                                                                                                        )?.biometria_face?.probabilidade.indexOf(
-                                                                                                                                            "Altíssima "
-                                                                                                                                        ) >=
-                                                                                                                                        0
-                                                                                                                                            ? "green"
-                                                                                                                                            : JSON.parse(
-                                                                                                                                                  item.resultado
-                                                                                                                                              )?.biometria_face?.probabilidade.indexOf(
-                                                                                                                                                  "Alta "
-                                                                                                                                              ) >=
-                                                                                                                                              0
-                                                                                                                                            ? "blue"
-                                                                                                                                            : JSON.parse(
-                                                                                                                                                  item.resultado
-                                                                                                                                              )?.biometria_face?.probabilidade.indexOf(
-                                                                                                                                                  "Baixa "
-                                                                                                                                              ) >=
-                                                                                                                                              0
-                                                                                                                                            ? "orange"
-                                                                                                                                            : "red"
-                                                                                                                                    }
-                                                                                                                                >
-                                                                                                                                    {
-                                                                                                                                        JSON.parse(
-                                                                                                                                            item.resultado
-                                                                                                                                        )
-                                                                                                                                            ?.biometria_face
-                                                                                                                                            ?.probabilidade
-                                                                                                                                    }
-                                                                                                                                </Text>
-                                                                                                                            </Box>
-                                                                                                                        </Flex>
-                                                                                                                    </PopoverBody>
-                                                                                                                </PopoverContent>
-                                                                                                            </Popover>
-                                                                                                        )}
+                                                                                                                                </Box>
+                                                                                                                            </Flex>
+                                                                                                                        </PopoverBody>
+                                                                                                                    </PopoverContent>
+                                                                                                                </Popover>
+                                                                                                            )}
 
-                                                                                                        <Tooltip label="Copiar URL da Ficha">
-                                                                                                            <Button
-                                                                                                                size="xs"
-                                                                                                                variant="ghost"
-                                                                                                                colorScheme="blue"
-                                                                                                                leftIcon={
-                                                                                                                    <Icon
-                                                                                                                        as={
-                                                                                                                            FiLink
-                                                                                                                        }
-                                                                                                                    />
-                                                                                                                }
-                                                                                                                onClick={() => {
-                                                                                                                    navigator.clipboard.writeText(
-                                                                                                                        `${window.location.origin}/validacao-facial/${item.id}`
-                                                                                                                    );
-                                                                                                                    toast(
-                                                                                                                        {
-                                                                                                                            title: "URL Copiada",
-                                                                                                                        }
-                                                                                                                    );
-                                                                                                                }}
-                                                                                                            >
-                                                                                                                Copiar
-                                                                                                                Link
-                                                                                                                da
-                                                                                                                Validação
-                                                                                                            </Button>
-                                                                                                        </Tooltip>
-                                                                                                    </>
-                                                                                                )
-                                                                                            )}
-                                                                                    </Text>
-                                                                                ) : (
-                                                                                    <Button
-                                                                                        size="xs"
-                                                                                        onClick={() =>
-                                                                                            onCadastrarValidacao(
-                                                                                                {
-                                                                                                    campoFichaCadastralCodigo:
-                                                                                                        watch(
-                                                                                                            "preenchimento"
-                                                                                                        )?.find(
-                                                                                                            (
-                                                                                                                p
-                                                                                                            ) =>
-                                                                                                                p.campoFichaCadastralCodigo ==
-                                                                                                                i.codigo
-                                                                                                        )
-                                                                                                            ?.campoFichaCadastralCodigo,
-                                                                                                    cpf: watch(
-                                                                                                        "preenchimento"
-                                                                                                    )?.find(
-                                                                                                        (
-                                                                                                            p
-                                                                                                        ) =>
-                                                                                                            p.campoFichaCadastralCodigo ==
-                                                                                                            i.codigo
+                                                                                                            <Tooltip label="Copiar URL da Ficha">
+                                                                                                                <Button
+                                                                                                                    size="xs"
+                                                                                                                    variant="ghost"
+                                                                                                                    colorScheme="blue"
+                                                                                                                    leftIcon={
+                                                                                                                        <Icon
+                                                                                                                            as={
+                                                                                                                                FiLink
+                                                                                                                            }
+                                                                                                                        />
+                                                                                                                    }
+                                                                                                                    onClick={() => {
+                                                                                                                        navigator.clipboard.writeText(
+                                                                                                                            `${window.location.origin}/validacao-facial/${item.id}`
+                                                                                                                        );
+                                                                                                                        toast(
+                                                                                                                            {
+                                                                                                                                title: "URL Copiada",
+                                                                                                                            }
+                                                                                                                        );
+                                                                                                                    }}
+                                                                                                                >
+                                                                                                                    Copiar
+                                                                                                                    Link
+                                                                                                                    da
+                                                                                                                    Validação
+                                                                                                                </Button>
+                                                                                                            </Tooltip>
+                                                                                                        </>
                                                                                                     )
-                                                                                                        ?.valor,
-                                                                                                    fichaCadastralId:
-                                                                                                        watch(
+                                                                                                )}
+                                                                                        </Text>
+                                                                                    ) : (
+                                                                                        <Button
+                                                                                            variant="outline"
+                                                                                            size="xs"
+                                                                                            onClick={() =>
+                                                                                                onCadastrarValidacao(
+                                                                                                    {
+                                                                                                        campoFichaCadastralCodigo:
+                                                                                                            watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.campoFichaCadastralCodigo,
+                                                                                                        cpf: watch(
                                                                                                             "preenchimento"
                                                                                                         )?.find(
                                                                                                             (
@@ -997,86 +1043,404 @@ const ModalBase = ({}, ref) => {
                                                                                                                 p.campoFichaCadastralCodigo ==
                                                                                                                 i.codigo
                                                                                                         )
-                                                                                                            ?.fichaCadastralId,
+                                                                                                            ?.valor,
+                                                                                                        fichaCadastralId:
+                                                                                                            watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.fichaCadastralId,
+                                                                                                    }
+                                                                                                )
+                                                                                            }
+                                                                                        >
+                                                                                            Consultar
+                                                                                        </Button>
+                                                                                    )}
+                                                                                </Box>
+                                                                                <Box
+                                                                                    minW={
+                                                                                        44
+                                                                                    }
+                                                                                >
+                                                                                    <Text fontSize="xs">
+                                                                                        Consultar
+                                                                                        <br />
+                                                                                        Tribunal
+                                                                                        de
+                                                                                        Justiça
+                                                                                        Brasil
+                                                                                    </Text>
+                                                                                    <Button
+                                                                                        w="full"
+                                                                                        variant="outline"
+                                                                                        size="xs"
+                                                                                        leftIcon={
+                                                                                            <Icon
+                                                                                                as={
+                                                                                                    FiSearch
+                                                                                                }
+                                                                                            />
+                                                                                        }
+                                                                                        onClick={() =>
+                                                                                            consultarNetrin(
+                                                                                                {
+                                                                                                    tipoConsulta:
+                                                                                                        "processos_pf",
+                                                                                                    requisicao:
+                                                                                                        {
+                                                                                                            cpf: watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.valor,
+                                                                                                        },
                                                                                                 }
                                                                                             )
                                                                                         }
                                                                                     >
-                                                                                        Validação
-                                                                                        Facial
+                                                                                        Consultar
                                                                                     </Button>
-                                                                                )}
-                                                                                <Menu>
-                                                                                    <MenuButton
-                                                                                        size="sm"
-                                                                                        as={
-                                                                                            Button
-                                                                                        }
+                                                                                    {data.find(
+                                                                                        (
+                                                                                            ii
+                                                                                        ) =>
+                                                                                            ii.tipoConsulta ==
+                                                                                                "processos_pf" &&
+                                                                                            ii
+                                                                                                .requisicao
+                                                                                                .cpf ==
+                                                                                                watch(
+                                                                                                    "preenchimento"
+                                                                                                )?.find(
+                                                                                                    (
+                                                                                                        p
+                                                                                                    ) =>
+                                                                                                        p.campoFichaCadastralCodigo ==
+                                                                                                        i.codigo
+                                                                                                )
+                                                                                                    ?.valor
+                                                                                    )
+                                                                                        ?.retorno
+                                                                                        ?.processosCPF && (
+                                                                                        <Tooltip label="Visualizar Arquivo">
+                                                                                            <Button
+                                                                                                variant="outline"
+                                                                                                size="xs"
+                                                                                                leftIcon={
+                                                                                                    <Icon
+                                                                                                        as={
+                                                                                                            FiEye
+                                                                                                        }
+                                                                                                    />
+                                                                                                }
+                                                                                                onClick={() =>
+                                                                                                    preview.current.onOpen(
+                                                                                                        process
+                                                                                                            .env
+                                                                                                            .NODE_ENV ==
+                                                                                                            "production"
+                                                                                                            ? `https://www.imo7.com.br/api/v1/integracao/netrin/${
+                                                                                                                  data.find(
+                                                                                                                      (
+                                                                                                                          ii
+                                                                                                                      ) =>
+                                                                                                                          ii.tipoConsulta ==
+                                                                                                                              "processos_pf" &&
+                                                                                                                          ii
+                                                                                                                              .requisicao
+                                                                                                                              .cpf ==
+                                                                                                                              watch(
+                                                                                                                                  "preenchimento"
+                                                                                                                              )?.find(
+                                                                                                                                  (
+                                                                                                                                      p
+                                                                                                                                  ) =>
+                                                                                                                                      p.campoFichaCadastralCodigo ==
+                                                                                                                                      i.codigo
+                                                                                                                              )
+                                                                                                                                  ?.valor
+                                                                                                                  )
+                                                                                                                      .id
+                                                                                                              }/pdf`
+                                                                                                            : `http://localhost:3000/api/v1/integracao/netrin/${
+                                                                                                                  data.find(
+                                                                                                                      (
+                                                                                                                          ii
+                                                                                                                      ) =>
+                                                                                                                          ii.tipoConsulta ==
+                                                                                                                              "processos_pf" &&
+                                                                                                                          ii
+                                                                                                                              .requisicao
+                                                                                                                              .cpf ==
+                                                                                                                              watch(
+                                                                                                                                  "preenchimento"
+                                                                                                                              )?.find(
+                                                                                                                                  (
+                                                                                                                                      p
+                                                                                                                                  ) =>
+                                                                                                                                      p.campoFichaCadastralCodigo ==
+                                                                                                                                      i.codigo
+                                                                                                                              )
+                                                                                                                                  ?.valor
+                                                                                                                  )
+                                                                                                                      .id
+                                                                                                              }/pdf`
+                                                                                                    )
+                                                                                                }
+                                                                                            >
+                                                                                                {data.find(
+                                                                                                    (
+                                                                                                        ii
+                                                                                                    ) =>
+                                                                                                        ii.tipoConsulta ==
+                                                                                                            "processos_pf" &&
+                                                                                                        ii
+                                                                                                            .requisicao
+                                                                                                            .cpf ==
+                                                                                                            watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.valor
+                                                                                                )
+                                                                                                    ?.retorno
+                                                                                                    ?.processosCPF
+                                                                                                    ?.code
+                                                                                                    ? "0"
+                                                                                                    : data.find(
+                                                                                                          (
+                                                                                                              ii
+                                                                                                          ) =>
+                                                                                                              ii.tipoConsulta ==
+                                                                                                                  "processos_pf" &&
+                                                                                                              ii
+                                                                                                                  .requisicao
+                                                                                                                  .cpf ==
+                                                                                                                  watch(
+                                                                                                                      "preenchimento"
+                                                                                                                  )?.find(
+                                                                                                                      (
+                                                                                                                          p
+                                                                                                                      ) =>
+                                                                                                                          p.campoFichaCadastralCodigo ==
+                                                                                                                          i.codigo
+                                                                                                                  )
+                                                                                                                      ?.valor
+                                                                                                      )
+                                                                                                          ?.retorno
+                                                                                                          ?.processosCPF
+                                                                                                          ?.totalProcessos}{" "}
+                                                                                                processos
+                                                                                                encontrados
+                                                                                            </Button>
+                                                                                        </Tooltip>
+                                                                                    )}
+                                                                                </Box>
+                                                                                <Box
+                                                                                    minW={
+                                                                                        44
+                                                                                    }
+                                                                                >
+                                                                                    <Text fontSize="xs">
+                                                                                        Consultar
+                                                                                        <br />
+                                                                                        Protestos
+                                                                                        Nacional
+                                                                                    </Text>
+                                                                                    <Button
+                                                                                        w="full"
                                                                                         variant="outline"
+                                                                                        size="xs"
                                                                                         leftIcon={
-                                                                                            <AiOutlineFileSearch />
+                                                                                            <Icon
+                                                                                                as={
+                                                                                                    FiSearch
+                                                                                                }
+                                                                                            />
+                                                                                        }
+                                                                                        onClick={() =>
+                                                                                            consultarNetrin(
+                                                                                                {
+                                                                                                    tipoConsulta:
+                                                                                                        "protestos_pf",
+                                                                                                    requisicao:
+                                                                                                        {
+                                                                                                            cpf: watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.valor,
+                                                                                                        },
+                                                                                                }
+                                                                                            )
                                                                                         }
                                                                                     >
                                                                                         Consultar
-                                                                                    </MenuButton>
-                                                                                    <MenuList>
-                                                                                        <MenuItem
-                                                                                            onClick={() =>
-                                                                                                consultarNetrin(
-                                                                                                    {
-                                                                                                        tipoConsulta:
-                                                                                                            "processos_pf",
-                                                                                                        requisicao:
-                                                                                                            {
-                                                                                                                cpf: watch(
-                                                                                                                    "preenchimento"
-                                                                                                                )?.find(
-                                                                                                                    (
-                                                                                                                        p
-                                                                                                                    ) =>
-                                                                                                                        p.campoFichaCadastralCodigo ==
-                                                                                                                        i.codigo
-                                                                                                                )
-                                                                                                                    ?.valor,
-                                                                                                            },
-                                                                                                    }
+                                                                                    </Button>
+                                                                                    {data.find(
+                                                                                        (
+                                                                                            ii
+                                                                                        ) =>
+                                                                                            ii.tipoConsulta ==
+                                                                                                "protestos_pf" &&
+                                                                                            ii
+                                                                                                .requisicao
+                                                                                                .cpf ==
+                                                                                                watch(
+                                                                                                    "preenchimento"
+                                                                                                )?.find(
+                                                                                                    (
+                                                                                                        p
+                                                                                                    ) =>
+                                                                                                        p.campoFichaCadastralCodigo ==
+                                                                                                        i.codigo
                                                                                                 )
-                                                                                            }
-                                                                                        >
-                                                                                            Processos
-                                                                                            Pessoa
-                                                                                            Física
-                                                                                        </MenuItem>
-                                                                                        <MenuItem
-                                                                                            onClick={() =>
-                                                                                                consultarNetrin(
-                                                                                                    {
-                                                                                                        tipoConsulta:
-                                                                                                            "protestos_pf",
-                                                                                                        requisicao:
-                                                                                                            {
-                                                                                                                cpf: watch(
-                                                                                                                    "preenchimento"
-                                                                                                                )?.find(
-                                                                                                                    (
-                                                                                                                        p
-                                                                                                                    ) =>
-                                                                                                                        p.campoFichaCadastralCodigo ==
-                                                                                                                        i.codigo
-                                                                                                                )
-                                                                                                                    ?.valor,
-                                                                                                            },
-                                                                                                    }
+                                                                                                    ?.valor
+                                                                                    )
+                                                                                        ?.retorno
+                                                                                        ?.cenprotProtestos && (
+                                                                                        <Tooltip label="Visualizar Arquivo">
+                                                                                            <Button
+                                                                                                variant="outline"
+                                                                                                size="xs"
+                                                                                                leftIcon={
+                                                                                                    <Icon
+                                                                                                        as={
+                                                                                                            FiEye
+                                                                                                        }
+                                                                                                    />
+                                                                                                }
+                                                                                                onClick={() =>
+                                                                                                    preview.current.onOpen(
+                                                                                                        process
+                                                                                                            .env
+                                                                                                            .NODE_ENV ==
+                                                                                                            "production"
+                                                                                                            ? `https://www.imo7.com.br/api/v1/integracao/netrin/${
+                                                                                                                  data.find(
+                                                                                                                      (
+                                                                                                                          ii
+                                                                                                                      ) =>
+                                                                                                                          ii.tipoConsulta ==
+                                                                                                                              "protestos_pf" &&
+                                                                                                                          ii
+                                                                                                                              .requisicao
+                                                                                                                              .cpf ==
+                                                                                                                              watch(
+                                                                                                                                  "preenchimento"
+                                                                                                                              )?.find(
+                                                                                                                                  (
+                                                                                                                                      p
+                                                                                                                                  ) =>
+                                                                                                                                      p.campoFichaCadastralCodigo ==
+                                                                                                                                      i.codigo
+                                                                                                                              )
+                                                                                                                                  ?.valor
+                                                                                                                  )
+                                                                                                                      .id
+                                                                                                              }/pdf`
+                                                                                                            : `http://localhost:3000/api/v1/integracao/netrin/${
+                                                                                                                  data.find(
+                                                                                                                      (
+                                                                                                                          ii
+                                                                                                                      ) =>
+                                                                                                                          ii.tipoConsulta ==
+                                                                                                                              "protestos_pf" &&
+                                                                                                                          ii
+                                                                                                                              .requisicao
+                                                                                                                              .cpf ==
+                                                                                                                              watch(
+                                                                                                                                  "preenchimento"
+                                                                                                                              )?.find(
+                                                                                                                                  (
+                                                                                                                                      p
+                                                                                                                                  ) =>
+                                                                                                                                      p.campoFichaCadastralCodigo ==
+                                                                                                                                      i.codigo
+                                                                                                                              )
+                                                                                                                                  ?.valor
+                                                                                                                  )
+                                                                                                                      .id
+                                                                                                              }/pdf`
+                                                                                                    )
+                                                                                                }
+                                                                                            >
+                                                                                                {data.find(
+                                                                                                    (
+                                                                                                        ii
+                                                                                                    ) =>
+                                                                                                        ii.tipoConsulta ==
+                                                                                                            "protestos_pf" &&
+                                                                                                        ii
+                                                                                                            .requisicao
+                                                                                                            .cpf ==
+                                                                                                            watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.valor
                                                                                                 )
-                                                                                            }
-                                                                                        >
-                                                                                            Protestos
-                                                                                            Pessoa
-                                                                                            Física
-                                                                                        </MenuItem>
-                                                                                    </MenuList>
-                                                                                </Menu>
-                                                                            </>
+                                                                                                    ?.retorno
+                                                                                                    ?.processosCPF
+                                                                                                    ?.code
+                                                                                                    ? "0"
+                                                                                                    : totalProtestos(
+                                                                                                          data.find(
+                                                                                                              (
+                                                                                                                  ii
+                                                                                                              ) =>
+                                                                                                                  ii.tipoConsulta ==
+                                                                                                                      "protestos_pf" &&
+                                                                                                                  ii
+                                                                                                                      .requisicao
+                                                                                                                      .cpf ==
+                                                                                                                      watch(
+                                                                                                                          "preenchimento"
+                                                                                                                      )?.find(
+                                                                                                                          (
+                                                                                                                              p
+                                                                                                                          ) =>
+                                                                                                                              p.campoFichaCadastralCodigo ==
+                                                                                                                              i.codigo
+                                                                                                                      )
+                                                                                                                          ?.valor
+                                                                                                          )
+                                                                                                              ?.retorno
+                                                                                                              ?.cenprotProtestos
+                                                                                                      )}{" "}
+                                                                                                protestos
+                                                                                                encontrados
+                                                                                            </Button>
+                                                                                        </Tooltip>
+                                                                                    )}
+                                                                                </Box>
+                                                                            </Flex>
                                                                         )}
                                                                     </Flex>
                                                                 </GridItem>
