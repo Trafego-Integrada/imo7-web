@@ -1,4 +1,4 @@
-import { formatoValor } from "@/helpers/helpers";
+import { formatoData, formatoValor } from "@/helpers/helpers";
 import { listarUsuarios } from "@/services/models/usuario";
 import {
     Box,
@@ -8,6 +8,7 @@ import {
     Td,
     Th,
     Thead,
+    Tooltip,
     Tr,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -23,28 +24,31 @@ export const Cobrancas = ({ data }) => {
                         <Th w={32}>Vencimento</Th>
                         <Th>Descrição</Th>
                         <Th w={32}>Valor</Th>
-                        <Th w={24}></Th>
                     </Tr>
                 </Thead>
                 <Tbody>
                     {data?.map((item) => (
                         <Tr key={item.id}>
-                            <Td>{item.data_vencimen}</Td>
+                            <Td>
+                                <Tooltip label="Gerar PDF">
+                                    <Link
+                                        href={`https://www.imo7.com.br/api/boleto/${item.id}/pdf`}
+                                        target="_blank"
+                                        passHref
+                                    >
+                                        <IconButton
+                                            size="sm"
+                                            icon={<VscFilePdf />}
+                                            color="red"
+                                        />
+                                    </Link>
+                                </Tooltip>
+                            </Td>
+                            <Td>
+                                {formatoData(item.data_vencimen.slice(0, 10))}
+                            </Td>
                             <Td>{item.instrucoes3}</Td>
                             <Td>{formatoValor(item.valor_doc2)}</Td>
-                            <Td>
-                                <Link
-                                    href={`https://www.imo7.com.br/api/boleto/${item.id}/pdf`}
-                                    target="_blank"
-                                    passHref
-                                >
-                                    <IconButton
-                                        size="sm"
-                                        as={VscFilePdf}
-                                        color="red"
-                                    />
-                                </Link>
-                            </Td>
                         </Tr>
                     ))}
                 </Tbody>

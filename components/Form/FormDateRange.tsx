@@ -38,7 +38,7 @@ const InputBase = (
             isInvalid={error}
             isRequired={required}
             size={size}
-            zIndex="dropdown"
+            zIndex="overlay"
             {...rest}
         >
             {label && <FormLabel fontSize={size}>{label}</FormLabel>}

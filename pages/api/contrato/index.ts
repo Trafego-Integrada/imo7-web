@@ -41,7 +41,6 @@ handle.get(async (req, res) => {
             filtroQuery = {
                 ...filtroQuery,
                 OR: [
-                    ...filtroQuery.OR,
                     {
                         codigo: {
                             contains: query,

@@ -113,18 +113,19 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                 _hover={{ bg: "gray.600" }}
                 cursor="pointer"
                 role="group"
-                borderBottom="1px solid rgba(255,255,255,0.2)"
+                borderBottom="1px solid blue.50"
                 p={3}
                 pos="relative"
                 zIndex={999}
             >
                 <Flex
+                    gap={1}
                     flexDir={{ md: "column" }}
                     alignItems="center"
                     onClick={() => router.push(href)}
                 >
-                    <Icon as={icon} fontSize={{ base: "md", md: "md" }} />
-                    <Text fontWeight="normal" fontSize="xs" mt={2}>
+                    <Icon as={icon} fontSize={{ base: "md", md: "sm" }} />
+                    <Text fontWeight="normal" fontSize="xs">
                         {title}
                     </Text>
                 </Flex>

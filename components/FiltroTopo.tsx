@@ -9,6 +9,7 @@ import {
     InputRightElement,
     List,
     ListItem,
+    ModalOverlay,
     Popover,
     PopoverArrow,
     PopoverBody,
@@ -17,6 +18,7 @@ import {
     PopoverFooter,
     PopoverHeader,
     PopoverTrigger,
+    Portal,
     Tag,
     Text,
     useDisclosure,
@@ -66,74 +68,95 @@ export const FiltroTopo = () => {
                     <FormInput
                         leftElement={<Icon as={FiSearch} />}
                         placeholder="Pesquisa de contratos..."
-                        bg="rgba(94, 93, 93, 0.5)"
-                        color="white"
+                        bg="white"
+                        color="#03132B"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
+                        rounded="full"
                         size="sm"
                     />
                 </PopoverTrigger>
-                <PopoverContent w="xl" rounded="none">
-                    <PopoverArrow />
-                    <PopoverCloseButton />
-                    <PopoverHeader>Resultado da pesquisa</PopoverHeader>
-                    <PopoverBody>
-                        <List>
-                            {contratos?.data?.data?.map((i) => (
-                                <ListItem
-                                    p={2}
-                                    key={i.id}
-                                    _hover={{ bg: "gray.100" }}
-                                    onClick={() =>
-                                        modalContrato.current.onOpen(i.id)
-                                    }
-                                >
-                                    <Box>
-                                        <Text fontSize="sm" fontWeight="bold">
-                                            <Text as="span" color="gray">
-                                                Cod.:
-                                            </Text>{" "}
-                                            {i.codigo}
-                                        </Text>
-                                        <Text fontSize="sm">{`${i.imovel?.tipo}, ${i.imovel?.endereco},nº ${i.imovel?.numero}, ${i.imovel?.bairro}, ${i.imovel?.cidade}/${i.imovel?.estado}`}</Text>
-                                    </Box>
-                                    <Box>
-                                        <Text
-                                            fontSize="sm"
-                                            fontWeight="bold"
-                                            color="gray"
+                <Portal>
+                    <Box zIndex="dropdown">
+                        <PopoverContent w="xl" rounded="none" zIndex="modal">
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>Resultado da pesquisa</PopoverHeader>
+                            <PopoverBody>
+                                <List>
+                                    {contratos?.data?.data?.map((i) => (
+                                        <ListItem
+                                            p={2}
+                                            key={i.id}
+                                            _hover={{ bg: "gray.100" }}
+                                            onClick={() =>
+                                                modalContrato.current.onOpen(
+                                                    i.id
+                                                )
+                                            }
                                         >
-                                            Inquilinos
-                                        </Text>
-                                        <Flex gridGap={1}>
-                                            {i.inquilinos.map((i) => (
-                                                <Tag key={i.id} size="sm">
-                                                    {i.nome}
-                                                </Tag>
-                                            ))}
-                                        </Flex>
-                                    </Box>
-                                    <Box>
-                                        <Text
-                                            fontSize="sm"
-                                            fontWeight="bold"
-                                            color="gray"
-                                        >
-                                            Proprietários
-                                        </Text>
-                                        <Flex gridGap={1}>
-                                            {i.proprietarios.map((i) => (
-                                                <Tag key={i.id} size="sm">
-                                                    {i.nome}
-                                                </Tag>
-                                            ))}
-                                        </Flex>
-                                    </Box>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </PopoverBody>
-                </PopoverContent>
+                                            <Box>
+                                                <Text
+                                                    fontSize="sm"
+                                                    fontWeight="bold"
+                                                >
+                                                    <Text
+                                                        as="span"
+                                                        color="gray"
+                                                    >
+                                                        Cod.:
+                                                    </Text>{" "}
+                                                    {i.codigo}
+                                                </Text>
+                                                <Text fontSize="sm">{`${i.imovel?.tipo}, ${i.imovel?.endereco},nº ${i.imovel?.numero}, ${i.imovel?.bairro}, ${i.imovel?.cidade}/${i.imovel?.estado}`}</Text>
+                                            </Box>
+                                            <Box>
+                                                <Text
+                                                    fontSize="sm"
+                                                    fontWeight="bold"
+                                                    color="gray"
+                                                >
+                                                    Inquilinos
+                                                </Text>
+                                                <Flex gridGap={1}>
+                                                    {i.inquilinos.map((i) => (
+                                                        <Tag
+                                                            key={i.id}
+                                                            size="sm"
+                                                        >
+                                                            {i.nome}
+                                                        </Tag>
+                                                    ))}
+                                                </Flex>
+                                            </Box>
+                                            <Box>
+                                                <Text
+                                                    fontSize="sm"
+                                                    fontWeight="bold"
+                                                    color="gray"
+                                                >
+                                                    Proprietários
+                                                </Text>
+                                                <Flex gridGap={1}>
+                                                    {i.proprietarios.map(
+                                                        (i) => (
+                                                            <Tag
+                                                                key={i.id}
+                                                                size="sm"
+                                                            >
+                                                                {i.nome}
+                                                            </Tag>
+                                                        )
+                                                    )}
+                                                </Flex>
+                                            </Box>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </PopoverBody>
+                        </PopoverContent>
+                    </Box>
+                </Portal>
             </Popover>
             <ModalContratos ref={modalContrato} />
         </>

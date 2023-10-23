@@ -90,6 +90,15 @@ async function main() {
                 nome: "Processos",
                 codigo: "imobiliaria.processos",
             },
+            {
+                nome: "Modelos de Fichas",
+                codigo: "imobiliaria.processos.modelos",
+                paiCodigo: "imobiliaria.processos",
+            },
+            {
+                nome: "Fila de Envio",
+                codigo: "imobiliaria.filaEnvio",
+            },
         ],
         skipDuplicates: true,
     });
@@ -120,6 +129,11 @@ async function main() {
                 nome: "Visualizar Todos",
                 codigo: "imobiliaria.processos.visualizarTodos",
                 moduloCodigo: "imobiliaria.processos",
+            },
+            {
+                nome: "Excluir",
+                codigo: "imobiliaria.filaEnvio.excluir",
+                moduloCodigo: "imobiliaria.filaEnvio",
             },
         ],
         skipDuplicates: true,

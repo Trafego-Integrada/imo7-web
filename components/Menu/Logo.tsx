@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import Link from "next/link";
 
 export const Logo = () => {
@@ -12,11 +12,9 @@ export const Logo = () => {
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
+                    p={4}
                 >
-                    <Flex fontSize="2xl" fontWeight="bold" letterSpacing="2px">
-                        <Text color="white">Imo</Text>
-                        <Text color="orange">7</Text>
-                    </Flex>
+                    <Image src="/img/logo-imo7-escuro.svg" />
                 </Box>
             </Link>
         </>

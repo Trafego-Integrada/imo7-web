@@ -43,7 +43,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
             <Box
                 display={{ sm: "flex", md: "none" }}
                 w="full"
-                bg="bluelight"
+                bg="#73C4E1"
                 h={12}
                 alignItems="center"
                 p={5}
@@ -111,7 +111,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                 display={{ sm: "none", md: "flex" }}
                 ml={{ base: "0px" }}
                 w="100%"
-                bg="bluelight"
+                bg="radial-gradient(274.41% 274.41% at 50% 50%, #012659 0%, rgba(0, 0, 0, 0.00) 100%), #03132B;"
                 h={12}
                 alignItems="center"
             >

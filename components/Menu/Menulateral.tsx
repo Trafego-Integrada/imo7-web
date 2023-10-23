@@ -8,7 +8,7 @@ export const Menulateral = () => {
             w="100px"
             h="full"
             minH="100vh"
-            bg="graydark"
+            bg="radial-gradient(274.41% 274.41% at 50% 50%, #012659 0%, rgba(0, 0, 0, 0.00) 100%), #03132B;"
             display={{ base: "none", md: "flex" }}
             flexDirection={"column"}
             zIndex="2"

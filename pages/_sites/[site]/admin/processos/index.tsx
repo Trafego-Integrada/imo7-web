@@ -7,6 +7,7 @@ import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
 import { ModalProcesso } from "@/components/Modals/ModalProcesso";
 import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFichaCadastral";
 import { ModalValidar } from "@/components/Modals/ModalValidar";
+import { Paginator2 } from "@/components/Paginator2";
 import { Filtro } from "@/components/Tabelas/TabelaPadrao/Filtro";
 import { TooltipAvatar } from "@/components/TooltipAvatar";
 import {
@@ -381,6 +382,7 @@ const Home = ({ query }) => {
                         >
                             Excluir Selecionados
                         </Button>
+                        <Text>{data?.data?.total} processos encontrados</Text>
                         <Flex>
                             {usuario?.permissoes?.includes(
                                 "imobiliaria.processos.cadastrar"
@@ -1223,6 +1225,16 @@ const Home = ({ query }) => {
                             //   ]) */}
                             <></>
                         )}
+                    </Flex>
+                    <Flex>
+                        <Paginator2
+                            currentPage={currentPage}
+                            pageSize={pageSize}
+                            pages={pages}
+                            pagesCount={pagesCount}
+                            setCurrentPage={setCurrentPage}
+                            setPageSize={setPageSize}
+                        />
                     </Flex>
                 </Flex>
             </Layout>

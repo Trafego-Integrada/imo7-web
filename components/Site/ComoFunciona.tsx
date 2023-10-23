@@ -13,7 +13,7 @@ import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
 
 export const ComoFunciona = () => {
     return (
-        <Container maxW="container.xl" py={12}>
+        <Container maxW="container.xl" pt={{ lg: 12 }} py={{ base: 12, lg: 0 }}>
             <Flex textAlign="center" mb={4} gap={4} flexDir="column">
                 <Heading color="#032552" fontSize="24px" fontWeight="500">
                     Como funciona
@@ -35,7 +35,11 @@ export const ComoFunciona = () => {
                     ?
                 </Text>
             </Flex>
-            <Flex align="center" gap={8}>
+            <Flex
+                align="center"
+                flexDir={{ base: "column", lg: "row" }}
+                gap={8}
+            >
                 <Image src="/img/IMAGEM.png" alt="#" />
                 <Flex flexDir="column" gap={4}>
                     <Flex align="center" gap={2}>

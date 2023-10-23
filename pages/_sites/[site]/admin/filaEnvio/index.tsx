@@ -7,6 +7,7 @@ import { FiltroContratos } from "@/components/Pages/FIltroContratos";
 import { FiltroFilaEnvio } from "@/components/Pages/FiltroFilaEnvio";
 import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
 import { formatoData } from "@/helpers/helpers";
+import { useAuth } from "@/hooks/useAuth";
 import { listarContratos } from "@/services/models/contrato";
 import {
     excluirFilaEnvio,
@@ -48,6 +49,7 @@ import { MdPageview } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 
 const Home = () => {
+    const { usuario } = useAuth();
     const toast = useToast();
     const modal = useRef();
     const [total, setTotal] = useState();
@@ -138,7 +140,14 @@ const Home = () => {
                                     colorScheme="red"
                                     variant="outline"
                                     disabled={
-                                        selecionados.length ? false : true
+                                        selecionados.length &&
+                                        usuario.permissoes.find(
+                                            (i) =>
+                                                i ==
+                                                "imobiliaria.filaEnvio.excluir"
+                                        )
+                                            ? false
+                                            : true
                                     }
                                     onClick={onDeleteMany}
                                 >
@@ -170,6 +179,15 @@ const Home = () => {
                                                 ).length == 0
                                                 ? true
                                                 : false
+                                        }
+                                        isDisabled={
+                                            usuario?.permissoes?.find(
+                                                (i) =>
+                                                    i ==
+                                                    "imobiliaria.filaEnvio.excluir"
+                                            )
+                                                ? false
+                                                : true
                                         }
                                         onChange={(e) =>
                                             setSelecionados(
@@ -217,6 +235,15 @@ const Home = () => {
                                                   isChecked={selecionados.includes(
                                                       item.id
                                                   )}
+                                                  isDisabled={
+                                                      usuario?.permissoes?.find(
+                                                          (i) =>
+                                                              i ==
+                                                              "imobiliaria.filaEnvio.excluir"
+                                                      )
+                                                          ? false
+                                                          : true
+                                                  }
                                                   onChange={(e) => {
                                                       if (e.target.checked) {
                                                           setSelecionados([
@@ -258,6 +285,15 @@ const Home = () => {
                                                                   )
                                                               }
                                                               aria-label="Abrir"
+                                                              isDisabled={
+                                                                  usuario.permissoes.find(
+                                                                      (i) =>
+                                                                          i ==
+                                                                          "imobiliaria.filaEnvio.excluir"
+                                                                  )
+                                                                      ? false
+                                                                      : true
+                                                              }
                                                           />
                                                       </Tooltip>
                                                   )}

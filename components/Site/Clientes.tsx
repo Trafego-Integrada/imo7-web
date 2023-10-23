@@ -11,12 +11,32 @@ export const Clientes = () => {
                     <Heading textAlign="center" fontWeight="400" color="white">
                         Conheça nossos <strong>clientes</strong>
                     </Heading>
-                    <Flex justify="center" gap={4}>
-                        <Image src="/img/WPA-01 1.png" objectFit="contain" />
-                        <Image src="/img/CARVALHO.png" objectFit="contain" />
-                        <Image src="/img/IMPERIUM.png" objectFit="contain" />
-                        <Image src="/img/BUENO.png" objectFit="contain" />
-                        <Image src="/img/JMATINS.png" objectFit="contain" />
+                    <Flex justify="center" gap={4} wrap="wrap">
+                        <Image
+                            src="/img/WPA-01 1.png"
+                            objectFit="contain"
+                            w={44}
+                        />
+                        <Image
+                            src="/img/CARVALHO.png"
+                            objectFit="contain"
+                            w={44}
+                        />
+                        <Image
+                            src="/img/IMPERIUM.png"
+                            objectFit="contain"
+                            w={44}
+                        />
+                        <Image
+                            src="/img/BUENO.png"
+                            objectFit="contain"
+                            w={44}
+                        />
+                        <Image
+                            src="/img/JMATINS.png"
+                            objectFit="contain"
+                            w={44}
+                        />
                     </Flex>
                 </Flex>
             </Container>

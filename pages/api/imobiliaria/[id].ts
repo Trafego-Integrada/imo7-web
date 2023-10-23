@@ -230,5 +230,13 @@ handle.post(async (req, res) => {
         res.status(500).send(error);
     }
 });
-
+handle.delete(async (req, res) => {
+    const { id } = req.query;
+    const data = await prisma.imobiliaria.delete({
+        where: {
+            id: Number(id),
+        },
+    });
+    res.send(data);
+});
 export default handle;

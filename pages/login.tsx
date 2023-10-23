@@ -57,88 +57,104 @@ const SignIn: NextPage = () => {
         }
     };
     return (
-        <Stack bg="gray.50" w="100vw" h="100vh">
-            <Grid templateColumns="repeat(2, 1fr)" w="full" h="full">
-                <GridItem
-                    display={{ base: "none", lg: "flex" }}
-                    bg="blue.500"
-                    alignItems="center"
-                    justifyContent="center"
-                    p={4}
-                >
-                    <Heading size="4xl" display="flex" color="white">
-                        Imo7
-                    </Heading>
-                </GridItem>
-                <GridItem w="full">
-                    <VStack
+        <Stack
+            bg="gray.50"
+            w="100vw"
+            h="100vh"
+            background="url(/img/IMAGEM-TOPO-CELULAR.png),radial-gradient(274.41% 274.41% at 50% 50%, #012659 0%, rgba(0, 0, 0, 0.00) 100%),#03132B"
+            bgRepeat="no-repeat"
+            bgPos="right"
+            bgSize="cover"
+        >
+            <Flex
+                flexDir="column"
+                gap={12}
+                align="center"
+                justify="center"
+                w="full"
+                h="full"
+            >
+                <GridItem as={Flex} w="full" align="center" justify="center">
+                    <Flex
                         as="form"
                         onSubmit={handleSubmit(onSubmit)}
-                        w={{ base: "100vw", lg: "full" }}
-                        h="full"
                         align="center"
                         justify="center"
-                        gridGap={4}
-                        p={4}
+                        flexDir="column"
+                        gap={12}
+                        p={8}
+                        rounded="2xl"
+                        bg="rgb(3, 19, 43,.8)"
                     >
-                        <Box
-                            display={{ base: "block", lg: "none" }}
-                            px={8}
-                            py={4}
+                        <Flex
+                            flexDir="column"
+                            justify="center"
+                            align="center"
+                            gap={2}
                         >
-                            <Heading size="4xl" display="flex" color="blue.500">
-                                Imo7
-                            </Heading>
-                        </Box>
-                        <Text>Faça seu login</Text>
-                        {error && (
-                            <Flex
-                                color="red"
-                                borderWidth={1}
-                                borderColor="red"
-                                w={96}
-                                p={2}
+                            <Box px={8} py={4}>
+                                <Image
+                                    src="/img/logo-imo7-escuro.svg"
+                                    alt="Imo7"
+                                />
+                            </Box>
+                            <Text color="white">Faça seu login</Text>
+                            {error && (
+                                <Flex
+                                    color="red"
+                                    borderWidth={1}
+                                    borderColor="red"
+                                    w={96}
+                                    p={2}
+                                >
+                                    <Text w="full" textAlign="center">
+                                        {error}
+                                    </Text>
+                                </Flex>
+                            )}
+                        </Flex>
+                        <Flex flexDir="column" gap={4}>
+                            <Input
+                                w={{ lg: 96 }}
+                                size="sm"
+                                type="text"
+                                leftIcon={
+                                    <Icon as={MdFingerprint} w={6} h={6} />
+                                }
+                                placeholder="Seu CPF"
+                                {...register("documento")}
+                                error={errors.documento?.message}
+                                color="white"
+                            />
+                            <Input
+                                type="password"
+                                w={{ lg: 96 }}
+                                size="sm"
+                                leftIcon={<Icon as={CgPassword} w={6} h={6} />}
+                                placeholder="Sua senha"
+                                {...register("password")}
+                                error={errors.password?.message}
+                                color="white"
+                            />
+                            <Button
+                                type="submit"
+                                borderRadius={0}
+                                colorScheme="blue"
+                                rightIcon={<Icon as={FaSignInAlt} />}
+                                isLoading={isSubmitting}
+                                spinner={<BeatLoader size={8} color="white" />}
                             >
-                                <Text w="full" textAlign="center">
-                                    {error}
-                                </Text>
-                            </Flex>
-                        )}
-                        <Input
-                            w={96}
-                            type="text"
-                            leftIcon={<Icon as={MdFingerprint} w={6} h={6} />}
-                            placeholder="Seu CPF"
-                            {...register("documento")}
-                            error={errors.documento?.message}
-                        />
-                        <Input
-                            type="password"
-                            w={96}
-                            leftIcon={<Icon as={CgPassword} w={6} h={6} />}
-                            placeholder="Sua senha"
-                            {...register("password")}
-                            error={errors.password?.message}
-                        />
-                        <Button
-                            type="submit"
-                            borderRadius={0}
-                            colorScheme="blue"
-                            rightIcon={<Icon as={FaSignInAlt} />}
-                            isLoading={isSubmitting}
-                            spinner={<BeatLoader size={8} color="white" />}
-                        >
-                            Entrar
-                        </Button>
+                                Entrar
+                            </Button>
+                        </Flex>
                         <NextChakraLink href="/recuperar-senha">
-                            <Button variant="ghost" size="xs">
+                            <Button variant="ghost" size="xs" color="gray">
                                 Esqueci minha senha
                             </Button>
                         </NextChakraLink>
-                    </VStack>
-                    <VStack></VStack>
+                    </Flex>
                 </GridItem>
-            </Grid>
+            </Flex>
         </Stack>
     );
 };

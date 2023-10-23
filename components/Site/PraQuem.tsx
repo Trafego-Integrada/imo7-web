@@ -39,7 +39,12 @@ export const PraQuem = () => {
                         na sua imobiliária
                     </Text>
                 </Flex>
-                <Flex align="center" gap={8} justify="space-between">
+                <Flex
+                    align="center"
+                    gap={8}
+                    flexDir={{ base: "column", lg: "row" }}
+                    justify="space-between"
+                >
                     <Flex flexDir="column" gap={4} maxW="lg">
                         <Text color="#FFF">
                             Você já imaginou quantas oportunidades perdeu por

@@ -121,7 +121,7 @@ const menu = [
                 href: "/admin/fichas/modelos",
                 icon: HiOutlineDocumentText,
                 cargos: ["imobiliaria"],
-                modulos: ["imobiliaria.fichas.modelos"],
+                modulos: ["imobiliaria.processos.modelos"],
             },
         ],
     },
@@ -213,13 +213,7 @@ const menu = [
         cargos: ["adm"],
         modulos: ["adm.imobiliarias"],
     },
-    {
-        titulo: "Cadastros",
-        href: "/admin/filaEnvio",
-        icon: BsFillGearFill,
-        cargos: ["adm"],
-        modulos: ["adm.imobiliarias"],
-    },
+
     {
         titulo: "Cadastros",
         href: "/admin/cadastros",
@@ -232,7 +226,7 @@ const menu = [
         href: "/admin/filaEnvio",
         icon: MdNewspaper,
         cargos: ["imobiliaria", "adm"],
-        modulos: ["imobiliaria.configuracoes"],
+        modulos: ["imobiliaria.filaEnvio"],
     },
 ];
 

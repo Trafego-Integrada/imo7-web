@@ -49,7 +49,11 @@ export const FichasCadastrais = () => {
                     <strong>processo de cadastro</strong> e{" "}
                     <strong>análise de inquilinos</strong>.
                 </Text>
-                <Flex align="center" gap={8}>
+                <Flex
+                    align="center"
+                    gap={8}
+                    flexDir={{ base: "column", lg: "row" }}
+                >
                     <Image src="/img/laptop-cellphone 1.png" alt="#" />
                     <Flex flexDir="column" gap={4}>
                         <Flex align="center" gap={2}>

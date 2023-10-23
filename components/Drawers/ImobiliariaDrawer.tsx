@@ -1,11 +1,11 @@
 import {
-    Drawer,
-    DrawerBody,
-    DrawerCloseButton,
-    DrawerContent,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
     Flex,
     Grid,
     GridItem,
@@ -37,6 +37,8 @@ import { getAll as getAllContas, listarContas } from "@/services/models/conta";
 import { Select } from "@/components/Forms/Select";
 import { TabelaUsuarios } from "@/components/Tabelas/Usuarios";
 import { queryClient } from "@/services/queryClient";
+import { FormInput } from "../Form/FormInput";
+import { FormSelect } from "../Form/FormSelect";
 
 const schema = yup.object().shape({
     codigo: yup.string().required("O Código é obrigatório"),
@@ -51,7 +53,6 @@ const schema = yup.object().shape({
 const DrawerBase = ({}, ref) => {
     const toast = useToast();
     const { usuario } = useAuth();
-    const { data: contas } = useQuery(["contas"], listarContas);
     const { isOpen, onClose, onOpen } = useDisclosure();
     const {
         register,
@@ -63,18 +64,14 @@ const DrawerBase = ({}, ref) => {
         resolver: yupResolver(schema),
     });
 
-    const showData = useMutation(show);
+    const showData = useMutation(show, {
+        onSuccess: (data) => {
+            reset(data);
+            onOpen();
+        },
+    });
     const atualizar = useMutation(update);
     const cadastrar = useMutation(store);
-
-    const onShow = async (id) => {
-        await showData.mutateAsync(id, {
-            onSuccess: (data) => {
-                reset(data);
-                onOpen();
-            },
-        });
-    };
 
     const { mutateAsync: buscarCep, isLoading } = useMutation(
         async (cep) => {
@@ -141,26 +138,30 @@ const DrawerBase = ({}, ref) => {
         onOpen: (id = null) => {
             reset({});
             if (id) {
-                onShow(id);
+                reset({});
+                showData.mutate(id);
             } else {
                 reset({});
                 onOpen();
             }
         },
     }));
+    console.log("Dados", watch());
+    const { data: contas } = useQuery(["contas"], listarContas);
     return (
-        <Drawer isOpen={isOpen} onClose={onClose} size="xl" placement="right">
-            <DrawerOverlay />
-            <DrawerContent>
-                <DrawerHeader>
-                    <DrawerCloseButton />
-                </DrawerHeader>
-                <DrawerBody
+        <Modal isOpen={isOpen} onClose={onClose} size="6xl">
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>
+                    Imobiliária
+                    <ModalCloseButton />
+                </ModalHeader>
+                <ModalBody
                     as="form"
                     id="imob-form"
                     onSubmit={handleSubmit(onSubmit)}
                 >
-                    <Tabs>
+                    <Tabs size="sm">
                         <TabList>
                             <Tab>Informações Gerais</Tab>
                             {watch("id") && (
@@ -181,15 +182,15 @@ const DrawerBase = ({}, ref) => {
                                         gap={4}
                                     >
                                         <GridItem colSpan={2}>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Código (Identificador único da imobiliária)"
-                                                {...register("codigo")}
-                                                error={errors.codigo?.message}
+                                                {...register("codigo1")}
+                                                error={errors.codigo1?.message}
                                             />
                                         </GridItem>
                                         <GridItem colStart={1} colSpan={2}>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Razão Social"
                                                 {...register("razaoSocial")}
@@ -199,7 +200,7 @@ const DrawerBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem colSpan={2}>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Nome Fantasia"
                                                 {...register("nome")}
@@ -207,7 +208,7 @@ const DrawerBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="CNPJ"
                                                 as={InputMask}
@@ -218,7 +219,7 @@ const DrawerBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Inscrição Estadual"
                                                 {...register("ie")}
@@ -226,7 +227,7 @@ const DrawerBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem colSpan={2}>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="E-mail para contato"
                                                 {...register("email")}
@@ -234,7 +235,7 @@ const DrawerBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem colSpan={2}>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Site"
                                                 {...register("site")}
@@ -243,7 +244,7 @@ const DrawerBase = ({}, ref) => {
                                         </GridItem>
 
                                         <GridItem>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Telefone"
                                                 {...register("telefone")}
@@ -273,7 +274,7 @@ const DrawerBase = ({}, ref) => {
                                             align="center"
                                             colStart={1}
                                         >
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="CEP"
                                                 as={InputMask}
@@ -290,7 +291,7 @@ const DrawerBase = ({}, ref) => {
                                             {isLoading && <Spinner size="xs" />}
                                         </GridItem>
                                         <GridItem colStart={1} colSpan={3}>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Endereço"
                                                 {...register("endereco")}
@@ -298,7 +299,7 @@ const DrawerBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Número"
                                                 {...register("numero")}
@@ -306,7 +307,7 @@ const DrawerBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Bairro"
                                                 {...register("bairro")}
@@ -314,7 +315,7 @@ const DrawerBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="Cidade"
                                                 {...register("cidade")}
@@ -322,7 +323,7 @@ const DrawerBase = ({}, ref) => {
                                             />
                                         </GridItem>
                                         <GridItem>
-                                            <Select
+                                            <FormSelect
                                                 size="sm"
                                                 label="Estado"
                                                 {...register("estado")}
@@ -408,7 +409,7 @@ const DrawerBase = ({}, ref) => {
                                                 <option value="EX">
                                                     Estrangeiro
                                                 </option>
-                                            </Select>
+                                            </FormSelect>
                                         </GridItem>
                                     </Grid>
                                     <Heading size="md" mt={4} mb={2}>
@@ -419,7 +420,7 @@ const DrawerBase = ({}, ref) => {
                                         gap={4}
                                     >
                                         <GridItem colSpan={2}>
-                                            <Input
+                                            <FormInput
                                                 size="sm"
                                                 label="URL"
                                                 {...register("url")}
@@ -437,7 +438,7 @@ const DrawerBase = ({}, ref) => {
                                                 gap={4}
                                             >
                                                 <GridItem colSpan={1}>
-                                                    <Input
+                                                    <FormInput
                                                         size="sm"
                                                         label="Nome"
                                                         {...register(
@@ -450,7 +451,7 @@ const DrawerBase = ({}, ref) => {
                                                     />
                                                 </GridItem>
                                                 <GridItem colSpan={1}>
-                                                    <Input
+                                                    <FormInput
                                                         size="sm"
                                                         label="CPF"
                                                         {...register(
@@ -464,7 +465,7 @@ const DrawerBase = ({}, ref) => {
                                                     />
                                                 </GridItem>
                                                 <GridItem colSpan={1}>
-                                                    <Input
+                                                    <FormInput
                                                         size="sm"
                                                         label="E-mail"
                                                         {...register(
@@ -496,7 +497,7 @@ const DrawerBase = ({}, ref) => {
                                                     gap={4}
                                                 >
                                                     <GridItem colSpan={2}>
-                                                        <Select
+                                                        <FormSelect
                                                             size="sm"
                                                             label="Conta"
                                                             placeholder="É de qual conta?"
@@ -528,7 +529,7 @@ const DrawerBase = ({}, ref) => {
                                                                         </option>
                                                                     )
                                                                 )}
-                                                        </Select>
+                                                        </FormSelect>
                                                     </GridItem>
                                                 </Grid>
                                             </>
@@ -546,8 +547,8 @@ const DrawerBase = ({}, ref) => {
                             <TabPanel></TabPanel>
                         </TabPanels>
                     </Tabs>
-                </DrawerBody>
-                <DrawerFooter>
+                </ModalBody>
+                <ModalFooter>
                     <Button
                         type="submit"
                         form="imob-form"
@@ -556,9 +557,9 @@ const DrawerBase = ({}, ref) => {
                     >
                         Salvar
                     </Button>
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     );
 };
 

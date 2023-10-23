@@ -50,6 +50,9 @@ handle.get(async (req, res) => {
                     orderBy: {
                         ordem: "asc",
                     },
+                    include: {
+                        dependencia: true,
+                    },
                 },
             },
             orderBy: {

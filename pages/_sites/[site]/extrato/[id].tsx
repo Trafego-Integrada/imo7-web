@@ -3402,7 +3402,7 @@ const Extrato = ({ extrato }) => {
                         <div class="row">
                             <div class="col-xs-12">
                                 <h3 style="text-align:center;">${
-                                    extrato.imobiliaria?.razaoSocial
+                                    extrato.proprietario?.nome
                                 }<br> Extrato do
                                     período: ${extrato.periodo}</h3>
                             </div>
@@ -3421,17 +3421,20 @@ const Extrato = ({ extrato }) => {
                             }</div>
                             <div class="col-xs-3">Depósito: ${
                                 extrato.dataDeposito &&
-                                formatoData(extrato.dataDeposito)
+                                formatoData(extrato.dataDeposito.slice(0, 10))
                             }</div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-5">Locatário: ${
-                                extrato.proprietario?.nome
-                            }</div>
-                            <div class="col-xs-4">Documento: ${
-                                extrato.proprietario?.documento
-                            }</div>
-                        </div>
+                        ${extrato?.contrato?.inqulinos?.map(
+                            (item) =>
+                                `<div className="row">
+                            <div className="col-xs-5">
+                                Locatário: ${item?.nome}
+                            </div>
+                            <div className="col-xs-4">
+                                Documento: ${item?.documento}
+                            </div>
+                        </div>`
+                        )}
                         <div class="row">
                             <div class="col-xs-6"></div>
                             <div class="col-xs-6">Responsável: ${
@@ -3476,7 +3479,12 @@ const Extrato = ({ extrato }) => {
                                         <td class="text-bold" style="border-top:1px solid black;border-bottom:1px solid black;">
                                             Vencimento: ${
                                                 extrato.vencimento &&
-                                                formatoData(extrato.vencimento)
+                                                formatoData(
+                                                    extrato.vencimento.slice(
+                                                        0,
+                                                        10
+                                                    )
+                                                )
                                             }</td>
                                         <td colspan="1" style="border-top:1px solid black;border-bottom:1px solid black;text-align: right;">
                                             Total: ${formatoValor(
@@ -3559,6 +3567,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
             contrato: {
                 include: {
                     imovel: true,
+                    inquilinos: true,
                 },
             },
             proprietario: true,

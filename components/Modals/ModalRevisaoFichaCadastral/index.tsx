@@ -225,7 +225,7 @@ const ModalBase = ({}, ref) => {
 
         return total;
     };
-
+    console.log("DAdos", watch());
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -431,6 +431,9 @@ const ModalBase = ({}, ref) => {
                                                                         i.colSpan
                                                                     }
                                                                 >
+                                                                    {i.dependencia
+                                                                        ? "S"
+                                                                        : "N"}
                                                                     <Flex
                                                                         align="center"
                                                                         gap={2}

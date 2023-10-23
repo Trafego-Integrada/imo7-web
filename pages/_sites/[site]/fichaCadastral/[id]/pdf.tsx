@@ -386,7 +386,36 @@ const FichaCadastral = ({
                                     {item.nome}
                                 </Heading>
                             </Box>
-                            <>{renderTable(item.campos)}</>
+                            <>
+                                {renderTable(
+                                    item.campos.filter((i) => {
+                                        if (
+                                            (modelo.campos[i.codigo] &&
+                                                modelo?.campos[i.codigo]
+                                                    ?.exibir &&
+                                                !i.dependencia) ||
+                                            (modelo.campos[i.codigo] &&
+                                                modelo?.campos[i.codigo]
+                                                    ?.exibir &&
+                                                ((i.dependencia?.codigo &&
+                                                    !i.dependenciaValor &&
+                                                    ficha.preenchimento[
+                                                        i.dependencia?.codigo
+                                                    ]) ||
+                                                    (i.dependencia?.codigo &&
+                                                        i.dependenciaValor ==
+                                                            ficha.preenchimento[
+                                                                i.dependencia
+                                                                    ?.codigo
+                                                            ])))
+                                        ) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+                                )}
+                            </>
                             {/* <Grid
                                 gridTemplateColumns={{
                                     base: "repeat(5,1fr)",
@@ -655,6 +684,7 @@ export const getServerSideProps = async (ctx) => {
             campos: {
                 some: {
                     tipoFicha: ficha?.modelo.tipo,
+                    deletedAt:null
                 },
             },
         },
@@ -665,6 +695,9 @@ export const getServerSideProps = async (ctx) => {
             campos: {
                 orderBy: {
                     ordem: "asc",
+                },
+                include: {
+                    dependencia: true,
                 },
             },
         },

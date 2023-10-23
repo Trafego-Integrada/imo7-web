@@ -243,7 +243,7 @@ const Boleto = ({ boleto }) => {
         <td width="160px">
             <div class="titulo">Vencimento</div>
             <div class="conteudo rtl">${formatoData(
-                boleto?.data_vencimen
+                boleto?.data_vencimen?.slice(0, 10)
             )}</div>
         </td>
     </tr>
@@ -372,73 +372,57 @@ const Boleto = ({ boleto }) => {
     <tr>
         <td colspan="5">
             <div class="titulo">Local de pagamento</div>
-            <div class="conteudo">${
-                boleto?.local_pgto1
-            }<?php echo $dadosboleto['local_pgto1'] ?></div>
+            <div class="conteudo">${boleto?.local_pgto1}</div>
         </td>
         <td width="155px">
             <div class="titulo">Vencimento</div>
             <div class="conteudo rtl">${formatoData(
-                boleto?.data_vencimen
-            )}<?php echo $dadosboleto['data_vencimen'] ?></div>
+                boleto?.data_vencimen?.slice(0, 10)
+            )}</div>
         </td>
     </tr>
     <tr>
         <td colspan="4">
             <div class="titulo">Beneficiário</div>
-            <div class="conteudo">${
-                boleto?.beneficiario
-            }<?php echo $dadosboleto['beneficiario'] ?></div>
+            <div class="conteudo">${boleto?.beneficiario}</div>
         </td>
         <td>
             <div class="titulo">CPF/CNPJ</div>
-            <div class="conteudo">${
-                boleto?.cpf_cnpj_beneficiario
-            }<?= $dadosboleto['cpf_cnpj_beneficiario'] ?></div>
+            <div class="conteudo">${boleto?.cpf_cnpj_beneficiario}</div>
         </td>
         <td>
             <div class="titulo">Agência/Cód. Beneficiário</div>
-            <div class="conteudo rtl">${
-                boleto?.ag_cod_beneficiar
-            }<?php echo $dadosboleto['ag_cod_beneficiar'] ?></div>
+            <div class="conteudo rtl">${boleto?.ag_cod_beneficiar}</div>
         </td>
     </tr>
     <tr>
         <td width="110px">
             <div class="titulo">Data do documento</div>
             <div class="conteudo">${formatoData(
-                boleto?.data_doc
-            )}<?php echo $dadosboleto['data_doc'] ?></div>
+                boleto?.data_doc?.slice(0, 10)
+            )}</div>
         </td>
         <td width="120px">
             <div class="titulo">Nº documento</div>
-            <div class="conteudo">${
-                boleto?.num_doc2
-            }<?php echo $dadosboleto['num_doc2'] ?></div>
+            <div class="conteudo">${boleto?.num_doc2}</div>
         </td>
         <td width="60px">
             <div class="titulo">Espécie doc.</div>
-            <div class="conteudo">${
-                boleto?.especie_doc
-            }<?php echo $dadosboleto['especie_doc'] ?></div>
+            <div class="conteudo">${boleto?.especie_doc}</div>
         </td>
         <td>
             <div class="titulo">Aceite</div>
-            <div class="conteudo">${
-                boleto?.aceite
-            }<?php echo $dadosboleto['aceite'] ?></div>
+            <div class="conteudo">${boleto?.aceite}</div>
         </td>
         <td width="110px">
             <div class="titulo">Data processamento</div>
             <div class="conteudo">${formatoData(
-                boleto?.data_proces
-            )}<?php echo $dadosboleto['data_proces'] ?></div>
+                boleto?.data_proces?.slice(0, 10)
+            )}</div>
         </td>
         <td>
             <div class="titulo">Nosso número</div>
-            <div class="conteudo rtl">${
-                boleto?.nosso_numero2
-            }<?php echo $dadosboleto['nosso_numero2'] ?></div>
+            <div class="conteudo rtl">${boleto?.nosso_numero2}</div>
         </td>
     </tr>
     <tr>
@@ -448,9 +432,7 @@ const Boleto = ({ boleto }) => {
         </td>
         <td>
             <div class="titulo">Carteira</div>
-            <div class="conteudo">${
-                boleto?.carteira
-            }<?php echo $dadosboleto['carteira'] ?></div>
+            <div class="conteudo">${boleto?.carteira}</div>
         </td>
         <td>
             <div class="titulo">Espécie</div>
@@ -458,21 +440,15 @@ const Boleto = ({ boleto }) => {
         </td>
         <td>
             <div class="titulo">Quantidade</div>
-            <div class="conteudo">${
-                boleto?.qtd2
-            }<?php echo $dadosboleto['qtd2'] ?></div>
+            <div class="conteudo">${boleto?.qtd2}</div>
         </td>
         <td>
             <div class="titulo">Valor</div>
-            <div class="conteudo">${
-                boleto?.xvalor
-            }<?php if($dadosboleto['xvalor']!=0){echo $dadosboleto['xvalor'];} ?></div>
+            <div class="conteudo">${boleto?.xvalor}</div>
         </td>
         <td>
             <div class="titulo">(=) Valor Documento</div>
-            <div class="conteudo rtl">${
-                boleto?.valor_doc2
-            }<?php echo number_format($dadosboleto['valor_doc2'], 2,',','.') ?></div>
+            <div class="conteudo rtl">${boleto?.valor_doc2}</div>
         </td>
     </tr>
     <tr>
@@ -481,67 +457,43 @@ const Boleto = ({ boleto }) => {
         </td>
         <td>
             <div class="titulo">(-) Descontos / Abatimentos</div>
-            <div class="conteudo rtl">${
-                boleto?.desconto2
-            }<?php if($dadosboleto['desconto2']!=0){echo $dadosboleto['desconto2'];} ?></div>
+            <div class="conteudo rtl">${boleto?.desconto2}</div>
         </td>
     </tr>
     <tr>
         <td colspan="5" class="notopborder">
-            <div class="conteudo">${
-                boleto?.instrucoes1
-            }<?php echo $dadosboleto['instrucoes1']; ?></div>
-            <div class="conteudo">${
-                boleto?.instrucoes2
-            }<?php echo $dadosboleto['instrucoes2']; ?></div>
+            <div class="conteudo">${boleto?.instrucoes1}</div>
+            <div class="conteudo">${boleto?.instrucoes2}</div>
         </td>
         <td>
             <div class="titulo">(-) Outras deduções</div>
-            <div class="conteudo rtl">${
-                boleto?.outras_deducoes2
-            }<?php if($dadosboleto['outras_deducoes2']!=0) {echo $dadosboleto['outras_deducoes2'];} ?></div>
+            <div class="conteudo rtl">${boleto?.outras_deducoes2}</div>
         </td>
     </tr>
     <tr>
         <td colspan="5" class="notopborder">
-            <div class="conteudo">${
-                boleto?.instrucoes3
-            }<?php echo $dadosboleto['instrucoes3']; ?></div>
-            <div class="conteudo">${
-                boleto?.instrucoes4
-            }<?php echo $dadosboleto['instrucoes4']; ?></div>
+            <div class="conteudo">${boleto?.instrucoes3}</div>
+            <div class="conteudo">${boleto?.instrucoes4}</div>
         </td>
         <td>
             <div class="titulo">(+) Mora / Multa</div>
-            <div class="conteudo rtl">${
-                boleto?.valorcobrado2
-            }<?php if($dadosboleto['mora_multa2']!=0){echo $dadosboleto['mora_multa2'];} ?></div>
+            <div class="conteudo rtl">${boleto?.valorcobrado2}</div>
         </td>
     </tr>
     <tr>
         <td colspan="5" class="notopborder">
-            <div class="conteudo">${
-                boleto?.valorcobrado2
-            }<?php echo $dadosboleto['instrucoes5']; ?></div>
-            <div class="conteudo">${
-                boleto?.valorcobrado2
-            }<?php echo $dadosboleto['instrucoes6']; ?></div>
+            <div class="conteudo">${boleto?.instrucoes5}</div>
+            <div class="conteudo">${boleto?.instrucoes6}</div>
         </td>
         <td>
             <div class="titulo">(+) Outros acréscimos</div>
-            <div class="conteudo rtl">${
-                boleto?.valorcobrado2
-            }<?php if($dadosboleto['outros_acrescimos2']!=0){echo $dadosboleto['outros_acrescimos2'];} ?></div>
+            <div class="conteudo rtl">${boleto?.outros_acrescimos2}</div>
         </td>
     </tr>
     <tr>
         <td colspan="5" class="notopborder">
-            <div class="conteudo">${
-                boleto?.valorcobrado2
-            }<?php echo $dadosboleto['instrucoes7']; ?></div>
-            <div class="conteudo">${
-                boleto?.valorcobrado2
-            }<?php echo $dadosboleto['instrucoes8']; ?></div>
+            <div class="conteudo">${boleto?.instrucoes7}</div>
+            <div class="conteudo">${boleto?.instrucoes8}</div>
         </td>
         <td>
             <div class="titulo">(=) Valor cobrado</div>

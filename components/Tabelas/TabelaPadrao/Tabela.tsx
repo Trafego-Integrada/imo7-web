@@ -28,7 +28,7 @@ export const Tabela = ({ head, data, isLoading }: TabelaProps) => {
             <Table size="sm">
                 <Thead>
                     <Tr>
-                        {head.map(({ value, ...props }, key) => (
+                        {head?.map(({ value, ...props }, key) => (
                             <Th key={key} {...props}>
                                 {value}
                             </Th>
@@ -47,8 +47,8 @@ export const Tabela = ({ head, data, isLoading }: TabelaProps) => {
                                 </Flex>
                             </Td>
                         </Tr>
-                    ) : data.length > 0 ? (
-                        data.map((item, key) => (
+                    ) : data?.length > 0 ? (
+                        data?.map((item, key) => (
                             <Tr key={key}>
                                 {item.map(({ value, ...props }, k) => (
                                     <Td key={k} {...props}>

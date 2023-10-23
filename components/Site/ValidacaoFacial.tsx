@@ -33,7 +33,11 @@ export const ValidacaoFacial = () => {
                 <strong>verificar a identidade dos indivíduos</strong>
                 envolvidos nas transações.
             </Text>
-            <Flex align="center" gap={8}>
+            <Flex
+                align="center"
+                gap={8}
+                flexDir={{ base: "column", lg: "row" }}
+            >
                 <Flex flexDir="column" gap={4}>
                     <Flex align="center" gap={2}>
                         <Icon

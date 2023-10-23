@@ -138,5 +138,30 @@ handle.post(async (req, res) => {
 
     res.send(data);
 });
+handle.delete(async (req, res) => {
+    try {
+        const { ids } = req.query;
+        let arrayIds = JSON.parse(ids);
+        console.log(arrayIds, ids);
+        if (!arrayIds.length) {
+            return res
+                .status(400)
+                .send({ success: false, message: "Nenhum id informado" });
+        }
 
+        await prisma.imobiliaria.deleteMany({
+            where: {
+                id: {
+                    in: arrayIds.map((i) => Number(i)),
+                },
+            },
+        });
+        return res.send({ success: true });
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error?.message,
+        });
+    }
+});
 export default handle;

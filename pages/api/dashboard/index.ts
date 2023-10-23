@@ -204,7 +204,9 @@ handler.get(async (req, res) => {
         // Processos
         const processos = await prisma.processo.findMany({
             select: {
+                id: true,
                 status: true,
+                imobiliariaId: true,
             },
             where: {
                 // createdAt: {
@@ -212,8 +214,13 @@ handler.get(async (req, res) => {
                 //     lte: moment().endOf("d").format(),
                 // },
                 imobiliariaId: req.user.imobiliariaId,
+                deletedAt: null,
             },
         });
+        console.log(
+            processos.filter((i) => i.status == "EM_ANDAMENTO"),
+            req.user.imobiliariaId
+        );
         // Data do mês atual e do mês passado
         const hoje = new Date();
 

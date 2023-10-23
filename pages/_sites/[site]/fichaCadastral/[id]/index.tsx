@@ -945,6 +945,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             campos: {
                 some: {
                     tipoFicha: ficha?.modelo.tipo,
+                    deletedAt: null,
                 },
             },
         },
