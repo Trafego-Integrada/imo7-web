@@ -361,7 +361,7 @@ const ModalBase = ({}, ref) => {
                                         </GridItem>
                                         {campos?.data
                                             ?.filter((i) =>
-                                                i.campos.find(
+                                                i?.campos?.find(
                                                     (e) =>
                                                         watch(
                                                             `modelo.campos.${e.codigo}`
@@ -431,9 +431,6 @@ const ModalBase = ({}, ref) => {
                                                                         i.colSpan
                                                                     }
                                                                 >
-                                                                    {i.dependencia
-                                                                        ? "S"
-                                                                        : "N"}
                                                                     <Flex
                                                                         align="center"
                                                                         gap={2}
@@ -1114,7 +1111,7 @@ const ModalBase = ({}, ref) => {
                                                                                     >
                                                                                         Consultar
                                                                                     </Button>
-                                                                                    {data.find(
+                                                                                    {data?.find(
                                                                                         (
                                                                                             ii
                                                                                         ) =>
@@ -1154,7 +1151,7 @@ const ModalBase = ({}, ref) => {
                                                                                                             .NODE_ENV ==
                                                                                                             "production"
                                                                                                             ? `https://www.imo7.com.br/api/v1/integracao/netrin/${
-                                                                                                                  data.find(
+                                                                                                                  data?.find(
                                                                                                                       (
                                                                                                                           ii
                                                                                                                       ) =>
@@ -1177,7 +1174,7 @@ const ModalBase = ({}, ref) => {
                                                                                                                       .id
                                                                                                               }/pdf`
                                                                                                             : `http://localhost:3000/api/v1/integracao/netrin/${
-                                                                                                                  data.find(
+                                                                                                                  data?.find(
                                                                                                                       (
                                                                                                                           ii
                                                                                                                       ) =>
@@ -1202,7 +1199,7 @@ const ModalBase = ({}, ref) => {
                                                                                                     )
                                                                                                 }
                                                                                             >
-                                                                                                {data.find(
+                                                                                                {data?.find(
                                                                                                     (
                                                                                                         ii
                                                                                                     ) =>
@@ -1226,7 +1223,7 @@ const ModalBase = ({}, ref) => {
                                                                                                     ?.processosCPF
                                                                                                     ?.code
                                                                                                     ? "0"
-                                                                                                    : data.find(
+                                                                                                    : data?.find(
                                                                                                           (
                                                                                                               ii
                                                                                                           ) =>
@@ -1301,7 +1298,7 @@ const ModalBase = ({}, ref) => {
                                                                                     >
                                                                                         Consultar
                                                                                     </Button>
-                                                                                    {data.find(
+                                                                                    {data?.find(
                                                                                         (
                                                                                             ii
                                                                                         ) =>
@@ -1341,7 +1338,7 @@ const ModalBase = ({}, ref) => {
                                                                                                             .NODE_ENV ==
                                                                                                             "production"
                                                                                                             ? `https://www.imo7.com.br/api/v1/integracao/netrin/${
-                                                                                                                  data.find(
+                                                                                                                  data?.find(
                                                                                                                       (
                                                                                                                           ii
                                                                                                                       ) =>
@@ -1364,7 +1361,7 @@ const ModalBase = ({}, ref) => {
                                                                                                                       .id
                                                                                                               }/pdf`
                                                                                                             : `http://localhost:3000/api/v1/integracao/netrin/${
-                                                                                                                  data.find(
+                                                                                                                  data?.find(
                                                                                                                       (
                                                                                                                           ii
                                                                                                                       ) =>
@@ -1389,7 +1386,7 @@ const ModalBase = ({}, ref) => {
                                                                                                     )
                                                                                                 }
                                                                                             >
-                                                                                                {data.find(
+                                                                                                {data?.find(
                                                                                                     (
                                                                                                         ii
                                                                                                     ) =>
@@ -1414,7 +1411,7 @@ const ModalBase = ({}, ref) => {
                                                                                                     ?.code
                                                                                                     ? "0"
                                                                                                     : totalProtestos(
-                                                                                                          data.find(
+                                                                                                          data?.find(
                                                                                                               (
                                                                                                                   ii
                                                                                                               ) =>
