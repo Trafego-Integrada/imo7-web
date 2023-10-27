@@ -280,8 +280,6 @@ handle.post(async (req, res) => {
                     message: `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
                 });
             });
-        if (getObjectResponse) {
-        }
 
         res.send(data);
     } catch (error) {

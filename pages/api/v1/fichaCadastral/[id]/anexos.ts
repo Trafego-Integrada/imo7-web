@@ -95,7 +95,7 @@ handler.post(async (req, res) => {
                     .catch((err) => {
                         console.log(err);
                         return res.status(400).send({
-                            message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
+                            message: `Não conseguimos salvar o arquivo , verifique o arquivo. Caso persista, contate o suporte.`,
                         });
                     });
             })
