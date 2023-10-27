@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { providerStorage } from "@/lib/storage";
 import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
 import { multiparty } from "@/middleware/multipart";
@@ -9,6 +8,8 @@ import nextConnect from "next-connect";
 import * as os from "oci-objectstorage";
 import slug from "slug";
 import fs from "fs";
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3Client } from "@aws-sdk/client-s3";
 const handle = nextConnect();
 
 export const config = {
@@ -121,22 +122,6 @@ handle.post(async (req, res) => {
             },
         });
 
-        const client = new os.ObjectStorageClient({
-            authenticationDetailsProvider: providerStorage,
-        });
-        const bucket = "imo7-standard-storage";
-
-        const request: os.requests.GetNamespaceRequest = {};
-        const response = await client.getNamespace(request);
-
-        const namespace = response.value;
-
-        const getBucketRequest: os.requests.GetBucketRequest = {
-            namespaceName: namespace,
-            bucketName: bucket,
-        };
-        const getBucketResponse = await client.getBucket(getBucketRequest);
-
         if (logo) {
             const extension = logo.name.slice(
                 (Math.max(0, logo.name.lastIndexOf(".")) || Infinity) + 1
@@ -153,33 +138,49 @@ handle.post(async (req, res) => {
             const imageData = fs.readFileSync(logo.path);
             const base64Data = imageData.toString("base64");
             const buff = Buffer.from(base64Data, "base64");
-            const putObjectRequest: os.requests.PutObjectRequest = {
-                namespaceName: namespace,
-                bucketName: bucket,
-                putObjectBody: buff,
-                objectName: nameLocation,
-                contentLength: stats.size,
-            };
-            const putObjectResponse = await client.putObject(putObjectRequest);
-
-            const getObjectRequest: os.requests.GetObjectRequest = {
-                objectName: nameLocation,
-                bucketName: bucket,
-                namespaceName: namespace,
-            };
-            const getObjectResponse = await client.getObject(getObjectRequest);
-
-            if (getObjectResponse) {
-                const anexo = await prisma.imobiliaria.update({
-                    where: {
-                        id: Number(id),
+            new Upload({
+                client: new S3Client({
+                    credentials: {
+                        accessKeyId: process.env.STORAGE_KEY,
+                        secretAccessKey: process.env.STORAGE_SECRET,
                     },
-                    data: {
-                        logo:
-                            process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
-                    },
+                    region: process.env.STORAGE_REGION,
+                    endpoint: process.env.STORAGE_ENDPOINT,
+                    tls: false,
+                    forcePathStyle: true,
+                }),
+                params: {
+                    ACL: "public-read",
+                    Bucket: process.env.STORAGE_BUCKET,
+                    Key: nameLocation,
+                    Body: buff,
+                },
+            })
+                .done()
+                .then(async (data) => {
+                    console.log(data);
+                    // if (getObjectResponse.contentLength == 0) {
+                    //     return res.status(400).send({
+                    //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
+                    //     });
+                    // }
+                    const anexo = await prisma.imobiliaria.update({
+                        where: {
+                            id: Number(id),
+                        },
+                        data: {
+                            logo:
+                                process.env.NEXT_PUBLIC_URL_STORAGE +
+                                nameLocation,
+                        },
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(400).send({
+                        message: `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
+                    });
                 });
-            }
         }
         if (bg) {
             const extension = bg.name.slice(
@@ -197,32 +198,49 @@ handle.post(async (req, res) => {
             const imageData = fs.readFileSync(bg.path);
             const base64Data = imageData.toString("base64");
             const buff = Buffer.from(base64Data, "base64");
-            const putObjectRequest: os.requests.PutObjectRequest = {
-                namespaceName: namespace,
-                bucketName: bucket,
-                putObjectBody: buff,
-                objectName: nameLocation,
-                contentLength: stats.size,
-            };
-            const putObjectResponse = await client.putObject(putObjectRequest);
-
-            const getObjectRequest: os.requests.GetObjectRequest = {
-                objectName: nameLocation,
-                bucketName: bucket,
-                namespaceName: namespace,
-            };
-            const getObjectResponse = await client.getObject(getObjectRequest);
-
-            if (getObjectResponse) {
-                const anexo = await prisma.imobiliaria.update({
-                    where: {
-                        id: Number(id),
+            new Upload({
+                client: new S3Client({
+                    credentials: {
+                        accessKeyId: process.env.STORAGE_KEY,
+                        secretAccessKey: process.env.STORAGE_SECRET,
                     },
-                    data: {
-                        bg: process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
-                    },
+                    region: process.env.STORAGE_REGION,
+                    endpoint: process.env.STORAGE_ENDPOINT,
+                    tls: false,
+                    forcePathStyle: true,
+                }),
+                params: {
+                    ACL: "public-read",
+                    Bucket: process.env.STORAGE_BUCKET,
+                    Key: nameLocation,
+                    Body: buff,
+                },
+            })
+                .done()
+                .then(async (data) => {
+                    console.log(data);
+                    // if (getObjectResponse.contentLength == 0) {
+                    //     return res.status(400).send({
+                    //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
+                    //     });
+                    // }
+                    const anexo = await prisma.imobiliaria.update({
+                        where: {
+                            id: Number(id),
+                        },
+                        data: {
+                            bg:
+                                process.env.NEXT_PUBLIC_URL_STORAGE +
+                                nameLocation,
+                        },
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(400).send({
+                        message: `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
+                    });
                 });
-            }
         }
 
         res.send(imobiliaria);

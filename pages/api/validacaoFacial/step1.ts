@@ -1,22 +1,19 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { checkAuth } from "@/middleware/checkAuth";
-import { getUser } from "@/services/database/user";
+import { NextApiResponse } from "next";
 import { NextApiRequestWithUser } from "@/types/auth";
 import nextConnect from "next-connect";
 import { cors } from "@/middleware/cors";
 import axios from "axios";
 import prisma from "@/lib/prisma";
 
-import { providerStorage } from "@/lib/storage";
-import { multiparty } from "@/middleware/multipart";
 import * as os from "oci-objectstorage";
 import slug from "slug";
 import moment from "moment";
 import fs from "fs";
 import { statSync } from "fs";
-import { encodeBase64 } from "bcryptjs";
 import { removerCaracteresEspeciais } from "@/helpers/helpers";
 
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3Client } from "@aws-sdk/client-s3";
 var FOLDER;
 
 if (process.platform == "linux") FOLDER = "/tmp/";
@@ -116,23 +113,6 @@ const savePhoto = async (imobiliariaId: string, photoBase64: string) => {
 };
 
 const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
-    const client = new os.ObjectStorageClient({
-        authenticationDetailsProvider: providerStorage,
-    });
-    const bucket = "imo7-standard-storage";
-
-    const request: os.requests.GetNamespaceRequest = {};
-    const response = await client.getNamespace(request);
-
-    const namespace = response.value;
-
-    const getBucketRequest: os.requests.GetBucketRequest = {
-        namespaceName: namespace,
-        bucketName: bucket,
-    };
-
-    const getBucketResponse = await client.getBucket(getBucketRequest);
-
     const extension = "jpg";
     const nameLocation = `imobiliarias/${imobiliariaId}/validacaoFacial/${slug(
         `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`
@@ -151,28 +131,38 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
     const nodeFsBlob = new os.NodeFSBlob(filepath, stats.size);
     const objectData = await nodeFsBlob.getData();
 
-    const putObjectRequest: os.requests.PutObjectRequest = {
-        namespaceName: namespace,
-        bucketName: bucket,
-        putObjectBody: buff,
-        objectName: nameLocation,
-        contentLength: stats.size,
-    };
+    new Upload({
+        client: new S3Client({
+            credentials: {
+                accessKeyId: process.env.STORAGE_KEY,
+                secretAccessKey: process.env.STORAGE_SECRET,
+            },
+            region: process.env.STORAGE_REGION,
+            endpoint: process.env.STORAGE_ENDPOINT,
+            tls: false,
+            forcePathStyle: true,
+        }),
+        params: {
+            ACL: "public-read",
+            Bucket: process.env.STORAGE_BUCKET,
+            Key: nameLocation,
+            Body: buff,
+        },
+    })
+        .done()
+        .then(async (data) => {
+            console.log(data);
+            // if (getObjectResponse.contentLength == 0) {
+            //     return res.status(400).send({
+            //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
+            //     });
+            // }
 
-    const putObjectResponse = await client.putObject(putObjectRequest);
-
-    const getObjectRequest: os.requests.GetObjectRequest = {
-        objectName: nameLocation,
-        bucketName: bucket,
-        namespaceName: namespace,
-    };
-
-    const getObjectResponse = await client.getObject(getObjectRequest);
-
-    if (getObjectResponse) {
-        return process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation;
-    } else {
-    }
+            return process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 
     return "";
 };

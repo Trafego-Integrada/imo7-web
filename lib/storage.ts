@@ -1,4 +1,8 @@
-import { Region, SimpleAuthenticationDetailsProvider } from "oci-common";
+import {
+    Region,
+    AuthenticationDetailsProvider,
+    ConfigFileAuthenticationDetailsProvider,
+} from "oci-common";
 
 const tenancy =
     "ocid1.tenancy.oc1..aaaaaaaagzw4a3rjpjyjgolo4vfmjsp2i6zjqykoz5233xdwqa7uxdkuueya";
@@ -35,11 +39,4 @@ Ozh7cnyrpLx3Edl8tJjmkbwJydwrPJbWMZdLrqyGfOPVez2pzZCy4Atvi01etOrI
 WXUVecJuLygidfCd3RJ4F+g=
 -----END PRIVATE KEY-----`;
 const region = Region.SA_SAOPAULO_1; // Change to appropriate region
-export const providerStorage = new SimpleAuthenticationDetailsProvider(
-    tenancy,
-    user,
-    fingerprint,
-    privateKey,
-    passphrase,
-    region
-);
+export const providerStorage = new ConfigFileAuthenticationDetailsProvider();

@@ -1,7 +1,5 @@
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
-import { providerStorage } from "@/lib/storage";
-import * as os from "oci-objectstorage";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 import { cors } from "@/middleware/cors";

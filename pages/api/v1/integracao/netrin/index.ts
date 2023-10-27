@@ -8,14 +8,12 @@ import { cors } from "@/middleware/cors";
 import { removerCaracteresEspeciais } from "@/helpers/helpers";
 import { Prisma } from "@prisma/client";
 import puppeteer from "puppeteer";
-import fs from "fs";
-
-import st from "stream";
-import { providerStorage } from "@/lib/storage";
 import slug from "slug";
 import * as os from "oci-objectstorage";
 import { createReadStream, statSync } from "fs";
 
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3Client } from "@aws-sdk/client-s3";
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
 handle.use(cors);
 handle.use(checkAuth);
@@ -200,21 +198,6 @@ handle.post(async (req, res) => {
         });
 
         await browser.close();
-        const client = new os.ObjectStorageClient({
-            authenticationDetailsProvider: providerStorage,
-        });
-        const bucket = "imo7-standard-storage";
-
-        const request: os.requests.GetNamespaceRequest = {};
-        const response = await client.getNamespace(request);
-
-        const namespace = response.value;
-
-        const getBucketRequest: os.requests.GetBucketRequest = {
-            namespaceName: namespace,
-            bucketName: bucket,
-        };
-        const getBucketResponse = await client.getBucket(getBucketRequest);
 
         const extension = ".pdf";
         const nameLocation = `anexo/${slug(
@@ -228,58 +211,76 @@ handle.post(async (req, res) => {
         // const base64Data = imageData.toString("base64");
 
         // const buff = Buffer.from(base64Data, "base64");
-        const putObjectRequest: os.requests.PutObjectRequest = {
-            namespaceName: namespace,
-            bucketName: bucket,
-            putObjectBody: pdf,
-            objectName: nameLocation,
-            //contentLength: stats.size,
-        };
-        const putObjectResponse = await client.putObject(putObjectRequest);
-
-        const getObjectRequest: os.requests.GetObjectRequest = {
-            objectName: nameLocation,
-            bucketName: bucket,
-            namespaceName: namespace,
-        };
-        const getObjectResponse = await client.getObject(getObjectRequest);
-
-        if (getObjectResponse) {
-            const anexo = await prisma.anexo.create({
-                data: {
-                    nome: `${
-                        data.tipoConsulta == "processos_pf"
-                            ? `Consulta Processos Pessoa Física - CPF: ${data.requisicao?.cpf}`
-                            : data.tipoConsulta == "processos_pj"
-                            ? `Consulta Processos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
-                            : data.tipoConsulta == "protestos_pf"
-                            ? `Consulta Protestos Pessoa Física - CPF: ${data.requisicao?.cpf}`
-                            : data.tipoConsulta == "protestos_pj"
-                            ? `Consulta Protestos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
-                            : "Consultas"
-                    }`,
-                    anexo: process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
-                    processo: processoId
-                        ? {
-                              connect: {
-                                  id: processoId,
-                              },
-                          }
-                        : {},
-                    fichaCadastral: fichaCadastralId
-                        ? {
-                              connect: {
-                                  id: fichaCadastralId,
-                              },
-                          }
-                        : {},
-                    usuario: {
-                        connect: {
-                            id: req.user.id,
+        new Upload({
+            client: new S3Client({
+                credentials: {
+                    accessKeyId: process.env.STORAGE_KEY,
+                    secretAccessKey: process.env.STORAGE_SECRET,
+                },
+                region: process.env.STORAGE_REGION,
+                endpoint: process.env.STORAGE_ENDPOINT,
+                tls: false,
+                forcePathStyle: true,
+            }),
+            params: {
+                ACL: "public-read",
+                Bucket: process.env.STORAGE_BUCKET,
+                Key: nameLocation,
+                Body: pdf,
+            },
+        })
+            .done()
+            .then(async (data) => {
+                console.log(data);
+                // if (getObjectResponse.contentLength == 0) {
+                //     return res.status(400).send({
+                //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
+                //     });
+                // }
+                const anexo = await prisma.anexo.create({
+                    data: {
+                        nome: `${
+                            data.tipoConsulta == "processos_pf"
+                                ? `Consulta Processos Pessoa Física - CPF: ${data.requisicao?.cpf}`
+                                : data.tipoConsulta == "processos_pj"
+                                ? `Consulta Processos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
+                                : data.tipoConsulta == "protestos_pf"
+                                ? `Consulta Protestos Pessoa Física - CPF: ${data.requisicao?.cpf}`
+                                : data.tipoConsulta == "protestos_pj"
+                                ? `Consulta Protestos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
+                                : "Consultas"
+                        }`,
+                        anexo:
+                            process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
+                        processo: processoId
+                            ? {
+                                  connect: {
+                                      id: processoId,
+                                  },
+                              }
+                            : {},
+                        fichaCadastral: fichaCadastralId
+                            ? {
+                                  connect: {
+                                      id: fichaCadastralId,
+                                  },
+                              }
+                            : {},
+                        usuario: {
+                            connect: {
+                                id: req.user.id,
+                            },
                         },
                     },
-                },
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                return res.status(400).send({
+                    message: `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
+                });
             });
+        if (getObjectResponse) {
         }
 
         res.send(data);

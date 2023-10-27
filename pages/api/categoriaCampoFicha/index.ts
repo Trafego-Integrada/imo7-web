@@ -1,18 +1,6 @@
 import nextConnect from "next-connect";
-import { multiparty } from "@/middleware/multipart";
 
-import slug from "slug";
-import common, {
-    ConfigFileAuthenticationDetailsProvider,
-    Region,
-    SimpleAuthenticationDetailsProvider,
-} from "oci-common";
-import * as os from "oci-objectstorage";
-import { createReadStream, statSync } from "fs";
-import st from "stream";
-import moment from "moment";
 import prisma from "@/lib/prisma";
-import { providerStorage } from "@/lib/storage";
 import { checkAuth } from "@/middleware/checkAuth";
 
 const handle = nextConnect();

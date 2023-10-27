@@ -1,9 +1,8 @@
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
-import { providerStorage } from "@/lib/storage";
 import * as os from "oci-objectstorage";
 
-import { createReadStream, statSync } from "fs";
+import { statSync } from "fs";
 const handler = nextConnect();
 import { cors } from "@/middleware/cors";
 import moment from "moment";
@@ -11,6 +10,9 @@ import slug from "slug";
 import { checkAuth } from "@/middleware/checkAuth";
 import { multiparty } from "@/middleware/multipart";
 import fs from "fs";
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3Client } from "@aws-sdk/client-s3";
+
 handler.use(cors);
 handler.use(checkAuth);
 handler.use(multiparty);
@@ -45,21 +47,6 @@ handler.post(async (req, res) => {
         } = req.body;
         console.log(JSON.parse(usuariosPermitidos));
         const { anexos } = req.files;
-        const client = new os.ObjectStorageClient({
-            authenticationDetailsProvider: providerStorage,
-        });
-        const bucket = "imo7-standard-storage";
-
-        const request: os.requests.GetNamespaceRequest = {};
-        const response = await client.getNamespace(request);
-
-        const namespace = response.value;
-
-        const getBucketRequest: os.requests.GetBucketRequest = {
-            namespaceName: namespace,
-            bucketName: bucket,
-        };
-        const getBucketResponse = await client.getBucket(getBucketRequest);
         const anexo = await prisma.anexo.update({
             where: {
                 id: Number(id),
@@ -98,120 +85,136 @@ handler.post(async (req, res) => {
             const imageData = fs.readFileSync(anexos.path);
             const base64Data = imageData.toString("base64");
             let buff = Buffer.from(base64Data, "base64");
-            const putObjectRequest: os.requests.PutObjectRequest = {
-                namespaceName: namespace,
-                bucketName: bucket,
-                putObjectBody: buff,
-                objectName: nameLocation,
-                contentLength: stats.size,
-            };
-            const putObjectResponse = await client.putObject(putObjectRequest);
-
-            const getObjectRequest: os.requests.GetObjectRequest = {
-                objectName: nameLocation,
-                bucketName: bucket,
-                namespaceName: namespace,
-            };
-            const getObjectResponse = await client.getObject(getObjectRequest);
-
-            if (getObjectResponse) {
-                const anexo = await prisma.anexo.update({
-                    where: {
-                        id: Number(id),
+            new Upload({
+                client: new S3Client({
+                    credentials: {
+                        accessKeyId: process.env.STORAGE_KEY,
+                        secretAccessKey: process.env.STORAGE_SECRET,
                     },
-                    data: {
-                        nome,
-                        anexo:
-                            process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
-                        contrato: contratoId
-                            ? {
-                                  connect: {
-                                      id: Number(contratoId),
-                                  },
-                              }
-                            : {},
-                        chamado: chamadoId
-                            ? {
-                                  connect: {
-                                      id: Number(chamadoId),
-                                  },
-                              }
-                            : {},
-                        conversa: conversaId
-                            ? {
-                                  connect: {
-                                      id: Number(conversaId),
-                                  },
-                              }
-                            : {},
-                        usuario: {
-                            connect: {
-                                id: req.user.id,
-                            },
+                    region: process.env.STORAGE_REGION,
+                    endpoint: process.env.STORAGE_ENDPOINT,
+                    tls: false,
+                    forcePathStyle: true,
+                }),
+                params: {
+                    ACL: "public-read",
+                    Bucket: process.env.STORAGE_BUCKET,
+                    Key: nameLocation,
+                    Body: buff,
+                },
+            })
+                .done()
+                .then(async (data) => {
+                    console.log(data);
+                    // if (getObjectResponse.contentLength == 0) {
+                    //     return res.status(400).send({
+                    //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
+                    //     });
+                    // }
+                    const anexo = await prisma.anexo.update({
+                        where: {
+                            id: Number(id),
                         },
-                        usuariosPermitidos: usuariosPermitidos
-                            ? {
-                                  connect: JSON.parse(usuariosPermitidos).map(
-                                      (item) => {
+                        data: {
+                            nome,
+                            anexo:
+                                process.env.NEXT_PUBLIC_URL_STORAGE +
+                                nameLocation,
+                            contrato: contratoId
+                                ? {
+                                      connect: {
+                                          id: Number(contratoId),
+                                      },
+                                  }
+                                : {},
+                            chamado: chamadoId
+                                ? {
+                                      connect: {
+                                          id: Number(chamadoId),
+                                      },
+                                  }
+                                : {},
+                            conversa: conversaId
+                                ? {
+                                      connect: {
+                                          id: Number(conversaId),
+                                      },
+                                  }
+                                : {},
+                            usuario: {
+                                connect: {
+                                    id: req.user.id,
+                                },
+                            },
+                            usuariosPermitidos: usuariosPermitidos
+                                ? {
+                                      connect: JSON.parse(
+                                          usuariosPermitidos
+                                      ).map((item) => {
                                           return {
                                               id: item.id,
                                           };
-                                      }
-                                  ),
-                              }
-                            : {},
-                    },
+                                      }),
+                                  }
+                                : {},
+                        },
+                    });
+                    if (conversaId && chamadoId) {
+                        await prisma.interacaoChamado.create({
+                            data: {
+                                conversa: {
+                                    connect: {
+                                        id: Number(conversaId),
+                                    },
+                                },
+                                chamado: {
+                                    connect: {
+                                        id: Number(chamadoId),
+                                    },
+                                },
+                                anexos: {
+                                    connect: {
+                                        id: anexo.id,
+                                    },
+                                },
+                                mensagem: "Arquivo atualizado",
+                                usuario: {
+                                    connect: {
+                                        id: req.user.id,
+                                    },
+                                },
+                            },
+                        });
+                    }
+                    if (chamadoId) {
+                        await prisma.historicoChamado.create({
+                            data: {
+                                chamado: {
+                                    connect: {
+                                        id: Number(chamadoId),
+                                    },
+                                },
+                                usuario: {
+                                    connect: {
+                                        id: req.user.id,
+                                    },
+                                },
+                                descricao: `Arquivo anexado foi alterado: ${
+                                    nome ? nome : ""
+                                } <a href="${
+                                    process.env.NEXT_PUBLIC_URL_STORAGE +
+                                    nameLocation
+                                }" target="_blank">Visualizar arquivo</a>`,
+                            },
+                        });
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(400).send({
+                        message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
+                    });
                 });
-                if (conversaId && chamadoId) {
-                    await prisma.interacaoChamado.create({
-                        data: {
-                            conversa: {
-                                connect: {
-                                    id: Number(conversaId),
-                                },
-                            },
-                            chamado: {
-                                connect: {
-                                    id: Number(chamadoId),
-                                },
-                            },
-                            anexos: {
-                                connect: {
-                                    id: anexo.id,
-                                },
-                            },
-                            mensagem: "Arquivo atualizado",
-                            usuario: {
-                                connect: {
-                                    id: req.user.id,
-                                },
-                            },
-                        },
-                    });
-                }
-                if (chamadoId) {
-                    await prisma.historicoChamado.create({
-                        data: {
-                            chamado: {
-                                connect: {
-                                    id: Number(chamadoId),
-                                },
-                            },
-                            usuario: {
-                                connect: {
-                                    id: req.user.id,
-                                },
-                            },
-                            descricao: `Arquivo anexado foi alterado: ${
-                                nome ? nome : ""
-                            } <a href="${
-                                process.env.NEXT_PUBLIC_URL_STORAGE +
-                                nameLocation
-                            }" target="_blank">Visualizar arquivo</a>`,
-                        },
-                    });
-                }
-            }
         }
 
         res.send({
