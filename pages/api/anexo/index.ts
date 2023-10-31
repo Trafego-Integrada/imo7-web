@@ -97,9 +97,8 @@ handle.post(async (req, res) => {
         console.log(req.body);
         if (anexos && Array.isArray(anexos) && anexos.length > 0) {
             for await (const foto of anexos) {
-                const extension = foto.originalFilename.slice(
-                    (Math.max(0, foto.originalFilename.lastIndexOf(".")) ||
-                        Infinity) + 1
+                const extension = foto.name.slice(
+                    (Math.max(0, foto.name.lastIndexOf(".")) || Infinity) + 1
                 );
                 const nameLocation = `anexo/${slug(
                     `${moment()}${
@@ -107,10 +106,10 @@ handle.post(async (req, res) => {
                     }`
                 )}.${extension}`;
                 // Create read stream to file
-                const stats = statSync(foto.filepath);
-                const nodeFsBlob = new os.NodeFSBlob(foto.filepath, stats.size);
+                const stats = statSync(foto.path);
+                const nodeFsBlob = new os.NodeFSBlob(foto.path, stats.size);
                 const objectData = await nodeFsBlob.getData();
-                const imageData = fs.readFileSync(foto.filepath);
+                const imageData = fs.readFileSync(foto.path);
                 const base64Data = imageData.toString("base64");
 
                 new Upload({
@@ -251,9 +250,8 @@ handle.post(async (req, res) => {
                     });
             }
         } else if (anexos) {
-            const extension = anexos.originalFilename.slice(
-                (Math.max(0, anexos.originalFilename.lastIndexOf(".")) ||
-                    Infinity) + 1
+            const extension = anexos.name.slice(
+                (Math.max(0, anexos.name.lastIndexOf(".")) || Infinity) + 1
             );
             const nameLocation = `anexo/${slug(
                 `${moment()}${
@@ -261,10 +259,10 @@ handle.post(async (req, res) => {
                 }`
             )}.${extension}`;
             // Create read stream to file
-            const stats = statSync(anexos.filepath);
-            const nodeFsBlob = new os.NodeFSBlob(anexos.filepath, stats.size);
+            const stats = statSync(anexos.path);
+            const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
             const objectData = await nodeFsBlob.getData();
-            const imageData = fs.readFileSync(anexos.filepath);
+            const imageData = fs.readFileSync(anexos.path);
             const base64Data = imageData.toString("base64");
             const buff = Buffer.from(base64Data, "base64");
             new Upload({

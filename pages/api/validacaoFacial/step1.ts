@@ -104,12 +104,12 @@ handler.post(async (req, res) => {
 const savePhoto = async (imobiliariaId: string, photoBase64: string) => {
     const extension = "jpg";
 
-    const filepath = FOLDER + new Date().getTime() + "." + extension;
+    const path = FOLDER + new Date().getTime() + "." + extension;
 
     let base64Image = photoBase64.split(";base64,").pop();
 
     let buff = Buffer.from(base64Image, "base64");
-    let result = await fs.writeFileSync(filepath, buff, "base64");
+    let result = await fs.writeFileSync(path, buff, "base64");
 };
 
 const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
@@ -118,17 +118,17 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
         `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`
     )}.${extension}`;
 
-    const filepath = FOLDER + new Date().getTime() + "." + extension;
+    const path = FOLDER + new Date().getTime() + "." + extension;
 
     let base64Image = photoBase64.split(";base64,").pop();
 
     let buff = Buffer.from(base64Image, "base64");
-    let result = await fs.writeFileSync(filepath, buff, {
+    let result = await fs.writeFileSync(path, buff, {
         encoding: "base64",
     });
 
-    const stats = statSync(filepath);
-    const nodeFsBlob = new os.NodeFSBlob(filepath, stats.size);
+    const stats = statSync(path);
+    const nodeFsBlob = new os.NodeFSBlob(path, stats.size);
     const objectData = await nodeFsBlob.getData();
 
     new Upload({

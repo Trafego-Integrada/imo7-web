@@ -68,9 +68,8 @@ handler.post(async (req, res) => {
             },
         });
         if (anexos) {
-            const extension = anexos.originalFilename.slice(
-                (Math.max(0, anexos.originalFilename.lastIndexOf(".")) ||
-                    Infinity) + 1
+            const extension = anexos.name.slice(
+                (Math.max(0, anexos.name.lastIndexOf(".")) || Infinity) + 1
             );
 
             const nameLocation = `anexo/${slug(
@@ -80,10 +79,10 @@ handler.post(async (req, res) => {
             )}.${extension}`;
 
             // Create read stream to file
-            const stats = statSync(anexos.filepath);
-            const nodeFsBlob = new os.NodeFSBlob(anexos.filepath, stats.size);
+            const stats = statSync(anexos.path);
+            const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
             const objectData = await nodeFsBlob.getData();
-            const imageData = fs.readFileSync(anexos.filepath);
+            const imageData = fs.readFileSync(anexos.path);
             const base64Data = imageData.toString("base64");
             let buff = Buffer.from(base64Data, "base64");
             new Upload({
