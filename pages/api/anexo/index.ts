@@ -107,10 +107,13 @@ handle.post(async (req, res) => {
                         }`
                     )}.${extension}`;
                     // Create read stream to file
-                    const stats = statSync(foto.path);
-                    const nodeFsBlob = new os.NodeFSBlob(foto.path, stats.size);
+                    const stats = statSync(foto.filepath);
+                    const nodeFsBlob = new os.NodeFSBlob(
+                        foto.filepath,
+                        stats.size
+                    );
                     const objectData = await nodeFsBlob.getData();
-                    const imageData = fs.readFileSync(foto.path);
+                    const imageData = fs.readFileSync(foto.filepath);
                     const base64Data = imageData.toString("base64");
 
                     new Upload({
@@ -263,10 +266,10 @@ handle.post(async (req, res) => {
                 }`
             )}.${extension}`;
             // Create read stream to file
-            const stats = statSync(anexos.path);
-            const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
+            const stats = statSync(anexos.filepath);
+            const nodeFsBlob = new os.NodeFSBlob(anexos.filepath, stats.size);
             const objectData = await nodeFsBlob.getData();
-            const imageData = fs.readFileSync(anexos.path);
+            const imageData = fs.readFileSync(anexos.filepath);
             const base64Data = imageData.toString("base64");
             const buff = Buffer.from(base64Data, "base64");
             new Upload({

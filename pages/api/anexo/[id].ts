@@ -80,10 +80,10 @@ handler.post(async (req, res) => {
             )}.${extension}`;
 
             // Create read stream to file
-            const stats = statSync(anexos.path);
-            const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
+            const stats = statSync(anexos.filepath);
+            const nodeFsBlob = new os.NodeFSBlob(anexos.filepath, stats.size);
             const objectData = await nodeFsBlob.getData();
-            const imageData = fs.readFileSync(anexos.path);
+            const imageData = fs.readFileSync(anexos.filepath);
             const base64Data = imageData.toString("base64");
             let buff = Buffer.from(base64Data, "base64");
             new Upload({
