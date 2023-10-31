@@ -97,9 +97,9 @@ handle.post(async (req, res) => {
         if (anexos && anexos.length > 0) {
             await Promise.all(
                 anexos.map(async (foto) => {
-                    const extension = foto.name.slice(
-                        (Math.max(0, foto.name.lastIndexOf(".")) || Infinity) +
-                            1
+                    const extension = foto.originalFilename.slice(
+                        (Math.max(0, foto.originalFilename.lastIndexOf(".")) ||
+                            Infinity) + 1
                     );
                     const nameLocation = `anexo/${slug(
                         `${moment()}${
@@ -253,8 +253,9 @@ handle.post(async (req, res) => {
                 })
             );
         } else if (anexos) {
-            const extension = anexos.name.slice(
-                (Math.max(0, anexos.name.lastIndexOf(".")) || Infinity) + 1
+            const extension = anexos.originalFilename.slice(
+                (Math.max(0, anexos.originalFilename.lastIndexOf(".")) ||
+                    Infinity) + 1
             );
             const nameLocation = `anexo/${slug(
                 `${moment()}${

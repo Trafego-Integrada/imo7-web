@@ -68,8 +68,9 @@ handler.post(async (req, res) => {
             },
         });
         if (anexos) {
-            const extension = anexos.name.slice(
-                (Math.max(0, anexos.name.lastIndexOf(".")) || Infinity) + 1
+            const extension = anexos.originalFilename.slice(
+                (Math.max(0, anexos.originalFilename.lastIndexOf(".")) ||
+                    Infinity) + 1
             );
 
             const nameLocation = `anexo/${slug(
