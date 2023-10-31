@@ -94,7 +94,7 @@ handle.post(async (req, res) => {
         } = req.body;
         const { anexos } = req.files;
 
-        if (anexos && anexos.length > 0) {
+        if (anexos && Array.isArray(anexos) && anexos.length > 0) {
             await Promise.all(
                 anexos.map(async (foto) => {
                     const extension = foto.originalFilename.slice(
