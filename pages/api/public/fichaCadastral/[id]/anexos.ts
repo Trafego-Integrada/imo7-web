@@ -34,6 +34,7 @@ handler.post(async (req, res) => {
         // const getBucketResponse = await client.getBucket(getBucketRequest);
 
         for await (const i of Object.entries(req.files)) {
+            console.log(i);
             const extension = i[1][0].name?.slice(
                 (Math.max(0, i[1][0].name?.lastIndexOf(".")) || Infinity) + 1
             );
