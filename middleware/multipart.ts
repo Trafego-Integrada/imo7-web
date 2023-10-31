@@ -7,7 +7,10 @@ export const multiparty = async (req, res, next) => {
         console.log(req.body);
         form.parse(req, (err, fields, files) => {
             if (!err) {
-                req.body = fields; // sets the body field in the request object
+                req.body = {};
+                Object.entries(fields).map(
+                    (item) => (req.body[item[0]] = item[1][0])
+                ); // sets the body field in the request object
                 req.files = files; // sets the files field in the request object
             }
             console.log(req.body);

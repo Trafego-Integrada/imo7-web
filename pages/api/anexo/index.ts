@@ -136,7 +136,7 @@ handle.post(async (req, res) => {
                         console.log(data);
                         const anexo = await prisma.anexo.create({
                             data: {
-                                nome: nome[0],
+                                nome: nome,
                                 anexo:
                                     process.env.NEXT_PUBLIC_URL_STORAGE +
                                     nameLocation,
@@ -290,7 +290,7 @@ handle.post(async (req, res) => {
                     console.log(data);
                     const anexo = await prisma.anexo.create({
                         data: {
-                            nome: nome[0],
+                            nome: nome,
                             anexo:
                                 process.env.NEXT_PUBLIC_URL_STORAGE +
                                 nameLocation,
