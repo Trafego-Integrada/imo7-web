@@ -95,166 +95,160 @@ handle.post(async (req, res) => {
         const { anexos } = req.files;
 
         if (anexos && Array.isArray(anexos) && anexos.length > 0) {
-            await Promise.all(
-                anexos.map(async (foto) => {
-                    const extension = foto.originalFilename.slice(
-                        (Math.max(0, foto.originalFilename.lastIndexOf(".")) ||
-                            Infinity) + 1
-                    );
-                    const nameLocation = `anexo/${slug(
-                        `${moment()}${
-                            Math.random() * (999999999 - 100000000) + 100000000
-                        }`
-                    )}.${extension}`;
-                    // Create read stream to file
-                    const stats = statSync(foto.filepath);
-                    const nodeFsBlob = new os.NodeFSBlob(
-                        foto.filepath,
-                        stats.size
-                    );
-                    const objectData = await nodeFsBlob.getData();
-                    const imageData = fs.readFileSync(foto.filepath);
-                    const base64Data = imageData.toString("base64");
+            for await (const foto of anexos) {
+                const extension = foto.originalFilename.slice(
+                    (Math.max(0, foto.originalFilename.lastIndexOf(".")) ||
+                        Infinity) + 1
+                );
+                const nameLocation = `anexo/${slug(
+                    `${moment()}${
+                        Math.random() * (999999999 - 100000000) + 100000000
+                    }`
+                )}.${extension}`;
+                // Create read stream to file
+                const stats = statSync(foto.filepath);
+                const nodeFsBlob = new os.NodeFSBlob(foto.filepath, stats.size);
+                const objectData = await nodeFsBlob.getData();
+                const imageData = fs.readFileSync(foto.filepath);
+                const base64Data = imageData.toString("base64");
 
-                    new Upload({
-                        client: new S3Client({
-                            credentials: {
-                                accessKeyId: process.env.STORAGE_KEY,
-                                secretAccessKey: process.env.STORAGE_SECRET,
-                            },
-                            region: process.env.STORAGE_REGION,
-                            endpoint: process.env.STORAGE_ENDPOINT,
-                            tls: false,
-                            forcePathStyle: true,
-                        }),
-                        params: {
-                            ACL: "public-read",
-                            Bucket: process.env.STORAGE_BUCKET,
-                            Key: nameLocation,
-                            Body: base64Data,
+                new Upload({
+                    client: new S3Client({
+                        credentials: {
+                            accessKeyId: process.env.STORAGE_KEY,
+                            secretAccessKey: process.env.STORAGE_SECRET,
                         },
-                    })
-                        .done()
-                        .then(async (data) => {
-                            console.log(data);
-                            const anexo = await prisma.anexo.create({
+                        region: process.env.STORAGE_REGION,
+                        endpoint: process.env.STORAGE_ENDPOINT,
+                        tls: false,
+                        forcePathStyle: true,
+                    }),
+                    params: {
+                        ACL: "public-read",
+                        Bucket: process.env.STORAGE_BUCKET,
+                        Key: nameLocation,
+                        Body: base64Data,
+                    },
+                })
+                    .done()
+                    .then(async (data) => {
+                        console.log(data);
+                        const anexo = await prisma.anexo.create({
+                            data: {
+                                nome,
+                                anexo:
+                                    process.env.NEXT_PUBLIC_URL_STORAGE +
+                                    nameLocation,
+                                contrato: contratoId
+                                    ? {
+                                          connect: {
+                                              id: Number(contratoId),
+                                          },
+                                      }
+                                    : {},
+                                chamado: chamadoId
+                                    ? {
+                                          connect: {
+                                              id: Number(chamadoId),
+                                          },
+                                      }
+                                    : {},
+                                conversa: conversaId
+                                    ? {
+                                          connect: {
+                                              id: Number(conversaId),
+                                          },
+                                      }
+                                    : {},
+                                processo: processoId
+                                    ? {
+                                          connect: {
+                                              id: processoId,
+                                          },
+                                      }
+                                    : {},
+                                fichaCadastral: fichaCadastralId
+                                    ? {
+                                          connect: {
+                                              id: fichaCadastralId,
+                                          },
+                                      }
+                                    : {},
+                                usuario: {
+                                    connect: {
+                                        id: req.user.id,
+                                    },
+                                },
+                                usuariosPermitidos: usuariosPermitidos
+                                    ? {
+                                          connect: usuariosPermitidos.map(
+                                              (item) => {
+                                                  return {
+                                                      id: item.id,
+                                                  };
+                                              }
+                                          ),
+                                      }
+                                    : {},
+                            },
+                        });
+                        if (conversaId && chamadoId) {
+                            await prisma.interacaoChamado.create({
                                 data: {
-                                    nome,
-                                    anexo:
-                                        process.env.NEXT_PUBLIC_URL_STORAGE +
-                                        nameLocation,
-                                    contrato: contratoId
-                                        ? {
-                                              connect: {
-                                                  id: Number(contratoId),
-                                              },
-                                          }
-                                        : {},
-                                    chamado: chamadoId
-                                        ? {
-                                              connect: {
-                                                  id: Number(chamadoId),
-                                              },
-                                          }
-                                        : {},
-                                    conversa: conversaId
-                                        ? {
-                                              connect: {
-                                                  id: Number(conversaId),
-                                              },
-                                          }
-                                        : {},
-                                    processo: processoId
-                                        ? {
-                                              connect: {
-                                                  id: processoId,
-                                              },
-                                          }
-                                        : {},
-                                    fichaCadastral: fichaCadastralId
-                                        ? {
-                                              connect: {
-                                                  id: fichaCadastralId,
-                                              },
-                                          }
-                                        : {},
+                                    conversa: {
+                                        connect: {
+                                            id: Number(conversaId),
+                                        },
+                                    },
+                                    chamado: {
+                                        connect: {
+                                            id: Number(chamadoId),
+                                        },
+                                    },
+                                    anexos: {
+                                        connect: {
+                                            id: anexo.id,
+                                        },
+                                    },
+                                    mensagem: "Arquivos anexados",
                                     usuario: {
                                         connect: {
                                             id: req.user.id,
                                         },
                                     },
-                                    usuariosPermitidos: usuariosPermitidos
-                                        ? {
-                                              connect: usuariosPermitidos.map(
-                                                  (item) => {
-                                                      return {
-                                                          id: item.id,
-                                                      };
-                                                  }
-                                              ),
-                                          }
-                                        : {},
                                 },
                             });
-                            if (conversaId && chamadoId) {
-                                await prisma.interacaoChamado.create({
-                                    data: {
-                                        conversa: {
-                                            connect: {
-                                                id: Number(conversaId),
-                                            },
-                                        },
-                                        chamado: {
-                                            connect: {
-                                                id: Number(chamadoId),
-                                            },
-                                        },
-                                        anexos: {
-                                            connect: {
-                                                id: anexo.id,
-                                            },
-                                        },
-                                        mensagem: "Arquivos anexados",
-                                        usuario: {
-                                            connect: {
-                                                id: req.user.id,
-                                            },
+                        }
+                        if (chamadoId) {
+                            await prisma.historicoChamado.create({
+                                data: {
+                                    chamado: {
+                                        connect: {
+                                            id: Number(chamadoId),
                                         },
                                     },
-                                });
-                            }
-                            if (chamadoId) {
-                                await prisma.historicoChamado.create({
-                                    data: {
-                                        chamado: {
-                                            connect: {
-                                                id: Number(chamadoId),
-                                            },
+                                    usuario: {
+                                        connect: {
+                                            id: req.user.id,
                                         },
-                                        usuario: {
-                                            connect: {
-                                                id: req.user.id,
-                                            },
-                                        },
-                                        descricao: `Arquivo anexado: ${
-                                            nome ? nome : ""
-                                        } <a href="${
-                                            process.env
-                                                .NEXT_PUBLIC_URL_STORAGE +
-                                            nameLocation
-                                        }" target="_blank">Visualizar arquivo</a>`,
                                     },
-                                });
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            return res.status(400).send({
-                                message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
+                                    descricao: `Arquivo anexado: ${
+                                        nome ? nome : ""
+                                    } <a href="${
+                                        process.env.NEXT_PUBLIC_URL_STORAGE +
+                                        nameLocation
+                                    }" target="_blank">Visualizar arquivo</a>`,
+                                },
                             });
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        return res.status(400).send({
+                            message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
                         });
-                })
-            );
+                    });
+            }
         } else if (anexos) {
             const extension = anexos.originalFilename.slice(
                 (Math.max(0, anexos.originalFilename.lastIndexOf(".")) ||
