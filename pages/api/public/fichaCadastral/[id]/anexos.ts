@@ -35,8 +35,8 @@ handler.post(async (req, res) => {
 
         for await (const i of Object.entries(req.files)) {
             console.log(i);
-            const extension = i[1][0].name?.slice(
-                (Math.max(0, i[1][0].name?.lastIndexOf(".")) || Infinity) + 1
+            const extension = i[1].name?.slice(
+                (Math.max(0, i[1].name?.lastIndexOf(".")) || Infinity) + 1
             );
             const nameLocation = `teste/${id}/anexos/${slug(
                 `${i[0]}-${moment()}${
@@ -44,8 +44,8 @@ handler.post(async (req, res) => {
                 }`
             )}.${extension}`;
             // Create read stream to file
-            const stats = statSync(i[1][0].path);
-            const imageData = fs.readFileSync(i[1][0].path);
+            const stats = statSync(i[1].path);
+            const imageData = fs.readFileSync(i[1].path);
             const base64Data = imageData.toString("base64");
             const buff = Buffer.from(base64Data, "base64");
 
