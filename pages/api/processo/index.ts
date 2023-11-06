@@ -23,6 +23,7 @@ handle.get(async (req, res) => {
             codigoImovel,
             dataCriacao,
             status,
+            responsavel,
         } = req.query;
 
         let filtroQuery: Prisma.ProcessoWhereInput = {};
@@ -94,6 +95,30 @@ handle.get(async (req, res) => {
                     {
                         status: {
                             in: status,
+                        },
+                    },
+                ],
+            };
+        }
+        if (responsavel) {
+            if (!filtroQuery.AND) {
+                filtroQuery = {
+                    ...filtroQuery,
+                    AND: [],
+                };
+            }
+            console.log(responsavel);
+            // responsavel = JSON.parse(responsavel);
+            console.log(responsavel);
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    ...filtroQuery.AND,
+                    {
+                        responsavelId: {
+                            in: Array.isArray(responsavel)
+                                ? responsavel.map((i) => Number(i))
+                                : [Number(responsavel)],
                         },
                     },
                 ],

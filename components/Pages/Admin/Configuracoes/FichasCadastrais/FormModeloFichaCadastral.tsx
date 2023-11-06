@@ -192,40 +192,34 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
                                                 <Th w={24}>Obrigatório</Th>
                                             </Tr>
                                         </Thead>
-                                        {item?.campos
-                                            ?.filter(
-                                                (i) =>
-                                                    i.tipoCampo != "files" &&
-                                                    i.tipoCampo != "file"
-                                            )
-                                            .map((i, key) => (
-                                                <Tr key={i.id}>
-                                                    <Td>{i.nome}</Td>
-                                                    <Td>
-                                                        <Switch
-                                                            size="sm"
-                                                            {...register(
-                                                                `campos.${i.codigo}.exibir`
-                                                            )}
-                                                        />
-                                                    </Td>
-                                                    <Td>
-                                                        <Switch
-                                                            size="sm"
-                                                            {...register(
-                                                                `campos.${i.codigo}.obrigatorio`
-                                                            )}
-                                                        />
-                                                    </Td>
-                                                </Tr>
-                                            ))}
+                                        {item?.campos.map((i, key) => (
+                                            <Tr key={i.id}>
+                                                <Td>{i.nome}</Td>
+                                                <Td>
+                                                    <Switch
+                                                        size="sm"
+                                                        {...register(
+                                                            `campos.${i.codigo}.exibir`
+                                                        )}
+                                                    />
+                                                </Td>
+                                                <Td>
+                                                    <Switch
+                                                        size="sm"
+                                                        {...register(
+                                                            `campos.${i.codigo}.obrigatorio`
+                                                        )}
+                                                    />
+                                                </Td>
+                                            </Tr>
+                                        ))}
                                     </Table>
                                 </GridItem>
                             ))}
                     </Grid>
                 </GridItem>
                 <GridItem as={Grid} gap={4}>
-                    <GridItem bg="white" p={4}>
+                    {/* <GridItem bg="white" p={4}>
                         <Heading size="sm">Arquivos</Heading>
                         <Table size="sm">
                             <Thead>
@@ -263,7 +257,7 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
                                     </Tr>
                                 ))}
                         </Table>
-                    </GridItem>
+                    </GridItem> */}
                     <GridItem bg="white" p={4}>
                         <Flex justify="space-between" align="center">
                             <Box>

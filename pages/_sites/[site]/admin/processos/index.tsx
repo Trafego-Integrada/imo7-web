@@ -9,8 +9,10 @@ import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFich
 import { ModalValidar } from "@/components/Modals/ModalValidar";
 import { Paginator2 } from "@/components/Paginator2";
 import { Filtro } from "@/components/Tabelas/TabelaPadrao/Filtro";
+import { exportToExcel } from "react-json-to-excel";
 import { TooltipAvatar } from "@/components/TooltipAvatar";
 import {
+    formatoData,
     statusFicha,
     statusFichaTag,
     statusProcesso,
@@ -22,6 +24,7 @@ import {
     excluirVariosContratos,
     listarContratos,
 } from "@/services/models/contrato";
+import { listarUsuarios } from "@/services/models/usuario";
 import { queryClient } from "@/services/queryClient";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import {
@@ -107,6 +110,7 @@ const Home = ({ query }) => {
                 : query?.status
                 ? [query?.status]
                 : ["EM_ANDAMENTO"],
+        responsavel: [],
     });
     const {
         currentPage,
@@ -215,6 +219,15 @@ const Home = ({ query }) => {
             value: "REPROVADO",
         },
     ];
+
+    const { data: usuarios } = useQuery(
+        ["listaUsuarios", { admImobiliaria: true }],
+        listarUsuarios,
+        {
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+        }
+    );
     return (
         <>
             <Layout title="Processos">
@@ -275,7 +288,6 @@ const Home = ({ query }) => {
                                         }}
                                     />
                                 </GridItem>
-
                                 <GridItem>
                                     <FormInput
                                         size="sm"
@@ -345,6 +357,29 @@ const Home = ({ query }) => {
                                                 },
                                             })
                                         }
+                                    />
+                                </GridItem>
+                                <GridItem>
+                                    <FormMultiSelect
+                                        size="sm"
+                                        label="Responsável"
+                                        options={usuarios?.data?.data}
+                                        getOptionLabel={(e) => e.nome}
+                                        getOptionValue={(e) => e.id}
+                                        placeholder="Selecione o responsável"
+                                        onChange={(e) =>
+                                            setFiltro({
+                                                ...filtro,
+                                                responsavel: e.map((i) => i.id),
+                                            })
+                                        }
+                                        value={usuarios?.data?.data.filter(
+                                            (e) =>
+                                                filtro.responsavel.find(
+                                                    (i) => i == e.id
+                                                )
+                                        )}
+                                        isMulti
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -914,6 +949,17 @@ const Home = ({ query }) => {
                                                                             />
                                                                         </Tooltip>
                                                                     </>
+                                                                </Td>
+                                                                <Td>
+                                                                    <Tooltip
+                                                                        label="Última atualização"
+                                                                        hasArrow
+                                                                    >
+                                                                        {formatoData(
+                                                                            item.updatedAt,
+                                                                            "DATA_HORA"
+                                                                        )}
+                                                                    </Tooltip>
                                                                 </Td>
                                                                 <Td>
                                                                     <>

@@ -49,8 +49,8 @@ const schema = yup.object({
         .array()
         .of(
             yup.object({
-                modelo: yup.object().required("Campo obrigatório"),
-                nome: yup.string().required("Campo obrigatório"),
+                modelo: yup.object().nullable().required("Campo obrigatório"),
+                nome: yup.string().nullable().required("Campo obrigatório"),
             })
         )
         .min(1, "Deve ter no mínimo uma ficha")

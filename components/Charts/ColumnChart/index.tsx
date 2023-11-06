@@ -99,9 +99,30 @@ class App extends Component {
                 }),
             })
         );
-
-        series1.data.setAll(this.props.data); // Add legend
+        series1.bullets.push(function () {
+            return am5.Bullet.new(root, {
+                locationX: 0.1,
+                locationY: 1,
+                sprite: am5.Label.new(root, {
+                    centerX: am5.p0,
+                    text: "{esteMes}",
+                    populateText: true,
+                }),
+            });
+        });
+        series2.bullets.push(function () {
+            return am5.Bullet.new(root, {
+                locationX: 0.1,
+                locationY: 1,
+                sprite: am5.Label.new(root, {
+                    centerX: am5.p0,
+                    text: "{mesPassado}",
+                    populateText: true,
+                }),
+            });
+        });
         series2.data.setAll(this.props.data);
+        series1.data.setAll(this.props.data); // Add legend
         legend.data.setAll(chart.series.values);
         // https://www.amcharts.com/docs/v5/concepts/animations/
         series1.appear(1000);

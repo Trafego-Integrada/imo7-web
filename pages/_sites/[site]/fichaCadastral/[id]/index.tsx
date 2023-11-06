@@ -149,8 +149,10 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             • CNPJ: {ficha.imobiliaria.cnpj}
                         </Text>
                         <Text fontSize="sm">
-                            {ficha.imobiliaria.endereco},
-                            {ficha.imobiliaria.bairro},
+                            {ficha.imobiliaria.endereco}
+                            {ficha.imobiliaria.numero &&
+                                ` nº ${ficha.imobiliaria.numero}`}
+                            ,{ficha.imobiliaria.bairro},
                             {ficha.imobiliaria.cidade}/
                             {ficha.imobiliaria.estado} - CEP:{" "}
                             {ficha.imobiliaria.cep}
@@ -948,6 +950,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
                     deletedAt: null,
                 },
             },
+            deletedAt: null,
         },
         orderBy: {
             ordem: "asc",
@@ -956,6 +959,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             campos: {
                 where: {
                     tipoFicha: ficha?.modelo.tipo,
+                    deletedAt: null,
                 },
                 orderBy: {
                     ordem: "asc",

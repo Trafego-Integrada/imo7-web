@@ -57,7 +57,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import moment from "moment";
 import Link from "next/link";
 import { Router, useRouter } from "next/router";
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     FiAlertCircle,
@@ -165,8 +165,10 @@ const ModalBase = ({}, ref) => {
         });
         buscar.mutate(fichaCadastralId);
     };
+    const [consultandoNetrin, setConsultandoNetrin] = useState(false);
     const consultarNetrin = async (data) => {
         try {
+            setConsultandoNetrin(true);
             const response = await api.post("v1/integracao/netrin", {
                 ...data,
                 processoId: watch("processoId"),
@@ -177,7 +179,10 @@ const ModalBase = ({}, ref) => {
                 title: "Consulta realizada com sucesso, entre na aba consultas para visualizar o documento",
                 status: "success",
             });
+            buscar.mutateAsync(watch("id"));
+            setConsultandoNetrin(false);
         } catch (error) {
+            setConsultandoNetrin(false);
             console.log(error);
             toast({
                 title: "Houve um problema",
@@ -409,15 +414,32 @@ const ModalBase = ({}, ref) => {
                                                                             ?.codigo &&
                                                                             !i.dependenciaValor &&
                                                                             watch(
-                                                                                `preenchimento.${i.dependencia?.codigo}`
+                                                                                `preenchimento`
+                                                                            ).find(
+                                                                                (
+                                                                                    ii
+                                                                                ) =>
+                                                                                    ii.campoFichaCadastralCodigo ==
+                                                                                    i
+                                                                                        .dependencia
+                                                                                        ?.codigo
                                                                             )) ||
                                                                             (i
                                                                                 .dependencia
                                                                                 ?.codigo &&
                                                                                 i.dependenciaValor ==
                                                                                     watch(
-                                                                                        `preenchimento.${i.dependencia?.codigo}`
-                                                                                    ))))
+                                                                                        `preenchimento`
+                                                                                    ).find(
+                                                                                        (
+                                                                                            ii
+                                                                                        ) =>
+                                                                                            ii.campoFichaCadastralCodigo ==
+                                                                                            i
+                                                                                                .dependencia
+                                                                                                ?.codigo
+                                                                                    )
+                                                                                        ?.valor)))
                                                                 ) {
                                                                     return true;
                                                                 } else {
@@ -428,7 +450,12 @@ const ModalBase = ({}, ref) => {
                                                                 <GridItem
                                                                     key={i.id}
                                                                     colSpan={
-                                                                        i.colSpan
+                                                                        i.tipoCampo ==
+                                                                            "cpf" ||
+                                                                        i.tipoCampo ==
+                                                                            "cnpj"
+                                                                            ? 5
+                                                                            : i.colSpan
                                                                     }
                                                                 >
                                                                     <Flex
@@ -1058,6 +1085,9 @@ const ModalBase = ({}, ref) => {
                                                                                                     }
                                                                                                 )
                                                                                             }
+                                                                                            isLoading={
+                                                                                                cadastrarValidacaoFacial.isLoading
+                                                                                            }
                                                                                         >
                                                                                             Consultar
                                                                                         </Button>
@@ -1107,6 +1137,9 @@ const ModalBase = ({}, ref) => {
                                                                                                         },
                                                                                                 }
                                                                                             )
+                                                                                        }
+                                                                                        isLoading={
+                                                                                            consultandoNetrin
                                                                                         }
                                                                                     >
                                                                                         Consultar
@@ -1294,6 +1327,9 @@ const ModalBase = ({}, ref) => {
                                                                                                         },
                                                                                                 }
                                                                                             )
+                                                                                        }
+                                                                                        isLoading={
+                                                                                            consultandoNetrin
                                                                                         }
                                                                                     >
                                                                                         Consultar

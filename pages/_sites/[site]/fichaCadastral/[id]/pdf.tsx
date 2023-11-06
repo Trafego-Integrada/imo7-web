@@ -635,7 +635,11 @@ export const getServerSideProps = async (ctx) => {
             responsavel: true,
             imovel: true,
             Processo: true,
-            Anexo: true,
+            Anexo: {
+                where: {
+                    deletedAt: null,
+                },
+            },
         },
     });
     let processo = null;
@@ -684,7 +688,7 @@ export const getServerSideProps = async (ctx) => {
             campos: {
                 some: {
                     tipoFicha: ficha?.modelo.tipo,
-                    deletedAt:null
+                    deletedAt: null,
                 },
             },
         },
