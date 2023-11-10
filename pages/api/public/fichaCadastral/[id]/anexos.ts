@@ -11,12 +11,11 @@ import { S3Client } from "@aws-sdk/client-s3";
 
 const handler = nextConnect();
 handler.use(cors);
-handler.use(multiparty);
 
 handler.post(async (req, res) => {
     try {
         const { id } = req.query;
-
+        const { arquivos } = req.body;
         // const client = new os.ObjectStorageClient({
         //     authenticationDetailsProvider: providerStorage,
         // });
@@ -33,22 +32,18 @@ handler.post(async (req, res) => {
         // };
         // const getBucketResponse = await client.getBucket(getBucketRequest);
 
-        for await (const i of Object.entries(req.files)) {
-            console.log(i);
-            const extension = i[1].name?.slice(
-                (Math.max(0, i[1].name?.lastIndexOf(".")) || Infinity) + 1
-            );
+        for await (const i of arquivos) {
+            const extension = i.extensao;
             const nameLocation = `teste/${id}/anexos/${slug(
-                `${i[0]}-${moment()}${
+                `${i.nome}-${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
                 }`
             )}.${extension}`;
-            // Create read stream to file
-            const stats = statSync(i[1].path);
-            const imageData = fs.readFileSync(i[1].path);
-            const base64Data = imageData.toString("base64");
-            const buff = Buffer.from(base64Data, "base64");
-
+            //Create read stream to file
+            //  const stats = statSync(i[1].path);
+            //  const imageData = fs.readFileSync(i[1].path);
+            const buff = Buffer.from(i.base64, "base64");
+            console.log("Buffer", buff);
             new Upload({
                 client: new S3Client({
                     credentials: {
@@ -86,11 +81,12 @@ handler.post(async (req, res) => {
                                         fichaCadastralId_campoFichaCadastralCodigo:
                                             {
                                                 fichaCadastralId: id,
-                                                campoFichaCadastralCodigo: i[0],
+                                                campoFichaCadastralCodigo:
+                                                    i.nome,
                                             },
                                     },
                                     create: {
-                                        campoFichaCadastralCodigo: i[0],
+                                        campoFichaCadastralCodigo: i.nome,
                                         valor:
                                             process.env
                                                 .NEXT_PUBLIC_URL_STORAGE +
@@ -110,7 +106,7 @@ handler.post(async (req, res) => {
                 .catch((err) => {
                     console.log(err);
                     return res.status(400).send({
-                        message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
+                        message: `Não conseguimos salvar o arquivo ${i.nome}, verifique o arquivo. Caso persista, contate o suporte.`,
                     });
                 });
         }
@@ -124,9 +120,5 @@ handler.post(async (req, res) => {
         });
     }
 });
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
+
 export default handler;

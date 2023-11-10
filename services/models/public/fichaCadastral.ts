@@ -8,10 +8,7 @@ export const atualizarFicha = async ({ id, ...rest }) => {
 export const atualizarAnexosFicha = async ({ id, formData }) => {
     const { data } = await api.post(
         "public/fichaCadastral/" + id + "/anexos",
-        formData,
-        {
-            headers: { "Content-Type": "multipart/form-data" },
-        }
+        formData
     );
     return data;
 };

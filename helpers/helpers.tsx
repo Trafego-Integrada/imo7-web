@@ -403,3 +403,21 @@ export const tagTipoConsultaNetrin = (tipo) => {
             );
     }
 };
+// Função para converter arquivo para base64
+export async function convertToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            resolve(e.target.result.split(",")[1]);
+        };
+        reader.onerror = function (error) {
+            reject(error);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// Função para obter a extensão do arquivo
+export function getFileExtension(filename) {
+    return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
+}

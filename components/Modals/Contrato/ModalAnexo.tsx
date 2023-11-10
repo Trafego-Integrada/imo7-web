@@ -1,4 +1,9 @@
-import { formatoData, formatoValor } from "@/helpers/helpers";
+import {
+    convertToBase64,
+    formatoData,
+    formatoValor,
+    getFileExtension,
+} from "@/helpers/helpers";
 import {
     anexarArquivoContrato,
     atualizarAnexoContrato,
@@ -87,24 +92,51 @@ const ModalBase = (
         },
     });
     const onUpload = async (data) => {
-        const formData = new FormData();
-        contratoId && formData.append("contratoId", contratoId);
-        chamadoId && formData.append("chamadoId", chamadoId);
-        fichaCadastralId &&
-            formData.append("fichaCadastralId", fichaCadastralId);
-        processoId && formData.append("processoId", processoId);
-        formData.append("nome", data.nome);
-        data.usuariosPermitidos &&
-            formData.append(
-                "usuariosPermitidos",
-                JSON.stringify(data.usuariosPermitidos)
-            );
-        formData.append("anexos", file[0]);
+        // const formData = new FormData();
+        // contratoId && formData.append("contratoId", contratoId);
+        // chamadoId && formData.append("chamadoId", chamadoId);
+        // fichaCadastralId &&
+        //     formData.append("fichaCadastralId", fichaCadastralId);
+        // processoId && formData.append("processoId", processoId);
+        // formData.append("nome", data.nome);
+        // data.usuariosPermitidos &&
+        //     formData.append(
+        //         "usuariosPermitidos",
+        //         JSON.stringify(data.usuariosPermitidos)
+        //     );
+        // formData.append("anexos", file[0]);
+        const base64String = await convertToBase64(file[0]);
+        const fileExtension = getFileExtension(file[0].name);
+
+        // return {
+        //     nome: item[0],
+        //     extensao: fileExtension,
+        //     base64: base64String,
+        // };
         if (data.id) {
-            formData.append("id", data.id);
-            await atualizar.mutateAsync(formData);
+            await atualizar.mutateAsync({
+                ...data,
+                contratoId,
+                chamadoId,
+                fichaCadastralId,
+                processoId,
+                anexos: {
+                    base64: base64String,
+                    extensao: fileExtension,
+                },
+            });
         } else {
-            await upload.mutateAsync(formData);
+            await upload.mutateAsync({
+                ...data,
+                contratoId,
+                chamadoId,
+                fichaCadastralId,
+                processoId,
+                anexos: {
+                    base64: base64String,
+                    extensao: fileExtension,
+                },
+            });
         }
     };
     useImperativeHandle(ref, () => ({

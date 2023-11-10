@@ -40,7 +40,11 @@ import "react-quill/dist/quill.snow.css";
 import { buscarEndereco } from "@/lib/buscarEndereco";
 import { GetServerSideProps } from "next";
 import { FormSelect } from "@/components/Form/FormSelect";
-import { formatoValor } from "@/helpers/helpers";
+import {
+    convertToBase64,
+    formatoValor,
+    getFileExtension,
+} from "@/helpers/helpers";
 import { Head } from "@/components/Head";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
     console.log(modelo);
@@ -59,7 +63,8 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         },
     });
     const atualizar = useMutation(atualizarFicha);
-    const atualizarAnexos = useMutation(atualizarAnexosFicha);
+    const atualizarAnexos = useMutation(atualizarAnexosFicha); // Função para converter arquivo para base64
+
     const onSubmit = async (data) => {
         try {
             console.log(data);
@@ -67,16 +72,46 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
 
             const formData = new FormData();
             if (data.arquivos && Object.entries(data.arquivos).length) {
-                await Promise.all(
-                    Object.entries(data.arquivos).map((item) => {
-                        var files = item[1].length;
-                        for (var x = 0; x < files; x++) {
-                            formData.append(item[0], item[1][x]);
-                        }
+                const filesData = await Promise.all(
+                    Object.entries(data.arquivos).map(async (item) => {
+                        var files = item[1];
+                        console.log("files", files, item[1]);
+
+                        const filePromises = Array.from(files).map(
+                            async (file) => {
+                                console.log(file, file.name);
+                                const base64String = await convertToBase64(
+                                    file
+                                );
+                                const fileExtension = getFileExtension(
+                                    file.name
+                                );
+
+                                return {
+                                    nome: item[0],
+                                    extensao: fileExtension,
+                                    base64: base64String,
+                                };
+                            }
+                        );
+
+                        return Promise.all(filePromises);
                     })
                 );
-                await atualizarAnexos.mutateAsync({ id: data.id, formData });
+
+                // Flatten the array
+                const flattenedFilesData = filesData.flat();
+
+                // Now you have an array of objects with nome, extensao, and base64 properties
+                console.log(flattenedFilesData);
+                await atualizarAnexos.mutateAsync({
+                    id: data.id,
+                    formData: {
+                        arquivos: flattenedFilesData,
+                    },
+                });
             }
+
             toast({ title: "Ficha salva", status: "success" });
         } catch (e) {
             console.log(e);

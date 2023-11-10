@@ -1,15 +1,14 @@
 import { FormInput } from "@/components/Form/FormInput";
-import { FormSelect } from "@/components/Form/FormSelect";
 import { Layout } from "@/components/Layout/layout";
 import { Envio } from "@/components/Pages/Admin/Configuracoes/Envio";
 import { FichasCadastrais } from "@/components/Pages/Admin/Configuracoes/FichasCadastrais";
+import { convertToBase64, getFileExtension } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
 import { show, update } from "@/services/models/imobiliaria";
 import { withSSRAuth } from "@/utils/withSSRAuth";
 import {
     Box,
     Button,
-    Checkbox,
     Flex,
     Grid,
     GridItem,
@@ -68,11 +67,36 @@ const Configuracoes = () => {
     const onSubmit = async (data) => {
         try {
             setError(null);
-            const formData = new FormData();
-            Object.entries(data).map((i) => formData.append(i[0], i[1]));
-            if (logos) formData.append("logo", logo[0]);
-            if (bgs) formData.append("bg", bg[0]);
-            await atualizar.mutateAsync({ id: data.id, data: formData });
+            // const formData = new FormData();
+            // Object.entries(data).map((i) => formData.append(i[0], i[1]));
+            let base64StringLogo = null;
+            let fileExtensionLogo = null;
+            let base64StringBg = null;
+            let fileExtensionBg = null;
+            if (logos) {
+                base64StringLogo = await convertToBase64(logo[0]);
+                fileExtensionLogo = getFileExtension(logo[0].name);
+            }
+            if (bgs) {
+                base64StringBg = await convertToBase64(bg[0]);
+                fileExtensionBg = getFileExtension(bg[0].name);
+            }
+
+            await atualizar.mutateAsync({
+                id: data.id,
+                data: {
+                    ...data,
+                    logo: logos
+                        ? {
+                              base64: base64StringLogo,
+                              extensao: fileExtensionLogo,
+                          }
+                        : null,
+                    bg: bgs
+                        ? { base64: base64StringBg, extensao: fileExtensionBg }
+                        : null,
+                },
+            });
             toast({
                 title: "Dados atualizados",
                 status: "success",

@@ -49,19 +49,11 @@ export const buscarAnexoContrato = async (id) => {
 };
 
 export const atualizarAnexoContrato = async (body) => {
-    const { data } = await api.post("anexo/" + body.get("id"), body, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    const { data } = await api.post("anexo/" + body.id, body);
     return data;
 };
 
 export const anexarArquivoContrato = async (body) => {
-    const { data } = await api.post("anexo", body, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    const { data } = await api.post("anexo", body);
     return data;
 };

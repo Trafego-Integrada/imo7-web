@@ -17,16 +17,16 @@ import fs from "fs";
 
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client } from "@aws-sdk/client-s3";
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
+// export const config = {
+//     api: {
+//         bodyParser: false,
+//     },
+// };
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
 handle.use(cors);
 handle.use(checkAuth);
-handle.use(multiparty);
+// handle.use(multiparty);
 
 handle.get(async (req, res) => {
     try {
@@ -91,14 +91,15 @@ handle.post(async (req, res) => {
             fichaCadastralId,
             nome,
             usuariosPermitidos,
+            anexos,
         } = req.body;
-        const { anexos } = req.files;
+        // const { anexos } = req.files;
 
         console.log(req.body);
         if (anexos && Array.isArray(anexos) && anexos.length > 0) {
             for await (const foto of anexos) {
-                const extension = foto.name.slice(
-                    (Math.max(0, foto.name.lastIndexOf(".")) || Infinity) + 1
+                const extension = nome.slice(
+                    (Math.max(0, nome.lastIndexOf(".")) || Infinity) + 1
                 );
                 const nameLocation = `anexo/${slug(
                     `${moment()}${
@@ -250,21 +251,18 @@ handle.post(async (req, res) => {
                     });
             }
         } else if (anexos) {
-            const extension = anexos.name.slice(
-                (Math.max(0, anexos.name.lastIndexOf(".")) || Infinity) + 1
-            );
             const nameLocation = `anexo/${slug(
                 `${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
                 }`
-            )}.${extension}`;
+            )}.${anexos.extensao}`;
             // Create read stream to file
-            const stats = statSync(anexos.path);
-            const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
-            const objectData = await nodeFsBlob.getData();
-            const imageData = fs.readFileSync(anexos.path);
-            const base64Data = imageData.toString("base64");
-            const buff = Buffer.from(base64Data, "base64");
+            // const stats = statSync(anexos.path);
+            // const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
+            // const objectData = await nodeFsBlob.getData();
+            // const imageData = fs.readFileSync(anexos.path);
+            // const base64Data = imageData.toString("base64");
+            const buff = Buffer.from(anexos.base64, "base64");
             new Upload({
                 client: new S3Client({
                     credentials: {
@@ -394,19 +392,18 @@ handle.post(async (req, res) => {
                             },
                         });
                     }
+                    res.send({
+                        success: true,
+                        data: null,
+                    });
                 })
                 .catch((err) => {
                     console.log(err);
                     return res.status(400).send({
-                        message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
+                        message: `Não conseguimos salvar o arquivo ${nome}, verifique o arquivo. Caso persista, contate o suporte.`,
                     });
                 });
         }
-
-        res.send({
-            success: true,
-            data: null,
-        });
     } catch (error) {
         res.status(500).send({
             success: false,
