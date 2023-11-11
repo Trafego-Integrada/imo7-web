@@ -17,11 +17,13 @@ import fs from "fs";
 
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client } from "@aws-sdk/client-s3";
-// export const config = {
-//     api: {
-//         bodyParser: false,
-//     },
-// };
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: "200mb", // Set desired value here
+        },
+    },
+};
 const handle = nextConnect();
 import { cors } from "@/middleware/cors";
 handle.use(cors);

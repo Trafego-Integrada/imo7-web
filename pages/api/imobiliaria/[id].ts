@@ -12,11 +12,13 @@ import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client } from "@aws-sdk/client-s3";
 const handle = nextConnect();
 
-// export const config = {
-//     api: {
-//         bodyParser: false,
-//     },
-// };
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: "200mb", // Set desired value here
+        },
+    },
+};
 handle.use(cors);
 handle.use(checkAuth);
 // handle.use(multiparty);

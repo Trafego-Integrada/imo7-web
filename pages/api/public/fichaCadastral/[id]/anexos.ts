@@ -120,5 +120,11 @@ handler.post(async (req, res) => {
         });
     }
 });
-
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: "200mb", // Set desired value here
+        },
+    },
+};
 export default handler;
