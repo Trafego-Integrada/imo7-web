@@ -951,7 +951,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                             ? 2
                                                                             : ""
                                                                     }
-                                                                    onBlur={() =>
+                                                                    onChange={() =>
                                                                         handleSubmit(
                                                                             onSubmit
                                                                         )
