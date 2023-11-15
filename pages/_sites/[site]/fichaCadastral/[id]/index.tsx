@@ -170,7 +170,6 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         index: 1,
         count: campos.length,
     });
-    console.log(campos);
     return (
         <Box
             bg="gray.100"
@@ -319,7 +318,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     )}
                 </Grid>
                 <Flex>
-                    <Box w="2xl">
+                    {/* <Box w="2xl">
                         <Stepper
                             size="xs"
                             index={activeStep}
@@ -367,7 +366,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                 <StepSeparator />
                             </Step>
                         </Stepper>
-                    </Box>
+                    </Box> */}
                     <Box>
                         <Grid gap={4}>
                             {campos
@@ -381,7 +380,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                         key={item.id}
                                         bg="white"
                                         p={4}
-                                        hidden={activeStep != index}
+                                        // hidden={activeStep != index}
                                     >
                                         <Heading size="sm" mb={6}>
                                             {item.nome}
@@ -952,6 +951,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                             ? 2
                                                                             : ""
                                                                     }
+                                                                    onBlue={() =>
+                                                                        handleSubmit(
+                                                                            onSubmit
+                                                                        )
+                                                                    }
                                                                     error={
                                                                         errors.arquivos &&
                                                                         errors
@@ -1096,7 +1100,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             </GridItem>
                         </Grid>
                         <Flex py={4} justify="space-between">
-                            <Button
+                            {/* <Button
                                 isDisabled={activeStep == 0}
                                 size="sm"
                                 colorScheme="blue"
@@ -1116,20 +1120,19 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                 onClick={() => setActiveStep(activeStep + 1)}
                             >
                                 Avançar
-                            </Button>
-                            {activeStep == campos.length &&
-                                (ficha.status == "reprovada" ||
-                                    ficha.status == "aguardando") && (
-                                    <Button
-                                        size="sm"
-                                        colorScheme="blue"
-                                        type="submit"
-                                        isLoading={isSubmitting}
-                                        rightIcon={<BiSave />}
-                                    >
-                                        Proximo
-                                    </Button>
-                                )}
+                            </Button> */}
+                            {(ficha.status == "reprovada" ||
+                                ficha.status == "aguardando") && (
+                                <Button
+                                    size="sm"
+                                    colorScheme="blue"
+                                    type="submit"
+                                    isLoading={isSubmitting}
+                                    rightIcon={<BiSave />}
+                                >
+                                    Salvar
+                                </Button>
+                            )}
                         </Flex>
                     </Box>
                 </Flex>
