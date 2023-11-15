@@ -951,7 +951,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                             ? 2
                                                                             : ""
                                                                     }
-                                                                    onBlue={() =>
+                                                                    onBlur={() =>
                                                                         handleSubmit(
                                                                             onSubmit
                                                                         )
@@ -1055,7 +1055,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             <GridItem
                                 bg="white"
                                 p={4}
-                                hidden={activeStep != campos.length}
+                                // hidden={activeStep != campos.length}
                             >
                                 Resumo
                                 <Box
