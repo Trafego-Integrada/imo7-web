@@ -73,11 +73,11 @@ const Configuracoes = () => {
             let fileExtensionLogo = null;
             let base64StringBg = null;
             let fileExtensionBg = null;
-            if (logos) {
+            if (logo) {
                 base64StringLogo = await convertToBase64(logo[0]);
                 fileExtensionLogo = getFileExtension(logo[0].name);
             }
-            if (bgs) {
+            if (bg) {
                 base64StringBg = await convertToBase64(bg[0]);
                 fileExtensionBg = getFileExtension(bg[0].name);
             }
@@ -86,13 +86,13 @@ const Configuracoes = () => {
                 id: data.id,
                 data: {
                     ...data,
-                    logo: logos
+                    logo: logo
                         ? {
                               base64: base64StringLogo,
                               extensao: fileExtensionLogo,
                           }
                         : null,
-                    bg: bgs
+                    bg: bg
                         ? { base64: base64StringBg, extensao: fileExtensionBg }
                         : null,
                 },
@@ -212,7 +212,7 @@ const Configuracoes = () => {
                                                     type="submit"
                                                     isLoading={isSubmitting}
                                                     size="sm"
-                                                    id="formImobiliaria"
+                                                    form="formImobiliaria"
                                                     colorScheme="blue"
                                                 >
                                                     Salvar
@@ -266,7 +266,7 @@ const Configuracoes = () => {
                                                                 )}
                                                                 error={
                                                                     errors
-                                                                        .razaoSocial
+                                                                        .nomeFantasia
                                                                         ?.message
                                                                 }
                                                             />
@@ -480,7 +480,7 @@ const Configuracoes = () => {
                                                         type="submit"
                                                         isLoading={isSubmitting}
                                                         size="sm"
-                                                        id="formImobiliaria"
+                                                        form="formImobiliaria"
                                                         colorScheme="blue"
                                                     >
                                                         Salvar
@@ -562,7 +562,7 @@ const Configuracoes = () => {
                                                         type="submit"
                                                         isLoading={isSubmitting}
                                                         size="sm"
-                                                        id="formImobiliaria"
+                                                        form="formImobiliaria"
                                                         colorScheme="blue"
                                                     >
                                                         Salvar

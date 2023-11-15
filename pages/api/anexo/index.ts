@@ -20,7 +20,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 export const config = {
     api: {
         bodyParser: {
-            sizeLimit: "200mb", // Set desired value here
+            sizeLimit: "1000mb", // Set desired value here
         },
     },
 };
