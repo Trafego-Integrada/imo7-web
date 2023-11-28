@@ -39,6 +39,7 @@ import {
     Tag,
     Text,
     Tooltip,
+    useSteps,
     useToast,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -369,6 +370,10 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             });
         }
     };
+    const { activeStep, setActiveStep } = useSteps({
+        index: 1,
+        count: campos.length,
+    });
     return (
         <Box
             bg="gray.100"
