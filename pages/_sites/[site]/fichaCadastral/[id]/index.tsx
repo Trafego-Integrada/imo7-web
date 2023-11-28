@@ -280,7 +280,6 @@ function Previews(props) {
 }
 
 const FichaCadastral = ({ ficha, campos, modelo }) => {
-    console.log(modelo);
     const [schema, setSchema] = useState({});
     const toast = useToast();
     const {
@@ -408,12 +407,12 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             <Container maxW="container.xl">
                 <Flex
                     align="center"
-                    py={8}
+                    py={6}
                     gap={6}
                     flexDir={{ base: "column", lg: "row" }}
                 >
                     <Box>
-                        <Image w={150} src={ficha.imobiliaria.logo} />
+                        <Image h={100} src={ficha.imobiliaria.logo} />
                     </Box>
                     <Box>
                         <Text>
@@ -447,7 +446,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                         </Text>
                     </Box>
                 </Flex>
-                <Box py={8}>
+                <Box py={4}>
                     <Heading size="md" textAlign="center">
                         {modelo.nome}
                     </Heading>
@@ -509,31 +508,37 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             ""
                         )}
                     </GridItem>
-                    <GridItem p={4} bg="white">
-                        <Text fontSize="sm" color="gray">
-                            Valor Negociado
-                        </Text>
-                        <Text>
-                            {
-                                ficha.Processo?.campos?.find((e) => e.valor)
-                                    ?.valor
-                            }
-                        </Text>
-                    </GridItem>
-                    <GridItem p={4} bg="white">
-                        <Text fontSize="sm" color="gray">
-                            Valor Condominio
-                        </Text>
-                        <Text>
-                            {formatoValor(ficha.imovel?.valorCondominio)}
-                        </Text>
-                    </GridItem>
-                    <GridItem p={4} bg="white">
-                        <Text fontSize="sm" color="gray">
-                            Valor IPTU
-                        </Text>
-                        <Text>{formatoValor(ficha.imovel?.valorIPTU)}</Text>
-                    </GridItem>
+                    {ficha.Processo?.campos?.find((e) => e.valor)?.valor && (
+                        <GridItem p={4} bg="white">
+                            <Text fontSize="sm" color="gray">
+                                Valor Negociado
+                            </Text>
+                            <Text>
+                                {
+                                    ficha.Processo?.campos?.find((e) => e.valor)
+                                        ?.valor
+                                }
+                            </Text>
+                        </GridItem>
+                    )}
+                    {ficha.imovel?.valorCondominio && (
+                        <GridItem p={4} bg="white">
+                            <Text fontSize="sm" color="gray">
+                                Valor Condominio
+                            </Text>
+                            <Text>
+                                {formatoValor(ficha.imovel?.valorCondominio)}
+                            </Text>
+                        </GridItem>
+                    )}
+                    {ficha.imovel?.valorIPTU && (
+                        <GridItem p={4} bg="white">
+                            <Text fontSize="sm" color="gray">
+                                Valor IPTU
+                            </Text>
+                            <Text>{formatoValor(ficha.imovel?.valorIPTU)}</Text>
+                        </GridItem>
+                    )}
                 </Grid>
                 <Flex flexDir={{ base: "column", lg: "row" }}>
                     <Box w={{ base: "full", lg: "xs" }} overflow="auto">

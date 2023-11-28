@@ -73,11 +73,11 @@ const Configuracoes = () => {
             let fileExtensionLogo = null;
             let base64StringBg = null;
             let fileExtensionBg = null;
-            if (logo) {
+            if (logo && logo?.length) {
                 base64StringLogo = await convertToBase64(logo[0]);
                 fileExtensionLogo = getFileExtension(logo[0].name);
             }
-            if (bg) {
+            if (bg && bg?.length) {
                 base64StringBg = await convertToBase64(bg[0]);
                 fileExtensionBg = getFileExtension(bg[0].name);
             }
@@ -139,7 +139,6 @@ const Configuracoes = () => {
             {file.path} - {file.size} bytes
         </ListItem>
     ));
-    console.log(router);
     const tabIndex = (value) => {
         switch (value) {
             case "dados":
@@ -689,7 +688,7 @@ const Configuracoes = () => {
                                                     type="submit"
                                                     isLoading={isSubmitting}
                                                     size="sm"
-                                                    id="formImobiliaria"
+                                                    form="formImobiliaria"
                                                     colorScheme="blue"
                                                 >
                                                     Salvar

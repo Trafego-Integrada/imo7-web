@@ -125,7 +125,7 @@ handle.post(async (req, res) => {
             },
         });
 
-        if (logo) {
+        if (logo && logo.base64) {
             const nameLocation = `logos/${slug(
                 `${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
@@ -182,7 +182,7 @@ handle.post(async (req, res) => {
                     });
                 });
         }
-        if (bg) {
+        if (bg && bg.base64) {
             // const extension = bg.name.slice(
             //     (Math.max(0, bg.name.lastIndexOf(".")) || Infinity) + 1
             // );
