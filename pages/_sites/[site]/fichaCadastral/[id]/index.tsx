@@ -354,6 +354,63 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             });
         }
     };
+    const onSubmitIgnorandoErros = async (data) => {
+        try {
+            console.log(data);
+            await atualizar.mutateAsync(data);
+
+            // const formData = new FormData();
+            // if (data.arquivos && Object.entries(data.arquivos).length) {
+            //     const filesData = await Promise.all(
+            //         Object.entries(data.arquivos).map(async (item) => {
+            //             var files = item[1];
+            //             console.log("files", files, item[1]);
+
+            //             const filePromises = Array.from(files).map(
+            //                 async (file) => {
+            //                     console.log(file, file.name);
+            //                     const base64String = await convertToBase64(
+            //                         file
+            //                     );
+            //                     const fileExtension = getFileExtension(
+            //                         file.name
+            //                     );
+
+            //                     return {
+            //                         nome: item[0],
+            //                         extensao: fileExtension,
+            //                         base64: base64String,
+            //                     };
+            //                 }
+            //             );
+
+            //             return Promise.all(filePromises);
+            //         })
+            //     );
+
+            //     // Flatten the array
+            //     const flattenedFilesData = filesData.flat();
+
+            //     // Now you have an array of objects with nome, extensao, and base64 properties
+            //     console.log(flattenedFilesData);
+            //     await atualizarAnexos.mutateAsync({
+            //         id: data.id,
+            //         formData: {
+            //             arquivos: flattenedFilesData,
+            //         },
+            //     });
+            // }
+
+            toast({ title: "Ficha salva automaticamente", status: "success" });
+        } catch (e) {
+            console.log(e);
+            toast({
+                title: "Houve um problema",
+                description: e.response?.data?.message,
+                status: "error",
+            });
+        }
+    };
 
     const buscarEnderecoPorCep = async (cep, camposEndereco) => {
         try {
@@ -393,6 +450,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
         ).length,
     });
+    console.log(errors);
     return (
         <Box
             bg="gray.100"
@@ -1516,8 +1574,33 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                         </Checkbox>
                                     ))}
                                 </Flex>
+                                <Flex>
+                                    {errors && (
+                                        <Alert>
+                                            <AlertTitle>
+                                                Foram encontradas algumas
+                                                pendências
+                                            </AlertTitle>
+                                            <AlertDescription>
+                                                <ul>
+                                                    {Object.keys(errors).map(
+                                                        (fieldName) => (
+                                                            <li key={fieldName}>
+                                                                {
+                                                                    errors[
+                                                                        fieldName
+                                                                    ]?.message
+                                                                }
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            </AlertDescription>
+                                        </Alert>
+                                    )}
+                                </Flex>
                             </GridItem>
-                        </Grid>{" "}
+                        </Grid>
                         <Flex py={4} justify="space-between">
                             <Button
                                 isDisabled={activeStep == 0}
@@ -1541,9 +1624,10 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     type="button"
                                     isLoading={isSubmitting}
                                     rightIcon={<BsArrowRight />}
-                                    onClick={() =>
-                                        setActiveStep(activeStep + 1)
-                                    }
+                                    onClick={() => {
+                                        setActiveStep(activeStep + 1);
+                                        handleSubmit(onSubmitIgnorandoErros);
+                                    }}
                                 >
                                     Avançar
                                 </Button>
