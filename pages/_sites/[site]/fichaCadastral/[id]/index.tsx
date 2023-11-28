@@ -62,6 +62,7 @@ import { Head } from "@/components/Head";
 import { MdClose } from "react-icons/md";
 
 import { FileUpload } from "primereact/fileupload";
+import { BiSave } from "react-icons/bi";
 
 function Previews(props) {
     const toast = useToast(null);
@@ -1260,6 +1261,41 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             </Flex>
                         </GridItem>
                     </Grid>
+                </Flex>
+                <Flex py={4} justify="space-between">
+                    {/* <Button
+                                isDisabled={activeStep == 0}
+                                size="sm"
+                                colorScheme="blue"
+                                type="button"
+                                isLoading={isSubmitting}
+                                leftIcon={<BsArrowLeft />}
+                                onClick={() => setActiveStep(activeStep - 1)}
+                            >
+                                Voltar
+                            </Button>
+                            <Button
+                                size="sm"
+                                colorScheme="blue"
+                                type="button"
+                                isLoading={isSubmitting}
+                                rightIcon={<BsArrowRight />}
+                                onClick={() => setActiveStep(activeStep + 1)}
+                            >
+                                Avançar
+                            </Button> */}
+                    {(ficha.status == "reprovada" ||
+                        ficha.status == "aguardando") && (
+                        <Button
+                            size="sm"
+                            colorScheme="blue"
+                            type="submit"
+                            isLoading={isSubmitting}
+                            rightIcon={<BiSave />}
+                        >
+                            Salvar
+                        </Button>
+                    )}
                 </Flex>
                 <Flex py={4} justify="flex-end">
                     {(ficha.status == "reprovada" ||
