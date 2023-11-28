@@ -63,6 +63,7 @@ import { MdClose } from "react-icons/md";
 
 import { FileUpload } from "primereact/fileupload";
 import { BiSave } from "react-icons/bi";
+import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 
 function Previews(props) {
     const toast = useToast(null);
@@ -115,7 +116,7 @@ function Previews(props) {
             <Flex
                 alignItems="center"
                 justify="space-between"
-                flexDir="column"
+                flexDir="row"
                 gap={2}
             >
                 <Flex gap={4}>
@@ -123,7 +124,7 @@ function Previews(props) {
                     {uploadButton}
                     {cancelButton}
                 </Flex>
-                <Flex align="center" gap={3} ml="auto">
+                <Flex align="center" flexDir="column" gap={1} ml="auto">
                     <Text fontSize="xs">{formatedValue} / 100 MB</Text>
                     <Progress
                         value={value}
@@ -139,27 +140,33 @@ function Previews(props) {
 
     const itemTemplate = (file, props) => {
         return (
-            <Flex align="center" justify="space-between" flexWrap="wrap">
+            <Flex
+                align="center"
+                justify="space-between"
+                flexWrap="wrap"
+                pos="relative"
+            >
                 <Flex align="center">
-                    <img
+                    <Image
                         alt={file.name}
                         role="presentation"
                         src={file.objectURL}
-                        width={100}
+                        w="full"
+                        rounded="lg"
                     />
-                    <Flex as="span" flexDir="column" textAlign="left" ml={3}>
-                        {file.name}
-                        <Tag
-                            size="sm"
-                            colorScheme="orange"
-                            className="px-3 py-2"
-                        >
-                            {props.formatSize}
-                        </Tag>
-                    </Flex>
                 </Flex>
+                <Box as="span" flexDir="column" textAlign="center">
+                    <Text fontSize="xs">{file.name}</Text>
+                    <Tag size="sm" colorScheme="orange">
+                        {props.formatSize}
+                    </Tag>
+                </Box>
 
                 <IconButton
+                    top={0}
+                    right={0}
+                    size="sm"
+                    pos="absolute"
                     colorScheme="red"
                     variant="outline"
                     icon={<MdClose />}
@@ -194,7 +201,7 @@ function Previews(props) {
                 formData: {
                     arquivos: [
                         {
-                            nome: props.nome,
+                            nome: props.codigo,
                             extensao: fileExtension,
                             base64: base64String,
                         },
@@ -209,8 +216,17 @@ function Previews(props) {
         );
     };
     return (
-        <Flex flexDir="column" gap={4} borderWidth={1} p={4} rounded="lg">
-            <Text>{props.nome}</Text>
+        <Flex
+            flexDir="column"
+            gap={4}
+            borderWidth={1}
+            p={4}
+            rounded="lg"
+            w="full"
+        >
+            <Text fontSize="sm" fontWeight="medium">
+                {props.nome}
+            </Text>
             <FileUpload
                 ref={fileUploadRef}
                 nome={props.codigo}
@@ -227,6 +243,7 @@ function Previews(props) {
                 emptyTemplate={emptyTemplate}
                 uploadHandler={customBase64Uploader}
                 mode="advanced"
+                auto
                 uploadOptions={{
                     icon: (
                         <Tooltip label="Upload">
@@ -286,47 +303,47 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             console.log(data);
             await atualizar.mutateAsync(data);
 
-            const formData = new FormData();
-            if (data.arquivos && Object.entries(data.arquivos).length) {
-                const filesData = await Promise.all(
-                    Object.entries(data.arquivos).map(async (item) => {
-                        var files = item[1];
-                        console.log("files", files, item[1]);
+            // const formData = new FormData();
+            // if (data.arquivos && Object.entries(data.arquivos).length) {
+            //     const filesData = await Promise.all(
+            //         Object.entries(data.arquivos).map(async (item) => {
+            //             var files = item[1];
+            //             console.log("files", files, item[1]);
 
-                        const filePromises = Array.from(files).map(
-                            async (file) => {
-                                console.log(file, file.name);
-                                const base64String = await convertToBase64(
-                                    file
-                                );
-                                const fileExtension = getFileExtension(
-                                    file.name
-                                );
+            //             const filePromises = Array.from(files).map(
+            //                 async (file) => {
+            //                     console.log(file, file.name);
+            //                     const base64String = await convertToBase64(
+            //                         file
+            //                     );
+            //                     const fileExtension = getFileExtension(
+            //                         file.name
+            //                     );
 
-                                return {
-                                    nome: item[0],
-                                    extensao: fileExtension,
-                                    base64: base64String,
-                                };
-                            }
-                        );
+            //                     return {
+            //                         nome: item[0],
+            //                         extensao: fileExtension,
+            //                         base64: base64String,
+            //                     };
+            //                 }
+            //             );
 
-                        return Promise.all(filePromises);
-                    })
-                );
+            //             return Promise.all(filePromises);
+            //         })
+            //     );
 
-                // Flatten the array
-                const flattenedFilesData = filesData.flat();
+            //     // Flatten the array
+            //     const flattenedFilesData = filesData.flat();
 
-                // Now you have an array of objects with nome, extensao, and base64 properties
-                console.log(flattenedFilesData);
-                await atualizarAnexos.mutateAsync({
-                    id: data.id,
-                    formData: {
-                        arquivos: flattenedFilesData,
-                    },
-                });
-            }
+            //     // Now you have an array of objects with nome, extensao, and base64 properties
+            //     console.log(flattenedFilesData);
+            //     await atualizarAnexos.mutateAsync({
+            //         id: data.id,
+            //         formData: {
+            //             arquivos: flattenedFilesData,
+            //         },
+            //     });
+            // }
 
             toast({ title: "Ficha salva", status: "success" });
         } catch (e) {
@@ -372,8 +389,10 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         }
     };
     const { activeStep, setActiveStep } = useSteps({
-        index: 1,
-        count: campos.length,
+        index: 0,
+        count: campos.filter((i) =>
+            i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
+        ).length,
     });
     return (
         <Box
@@ -516,37 +535,56 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                         <Text>{formatoValor(ficha.imovel?.valorIPTU)}</Text>
                     </GridItem>
                 </Grid>
-                <Flex>
-                    <Box w="2xl">
+                <Flex flexDir={{ base: "column", lg: "row" }}>
+                    <Box w={{ base: "full", lg: "xs" }} overflow="auto">
                         <Stepper
                             size="xs"
                             index={activeStep}
                             orientation="vertical"
+                            display={{ base: "none", lg: "flex" }}
                         >
-                            {campos.map((step, index) => (
-                                <Step
-                                    key={index}
-                                    onClick={() => setActiveStep(index)}
-                                >
-                                    <StepIndicator>
-                                        <StepStatus
-                                            complete={<StepIcon />}
-                                            incomplete={<StepNumber />}
-                                            active={<StepNumber />}
-                                        />
-                                    </StepIndicator>
+                            {campos
+                                .filter((i) =>
+                                    i.campos.find(
+                                        (e) => modelo?.campos[e.codigo]?.exibir
+                                    )
+                                )
+                                .map((step, index) => (
+                                    <Step
+                                        key={index}
+                                        onClick={() => setActiveStep(index)}
+                                    >
+                                        <StepIndicator>
+                                            <StepStatus
+                                                complete={<StepIcon />}
+                                                incomplete={<StepNumber />}
+                                                active={<StepNumber />}
+                                            />
+                                        </StepIndicator>
 
-                                    <Box flexShrink="0">
-                                        <StepTitle>{step.nome}</StepTitle>
-                                        <StepDescription>
-                                            {step.descricao}
-                                        </StepDescription>
-                                    </Box>
+                                        <Box flexShrink="0">
+                                            <StepTitle>{step.nome}</StepTitle>
+                                            <StepDescription>
+                                                {step.descricao}
+                                            </StepDescription>
+                                        </Box>
 
-                                    <StepSeparator />
-                                </Step>
-                            ))}
-                            <Step onClick={() => setActiveStep(campos.length)}>
+                                        <StepSeparator />
+                                    </Step>
+                                ))}
+                            <Step
+                                onClick={() =>
+                                    setActiveStep(
+                                        campos.filter((i) =>
+                                            i.campos.find(
+                                                (e) =>
+                                                    modelo?.campos[e.codigo]
+                                                        ?.exibir
+                                            )
+                                        ).length
+                                    )
+                                }
+                            >
                                 <StepIndicator>
                                     <StepStatus
                                         complete={<StepIcon />}
@@ -565,419 +603,333 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                 <StepSeparator />
                             </Step>
                         </Stepper>
+                        <Box display={{ lg: "none" }}>
+                            <Stepper
+                                size="xs"
+                                index={activeStep}
+                                flexWrap="wrap"
+                            >
+                                {campos
+                                    .filter((i) =>
+                                        i.campos.find(
+                                            (e) =>
+                                                modelo?.campos[e.codigo]?.exibir
+                                        )
+                                    )
+                                    .map((step, index) => (
+                                        <Step
+                                            key={index}
+                                            onClick={() => setActiveStep(index)}
+                                            style={{
+                                                minWidth: "content",
+                                            }}
+                                        >
+                                            <StepIndicator>
+                                                <StepStatus
+                                                    complete={<StepIcon />}
+                                                    incomplete={<StepNumber />}
+                                                    active={<StepNumber />}
+                                                />
+                                            </StepIndicator>
+
+                                            <Box flexShrink="0">
+                                                <StepTitle>
+                                                    {step.nome}
+                                                </StepTitle>
+                                                <StepDescription>
+                                                    {step.descricao}
+                                                </StepDescription>
+                                            </Box>
+
+                                            <StepSeparator />
+                                        </Step>
+                                    ))}
+                                <Step
+                                    onClick={() =>
+                                        setActiveStep(
+                                            campos.filter((i) =>
+                                                i.campos.find(
+                                                    (e) =>
+                                                        modelo?.campos[e.codigo]
+                                                            ?.exibir
+                                                )
+                                            ).length
+                                        )
+                                    }
+                                >
+                                    <StepIndicator>
+                                        <StepStatus
+                                            complete={<StepIcon />}
+                                            incomplete={<StepNumber />}
+                                            active={<StepNumber />}
+                                        />
+                                    </StepIndicator>
+
+                                    <Box flexShrink="0">
+                                        <StepTitle>Resumo</StepTitle>
+                                        <StepDescription>
+                                            Confira os dados informados
+                                        </StepDescription>
+                                    </Box>
+
+                                    <StepSeparator />
+                                </Step>
+                            </Stepper>
+                        </Box>
                     </Box>
-                    <Grid gap={4}>
-                        {campos
-                            .filter((i) =>
-                                i.campos.find(
-                                    (e) => modelo?.campos[e.codigo]?.exibir
+                    <Box w="full">
+                        <Grid gap={4}>
+                            {campos
+                                .filter((i) =>
+                                    i.campos.find(
+                                        (e) => modelo?.campos[e.codigo]?.exibir
+                                    )
                                 )
-                            )
-                            .map((item) => (
-                                <Box key={item.id} bg="white" p={4}>
-                                    <Heading size="sm" mb={6}>
-                                        {item.nome}
-                                    </Heading>
-                                    <Grid
-                                        gridTemplateColumns={{
-                                            base: "repeat(1,1fr)",
-                                            lg: "repeat(5,1fr)",
-                                        }}
-                                        gap={2}
+                                .map((item, index) => (
+                                    <Box
+                                        key={item.id}
+                                        bg="white"
+                                        p={4}
+                                        hidden={activeStep != index}
+                                        w="full"
+                                        minH={96}
                                     >
-                                        {item.campos
-                                            .filter((i) => {
-                                                if (
-                                                    (modelo.campos[i.codigo] &&
-                                                        modelo?.campos[i.codigo]
-                                                            ?.exibir &&
-                                                        !i.dependencia) ||
-                                                    (modelo.campos[i.codigo] &&
-                                                        modelo?.campos[i.codigo]
-                                                            ?.exibir &&
-                                                        ((i.dependencia
-                                                            ?.codigo &&
-                                                            !i.dependenciaValor &&
-                                                            watch(
-                                                                `preenchimento.${i.dependencia?.codigo}`
-                                                            )) ||
-                                                            (i.dependencia
+                                        <Heading size="sm" mb={6}>
+                                            {item.nome}
+                                        </Heading>
+                                        <Grid
+                                            gridTemplateColumns={{
+                                                base: "repeat(1,1fr)",
+                                                lg: "repeat(6,1fr)",
+                                            }}
+                                            gap={2}
+                                        >
+                                            {item.campos
+                                                .filter((i) => {
+                                                    if (
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            !i.dependencia) ||
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            ((i.dependencia
                                                                 ?.codigo &&
-                                                                i.dependenciaValor ==
-                                                                    watch(
-                                                                        `preenchimento.${i.dependencia?.codigo}`
-                                                                    ))))
-                                                ) {
-                                                    return true;
-                                                } else {
-                                                    return false;
-                                                }
-                                            })
-                                            .map((campo) => (
-                                                <GridItem
-                                                    key={campo.id}
-                                                    colSpan={{
-                                                        lg: campo.colSpan,
-                                                    }}
-                                                >
-                                                    {campo.tipoCampo ==
-                                                        "checkbox" && (
-                                                        <>
-                                                            <Controller
-                                                                control={
-                                                                    control
-                                                                }
-                                                                name={
-                                                                    "preenchimento." +
-                                                                    campo.codigo
-                                                                }
-                                                                rules={{
-                                                                    required: {
-                                                                        value: modelo
-                                                                            .campos[
-                                                                            campo
-                                                                                .codigo
-                                                                        ]
-                                                                            ?.obrigatorio,
-                                                                        message:
-                                                                            "Campo obrigatório",
-                                                                    },
-                                                                }}
-                                                                render={({
-                                                                    field,
-                                                                }) => (
-                                                                    <Checkbox
-                                                                        {...field}
-                                                                        onChange={(
-                                                                            e
-                                                                        ) => {
-                                                                            if (
-                                                                                e
-                                                                                    .target
-                                                                                    .checked
-                                                                            ) {
-                                                                                field.onChange(
-                                                                                    "Sim"
-                                                                                );
-                                                                            } else {
-                                                                                field.onChange(
-                                                                                    "Não"
-                                                                                );
-                                                                            }
-                                                                        }}
-                                                                        borderColor={
-                                                                            watch(
-                                                                                "analise." +
-                                                                                    campo.codigo
-                                                                            )
-                                                                                ?.aprovado
-                                                                                ? "green"
-                                                                                : ""
-                                                                        }
-                                                                        borderWidth={
-                                                                            watch(
-                                                                                "analise." +
-                                                                                    campo.codigo
-                                                                            )
-                                                                                ?.aprovado
-                                                                                ? 2
-                                                                                : ""
-                                                                        }
-                                                                        error={
-                                                                            errors.preenchimento &&
-                                                                            errors
-                                                                                .preenchimento[
-                                                                                campo
-                                                                                    .codigo
-                                                                            ]
-                                                                                ?.message
-                                                                                ? errors
-                                                                                      .preenchimento[
-                                                                                      campo
-                                                                                          .codigo
-                                                                                  ]
-                                                                                      ?.message
-                                                                                : watch(
-                                                                                      "analise." +
-                                                                                          campo.codigo
-                                                                                  )
-                                                                                      ?.motivoReprovacao
-                                                                                ? "Campo reprovado: " +
-                                                                                  watch(
-                                                                                      "analise." +
-                                                                                          campo.codigo
-                                                                                  )
-                                                                                      ?.motivoReprovacao
-                                                                                : ""
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            campo.nome
-                                                                        }
-                                                                    </Checkbox>
-                                                                )}
-                                                            />
-                                                        </>
-                                                    )}
-                                                    {campo.tipoCampo ==
-                                                        "select" && (
-                                                        <FormSelect
-                                                            size="sm"
-                                                            label={campo.nome}
-                                                            mask={campo.mask}
-                                                            placeholder={`Selecione ${campo.nome}`}
-                                                            {...register(
-                                                                "preenchimento." +
-                                                                    campo.codigo,
-                                                                {
-                                                                    required: {
-                                                                        value: modelo
-                                                                            .campos[
-                                                                            campo
-                                                                                .codigo
-                                                                        ]
-                                                                            ?.obrigatorio,
-                                                                        message:
-                                                                            "Campo obrigatório",
-                                                                    },
-                                                                }
-                                                            )}
-                                                            borderColor={
+                                                                !i.dependenciaValor &&
                                                                 watch(
-                                                                    "analise." +
-                                                                        campo.codigo
-                                                                )?.aprovado
-                                                                    ? "green"
-                                                                    : ""
-                                                            }
-                                                            borderWidth={
-                                                                watch(
-                                                                    "analise." +
-                                                                        campo.codigo
-                                                                )?.aprovado
+                                                                    `preenchimento.${i.dependencia?.codigo}`
+                                                                )) ||
+                                                                (i.dependencia
+                                                                    ?.codigo &&
+                                                                    i.dependenciaValor ==
+                                                                        watch(
+                                                                            `preenchimento.${i.dependencia?.codigo}`
+                                                                        ))))
+                                                    ) {
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+                                                })
+                                                .map((campo, i) => (
+                                                    <GridItem
+                                                        key={campo.id}
+                                                        colSpan={{
+                                                            base: 1,
+                                                            lg:
+                                                                campo.tipoCampo ==
+                                                                "file"
                                                                     ? 2
-                                                                    : ""
-                                                            }
-                                                            error={
-                                                                errors.preenchimento &&
-                                                                errors
-                                                                    .preenchimento[
-                                                                    campo.codigo
-                                                                ]?.message
-                                                                    ? errors
-                                                                          .preenchimento[
-                                                                          campo
-                                                                              .codigo
-                                                                      ]?.message
-                                                                    : watch(
-                                                                          "analise." +
-                                                                              campo.codigo
-                                                                      )
-                                                                          ?.motivoReprovacao
-                                                                    ? "Campo reprovado: " +
-                                                                      watch(
-                                                                          "analise." +
-                                                                              campo.codigo
-                                                                      )
-                                                                          ?.motivoReprovacao
-                                                                    : ""
-                                                            }
-                                                        >
-                                                            {campo.opcoes.map(
-                                                                (op) => (
-                                                                    <option
-                                                                        key={op}
-                                                                        value={
-                                                                            op
-                                                                        }
-                                                                    >
-                                                                        {op}
-                                                                    </option>
-                                                                )
-                                                            )}
-                                                        </FormSelect>
-                                                    )}
-                                                    {campo.tipoCampo ==
-                                                        "cnpj" ||
-                                                    campo.tipoCampo == "cpf" ||
-                                                    campo.tipoCampo == "text" ||
-                                                    campo.tipoCampo ==
-                                                        "number" ||
-                                                    campo.tipoCampo ==
-                                                        "qrcode" ? (
-                                                        <FormInput
-                                                            size="sm"
-                                                            type={
-                                                                campo.tipoCampo
-                                                            }
-                                                            label={campo.nome}
-                                                            mask={campo.mask}
-                                                            {...register(
-                                                                "preenchimento." +
-                                                                    campo.codigo,
-                                                                {
-                                                                    required: {
-                                                                        value: modelo
-                                                                            .campos[
-                                                                            campo
-                                                                                .codigo
-                                                                        ]
-                                                                            ?.obrigatorio,
-                                                                        message:
-                                                                            "Campo obrigatório",
-                                                                    },
-                                                                    onChange: (
-                                                                        e
-                                                                    ) => {
+                                                                    : campo.colSpan +
+                                                                      1,
+                                                        }}
+                                                        colStart={{
+                                                            lg:
+                                                                campo.tipoCampo ==
+                                                                    "file" &&
+                                                                item.campos.filter(
+                                                                    (i) => {
                                                                         if (
-                                                                            campo.cep
+                                                                            (modelo
+                                                                                .campos[
+                                                                                i
+                                                                                    .codigo
+                                                                            ] &&
+                                                                                modelo
+                                                                                    ?.campos[
+                                                                                    i
+                                                                                        .codigo
+                                                                                ]
+                                                                                    ?.exibir &&
+                                                                                !i.dependencia) ||
+                                                                            (modelo
+                                                                                .campos[
+                                                                                i
+                                                                                    .codigo
+                                                                            ] &&
+                                                                                modelo
+                                                                                    ?.campos[
+                                                                                    i
+                                                                                        .codigo
+                                                                                ]
+                                                                                    ?.exibir &&
+                                                                                ((i
+                                                                                    .dependencia
+                                                                                    ?.codigo &&
+                                                                                    !i.dependenciaValor &&
+                                                                                    watch(
+                                                                                        `preenchimento.${i.dependencia?.codigo}`
+                                                                                    )) ||
+                                                                                    (i
+                                                                                        .dependencia
+                                                                                        ?.codigo &&
+                                                                                        i.dependenciaValor ==
+                                                                                            watch(
+                                                                                                `preenchimento.${i.dependencia?.codigo}`
+                                                                                            ))))
                                                                         ) {
-                                                                            buscarEnderecoPorCep(
-                                                                                e
-                                                                                    .target
-                                                                                    .value,
-                                                                                campo.camposEndereco
-                                                                            );
+                                                                            return true;
+                                                                        } else {
+                                                                            return false;
                                                                         }
-                                                                    },
-                                                                }
-                                                            )}
-                                                            borderColor={
-                                                                watch(
-                                                                    "analise." +
+                                                                    }
+                                                                )[i - 1]
+                                                                    ?.tipoCampo !=
+                                                                    "file"
+                                                                    ? 1
+                                                                    : "auto",
+                                                        }}
+                                                    >
+                                                        {campo.tipoCampo ==
+                                                            "checkbox" && (
+                                                            <>
+                                                                <Controller
+                                                                    control={
+                                                                        control
+                                                                    }
+                                                                    name={
+                                                                        "preenchimento." +
                                                                         campo.codigo
-                                                                )?.aprovado
-                                                                    ? "green"
-                                                                    : ""
-                                                            }
-                                                            borderWidth={
-                                                                watch(
-                                                                    "analise." +
-                                                                        campo.codigo
-                                                                )?.aprovado
-                                                                    ? 2
-                                                                    : ""
-                                                            }
-                                                            error={
-                                                                errors.preenchimento &&
-                                                                errors
-                                                                    .preenchimento[
-                                                                    campo.codigo
-                                                                ]?.message
-                                                                    ? errors
-                                                                          .preenchimento[
-                                                                          campo
-                                                                              .codigo
-                                                                      ]?.message
-                                                                    : watch(
-                                                                          "analise." +
-                                                                              campo.codigo
-                                                                      )
-                                                                          ?.motivoReprovacao
-                                                                    ? "Campo reprovado: " +
-                                                                      watch(
-                                                                          "analise." +
-                                                                              campo.codigo
-                                                                      )
-                                                                          ?.motivoReprovacao
-                                                                    : ""
-                                                            }
-                                                        />
-                                                    ) : campo.tipoCampo ==
-                                                          "date" ||
-                                                      campo.tipoCampo ==
-                                                          "time" ? (
-                                                        <FormInput
-                                                            size="sm"
-                                                            type={
-                                                                campo.tipoCampo
-                                                            }
-                                                            label={campo.nome}
-                                                            {...register(
-                                                                "preenchimento." +
-                                                                    campo.codigo,
-                                                                {
-                                                                    required: {
-                                                                        value: modelo
-                                                                            .campos[
-                                                                            campo
-                                                                                .codigo
-                                                                        ]
-                                                                            ?.obrigatorio,
-                                                                        message:
-                                                                            "Campo obrigatório",
-                                                                    },
-                                                                }
-                                                            )}
-                                                            borderColor={
-                                                                watch(
-                                                                    "analise." +
-                                                                        campo.codigo
-                                                                )?.aprovado
-                                                                    ? "green"
-                                                                    : ""
-                                                            }
-                                                            borderWidth={
-                                                                watch(
-                                                                    "analise." +
-                                                                        campo.codigo
-                                                                )?.aprovado
-                                                                    ? 2
-                                                                    : ""
-                                                            }
-                                                            error={
-                                                                errors.preenchimento &&
-                                                                errors
-                                                                    .preenchimento[
-                                                                    campo.codigo
-                                                                ]?.message
-                                                                    ? errors
-                                                                          .preenchimento[
-                                                                          campo
-                                                                              .codigo
-                                                                      ]?.message
-                                                                    : watch(
-                                                                          "analise." +
-                                                                              campo.codigo
-                                                                      )
-                                                                          ?.motivoReprovacao
-                                                                    ? "Campo reprovado: " +
-                                                                      watch(
-                                                                          "analise." +
-                                                                              campo.codigo
-                                                                      )
-                                                                          ?.motivoReprovacao
-                                                                    : ""
-                                                            }
-                                                        />
-                                                    ) : campo.tipoCampo ==
-                                                      "image" ? (
-                                                        <Flex align="center">
-                                                            <FormInput
+                                                                    }
+                                                                    rules={{
+                                                                        required:
+                                                                            {
+                                                                                value: modelo
+                                                                                    .campos[
+                                                                                    campo
+                                                                                        .codigo
+                                                                                ]
+                                                                                    ?.obrigatorio,
+                                                                                message:
+                                                                                    "Campo obrigatório",
+                                                                            },
+                                                                    }}
+                                                                    render={({
+                                                                        field,
+                                                                    }) => (
+                                                                        <Checkbox
+                                                                            {...field}
+                                                                            onChange={(
+                                                                                e
+                                                                            ) => {
+                                                                                if (
+                                                                                    e
+                                                                                        .target
+                                                                                        .checked
+                                                                                ) {
+                                                                                    field.onChange(
+                                                                                        "Sim"
+                                                                                    );
+                                                                                } else {
+                                                                                    field.onChange(
+                                                                                        "Não"
+                                                                                    );
+                                                                                }
+                                                                            }}
+                                                                            borderColor={
+                                                                                watch(
+                                                                                    "analise." +
+                                                                                        campo.codigo
+                                                                                )
+                                                                                    ?.aprovado
+                                                                                    ? "green"
+                                                                                    : ""
+                                                                            }
+                                                                            borderWidth={
+                                                                                watch(
+                                                                                    "analise." +
+                                                                                        campo.codigo
+                                                                                )
+                                                                                    ?.aprovado
+                                                                                    ? 2
+                                                                                    : ""
+                                                                            }
+                                                                            error={
+                                                                                errors.preenchimento &&
+                                                                                errors
+                                                                                    .preenchimento[
+                                                                                    campo
+                                                                                        .codigo
+                                                                                ]
+                                                                                    ?.message
+                                                                                    ? errors
+                                                                                          .preenchimento[
+                                                                                          campo
+                                                                                              .codigo
+                                                                                      ]
+                                                                                          ?.message
+                                                                                    : watch(
+                                                                                          "analise." +
+                                                                                              campo.codigo
+                                                                                      )
+                                                                                          ?.motivoReprovacao
+                                                                                    ? "Campo reprovado: " +
+                                                                                      watch(
+                                                                                          "analise." +
+                                                                                              campo.codigo
+                                                                                      )
+                                                                                          ?.motivoReprovacao
+                                                                                    : ""
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                campo.nome
+                                                                            }
+                                                                        </Checkbox>
+                                                                    )}
+                                                                />
+                                                            </>
+                                                        )}
+                                                        {campo.tipoCampo ==
+                                                            "select" && (
+                                                            <FormSelect
                                                                 size="sm"
-                                                                type="file"
                                                                 label={
                                                                     campo.nome
                                                                 }
+                                                                mask={
+                                                                    campo.mask
+                                                                }
+                                                                placeholder={`Selecione ${campo.nome}`}
                                                                 {...register(
-                                                                    "arquivos." +
+                                                                    "preenchimento." +
                                                                         campo.codigo,
                                                                     {
                                                                         required:
                                                                             {
-                                                                                value:
-                                                                                    modelo
-                                                                                        .campos[
-                                                                                        campo
-                                                                                            .codigo
-                                                                                    ]
-                                                                                        ?.obrigatorio &&
-                                                                                    !watch(
-                                                                                        "preenchimento." +
-                                                                                            campo.codigo
-                                                                                    )
-                                                                                        ? true
-                                                                                        : false,
+                                                                                value: modelo
+                                                                                    .campos[
+                                                                                    campo
+                                                                                        .codigo
+                                                                                ]
+                                                                                    ?.obrigatorio,
                                                                                 message:
                                                                                     "Campo obrigatório",
                                                                             },
@@ -1000,14 +952,14 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                         : ""
                                                                 }
                                                                 error={
-                                                                    errors.arquivos &&
+                                                                    errors.preenchimento &&
                                                                     errors
-                                                                        .arquivos[
+                                                                        .preenchimento[
                                                                         campo
                                                                             .codigo
                                                                     ]?.message
                                                                         ? errors
-                                                                              .arquivos[
+                                                                              .preenchimento[
                                                                               campo
                                                                                   .codigo
                                                                           ]
@@ -1025,57 +977,340 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                               ?.motivoReprovacao
                                                                         : ""
                                                                 }
-                                                                rightAddon={
-                                                                    watch(
-                                                                        "preenchimento." +
-                                                                            campo.codigo
-                                                                    ) && (
-                                                                        <Link
-                                                                            href={watch(
-                                                                                "preenchimento." +
-                                                                                    campo.codigo
-                                                                            )}
-                                                                            target="_parent"
+                                                            >
+                                                                {campo.opcoes.map(
+                                                                    (op) => (
+                                                                        <option
+                                                                            key={
+                                                                                op
+                                                                            }
+                                                                            value={
+                                                                                op
+                                                                            }
                                                                         >
-                                                                            <Button
-                                                                                size="sm"
-                                                                                variant="ghost"
-                                                                                colorScheme="blue"
-                                                                                leftIcon={
-                                                                                    <Icon
-                                                                                        as={
-                                                                                            FiEye
-                                                                                        }
-                                                                                    />
-                                                                                }
-                                                                                px={
-                                                                                    6
-                                                                                }
-                                                                            >
-                                                                                Visualizar
-                                                                            </Button>
-                                                                        </Link>
+                                                                            {op}
+                                                                        </option>
                                                                     )
+                                                                )}
+                                                            </FormSelect>
+                                                        )}
+                                                        {campo.tipoCampo ==
+                                                            "cnpj" ||
+                                                        campo.tipoCampo ==
+                                                            "cpf" ||
+                                                        campo.tipoCampo ==
+                                                            "text" ||
+                                                        campo.tipoCampo ==
+                                                            "number" ||
+                                                        campo.tipoCampo ==
+                                                            "qrcode" ? (
+                                                            <FormInput
+                                                                size="sm"
+                                                                type={
+                                                                    campo.tipoCampo
                                                                 }
-                                                            />
-                                                        </Flex>
-                                                    ) : campo.tipoCampo ==
-                                                      "file" ? (
-                                                        <Flex align="center">
-                                                            <Previews
-                                                                nome={
+                                                                label={
                                                                     campo.nome
                                                                 }
-                                                                codigo={
-                                                                    campo.codigo
+                                                                mask={
+                                                                    campo.mask
                                                                 }
-                                                                id={ficha.id}
-                                                                data={watch(
+                                                                {...register(
                                                                     "preenchimento." +
-                                                                        campo.codigo
+                                                                        campo.codigo,
+                                                                    {
+                                                                        required:
+                                                                            {
+                                                                                value: modelo
+                                                                                    .campos[
+                                                                                    campo
+                                                                                        .codigo
+                                                                                ]
+                                                                                    ?.obrigatorio,
+                                                                                message:
+                                                                                    "Campo obrigatório",
+                                                                            },
+                                                                        onChange:
+                                                                            (
+                                                                                e
+                                                                            ) => {
+                                                                                if (
+                                                                                    campo.cep
+                                                                                ) {
+                                                                                    buscarEnderecoPorCep(
+                                                                                        e
+                                                                                            .target
+                                                                                            .value,
+                                                                                        campo.camposEndereco
+                                                                                    );
+                                                                                }
+                                                                            },
+                                                                    }
                                                                 )}
+                                                                borderColor={
+                                                                    watch(
+                                                                        "analise." +
+                                                                            campo.codigo
+                                                                    )?.aprovado
+                                                                        ? "green"
+                                                                        : ""
+                                                                }
+                                                                borderWidth={
+                                                                    watch(
+                                                                        "analise." +
+                                                                            campo.codigo
+                                                                    )?.aprovado
+                                                                        ? 2
+                                                                        : ""
+                                                                }
+                                                                error={
+                                                                    errors.preenchimento &&
+                                                                    errors
+                                                                        .preenchimento[
+                                                                        campo
+                                                                            .codigo
+                                                                    ]?.message
+                                                                        ? errors
+                                                                              .preenchimento[
+                                                                              campo
+                                                                                  .codigo
+                                                                          ]
+                                                                              ?.message
+                                                                        : watch(
+                                                                              "analise." +
+                                                                                  campo.codigo
+                                                                          )
+                                                                              ?.motivoReprovacao
+                                                                        ? "Campo reprovado: " +
+                                                                          watch(
+                                                                              "analise." +
+                                                                                  campo.codigo
+                                                                          )
+                                                                              ?.motivoReprovacao
+                                                                        : ""
+                                                                }
                                                             />
-                                                            {/* <FormInput
+                                                        ) : campo.tipoCampo ==
+                                                              "date" ||
+                                                          campo.tipoCampo ==
+                                                              "time" ? (
+                                                            <FormInput
+                                                                size="sm"
+                                                                type={
+                                                                    campo.tipoCampo
+                                                                }
+                                                                label={
+                                                                    campo.nome
+                                                                }
+                                                                {...register(
+                                                                    "preenchimento." +
+                                                                        campo.codigo,
+                                                                    {
+                                                                        required:
+                                                                            {
+                                                                                value: modelo
+                                                                                    .campos[
+                                                                                    campo
+                                                                                        .codigo
+                                                                                ]
+                                                                                    ?.obrigatorio,
+                                                                                message:
+                                                                                    "Campo obrigatório",
+                                                                            },
+                                                                    }
+                                                                )}
+                                                                borderColor={
+                                                                    watch(
+                                                                        "analise." +
+                                                                            campo.codigo
+                                                                    )?.aprovado
+                                                                        ? "green"
+                                                                        : ""
+                                                                }
+                                                                borderWidth={
+                                                                    watch(
+                                                                        "analise." +
+                                                                            campo.codigo
+                                                                    )?.aprovado
+                                                                        ? 2
+                                                                        : ""
+                                                                }
+                                                                error={
+                                                                    errors.preenchimento &&
+                                                                    errors
+                                                                        .preenchimento[
+                                                                        campo
+                                                                            .codigo
+                                                                    ]?.message
+                                                                        ? errors
+                                                                              .preenchimento[
+                                                                              campo
+                                                                                  .codigo
+                                                                          ]
+                                                                              ?.message
+                                                                        : watch(
+                                                                              "analise." +
+                                                                                  campo.codigo
+                                                                          )
+                                                                              ?.motivoReprovacao
+                                                                        ? "Campo reprovado: " +
+                                                                          watch(
+                                                                              "analise." +
+                                                                                  campo.codigo
+                                                                          )
+                                                                              ?.motivoReprovacao
+                                                                        : ""
+                                                                }
+                                                            />
+                                                        ) : campo.tipoCampo ==
+                                                          "image" ? (
+                                                            <Flex align="center">
+                                                                <Previews
+                                                                    nome={
+                                                                        campo.nome
+                                                                    }
+                                                                    codigo={
+                                                                        campo.codigo
+                                                                    }
+                                                                    id={
+                                                                        ficha.id
+                                                                    }
+                                                                    data={watch(
+                                                                        "preenchimento." +
+                                                                            campo.codigo
+                                                                    )}
+                                                                />
+                                                                {/* <FormInput
+                                                                    size="sm"
+                                                                    type="file"
+                                                                    label={
+                                                                        campo.nome
+                                                                    }
+                                                                    {...register(
+                                                                        "arquivos." +
+                                                                            campo.codigo,
+                                                                        {
+                                                                            required:
+                                                                                {
+                                                                                    value:
+                                                                                        modelo
+                                                                                            .campos[
+                                                                                            campo
+                                                                                                .codigo
+                                                                                        ]
+                                                                                            ?.obrigatorio &&
+                                                                                        !watch(
+                                                                                            "preenchimento." +
+                                                                                                campo.codigo
+                                                                                        )
+                                                                                            ? true
+                                                                                            : false,
+                                                                                    message:
+                                                                                        "Campo obrigatório",
+                                                                                },
+                                                                        }
+                                                                    )}
+                                                                    borderColor={
+                                                                        watch(
+                                                                            "analise." +
+                                                                                campo.codigo
+                                                                        )
+                                                                            ?.aprovado
+                                                                            ? "green"
+                                                                            : ""
+                                                                    }
+                                                                    borderWidth={
+                                                                        watch(
+                                                                            "analise." +
+                                                                                campo.codigo
+                                                                        )
+                                                                            ?.aprovado
+                                                                            ? 2
+                                                                            : ""
+                                                                    }
+                                                                    error={
+                                                                        errors.arquivos &&
+                                                                        errors
+                                                                            .arquivos[
+                                                                            campo
+                                                                                .codigo
+                                                                        ]
+                                                                            ?.message
+                                                                            ? errors
+                                                                                  .arquivos[
+                                                                                  campo
+                                                                                      .codigo
+                                                                              ]
+                                                                                  ?.message
+                                                                            : watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            ? "Campo reprovado: " +
+                                                                              watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            : ""
+                                                                    }
+                                                                    rightAddon={
+                                                                        watch(
+                                                                            "preenchimento." +
+                                                                                campo.codigo
+                                                                        ) && (
+                                                                            <Link
+                                                                                href={watch(
+                                                                                    "preenchimento." +
+                                                                                        campo.codigo
+                                                                                )}
+                                                                                target="_parent"
+                                                                            >
+                                                                                <Button
+                                                                                    size="sm"
+                                                                                    variant="ghost"
+                                                                                    colorScheme="blue"
+                                                                                    leftIcon={
+                                                                                        <Icon
+                                                                                            as={
+                                                                                                FiEye
+                                                                                            }
+                                                                                        />
+                                                                                    }
+                                                                                    px={
+                                                                                        6
+                                                                                    }
+                                                                                >
+                                                                                    Visualizar
+                                                                                </Button>
+                                                                            </Link>
+                                                                        )
+                                                                    }
+                                                                /> */}
+                                                            </Flex>
+                                                        ) : campo.tipoCampo ==
+                                                          "file" ? (
+                                                            <Flex
+                                                                align="center"
+                                                                w="full"
+                                                            >
+                                                                <Previews
+                                                                    nome={
+                                                                        campo.nome
+                                                                    }
+                                                                    codigo={
+                                                                        campo.codigo
+                                                                    }
+                                                                    id={
+                                                                        ficha.id
+                                                                    }
+                                                                    data={watch(
+                                                                        "preenchimento." +
+                                                                            campo.codigo
+                                                                    )}
+                                                                />
+                                                                {/* <FormInput
                                                                     size="sm"
                                                                     type="file"
                                                                     label={
@@ -1188,126 +1423,145 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                         )
                                                                     }
                                                                 /> */}
-                                                        </Flex>
-                                                    ) : campo.tipoCampo ==
-                                                      "files" ? (
-                                                        <FormInput
-                                                            size="sm"
-                                                            type="file"
-                                                            multiple="multiple"
-                                                            label={campo.nome}
-                                                            {...register(
-                                                                "arquivos." +
-                                                                    campo.codigo,
-                                                                {
-                                                                    required: {
-                                                                        value: modelo
-                                                                            .campos[
-                                                                            campo
-                                                                                .codigo
-                                                                        ]
-                                                                            ?.obrigatorio,
-                                                                        message:
-                                                                            "Campo obrigatório",
-                                                                    },
+                                                            </Flex>
+                                                        ) : campo.tipoCampo ==
+                                                          "files" ? (
+                                                            <FormInput
+                                                                size="sm"
+                                                                type="file"
+                                                                multiple="multiple"
+                                                                label={
+                                                                    campo.nome
                                                                 }
-                                                            )}
-                                                        />
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </GridItem>
-                                            ))}
-                                    </Grid>
-                                </Box>
-                            ))}
-                        <GridItem>
-                            <Box
-                                colSpan={{ base: 1, lg: 5 }}
-                                p={4}
-                                bg="white"
-                                mt={4}
+                                                                {...register(
+                                                                    "arquivos." +
+                                                                        campo.codigo,
+                                                                    {
+                                                                        required:
+                                                                            {
+                                                                                value: modelo
+                                                                                    .campos[
+                                                                                    campo
+                                                                                        .codigo
+                                                                                ]
+                                                                                    ?.obrigatorio,
+                                                                                message:
+                                                                                    "Campo obrigatório",
+                                                                            },
+                                                                    }
+                                                                )}
+                                                            />
+                                                        ) : (
+                                                            ""
+                                                        )}
+                                                    </GridItem>
+                                                ))}
+                                        </Grid>
+                                    </Box>
+                                ))}
+                            <GridItem
+                                hidden={
+                                    activeStep !=
+                                    campos.filter((i) =>
+                                        i.campos.find(
+                                            (e) =>
+                                                modelo?.campos[e.codigo]?.exibir
+                                        )
+                                    ).length
+                                }
                             >
                                 <Box
-                                    dangerouslySetInnerHTML={{
-                                        __html: modelo.instrucoes,
-                                    }}
-                                />
-                            </Box>
-                            <Flex mt={4} p={4} bg="white" flexDir="column">
-                                {modelo.checkbox?.map((item, key) => (
-                                    <Checkbox
-                                        key={item.id}
-                                        {...register("checkbox_" + key, {
-                                            required: {
-                                                message:
-                                                    "Você deve aceitar para prosseguir",
-                                                value: true,
-                                            },
-                                        })}
-                                        isInvalid={
-                                            errors[`checkbox_${key}`]?.message
-                                        }
-                                    >
-                                        {item}{" "}
-                                        {errors[`checkbox_${key}`]?.message && (
-                                            <Tag colorScheme="red">
-                                                Você deve aceitar os termos para
-                                                prosseguir
-                                            </Tag>
-                                        )}
-                                    </Checkbox>
-                                ))}
-                            </Flex>
-                        </GridItem>
-                    </Grid>
-                </Flex>
-                <Flex py={4} justify="space-between">
-                    {/* <Button
+                                    colSpan={{ base: 1, lg: 5 }}
+                                    p={4}
+                                    bg="white"
+                                    mt={4}
+                                >
+                                    <Box
+                                        dangerouslySetInnerHTML={{
+                                            __html: modelo.instrucoes,
+                                        }}
+                                    />
+                                </Box>
+                                <Flex mt={4} p={4} bg="white" flexDir="column">
+                                    {modelo.checkbox?.map((item, key) => (
+                                        <Checkbox
+                                            key={item.id}
+                                            {...register("checkbox_" + key, {
+                                                required: {
+                                                    message:
+                                                        "Você deve aceitar para prosseguir",
+                                                    value: true,
+                                                },
+                                            })}
+                                            isInvalid={
+                                                errors[`checkbox_${key}`]
+                                                    ?.message
+                                            }
+                                        >
+                                            {item}{" "}
+                                            {errors[`checkbox_${key}`]
+                                                ?.message && (
+                                                <Tag colorScheme="red">
+                                                    Você deve aceitar os termos
+                                                    para prosseguir
+                                                </Tag>
+                                            )}
+                                        </Checkbox>
+                                    ))}
+                                </Flex>
+                            </GridItem>
+                        </Grid>{" "}
+                        <Flex py={4} justify="space-between">
+                            <Button
                                 isDisabled={activeStep == 0}
                                 size="sm"
                                 colorScheme="blue"
                                 type="button"
-                                isLoading={isSubmitting}
                                 leftIcon={<BsArrowLeft />}
                                 onClick={() => setActiveStep(activeStep - 1)}
                             >
                                 Voltar
                             </Button>
-                            <Button
-                                size="sm"
-                                colorScheme="blue"
-                                type="button"
-                                isLoading={isSubmitting}
-                                rightIcon={<BsArrowRight />}
-                                onClick={() => setActiveStep(activeStep + 1)}
-                            >
-                                Avançar
-                            </Button> */}
-                    {(ficha.status == "reprovada" ||
-                        ficha.status == "aguardando") && (
-                        <Button
-                            size="sm"
-                            colorScheme="blue"
-                            type="submit"
-                            isLoading={isSubmitting}
-                            rightIcon={<BiSave />}
-                        >
-                            Salvar
-                        </Button>
-                    )}
-                </Flex>
-                <Flex py={4} justify="flex-end">
-                    {(ficha.status == "reprovada" ||
-                        ficha.status == "aguardando") && (
-                        <Button
-                            colorScheme="blue"
-                            type="submit"
-                            isLoading={isSubmitting}
-                        >
-                            Salvar
-                        </Button>
-                    )}
+                            {activeStep !=
+                                campos.filter((i) =>
+                                    i.campos.find(
+                                        (e) => modelo?.campos[e.codigo]?.exibir
+                                    )
+                                ).length && (
+                                <Button
+                                    size="sm"
+                                    colorScheme="blue"
+                                    type="button"
+                                    isLoading={isSubmitting}
+                                    rightIcon={<BsArrowRight />}
+                                    onClick={() =>
+                                        setActiveStep(activeStep + 1)
+                                    }
+                                >
+                                    Avançar
+                                </Button>
+                            )}
+                            {(ficha.status == "reprovada" ||
+                                ficha.status == "aguardando") &&
+                                activeStep ==
+                                    campos.filter((i) =>
+                                        i.campos.find(
+                                            (e) =>
+                                                modelo?.campos[e.codigo]?.exibir
+                                        )
+                                    ).length && (
+                                    <Button
+                                        size="sm"
+                                        colorScheme="blue"
+                                        type="submit"
+                                        isLoading={isSubmitting}
+                                        rightIcon={<BiSave />}
+                                    >
+                                        Salvar
+                                    </Button>
+                                )}
+                        </Flex>
+                    </Box>
                 </Flex>
             </Container>
         </Box>
@@ -1769,7 +2023,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 //     };
 //     const { activeStep, setActiveStep } = useSteps({
 //         index: 1,
-//         count: campos.length,
+//         count: campos.filter((i) =>
+//     i.campos.find(
+//         (e) => modelo?.campos[e.codigo]?.exibir
+//     )
+// ).length,
 //     });
 //     const getUploadParams = ({ meta }) => {
 //         return { url: "https://httpbin.org/post" };
@@ -1964,7 +2222,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 //                                     <StepSeparator />
 //                                 </Step>
 //                             ))}
-//                             <Step onClick={() => setActiveStep(campos.length)}>
+// //                             <Step onClick={() => setActiveStep(campos.filter((i) =>
+//                                     i.campos.find(
+//                                         (e) => modelo?.campos[e.codigo]?.exibir
+//                                     )
+//                                 ).length)}>
 //                                 <StepIndicator>
 //                                     <StepStatus
 //                                         complete={<StepIcon />}
@@ -2694,7 +2956,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 //                             <GridItem
 //                                 bg="white"
 //                                 p={4}
-//                                 // hidden={activeStep != campos.length}
+// //                                 // hidden={activeStep != campos.filter((i) =>
+//                                     i.campos.find(
+//                                         (e) => modelo?.campos[e.codigo]?.exibir
+//                                     )
+//                                 ).length}
 //                             >
 //                                 Resumo
 //                                 <Box
