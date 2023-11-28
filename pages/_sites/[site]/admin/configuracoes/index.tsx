@@ -265,7 +265,7 @@ const Configuracoes = () => {
                                                                 )}
                                                                 error={
                                                                     errors
-                                                                        .razaoSocial
+                                                                        .nomeFantasia
                                                                         ?.message
                                                                 }
                                                             />
