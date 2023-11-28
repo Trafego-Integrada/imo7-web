@@ -637,14 +637,16 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                 />
                                             </StepIndicator>
 
-                                            <Box flexShrink="0">
-                                                <StepTitle>
-                                                    {step.nome}
-                                                </StepTitle>
-                                                <StepDescription>
-                                                    {step.descricao}
-                                                </StepDescription>
-                                            </Box>
+                                            {index == activeStep && (
+                                                <Box flexShrink="0">
+                                                    <StepTitle>
+                                                        {step.nome}
+                                                    </StepTitle>
+                                                    <StepDescription>
+                                                        {step.descricao}
+                                                    </StepDescription>
+                                                </Box>
+                                            )}
 
                                             <StepSeparator />
                                         </Step>
