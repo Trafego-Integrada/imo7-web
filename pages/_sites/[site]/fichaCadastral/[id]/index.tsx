@@ -27,6 +27,15 @@ import {
     Radio,
     RadioGroup,
     Stack,
+    Step,
+    StepDescription,
+    StepIcon,
+    StepIndicator,
+    StepNumber,
+    StepSeparator,
+    StepStatus,
+    StepTitle,
+    Stepper,
     Tag,
     Text,
     Tooltip,
@@ -501,6 +510,55 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                         <Text>{formatoValor(ficha.imovel?.valorIPTU)}</Text>
                     </GridItem>
                 </Grid>
+                <Box w="2xl">
+                    <Stepper
+                        size="xs"
+                        index={activeStep}
+                        orientation="vertical"
+                    >
+                        {campos.map((step, index) => (
+                            <Step
+                                key={index}
+                                onClick={() => setActiveStep(index)}
+                            >
+                                <StepIndicator>
+                                    <StepStatus
+                                        complete={<StepIcon />}
+                                        incomplete={<StepNumber />}
+                                        active={<StepNumber />}
+                                    />
+                                </StepIndicator>
+
+                                <Box flexShrink="0">
+                                    <StepTitle>{step.nome}</StepTitle>
+                                    <StepDescription>
+                                        {step.descricao}
+                                    </StepDescription>
+                                </Box>
+
+                                <StepSeparator />
+                            </Step>
+                        ))}
+                        <Step onClick={() => setActiveStep(campos.length)}>
+                            <StepIndicator>
+                                <StepStatus
+                                    complete={<StepIcon />}
+                                    incomplete={<StepNumber />}
+                                    active={<StepNumber />}
+                                />
+                            </StepIndicator>
+
+                            <Box flexShrink="0">
+                                <StepTitle>Resumo</StepTitle>
+                                <StepDescription>
+                                    Confira os dados informados
+                                </StepDescription>
+                            </Box>
+
+                            <StepSeparator />
+                        </Step>
+                    </Stepper>
+                </Box>
                 <Grid gap={4}>
                     {campos
                         .filter((i) =>
