@@ -1619,7 +1619,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     ))}
                                 </Flex>
                                 <Flex>
-                                    {errors.length && (
+                                    {errors && errors?.preenchimento && (
                                         <Alert
                                             status="warning"
                                             flexDir="column"
