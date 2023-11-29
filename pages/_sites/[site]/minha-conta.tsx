@@ -22,10 +22,10 @@ import { useAuth } from "@/hooks/useAuth";
 const schema = yup.object().shape({
     nome: yup.string().required("O CPF é obrigatório"),
     email: yup.string().required("O CPF é obrigatório"),
-    password: yup.string(),
-    confirmPassword: yup
+    senha: yup.string(),
+    confirmarSenha: yup
         .string()
-        .oneOf([yup.ref("password"), null], "A senha deve ser a mesma"),
+        .oneOf([yup.ref("senha"), null], "A senha deve ser a mesma"),
 });
 const Page = () => {
     const toast = useToast();
@@ -138,15 +138,15 @@ const Page = () => {
                         <GridItem>
                             <FormInput
                                 label="Senha"
-                                {...register("password")}
-                                error={errors.password?.message}
+                                {...register("senha")}
+                                error={errors.senha?.message}
                             />
                         </GridItem>
                         <GridItem>
                             <FormInput
                                 label="Confirmar Senha"
-                                {...register("confirmPassword")}
-                                error={errors.confirmPassword?.message}
+                                {...register("confirmarSenha")}
+                                error={errors.confirmarSenha?.message}
                             />
                         </GridItem>
                     </Grid>

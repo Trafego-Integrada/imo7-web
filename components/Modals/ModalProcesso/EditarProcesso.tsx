@@ -98,7 +98,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         { refetchOnReconnect: false, refetchOnWindowFocus: false }
     );
     useEffect(() => {
-        reset();
+        reset({});
     }, []);
     const { fields, append, remove } = useFieldArray({
         control,

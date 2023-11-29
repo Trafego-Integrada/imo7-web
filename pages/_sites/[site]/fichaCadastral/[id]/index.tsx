@@ -36,6 +36,9 @@ import {
     StepStatus,
     StepTitle,
     Stepper,
+    Tab,
+    TabList,
+    Tabs,
     Tag,
     Text,
     Tooltip,
@@ -46,7 +49,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FiEye, FiFile, FiPlus, FiUpload } from "react-icons/fi";
+import {
+    FiAlertTriangle,
+    FiEye,
+    FiFile,
+    FiPlus,
+    FiUpload,
+} from "react-icons/fi";
 import { useMutation } from "react-query";
 import * as yup from "yup";
 import "react-quill/dist/quill.snow.css";
@@ -289,6 +298,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         register,
         handleSubmit,
         formState: { isSubmitting, errors },
+        clearErrors,
     } = useForm({
         defaultValues: {
             ...ficha,
@@ -354,52 +364,12 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             });
         }
     };
+
     const onSubmitIgnorandoErros = async (data) => {
+        console.log("veio aqui");
         try {
-            console.log(data);
+            console.log("veio aqui");
             await atualizar.mutateAsync(data);
-
-            // const formData = new FormData();
-            // if (data.arquivos && Object.entries(data.arquivos).length) {
-            //     const filesData = await Promise.all(
-            //         Object.entries(data.arquivos).map(async (item) => {
-            //             var files = item[1];
-            //             console.log("files", files, item[1]);
-
-            //             const filePromises = Array.from(files).map(
-            //                 async (file) => {
-            //                     console.log(file, file.name);
-            //                     const base64String = await convertToBase64(
-            //                         file
-            //                     );
-            //                     const fileExtension = getFileExtension(
-            //                         file.name
-            //                     );
-
-            //                     return {
-            //                         nome: item[0],
-            //                         extensao: fileExtension,
-            //                         base64: base64String,
-            //                     };
-            //                 }
-            //             );
-
-            //             return Promise.all(filePromises);
-            //         })
-            //     );
-
-            //     // Flatten the array
-            //     const flattenedFilesData = filesData.flat();
-
-            //     // Now you have an array of objects with nome, extensao, and base64 properties
-            //     console.log(flattenedFilesData);
-            //     await atualizarAnexos.mutateAsync({
-            //         id: data.id,
-            //         formData: {
-            //             arquivos: flattenedFilesData,
-            //         },
-            //     });
-            // }
 
             toast({ title: "Ficha salva automaticamente", status: "success" });
         } catch (e) {
@@ -411,7 +381,20 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             });
         }
     };
-
+    const onError = (data) => {
+        if (
+            activeStep !=
+            campos.filter((i) =>
+                i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
+            ).length
+        ) {
+            console.log("data", data);
+            clearErrors();
+            setActiveStep(activeStep + 1);
+            onSubmit(watch());
+            return;
+        }
+    };
     const buscarEnderecoPorCep = async (cep, camposEndereco) => {
         try {
             if (cep.length > 8) {
@@ -444,19 +427,45 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             });
         }
     };
-    const { activeStep, setActiveStep } = useSteps({
+    const { activeStep, setActiveStep, isIncompleteStep } = useSteps({
         index: 0,
         count: campos.filter((i) =>
             i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
         ).length,
     });
     console.log(errors);
+
+    useEffect(() => {
+        if (errors) {
+            console.log(
+                campos
+                    .filter(
+                        (i) =>
+                            i.campos.find(
+                                (e) => modelo?.campos[e.codigo]?.exibir
+                            ) &&
+                            i.campos.find((campo) =>
+                                errors?.preenchimento &&
+                                Object.keys(errors?.preenchimento).find(
+                                    (e) => e == campo.codigo
+                                )
+                                    ? true
+                                    : false
+                            )
+                    )
+                    .map((i) => {
+                        const index = campos.findIndex((e) => e.id == i.id);
+                        isIncompleteStep(index);
+                    })
+            );
+        }
+    }, [errors]);
     return (
         <Box
             bg="gray.100"
             minH="100vh"
             as="form"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit, onError)}
         >
             <Head
                 title={ficha?.nome}
@@ -517,6 +526,19 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             <AlertTitle>Ficha Aprovada</AlertTitle>
                         </Alert>
                     )}
+                    {ficha.status != "aguardando" &&
+                        ficha.status != "aprovada" &&
+                        ficha.status != "reprovada" && (
+                            <Alert status="info" my={2}>
+                                <AlertIcon />
+                                <AlertTitle>Ficha em análise</AlertTitle>
+                                <AlertDescription>
+                                    Não será possivel editar durante este
+                                    status, caso seja necessário, entrar em
+                                    contato com o administrador.
+                                </AlertDescription>
+                            </Alert>
+                        )}
                     {ficha.status == "reprovada" && (
                         <Alert status="error" my={2}>
                             <AlertIcon />
@@ -579,6 +601,27 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             </Text>
                         </GridItem>
                     )}
+                    {ficha.imovel?.valorAluguel && (
+                        <GridItem p={4} bg="white">
+                            <Text fontSize="sm" color="gray">
+                                Valor Aluguel
+                            </Text>
+                            <Text>
+                                {formatoValor(ficha.imovel?.valorAluguel)}
+                            </Text>
+                        </GridItem>
+                    )}
+                    {/* {ficha.imovel?.valorVenda && (
+                        <GridItem p={4} bg="white">
+                            <Text fontSize="sm" color="gray">
+                                Valor Venda
+                            </Text>
+                            <Text>
+                                {formatoValor(ficha.imovel?.valorVenda)}
+                            </Text>
+                        </GridItem>
+                    )} */}
+
                     {ficha.imovel?.valorCondominio && (
                         <GridItem p={4} bg="white">
                             <Text fontSize="sm" color="gray">
@@ -666,80 +709,81 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                 <StepSeparator />
                             </Step>
                         </Stepper>
-                        <Box display={{ lg: "none" }}>
-                            <Stepper
-                                size="xs"
+                        <Box display={{ lg: "none" }} py={4}>
+                            <Tabs
+                                size="sm"
                                 index={activeStep}
-                                flexWrap="wrap"
+                                variant="solid-rounded"
                             >
-                                {campos
-                                    .filter((i) =>
-                                        i.campos.find(
-                                            (e) =>
-                                                modelo?.campos[e.codigo]?.exibir
+                                <TabList>
+                                    {campos
+                                        .filter((i) =>
+                                            i.campos.find(
+                                                (e) =>
+                                                    modelo?.campos[e.codigo]
+                                                        ?.exibir
+                                            )
                                         )
-                                    )
-                                    .map((step, index) => (
-                                        <Step
-                                            key={index}
-                                            onClick={() => setActiveStep(index)}
-                                            style={{
-                                                minWidth: "content",
-                                            }}
-                                        >
-                                            <StepIndicator>
-                                                <StepStatus
-                                                    complete={<StepIcon />}
-                                                    incomplete={<StepNumber />}
-                                                    active={<StepNumber />}
-                                                />
-                                            </StepIndicator>
-
-                                            {index == activeStep && (
-                                                <Box flexShrink="0">
-                                                    <StepTitle>
-                                                        {step.nome}
-                                                    </StepTitle>
-                                                    <StepDescription>
-                                                        {step.descricao}
-                                                    </StepDescription>
-                                                </Box>
-                                            )}
-
-                                            <StepSeparator />
-                                        </Step>
-                                    ))}
-                                <Step
-                                    onClick={() =>
-                                        setActiveStep(
-                                            campos.filter((i) =>
-                                                i.campos.find(
-                                                    (e) =>
-                                                        modelo?.campos[e.codigo]
-                                                            ?.exibir
-                                                )
-                                            ).length
-                                        )
-                                    }
-                                >
-                                    <StepIndicator>
-                                        <StepStatus
-                                            complete={<StepIcon />}
-                                            incomplete={<StepNumber />}
-                                            active={<StepNumber />}
-                                        />
-                                    </StepIndicator>
-
-                                    <Box flexShrink="0">
-                                        <StepTitle>Resumo</StepTitle>
-                                        <StepDescription>
-                                            Confira os dados informados
-                                        </StepDescription>
-                                    </Box>
-
-                                    <StepSeparator />
-                                </Step>
-                            </Stepper>
+                                        .map((step, index) => (
+                                            <Tab
+                                                key={index}
+                                                onClick={() =>
+                                                    setActiveStep(index)
+                                                }
+                                                bg={
+                                                    step.campos.find((campo) =>
+                                                        errors?.preenchimento &&
+                                                        Object.keys(
+                                                            errors?.preenchimento
+                                                        ).find(
+                                                            (e) =>
+                                                                e ==
+                                                                campo.codigo
+                                                        )
+                                                            ? true
+                                                            : false
+                                                    )
+                                                        ? "orange"
+                                                        : null
+                                                }
+                                                alignItems="center"
+                                                gap={2}
+                                            >
+                                                {step.campos.find((campo) =>
+                                                    errors?.preenchimento &&
+                                                    Object.keys(
+                                                        errors?.preenchimento
+                                                    ).find(
+                                                        (e) => e == campo.codigo
+                                                    )
+                                                        ? true
+                                                        : false
+                                                ) && (
+                                                    <Icon
+                                                        as={FiAlertTriangle}
+                                                    />
+                                                )}
+                                                {step.nome}
+                                            </Tab>
+                                        ))}
+                                    <Tab
+                                        onClick={() =>
+                                            setActiveStep(
+                                                campos.filter((i) =>
+                                                    i.campos.find(
+                                                        (e) =>
+                                                            modelo?.campos[
+                                                                e.codigo
+                                                            ]?.exibir
+                                                    )
+                                                ).length
+                                            )
+                                        }
+                                    >
+                                        Resumo
+                                    </Tab>
+                                </TabList>
+                            </Tabs>
                         </Box>
                     </Box>
                     <Box w="full">
@@ -1575,25 +1619,100 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     ))}
                                 </Flex>
                                 <Flex>
-                                    {errors && (
-                                        <Alert>
-                                            <AlertTitle>
-                                                Foram encontradas algumas
-                                                pendências
-                                            </AlertTitle>
+                                    {errors.length && (
+                                        <Alert
+                                            status="warning"
+                                            flexDir="column"
+                                        >
+                                            <Flex>
+                                                {" "}
+                                                <AlertIcon />
+                                                <AlertTitle>
+                                                    Foram encontradas algumas
+                                                    pendências
+                                                </AlertTitle>
+                                            </Flex>
                                             <AlertDescription>
                                                 <ul>
-                                                    {Object.keys(errors).map(
-                                                        (fieldName) => (
-                                                            <li key={fieldName}>
-                                                                {
-                                                                    errors[
-                                                                        fieldName
-                                                                    ]?.message
-                                                                }
-                                                            </li>
+                                                    {campos
+                                                        .filter(
+                                                            (i) =>
+                                                                i.campos.find(
+                                                                    (e) =>
+                                                                        modelo
+                                                                            ?.campos[
+                                                                            e
+                                                                                .codigo
+                                                                        ]
+                                                                            ?.exibir
+                                                                ) &&
+                                                                i.campos.find(
+                                                                    (campo) =>
+                                                                        errors?.preenchimento &&
+                                                                        Object.keys(
+                                                                            errors?.preenchimento
+                                                                        ).find(
+                                                                            (
+                                                                                e
+                                                                            ) =>
+                                                                                e ==
+                                                                                campo.codigo
+                                                                        )
+                                                                            ? true
+                                                                            : false
+                                                                )
                                                         )
-                                                    )}
+                                                        .map((c) => (
+                                                            <>
+                                                                <li>
+                                                                    {c.nome}
+                                                                </li>
+                                                                <ul>
+                                                                    {c.campos
+                                                                        .filter(
+                                                                            (
+                                                                                campo
+                                                                            ) =>
+                                                                                errors?.preenchimento &&
+                                                                                Object.keys(
+                                                                                    errors?.preenchimento
+                                                                                ).find(
+                                                                                    (
+                                                                                        e
+                                                                                    ) =>
+                                                                                        e ==
+                                                                                        campo.codigo
+                                                                                )
+                                                                                    ? true
+                                                                                    : false
+                                                                        )
+                                                                        .map(
+                                                                            (
+                                                                                campo
+                                                                            ) => (
+                                                                                <li>
+                                                                                    {
+                                                                                        campo.nome
+                                                                                    }{" "}
+                                                                                    -{" "}
+                                                                                    {
+                                                                                        Object.entries(
+                                                                                            errors?.preenchimento
+                                                                                        ).find(
+                                                                                            (
+                                                                                                e
+                                                                                            ) =>
+                                                                                                e[0] ==
+                                                                                                campo.codigo
+                                                                                        )[1]
+                                                                                            .message
+                                                                                    }
+                                                                                </li>
+                                                                            )
+                                                                        )}
+                                                                </ul>
+                                                            </>
+                                                        ))}
                                                 </ul>
                                             </AlertDescription>
                                         </Alert>
@@ -1621,13 +1740,10 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                 <Button
                                     size="sm"
                                     colorScheme="blue"
-                                    type="button"
+                                    type="submit"
                                     isLoading={isSubmitting}
                                     rightIcon={<BsArrowRight />}
-                                    onClick={() => {
-                                        setActiveStep(activeStep + 1);
-                                        handleSubmit(onSubmitIgnorandoErros);
-                                    }}
+                                    noValidate
                                 >
                                     Avançar
                                 </Button>
