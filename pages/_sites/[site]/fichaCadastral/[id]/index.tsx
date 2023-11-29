@@ -309,6 +309,14 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
 
     const onSubmit = async (data) => {
         try {
+            if (
+                activeStep !=
+                campos.filter((i) =>
+                    i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
+                ).length
+            ) {
+                setActiveStep(activeStep + 1);
+            }
             console.log(data);
             await atualizar.mutateAsync(data);
 
@@ -381,20 +389,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             });
         }
     };
-    const onError = (data) => {
-        if (
-            activeStep !=
-            campos.filter((i) =>
-                i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
-            ).length
-        ) {
-            console.log("data", data);
-            clearErrors();
-            setActiveStep(activeStep + 1);
-            onSubmit(watch());
-            return;
-        }
-    };
+
     const buscarEnderecoPorCep = async (cep, camposEndereco) => {
         try {
             if (cep.length > 8) {
@@ -433,6 +428,20 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
         ).length,
     });
+    const onError = (data) => {
+        if (
+            activeStep !=
+            campos.filter((i) =>
+                i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
+            ).length
+        ) {
+            console.log("data", data);
+            clearErrors();
+            setActiveStep(activeStep + 1);
+            onSubmit(watch());
+            return;
+        }
+    };
     console.log(errors);
 
     useEffect(() => {
