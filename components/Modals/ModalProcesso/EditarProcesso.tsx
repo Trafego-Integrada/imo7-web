@@ -105,6 +105,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         name: "fichas",
     });
     useEffect(() => {
+        reset({});
         buscar.mutate(id);
     }, [id]);
     return (
@@ -279,6 +280,11 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                     </Text>
                                                                 </Box>
                                                             )}
+                                                            getOptionLabel={(
+                                                                i
+                                                            ) =>
+                                                                `Codigo: ${i.codigo} -  ${i.endereco}, ${i.bairro},${i.cidade}`
+                                                            }
                                                             getOptionValue={(
                                                                 i
                                                             ) => i.id}
@@ -290,7 +296,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                                 "imovelId"
                                                                             )
                                                                                 ? "Editar imóvel"
-                                                                                : "Cadatrar Imóvel"
+                                                                                : "Cadastrar Imóvel"
                                                                         }
                                                                     >
                                                                         <IconButton

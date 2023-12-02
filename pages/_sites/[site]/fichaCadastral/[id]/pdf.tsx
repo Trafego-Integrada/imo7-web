@@ -305,8 +305,11 @@ const FichaCadastral = ({
                             <Text fontWeight="bold" fontSize="sm">
                                 {ficha.imovel?.codigo} -{" "}
                                 {ficha.imovel?.endereco}, nº
-                                {ficha.imovel?.numero}, {ficha.imovel?.bairro},{" "}
-                                {ficha.imovel?.cidade}/{ficha.imovel?.estado}
+                                {ficha.imovel?.numero},
+                                {ficha?.imovel?.complemento &&
+                                    ` ${ficha?.imovel?.complemento},`}{" "}
+                                {ficha.imovel?.bairro}, {ficha.imovel?.cidade}/
+                                {ficha.imovel?.estado}, CEP: {ficha.imove?.cep}
                             </Text>
                         </Box>
                     ) : ficha.codigoImovel ? (
@@ -357,7 +360,7 @@ const FichaCadastral = ({
                     </Text>
                 </GridItem>
                 <GridItem borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Valor Seguro:</Text>
+                    <Text fontSize="xs">Valor Seguro Incêndio:</Text>
                     <Text fontWeight="bold" fontSize="sm">
                         {ficha.imovel?.valorSeguro &&
                             formatoValor(ficha.imovel?.valorSeguro)}

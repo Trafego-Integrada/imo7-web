@@ -271,7 +271,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             render={({ field }) => (
                                                 <FormInputCurrency
                                                     size="sm"
-                                                    label="Valor Seguro "
+                                                    label="Valor Seguro Incêndio"
                                                     placeholder="R$"
                                                     error={
                                                         errors.valorSeguro

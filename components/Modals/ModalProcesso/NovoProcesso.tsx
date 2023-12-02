@@ -228,6 +228,9 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                             </Text>
                                                         </Box>
                                                     )}
+                                                    getOptionLabel={(i) =>
+                                                        `Codigo: ${i.codigo} -  ${i.endereco}, ${i.bairro},${i.cidade}`
+                                                    }
                                                     getOptionValue={(i) => i.id}
                                                     rightAddon={
                                                         <Box p={0}>
@@ -237,7 +240,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                                         "imovelId"
                                                                     )
                                                                         ? "Editar imóvel"
-                                                                        : "Cadatrar Imóvel"
+                                                                        : "Cadastrar Imóvel"
                                                                 }
                                                             >
                                                                 <IconButton

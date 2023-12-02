@@ -4,7 +4,9 @@ import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
 import prisma from "@/lib/prisma";
 import {
     atualizarAnexosFicha,
+    excluirAnexoFicha,
     atualizarFicha,
+    buscarFicha,
 } from "@/services/models/public/fichaCadastral";
 import {
     Alert,
@@ -51,6 +53,7 @@ import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     FiAlertTriangle,
+    FiDelete,
     FiEye,
     FiFile,
     FiPlus,
@@ -66,6 +69,7 @@ import {
     convertToBase64,
     formatoValor,
     getFileExtension,
+    verificarExtensaoImagem,
 } from "@/helpers/helpers";
 import { Head } from "@/components/Head";
 import { MdClose } from "react-icons/md";
@@ -73,8 +77,11 @@ import { MdClose } from "react-icons/md";
 import { FileUpload } from "primereact/fileupload";
 import { BiSave } from "react-icons/bi";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
+import { ModalPreview } from "@/components/Modals/Preview";
 
 function Previews(props) {
+    const preview = useRef();
+    const buscar = useMutation(buscarFicha);
     const toast = useToast(null);
     const [totalSize, setTotalSize] = useState(0);
     const fileUploadRef = useRef(null);
@@ -101,6 +108,7 @@ function Previews(props) {
         toast({
             status: "info",
             title: "File Uploaded",
+            position: "top-right",
         });
     };
 
@@ -196,33 +204,82 @@ function Previews(props) {
         );
     };
 
-    const atualizarAnexos = useMutation(atualizarAnexosFicha);
+    const atualizarAnexos = useMutation(atualizarAnexosFicha, {
+        onSuccess: () => {
+            props.buscar();
+        },
+    });
+    const excluirAnexo = useMutation(excluirAnexoFicha, {
+        onSuccess: () => {
+            toast({
+                title: "Arquivo excluído com sucesso",
+                position: "top-right",
+            });
+            props.buscar();
+        },
+    });
     const customBase64Uploader = async (event) => {
         // convert file to base64 encoded
-        const file = event.files[0];
+        if (event.options?.props?.multiple) {
+            const files = event.files;
 
-        const base64String = await convertToBase64(file);
-        const fileExtension = getFileExtension(file.name);
+            for await (const item of files) {
+                const base64String = await convertToBase64(item);
+                const fileExtension = getFileExtension(item.name);
 
-        await atualizarAnexos.mutateAsync(
-            {
-                id: props.id,
-                formData: {
-                    arquivos: [
-                        {
-                            nome: props.codigo,
-                            extensao: fileExtension,
-                            base64: base64String,
+                await atualizarAnexos.mutateAsync(
+                    {
+                        id: props.id,
+                        formData: {
+                            arquivos: [
+                                {
+                                    nome: props.codigo,
+                                    extensao: fileExtension,
+                                    base64: base64String,
+                                },
+                            ],
                         },
-                    ],
-                },
-            },
-            {
-                onSuccess: () => {
-                    toast({ title: "Upload realizado com sucesso" });
-                },
+                    },
+                    {
+                        onSuccess: () => {
+                            toast({
+                                title: "Upload realizado com sucesso",
+                                position: "top-right",
+                            });
+                        },
+                    }
+                );
             }
-        );
+        } else {
+            const file = event.files[0];
+
+            const base64String = await convertToBase64(file);
+            const fileExtension = getFileExtension(file.name);
+
+            await atualizarAnexos.mutateAsync(
+                {
+                    id: props.id,
+                    formData: {
+                        arquivos: [
+                            {
+                                nome: props.codigo,
+                                extensao: fileExtension,
+                                base64: base64String,
+                            },
+                        ],
+                    },
+                },
+                {
+                    onSuccess: () => {
+                        toast({
+                            title: "Upload realizado com sucesso",
+                            position: "top-right",
+                        });
+                    },
+                }
+            );
+        }
+        console.log(event);
     };
     return (
         <Flex
@@ -281,9 +338,111 @@ function Previews(props) {
             {props.data && (
                 <Flex flexDir="column" gap={1}>
                     <Text fontSize="sm">Arquivos anexados</Text>
-                    <Image src={props.data} w={24} />
+                    <Flex flexDir="row" gap={1} wrap="wrap">
+                        {props.multiple ? (
+                            JSON.parse(props.data).map((item) => (
+                                <Box pos="relative" key={item}>
+                                    <IconButton
+                                        icon={<FiDelete />}
+                                        colorScheme="red"
+                                        size="xs"
+                                        pos="absolute"
+                                        top={0}
+                                        right={0}
+                                        onClick={() =>
+                                            excluirAnexo.mutate({
+                                                id: props.id,
+                                                params: {
+                                                    ...props,
+                                                    arquivo: item,
+                                                },
+                                            })
+                                        }
+                                    />
+                                    {verificarExtensaoImagem(item).eImagem ? (
+                                        <Image
+                                            src={item}
+                                            w={32}
+                                            h={32}
+                                            cursor="pointer"
+                                            onClick={() =>
+                                                preview.current.onOpen(item)
+                                            }
+                                        />
+                                    ) : (
+                                        <Flex
+                                            align="center"
+                                            justify="center"
+                                            h={32}
+                                            w={32}
+                                            bg="gray.700"
+                                            cursor="pointer"
+                                            onClick={() =>
+                                                preview.current.onOpen(item)
+                                            }
+                                        >
+                                            <Text color="white" fontSize="lg">
+                                                {verificarExtensaoImagem(
+                                                    item
+                                                ).extensao?.toLocaleUpperCase()}
+                                            </Text>
+                                        </Flex>
+                                    )}
+                                </Box>
+                            ))
+                        ) : (
+                            <Box pos="relative">
+                                <IconButton
+                                    icon={<FiDelete />}
+                                    colorScheme="red"
+                                    size="xs"
+                                    pos="absolute"
+                                    top={0}
+                                    right={0}
+                                    onClick={() =>
+                                        excluirAnexo.mutate({
+                                            id: props.id,
+                                            params: {
+                                                ...props,
+                                            },
+                                        })
+                                    }
+                                />
+                                {verificarExtensaoImagem(props.data).eImagem ? (
+                                    <Image
+                                        src={props.data}
+                                        w={32}
+                                        h={32}
+                                        cursor="pointer"
+                                        onClick={() =>
+                                            preview.current.onOpen(props.data)
+                                        }
+                                    />
+                                ) : (
+                                    <Flex
+                                        align="center"
+                                        justify="center"
+                                        h={32}
+                                        w={32}
+                                        bg="gray.700"
+                                        cursor="pointer"
+                                        onClick={() =>
+                                            preview.current.onOpen(props.data)
+                                        }
+                                    >
+                                        <Text color="white" fontSize="lg">
+                                            {verificarExtensaoImagem(
+                                                props.data
+                                            ).extensao?.toLocaleUpperCase()}
+                                        </Text>
+                                    </Flex>
+                                )}
+                            </Box>
+                        )}
+                    </Flex>
                 </Flex>
             )}
+            <ModalPreview ref={preview} />
         </Flex>
     );
 }
@@ -302,6 +461,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     } = useForm({
         defaultValues: {
             ...ficha,
+        },
+    });
+    const buscar = useMutation(buscarFicha, {
+        onSuccess: (data) => {
+            reset(data);
         },
     });
     const atualizar = useMutation(atualizarFicha);
@@ -362,13 +526,18 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             //     });
             // }
 
-            toast({ title: "Ficha salva", status: "success" });
+            toast({
+                title: "Ficha salva",
+                status: "success",
+                position: "top-right",
+            });
         } catch (e) {
             console.log(e);
             toast({
                 title: "Houve um problema",
                 description: e.response?.data?.message,
                 status: "error",
+                position: "top-right",
             });
         }
     };
@@ -379,13 +548,18 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             console.log("veio aqui");
             await atualizar.mutateAsync(data);
 
-            toast({ title: "Ficha salva automaticamente", status: "success" });
+            toast({
+                title: "Ficha salva automaticamente",
+                status: "success",
+                position: "top-right",
+            });
         } catch (e) {
             console.log(e);
             toast({
                 title: "Houve um problema",
                 description: e.response?.data?.message,
                 status: "error",
+                position: "top-right",
             });
         }
     };
@@ -419,6 +593,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             toast({
                 title: "Endereço não encontrado",
                 status: "warning",
+                position: "top-right",
             });
         }
     };
@@ -572,10 +747,15 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                 </Text>
                                 <Text>
                                     {ficha.imovel?.codigo} -{" "}
-                                    {ficha.imovel?.endereco},{" "}
+                                    {ficha.imovel?.endereco}, nº
+                                    {ficha.imovel?.numero},
+                                    {ficha?.imovel?.complemento &&
+                                        ` ${ficha?.imovel?.complemento},`}{" "}
                                     {ficha.imovel?.bairro},{" "}
                                     {ficha.imovel?.cidade}/
-                                    {ficha.imovel?.estado}
+                                    {ficha.imovel?.estado},
+                                    {ficha.imovel?.estado}, CEP:{" "}
+                                    {ficha.imove?.cep}
                                 </Text>
                             </Box>
                         ) : ficha.codigoImovel ? (
@@ -1133,6 +1313,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 mask={
                                                                     campo.mask
                                                                 }
+                                                                inputMode="numeric"
                                                                 {...register(
                                                                     "preenchimento." +
                                                                         campo.codigo,
@@ -1297,6 +1478,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                         "preenchimento." +
                                                                             campo.codigo
                                                                     )}
+                                                                    buscar={() =>
+                                                                        buscar.mutate(
+                                                                            ficha.id
+                                                                        )
+                                                                    }
                                                                 />
                                                                 {/* <FormInput
                                                                     size="sm"
@@ -1427,6 +1613,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                         "preenchimento." +
                                                                             campo.codigo
                                                                     )}
+                                                                    buscar={() =>
+                                                                        buscar.mutate(
+                                                                            ficha.id
+                                                                        )
+                                                                    }
                                                                 />
                                                                 {/* <FormInput
                                                                     size="sm"
@@ -1544,31 +1735,32 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                             </Flex>
                                                         ) : campo.tipoCampo ==
                                                           "files" ? (
-                                                            <FormInput
-                                                                size="sm"
-                                                                type="file"
-                                                                multiple="multiple"
-                                                                label={
-                                                                    campo.nome
-                                                                }
-                                                                {...register(
-                                                                    "arquivos." +
-                                                                        campo.codigo,
-                                                                    {
-                                                                        required:
-                                                                            {
-                                                                                value: modelo
-                                                                                    .campos[
-                                                                                    campo
-                                                                                        .codigo
-                                                                                ]
-                                                                                    ?.obrigatorio,
-                                                                                message:
-                                                                                    "Campo obrigatório",
-                                                                            },
+                                                            <Flex
+                                                                align="center"
+                                                                w="full"
+                                                            >
+                                                                <Previews
+                                                                    nome={
+                                                                        campo.nome
                                                                     }
-                                                                )}
-                                                            />
+                                                                    codigo={
+                                                                        campo.codigo
+                                                                    }
+                                                                    id={
+                                                                        ficha.id
+                                                                    }
+                                                                    data={watch(
+                                                                        "preenchimento." +
+                                                                            campo.codigo
+                                                                    )}
+                                                                    multiple
+                                                                    buscar={() =>
+                                                                        buscar.mutate(
+                                                                            ficha.id
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </Flex>
                                                         ) : (
                                                             ""
                                                         )}

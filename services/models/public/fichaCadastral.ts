@@ -12,3 +12,19 @@ export const atualizarAnexosFicha = async ({ id, formData }) => {
     );
     return data;
 };
+export const buscarFicha = async (id) => {
+    const { data } = await api.get("public/fichaCadastral/" + id);
+    return data;
+};
+
+export const excluirAnexoFicha = async ({ id, params }) => {
+    const { data } = await api.delete(
+        "public/fichaCadastral/" + id + "/anexos",
+        {
+            params: {
+                ...params,
+            },
+        }
+    );
+    return data;
+};

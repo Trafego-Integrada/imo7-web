@@ -78,7 +78,10 @@ import { imo7ApiService } from "@/services/apiServiceUsage";
 import { ConsultasNetrin } from "../ModalProcesso/ConsultaNetrin";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { api } from "@/services/apiClient";
-import { removerCaracteresEspeciais } from "@/helpers/helpers";
+import {
+    removerCaracteresEspeciais,
+    verificarExtensaoImagem,
+} from "@/helpers/helpers";
 const schema = yup.object({
     status: yup.string().required("Status é obrigatório"),
     motivoReprovacaoId: yup.string().when("status", {
@@ -646,8 +649,13 @@ const ModalBase = ({}, ref) => {
                                                                                     />
                                                                                 </Flex>
                                                                             ) : i.tipoCampo ==
-                                                                              "file" ? (
-                                                                                <Flex>
+                                                                              "files" ? (
+                                                                                <Flex
+                                                                                    wrap="wrap"
+                                                                                    gap={
+                                                                                        2
+                                                                                    }
+                                                                                >
                                                                                     {watch(
                                                                                         "preenchimento"
                                                                                     )?.find(
@@ -657,81 +665,123 @@ const ModalBase = ({}, ref) => {
                                                                                             p.campoFichaCadastralCodigo ==
                                                                                             i.codigo
                                                                                     )
-                                                                                        ?.valor ? (
-                                                                                        <>
-                                                                                            <Text as="span">
-                                                                                                Arquivo
-                                                                                                anexado
-                                                                                            </Text>
-                                                                                            <Tooltip label="Visualizar Arquivo">
-                                                                                                <IconButton
-                                                                                                    size="xs"
-                                                                                                    icon={
-                                                                                                        <Icon
-                                                                                                            as={
-                                                                                                                FiEye
+                                                                                        ?.valor &&
+                                                                                        JSON.parse(
+                                                                                            watch(
+                                                                                                "preenchimento"
+                                                                                            )?.find(
+                                                                                                (
+                                                                                                    p
+                                                                                                ) =>
+                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                    i.codigo
+                                                                                            )
+                                                                                                ?.valor
+                                                                                        ).map(
+                                                                                            (
+                                                                                                item
+                                                                                            ) => (
+                                                                                                <Box
+                                                                                                    key={
+                                                                                                        item
+                                                                                                    }
+                                                                                                >
+                                                                                                    {verificarExtensaoImagem(
+                                                                                                        item
+                                                                                                    )
+                                                                                                        .eImagem ? (
+                                                                                                        <Image
+                                                                                                            src={
+                                                                                                                item
+                                                                                                            }
+                                                                                                            w={
+                                                                                                                32
+                                                                                                            }
+                                                                                                            h={
+                                                                                                                32
+                                                                                                            }
+                                                                                                            cursor="pointer"
+                                                                                                            onClick={() =>
+                                                                                                                preview.current.onOpen(
+                                                                                                                    item
+                                                                                                                )
                                                                                                             }
                                                                                                         />
-                                                                                                    }
-                                                                                                    onClick={() =>
-                                                                                                        preview.current.onOpen(
-                                                                                                            watch(
-                                                                                                                "preenchimento"
-                                                                                                            )?.find(
-                                                                                                                (
-                                                                                                                    p
-                                                                                                                ) =>
-                                                                                                                    p.campoFichaCadastralCodigo ==
-                                                                                                                    i.codigo
-                                                                                                            )
-                                                                                                                ?.valor
-                                                                                                        )
-                                                                                                    }
-                                                                                                />
-                                                                                            </Tooltip>
-                                                                                            <Tooltip label="Baixar Arquivo">
-                                                                                                <Link
-                                                                                                    href={
-                                                                                                        watch(
-                                                                                                            "preenchimento"
-                                                                                                        )?.find(
-                                                                                                            (
-                                                                                                                p
-                                                                                                            ) =>
-                                                                                                                p.campoFichaCadastralCodigo ==
-                                                                                                                i.codigo
-                                                                                                        )
-                                                                                                            ?.valor
-                                                                                                            ? watch(
-                                                                                                                  "preenchimento"
-                                                                                                              )?.find(
-                                                                                                                  (
-                                                                                                                      p
-                                                                                                                  ) =>
-                                                                                                                      p.campoFichaCadastralCodigo ==
-                                                                                                                      i.codigo
-                                                                                                              )
-                                                                                                                  ?.valor
-                                                                                                            : "#"
-                                                                                                    }
-                                                                                                    passHref
-                                                                                                >
-                                                                                                    <IconButton
-                                                                                                        size="xs"
-                                                                                                        icon={
-                                                                                                            <Icon
-                                                                                                                as={
-                                                                                                                    FiDownload
+                                                                                                    ) : (
+                                                                                                        <Flex
+                                                                                                            align="center"
+                                                                                                            justify="center"
+                                                                                                            h={
+                                                                                                                32
+                                                                                                            }
+                                                                                                            w={
+                                                                                                                32
+                                                                                                            }
+                                                                                                            bg="gray.700"
+                                                                                                            cursor="pointer"
+                                                                                                            onClick={() =>
+                                                                                                                preview.current.onOpen(
+                                                                                                                    item
+                                                                                                                )
+                                                                                                            }
+                                                                                                        >
+                                                                                                            <Text
+                                                                                                                color="white"
+                                                                                                                fontSize="lg"
+                                                                                                            >
+                                                                                                                {verificarExtensaoImagem(
+                                                                                                                    item
+                                                                                                                ).extensao?.toLocaleUpperCase()}
+                                                                                                            </Text>
+                                                                                                        </Flex>
+                                                                                                    )}
+                                                                                                    <Flex
+                                                                                                        gap={
+                                                                                                            1
+                                                                                                        }
+                                                                                                    >
+                                                                                                        <Tooltip label="Visualizar Arquivo">
+                                                                                                            <IconButton
+                                                                                                                size="xs"
+                                                                                                                icon={
+                                                                                                                    <Icon
+                                                                                                                        as={
+                                                                                                                            FiEye
+                                                                                                                        }
+                                                                                                                    />
+                                                                                                                }
+                                                                                                                onClick={() =>
+                                                                                                                    preview.current.onOpen(
+                                                                                                                        item
+                                                                                                                    )
                                                                                                                 }
                                                                                                             />
-                                                                                                        }
-                                                                                                    />
-                                                                                                </Link>
-                                                                                            </Tooltip>
-                                                                                        </>
-                                                                                    ) : (
-                                                                                        ""
-                                                                                    )}
+                                                                                                        </Tooltip>
+                                                                                                        <Tooltip label="Baixar Arquivo">
+                                                                                                            <Link
+                                                                                                                href={
+                                                                                                                    item
+                                                                                                                        ? item
+                                                                                                                        : "#"
+                                                                                                                }
+                                                                                                                passHref
+                                                                                                            >
+                                                                                                                <IconButton
+                                                                                                                    size="xs"
+                                                                                                                    icon={
+                                                                                                                        <Icon
+                                                                                                                            as={
+                                                                                                                                FiDownload
+                                                                                                                            }
+                                                                                                                        />
+                                                                                                                    }
+                                                                                                                />
+                                                                                                            </Link>
+                                                                                                        </Tooltip>
+                                                                                                    </Flex>
+                                                                                                </Box>
+                                                                                            )
+                                                                                        )}
                                                                                     <AnaliseCampo
                                                                                         campoCodigo={
                                                                                             i.codigo
@@ -744,6 +794,197 @@ const ModalBase = ({}, ref) => {
                                                                                         }
                                                                                     />
                                                                                 </Flex>
+                                                                            ) : i.tipoCampo ==
+                                                                              "file" ? (
+                                                                                <Box>
+                                                                                    <Flex>
+                                                                                        {watch(
+                                                                                            "preenchimento"
+                                                                                        )?.find(
+                                                                                            (
+                                                                                                p
+                                                                                            ) =>
+                                                                                                p.campoFichaCadastralCodigo ==
+                                                                                                i.codigo
+                                                                                        )
+                                                                                            ?.valor ? (
+                                                                                            <>
+                                                                                                {verificarExtensaoImagem(
+                                                                                                    watch(
+                                                                                                        "preenchimento"
+                                                                                                    )?.find(
+                                                                                                        (
+                                                                                                            p
+                                                                                                        ) =>
+                                                                                                            p.campoFichaCadastralCodigo ==
+                                                                                                            i.codigo
+                                                                                                    )
+                                                                                                        ?.valor
+                                                                                                )
+                                                                                                    .eImagem ? (
+                                                                                                    <Image
+                                                                                                        src={
+                                                                                                            watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.valor
+                                                                                                        }
+                                                                                                        w={
+                                                                                                            32
+                                                                                                        }
+                                                                                                        h={
+                                                                                                            32
+                                                                                                        }
+                                                                                                        cursor="pointer"
+                                                                                                        onClick={() =>
+                                                                                                            preview.current.onOpen(
+                                                                                                                watch(
+                                                                                                                    "preenchimento"
+                                                                                                                )?.find(
+                                                                                                                    (
+                                                                                                                        p
+                                                                                                                    ) =>
+                                                                                                                        p.campoFichaCadastralCodigo ==
+                                                                                                                        i.codigo
+                                                                                                                )
+                                                                                                                    ?.valor
+                                                                                                            )
+                                                                                                        }
+                                                                                                    />
+                                                                                                ) : (
+                                                                                                    <Flex
+                                                                                                        align="center"
+                                                                                                        justify="center"
+                                                                                                        h={
+                                                                                                            32
+                                                                                                        }
+                                                                                                        w={
+                                                                                                            32
+                                                                                                        }
+                                                                                                        bg="gray.700"
+                                                                                                        cursor="pointer"
+                                                                                                        onClick={() =>
+                                                                                                            preview.current.onOpen(
+                                                                                                                watch(
+                                                                                                                    "preenchimento"
+                                                                                                                )?.find(
+                                                                                                                    (
+                                                                                                                        p
+                                                                                                                    ) =>
+                                                                                                                        p.campoFichaCadastralCodigo ==
+                                                                                                                        i.codigo
+                                                                                                                )
+                                                                                                                    ?.valor
+                                                                                                            )
+                                                                                                        }
+                                                                                                    >
+                                                                                                        <Text
+                                                                                                            color="white"
+                                                                                                            fontSize="lg"
+                                                                                                        >
+                                                                                                            {verificarExtensaoImagem(
+                                                                                                                watch(
+                                                                                                                    "preenchimento"
+                                                                                                                )?.find(
+                                                                                                                    (
+                                                                                                                        p
+                                                                                                                    ) =>
+                                                                                                                        p.campoFichaCadastralCodigo ==
+                                                                                                                        i.codigo
+                                                                                                                )
+                                                                                                                    ?.valor
+                                                                                                            ).extensao?.toLocaleUpperCase()}
+                                                                                                        </Text>
+                                                                                                    </Flex>
+                                                                                                )}
+                                                                                                <Tooltip label="Visualizar Arquivo">
+                                                                                                    <IconButton
+                                                                                                        size="xs"
+                                                                                                        icon={
+                                                                                                            <Icon
+                                                                                                                as={
+                                                                                                                    FiEye
+                                                                                                                }
+                                                                                                            />
+                                                                                                        }
+                                                                                                        onClick={() =>
+                                                                                                            preview.current.onOpen(
+                                                                                                                watch(
+                                                                                                                    "preenchimento"
+                                                                                                                )?.find(
+                                                                                                                    (
+                                                                                                                        p
+                                                                                                                    ) =>
+                                                                                                                        p.campoFichaCadastralCodigo ==
+                                                                                                                        i.codigo
+                                                                                                                )
+                                                                                                                    ?.valor
+                                                                                                            )
+                                                                                                        }
+                                                                                                    />
+                                                                                                </Tooltip>
+                                                                                                <Tooltip label="Baixar Arquivo">
+                                                                                                    <Link
+                                                                                                        href={
+                                                                                                            watch(
+                                                                                                                "preenchimento"
+                                                                                                            )?.find(
+                                                                                                                (
+                                                                                                                    p
+                                                                                                                ) =>
+                                                                                                                    p.campoFichaCadastralCodigo ==
+                                                                                                                    i.codigo
+                                                                                                            )
+                                                                                                                ?.valor
+                                                                                                                ? watch(
+                                                                                                                      "preenchimento"
+                                                                                                                  )?.find(
+                                                                                                                      (
+                                                                                                                          p
+                                                                                                                      ) =>
+                                                                                                                          p.campoFichaCadastralCodigo ==
+                                                                                                                          i.codigo
+                                                                                                                  )
+                                                                                                                      ?.valor
+                                                                                                                : "#"
+                                                                                                        }
+                                                                                                        passHref
+                                                                                                    >
+                                                                                                        <IconButton
+                                                                                                            size="xs"
+                                                                                                            icon={
+                                                                                                                <Icon
+                                                                                                                    as={
+                                                                                                                        FiDownload
+                                                                                                                    }
+                                                                                                                />
+                                                                                                            }
+                                                                                                        />
+                                                                                                    </Link>
+                                                                                                </Tooltip>
+                                                                                            </>
+                                                                                        ) : (
+                                                                                            ""
+                                                                                        )}
+                                                                                        <AnaliseCampo
+                                                                                            campoCodigo={
+                                                                                                i.codigo
+                                                                                            }
+                                                                                            fichaId={watch(
+                                                                                                "id"
+                                                                                            )}
+                                                                                            buscarFicha={
+                                                                                                buscar
+                                                                                            }
+                                                                                        />
+                                                                                    </Flex>
+                                                                                </Box>
                                                                             ) : (
                                                                                 <>
                                                                                     <Flex

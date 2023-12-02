@@ -43,7 +43,6 @@ handler.post(async (req, res) => {
             //  const stats = statSync(i[1].path);
             //  const imageData = fs.readFileSync(i[1].path);
             const buff = Buffer.from(i.base64, "base64");
-            console.log("Buffer", buff);
             new Upload({
                 client: new S3Client({
                     credentials: {
@@ -64,19 +63,22 @@ handler.post(async (req, res) => {
             })
                 .done()
                 .then(async (data) => {
-                    console.log(data);
                     // if (getObjectResponse.contentLength == 0) {
                     //     return res.status(400).send({
                     //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
                     //     });
                     // }
-                    await prisma.fichaCadastral.update({
+                    const campo = await prisma.campoFichaCadastral.findUnique({
                         where: {
-                            id,
+                            codigo: i.nome,
                         },
-                        data: {
-                            preenchimento: {
-                                upsert: {
+                    });
+                    console.log(campo);
+                    if (campo?.tipoCampo == "files") {
+                        let val = [];
+                        const existe =
+                            await prisma.fichaCadastralPreenchimento.findUnique(
+                                {
                                     where: {
                                         fichaCadastralId_campoFichaCadastralCodigo:
                                             {
@@ -85,39 +87,150 @@ handler.post(async (req, res) => {
                                                     i.nome,
                                             },
                                     },
-                                    create: {
-                                        campoFichaCadastralCodigo: i.nome,
-                                        valor:
-                                            process.env
-                                                .NEXT_PUBLIC_URL_STORAGE +
-                                            nameLocation,
-                                    },
-                                    update: {
-                                        valor:
-                                            process.env
-                                                .NEXT_PUBLIC_URL_STORAGE +
-                                            nameLocation,
+                                }
+                            );
+
+                        if (existe) {
+                            val = JSON.parse(existe.valor);
+                            val.push(
+                                process.env.NEXT_PUBLIC_URL_STORAGE +
+                                    nameLocation
+                            );
+                        } else {
+                            val = [
+                                process.env.NEXT_PUBLIC_URL_STORAGE +
+                                    nameLocation,
+                            ];
+                        }
+                        console.log(val);
+                        await prisma.fichaCadastral.update({
+                            where: {
+                                id,
+                            },
+                            data: {
+                                preenchimento: {
+                                    upsert: {
+                                        where: {
+                                            fichaCadastralId_campoFichaCadastralCodigo:
+                                                {
+                                                    fichaCadastralId: id,
+                                                    campoFichaCadastralCodigo:
+                                                        i.nome,
+                                                },
+                                        },
+                                        create: {
+                                            campoFichaCadastralCodigo: i.nome,
+                                            valor: JSON.stringify(val),
+                                        },
+                                        update: {
+                                            valor: JSON.stringify(val),
+                                        },
                                     },
                                 },
                             },
-                        },
-                    });
+                        });
+                    } else {
+                        await prisma.fichaCadastral.update({
+                            where: {
+                                id,
+                            },
+                            data: {
+                                preenchimento: {
+                                    upsert: {
+                                        where: {
+                                            fichaCadastralId_campoFichaCadastralCodigo:
+                                                {
+                                                    fichaCadastralId: id,
+                                                    campoFichaCadastralCodigo:
+                                                        i.nome,
+                                                },
+                                        },
+                                        create: {
+                                            campoFichaCadastralCodigo: i.nome,
+                                            valor:
+                                                process.env
+                                                    .NEXT_PUBLIC_URL_STORAGE +
+                                                nameLocation,
+                                        },
+                                        update: {
+                                            valor:
+                                                process.env
+                                                    .NEXT_PUBLIC_URL_STORAGE +
+                                                nameLocation,
+                                        },
+                                    },
+                                },
+                            },
+                        });
+                    }
                 })
                 .catch((err) => {
-                    console.log(err);
                     return res.status(400).send({
                         message: `Não conseguimos salvar o arquivo ${i.nome}, verifique o arquivo. Caso persista, contate o suporte.`,
                     });
                 });
         }
 
-        return res.send();
+        return res.send({});
     } catch (error) {
-        console.log(error?.response);
         return res.status(500).send({
             success: false,
             message: error.message,
         });
+    }
+});
+
+handler.delete(async (req, res) => {
+    try {
+        const { multiple, arquivo, codigo, id } = req.query;
+
+        if (multiple) {
+            const preenchimento =
+                await prisma.fichaCadastralPreenchimento.findUnique({
+                    where: {
+                        fichaCadastralId_campoFichaCadastralCodigo: {
+                            campoFichaCadastralCodigo: codigo,
+                            fichaCadastralId: id,
+                        },
+                    },
+                });
+
+            await prisma.fichaCadastralPreenchimento.update({
+                where: {
+                    fichaCadastralId_campoFichaCadastralCodigo: {
+                        campoFichaCadastralCodigo: codigo,
+                        fichaCadastralId: id,
+                    },
+                },
+                data: {
+                    valor:
+                        JSON.parse(preenchimento?.valor).filter(
+                            (i) => i != arquivo
+                        ).length != 0
+                            ? JSON.stringify(
+                                  JSON.parse(preenchimento?.valor).filter(
+                                      (i) => i != arquivo
+                                  )
+                              )
+                            : null,
+                },
+            });
+        } else {
+            await prisma.fichaCadastralPreenchimento.update({
+                where: {
+                    fichaCadastralId_campoFichaCadastralCodigo: {
+                        campoFichaCadastralCodigo: codigo,
+                        fichaCadastralId: id,
+                    },
+                },
+                data: {
+                    valor: null,
+                },
+            });
+        }
+        return res.send(req.query);
+    } catch (error) {
+        return res.status(500).send({ error });
     }
 });
 export const config = {

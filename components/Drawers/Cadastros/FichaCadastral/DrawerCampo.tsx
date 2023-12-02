@@ -207,6 +207,9 @@ const ModalBase = ({}, ref) => {
                                     <option value="select">Select</option>
                                     <option value="checkbox">Checkbox</option>
                                     <option value="file">Arquivo</option>
+                                    <option value="files">
+                                        Multiplos Arquivos
+                                    </option>
                                     <option value="image">Imagem</option>
                                     <option value="datetime-local">
                                         Data e Hora

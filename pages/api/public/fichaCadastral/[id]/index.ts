@@ -22,8 +22,22 @@ handler.get(async (req, res) => {
                 },
                 responsavel: true,
                 imovel: true,
+                imobiliaria: true,
+
+                Processo: true,
             },
         });
+        let newObj = {};
+        let newArq = {};
+        let analise = {};
+        data.preenchimento.map((item) => {
+            newObj[item.campoFichaCadastralCodigo] = item.valor;
+            analise[item.campoFichaCadastralCodigo] = {
+                aprovado: item.aprovado,
+                motivoReprovacao: item.motivoReprovacao,
+            };
+        });
+        data.preenchimento = newObj;
         res.send(data);
     } catch (error) {
         res.status(500).send({

@@ -421,3 +421,26 @@ export async function convertToBase64(file) {
 export function getFileExtension(filename) {
     return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
 }
+export function verificarExtensaoImagem(link) {
+    // Lista de extensões de imagem suportadas
+    const extensoesImagem = [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".gif",
+        ".bmp",
+        ".svg",
+        ".webp",
+    ];
+
+    // Verifica se o link termina com alguma extensão de imagem
+    for (const extensao of extensoesImagem) {
+        if (link.toLowerCase().endsWith(extensao)) {
+            return { eImagem: true, extensao: extensao };
+        }
+    }
+
+    // Se não encontrar nenhuma extensão de imagem, retorna a extensão do arquivo
+    const extensaoArquivo = link.substring(link.lastIndexOf("."));
+    return { eImagem: false, extensao: extensaoArquivo };
+}
