@@ -365,6 +365,19 @@ const Home = () => {
                                                         i.status == "REPROVADO"
                                                 )?.length,
                                             ],
+                                            [
+                                                "Locados",
+                                                data?.processos?.processos?.filter(
+                                                    (i) => i.status == "LOCADO"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Desistentes",
+                                                data?.processos?.processos?.filter(
+                                                    (i) =>
+                                                        i.status == "DESISTENTE"
+                                                )?.length,
+                                            ],
                                         ]}
                                         options={{
                                             legend: "none",
@@ -549,6 +562,56 @@ const Home = () => {
                                                 Reprovados
                                             </Button>{" "}
                                         </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/processos",
+                                                query: {
+                                                    status: "LOCADO",
+                                                },
+                                            }}
+                                        >
+                                            <Button size="xs" colorScheme="red">
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.processos?.processos?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "LOCADO"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Locados
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/processos",
+                                                query: {
+                                                    status: "DESISTENTE",
+                                                },
+                                            }}
+                                        >
+                                            <Button size="xs" colorScheme="red">
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.processos?.processos?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "DESISTENTE"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Desistentes
+                                            </Button>{" "}
+                                        </Link>
                                     </Flex>
                                 </Flex>
                             </Box>
@@ -604,6 +667,19 @@ const Home = () => {
                                                 data?.fichasCadastrais?.filter(
                                                     (i) =>
                                                         i.status == "arquivada"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Locados",
+                                                data?.fichasCadastrais?.filter(
+                                                    (i) => i.status == "locado"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Desistente",
+                                                data?.fichasCadastrais?.filter(
+                                                    (i) =>
+                                                        i.status == "desistente"
                                                 )?.length,
                                             ],
                                         ]}
@@ -785,6 +861,56 @@ const Home = () => {
                                                     }
                                                 </Text>
                                                 Arquivadas
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/fichas",
+                                                query: {
+                                                    status: "locado",
+                                                },
+                                            }}
+                                        >
+                                            <Button size="xs">
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.fichasCadastrais?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "locado"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Locados
+                                            </Button>{" "}
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/fichas",
+                                                query: {
+                                                    status: "desistente",
+                                                },
+                                            }}
+                                        >
+                                            <Button size="xs">
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.fichasCadastrais?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "desistente"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Desistentes
                                             </Button>{" "}
                                         </Link>
                                     </Flex>

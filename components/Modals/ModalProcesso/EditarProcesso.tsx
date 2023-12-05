@@ -183,6 +183,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                     <option value="REPROVADO">
                                                         Reprovado
                                                     </option>
+                                                    <option value="LOCADO">
+                                                        Locado
+                                                    </option>
+                                                    <option value="DESISTENTE">
+                                                        Desisdente
+                                                    </option>
                                                 </FormSelect>
                                             </GridItem>
                                             <GridItem colStart={{ lg: 1 }}>

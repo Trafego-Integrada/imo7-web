@@ -138,6 +138,18 @@ export const statusFicha = (status) => {
                     Arquivada
                 </Tag>
             );
+        case "locado":
+            return (
+                <Tag colorScheme="green" size="sm">
+                    Locado
+                </Tag>
+            );
+        case "desistente":
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Desistente
+                </Tag>
+            );
     }
 };
 export const statusFichaTag = (status) => {
@@ -175,6 +187,18 @@ export const statusFichaTag = (status) => {
         case "arquivada":
             return (
                 <Tooltip label="Arquivada">
+                    <Tag colorScheme="gray" size="sm" rounded="full"></Tag>
+                </Tooltip>
+            );
+        case "locado":
+            return (
+                <Tooltip label="Locado">
+                    <Tag colorScheme="green" size="sm" rounded="full"></Tag>
+                </Tooltip>
+            );
+        case "desistente":
+            return (
+                <Tooltip label="Desistente">
                     <Tag colorScheme="gray" size="sm" rounded="full"></Tag>
                 </Tooltip>
             );
@@ -216,6 +240,18 @@ export const statusProcesso = (status) => {
             return (
                 <Tag colorScheme="gray" size="sm">
                     Arquivada
+                </Tag>
+            );
+        case "LOCADO":
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Locado
+                </Tag>
+            );
+        case "DESISTENTE":
+            return (
+                <Tag colorScheme="gray" size="sm">
+                    Desistente
                 </Tag>
             );
     }
@@ -293,6 +329,14 @@ export const arrayStatusFicha = [
     {
         label: "Arquivada",
         value: "arquivada",
+    },
+    {
+        label: "Locado",
+        value: "locado",
+    },
+    {
+        label: "Desistente",
+        value: "desistente",
     },
 ];
 export function removerCaracteresEspeciais(string) {

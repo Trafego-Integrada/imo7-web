@@ -218,6 +218,14 @@ const Home = ({ query }) => {
             label: "Reprovado",
             value: "REPROVADO",
         },
+        {
+            label: "Locado",
+            value: "LOCADO",
+        },
+        {
+            label: "Desistente",
+            value: "DESISTENTE",
+        },
     ];
 
     const { data: usuarios } = useQuery(

@@ -168,7 +168,8 @@ function Previews(props) {
                         alt={file.name}
                         role="presentation"
                         src={file.objectURL}
-                        w="full"
+                        w={44}
+                        h={44}
                         rounded="lg"
                     />
                 </Flex>
@@ -246,6 +247,7 @@ function Previews(props) {
                                 title: "Upload realizado com sucesso",
                                 position: "top-right",
                             });
+                            props.buscar();
                         },
                     }
                 );
@@ -275,6 +277,7 @@ function Previews(props) {
                             title: "Upload realizado com sucesso",
                             position: "top-right",
                         });
+                        props.buscar();
                     },
                 }
             );
@@ -305,7 +308,7 @@ function Previews(props) {
                 onError={onTemplateClear}
                 onClear={onTemplateClear}
                 headerTemplate={headerTemplate}
-                itemTemplate={itemTemplate}
+                // itemTemplate={itemTemplate}
                 emptyTemplate={emptyTemplate}
                 uploadHandler={customBase64Uploader}
                 mode="advanced"
@@ -978,10 +981,38 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     <Box w="full">
                         <Grid gap={4}>
                             {campos
-                                .filter((i) =>
-                                    i.campos.find(
-                                        (e) => modelo?.campos[e.codigo]?.exibir
-                                    )
+                                .filter(
+                                    (i) =>
+                                        i.campos.find(
+                                            (e) =>
+                                                modelo?.campos[e.codigo]?.exibir
+                                        ) &&
+                                        i.campos.filter((i) => {
+                                            if (
+                                                (modelo.campos[i.codigo] &&
+                                                    modelo?.campos[i.codigo]
+                                                        ?.exibir &&
+                                                    !i.dependencia) ||
+                                                (modelo.campos[i.codigo] &&
+                                                    modelo?.campos[i.codigo]
+                                                        ?.exibir &&
+                                                    ((i.dependencia?.codigo &&
+                                                        !i.dependenciaValor &&
+                                                        watch(
+                                                            `preenchimento.${i.dependencia?.codigo}`
+                                                        )) ||
+                                                        (i.dependencia
+                                                            ?.codigo &&
+                                                            i.dependenciaValor ==
+                                                                watch(
+                                                                    `preenchimento.${i.dependencia?.codigo}`
+                                                                ))))
+                                            ) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }).length > 0
                                 )
                                 .map((item, index) => (
                                     <Box
@@ -1313,7 +1344,16 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 mask={
                                                                     campo.mask
                                                                 }
-                                                                inputMode="numeric"
+                                                                inputMode={
+                                                                    campo.tipoCampo ==
+                                                                        "cnpj" ||
+                                                                    campo.tipoCampo ==
+                                                                        "cpf" ||
+                                                                    campo.tipoCampo ==
+                                                                        "number"
+                                                                        ? "numeric"
+                                                                        : "none"
+                                                                }
                                                                 {...register(
                                                                     "preenchimento." +
                                                                         campo.codigo,

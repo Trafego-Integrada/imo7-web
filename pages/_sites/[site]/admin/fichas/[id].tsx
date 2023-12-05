@@ -204,6 +204,12 @@ const Ficha = ({ ficha }) => {
                                             <option value="arquivada">
                                                 Arquivada
                                             </option>
+                                            <option value="locado">
+                                                Locado
+                                            </option>
+                                            <option value="desistente">
+                                                Desistente
+                                            </option>
                                         </FormSelect>
                                     </GridItem>
                                     {watch("status") == "reprovada" && (

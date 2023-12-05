@@ -699,6 +699,8 @@ enum StatusFicha {
     aprovada
     reprovada
     arquivada
+    locado
+    desistente
 }
 
 model FichaCadastral {
@@ -1053,6 +1055,8 @@ enum StatusProcesso {
     COMPLETO
     APROVADO
     REPROVADO
+    LOCADO
+    DESISTENTE
 }
 
 enum TipoProcesso {
