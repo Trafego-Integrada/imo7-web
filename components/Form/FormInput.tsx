@@ -46,7 +46,6 @@ const InputBase = (
                     size={size}
                     mask={mask}
                     maskChar=""
-                    inputMode=""
                     borderWidth={borderWidth}
                 />
                 {rightAddon && <InputRightAddon>{rightAddon}</InputRightAddon>}
