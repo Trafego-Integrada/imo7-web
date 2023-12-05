@@ -842,10 +842,38 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             display={{ base: "none", lg: "flex" }}
                         >
                             {campos
-                                .filter((i) =>
-                                    i.campos.find(
-                                        (e) => modelo?.campos[e.codigo]?.exibir
-                                    )
+                                .filter(
+                                    (i) =>
+                                        i.campos.find(
+                                            (e) =>
+                                                modelo?.campos[e.codigo]?.exibir
+                                        ) &&
+                                        i.campos.filter((i) => {
+                                            if (
+                                                (modelo.campos[i.codigo] &&
+                                                    modelo?.campos[i.codigo]
+                                                        ?.exibir &&
+                                                    !i.dependencia) ||
+                                                (modelo.campos[i.codigo] &&
+                                                    modelo?.campos[i.codigo]
+                                                        ?.exibir &&
+                                                    ((i.dependencia?.codigo &&
+                                                        !i.dependenciaValor &&
+                                                        watch(
+                                                            `preenchimento.${i.dependencia?.codigo}`
+                                                        )) ||
+                                                        (i.dependencia
+                                                            ?.codigo &&
+                                                            i.dependenciaValor ==
+                                                                watch(
+                                                                    `preenchimento.${i.dependencia?.codigo}`
+                                                                ))))
+                                            ) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }).length > 0
                                 )
                                 .map((step, index) => (
                                     <Step
@@ -909,12 +937,46 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             >
                                 <TabList>
                                     {campos
-                                        .filter((i) =>
-                                            i.campos.find(
-                                                (e) =>
-                                                    modelo?.campos[e.codigo]
-                                                        ?.exibir
-                                            )
+                                        .filter(
+                                            (i) =>
+                                                i.campos.find(
+                                                    (e) =>
+                                                        modelo?.campos[e.codigo]
+                                                            ?.exibir
+                                                ) &&
+                                                i.campos.filter((i) => {
+                                                    if (
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            !i.dependencia) ||
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            ((i.dependencia
+                                                                ?.codigo &&
+                                                                !i.dependenciaValor &&
+                                                                watch(
+                                                                    `preenchimento.${i.dependencia?.codigo}`
+                                                                )) ||
+                                                                (i.dependencia
+                                                                    ?.codigo &&
+                                                                    i.dependenciaValor ==
+                                                                        watch(
+                                                                            `preenchimento.${i.dependencia?.codigo}`
+                                                                        ))))
+                                                    ) {
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+                                                }).length > 0
                                         )
                                         .map((step, index) => (
                                             <Tab
