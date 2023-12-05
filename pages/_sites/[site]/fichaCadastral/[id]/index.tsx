@@ -1414,7 +1414,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                     campo.tipoCampo ==
                                                                         "number"
                                                                         ? "numeric"
-                                                                        : "none"
+                                                                        : "text"
                                                                 }
                                                                 {...register(
                                                                     "preenchimento." +
