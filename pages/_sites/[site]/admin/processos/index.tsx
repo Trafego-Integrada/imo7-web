@@ -78,6 +78,8 @@ import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import {
     FiArrowLeft,
     FiArrowRight,
+    FiDownload,
+    FiDownloadCloud,
     FiEdit,
     FiEye,
     FiLink,
@@ -509,6 +511,19 @@ const Home = ({ query }) => {
                                                         }
                                                         aria-label="Abrir"
                                                     />
+                                                    <Tooltip label="Baixar todos arquivos">
+                                                        <IconButton
+                                                            as={Link}
+                                                            size="sm"
+                                                            icon={
+                                                                <FiDownloadCloud />
+                                                            }
+                                                            href={`https://www.imo7.com.br/api/processo/${item.id}/downloadArquivos`}
+                                                            target="_blank"
+                                                            variant="ghost"
+                                                            passHref
+                                                        />
+                                                    </Tooltip>
                                                     <Center>
                                                         <Divider
                                                             h={6}
@@ -853,6 +868,21 @@ const Home = ({ query }) => {
                                                                                 >
                                                                                     Visualizar
                                                                                     Ficha
+                                                                                </MenuItem>{" "}
+                                                                                <MenuItem
+                                                                                    as={
+                                                                                        Link
+                                                                                    }
+                                                                                    icon={
+                                                                                        <FiDownload />
+                                                                                    }
+                                                                                    href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/downloadArquivos`}
+                                                                                    target="_blank"
+                                                                                    passHref
+                                                                                >
+                                                                                    Baixar
+                                                                                    Todos
+                                                                                    Arquivos
                                                                                 </MenuItem>
                                                                                 <MenuItem
                                                                                     icon={

@@ -55,6 +55,7 @@ import { useEffect, useRef, useState } from "react";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import {
     FiCheck,
+    FiDownload,
     FiEdit,
     FiEye,
     FiLink,
@@ -437,6 +438,15 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                           target="_blank"
                                                       >
                                                           Visualizar Ficha
+                                                      </MenuItem>
+                                                      <MenuItem
+                                                          as={Link}
+                                                          icon={<FiDownload />}
+                                                          href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/downloadArquivos`}
+                                                          target="_blank"
+                                                          passHref
+                                                      >
+                                                          Baixar Todos Arquivos
                                                       </MenuItem>
                                                       <MenuItem
                                                           icon={<FaFileExcel />}

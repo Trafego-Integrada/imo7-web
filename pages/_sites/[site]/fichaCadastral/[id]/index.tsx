@@ -25,6 +25,14 @@ import {
     Icon,
     IconButton,
     Image,
+    Popover,
+    PopoverArrow,
+    PopoverBody,
+    PopoverCloseButton,
+    PopoverContent,
+    PopoverFooter,
+    PopoverHeader,
+    PopoverTrigger,
     Progress,
     Radio,
     RadioGroup,
@@ -57,6 +65,8 @@ import {
     FiEye,
     FiFile,
     FiPlus,
+    FiTrash,
+    FiTrash2,
     FiUpload,
 } from "react-icons/fi";
 import { useMutation } from "react-query";
@@ -78,6 +88,47 @@ import { FileUpload } from "primereact/fileupload";
 import { BiSave } from "react-icons/bi";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { ModalPreview } from "@/components/Modals/Preview";
+function validateCPF(value) {
+    // Remove caracteres não numéricos
+    const cleanedCPF = value.replace(/\D/g, "");
+
+    // Verifica se o CPF possui 11 dígitos
+    if (cleanedCPF.length !== 11) {
+        return false;
+    }
+
+    // Verifica se todos os dígitos são iguais, o que invalida o CPF
+    if (/^(\d)\1+$/.test(cleanedCPF)) {
+        return false;
+    }
+
+    // Calcula os dígitos verificadores
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+        sum += parseInt(cleanedCPF.charAt(i)) * (10 - i);
+    }
+
+    let mod = sum % 11;
+    const firstDigit = mod < 2 ? 0 : 11 - mod;
+
+    sum = 0;
+    for (let i = 0; i < 10; i++) {
+        sum += parseInt(cleanedCPF.charAt(i)) * (11 - i);
+    }
+
+    mod = sum % 11;
+    const secondDigit = mod < 2 ? 0 : 11 - mod;
+
+    // Verifica se os dígitos verificadores são válidos
+    if (
+        parseInt(cleanedCPF.charAt(9)) !== firstDigit ||
+        parseInt(cleanedCPF.charAt(10)) !== secondDigit
+    ) {
+        return false;
+    }
+
+    return true;
+}
 
 function Previews(props) {
     const preview = useRef();
@@ -223,7 +274,11 @@ function Previews(props) {
         // convert file to base64 encoded
         if (event.options?.props?.multiple) {
             const files = event.files;
-
+            toast({
+                title: "Upload sendo realizado, aguarde...",
+                position: "top-right",
+                status: "info",
+            });
             for await (const item of files) {
                 const base64String = await convertToBase64(item);
                 const fileExtension = getFileExtension(item.name);
@@ -246,8 +301,10 @@ function Previews(props) {
                             toast({
                                 title: "Upload realizado com sucesso",
                                 position: "top-right",
+                                status: "success",
                             });
                             props.buscar();
+                            event.options.clear();
                         },
                     }
                 );
@@ -278,6 +335,7 @@ function Previews(props) {
                             position: "top-right",
                         });
                         props.buscar();
+                        event.options.clear();
                     },
                 }
             );
@@ -308,7 +366,7 @@ function Previews(props) {
                 onError={onTemplateClear}
                 onClear={onTemplateClear}
                 headerTemplate={headerTemplate}
-                // itemTemplate={itemTemplate}
+                itemTemplate={itemTemplate}
                 emptyTemplate={emptyTemplate}
                 uploadHandler={customBase64Uploader}
                 mode="advanced"
@@ -345,23 +403,49 @@ function Previews(props) {
                         {props.multiple ? (
                             JSON.parse(props.data).map((item) => (
                                 <Box pos="relative" key={item}>
-                                    <IconButton
-                                        icon={<FiDelete />}
-                                        colorScheme="red"
-                                        size="xs"
-                                        pos="absolute"
-                                        top={0}
-                                        right={0}
-                                        onClick={() =>
-                                            excluirAnexo.mutate({
-                                                id: props.id,
-                                                params: {
-                                                    ...props,
-                                                    arquivo: item,
-                                                },
-                                            })
-                                        }
-                                    />
+                                    <Popover>
+                                        <PopoverTrigger>
+                                            <IconButton
+                                                icon={<FiTrash />}
+                                                colorScheme="red"
+                                                size="xs"
+                                                pos="absolute"
+                                                top={0}
+                                                right={0}
+                                            />
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverCloseButton />
+                                            <PopoverHeader>
+                                                Confirmação!
+                                            </PopoverHeader>
+                                            <PopoverBody>
+                                                Deseja realmente excluir este
+                                                arquivo? Não será possivel
+                                                reverter
+                                            </PopoverBody>
+                                            <PopoverFooter>
+                                                <Button
+                                                    size="xs"
+                                                    colorScheme="red"
+                                                    leftIcon={<FiTrash2 />}
+                                                    onClick={() =>
+                                                        excluirAnexo.mutate({
+                                                            id: props.id,
+                                                            params: {
+                                                                ...props,
+                                                                arquivo: item,
+                                                            },
+                                                        })
+                                                    }
+                                                >
+                                                    Excluir
+                                                </Button>
+                                            </PopoverFooter>
+                                        </PopoverContent>
+                                    </Popover>
+
                                     {verificarExtensaoImagem(item).eImagem ? (
                                         <Image
                                             src={item}
@@ -461,6 +545,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         handleSubmit,
         formState: { isSubmitting, errors },
         clearErrors,
+        setError,
     } = useForm({
         defaultValues: {
             ...ficha,
@@ -1444,6 +1529,44 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                                             .value,
                                                                                         campo.camposEndereco
                                                                                     );
+                                                                                }
+                                                                                if (
+                                                                                    campo.tipoCampo ==
+                                                                                        "cpf" &&
+                                                                                    e
+                                                                                        .target
+                                                                                        .value
+                                                                                        .length ==
+                                                                                        14
+                                                                                ) {
+                                                                                    const cpfValido =
+                                                                                        validateCPF(
+                                                                                            e
+                                                                                                .target
+                                                                                                .value
+                                                                                        );
+                                                                                    console.log(
+                                                                                        "cpfValido",
+                                                                                        cpfValido
+                                                                                    );
+                                                                                    if (
+                                                                                        !cpfValido
+                                                                                    ) {
+                                                                                        setError(
+                                                                                            "preenchimento." +
+                                                                                                campo.codigo,
+                                                                                            {
+                                                                                                type: "custom",
+                                                                                                message:
+                                                                                                    "CPF Inválido",
+                                                                                            }
+                                                                                        );
+                                                                                    } else {
+                                                                                        clearErrors(
+                                                                                            "preenchimento." +
+                                                                                                campo.codigo
+                                                                                        );
+                                                                                    }
                                                                                 }
                                                                             },
                                                                     }

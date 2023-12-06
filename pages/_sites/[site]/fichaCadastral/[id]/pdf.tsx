@@ -146,6 +146,31 @@ const FichaCadastral = ({
                                         </Text>
                                     </Flex>
                                 ) : null
+                            ) : campo.tipoCampo === "files" ? (
+                                ficha.preenchimento[campo.codigo] ? (
+                                    <Flex wrap="wrap" gap={2}>
+                                        {JSON.parse(
+                                            ficha.preenchimento[campo.codigo]
+                                        ).map((i) => (
+                                            <Flex
+                                                key={i.id}
+                                                flexDirection="column"
+                                            >
+                                                <QRCode size={75} value={i} />
+                                                <Text
+                                                    fontSize="xx-small"
+                                                    mt={2}
+                                                >
+                                                    Leia o QRCode ou
+                                                    <br />
+                                                    <Link href={i}>
+                                                        clique aqui
+                                                    </Link>
+                                                </Text>
+                                            </Flex>
+                                        ))}
+                                    </Flex>
+                                ) : null
                             ) : (
                                 <Text fontSize="xs">
                                     {ficha.preenchimento[campo.codigo]}
@@ -195,6 +220,31 @@ const FichaCadastral = ({
                                                 clique aqui
                                             </Link>
                                         </Text>
+                                    </Flex>
+                                ) : null
+                            ) : campo.tipoCampo === "files" ? (
+                                ficha.preenchimento[campo.codigo] ? (
+                                    <Flex wrap="wrap" gap={2}>
+                                        {JSON.parse(
+                                            ficha.preenchimento[campo.codigo]
+                                        ).map((i) => (
+                                            <Flex
+                                                key={i.id}
+                                                flexDirection="column"
+                                            >
+                                                <QRCode size={75} value={i} />
+                                                <Text
+                                                    fontSize="xx-small"
+                                                    mt={2}
+                                                >
+                                                    Leia o QRCode ou
+                                                    <br />
+                                                    <Link href={i}>
+                                                        clique aqui
+                                                    </Link>
+                                                </Text>
+                                            </Flex>
+                                        ))}
                                     </Flex>
                                 ) : null
                             ) : (

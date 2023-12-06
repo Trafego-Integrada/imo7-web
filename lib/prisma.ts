@@ -19,7 +19,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 prisma.$use(async (params, next) => {
-    console.log(params);
     if (params.model != "FichaCadastralPreenchimento") {
         // Check incoming query type
         if (params.action == "delete") {
