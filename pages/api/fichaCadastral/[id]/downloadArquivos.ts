@@ -18,7 +18,6 @@ handler.get(async (req, res) => {
                 id,
             },
         });
-        console.log(ficha);
         const data = await prisma.fichaCadastralPreenchimento.findMany({
             where: {
                 fichaCadastralId: id,

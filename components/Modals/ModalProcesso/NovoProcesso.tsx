@@ -45,6 +45,7 @@ const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
     responsavelId: yup.string().required("Campo obrigatório"),
     imovelId: yup.string().required("Campo obrigatório"),
+    tipoGarantia: yup.string().required("Campo obrigatório"),
     fichas: yup
         .array()
         .of(

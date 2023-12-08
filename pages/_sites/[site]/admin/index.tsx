@@ -321,13 +321,19 @@ const Home = () => {
                                         chartType="PieChart"
                                         width={"200px"}
                                         data={[
-                                            ["teste", "teste"],
                                             [
                                                 "Em andamento",
                                                 data?.processos?.processos?.filter(
                                                     (i) =>
                                                         i.status ==
                                                         "EM_ANDAMENTO"
+                                                )?.length,
+                                            ],
+                                            [
+                                                "Em análise",
+                                                data?.processos?.processos?.filter(
+                                                    (i) =>
+                                                        i.status == "EM_ANALISE"
                                                 )?.length,
                                             ],
                                             [
@@ -423,6 +429,34 @@ const Home = () => {
                                                     }
                                                 </Text>
                                                 Em andamento
+                                            </Button>
+                                        </Link>
+                                        <Link
+                                            href={{
+                                                pathname: "/admin/processos",
+                                                query: {
+                                                    status: "EM_ANALISE",
+                                                },
+                                            }}
+                                        >
+                                            <Button
+                                                size="xs"
+                                                colorScheme="orange"
+                                            >
+                                                <Text
+                                                    as="span"
+                                                    mr={3}
+                                                    fontWeight="bold"
+                                                >
+                                                    {
+                                                        data?.processos?.processos?.filter(
+                                                            (i) =>
+                                                                i.status ==
+                                                                "EM_ANALISE"
+                                                        )?.length
+                                                    }
+                                                </Text>
+                                                Em análise
                                             </Button>
                                         </Link>
                                         <Link

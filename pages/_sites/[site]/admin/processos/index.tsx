@@ -201,6 +201,10 @@ const Home = ({ query }) => {
             value: "EM_ANDAMENTO",
         },
         {
+            label: "Em Análise",
+            value: "EM_ANALISE",
+        },
+        {
             label: "Cancelado",
             value: "CANCELADO",
         },

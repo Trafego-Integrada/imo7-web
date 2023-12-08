@@ -217,10 +217,7 @@ handler.get(async (req, res) => {
                 deletedAt: null,
             },
         });
-        console.log(
-            processos.filter((i) => i.status == "EM_ANDAMENTO"),
-            req.user.imobiliariaId
-        );
+
         // Data do mês atual e do mês passado
         const hoje = new Date();
 

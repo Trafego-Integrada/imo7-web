@@ -1049,6 +1049,7 @@ model Historico {
 }
 
 enum StatusProcesso {
+    EM_ANALISE
     EM_ANDAMENTO
     CANCELADO
     ARQUIVADO

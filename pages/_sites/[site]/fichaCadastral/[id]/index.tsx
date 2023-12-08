@@ -748,19 +748,23 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     align="center"
                     py={6}
                     gap={6}
-                    flexDir={{ base: "column", lg: "row" }}
+                    flexDir={{ base: "row", lg: "row" }}
                 >
                     <Box>
-                        <Image h={100} src={ficha.imobiliaria.logo} />
+                        <Image
+                            h={100}
+                            objectFit="contain"
+                            src={ficha.imobiliaria.logo}
+                        />
                     </Box>
                     <Box>
-                        <Text>
+                        <Text fontSize={{ base: "sm", lg: "md" }}>
                             <Text as="span" fontWeight="bold">
                                 {ficha.imobiliaria.razaoSocial}
                             </Text>{" "}
                             • CNPJ: {ficha.imobiliaria.cnpj}
                         </Text>
-                        <Text fontSize="sm">
+                        <Text fontSize={{ base: "xx-small", lg: "sm" }}>
                             {ficha.imobiliaria.endereco}
                             {ficha.imobiliaria.numero &&
                                 ` nº ${ficha.imobiliaria.numero}`}
@@ -769,7 +773,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             {ficha.imobiliaria.estado} - CEP:{" "}
                             {ficha.imobiliaria.cep}
                         </Text>
-                        <Text fontSize="sm">
+                        <Text fontSize={{ base: "xx-small", lg: "sm" }}>
                             <Text as="span" fontWeight="bold">
                                 Fixo:
                             </Text>{" "}
@@ -823,11 +827,14 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                 </Box>
 
                 <Grid
-                    gridTemplateColumns={{ lg: "repeat(6,1fr)" }}
+                    gridTemplateColumns={{
+                        base: "repeat(2,1fr)",
+                        lg: "repeat(6,1fr)",
+                    }}
                     gap={4}
                     my={2}
                 >
-                    <GridItem colSpan={{ lg: 3 }}>
+                    <GridItem colSpan={{ base: 2, lg: 3 }}>
                         {ficha.imovel ? (
                             <Box p={4} bg="white">
                                 <Text fontSize="sm" color="gray">
@@ -989,8 +996,46 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                         campos.filter((i) =>
                                             i.campos.find(
                                                 (e) =>
-                                                    modelo?.campos[e.codigo]
-                                                        ?.exibir
+                                                    i.campos.find(
+                                                        (e) =>
+                                                            modelo?.campos[
+                                                                e.codigo
+                                                            ]?.exibir
+                                                    ) &&
+                                                    i.campos.filter((i) => {
+                                                        if (
+                                                            (modelo.campos[
+                                                                i.codigo
+                                                            ] &&
+                                                                modelo?.campos[
+                                                                    i.codigo
+                                                                ]?.exibir &&
+                                                                !i.dependencia) ||
+                                                            (modelo.campos[
+                                                                i.codigo
+                                                            ] &&
+                                                                modelo?.campos[
+                                                                    i.codigo
+                                                                ]?.exibir &&
+                                                                ((i.dependencia
+                                                                    ?.codigo &&
+                                                                    !i.dependenciaValor &&
+                                                                    watch(
+                                                                        `preenchimento.${i.dependencia?.codigo}`
+                                                                    )) ||
+                                                                    (i
+                                                                        .dependencia
+                                                                        ?.codigo &&
+                                                                        i.dependenciaValor ==
+                                                                            watch(
+                                                                                `preenchimento.${i.dependencia?.codigo}`
+                                                                            ))))
+                                                        ) {
+                                                            return true;
+                                                        } else {
+                                                            return false;
+                                                        }
+                                                    }).length > 0
                                             )
                                         ).length
                                     )
@@ -1111,9 +1156,60 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                 campos.filter((i) =>
                                                     i.campos.find(
                                                         (e) =>
-                                                            modelo?.campos[
-                                                                e.codigo
-                                                            ]?.exibir
+                                                            i.campos.find(
+                                                                (e) =>
+                                                                    modelo
+                                                                        ?.campos[
+                                                                        e.codigo
+                                                                    ]?.exibir
+                                                            ) &&
+                                                            i.campos.filter(
+                                                                (i) => {
+                                                                    if (
+                                                                        (modelo
+                                                                            .campos[
+                                                                            i
+                                                                                .codigo
+                                                                        ] &&
+                                                                            modelo
+                                                                                ?.campos[
+                                                                                i
+                                                                                    .codigo
+                                                                            ]
+                                                                                ?.exibir &&
+                                                                            !i.dependencia) ||
+                                                                        (modelo
+                                                                            .campos[
+                                                                            i
+                                                                                .codigo
+                                                                        ] &&
+                                                                            modelo
+                                                                                ?.campos[
+                                                                                i
+                                                                                    .codigo
+                                                                            ]
+                                                                                ?.exibir &&
+                                                                            ((i
+                                                                                .dependencia
+                                                                                ?.codigo &&
+                                                                                !i.dependenciaValor &&
+                                                                                watch(
+                                                                                    `preenchimento.${i.dependencia?.codigo}`
+                                                                                )) ||
+                                                                                (i
+                                                                                    .dependencia
+                                                                                    ?.codigo &&
+                                                                                    i.dependenciaValor ==
+                                                                                        watch(
+                                                                                            `preenchimento.${i.dependencia?.codigo}`
+                                                                                        ))))
+                                                                    ) {
+                                                                        return true;
+                                                                    } else {
+                                                                        return false;
+                                                                    }
+                                                                }
+                                                            ).length > 0
                                                     )
                                                 ).length
                                             )
@@ -2000,7 +2096,44 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     campos.filter((i) =>
                                         i.campos.find(
                                             (e) =>
-                                                modelo?.campos[e.codigo]?.exibir
+                                                i.campos.find(
+                                                    (e) =>
+                                                        modelo?.campos[e.codigo]
+                                                            ?.exibir
+                                                ) &&
+                                                i.campos.filter((i) => {
+                                                    if (
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            !i.dependencia) ||
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            ((i.dependencia
+                                                                ?.codigo &&
+                                                                !i.dependenciaValor &&
+                                                                watch(
+                                                                    `preenchimento.${i.dependencia?.codigo}`
+                                                                )) ||
+                                                                (i.dependencia
+                                                                    ?.codigo &&
+                                                                    i.dependenciaValor ==
+                                                                        watch(
+                                                                            `preenchimento.${i.dependencia?.codigo}`
+                                                                        ))))
+                                                    ) {
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+                                                }).length > 0
                                         )
                                     ).length
                                 }
@@ -2160,7 +2293,39 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             {activeStep !=
                                 campos.filter((i) =>
                                     i.campos.find(
-                                        (e) => modelo?.campos[e.codigo]?.exibir
+                                        (e) =>
+                                            i.campos.find(
+                                                (e) =>
+                                                    modelo?.campos[e.codigo]
+                                                        ?.exibir
+                                            ) &&
+                                            i.campos.filter((i) => {
+                                                if (
+                                                    (modelo.campos[i.codigo] &&
+                                                        modelo?.campos[i.codigo]
+                                                            ?.exibir &&
+                                                        !i.dependencia) ||
+                                                    (modelo.campos[i.codigo] &&
+                                                        modelo?.campos[i.codigo]
+                                                            ?.exibir &&
+                                                        ((i.dependencia
+                                                            ?.codigo &&
+                                                            !i.dependenciaValor &&
+                                                            watch(
+                                                                `preenchimento.${i.dependencia?.codigo}`
+                                                            )) ||
+                                                            (i.dependencia
+                                                                ?.codigo &&
+                                                                i.dependenciaValor ==
+                                                                    watch(
+                                                                        `preenchimento.${i.dependencia?.codigo}`
+                                                                    ))))
+                                                ) {
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }
+                                            }).length > 0
                                     )
                                 ).length && (
                                 <Button
@@ -2180,7 +2345,44 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     campos.filter((i) =>
                                         i.campos.find(
                                             (e) =>
-                                                modelo?.campos[e.codigo]?.exibir
+                                                i.campos.find(
+                                                    (e) =>
+                                                        modelo?.campos[e.codigo]
+                                                            ?.exibir
+                                                ) &&
+                                                i.campos.filter((i) => {
+                                                    if (
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            !i.dependencia) ||
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            ((i.dependencia
+                                                                ?.codigo &&
+                                                                !i.dependenciaValor &&
+                                                                watch(
+                                                                    `preenchimento.${i.dependencia?.codigo}`
+                                                                )) ||
+                                                                (i.dependencia
+                                                                    ?.codigo &&
+                                                                    i.dependenciaValor ==
+                                                                        watch(
+                                                                            `preenchimento.${i.dependencia?.codigo}`
+                                                                        ))))
+                                                    ) {
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+                                                }).length > 0
                                         )
                                     ).length && (
                                     <Button

@@ -212,6 +212,12 @@ export const statusProcesso = (status) => {
                     Em andamento
                 </Tag>
             );
+        case "EM_ANALISE":
+            return (
+                <Tag colorScheme="blue" size="sm">
+                    Em análise
+                </Tag>
+            );
         case "REPROVADO":
             return (
                 <Tag colorScheme="red" size="sm">

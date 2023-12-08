@@ -168,6 +168,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                     <option value="EM_ANDAMENTO">
                                                         Em andamento
                                                     </option>
+                                                    <option value="EM_ANALISE">
+                                                        Em análise
+                                                    </option>
                                                     <option value="CANCELADO">
                                                         Cancelado
                                                     </option>
@@ -187,7 +190,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                         Locado
                                                     </option>
                                                     <option value="DESISTENTE">
-                                                        Desisdente
+                                                        Desistente
                                                     </option>
                                                 </FormSelect>
                                             </GridItem>
