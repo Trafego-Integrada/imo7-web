@@ -64,7 +64,7 @@ handle.put(async (req, res) => {
             },
             data: {
                 tipoProcesso,
-                tipoGarantia,
+                tipoGarantia: tipoGarantia ? tipoGarantia : "NENHUMA",
                 campos,
                 status,
                 observacoes,

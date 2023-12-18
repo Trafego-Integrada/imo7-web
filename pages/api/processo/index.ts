@@ -380,7 +380,7 @@ handle.post(async (req, res) => {
             data: {
                 codigo: ultimoProcesso ? ultimoProcesso?.codigo + 1 : 1,
                 tipoProcesso,
-                tipoGarantia,
+                tipoGarantia: tipoGarantia ? tipoGarantia : "NENHUMA",
                 campos,
                 status: "EM_ANDAMENTO",
                 fichas: {
