@@ -45,7 +45,11 @@ const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
     responsavelId: yup.string().required("Campo obrigatório"),
     imovelId: yup.string().required("Campo obrigatório"),
-    tipoGarantia: yup.string().required("Campo obrigatório"),
+    tipoGarantia: yup.string().when("tipoProcesso", {
+        is: (v) => v === "VENDA",
+        then: yup.string().required("Campo obrigatório"),
+        otherwise: yup.string().nullable(),
+    }),
     fichas: yup
         .array()
         .of(
