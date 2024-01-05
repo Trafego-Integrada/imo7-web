@@ -73,7 +73,6 @@ handler.post(async (req, res) => {
                             codigo: i.nome,
                         },
                     });
-                    console.log(campo);
                     if (campo?.tipoCampo == "files") {
                         let val = [];
                         const existe =
@@ -91,7 +90,7 @@ handler.post(async (req, res) => {
                             );
 
                         if (existe) {
-                            val = JSON.parse(existe.valor);
+                            val = existe.valor ? JSON.parse(existe.valor) : [];
                             val.push(
                                 process.env.NEXT_PUBLIC_URL_STORAGE +
                                     nameLocation
@@ -102,7 +101,6 @@ handler.post(async (req, res) => {
                                     nameLocation,
                             ];
                         }
-                        console.log(val);
                         await prisma.fichaCadastral.update({
                             where: {
                                 id,
