@@ -19,10 +19,8 @@ export const ValidacaoFacial = () => {
                     Validação Facial
                 </Heading>
                 <Text color="#021531" fontSize="32px">
-                    <strong>Mais segurança</strong> e{" "}
-                    <strong>confiabilidade</strong> no processo de{" "}
-                    <strong>cadastramento</strong>e{" "}
-                    <strong>análise de dados</strong>
+                    Evite <strong>GOLPES</strong> e <strong>FRAUDES</strong>{" "}
+                    financeiros com a <strong>validação facial</strong> do IMO7!
                 </Text>
             </Flex>
             <Text>

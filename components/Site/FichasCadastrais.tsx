@@ -16,46 +16,44 @@ export const FichasCadastrais = () => {
         <Box bg="#F6FDFF">
             <Container maxW="container.xl" py={12}>
                 <Flex textAlign="center" mb={4} gap={4} flexDir="column">
-                    <Heading color="#032552" fontSize="24px" fontWeight="500">
+                    <Heading
+                        color="#032552"
+                        fontSize="24px"
+                        fontWeight="500"
+                        my={8}
+                    >
                         Fichas Cadastrais Online
                     </Heading>
-                    <Text color="#021531" fontSize="32px">
-                        A{" "}
-                        <Text as="span" fontWeight="bold">
-                            sua imobiliária
-                        </Text>
-                        vai{" "}
-                        <Text as="span" fontWeight="bold">
-                            ganhar mais desempenho
-                        </Text>{" "}
-                        e ter{" "}
-                        <Text as="span" fontWeight="bold">
-                            mais organização
-                        </Text>
+                    <Text
+                        color="#021531"
+                        fontSize="32px"
+                        fontWeight="normal"
+                        my={8}
+                    >
+                        Melhore o <strong>desempenho</strong> da sua equipe e
+                        deixe a sua gestão de clientes mais{" "}
+                        <strong>organizada</strong> com as{" "}
+                        <strong>Fichas Cadastrais Online!</strong>
                     </Text>
                 </Flex>
                 <Text>
-                    A funcionalidade de{" "}
-                    <strong>Fichas Cadastrais Online</strong> oferece uma
-                    abordagem <strong>moderna</strong> e{" "}
-                    <strong>eficiente</strong> para{" "}
-                    <strong>
-                        coletar, validar e processar informações vitais
-                    </strong>{" "}
-                    para <strong>análises na imobiliária</strong>. Com uma série
-                    de recursos intuitivos, essa ferramenta se destaca por sua
-                    <strong>capacidade</strong> de <strong>simplificar</strong>{" "}
-                    e<strong>acelerar</strong> todo o{" "}
-                    <strong>processo de cadastro</strong> e{" "}
-                    <strong>análise de inquilinos</strong>.
+                    A funcionalidade de Fichas Cadastrais Online oferece uma
+                    abordagem moderna e eficiente para coletar, validar e
+                    processar informações vitais para análises na imobiliária.
+                </Text>{" "}
+                <Text>
+                    Com uma série de recursos intuitivos, essa ferramenta se
+                    destaca por sua capacidade de simplificar e acelerar todo o
+                    processo de cadastro e análise de inquilinos.
                 </Text>
                 <Flex
+                    my={12}
                     align="center"
                     gap={8}
                     flexDir={{ base: "column", lg: "row" }}
                 >
                     <Image src="/img/laptop-cellphone 1.png" alt="#" />
-                    <Flex flexDir="column" gap={4}>
+                    <Flex flexDir="column" gap={4} mx={24}>
                         <Flex align="center" gap={2}>
                             <Icon
                                 as={FiCheckCircle}

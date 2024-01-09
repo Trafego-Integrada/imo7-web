@@ -38,7 +38,13 @@ export const PraQuem = () => {
                         <br />
                         na sua imobiliária
                     </Text>
-                </Flex>
+                </Flex>{" "}
+                <Text color="#FFF" py={12}>
+                    Você já imaginou quantas oportunidades perdeu por não ter um
+                    atendimento rápido e informações facilitadas para o seu
+                    cliente? <br />
+                    <br />O Imo7 veio para atender quem:
+                </Text>
                 <Flex
                     align="center"
                     gap={8}
@@ -46,12 +52,6 @@ export const PraQuem = () => {
                     justify="space-between"
                 >
                     <Flex flexDir="column" gap={4} maxW="lg">
-                        <Text color="#FFF">
-                            Você já imaginou quantas oportunidades perdeu por
-                            não ter um atendimento rápido e informações
-                            facilitadas para o seu cliente? <br />
-                            <br />O Imo7 veio para atender quem:
-                        </Text>
                         <Flex align="center" gap={2}>
                             <Icon
                                 as={FiCheckCircle}
@@ -109,6 +109,12 @@ export const PraQuem = () => {
                                 a medida que a carga de trabalho aumenta.
                             </Text>
                         </Flex>
+                        <Button
+                            colorScheme="whatsapp"
+                            rightIcon={<FaWhatsappSquare />}
+                        >
+                            Solicitar demonstração
+                        </Button>
                     </Flex>
                     <Image src="/img/IMAGEM (1).png" alt="#" />
                 </Flex>
