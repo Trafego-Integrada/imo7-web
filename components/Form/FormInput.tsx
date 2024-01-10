@@ -41,12 +41,12 @@ const InputBase = (
                 )}
                 <Input
                     ref={ref}
-                    {...rest}
                     as={mask && ReactMask}
                     size={size}
                     mask={mask}
                     maskChar={null}
                     borderWidth={borderWidth}
+                    {...rest}
                 />
                 {rightAddon && <InputRightAddon>{rightAddon}</InputRightAddon>}
                 {rightElement && (
