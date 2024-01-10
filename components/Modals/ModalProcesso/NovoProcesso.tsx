@@ -211,6 +211,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                 <FormMultiSelect
                                                     filter
                                                     defaultOptions
+                                                    cacheOptions
                                                     size="sm"
                                                     label="Imóvel"
                                                     options={
