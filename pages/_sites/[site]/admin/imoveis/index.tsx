@@ -141,7 +141,7 @@ const FichasCadastrais = ({ query }) => {
         imo7ApiService("imovel").list,
         {
             onSuccess: (data) => {
-                setTotal(data.total);
+                setTotal(data.data.total);
             },
         }
     );
@@ -222,12 +222,13 @@ const FichasCadastrais = ({ query }) => {
                                     label="Codigo"
                                     placeholder="Por codigo"
                                     value={filtro.codigo}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                         setFiltro({
                                             ...filtro,
                                             codigo: e.target.value,
-                                        })
-                                    }
+                                        });
+                                        setCurrentPage(1);
+                                    }}
                                 />
                             </GridItem>
                             <GridItem>
@@ -236,12 +237,14 @@ const FichasCadastrais = ({ query }) => {
                                     label="Identificação"
                                     placeholder="Por nome, cpf/cnpj, telefone ou e-mail"
                                     value={filtro.identificacao}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                         setFiltro({
                                             ...filtro,
                                             identificacao: e.target.value,
-                                        })
-                                    }
+                                        });
+
+                                        setCurrentPage(1);
+                                    }}
                                 />
                             </GridItem>
                             <GridItem>
@@ -251,10 +254,13 @@ const FichasCadastrais = ({ query }) => {
                                     startDate={filtro?.createdAt[0]}
                                     endDate={filtro?.createdAt[1]}
                                     onChange={(e) => {
-                                        setFiltro({
-                                            ...filtro,
-                                            createdAt: e,
-                                        });
+                                        {
+                                            setFiltro({
+                                                ...filtro,
+                                                createdAt: e,
+                                            });
+                                            setCurrentPage(1);
+                                        }
                                     }}
                                 />
                             </GridItem>
@@ -265,10 +271,13 @@ const FichasCadastrais = ({ query }) => {
                                     startDate={filtro?.updatedAt[0]}
                                     endDate={filtro?.updatedAt[1]}
                                     onChange={(e) => {
-                                        setFiltro({
-                                            ...filtro,
-                                            updatedAt: e,
-                                        });
+                                        {
+                                            setFiltro({
+                                                ...filtro,
+                                                updatedAt: e,
+                                            });
+                                            setCurrentPage(1);
+                                        }
                                     }}
                                 />
                             </GridItem>
@@ -289,12 +298,13 @@ const FichasCadastrais = ({ query }) => {
                                     minW={96}
                                     label="Pesquisa rápida"
                                     value={filtro.query}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                         setFiltro({
                                             ...filtro,
                                             query: e.target.value,
-                                        })
-                                    }
+                                        });
+                                        setCurrentPage(1);
+                                    }}
                                 />
                             </Flex>
                             <Text fontSize="xs" color="gray" w="full">

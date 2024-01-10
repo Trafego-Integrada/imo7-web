@@ -359,7 +359,7 @@ const FichaCadastral = ({
                                 {ficha?.imovel?.complemento &&
                                     ` ${ficha?.imovel?.complemento},`}{" "}
                                 {ficha.imovel?.bairro}, {ficha.imovel?.cidade}/
-                                {ficha.imovel?.estado}, CEP: {ficha.imove?.cep}
+                                {ficha.imovel?.estado}, CEP: {ficha.imovel?.cep}
                             </Text>
                         </Box>
                     ) : ficha.codigoImovel ? (

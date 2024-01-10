@@ -303,12 +303,14 @@ function Previews(props) {
                                 position: "top-right",
                                 status: "success",
                             });
-                            props.buscar();
                             event.options.clear();
                         },
                     }
                 );
             }
+            setTimeout(() => {
+                props.buscar();
+            }, 1000);
         } else {
             const file = event.files[0];
 
@@ -563,8 +565,34 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         try {
             if (
                 activeStep !=
-                campos.filter((i) =>
-                    i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
+                campos.filter(
+                    (i) =>
+                        i.campos.find(
+                            (e) => modelo?.campos[e.codigo]?.exibir
+                        ) &&
+                        i.campos.filter((i) => {
+                            if (
+                                (modelo.campos[i.codigo] &&
+                                    modelo?.campos[i.codigo]?.exibir &&
+                                    !i.dependencia) ||
+                                (modelo.campos[i.codigo] &&
+                                    modelo?.campos[i.codigo]?.exibir &&
+                                    ((i.dependencia?.codigo &&
+                                        !i.dependenciaValor &&
+                                        watch(
+                                            `preenchimento.${i.dependencia?.codigo}`
+                                        )) ||
+                                        (i.dependencia?.codigo &&
+                                            i.dependenciaValor ==
+                                                watch(
+                                                    `preenchimento.${i.dependencia?.codigo}`
+                                                ))))
+                            ) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }).length > 0
                 ).length
             ) {
                 setActiveStep(activeStep + 1);
@@ -694,8 +722,32 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     const onError = (data) => {
         if (
             activeStep !=
-            campos.filter((i) =>
-                i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
+            campos.filter(
+                (i) =>
+                    i.campos.find((e) => modelo?.campos[e.codigo]?.exibir) &&
+                    i.campos.filter((i) => {
+                        if (
+                            (modelo.campos[i.codigo] &&
+                                modelo?.campos[i.codigo]?.exibir &&
+                                !i.dependencia) ||
+                            (modelo.campos[i.codigo] &&
+                                modelo?.campos[i.codigo]?.exibir &&
+                                ((i.dependencia?.codigo &&
+                                    !i.dependenciaValor &&
+                                    watch(
+                                        `preenchimento.${i.dependencia?.codigo}`
+                                    )) ||
+                                    (i.dependencia?.codigo &&
+                                        i.dependenciaValor ==
+                                            watch(
+                                                `preenchimento.${i.dependencia?.codigo}`
+                                            ))))
+                        ) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }).length > 0
             ).length
         ) {
             console.log("data", data);
@@ -2093,48 +2145,40 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             <GridItem
                                 hidden={
                                     activeStep !=
-                                    campos.filter((i) =>
-                                        i.campos.find(
-                                            (e) =>
-                                                i.campos.find(
-                                                    (e) =>
-                                                        modelo?.campos[e.codigo]
-                                                            ?.exibir
-                                                ) &&
-                                                i.campos.filter((i) => {
-                                                    if (
-                                                        (modelo.campos[
-                                                            i.codigo
-                                                        ] &&
-                                                            modelo?.campos[
-                                                                i.codigo
-                                                            ]?.exibir &&
-                                                            !i.dependencia) ||
-                                                        (modelo.campos[
-                                                            i.codigo
-                                                        ] &&
-                                                            modelo?.campos[
-                                                                i.codigo
-                                                            ]?.exibir &&
-                                                            ((i.dependencia
+                                    campos.filter(
+                                        (i) =>
+                                            i.campos.find(
+                                                (e) =>
+                                                    modelo?.campos[e.codigo]
+                                                        ?.exibir
+                                            ) &&
+                                            i.campos.filter((i) => {
+                                                if (
+                                                    (modelo.campos[i.codigo] &&
+                                                        modelo?.campos[i.codigo]
+                                                            ?.exibir &&
+                                                        !i.dependencia) ||
+                                                    (modelo.campos[i.codigo] &&
+                                                        modelo?.campos[i.codigo]
+                                                            ?.exibir &&
+                                                        ((i.dependencia
+                                                            ?.codigo &&
+                                                            !i.dependenciaValor &&
+                                                            watch(
+                                                                `preenchimento.${i.dependencia?.codigo}`
+                                                            )) ||
+                                                            (i.dependencia
                                                                 ?.codigo &&
-                                                                !i.dependenciaValor &&
-                                                                watch(
-                                                                    `preenchimento.${i.dependencia?.codigo}`
-                                                                )) ||
-                                                                (i.dependencia
-                                                                    ?.codigo &&
-                                                                    i.dependenciaValor ==
-                                                                        watch(
-                                                                            `preenchimento.${i.dependencia?.codigo}`
-                                                                        ))))
-                                                    ) {
-                                                        return true;
-                                                    } else {
-                                                        return false;
-                                                    }
-                                                }).length > 0
-                                        )
+                                                                i.dependenciaValor ==
+                                                                    watch(
+                                                                        `preenchimento.${i.dependencia?.codigo}`
+                                                                    ))))
+                                                ) {
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }
+                                            }).length > 0
                                     ).length
                                 }
                             >

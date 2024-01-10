@@ -88,7 +88,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
             onClose();
         } catch (error) {}
     };
-
+    const listarImoveis = useMutation(imo7ApiService("imovel").list);
     const { data: imoveis } = useQuery(
         ["imoveis", { linhas: 20, query: filtroImovel }],
         imo7ApiService("imovel").list,
@@ -209,11 +209,32 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                             name="imovelId"
                                             render={({ field }) => (
                                                 <FormMultiSelect
+                                                    filter
+                                                    defaultOptions
                                                     size="sm"
                                                     label="Imóvel"
                                                     options={
                                                         imoveis?.data?.data
                                                     }
+                                                    loadOptions={async (
+                                                        inputValue,
+                                                        callback
+                                                    ) => {
+                                                        const data =
+                                                            await listarImoveis.mutateAsync(
+                                                                {
+                                                                    queryKey: [
+                                                                        ,
+                                                                        {
+                                                                            query: inputValue,
+                                                                        },
+                                                                    ],
+                                                                }
+                                                            );
+                                                        callback(
+                                                            data.data.data
+                                                        );
+                                                    }}
                                                     isClearable
                                                     formatOptionLabel={(i) => (
                                                         <Box>

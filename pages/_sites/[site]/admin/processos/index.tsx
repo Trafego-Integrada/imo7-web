@@ -1012,7 +1012,10 @@ const Home = ({ query }) => {
                                                                                         (
                                                                                             i
                                                                                         ) =>
-                                                                                            i.valor
+                                                                                            i.valor !=
+                                                                                                "" &&
+                                                                                            i.valor !=
+                                                                                                null
                                                                                     )
                                                                                         .length
                                                                                 } de ${
@@ -1029,7 +1032,10 @@ const Home = ({ query }) => {
                                                                                                 (
                                                                                                     i
                                                                                                 ) =>
-                                                                                                    i.valor
+                                                                                                    i.valor !=
+                                                                                                        "" &&
+                                                                                                    i.valor !=
+                                                                                                        null
                                                                                             )
                                                                                                 .length
                                                                                         }
@@ -1048,7 +1054,10 @@ const Home = ({ query }) => {
                                                                                                 (
                                                                                                     i
                                                                                                 ) =>
-                                                                                                    i.valor
+                                                                                                    i.valor !=
+                                                                                                        "" &&
+                                                                                                    i.valor !=
+                                                                                                        null
                                                                                             )
                                                                                                 .length ==
                                                                                             item

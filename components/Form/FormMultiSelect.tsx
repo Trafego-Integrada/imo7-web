@@ -10,12 +10,13 @@ import {
     InputRightAddon,
     InputRightElement,
 } from "@chakra-ui/react";
-import { CreatableSelect, Select } from "chakra-react-select";
+import { CreatableSelect, Select, AsyncSelect } from "chakra-react-select";
 import { useRouter } from "next/router";
 import { forwardRef, useState } from "react";
 
 const InputBase = (
     {
+        filter,
         create,
         label,
         error,
@@ -48,7 +49,20 @@ const InputBase = (
                 {leftElement && (
                     <InputLeftElement p={0}>{leftElement}</InputLeftElement>
                 )}
-                {create ? (
+                {filter ? (
+                    <AsyncSelect
+                        ref={ref}
+                        placeholder={placeholder ? placeholder : "Selecione..."}
+                        chakraStyles={{
+                            container: (_, { selectProps }) => ({
+                                ..._,
+                                width: "full",
+                            }),
+                        }}
+                        size={size}
+                        {...rest}
+                    />
+                ) : create ? (
                     <CreatableSelect
                         ref={ref}
                         placeholder={placeholder ? placeholder : "Selecione..."}
