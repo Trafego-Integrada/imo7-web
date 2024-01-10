@@ -32,7 +32,6 @@ import {
     AccordionPanel,
     Avatar,
     AvatarGroup,
-    Badge,
     Box,
     Button,
     Center,
@@ -40,29 +39,22 @@ import {
     Divider,
     Flex,
     GridItem,
-    Icon,
     IconButton,
     Menu,
     MenuButton,
     MenuItem,
     MenuList,
     Progress,
-    ProgressLabel,
-    Spinner,
     Table,
-    Tag,
     Tbody,
     Td,
     Text,
-    Th,
-    Thead,
     Tooltip,
     Tr,
     useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { BsEye } from "react-icons/bs";
 import { CgMoreVerticalAlt } from "react-icons/cg";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import {

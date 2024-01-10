@@ -16,7 +16,7 @@ export const formatoValor = (valor) => {
     return Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-    }).format(valor);
+    }).format(Number(valor));
 };
 export function includesAll(arr: any[], items: any[]) {
     for (const item of items) {
