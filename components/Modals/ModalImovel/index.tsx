@@ -303,16 +303,25 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                         align="center"
                                         colStart={1}
                                     >
-                                        <FormInput
-                                            size="sm"
-                                            label="CEP"
-                                            mask="99999-999"
-                                            onChangeCapture={(e) =>
-                                                handleBuscarCep(e.target.value)
-                                            }
-                                            {...register("cep")}
-                                            error={errors.cep?.message}
+                                        <Controller
+                                            control={control}
+                                            name="cep"
+                                            render={({ field }) => (
+                                                <FormInput
+                                                    {...field}
+                                                    mask={"99999-999"}
+                                                    label="CEP"
+                                                    placeholder="CEP"
+                                                    error={errors.cep?.message}
+                                                    onChangeCapture={(e) =>
+                                                        handleBuscarCep(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                            )}
                                         />
+
                                         {isLoading && <Spinner size="xs" />}
                                     </GridItem>
                                     <GridItem
