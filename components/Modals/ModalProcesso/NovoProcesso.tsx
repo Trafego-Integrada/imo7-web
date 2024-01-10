@@ -232,9 +232,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                                     ],
                                                                 }
                                                             );
-                                                        callback(
-                                                            data.data.data
-                                                        );
+                                                        return data.data.data;
                                                     }}
                                                     isClearable
                                                     formatOptionLabel={(i) => (

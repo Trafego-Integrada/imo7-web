@@ -20,20 +20,10 @@ import {
 } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
 import { imo7ApiService } from "@/services/apiServiceUsage";
-import {
-    excluirVariosContratos,
-    listarContratos,
-} from "@/services/models/contrato";
 import { listarUsuarios } from "@/services/models/usuario";
 import { queryClient } from "@/services/queryClient";
 import { withSSRAuth } from "@/utils/withSSRAuth";
-import {
-    Pagination,
-    PaginationContainer,
-    PaginationNext,
-    PaginationPrevious,
-    usePagination,
-} from "@ajna/pagination";
+import { usePagination } from "@ajna/pagination";
 import {
     Accordion,
     AccordionButton,
