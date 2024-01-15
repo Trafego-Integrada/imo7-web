@@ -8,6 +8,7 @@ import {
     Heading,
     Icon,
     Image,
+    Link,
     Text,
 } from "@chakra-ui/react";
 import { BsChat } from "react-icons/bs";
@@ -20,7 +21,7 @@ import {
     MdTrendingUp,
 } from "react-icons/md";
 
-export const ComoFunciona2 = () => {
+export const ComoFunciona2 = ({ modal }) => {
     return (
         <Box bg="#F6FDFF" py={12}>
             <Container
@@ -156,6 +157,7 @@ export const ComoFunciona2 = () => {
                 </Flex>
                 <Flex justify="center">
                     <Button
+                        onClick={() => modal.current.onOpen()}
                         colorScheme="whatsapp"
                         rightIcon={<FaWhatsappSquare />}
                     >

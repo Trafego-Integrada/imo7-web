@@ -8,6 +8,7 @@ import {
     Heading,
     Icon,
     Image,
+    Link,
     Text,
 } from "@chakra-ui/react";
 import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
@@ -19,7 +20,7 @@ import {
     MdVerified,
 } from "react-icons/md";
 
-export const Tribunal = () => {
+export const Tribunal = ({ modal }) => {
     return (
         <>
             <Box>
@@ -39,10 +40,14 @@ export const Tribunal = () => {
                             fontWeight="normal"
                             my={8}
                         >
-                            Com apenas um botão você descobre se o seu cliente
-                            possui um histórico de processos na justiça. NÃO
-                            PERCA MAIS TEMPO procurando processos em um estado
-                            de cada vez!
+                            Com apenas <strong>um botão</strong> você descobre
+                            se o seu cliente possui um histórico de{" "}
+                            <strong>
+                                {" "}
+                                processos na justiça. NÃO PERCA MAIS TEMPO
+                            </strong>{" "}
+                            procurando processos em um{" "}
+                            <strong>estado de cada vez</strong>!
                         </Text>
                     </Flex>
 
@@ -52,8 +57,16 @@ export const Tribunal = () => {
                         gap={8}
                         flexDir={{ base: "column", lg: "row" }}
                     >
-                        <Grid gridTemplateColumns={{ lg: "repeat(2,1fr)" }}>
-                            <GridItem>
+                        <Grid
+                            gridTemplateColumns={{ lg: "repeat(2,1fr)" }}
+                            gap={8}
+                        >
+                            <GridItem
+                                as={Flex}
+                                flexDir="column"
+                                gap={4}
+                                justify="space-between"
+                            >
                                 <Text>
                                     Chega daquela coisa chata de ficar horas
                                     indo atrás de descobrir se o seu cliente já
@@ -64,11 +77,15 @@ export const Tribunal = () => {
                                     judicial de seus clientes sem todo o Brasil
                                     com apenas um clique.
                                 </Text>
-                                <Text>Encontre processos em 05 segundos!</Text>
+                                <Text fontWeight="bold" fontSize="xl">
+                                    Encontre processos em 05 segundos!
+                                </Text>
                                 <Text>
                                     Acesso instantâneo a processos judiciais em
                                     todo o país, eliminando a busca lenta e
                                     garantindo agilidade máxima em sua análise.
+                                    <br />
+                                    <br />
                                     Com o IMO7, você navega pelo histórico de
                                     processos em todos os estados do Brasil sem
                                     demora, proporcionando uma pesquisa
@@ -76,7 +93,7 @@ export const Tribunal = () => {
                                 </Text>
                             </GridItem>
                             <GridItem>
-                                <Image src="/img/justica.png" alt="#" />
+                                <Image src="/img/IMAGEM (5).png" alt="#" />
                             </GridItem>
                         </Grid>
                     </Flex>
@@ -290,6 +307,7 @@ export const Tribunal = () => {
                                 <Text color="#FFF">11. Receita CPF</Text>
                             </Flex>
                             <Button
+                                onClick={() => modal.current.onOpen()}
                                 colorScheme="whatsapp"
                                 rightIcon={<FaWhatsappSquare />}
                             >

@@ -1131,3 +1131,16 @@ model ConsultaNetrin {
     fichaCadastral   FichaCadastral? @relation(fields: [fichaCadastralId], references: [id])
     fichaCadastralId String?
 }
+
+model Contato {
+    id String @id @default(uuid())
+
+    nome     String?
+    telefone String?
+    email    String?
+    mensagem String?
+
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @updatedAt
+    deletedAt DateTime?
+}

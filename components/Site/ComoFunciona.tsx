@@ -6,14 +6,15 @@ import {
     Heading,
     Icon,
     Image,
+    Link,
     Text,
 } from "@chakra-ui/react";
 import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
 import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
 
-export const ComoFunciona = () => {
+export const ComoFunciona = ({ modal }) => {
     return (
-        <Box bg="#F6FDFF">
+        <Box id="como-funciona" bg="#F6FDFF">
             <Container
                 maxW="container.xl"
                 pt={{ lg: 12 }}
@@ -102,6 +103,7 @@ export const ComoFunciona = () => {
                             </Text>
                         </Flex>
                         <Button
+                            onClick={() => modal.current.onOpen()}
                             colorScheme="whatsapp"
                             rightIcon={<FaWhatsappSquare />}
                         >

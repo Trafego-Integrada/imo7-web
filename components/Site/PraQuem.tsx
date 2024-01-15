@@ -6,12 +6,13 @@ import {
     Heading,
     Icon,
     Image,
+    Link,
     Text,
 } from "@chakra-ui/react";
 import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
 import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
 
-export const PraQuem = () => {
+export const PraQuem = ({ modal }) => {
     return (
         <Box
             bg="radial-gradient(232.42% 232.42% at 50% 50%, #012659 0%, rgba(0, 0, 0, 0.00) 100%), #03132B"
@@ -110,6 +111,7 @@ export const PraQuem = () => {
                             </Text>
                         </Flex>
                         <Button
+                            onClick={() => modal.current.onOpen()}
                             colorScheme="whatsapp"
                             rightIcon={<FaWhatsappSquare />}
                         >

@@ -6,14 +6,15 @@ import {
     Heading,
     Icon,
     Image,
+    Link,
     Text,
 } from "@chakra-ui/react";
 import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
 import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
 
-export const FichasCadastrais = () => {
+export const FichasCadastrais = ({ modal }) => {
     return (
-        <Box bg="#F6FDFF">
+        <Box id="solucoes" bg="#F6FDFF">
             <Container maxW="container.xl" py={12}>
                 <Flex textAlign="center" mb={4} gap={4} flexDir="column">
                     <Heading
@@ -101,6 +102,7 @@ export const FichasCadastrais = () => {
                             </Text>
                         </Flex>
                         <Button
+                            onClick={() => modal.current.onOpen()}
                             colorScheme="whatsapp"
                             rightIcon={<FaWhatsappSquare />}
                         >

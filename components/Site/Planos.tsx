@@ -26,7 +26,7 @@ import { IoIosArrowForward } from "react-icons/io";
 export const Planos = () => {
     const planos = [
         {
-            plano: "Start",
+            plano: "Econômico",
             valor: 99,
             itens: [
                 "20 Processos Cadastrais",
@@ -36,7 +36,7 @@ export const Planos = () => {
             ],
         },
         {
-            plano: "Startup",
+            plano: "Básico",
             valor: 159,
             itens: [
                 "40 Processos Cadastrais",
@@ -46,7 +46,7 @@ export const Planos = () => {
             ],
         },
         {
-            plano: "Plus",
+            plano: "Profissional",
             valor: 199,
             itens: [
                 "60 Processos Cadastrais",
@@ -56,7 +56,7 @@ export const Planos = () => {
             ],
         },
         {
-            plano: "Pro",
+            plano: "Avançado",
             valor: 259,
             itens: [
                 "80 Processos Cadastrais",
@@ -68,14 +68,11 @@ export const Planos = () => {
         },
     ];
     return (
-        <Container maxW="container.xl" py={12}>
+        <Container id="planos" maxW="container.xl" py={12}>
             <Heading textAlign="center">
-                Preço simplificado, zero compromisso
-            </Heading>
-            <Text textAlign="center">
                 Escolha o plano que melhor se adapta ao seu negócio.
-                <br /> Comece gratuitamente e atualize quando quiser.
-            </Text>
+            </Heading>
+
             <Grid
                 gridTemplateColumns={{
                     base: "repeat(1,1fr)",
@@ -135,23 +132,22 @@ export const Planos = () => {
                 <Thead>
                     <Tr>
                         <Th></Th>
-                        <Th>Starter</Th>
-                        <Th>Startup</Th>
-                        <Th>Plus</Th>
-                        <Th>Pro</Th>
+                        <Th>Econômico</Th>
+                        <Th>Básico</Th>
+                        <Th>Profissional</Th>
+                        <Th>Avançado</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
                     <Tr>
-                        <Td>Valor validação Facial ( Unitário )</Td>
+                        <Td>Consulta Simples Excedente Unitário</Td>
                         <Td>R$ 1,20</Td>
                         <Td>R$ 1,20</Td>
                         <Td>R$ 1,20</Td>
                         <Td>R$ 1,20</Td>
                     </Tr>
                     <Tr>
-                        <Td>Consulta Simples Excedente Unitário</Td>
-
+                        <Td>Valor validação Facial ( Unitário )</Td>
                         <Td>R$ 6,80</Td>
                         <Td>R$ 6,80</Td>
                         <Td>R$ 6,80</Td>

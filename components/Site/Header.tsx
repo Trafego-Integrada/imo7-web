@@ -1,3 +1,5 @@
+import { imo7ApiService } from "@/services/apiServiceUsage";
+import { apiService } from "@/services/apiServices";
 import {
     Box,
     Button,
@@ -14,12 +16,38 @@ import {
     Link,
     Text,
     useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import { FaWhatsapp } from "react-icons/fa";
 import { MdMenu } from "react-icons/md";
+import { useMutation } from "react-query";
+import * as yup from "yup";
 
+const schema = yup.object({
+    nome: yup.string().required(),
+});
 export const Header = () => {
     const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+    const toast = useToast();
+
+    const form = useForm({
+        resolver: yupResolver(schema),
+    });
+    const contato = useMutation(imo7ApiService("contato").create, {
+        onSuccess: () => {
+            window.open(
+                `https://web.whatsapp.com/send?phone=+5527992747255&text=Olá, sou ${form.watch(
+                    "nome"
+                )},\n\n Meu e-mail é ${form.watch(
+                    "email"
+                )}, e meu telefone ${form.watch(
+                    "telefone"
+                )}\n\n Quero saber mais sobre o IMO7`
+            );
+        },
+    });
     return (
         <Box
             h={{ lg: "90vh" }}
@@ -46,13 +74,13 @@ export const Header = () => {
                         display={{ base: "none", lg: "flex" }}
                     >
                         <Flex gap={8}>
-                            <Link href="#" color="white">
+                            <Link href="#como-funciona" color="white">
+                                Como funciona
+                            </Link>
+                            <Link href="#solucoes" color="white">
                                 Soluções
                             </Link>
-                            <Link href="#" color="white">
-                                Recursos
-                            </Link>
-                            <Link href="#" color="white">
+                            <Link href="#planos" color="white">
                                 Planos
                             </Link>
                         </Flex>
@@ -133,10 +161,35 @@ export const Header = () => {
                         produtividade da equipe e multiplicar os novos
                         atendimentos com muito mais eficiência!
                     </Text>
-                    <Flex gap={4}>
-                        <Input bg="white" placeholder="Cadastre seu e-mail" />
+                    <Flex
+                        as="form"
+                        onSubmit={form.handleSubmit(
+                            async (data) => await contato.mutateAsync(data)
+                        )}
+                        gap={4}
+                        flexDir="column"
+                    >
+                        <Input
+                            bg="white"
+                            placeholder="Qual seu nome?"
+                            {...form.register("nome")}
+                        />
+                        <Input
+                            bg="white"
+                            placeholder="Qual seu e-mail"
+                            {...form.register("email")}
+                        />
+                        <Input
+                            bg="white"
+                            placeholder="Qual seu telefone"
+                            {...form.register("telefone")}
+                        />
                         <Box>
-                            <Button colorScheme="cyan">
+                            <Button
+                                // isLoading={form.formState.isSubmitting}
+                                colorScheme="cyan"
+                                type="submit"
+                            >
                                 Descubra a solução
                             </Button>
                         </Box>

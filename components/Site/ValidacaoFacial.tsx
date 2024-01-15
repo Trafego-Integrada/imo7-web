@@ -8,10 +8,11 @@ import {
     Image,
     Text,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
 import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
 
-export const ValidacaoFacial = () => {
+export const ValidacaoFacial = ({ modal }) => {
     return (
         <Container maxW="container.xl" py={12}>
             <Flex textAlign="center" mb={4} gap={4} flexDir="column">
@@ -70,6 +71,7 @@ export const ValidacaoFacial = () => {
                         </Text>
                     </Flex>
                     <Button
+                        onClick={() => modal.current.onOpen()}
                         colorScheme="whatsapp"
                         rightIcon={<FaWhatsappSquare />}
                     >
