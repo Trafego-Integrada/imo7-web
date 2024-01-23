@@ -18,7 +18,7 @@ import {
     Text,
 } from "@chakra-ui/react";
 import moment from "moment";
-import { NextPage } from "next";
+import { NextPage, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaCopy, FaEye, FaGrinWink, FaPrint } from "react-icons/fa";
@@ -26,7 +26,7 @@ import { FiEye } from "react-icons/fi";
 import { IoHelpBuoy } from "react-icons/io5";
 import { useQuery } from "react-query";
 
-const Dashbord: NextPage = ({ boletos, extratos }) => {
+const Dashbord: NextPage = ({ boletos, extratos }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const { usuario } = useAuth();
     const router = useRouter();
     const { data: chamados } = useQuery(
@@ -34,9 +34,9 @@ const Dashbord: NextPage = ({ boletos, extratos }) => {
         listarChamados
     );
     console.log(
-        boletos.filter((e) => {
+        boletos?.filter((e:any) => {
             console.log(
-                e.contrato.inquilinos.includes((i) => {
+                e.contrato.inquilinos.includes((i: any) => {
                     console.log("a", i);
                     return true;
                 })
@@ -203,9 +203,10 @@ const Dashbord: NextPage = ({ boletos, extratos }) => {
                         )}
                     </>
                 )}
-                {boletos.filter((e) =>
-                    e.contrato.inquilinos.filter((i) => i.id == usuario.id)
-                        .length > 0
+                {boletos?.filter((e: any) =>
+                    e.contrato.inquilinos.filter(
+                        (i: any) => i.id == usuario?.id
+                    ).length > 0
                         ? true
                         : false
                 ).length > 0 && (
