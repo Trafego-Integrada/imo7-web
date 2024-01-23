@@ -14,7 +14,8 @@ import { removerCaracteresEspeciais } from "@/helpers/helpers";
 
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client } from "@aws-sdk/client-s3";
-var FOLDER;
+import { randomBytes } from "crypto";
+let FOLDER;
 
 if (process.platform == "linux") FOLDER = "/tmp/";
 else FOLDER = "d:\\";
@@ -42,33 +43,34 @@ handler.post(async (req, res) => {
     });
 
     const ACCESS_TOKEN = await getToken();
+    console.log("VALIDAÇÃO FACIAL::LINHA 46: ", ACCESS_TOKEN)
 
     const PIN = await getPin(ACCESS_TOKEN, cpf);
 
     if (foto === undefined || foto == "") {
-        res.status(200).send({
+        return res.status(400).send({
             status: 0,
             message: "Falha no envio da foto - 1",
         });
-        return;
     }
 
-    await savePhoto(validacao?.imobiliariaId, foto);
+    await savePhoto(validacao?.imobiliariaId!, foto);
 
-    let fotoUrl = await uploadPhoto(validacao?.imobiliariaId, foto);
+    let fotoUrl = await uploadPhoto(validacao?.imobiliariaId!, foto);
 
     if (!fotoUrl) {
-        return res.status(200).send({
+        return res.status(400).send({
             status: 0,
             message: "Falha no envio da foto - WRITE FAILED ",
         });
     }
 
-    const PHOTO = await setPhoto(ACCESS_TOKEN, PIN, validacao.cpf, foto);
+    const PHOTO: any = await setPhoto(ACCESS_TOKEN, PIN, validacao?.cpf!, foto);
 
-    if (PHOTO != "OK") {
-        res.status(200).send({ status: 0, message: PHOTO.mensagem });
-        return;
+    console.log("VALICAÇÃO FACIA :: LINHA 70: ", PHOTO);
+
+    if (!PHOTO) {
+        return res.status(400).send({ status: 0, message: PHOTO.mensagem });
     }
 
     try {
@@ -79,7 +81,7 @@ handler.post(async (req, res) => {
 
         const resValidacaoFacial = await prisma.validacaoFacial.update({
             where: {
-                id: validacao.id,
+                id: validacao?.id,
             },
             data: data,
         });
@@ -87,21 +89,24 @@ handler.post(async (req, res) => {
 
         if (id) {
             return res
-                .status(200)
+                .status(201)
                 .send({ status: 1, message: "Validação enviada com sucesso." });
         }
 
         return res
-            .status(200)
+            .status(400)
             .send({ status: 0, message: "Falha no banco de dados." });
-    } catch (error) {
+    } catch (error: any) {
         return res
-            .status(200)
-            .send({ status: 0, message: "Falha na validação" });
+            .status(400)
+            .send({
+                status: 0,
+                message: error?.message || "ocorreu um erro inesperado!",
+            });
     }
 });
 
-const savePhoto = async (imobiliariaId: string, photoBase64: string) => {
+const savePhoto = async (imobiliariaId: number, photoBase64: any) => {
     const extension = "jpg";
 
     const path = FOLDER + new Date().getTime() + "." + extension;
@@ -109,11 +114,12 @@ const savePhoto = async (imobiliariaId: string, photoBase64: string) => {
     let base64Image = photoBase64.split(";base64,").pop();
 
     let buff = Buffer.from(base64Image, "base64");
-    let result = await fs.writeFileSync(path, buff, "base64");
+    let result = fs.writeFileSync(path, buff, "base64");
 };
 
-const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
+const uploadPhoto = async (imobiliariaId: number, photoBase64: any) => {
     const extension = "jpg";
+    //const nameLocation = randomBytes(16).toString("hex");
     const nameLocation = `imobiliarias/${imobiliariaId}/validacaoFacial/${slug(
         `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`
     )}.${extension}`;
@@ -122,8 +128,8 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
 
     let base64Image = photoBase64.split(";base64,").pop();
 
-    let buff = Buffer.from(base64Image, "base64");
-    let result = await fs.writeFileSync(path, buff, {
+    let buff = Buffer.from(base64Image!, "base64");
+    let result = fs.writeFileSync(path, buff, {
         encoding: "base64",
     });
 
@@ -134,8 +140,8 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
     new Upload({
         client: new S3Client({
             credentials: {
-                accessKeyId: process.env.STORAGE_KEY,
-                secretAccessKey: process.env.STORAGE_SECRET,
+                accessKeyId: process.env.STORAGE_KEY!,
+                secretAccessKey: process.env.STORAGE_SECRET!,
             },
             region: process.env.STORAGE_REGION,
             endpoint: process.env.STORAGE_ENDPOINT,
@@ -164,7 +170,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
             console.log(err);
         });
 
-    return "";
+    return process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation;
 };
 
 const getToken = async () => {
@@ -185,12 +191,13 @@ const getToken = async () => {
             }
         );
         return data.data.access_token;
-    } catch (e) {
+    } catch (e: any) {
+        console.log("VALIDAÇÃO FACIAL::LINHA191: ", e?.message || e);
         return e;
     }
 };
 
-const getPin = async (access_token: string, cpf: number) => {
+const getPin = async (access_token: string, cpf: string) => {
     try {
         const resPin = await axios.post(
             "https://gateway.apiserpro.serpro.gov.br/biovalid/v1/token",
@@ -204,9 +211,10 @@ const getPin = async (access_token: string, cpf: number) => {
                 },
             }
         );
-
+        console.log("VALIDAÇÃO FACIAL::LINHA 210: ", resPin.data);
         return resPin.data;
-    } catch (e) {
+    } catch (e: any) {
+        console.log("VALIDAÇÃO FACIAL::LINHA 213: ", e?.message || e);
         return e;
     }
 };
@@ -214,7 +222,7 @@ const getPin = async (access_token: string, cpf: number) => {
 const setPhoto = async (
     access_token: string,
     pin: string,
-    cpf: number,
+    cpf: string,
     photoBase64: string
 ) => {
     photoBase64 = photoBase64.substring("data:image/jpeg;base64,".length);
@@ -236,14 +244,18 @@ const setPhoto = async (
             }
         )
         .catch((error) => {
+            console.log(
+                "VALIDAÇÃO FACIAL:: LINHA 242: ",
+                error?.message || error
+            );
             return error.response;
         });
-
+    console.log("VALIDAÇÃO FACIAL:: LINHA 245: ", response.data);
     return response.data;
 };
 
 handler.get(async (req, res) => {
-    return res.status(200).send("GET NOT FOUND");
+    return res.status(404).send("GET NOT FOUND");
 });
 
 export default handler;
