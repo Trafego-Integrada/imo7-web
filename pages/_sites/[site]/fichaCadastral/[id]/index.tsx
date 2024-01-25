@@ -73,7 +73,7 @@ import { useMutation } from "react-query";
 import * as yup from "yup";
 import "react-quill/dist/quill.snow.css";
 import { buscarEndereco } from "@/lib/buscarEndereco";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { FormSelect } from "@/components/Form/FormSelect";
 import {
     convertToBase64,
@@ -88,6 +88,7 @@ import { FileUpload } from "primereact/fileupload";
 import { BiSave } from "react-icons/bi";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { ModalPreview } from "@/components/Modals/Preview";
+
 function validateCPF(value) {
     // Remove caracteres não numéricos
     const cleanedCPF = value.replace(/\D/g, "");
@@ -258,16 +259,19 @@ function Previews(props) {
 
     const atualizarAnexos = useMutation(atualizarAnexosFicha, {
         onSuccess: () => {
+            //console.log('LINHA 261: FICHA CADASTRAL: REFRESH ANEXAR')
             props.buscar();
         },
     });
     const excluirAnexo = useMutation(excluirAnexoFicha, {
         onSuccess: () => {
+            //console.log('LINHA 261: FICHA CADASTRAL: REFRESH EXCLUIR')
             toast({
                 title: "Arquivo excluído com sucesso",
                 position: "top-right",
             });
             props.buscar();
+            window.location.reload()
         },
     });
     const customBase64Uploader = async (event) => {
@@ -298,12 +302,14 @@ function Previews(props) {
                     },
                     {
                         onSuccess: () => {
+                            console.log('LINHA 304: FICHA CADASTRAL: UPLOAD')
                             toast({
                                 title: "Upload realizado com sucesso",
                                 position: "top-right",
                                 status: "success",
                             });
                             event.options.clear();
+                            window.location.reload()
                         },
                     }
                 );
@@ -338,6 +344,7 @@ function Previews(props) {
                         });
                         props.buscar();
                         event.options.clear();
+                        window.location.reload()
                     },
                 }
             );
@@ -536,7 +543,7 @@ function Previews(props) {
     );
 }
 
-const FichaCadastral = ({ ficha, campos, modelo }) => {
+const FichaCadastral = ({ ficha, campos, modelo }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const [schema, setSchema] = useState({});
     const toast = useToast();
     const {
@@ -560,6 +567,8 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     });
     const atualizar = useMutation(atualizarFicha);
     const atualizarAnexos = useMutation(atualizarAnexosFicha); // Função para converter arquivo para base64
+
+    const router = useRouter()
 
     const onSubmit = async (data) => {
         try {
@@ -681,10 +690,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     };
 
     const buscarEnderecoPorCep = async (cep, camposEndereco) => {
+        //console.log('LINHA 684 : FICHA CADASTRAL: ', cep)
         try {
             if (cep.length > 8) {
                 const res = await buscarEndereco(cep);
-                console.log(res);
+                //console.log(res);
                 let obj = {};
                 Object.entries(camposEndereco).map((item) => {
                     if (item[0] == "endereco") {
@@ -761,27 +771,28 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
 
     useEffect(() => {
         if (errors) {
-            console.log(
-                campos
-                    .filter(
-                        (i) =>
-                            i.campos.find(
-                                (e) => modelo?.campos[e.codigo]?.exibir
-                            ) &&
-                            i.campos.find((campo) =>
-                                errors?.preenchimento &&
-                                Object.keys(errors?.preenchimento).find(
-                                    (e) => e == campo.codigo
-                                )
-                                    ? true
-                                    : false
-                            )
-                    )
-                    .map((i) => {
-                        const index = campos.findIndex((e) => e.id == i.id);
-                        isIncompleteStep(index);
-                    })
-            );
+            null
+            //console.log(
+            //    campos
+            //        .filter(
+            //            (i) =>
+            //                i.campos.find(
+            //                    (e) => modelo?.campos[e.codigo]?.exibir
+            //                ) &&
+            //                i.campos.find((campo) =>
+            //                    errors?.preenchimento &&
+            //                    Object.keys(errors?.preenchimento).find(
+            //                        (e) => e == campo.codigo
+            //                    )
+            //                        ? true
+            //                        : false
+            //                )
+            //        )
+            //        .map((i) => {
+            //            const index = campos.findIndex((e) => e.id == i.id);
+            //            isIncompleteStep(index);
+            //        })
+            //);
         }
     }, [errors]);
     return (
