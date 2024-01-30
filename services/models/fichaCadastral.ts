@@ -24,7 +24,7 @@ export const atualizarFicha = async ({ id, ...rest }: { id: any }) => {
 
 export const atualizarAnexosFicha = async ({
     id,
-    ...formData
+    formData
 }: {
     id: any
 }) => {

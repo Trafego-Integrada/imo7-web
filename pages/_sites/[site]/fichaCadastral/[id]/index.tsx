@@ -797,7 +797,7 @@ const FichaCadastral = ({
                                     {ficha.imovel?.cidade}/
                                     {ficha.imovel?.estado},
                                     {ficha.imovel?.estado}, CEP:{' '}
-                                    {ficha.imove?.cep}
+                                    {ficha.imovel?.cep}
                                 </Text>
                             </Box>
                         ) : ficha.codigoImovel ? (
@@ -842,16 +842,6 @@ const FichaCadastral = ({
                             </Text>
                         </GridItem>
                     )}
-                    {/* {ficha.imovel?.valorVenda && (
-                        <GridItem p={4} bg="white">
-                            <Text fontSize="sm" color="gray">
-                                Valor Venda
-                            </Text>
-                            <Text>
-                                {formatoValor(ficha.imovel?.valorVenda)}
-                            </Text>
-                        </GridItem>
-                    )} */}
 
                     {ficha.imovel?.valorCondominio && (
                         <GridItem p={4} bg="white">
@@ -941,11 +931,11 @@ const FichaCadastral = ({
                             <Step
                                 onClick={() =>
                                     setActiveStep(
-                                        campos.filter((i) =>
+                                        campos.filter((i: any) =>
                                             i.campos.find(
                                                 () =>
                                                     i.campos.find(
-                                                        (e) =>
+                                                        (e: any) =>
                                                             modelo?.campos[
                                                                 e.codigo
                                                             ]?.exibir,
@@ -1263,13 +1253,13 @@ const FichaCadastral = ({
                                                         return false
                                                     }
                                                 })
-                                                .map((campo: any, i: any) => (
+                                                .map((campo, i) => (
                                                     <GridItem
                                                         key={campo.id}
                                                         colSpan={{
                                                             base: 1,
                                                             lg:
-                                                                campo.tipoCampo ==
+                                                                campo?.tipoCampo ==
                                                                 'file'
                                                                     ? 2
                                                                     : campo.colSpan +
@@ -1277,10 +1267,10 @@ const FichaCadastral = ({
                                                         }}
                                                         colStart={{
                                                             lg:
-                                                                campo.tipoCampo ==
+                                                                campo?.tipoCampo ==
                                                                     'file' &&
                                                                 item.campos.filter(
-                                                                    (i) => {
+                                                                    (i:any) => {
                                                                         if (
                                                                             (modelo
                                                                                 .campos[
@@ -2203,8 +2193,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
             motivoReprovacao: item.motivoReprovacao,
         }
     })
-    ficha?.preenchimento! = newObj
-    ficha?.analise! = analise
+    ficha.preenchimento = newObj
+    ficha.analise = analise
     return {
         props: {
             ficha: JSON.parse(JSON.stringify(ficha)),
