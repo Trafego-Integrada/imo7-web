@@ -1,55 +1,55 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-import moment from "moment";
+import { Prisma, PrismaClient } from '@prisma/client'
+import moment from 'moment'
 
 interface CustomNodeJsGlobal extends NodeJS.Global {
-    prisma: PrismaClient;
+    prisma: PrismaClient
 }
 
-declare const global: CustomNodeJsGlobal;
+declare const global: CustomNodeJsGlobal
 
-let prisma: PrismaClient;
+let prisma: PrismaClient
 
-if (process.env.NODE_ENV === "production") {
-    prisma = new PrismaClient();
+if (process.env.NODE_ENV === 'production') {
+    prisma = new PrismaClient()
 } else {
     if (!global.prisma) {
-        global.prisma = new PrismaClient();
+        global.prisma = new PrismaClient()
     }
-    prisma = global.prisma;
+    prisma = global.prisma
 }
 
 prisma.$use(async (params, next) => {
-    if (params.model != "FichaCadastralPreenchimento") {
+    if (params.model != 'FichaCadastralPreenchimento') {
         // Check incoming query type
-        if (params.action == "delete") {
-            params.action = "update";
-            params.args["data"] = { deletedAt: moment().format() };
+        if (params.action == 'delete') {
+            params.action = 'update'
+            params.args['data'] = { deletedAt: moment().format() }
         }
-        if (params.action == "deleteMany") {
+        if (params.action == 'deleteMany') {
             // Delete many queries
-            params.action = "updateMany";
+            params.action = 'updateMany'
             if (params.args.data != undefined) {
-                params.args.data["deletedAt"] = moment().format();
+                params.args.data['deletedAt'] = moment().format()
             } else {
-                params.args["data"] = { deletedAt: moment().format() };
+                params.args['data'] = { deletedAt: moment().format() }
             }
         }
         if (
-            params.action == "findFirst" ||
-            params.action == "findMany" ||
-            params.action == "count"
+            params.action == 'findFirst' ||
+            params.action == 'findMany' ||
+            params.action == 'count'
         ) {
             // console.log(params)
-            if (params.args.where && params.args.where["deletedAt"]) {
+            if (params.args.where && params.args.where['deletedAt']) {
             } else if (params.args.where != undefined) {
-                params.args.where["deletedAt"] = null;
+                params.args.where['deletedAt'] = null
             } else {
-                params.args["where"] = { deletedAt: null };
+                params.args['where'] = { deletedAt: null }
             }
         }
     }
 
-    return next(params);
-});
+    return next(params)
+})
 
-export default prisma;
+export default prisma

@@ -1,15 +1,12 @@
 {
-    "name": "simob-api",
+    "name": "imo7-web",
     "version": "0.1.0",
     "private": true,
     "scripts": {
         "dev": "next dev",
         "build": "prisma generate && next build",
         "start": "next start",
-        "lint": "next lint",
-        "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
-        "ssh": "ssh ubuntu@140.238.181.195",
-        "db": "ssh -i C:/Users/gabri/.ssh/ssh-key-2022-10-14.key -N -L 3306:10.0.2.103:3306 -p 22 140.238.181.195"
+        "lint": "next lint"
     },
     "dependencies": {
         "@ajna/pagination": "^1.4.19",
@@ -104,17 +101,18 @@
     },
     "devDependencies": {
         "@types/formidable": "^1.2.3",
+        "@types/html-pdf": "^3.0.3",
         "@types/node": "^15.12.5",
         "@types/react": "17.0.11",
+        "@types/react-dom": "^18.2.18",
         "@types/react-input-mask": "^3.0.1",
+        "@types/slug": "^5.0.7",
+        "@types/uuid": "^9.0.8",
         "eslint": "7.29.0",
         "eslint-config-next": "11.0.1",
         "file-loader": "^6.2.0",
         "prisma": "^4.10.1",
         "ts-node": "^10.0.0",
         "typescript": "^4.3.4"
-    },
-    "prisma": {
-        "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
     }
 }

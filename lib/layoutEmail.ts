@@ -1,10 +1,10 @@
-import { formatoValor } from "@/helpers/helpers";
-import moment from "moment";
+import { formatoValor } from '@/helpers/helpers'
+import moment from 'moment'
 
 export const layoutRecuperarSenha = ({
     nome,
     codigoRecuperacao,
-}) => `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+}: any) => `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" style="width:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
 <head>
 <meta charset="UTF-8">
@@ -193,7 +193,7 @@ padding:5px 25px 5px 20px!important;
 </table>
 </div>
 </body>
-</html>`;
+</html>`
 
 export const emailBoleto = ({
     nomeDestinatario,
@@ -201,7 +201,7 @@ export const emailBoleto = ({
     complemento,
     imobiliaria,
     idBoleto,
-}) => `
+}: any) => `
 <!-- Inliner Build Version 4380b7741bb759d6cb997545f3add21ad48f010b -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -423,7 +423,7 @@ export const emailBoleto = ({
                                  align="center">
                                 <em>
                                     Todos os direitos reservados © 
-                                    ${moment().format("YYYY")}
+                                    ${moment().format('YYYY')}
 									${imobiliaria?.razaoSocial}.
                                 </em>
                             </div>
@@ -454,9 +454,13 @@ export const emailBoleto = ({
 </body>
 </html>
 
-`;
+`
 
-export const emailExtrato = ({ imobiliaria, extrato, nomeDestinatario }) => `
+export const emailExtrato = ({
+    imobiliaria,
+    extrato,
+    nomeDestinatario,
+}: any) => `
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
       xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -774,23 +778,23 @@ export const emailExtrato = ({ imobiliaria, extrato, nomeDestinatario }) => `
                                         <tr style="border-top:1px solid #ecedee;">
                                             <td style="padding: 12px;">Vencimento</td>
                                             <td style="padding: 12px;text-align: right;">${moment(
-                                                extrato?.vencimento
-                                            ).format("DD/MM/YYYY")}</td>
+                                                extrato?.vencimento,
+                                            ).format('DD/MM/YYYY')}</td>
                                         </tr>
                                         <tr style="border-top:1px solid #ecedee;">
                                             <td style="padding: 12px;">Depósito</td>
                                             <td style="padding: 12px;text-align: right;">${moment(
-                                                extrato?.dataDeposito
-                                            ).format("DD/MM/YYYY")}</td>
+                                                extrato?.dataDeposito,
+                                            ).format('DD/MM/YYYY')}</td>
                                         </tr>
                                         <tr style="border-top: 2px solid #7e7f80;;border-bottom:1px solid #ecedee;">
                                             <td style="padding: 12px;">Total</td>
                                             <td style="padding: 12px;text-align: right;">${formatoValor(
                                                 extrato.itens?.reduce(
-                                                    (acc, i) =>
+                                                    (acc: any, i: any) =>
                                                         Number(i.valor) + acc,
-                                                    0
-                                                )
+                                                    0,
+                                                ),
                                             )}</td>
                                         </tr>
                                     </table>
@@ -1106,4 +1110,4 @@ export const emailExtrato = ({ imobiliaria, extrato, nomeDestinatario }) => `
     <![endif]--></div>
 </body>
 </html>
-`;
+`
