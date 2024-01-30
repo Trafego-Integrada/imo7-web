@@ -1,9 +1,9 @@
-import prisma from "@/lib/prisma";
-import { GetUserProps } from "@/types/user";
+import prisma from '@/lib/prisma'
+import { GetUserProps } from '@/types/user'
 
 export async function getUsers() {
-    const users = await prisma.usuario.findMany();
-    return users;
+    const users = await prisma.usuario.findMany()
+    return users
 }
 
 export async function getUser({ documento, imobiliaria }: GetUserProps) {
@@ -18,7 +18,7 @@ export async function getUser({ documento, imobiliaria }: GetUserProps) {
                 },
             ],
             imobiliaria:
-                imobiliaria != "null"
+                imobiliaria != 'null'
                     ? {
                           url: imobiliaria,
                       }
@@ -44,24 +44,24 @@ export async function getUser({ documento, imobiliaria }: GetUserProps) {
                 },
             },
         },
-    });
-    if (!user) return null;
-    let arrPermissoes: string[] = [];
-    await user?.permissoes.map((permissao) => {
-        arrPermissoes.push(permissao.codigo);
-    });
-    let arrCargos: string[] = [];
-    await user?.cargos.map((cargo) => {
-        arrCargos.push(cargo.codigo);
-    });
-    let arrModulos: string[] = [];
-    await user?.modulos.map((cargo) => {
-        arrModulos.push(cargo.codigo);
-    });
+    })
+    if (!user) return null
+    let arrPermissoes: string[] = []
+    user?.permissoes.map((permissao: any) => {
+        arrPermissoes.push(permissao.codigo)
+    })
+    let arrCargos: string[] = []
+    user?.cargos.map((cargo: any) => {
+        arrCargos.push(cargo.codigo)
+    })
+    let arrModulos: string[] = []
+    user?.modulos.map((cargo: any) => {
+        arrModulos.push(cargo.codigo)
+    })
     return {
         ...user,
         permissoes: arrPermissoes,
         cargos: arrCargos,
         modulos: arrModulos,
-    };
+    }
 }

@@ -1,33 +1,32 @@
-import { signOut } from "@/contexts/AuthContext";
-import axios, { AxiosError } from "axios";
-import jwtDecode from "jwt-decode";
-import { parseCookies, setCookie } from "nookies";
-import { AuthTokenError } from "./errors/AuthTokenError";
+import axios, { AxiosError } from 'axios'
 
-let isRefreshing = false;
+let isRefreshing = false
 let failedRequestQueue: {
-    onSuccess: (token: string) => void;
-    onFailure: (err: AxiosError<any>) => void;
-}[] = [];
+    onSuccess: (token: string) => void
+    onFailure: (err: AxiosError<any>) => void
+}[] = []
+
+const NETRIN_API_URL = process.env.NETRIN_API_URL
+const NETRIN_API_TOKEN = process.env.NETRIN_API_TOKEN!
 
 function setupApiClient() {
     const api = axios.create({
-        baseURL: "https://api.netrin.com.br/v1/",
-    });
+        baseURL: NETRIN_API_URL,
+    })
 
-    return api;
+    return api
 }
 
-export const apiNetrin = setupApiClient();
+export const apiNetrin = setupApiClient()
 
 export const apiNetrinService = () => ({
-    consultaComposta: async (consulta) => {
+    consultaComposta: async (consulta: any) => {
         const { data } = await apiNetrin.get(`consulta-composta`, {
             params: {
-                token: "fd738b33-ad1d-4cda-bd47-47ffdeefad01",
+                token: NETRIN_API_TOKEN,
                 ...consulta,
             },
-        });
-        return data;
+        })
+        return data
     },
-});
+})

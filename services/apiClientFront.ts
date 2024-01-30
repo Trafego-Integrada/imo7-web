@@ -1,3 +1,4 @@
-import { setupApiClient } from "./apiFront";
+import { setupApiClient } from './apiFront'
 
-export const apiFront = setupApiClient();
+export const apiFront = setupApiClient()
+

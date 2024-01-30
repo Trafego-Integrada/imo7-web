@@ -1,30 +1,41 @@
-import { api } from "@/services/apiClient";
+import { api } from '@/services/apiClient'
 
-export const atualizarFicha = async ({ id, ...rest }) => {
-    const { data } = await api.post("public/fichaCadastral/" + id, { ...rest });
-    return data;
-};
+export const atualizarFicha = async ({ id, ...rest }: { id: string | any }) => {
+    const { data } = await api.post('public/fichaCadastral/' + id, { ...rest })
+    return data
+}
 
-export const atualizarAnexosFicha = async ({ id, formData }) => {
+export const atualizarAnexosFicha = async ({
+    id,
+    ...formData
+}: {
+    id: string | any
+}) => {
     const { data } = await api.post(
-        "public/fichaCadastral/" + id + "/anexos",
-        formData
-    );
-    return data;
-};
-export const buscarFicha = async (id) => {
-    const { data } = await api.get("public/fichaCadastral/" + id);
-    return data;
-};
+        'public/fichaCadastral/' + id + '/anexos',
+        formData,
+    )
+    return data
+}
+export const buscarFicha = async (id: string | any) => {
+    const { data } = await api.get('public/fichaCadastral/' + id)
+    return data
+}
 
-export const excluirAnexoFicha = async ({ id, params }) => {
+export const excluirAnexoFicha = async ({
+    id,
+    params,
+}: {
+    id: string | any
+    params: any
+}) => {
     const { data } = await api.delete(
-        "public/fichaCadastral/" + id + "/anexos",
+        'public/fichaCadastral/' + id + '/anexos',
         {
             params: {
                 ...params,
             },
-        }
-    );
-    return data;
-};
+        },
+    )
+    return data
+}
