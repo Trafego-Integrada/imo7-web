@@ -5,7 +5,7 @@ export const listarBoletos = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarBoleto = async (id: string | any) => {
+export const buscarBoleto = async (id: any) => {
     const { data } = await api.get('boleto/' + id)
     return data
 }
@@ -19,13 +19,13 @@ export const atualizarBoleto = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('boleto/' + id, { ...rest })
     return data
 }
 
-export const excluirBoleto = async (id: string | any) => {
+export const excluirBoleto = async (id: any) => {
     const { data } = await api.delete('boleto/' + id)
     return data
 }

@@ -5,7 +5,7 @@ export const listarContratos = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarContrato = async (id: string | any) => {
+export const buscarContrato = async (id: any) => {
     const { data } = await api.get('contrato/' + id)
     return data
 }
@@ -19,13 +19,13 @@ export const atualizarContrato = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('contrato/' + id, { ...rest })
     return data
 }
 
-export const excluirContrato = async (id: string | any) => {
+export const excluirContrato = async (id: any) => {
     const { data } = await api.post('contrato/' + id)
     return data
 }
@@ -48,7 +48,7 @@ export const listarParticipantesContratos = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarAnexoContrato = async (id: string | any) => {
+export const buscarAnexoContrato = async (id: any) => {
     const { data } = await api.get('anexo/' + id)
     return data
 }

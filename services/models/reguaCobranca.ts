@@ -5,7 +5,7 @@ export const listarReguasCobranca = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarReguaCobranca = async (id: string | any) => {
+export const buscarReguaCobranca = async (id: any) => {
     const { data } = await api.get('reguaCobranca/' + id)
     return data
 }
@@ -19,13 +19,13 @@ export const atualizarReguaCobranca = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('reguaCobranca/' + id, { ...rest })
     return data
 }
 
-export const excluirReguaCobranca = async (id: string | any) => {
+export const excluirReguaCobranca = async (id: any) => {
     const { data } = await api.delete('reguaCobranca/' + id)
     return data
 }

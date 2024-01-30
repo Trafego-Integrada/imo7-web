@@ -5,7 +5,7 @@ export const listarExtratos = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarExtrato = async (id: string | any) => {
+export const buscarExtrato = async (id: any) => {
     const { data } = await api.get('extrato/' + id)
     return data
 }
@@ -19,13 +19,13 @@ export const atualizarExtrato = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('extrato/' + id, { ...rest })
     return data
 }
 
-export const excluirExtrato = async (id: string | any) => {
+export const excluirExtrato = async (id: any) => {
     const { data } = await api.delete('extrato/' + id)
     return data
 }

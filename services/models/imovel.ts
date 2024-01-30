@@ -6,7 +6,7 @@ export const listarImoveis = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarImovel = async (id: string | any) => {
+export const buscarImovel = async (id: any) => {
     const { data } = await api.get('imovel/' + id)
     return data
 }
@@ -20,13 +20,13 @@ export const atualizarImovel = async ({
     id,
     ...data
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data: resp } = await api.post('imovel/' + id, data)
     return resp
 }
 
-export const excluirImovel = async (id: string | any) => {
+export const excluirImovel = async (id: any) => {
     const { data } = await api.post('imovel/' + id)
     return data
 }

@@ -7,7 +7,7 @@ export const listaregras = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscar = async (id: string | any) => {
+export const buscar = async (id: any) => {
     const { data } = await api.get('regua/' + id)
     return data
 }
@@ -17,12 +17,12 @@ export const cadastrarRegua = async (form: any) => {
     return data
 }
 
-export const atualizarRegua = async ({ id, ...rest }: { id: string | any }) => {
+export const atualizarRegua = async ({ id, ...rest }: { id: any }) => {
     const { data } = await api.post('regua/' + id, { ...rest })
     return data
 }
 
-export const excluirRegua = async (id: string | any) => {
+export const excluirRegua = async (id: any) => {
     const { data } = await api.delete('regua/' + id)
     return data
 }

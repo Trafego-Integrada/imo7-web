@@ -7,7 +7,7 @@ export const listarDepartamentos = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarDepartamento = async (id: string | any) => {
+export const buscarDepartamento = async (id: any) => {
     const { data } = await api.get('departamento/' + id)
     return data
 }
@@ -21,13 +21,13 @@ export const atualizarDepartamento = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('departamento/' + id, { ...rest })
     return data
 }
 
-export const excluirDepartamento = async (id: string | any) => {
+export const excluirDepartamento = async (id: any) => {
     const { data } = await api.delete('departamento/' + id)
     return data
 }

@@ -7,7 +7,7 @@ export const listarPessoas = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarPessoa = async (id: string | any) => {
+export const buscarPessoa = async (id: any) => {
     const { data } = await api.get('pessoa/' + id)
     return data
 }
@@ -21,13 +21,13 @@ export const atualizarPessoa = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('pessoa/' + id, { ...rest })
     return data
 }
 
-export const excluirPessoa = async (id: string | any) => {
+export const excluirPessoa = async (id: any) => {
     const { data } = await api.delete('pessoa/' + id)
     return data
 }

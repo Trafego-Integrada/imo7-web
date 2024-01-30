@@ -7,7 +7,7 @@ export const listarOrcamentos = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarOrcamento = async (id: string | any) => {
+export const buscarOrcamento = async (id: any) => {
     const { data } = await api.get('orcamento/' + id)
     return data
 }
@@ -21,13 +21,13 @@ export const atualizarOrcamento = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('orcamento/' + id, { ...rest })
     return data
 }
 
-export const excluirOrcamento = async (id: string | any) => {
+export const excluirOrcamento = async (id: any) => {
     const { data } = await api.delete('orcamento/' + id)
     return data
 }

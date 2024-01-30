@@ -7,7 +7,7 @@ export const listarFichas = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarFicha = async (id: string | any) => {
+export const buscarFicha = async (id: any) => {
     const { data } = await api.get('fichaCadastral/' + id)
     return data
 }
@@ -17,7 +17,7 @@ export const cadastrarFicha = async (form: any) => {
     return data
 }
 
-export const atualizarFicha = async ({ id, ...rest }: { id: string | any }) => {
+export const atualizarFicha = async ({ id, ...rest }: { id: any }) => {
     const { data } = await api.post('fichaCadastral/' + id, { ...rest })
     return data
 }
@@ -26,7 +26,7 @@ export const atualizarAnexosFicha = async ({
     id,
     ...formData
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post(
         'fichaCadastral/' + id + '/anexos',
@@ -38,7 +38,7 @@ export const atualizarAnexosFicha = async ({
     return data
 }
 
-export const excluirFicha = async (id: string | any) => {
+export const excluirFicha = async (id: any) => {
     const { data } = await api.delete('fichaCadastral/' + id)
     return data
 }
@@ -56,7 +56,7 @@ export const aprovaCampo = async ({
     fichaId,
     campoCodigo,
 }: {
-    fichaId: string | any
+    fichaid: any
     campoCodigo: any
 }) => {
     const { data } = await api.post(
@@ -71,7 +71,7 @@ export const reprovarCampo = async ({
     campoCodigo,
     motivoReprovacao,
 }: {
-    fichaId: string | any
+    fichaid: any
     campoCodigo: any
     motivoReprovacao: any
 }) => {

@@ -7,7 +7,7 @@ export const listarFichas = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarFicha = async (id: string | any) => {
+export const buscarFicha = async (id: any) => {
     const { data } = await api.get('modeloFicha/' + id)
     return data
 }
@@ -17,12 +17,12 @@ export const cadastrarFicha = async (form: any) => {
     return data
 }
 
-export const atualizarFicha = async ({ id, ...rest }: { id: string | any }) => {
+export const atualizarFicha = async ({ id, ...rest }: { id: any }) => {
     const { data } = await api.post('modeloFicha/' + id, { ...rest })
     return data
 }
 
-export const excluirFicha = async (id: string | any) => {
+export const excluirFicha = async (id: any) => {
     const { data } = await api.delete('modeloFicha/' + id)
     return data
 }

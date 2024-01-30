@@ -5,7 +5,7 @@ export const listarModulos = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarModulo = async (id: string | any) => {
+export const buscarModulo = async (id: any) => {
     const { data } = await api.get('modulo/' + id)
     return data
 }
@@ -19,13 +19,13 @@ export const atualizarModulo = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('modulo/' + id, { ...rest })
     return data
 }
 
-export const excluirModulo = async (id: string | any) => {
+export const excluirModulo = async (id: any) => {
     const { data } = await api.post('modulo/' + id)
     return data
 }

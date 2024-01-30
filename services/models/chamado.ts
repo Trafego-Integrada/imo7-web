@@ -5,7 +5,7 @@ export const listarChamados = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarChamado = async (id: string | any) => {
+export const buscarChamado = async (id: any) => {
     const { data } = await api.get('chamado/' + id)
     return data
 }
@@ -19,13 +19,13 @@ export const atualizarChamado = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('chamado/' + id, { ...rest })
     return data
 }
 
-export const excluirChamado = async (id: string | any) => {
+export const excluirChamado = async (id: any) => {
     const { data } = await api.post('chamado/' + id)
     return data
 }
@@ -59,8 +59,8 @@ export const enviarMensagemChamado = async ({
     conversaId,
     ...rest
 }: {
-    chamadoId: string | any
-    conversaId: string | any
+    chamadoid: any
+    conversaid: any
 }) => {
     const { data } = await api.post(
         'chamado/' + chamadoId + '/conversa/' + conversaId + '/mensagem',
@@ -75,7 +75,7 @@ export const iniciarConversaChamado = async ({
     chamadoId,
     ...rest
 }: {
-    chamadoId: string | any
+    chamadoid: any
 }) => {
     const { data } = await api.post('chamado/' + chamadoId + '/conversa', {
         ...rest,
@@ -109,8 +109,8 @@ export const buscarHistoricoChamado = async ({
     chamadoId,
     id,
 }: {
-    chamadoId: string | any
-    id: string | any
+    chamadoid: any
+    id: any
 }) => {
     const { data } = await api.get(`chamado/${chamadoId}/historico/${id}`)
     return data
@@ -120,7 +120,7 @@ export const cadastrarHistoricoChamado = async ({
     chamadoId,
     ...rest
 }: {
-    chamadoId: string | any
+    chamadoid: any
 }) => {
     const { data } = await api.post(`chamado/${chamadoId}/historico`, {
         ...rest,
@@ -133,8 +133,8 @@ export const atualizarHistoricoChamado = async ({
     id,
     ...rest
 }: {
-    chamadoId: string | any
-    id: string | any
+    chamadoid: any
+    id: any
 }) => {
     const { data } = await api.post(`chamado/${chamadoId}/historico/${id}`, {
         ...rest,
@@ -146,8 +146,8 @@ export const excluirHistoricoChamado = async ({
     chamadoId,
     id,
 }: {
-    chamadoId: string | any
-    id: string | any
+    chamadoid: any
+    id: any
 }) => {
     const { data } = await api.post(`chamado/${chamadoId}/historico/${id}`)
     return data

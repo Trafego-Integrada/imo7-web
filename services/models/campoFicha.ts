@@ -7,7 +7,7 @@ export const listarCampoFichas = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarCampoFicha = async (id: string | any) => {
+export const buscarCampoFicha = async (id: any) => {
     const { data } = await api.get('campoFicha/' + id)
     return data
 }
@@ -21,13 +21,13 @@ export const atualizarCampoFicha = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('campoFicha/' + id, { ...rest })
     return data
 }
 
-export const excluirCampoFicha = async (id: string | any) => {
+export const excluirCampoFicha = async (id: any) => {
     const { data } = await api.delete('campoFicha/' + id)
     return data
 }

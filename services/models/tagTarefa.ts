@@ -7,7 +7,7 @@ export const listarTagsTarefa = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarTagTarefa = async (id: string | any) => {
+export const buscarTagTarefa = async (id: any) => {
     const { data } = await api.get('tagTarefa/' + id)
     return data
 }
@@ -21,13 +21,13 @@ export const atualizarTagTarefa = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('tagTarefa/' + id, { ...rest })
     return data
 }
 
-export const excluirTagTarefa = async (id: string | any) => {
+export const excluirTagTarefa = async (id: any) => {
     const { data } = await api.delete('tagTarefa/' + id)
     return data
 }

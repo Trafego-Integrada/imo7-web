@@ -1,6 +1,6 @@
 import { api } from '@/services/apiClient'
 
-export const atualizarFicha = async ({ id, ...rest }: { id: string | any }) => {
+export const atualizarFicha = async ({ id, ...rest }: { id: any }) => {
     const { data } = await api.post('public/fichaCadastral/' + id, { ...rest })
     return data
 }
@@ -9,7 +9,7 @@ export const atualizarAnexosFicha = async ({
     id,
     ...formData
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post(
         'public/fichaCadastral/' + id + '/anexos',
@@ -17,7 +17,7 @@ export const atualizarAnexosFicha = async ({
     )
     return data
 }
-export const buscarFicha = async (id: string | any) => {
+export const buscarFicha = async (id: any) => {
     const { data } = await api.get('public/fichaCadastral/' + id)
     return data
 }
@@ -26,7 +26,7 @@ export const excluirAnexoFicha = async ({
     id,
     params,
 }: {
-    id: string | any
+    id: any
     params: any
 }) => {
     const { data } = await api.delete(

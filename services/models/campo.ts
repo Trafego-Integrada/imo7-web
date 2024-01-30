@@ -7,7 +7,7 @@ export const listarCampos = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarCampo = async (id: string | any) => {
+export const buscarCampo = async (id: any) => {
     const { data } = await api.get('campoFicha/' + id)
     return data
 }
@@ -17,12 +17,12 @@ export const cadastrarCampo = async (form: any) => {
     return data
 }
 
-export const atualizarCampo = async ({ id, ...rest }: { id: string | any }) => {
+export const atualizarCampo = async ({ id, ...rest }: { id: any }) => {
     const { data } = await api.post('campoFicha/' + id, { ...rest })
     return data
 }
 
-export const excluirCampo = async (id: string | any) => {
+export const excluirCampo = async (id: any) => {
     const { data } = await api.delete('campoFicha/' + id)
     return data
 }

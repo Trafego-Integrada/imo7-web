@@ -7,7 +7,7 @@ export const listarFilaEnvio = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarFilaEnvio = async (id: string | any) => {
+export const buscarFilaEnvio = async (id: any) => {
     const { data } = await api.get('filaEnvio/' + id)
     return data
 }
@@ -21,13 +21,13 @@ export const atualizarFilaEnvio = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('filaEnvio/' + id, { ...rest })
     return data
 }
 
-export const excluirFilaEnvio = async (id: string | any) => {
+export const excluirFilaEnvio = async (id: any) => {
     const { data } = await api.delete('filaEnvio/' + id)
     return data
 }

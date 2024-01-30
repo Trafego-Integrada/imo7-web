@@ -7,7 +7,7 @@ export const listarCategoriaCampoFichas = async ({ queryKey }: any) => {
     return data
 }
 
-export const buscarCategoriaCampoFicha = async (id: string | any) => {
+export const buscarCategoriaCampoFicha = async (id: any) => {
     const { data } = await api.get('categoriaCampoFicha/' + id)
     return data
 }
@@ -21,7 +21,7 @@ export const atualizarCategoriaCampoFicha = async ({
     id,
     ...rest
 }: {
-    id: string | any
+    id: any
 }) => {
     const { data } = await api.post('categoriaCampoFicha/' + id, {
         ...rest,
@@ -29,7 +29,7 @@ export const atualizarCategoriaCampoFicha = async ({
     return data
 }
 
-export const excluirCategoriaCampoFicha = async (id: string | any) => {
+export const excluirCategoriaCampoFicha = async (id: any) => {
     const { data } = await api.delete('categoriaCampoFicha/' + id)
     return data
 }

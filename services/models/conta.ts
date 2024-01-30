@@ -5,7 +5,7 @@ export const listarContas = async () => {
 
     return data
 }
-export const buscarConta = async (id: string | any) => {
+export const buscarConta = async (id: any) => {
     const { data } = await api.get('conta/' + id)
     return data
 }
@@ -15,12 +15,12 @@ export const cadastrarConta = async (form: any) => {
     return data
 }
 
-export const atualizarConta = async ({ id, ...rest }: { id: string | any }) => {
+export const atualizarConta = async ({ id, ...rest }: { id: any }) => {
     const { data } = await api.post('conta/' + id, { ...rest })
     return data
 }
 
-export const excluirConta = async (id: string | any) => {
+export const excluirConta = async (id: any) => {
     const { data } = await api.post('conta/' + id)
     return data
 }
