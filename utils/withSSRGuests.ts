@@ -2,22 +2,22 @@ import {
     GetServerSideProps,
     GetServerSidePropsContext,
     GetServerSidePropsResult,
-} from "next";
-import { parseCookies } from "nookies";
+} from 'next'
+import { parseCookies } from 'nookies'
 
-export function withSSRGuest<P>(fn: GetServerSideProps<P>) {
+export function withSSRGuest<P>(fn: GetServerSideProps<P | any>) {
     return async (
-        ctx: GetServerSidePropsContext
+        ctx: GetServerSidePropsContext,
     ): Promise<GetServerSidePropsResult<P>> => {
-        const cookies = parseCookies(ctx);
-        if (cookies["imo7.token"]) {
+        const cookies = parseCookies(ctx)
+        if (cookies['imo7.token']) {
             return {
                 redirect: {
-                    destination: "/",
+                    destination: '/',
                     permanent: false,
                 },
-            };
+            }
         }
-        return await fn(ctx);
-    };
+        return await fn(ctx)
+    }
 }

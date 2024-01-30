@@ -1,4 +1,4 @@
-import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
+import { LayoutPainel } from '@/components/Layouts/LayoutPainel'
 import {
     Box,
     Button,
@@ -9,27 +9,26 @@ import {
     GridItem,
     Heading,
     useToast,
-} from "@chakra-ui/react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "contexts/AuthContext";
-import { useMutation } from "react-query";
-import { atualizarUsuario, buscarUsuario } from "@/services/models/usuario";
-import { FormInput } from "@/components/Form/FormInput";
-import { useAuth } from "@/hooks/useAuth";
+} from '@chakra-ui/react'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { useEffect, useState } from 'react'
+import { useMutation } from 'react-query'
+import { atualizarUsuario, buscarUsuario } from '@/services/models/usuario'
+import { FormInput } from '@/components/Form/FormInput'
+import { useAuth } from '@/hooks/useAuth'
 const schema = yup.object().shape({
-    nome: yup.string().required("O CPF é obrigatório"),
-    email: yup.string().required("O CPF é obrigatório"),
+    nome: yup.string().required('O CPF é obrigatório'),
+    email: yup.string().required('O CPF é obrigatório'),
     password: yup.string(),
     confirmPassword: yup
         .string()
-        .oneOf([yup.ref("password"), null], "A senha deve ser a mesma"),
-});
-const Page = () => {
-    const toast = useToast();
-    const { usuario } = useAuth();
+        .oneOf([yup.ref('password'), null], 'A senha deve ser a mesma'),
+})
+const Page = (props: any) => {
+    const toast = useToast()
+    const { usuario }: any = useAuth()
     const {
         register,
         handleSubmit,
@@ -37,36 +36,36 @@ const Page = () => {
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
-    });
+    })
 
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null)
     const buscar = useMutation(buscarUsuario, {
         onSuccess: (data) => {
-            reset({ ...data });
+            reset({ ...data })
         },
-    });
-    const update = useMutation(atualizarUsuario);
-    const onSubmit = async (data) => {
-        console.log(data);
+    })
+    const update = useMutation(atualizarUsuario)
+    const onSubmit = async (data: any) => {
+        //console.log(data)
         try {
-            setError(null);
-            await update.mutateAsync(data);
+            setError(null)
+            await update.mutateAsync(data)
             toast({
-                title: "Dados atualizados",
-                status: "success",
+                title: 'Dados atualizados',
+                status: 'success',
                 containerStyle: {
                     zIndex: 999999,
                 },
-                position: "bottom-right",
-            });
-        } catch (error) {
-            setError(error.message);
+                position: 'bottom-right',
+            })
+        } catch (error: any) {
+            setError(error.message)
         }
-    };
+    }
 
     useEffect(() => {
-        buscar.mutate(usuario.id);
-    }, [usuario]);
+        buscar.mutate(usuario.id)
+    }, [buscar, usuario])
     return (
         <LayoutPainel>
             <Container as="form" onSubmit={handleSubmit(onSubmit)}>
@@ -76,28 +75,28 @@ const Page = () => {
                     <Grid
                         gap={4}
                         gridTemplateColumns={{
-                            base: "repeat(1,1fr)",
-                            lg: "repeat(2,1fr)",
+                            base: 'repeat(1,1fr)',
+                            lg: 'repeat(2,1fr)',
                         }}
                     >
                         <GridItem>
                             <FormInput
                                 label="Nome"
-                                {...register("nome")}
+                                {...register('nome')}
                                 error={errors.nome?.message}
                             />
                         </GridItem>
                         <GridItem>
                             <FormInput
                                 label="E-mail"
-                                {...register("email")}
+                                {...register('email')}
                                 error={errors.email?.message}
                             />
                         </GridItem>
                         <GridItem>
                             <FormInput
                                 label="CPF"
-                                {...register("documento")}
+                                {...register('documento')}
                                 error={errors.documento?.message}
                                 disabled
                             />
@@ -105,21 +104,21 @@ const Page = () => {
                         <GridItem>
                             <FormInput
                                 label="Telefone"
-                                {...register("telefone")}
+                                {...register('telefone')}
                                 error={errors.telefone?.message}
                             />
                         </GridItem>
                         <GridItem>
                             <FormInput
                                 label="Celular"
-                                {...register("celular")}
+                                {...register('celular')}
                                 error={errors.celular?.message}
                             />
                         </GridItem>
                         <GridItem>
                             <FormInput
                                 label="Profissão"
-                                {...register("profissao")}
+                                {...register('profissao')}
                                 error={errors.profissao?.message}
                             />
                         </GridItem>
@@ -131,21 +130,21 @@ const Page = () => {
                     <Grid
                         gap={4}
                         gridTemplateColumns={{
-                            base: "repeat(1,1fr)",
-                            lg: "repeat(2,1fr)",
+                            base: 'repeat(1,1fr)',
+                            lg: 'repeat(2,1fr)',
                         }}
                     >
                         <GridItem>
                             <FormInput
                                 label="Senha"
-                                {...register("password")}
+                                {...register('password')}
                                 error={errors.password?.message}
                             />
                         </GridItem>
                         <GridItem>
                             <FormInput
                                 label="Confirmar Senha"
-                                {...register("confirmPassword")}
+                                {...register('confirmPassword')}
                                 error={errors.confirmPassword?.message}
                             />
                         </GridItem>
@@ -162,6 +161,7 @@ const Page = () => {
                 </Flex>
             </Container>
         </LayoutPainel>
-    );
-};
-export default Page;
+    )
+}
+export default Page
+

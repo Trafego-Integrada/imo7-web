@@ -1,13 +1,13 @@
-import { v4 as uuid } from "uuid";
-import prisma from "@/lib/prisma";
-import { RefreshTokensStore, UsersStore } from "@/types/auth";
+import { v4 as uuid } from 'uuid'
+import prisma from '@/lib/prisma'
+import { RefreshTokensStore, UsersStore } from '@/types/auth'
 
-export const users: UsersStore = new Map();
+export const users: UsersStore = new Map()
 
-export const tokens: RefreshTokensStore = new Map();
+export const tokens: RefreshTokensStore = new Map()
 
-export async function createRefreshToken(id) {
-    const refreshToken = uuid();
+export async function createRefreshToken(id: any) {
+    const refreshToken = uuid()
 
     await prisma.token.create({
         data: {
@@ -18,15 +18,15 @@ export async function createRefreshToken(id) {
                 },
             },
         },
-    });
+    })
 
-    return refreshToken;
+    return refreshToken
 }
 
 export async function checkRefreshTokenIsValid(
     documento: string,
-    imobiliaria,
-    refreshToken: string
+    imobiliaria: any,
+    refreshToken: string,
 ) {
     const storedRefreshTokens = await prisma.token.findMany({
         where: {
@@ -40,16 +40,16 @@ export async function checkRefreshTokenIsValid(
                     },
                 ],
                 imobiliaria:
-                    imobiliaria != "null"
+                    imobiliaria != 'null'
                         ? {
                               url: imobiliaria,
                           }
                         : {},
             },
         },
-    });
+    })
 
-    return storedRefreshTokens.some((token) => token.token === refreshToken);
+    return storedRefreshTokens.some((token) => token.token === refreshToken)
 }
 
 export async function invalidateRefreshToken(refreshToken: string) {
@@ -57,5 +57,5 @@ export async function invalidateRefreshToken(refreshToken: string) {
         where: {
             token: refreshToken,
         },
-    });
+    })
 }

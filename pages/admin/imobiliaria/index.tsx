@@ -1,30 +1,22 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage, InferGetServerSidePropsType } from 'next'
 import {
     Box,
-    Stack,
-    Container,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
     Flex,
     Heading,
-    Avatar,
     Text,
     Grid,
     GridItem,
     Badge,
     Icon,
     Button,
-} from "@chakra-ui/react";
-import { NextChakraLink } from "@/components/NextChakraLink";
-import { FaCopy, FaEye, FaGrinWink, FaPrint } from "react-icons/fa";
-import { IoHelpBuoy } from "react-icons/io5";
-import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
-import { withSSRAuth } from "@/utils/withSSRAuth";
-import { useAuth } from "@/hooks/useAuth";
+} from '@chakra-ui/react'
+import { NextChakraLink } from '@/components/NextChakraLink'
+import { FaCopy, FaEye, FaGrinWink, FaPrint } from 'react-icons/fa'
+import { IoHelpBuoy } from 'react-icons/io5'
+import { LayoutPainel } from '@/components/Layouts/LayoutPainel'
+import { withSSRAuth } from '@/utils/withSSRAuth'
 
-const Dashbord: NextPage = () => {
+const Dashbord: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     return (
         <LayoutPainel>
             <Grid gridTemplateColumns="repeat(3,1fr)" gap={4}>
@@ -68,7 +60,7 @@ const Dashbord: NextPage = () => {
                             textAlign="center"
                         >
                             Utilize o código de barras a seguir para pagar sua
-                            fatura{" "}
+                            fatura{' '}
                         </Text>
                         <Flex
                             mt={2}
@@ -197,16 +189,17 @@ const Dashbord: NextPage = () => {
                 <GridItem bg="white" rounded="2xl"></GridItem>
             </Grid>
         </LayoutPainel>
-    );
-};
+    )
+}
 
-export default Dashbord;
+export default Dashbord
 
 export const getServerSideProps = withSSRAuth(
     async (ctx) => {
         return {
             props: {},
-        };
+        }
     },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);
+    { cargos: ['imobiliaria', 'adm', 'conta'] },
+)
+

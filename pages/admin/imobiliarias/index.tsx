@@ -1,36 +1,33 @@
-import { Button } from "@chakra-ui/button";
-import Icon from "@chakra-ui/icon";
-import { Box, Container, Flex } from "@chakra-ui/layout";
+import { Button } from '@chakra-ui/button'
+import Icon from '@chakra-ui/icon'
+import { Box, Container, Flex } from '@chakra-ui/layout'
 
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
-import { Tooltip } from "@chakra-ui/tooltip";
-import { useRef, useState } from "react";
-import { FaEdit, FaPlus } from "react-icons/fa";
-import { useMutation, useQuery } from "react-query";
-import { ImobiliariaDrawer } from "@/components/Drawers/ImobiliariaDrawer";
-import { Input } from "@/components/Forms/Input";
-import { Select } from "@/components/Forms/Select";
-import { Header } from "@/components/Header";
-import { listarContas } from "@/services/models/conta";
-import { getAll as getAllImobiliarias } from "@/services/models/imobiliaria";
-import { withSSRAuth } from "@/utils/withSSRAuth";
-import { Layout } from "@/components/Layout/layout";
-import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
-import { FormInput } from "@/components/Form/FormInput";
-import { FiSearch, FiTrash } from "react-icons/fi";
-import { usePagination } from "@ajna/pagination";
-import { imo7ApiService } from "@/services/apiServiceUsage";
-import { Checkbox, useToast } from "@chakra-ui/react";
-import { queryClient } from "@/services/queryClient";
+import { Tooltip } from '@chakra-ui/tooltip'
+import { useRef, useState } from 'react'
+import { FaEdit, FaPlus } from 'react-icons/fa'
+import { useMutation, useQuery } from 'react-query'
+import { ImobiliariaDrawer } from '@/components/Drawers/ImobiliariaDrawer'
+import { Header } from '@/components/Header'
+import { getAll as getAllImobiliarias } from '@/services/models/imobiliaria'
+import { withSSRAuth } from '@/utils/withSSRAuth'
+import { Layout } from '@/components/Layout/layout'
+import { TabelaPadrao } from '@/components/Tabelas/TabelaPadrao'
+import { FormInput } from '@/components/Form/FormInput'
+import { FiSearch, FiTrash } from 'react-icons/fi'
+import { usePagination } from '@ajna/pagination'
+import { imo7ApiService } from '@/services/apiServiceUsage'
+import { Checkbox, useToast } from '@chakra-ui/react'
+import { queryClient } from '@/services/queryClient'
+import { InferGetServerSidePropsType } from "next";
 
-const Imobiliarias = () => {
-    const toast = useToast();
-    const imobiliariaDrawer = useRef();
+const Imobiliarias = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const toast = useToast()
+    const imobiliariaDrawer: any = useRef()
     const [filter, setFilter] = useState({
-        query: "",
+        query: '',
         contaId: null,
-    });
-    const [total, setTotal] = useState();
+    })
+    const [total, setTotal] = useState()
     const {
         currentPage,
         setCurrentPage,
@@ -45,57 +42,57 @@ const Imobiliarias = () => {
             outer: 1,
         },
         initialState: { currentPage: 1, pageSize: 15 },
-    });
+    })
     const {
         data: imobiliarias,
         isFetching,
         isLoading,
     } = useQuery(
         [
-            "imobiliarias",
+            'imobiliarias',
             {
                 ...filter,
                 linhas: pageSize,
                 pagina: currentPage,
             },
         ],
-        getAllImobiliarias
-    );
-    const excluir = useMutation(imo7ApiService("imobiliaria").delete);
+        getAllImobiliarias,
+    )
+    const excluir = useMutation(imo7ApiService('imobiliaria').delete)
 
-    const onDelete = async (id) => {
+    const onDelete = async (id: any) => {
         await excluir.mutateAsync(id, {
             onSuccess: () => {
                 toast({
-                    title: "Imobiliária excluida",
+                    title: 'Imobiliária excluida',
                     duration: 3000,
-                    status: "success",
-                });
-                queryClient.invalidateQueries(["imobiliarias"]);
+                    status: 'success',
+                })
+                queryClient.invalidateQueries(['imobiliarias'])
             },
-        });
-    };
-    const [selecionados, setSelecionados] = useState([]);
+        })
+    }
+    const [selecionados, setSelecionados] = useState([])
     // console.log(usuario);
-    const deleteMany = useMutation(imo7ApiService("imobiliaria").deleteMany, {
+    const deleteMany = useMutation(imo7ApiService('imobiliaria').deleteMany, {
         onSuccess: () => {
-            queryClient.invalidateQueries("imobiliarias");
+            queryClient.invalidateQueries('imobiliarias')
             toast({
-                title: "Sucesso",
-                description: "Imobiliárias excluidas com sucesso com sucesso",
-                status: "success",
+                title: 'Sucesso',
+                description: 'Imobiliárias excluidas com sucesso com sucesso',
+                status: 'success',
                 duration: 3000,
-            });
+            })
         },
-    });
+    })
 
     const onDeleteMany = () => {
         deleteMany.mutate(
-            JSON.stringify(selecionados.map((i) => i.toString()))
-        );
-        setSelecionados([]);
-        queryClient.invalidateQueries("imoveis");
-    };
+            JSON.stringify(selecionados.map((i: any) => i.toString())),
+        )
+        setSelecionados([])
+        queryClient.invalidateQueries('imoveis')
+    }
     return (
         <Layout>
             <Header title="Imobiliarias" isFetching={isFetching}></Header>
@@ -112,21 +109,6 @@ const Imobiliarias = () => {
                                 setFilter({ ...filter, query: e.target.value })
                             }
                         />
-                        {/* <Select
-                            placeholder="De qual conta é?"
-                            value={filter.contaId}
-                            onChange={(e) =>
-                                setFilter({
-                                    ...filter,
-                                    contaId: e.target.value,
-                                })
-                            }
-                        >
-                            {contas &&
-                                contas.map((item, key) => (
-                                    <option value={item.id}>{item.nome}</option>
-                                ))}
-                        </Select> */}
                     </Flex>
                     <Button
                         size="sm"
@@ -145,18 +127,18 @@ const Imobiliarias = () => {
                                 value: (
                                     <Checkbox
                                         isChecked={selecionados.includes(i.id)}
-                                        onChange={(e) => {
+                                        onChange={(e: any) => {
                                             if (e.target.checked) {
                                                 setSelecionados([
                                                     ...selecionados,
                                                     i.id,
-                                                ]);
+                                                ])
                                             } else {
                                                 setSelecionados(
                                                     selecionados.filter(
-                                                        (i) => i !== i.id
-                                                    )
-                                                );
+                                                        (i) => i !== i.id,
+                                                    ),
+                                                )
                                             }
                                         }}
                                     />
@@ -172,7 +154,7 @@ const Imobiliarias = () => {
                                                 size="xs"
                                                 onClick={() =>
                                                     imobiliariaDrawer.current.onOpen(
-                                                        i.id
+                                                        i.id,
                                                     )
                                                 }
                                             >
@@ -204,12 +186,12 @@ const Imobiliarias = () => {
                                     <Checkbox
                                         isChecked={
                                             imobiliarias
-                                                ?.map((item) => item.id)
+                                                ?.map((item: any) => item.id)
                                                 .filter(
-                                                    (item) =>
+                                                    (item: any) =>
                                                         !selecionados.includes(
-                                                            item
-                                                        )
+                                                            item,
+                                                        ),
                                                 ).length == 0
                                                 ? true
                                                 : false
@@ -218,22 +200,24 @@ const Imobiliarias = () => {
                                             setSelecionados(
                                                 e.target.checked
                                                     ? JSON.parse(e.target.value)
-                                                    : []
+                                                    : [],
                                             )
                                         }
                                         value={JSON.stringify(
-                                            imobiliarias?.map((item) => item.id)
+                                            imobiliarias?.map(
+                                                (item: any) => item.id,
+                                            ),
                                         )}
                                     />
                                 ),
                                 w: 4,
                             },
-                            { value: "Ações" },
-                            { value: "ID" },
-                            { value: "Conta" },
-                            { value: "Razão Social" },
-                            { value: "Código" },
-                            { value: "CNPJ" },
+                            { value: 'Ações' },
+                            { value: 'ID' },
+                            { value: 'Conta' },
+                            { value: 'Razão Social' },
+                            { value: 'Código' },
+                            { value: 'CNPJ' },
                         ]}
                         total={total}
                         isLoading={isLoading}
@@ -266,15 +250,15 @@ const Imobiliarias = () => {
             </Container>
             <ImobiliariaDrawer ref={imobiliariaDrawer} />
         </Layout>
-    );
-};
+    )
+}
 
-export default Imobiliarias;
+export default Imobiliarias
 export const getServerSideProps = withSSRAuth(
     async (ctx) => {
         return {
             props: {},
-        };
+        }
     },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);
+    { cargos: ['imobiliaria', 'adm', 'conta'] },
+)
