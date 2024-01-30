@@ -1,12 +1,12 @@
 type User = {
-    permissoes: string[];
-    cargos: string[];
-};
+    permissoes: string[]
+    cargos: string[]
+}
 type ValidadeUserPermissions = {
-    user: User;
-    permissoes?: string[];
-    cargos?: string[];
-};
+    user: User
+    permissoes?: string[]
+    cargos?: string[]
+}
 export function validadeUserPermissions({
     user,
     permissoes,
@@ -14,19 +14,19 @@ export function validadeUserPermissions({
 }: ValidadeUserPermissions) {
     if (permissoes && permissoes?.length > 0) {
         const hasAllPermissions = permissoes?.every((permissao) => {
-            return user.permissoes.includes(permissao);
-        });
+            return user.permissoes.includes(permissao)
+        })
         if (!hasAllPermissions) {
-            return false;
+            return false
         }
     }
     if (cargos && cargos?.length > 0) {
         const hasAllRoles = cargos?.some((cargo) => {
-            return user.cargos.includes(cargo);
-        });
+            return user.cargos.includes(cargo)
+        })
         if (!hasAllRoles) {
-            return false;
+            return false
         }
     }
-    return true;
+    return true
 }
