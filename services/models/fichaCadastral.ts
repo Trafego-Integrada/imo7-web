@@ -25,8 +25,6 @@ export const atualizarFicha = async ({ id, ...rest }: { id: any }) => {
 export const atualizarAnexosFicha = async ({
     id,
     formData
-}: {
-    id: any
 }) => {
     const { data } = await api.post(
         'fichaCadastral/' + id + '/anexos',
