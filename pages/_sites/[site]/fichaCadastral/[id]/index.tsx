@@ -219,7 +219,7 @@ function Previews(props: any) {
                 position: 'top-right',
             })
             props.buscar()
-            window.location.reload()
+            //window.location.reload()
         },
     })
     const customBase64Uploader = async (event: any) => {
@@ -257,7 +257,7 @@ function Previews(props: any) {
                                 status: 'success',
                             })
                             event.options.clear()
-                            window.location.reload()
+                            //window.location.reload()
                         },
                     },
                 )
@@ -292,7 +292,7 @@ function Previews(props: any) {
                         })
                         props.buscar()
                         event.options.clear()
-                        window.location.reload()
+                        //window.location.reload()
                     },
                 },
             )
@@ -492,10 +492,10 @@ function Previews(props: any) {
 }
 
 const FichaCadastral = ({
-    ficha,
-    campos,
-    modelo,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+        ficha,
+        campos,
+        modelo,
+    }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const toast = useToast()
     const {
         control,
