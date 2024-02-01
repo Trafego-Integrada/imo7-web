@@ -1,12 +1,19 @@
 import { FormInput } from "@/components/Form/FormInput";
-import { Layout } from "@/components/Layout/layout";
-import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
+import { FormSelect } from "@/components/Form/FormSelect";
+import { Head } from "@/components/Head";
+import {
+    convertToBase64,
+    formatoValor,
+    getFileExtension,
+    verificarExtensaoImagem,
+} from "@/helpers/helpers";
+import { buscarEndereco } from "@/lib/buscarEndereco";
 import prisma from "@/lib/prisma";
 import {
     atualizarAnexosFicha,
-    excluirAnexoFicha,
     atualizarFicha,
     buscarFicha,
+    excluirAnexoFicha,
 } from "@/services/models/public/fichaCadastral";
 import {
     Alert,
@@ -18,7 +25,6 @@ import {
     Checkbox,
     Container,
     Flex,
-    FormLabel,
     Grid,
     GridItem,
     Heading,
@@ -34,9 +40,6 @@ import {
     PopoverHeader,
     PopoverTrigger,
     Progress,
-    Radio,
-    RadioGroup,
-    Stack,
     Step,
     StepDescription,
     StepIcon,
@@ -55,39 +58,26 @@ import {
     useSteps,
     useToast,
 } from "@chakra-ui/react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Link from "next/link";
+import { GetServerSideProps } from "next";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     FiAlertTriangle,
     FiDelete,
-    FiEye,
     FiFile,
     FiPlus,
     FiTrash,
     FiTrash2,
     FiUpload,
 } from "react-icons/fi";
-import { useMutation } from "react-query";
-import * as yup from "yup";
-import "react-quill/dist/quill.snow.css";
-import { buscarEndereco } from "@/lib/buscarEndereco";
-import { GetServerSideProps } from "next";
-import { FormSelect } from "@/components/Form/FormSelect";
-import {
-    convertToBase64,
-    formatoValor,
-    getFileExtension,
-    verificarExtensaoImagem,
-} from "@/helpers/helpers";
-import { Head } from "@/components/Head";
 import { MdClose } from "react-icons/md";
+import { useMutation } from "react-query";
+import "react-quill/dist/quill.snow.css";
 
+import { ModalPreview } from "@/components/Modals/Preview";
 import { FileUpload } from "primereact/fileupload";
 import { BiSave } from "react-icons/bi";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import { ModalPreview } from "@/components/Modals/Preview";
 function validateCPF(value) {
     // Remove caracteres não numéricos
     const cleanedCPF = value.replace(/\D/g, "");
@@ -303,6 +293,7 @@ function Previews(props) {
                                 position: "top-right",
                                 status: "success",
                             });
+                            props.buscar();
                             event.options.clear();
                         },
                     }
@@ -336,13 +327,14 @@ function Previews(props) {
                             title: "Upload realizado com sucesso",
                             position: "top-right",
                         });
-                        props.buscar();
                         event.options.clear();
                     },
                 }
             );
         }
-        console.log(event);
+        setTimeout(() => {
+            props.buscar();
+        }, 1000);
     };
     return (
         <Flex
