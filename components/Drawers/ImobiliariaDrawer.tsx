@@ -1,4 +1,15 @@
+import { TabelaUsuarios } from "@/components/Tabelas/Usuarios";
+import { useAuth } from "@/hooks/useAuth";
+import { listarContas } from "@/services/models/conta";
+import { show, store, update } from "@/services/models/imobiliaria";
+import { queryClient } from "@/services/queryClient";
 import {
+    Box,
+    Button,
+    Flex,
+    Grid,
+    GridItem,
+    Heading,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -6,37 +17,22 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    Flex,
-    Grid,
-    GridItem,
-    Heading,
-    Text,
-    useDisclosure,
-    Button,
     Spinner,
-    toast,
-    useToast,
     Tab,
     TabList,
     TabPanel,
     TabPanels,
     Tabs,
-    Box,
+    useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
-import InputMask from "react-input-mask";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
-import { show, store, update } from "@/services/models/imobiliaria";
-import { Input } from "@/components/Forms/Input";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import { useAuth } from "@/hooks/useAuth";
-import { getAll as getAllContas, listarContas } from "@/services/models/conta";
-import { Select } from "@/components/Forms/Select";
-import { TabelaUsuarios } from "@/components/Tabelas/Usuarios";
-import { queryClient } from "@/services/queryClient";
+import { forwardRef, useImperativeHandle } from "react";
+import { useForm } from "react-hook-form";
+import InputMask from "react-input-mask";
+import { useMutation, useQuery } from "react-query";
+import * as yup from "yup";
 import { FormInput } from "../Form/FormInput";
 import { FormSelect } from "../Form/FormSelect";
 
@@ -101,10 +97,15 @@ const DrawerBase = ({}, ref) => {
 
     const onSubmit = async (data) => {
         if (data.id) {
-            const formData = new FormData();
-            Object.entries(data).map((i) => formData.append(i[0], i[1]));
+            // const formData = new FormData();
+            // Object.entries(data).map((i) => formData.append(i[0], i[1]));
             await atualizar.mutateAsync(
-                { id: data.id, data: formData },
+                {
+                    id: data.id,
+                    data: {
+                        ...data,
+                    },
+                },
                 {
                     onSuccess: () => {
                         reset();
@@ -138,10 +139,8 @@ const DrawerBase = ({}, ref) => {
         onOpen: (id = null) => {
             reset({});
             if (id) {
-                reset({});
                 showData.mutate(id);
             } else {
-                reset({});
                 onOpen();
             }
         },

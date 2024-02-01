@@ -1,15 +1,11 @@
 import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
-import { multiparty } from "@/middleware/multipart";
-import { statSync } from "fs";
+import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 import moment from "moment";
 import nextConnect from "next-connect";
-import * as os from "oci-objectstorage";
 import slug from "slug";
-import fs from "fs";
-import { Upload } from "@aws-sdk/lib-storage";
-import { S3Client } from "@aws-sdk/client-s3";
 const handle = nextConnect();
 
 export const config = {
@@ -22,6 +18,7 @@ export const config = {
 handle.use(cors);
 handle.use(checkAuth);
 // handle.use(multiparty);
+
 handle.get(async (req, res) => {
     const { id } = req.query;
     const imobiliarias = await prisma.imobiliaria.findUnique({
@@ -71,6 +68,7 @@ handle.post(async (req, res) => {
             logo,
             bg,
         } = req.body;
+
         let limparLogo = {};
         let limparBg = {};
         if (removerLogo) {
