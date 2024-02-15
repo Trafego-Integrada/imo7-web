@@ -171,6 +171,7 @@ model Imobiliaria {
     telefone     String?
     cep          String?
     endereco     String?
+    complemento  String?
     numero       String?
     bairro       String?
     cidade       String?

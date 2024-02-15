@@ -1,22 +1,16 @@
 import nextConnect from "next-connect";
-import { multiparty } from "@/middleware/multipart";
 
-import slug from "slug";
-import common, {
-    ConfigFileAuthenticationDetailsProvider,
-    Region,
-    SimpleAuthenticationDetailsProvider,
-} from "oci-common";
-import * as os from "oci-objectstorage";
-import { createReadStream, statSync } from "fs";
-import st from "stream";
-import moment from "moment";
 import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
-import fs from "fs";
+import fs, { statSync } from "fs";
+import moment from "moment";
+import * as os from "oci-objectstorage";
+import slug from "slug";
+import st from "stream";
 
-import { Upload } from "@aws-sdk/lib-storage";
+import { cors } from "@/middleware/cors";
 import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 export const config = {
     api: {
         bodyParser: {
@@ -25,7 +19,6 @@ export const config = {
     },
 };
 const handle = nextConnect();
-import { cors } from "@/middleware/cors";
 handle.use(cors);
 handle.use(checkAuth);
 // handle.use(multiparty);

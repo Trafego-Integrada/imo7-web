@@ -1,8 +1,9 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
-const handle = nextConnect();
 import { cors } from "@/middleware/cors";
+import bcrypt from "bcryptjs";
+import nextConnect from "next-connect";
+const handle = nextConnect();
 
 handle.use(cors);
 handle.use(checkAuth);
@@ -44,6 +45,7 @@ handle.post(async (req, res) => {
         cidade,
         email,
         endereco,
+        complemento,
         estado,
         ie,
         nomeFantasia,
@@ -53,6 +55,8 @@ handle.post(async (req, res) => {
         numero,
         contaId,
         usuario,
+        senha,
+        confirmarSenha,
     } = req.body;
     const data = await prisma.imobiliaria.create({
         data: {
@@ -64,6 +68,7 @@ handle.post(async (req, res) => {
             cidade,
             email,
             endereco,
+            complemento,
             estado,
             ie,
             nomeFantasia,
@@ -71,7 +76,7 @@ handle.post(async (req, res) => {
             telefone,
             site,
             numero,
-            contaId: Number(contaId),
+            contaId: contaId ? Number(contaId) : 2,
         },
     });
 
@@ -105,6 +110,7 @@ handle.post(async (req, res) => {
                 nome: usuario.nome,
                 documento: usuario.documento,
                 email: usuario.email,
+                senhaHash: senha ? bcrypt.hashSync(senha, 10) : "",
                 imobiliaria: {
                     connect: {
                         id: data.id,
@@ -114,6 +120,41 @@ handle.post(async (req, res) => {
                     connect: {
                         codigo: "imobiliaria",
                     },
+                },
+                modulos: {
+                    connect: [
+                        {
+                            codigo: "imobiliaria.processos",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.modelos",
+                        },
+                        {
+                            codigo: "imobiliaria.cadastros",
+                        },
+                        {
+                            codigo: "imobiliaria.configuracoes",
+                        },
+                    ],
+                },
+                permissoes: {
+                    connect: [
+                        {
+                            codigo: "imobiliaria.processos.visualizar",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.cadastrar",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.editar",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.excluir",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.visualizarTodos",
+                        },
+                    ],
                 },
             },
         });
@@ -128,10 +169,46 @@ handle.post(async (req, res) => {
                         id: data.id,
                     },
                 },
+                senhaHash: senha ? bcrypt.hashSync(senha, 10) : "",
                 cargos: {
                     connect: {
                         codigo: "imobiliaria",
                     },
+                },
+                modulos: {
+                    connect: [
+                        {
+                            codigo: "imobiliaria.processos",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.modelos",
+                        },
+                        {
+                            codigo: "imobiliaria.cadastros",
+                        },
+                        {
+                            codigo: "imobiliaria.configuracoes",
+                        },
+                    ],
+                },
+                permissoes: {
+                    connect: [
+                        {
+                            codigo: "imobiliaria.processos.visualizar",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.cadastrar",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.editar",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.excluir",
+                        },
+                        {
+                            codigo: "imobiliaria.processos.visualizarTodos",
+                        },
+                    ],
                 },
             },
         });

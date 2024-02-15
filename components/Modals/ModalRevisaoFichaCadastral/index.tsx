@@ -1,15 +1,16 @@
-import { FormInput } from "@/components/Form/FormInput";
-import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormTextarea } from "@/components/Form/FormTextarea";
+import { Historicos } from "@/components/Pages/Historicos";
+import { verificarExtensaoImagem } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
+import { api } from "@/services/apiClient";
+import { imo7ApiService } from "@/services/apiServiceUsage";
 import { listarCategoriaCampoFichas } from "@/services/models/categoriaCampoFicha";
 import {
     atualizarFicha,
     buscarFicha,
     cadastrarFicha,
 } from "@/services/models/fichaCadastral";
-import { listarFichas } from "@/services/models/modeloFicha";
 import { cadastrarValidacao } from "@/services/models/validacaofacial";
 import { queryClient } from "@/services/queryClient";
 import {
@@ -23,10 +24,6 @@ import {
     Icon,
     IconButton,
     Image,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuList,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -56,12 +53,11 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import moment from "moment";
 import Link from "next/link";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
     FiAlertCircle,
-    FiCheck,
     FiCheckCircle,
     FiDownload,
     FiEye,
@@ -70,18 +66,10 @@ import {
 } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
+import { Documentos } from "../Contrato/Documentos";
+import { ConsultasNetrin } from "../ModalProcesso/ConsultaNetrin";
 import { ModalPreview } from "../Preview";
 import { AnaliseCampo } from "./AnaliseCampo";
-import { Historicos } from "@/components/Pages/Historicos";
-import { Documentos } from "../Contrato/Documentos";
-import { imo7ApiService } from "@/services/apiServiceUsage";
-import { ConsultasNetrin } from "../ModalProcesso/ConsultaNetrin";
-import { AiOutlineFileSearch } from "react-icons/ai";
-import { api } from "@/services/apiClient";
-import {
-    removerCaracteresEspeciais,
-    verificarExtensaoImagem,
-} from "@/helpers/helpers";
 const schema = yup.object({
     status: yup.string().required("Status é obrigatório"),
     motivoReprovacaoId: yup.string().when("status", {

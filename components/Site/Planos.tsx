@@ -6,8 +6,7 @@ import {
     Grid,
     GridItem,
     Heading,
-    Icon,
-    Image,
+    Link,
     List,
     ListIcon,
     ListItem,
@@ -19,8 +18,7 @@ import {
     Thead,
     Tr,
 } from "@chakra-ui/react";
-import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
-import { FiCheck, FiCheckCircle, FiCheckSquare } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
 import { IoIosArrowForward } from "react-icons/io";
 
 export const Planos = () => {
@@ -74,6 +72,7 @@ export const Planos = () => {
             </Heading>
 
             <Grid
+                my={16}
                 gridTemplateColumns={{
                     base: "repeat(1,1fr)",
                     md: "repeat(2,1fr)",
@@ -121,9 +120,16 @@ export const Planos = () => {
                                     </ListItem>
                                 ))}
                             </List>
-                            {/* <Button rightIcon={<IoIosArrowForward />}>
-                                Começar com o Plano {i.plano}
-                            </Button> */}
+                            <Button
+                                mt={12}
+                                size="xs"
+                                rightIcon={<IoIosArrowForward />}
+                                colorScheme="whatsapp"
+                                as={Link}
+                                href="/cadastro"
+                            >
+                                Testar Grátis o Plano {i.plano}
+                            </Button>
                         </Flex>
                     </GridItem>
                 ))}

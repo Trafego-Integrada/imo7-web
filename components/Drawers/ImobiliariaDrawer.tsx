@@ -79,7 +79,7 @@ const DrawerBase = ({}, ref) => {
         {
             onSuccess: (data) => {
                 reset({
-                    ...watch,
+                    ...watch(),
                     endereco: data.logradouro,
                     bairro: data.bairro,
                     estado: data.uf,
@@ -303,6 +303,16 @@ const DrawerBase = ({}, ref) => {
                                                 label="Número"
                                                 {...register("numero")}
                                                 error={errors.numero?.message}
+                                            />
+                                        </GridItem>
+                                        <GridItem>
+                                            <FormInput
+                                                size="sm"
+                                                label="Complemento"
+                                                {...register("complemento")}
+                                                error={
+                                                    errors.complemento?.message
+                                                }
                                             />
                                         </GridItem>
                                         <GridItem>

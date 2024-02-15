@@ -1,18 +1,11 @@
 import { Excluir } from "@/components/AlertDialogs/Excluir";
-import { FormDateRange } from "@/components/Form/FormDateRange";
 import { FormInput } from "@/components/Form/FormInput";
-import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
-import { Layout } from "@/components/Layout/layout";
 import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
 import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFichaCadastral";
 import { ModalValidar } from "@/components/Modals/ModalValidar";
 
-import {
-    arrayStatusFicha,
-    formatoData,
-    statusFicha,
-    tipoFicha,
-} from "@/helpers/helpers";
+import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
+import { formatoData, statusFicha, tipoFicha } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
 import {
     excluirFicha,
@@ -21,40 +14,29 @@ import {
 } from "@/services/models/fichaCadastral";
 import { listarUsuarios } from "@/services/models/usuario";
 import { queryClient } from "@/services/queryClient";
+import { usePagination } from "@ajna/pagination";
 import {
-    Avatar,
     Box,
     Button,
     Checkbox,
     Flex,
-    Grid,
-    GridItem,
-    Heading,
     Icon,
     IconButton,
     Menu,
     MenuButton,
-    MenuIcon,
     MenuItem,
     MenuList,
     Progress,
-    Table,
-    TableContainer,
-    Tbody,
-    Td,
     Text,
-    Th,
-    Thead,
     Tooltip,
-    Tr,
     useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { CgMoreVerticalAlt } from "react-icons/cg";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import {
-    FiCheck,
     FiDownload,
     FiEdit,
     FiEye,
@@ -62,21 +44,15 @@ import {
     FiPlus,
     FiTrash,
 } from "react-icons/fi";
-import { MdOutlineVerifiedUser, MdAccessibilityNew } from "react-icons/md";
+import { MdOutlineVerifiedUser } from "react-icons/md";
 import { exportToExcel } from "react-json-to-excel";
 import { useMutation, useQuery } from "react-query";
-import { CiCircleMore } from "react-icons/ci";
-import { RiMore2Line } from "react-icons/ri";
-import { CgMoreVerticalAlt } from "react-icons/cg";
-import { withSSRAuth } from "@/utils/withSSRAuth";
-import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
-import { usePagination } from "@ajna/pagination";
 const filtroPadrao = {
     query: "",
     identificacao: "",
     createdAt: [null, null],
     updatedAt: [null, null],
-    status: ["aguardando"],
+    status: [],
     responsaveis: [],
 };
 export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {

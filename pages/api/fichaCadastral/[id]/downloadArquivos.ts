@@ -1,9 +1,9 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
+import nextConnect from "next-connect";
 
 import { cors } from "@/middleware/cors";
-import axios from "axios";
 import * as AdmZip from "adm-zip";
+import axios from "axios";
 import path, { parse } from "path";
 
 const handler = nextConnect();
@@ -17,7 +17,11 @@ handler.get(async (req, res) => {
             where: {
                 id,
             },
+            include: {
+                Anexo: true,
+            },
         });
+
         const data = await prisma.fichaCadastralPreenchimento.findMany({
             where: {
                 fichaCadastralId: id,
@@ -48,7 +52,24 @@ handler.get(async (req, res) => {
         }
 
         const zip = new AdmZip();
+        if (ficha?.Anexo) {
+            for await (const anexo of ficha.Anexo) {
+                console.log();
 
+                const response = await axios.get(anexo.anexo, {
+                    responseType: "arraybuffer",
+                });
+
+                const fileName = path.basename(anexo.anexo);
+                console.log("nome", fileName);
+                if (response.status === 200) {
+                    zip.addFile(
+                        `Arquvos da Ficha ${ficha?.nome}/anexos/${fileName}`,
+                        Buffer.from(response.data)
+                    );
+                }
+            }
+        }
         for (let i = 0; i < fileUrls.length; i++) {
             const response = await axios.get(fileUrls[i], {
                 responseType: "arraybuffer",

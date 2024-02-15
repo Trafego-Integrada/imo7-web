@@ -1,10 +1,10 @@
-import { Box, Button, Grid, GridItem, useDisclosure } from "@chakra-ui/react";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormSelect } from "@/components/Form/FormSelect";
+import { listarUsuarios } from "@/services/models/usuario";
+import { Box, Button, Grid, GridItem } from "@chakra-ui/react";
+import { useQuery } from "react-query";
 import { FormDateRange } from "../Form/FormDateRange";
 import { FormMultiSelect } from "../Form/FormMultiSelect";
-import { listarUsuarios } from "@/services/models/usuario";
-import { useQuery } from "react-query";
 
 export const FiltroTarefas = ({ setFiltro, filtro }) => {
     const { data: responsaveis } = useQuery(

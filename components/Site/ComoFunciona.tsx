@@ -6,11 +6,10 @@ import {
     Heading,
     Icon,
     Image,
-    Link,
     Text,
 } from "@chakra-ui/react";
-import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
-import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
+import { FaWhatsappSquare } from "react-icons/fa";
+import { FiCheckCircle } from "react-icons/fi";
 
 export const ComoFunciona = ({ modal }) => {
     return (
@@ -28,7 +27,7 @@ export const ComoFunciona = ({ modal }) => {
                         Quantas <strong>oportunidades</strong> de venda e
                         locação já não foram perdidas pela falta de um
                         atendimento <strong>rápido</strong> e de informações
-                        <strong>facilitadas</strong> para o cliente?
+                        <strong> facilitadas</strong> para o cliente?
                     </Text>
                     <Text>
                         Com apenas um link você resolve tudo! Fica menos

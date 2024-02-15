@@ -1,19 +1,17 @@
-import moment from "moment";
-import nextConnect from "next-connect";
-import prisma from "@/lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
-import { checkAuth } from "@/middleware/checkAuth";
-import { apiNetrinService } from "@/services/apiNetrin";
-import { cors } from "@/middleware/cors";
 import { removerCaracteresEspeciais } from "@/helpers/helpers";
+import prisma from "@/lib/prisma";
+import { checkAuth } from "@/middleware/checkAuth";
+import { cors } from "@/middleware/cors";
+import { apiNetrinService } from "@/services/apiNetrin";
 import { Prisma } from "@prisma/client";
+import moment from "moment";
+import { NextApiRequest, NextApiResponse } from "next";
+import nextConnect from "next-connect";
 import puppeteer from "puppeteer";
 import slug from "slug";
-import * as os from "oci-objectstorage";
-import { createReadStream, statSync } from "fs";
 
-import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
 handle.use(cors);
 handle.use(checkAuth);
@@ -117,6 +115,45 @@ handle.post(async (req, res) => {
                     "govbr-cpf": "30156844850",
                 };
             }
+        } else if (tipoConsulta == "receita-federal-cnd") {
+            requisicaoBody = {
+                s: "receita-federal-cnd",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta == "sefaz-cnd") {
+            requisicaoBody = {
+                s: "sefaz-cnd",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+                uf: requisicao.uf,
+            };
+        } else if (tipoConsulta == "cnd-trabalhista") {
+            requisicaoBody = {
+                s: "sefaz-cnd",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta == "cnd-trabalhista-mte") {
+            requisicaoBody = {
+                s: "sefaz-cnd",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+                "govbr-senha": "trafego10",
+                "govbr-cpf": "30156844850",
+            };
+        } else if (tipoConsulta == "receita-federal-cnpj") {
+            requisicaoBody = {
+                s: "receita-federal-cnpj",
+                cnpj: removerCaracteresEspeciais(requisicao.cnpj),
+            };
+        } else if (tipoConsulta == "receita-federal-cnpj-qsa") {
+            requisicaoBody = {
+                s: "receita-federal-cnpj-qsa",
+                cnpj: removerCaracteresEspeciais(requisicao.cnpj),
+            };
+        } else if (tipoConsulta == "receita-federal-cpf") {
+            requisicaoBody = {
+                s: "receita-federal-cpf",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+                "data-nascimento": requisicao.dataNascimento,
+            };
         }
 
         // Consulta Netrin
@@ -248,7 +285,7 @@ handle.post(async (req, res) => {
                                 ? `Consulta Protestos Pessoa Física - CPF: ${data.requisicao?.cpf}`
                                 : data.tipoConsulta == "protestos_pj"
                                 ? `Consulta Protestos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
-                                : "Consultas"
+                                : `Consultas: ${data.tipoConsulta}`
                         }`,
                         anexo:
                             process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,

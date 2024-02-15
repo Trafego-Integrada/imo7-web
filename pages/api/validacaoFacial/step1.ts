@@ -1,19 +1,18 @@
-import { NextApiResponse } from "next";
-import { NextApiRequestWithUser } from "@/types/auth";
-import nextConnect from "next-connect";
-import { cors } from "@/middleware/cors";
-import axios from "axios";
 import prisma from "@/lib/prisma";
+import { cors } from "@/middleware/cors";
+import { NextApiRequestWithUser } from "@/types/auth";
+import axios from "axios";
+import { NextApiResponse } from "next";
+import nextConnect from "next-connect";
 
+import { removerCaracteresEspeciais } from "@/helpers/helpers";
+import fs, { statSync } from "fs";
+import moment from "moment";
 import * as os from "oci-objectstorage";
 import slug from "slug";
-import moment from "moment";
-import fs from "fs";
-import { statSync } from "fs";
-import { removerCaracteresEspeciais } from "@/helpers/helpers";
 
-import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 var FOLDER;
 
 if (process.platform == "linux") FOLDER = "/tmp/";
@@ -56,7 +55,7 @@ handler.post(async (req, res) => {
     await savePhoto(validacao?.imobiliariaId, foto);
 
     let fotoUrl = await uploadPhoto(validacao?.imobiliariaId, foto);
-
+    console.log(fotoUrl);
     if (!fotoUrl) {
         return res.status(200).send({
             status: 0,
@@ -131,7 +130,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
     const nodeFsBlob = new os.NodeFSBlob(path, stats.size);
     const objectData = await nodeFsBlob.getData();
 
-    new Upload({
+    const url = new Upload({
         client: new S3Client({
             credentials: {
                 accessKeyId: process.env.STORAGE_KEY,
@@ -164,7 +163,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
             console.log(err);
         });
 
-    return "";
+    return url;
 };
 
 const getToken = async () => {

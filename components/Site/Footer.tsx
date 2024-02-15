@@ -1,3 +1,4 @@
+import { imo7ApiService } from "@/services/apiServiceUsage";
 import {
     Box,
     Button,
@@ -10,13 +11,35 @@ import {
     Heading,
     Icon,
     Input,
-    Select,
     Text,
+    useToast,
 } from "@chakra-ui/react";
-import { FormSelect } from "../Form/FormSelect";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import { BiAlarm } from "react-icons/bi";
+import { useMutation } from "react-query";
+import * as yup from "yup";
 
+const schema = yup.object({
+    nome: yup.string().required("Campo obrigatório"),
+    email: yup.string().required("Campo obrigatório"),
+    telefone: yup.string().required("Campo obrigatório"),
+    mensagem: yup.string().required("Campo obrigatório"),
+});
 export const Footer = () => {
+    const toast = useToast();
+    const form = useForm({
+        resolver: yupResolver(schema),
+    });
+    const contato = useMutation(imo7ApiService("contato").create, {
+        onSuccess: () => {
+            toast({
+                title: "Mensagem enviada com sucesso",
+                status: "success",
+            });
+            form.reset({});
+        },
+    });
     return (
         <Box bg="#F6FDFF" py={24}>
             <Container maxW="container.xl">
@@ -35,26 +58,17 @@ export const Footer = () => {
                             assim que possível!
                         </Text>
                     </GridItem>
-                    <GridItem w="full">
+                    <GridItem
+                        w="full"
+                        as="form"
+                        onSubmit={form.handleSubmit(
+                            async (data) => await contato.mutateAsync(data)
+                        )}
+                    >
                         <Grid
                             gridTemplateColumns={{ lg: "repeat(2,1fr)" }}
                             gap={4}
                         >
-                            <GridItem colSpan={{ lg: 2 }}>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        Motivo do contato
-                                    </FormLabel>
-                                    <Select
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="Selecione o motivo de seu contato"
-                                    ></Select>
-                                </FormControl>
-                            </GridItem>
                             <GridItem colSpan={{ lg: 2 }}>
                                 <FormControl>
                                     <FormLabel
@@ -67,6 +81,7 @@ export const Footer = () => {
                                         bg="white"
                                         borderColor="#4B4B4B"
                                         placeholder="Digite seu nome completo"
+                                        {...form.register("nome")}
                                     />
                                 </FormControl>
                             </GridItem>
@@ -82,6 +97,7 @@ export const Footer = () => {
                                         bg="white"
                                         borderColor="#4B4B4B"
                                         placeholder="email@email.com.br"
+                                        {...form.register("email")}
                                     />
                                 </FormControl>
                             </GridItem>
@@ -97,6 +113,7 @@ export const Footer = () => {
                                         bg="white"
                                         borderColor="#4B4B4B"
                                         placeholder="(99) 99999-6666"
+                                        {...form.register("telefone")}
                                     />
                                 </FormControl>
                             </GridItem>
@@ -112,11 +129,12 @@ export const Footer = () => {
                                         bg="white"
                                         borderColor="#4B4B4B"
                                         placeholder="Olá, gostaria de mais informações sobree o Imo7"
+                                        {...form.register("mensagem")}
                                     />
                                 </FormControl>
                             </GridItem>
                             <GridItem colSpan={{ lg: 2 }} textAlign="center">
-                                <Button>Enviar mensagem</Button>
+                                <Button type="submit">Enviar mensagem</Button>
                             </GridItem>
                         </Grid>
                     </GridItem>

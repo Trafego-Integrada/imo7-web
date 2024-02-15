@@ -16,15 +16,8 @@ import {
     Flex,
     Icon,
     IconButton,
-    Table,
-    TableContainer,
     Tag,
-    Tbody,
-    Td,
     Text,
-    Th,
-    Thead,
-    Tr,
     useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";

@@ -9,11 +9,8 @@ import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFich
 import { ModalValidar } from "@/components/Modals/ModalValidar";
 import { Paginator2 } from "@/components/Paginator2";
 import { Filtro } from "@/components/Tabelas/TabelaPadrao/Filtro";
-import { exportToExcel } from "react-json-to-excel";
-import { TooltipAvatar } from "@/components/TooltipAvatar";
 import {
     formatoData,
-    statusFicha,
     statusFichaTag,
     statusProcesso,
     tipoFicha,
@@ -58,17 +55,15 @@ import { useRef, useState } from "react";
 import { CgMoreVerticalAlt } from "react-icons/cg";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import {
-    FiArrowLeft,
-    FiArrowRight,
     FiDownload,
-    FiDownloadCloud,
     FiEdit,
     FiEye,
     FiLink,
     FiPlus,
     FiTrash,
 } from "react-icons/fi";
-import { MdOutlineVerifiedUser, MdPageview } from "react-icons/md";
+import { MdOutlineVerifiedUser } from "react-icons/md";
+import { exportToExcel } from "react-json-to-excel";
 import { useMutation, useQuery } from "react-query";
 
 const Home = ({ query }) => {
@@ -497,7 +492,7 @@ const Home = ({ query }) => {
                                                         }
                                                         aria-label="Abrir"
                                                     />
-                                                    <Tooltip label="Baixar todos arquivos">
+                                                    {/* <Tooltip label="Baixar todos arquivos">
                                                         <IconButton
                                                             as={Link}
                                                             size="sm"
@@ -509,7 +504,7 @@ const Home = ({ query }) => {
                                                             variant="ghost"
                                                             passHref
                                                         />
-                                                    </Tooltip>
+                                                    </Tooltip> */}
                                                     <Center>
                                                         <Divider
                                                             h={6}
@@ -1001,8 +996,18 @@ const Home = ({ query }) => {
                                                                                     )
                                                                                         .length
                                                                                 } de ${
-                                                                                    item
-                                                                                        .preenchimento
+                                                                                    Object.entries(
+                                                                                        item
+                                                                                            .modelo
+                                                                                            .campos
+                                                                                    ).filter(
+                                                                                        (
+                                                                                            i
+                                                                                        ) =>
+                                                                                            i[1]
+                                                                                                .obrigatorio ==
+                                                                                            true
+                                                                                    )
                                                                                         .length
                                                                                 } campos preenchidos`}
                                                                             >
@@ -1022,12 +1027,25 @@ const Home = ({ query }) => {
                                                                                                 .length
                                                                                         }
                                                                                         max={
-                                                                                            item
-                                                                                                .preenchimento
+                                                                                            Object.entries(
+                                                                                                item
+                                                                                                    .modelo
+                                                                                                    .campos
+                                                                                            )
                                                                                                 .length >
                                                                                             0
-                                                                                                ? item
-                                                                                                      .preenchimento
+                                                                                                ? Object.entries(
+                                                                                                      item
+                                                                                                          .modelo
+                                                                                                          .campos
+                                                                                                  ).filter(
+                                                                                                      (
+                                                                                                          i
+                                                                                                      ) =>
+                                                                                                          i[1]
+                                                                                                              .obrigatorio ==
+                                                                                                          true
+                                                                                                  )
                                                                                                       .length
                                                                                                 : 100
                                                                                         }
@@ -1042,8 +1060,18 @@ const Home = ({ query }) => {
                                                                                                         null
                                                                                             )
                                                                                                 .length ==
-                                                                                            item
-                                                                                                .preenchimento
+                                                                                            Object.entries(
+                                                                                                item
+                                                                                                    .modelo
+                                                                                                    .campos
+                                                                                            ).filter(
+                                                                                                (
+                                                                                                    i
+                                                                                                ) =>
+                                                                                                    i[1]
+                                                                                                        .obrigatorio ==
+                                                                                                    true
+                                                                                            )
                                                                                                 .length
                                                                                                 ? "green"
                                                                                                 : "yellow"
@@ -1070,8 +1098,18 @@ const Home = ({ query }) => {
                                                                                                     i.valor
                                                                                             )
                                                                                                 .length /
-                                                                                                item
-                                                                                                    .preenchimento
+                                                                                                Object.entries(
+                                                                                                    item
+                                                                                                        .modelo
+                                                                                                        .campos
+                                                                                                ).filter(
+                                                                                                    (
+                                                                                                        i
+                                                                                                    ) =>
+                                                                                                        i[1]
+                                                                                                            .obrigatorio ==
+                                                                                                        true
+                                                                                                )
                                                                                                     .length) *
                                                                                                 100
                                                                                         ).toFixed(
@@ -1097,8 +1135,18 @@ const Home = ({ query }) => {
                                                                                                       i.valor
                                                                                               )
                                                                                                   .length /
-                                                                                                  item
-                                                                                                      .preenchimento
+                                                                                                  Object.entries(
+                                                                                                      item
+                                                                                                          .modelo
+                                                                                                          .campos
+                                                                                                  ).filter(
+                                                                                                      (
+                                                                                                          i
+                                                                                                      ) =>
+                                                                                                          i[1]
+                                                                                                              .obrigatorio ==
+                                                                                                          true
+                                                                                                  )
                                                                                                       .length) *
                                                                                                   100
                                                                                           ).toFixed(

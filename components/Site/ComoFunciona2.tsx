@@ -8,12 +8,9 @@ import {
     Heading,
     Icon,
     Image,
-    Link,
     Text,
 } from "@chakra-ui/react";
-import { BsChat } from "react-icons/bs";
-import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
-import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
+import { FaWhatsappSquare } from "react-icons/fa";
 import {
     MdAdsClick,
     MdElectricBolt,
@@ -31,21 +28,6 @@ export const ComoFunciona2 = ({ modal }) => {
                 py={{ base: 12, lg: 0 }}
             >
                 <Flex textAlign="center" mb={4} gap={4} flexDir="column">
-                    <Text color="#021531" fontSize="32px">
-                        Sua equipe{" "}
-                        <Text as="span" fontWeight="bold">
-                            PERDE TEMPO
-                        </Text>{" "}
-                        conversando o dia inteiro com os clientes no{" "}
-                        <Text as="span" fontWeight="bold">
-                            WHASTSAPP
-                        </Text>{" "}
-                        ou você quer fechar{" "}
-                        <Text as="span" fontWeight="bold">
-                            MAIS CONTRATOS DE LOCAÇÃO
-                        </Text>
-                        ?
-                    </Text>
                     <Text>
                         Seu tempo é valioso, e conversar o dia todo pelo
                         WhatsApp pode ser cansativo. Com o IMO7, não perca mais

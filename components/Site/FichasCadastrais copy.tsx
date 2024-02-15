@@ -8,11 +8,10 @@ import {
     Heading,
     Icon,
     Image,
-    Link,
     Text,
 } from "@chakra-ui/react";
-import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
-import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
+import { FaWhatsappSquare } from "react-icons/fa";
+import { FiCheckCircle } from "react-icons/fi";
 import {
     MdAutoAwesome,
     MdFilePresent,
@@ -32,7 +31,10 @@ export const Tribunal = ({ modal }) => {
                             fontWeight="500"
                             my={8}
                         >
-                            Tribunal de Justiça Nacional
+                            Consultas nos{" "}
+                            <strong>TJ (Tribunal de Justiça)</strong> em{" "}
+                            <strong>TODOS OS ESTADOS</strong> com{" "}
+                            <strong>apenas um clique!</strong>
                         </Heading>
                         <Text
                             color="#021531"

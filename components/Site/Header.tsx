@@ -1,5 +1,4 @@
 import { imo7ApiService } from "@/services/apiServiceUsage";
-import { apiService } from "@/services/apiServices";
 import {
     Box,
     Button,
@@ -10,6 +9,8 @@ import {
     DrawerContent,
     DrawerOverlay,
     Flex,
+    Grid,
+    GridItem,
     IconButton,
     Image,
     Input,
@@ -142,17 +143,13 @@ export const Header = () => {
                 </Container>
             </Box>
 
-            <Container maxW="container.xl" as={Flex} align="center" py={16}>
-                <Flex maxW="md" flexDir="column" gap={6}>
-                    <Text
-                        color="white"
-                        fontSize="32px"
-                        fontWeight="700"
-                        lineHeight="normal"
-                    >
-                        Uma ferramenta facilitadora para o cadastramento de
-                        dados nos processos de locação, compra e venda de
-                        imóveis
+            <Container maxW="container.xl" as={Flex} align="center" py={8}>
+                <Flex maxW="lg" flexDir="column" gap={6}>
+                    <Text color="white" fontSize="32px" lineHeight="normal">
+                        Sua equipe <strong>perde tempo</strong> conversando o
+                        dia inteiro com os cliente no <strong>Whatsapp</strong>{" "}
+                        ou você quer fechar{" "}
+                        <strong>mais contratos de locação</strong>?
                     </Text>
                     <Text color="white" lineHeight="24px" fontWeight="400">
                         Se o gerenciamento de dados dos seus clientes tem sido
@@ -161,39 +158,45 @@ export const Header = () => {
                         produtividade da equipe e multiplicar os novos
                         atendimentos com muito mais eficiência!
                     </Text>
-                    <Flex
+                    <Grid
                         as="form"
                         onSubmit={form.handleSubmit(
                             async (data) => await contato.mutateAsync(data)
                         )}
                         gap={4}
                         flexDir="column"
+                        gridTemplateColumns={{ lg: "repeat(2,1fr)" }}
                     >
-                        <Input
-                            bg="white"
-                            placeholder="Qual seu nome?"
-                            {...form.register("nome")}
-                        />
-                        <Input
-                            bg="white"
-                            placeholder="Qual seu e-mail"
-                            {...form.register("email")}
-                        />
-                        <Input
-                            bg="white"
-                            placeholder="Qual seu telefone"
-                            {...form.register("telefone")}
-                        />
-                        <Box>
-                            <Button
-                                // isLoading={form.formState.isSubmitting}
-                                colorScheme="cyan"
-                                type="submit"
-                            >
+                        <GridItem colSpan={{ lg: 2 }}>
+                            <Input
+                                size="sm"
+                                bg="white"
+                                placeholder="Qual seu nome?"
+                                {...form.register("nome")}
+                            />
+                        </GridItem>
+                        <GridItem>
+                            <Input
+                                size="sm"
+                                bg="white"
+                                placeholder="Qual seu e-mail"
+                                {...form.register("email")}
+                            />
+                        </GridItem>
+                        <GridItem>
+                            <Input
+                                size="sm"
+                                bg="white"
+                                placeholder="Qual seu telefone"
+                                {...form.register("telefone")}
+                            />
+                        </GridItem>
+                        <GridItem colSpan={{ lg: 2 }} textAlign="right">
+                            <Button size="sm" colorScheme="cyan" type="submit">
                                 Descubra a solução
                             </Button>
-                        </Box>
-                    </Flex>
+                        </GridItem>
+                    </Grid>
                 </Flex>
             </Container>
         </Box>
