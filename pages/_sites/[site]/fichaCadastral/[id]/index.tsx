@@ -63,7 +63,6 @@ import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     FiAlertTriangle,
-    FiDelete,
     FiFile,
     FiPlus,
     FiTrash,
@@ -395,109 +394,58 @@ function Previews(props) {
                 <Flex flexDir="column" gap={1}>
                     <Text fontSize="sm">Arquivos anexados</Text>
                     <Flex flexDir="row" gap={1} wrap="wrap">
-                        {props.multiple ? (
-                            JSON.parse(props.data).map((item) => (
-                                <Box pos="relative" key={item}>
-                                    <Popover>
-                                        <PopoverTrigger>
-                                            <IconButton
-                                                icon={<FiTrash />}
-                                                colorScheme="red"
-                                                size="xs"
-                                                pos="absolute"
-                                                top={0}
-                                                right={0}
-                                            />
-                                        </PopoverTrigger>
-                                        <PopoverContent>
-                                            <PopoverArrow />
-                                            <PopoverCloseButton />
-                                            <PopoverHeader>
-                                                Confirmação!
-                                            </PopoverHeader>
-                                            <PopoverBody>
-                                                Deseja realmente excluir este
-                                                arquivo? Não será possivel
-                                                reverter
-                                            </PopoverBody>
-                                            <PopoverFooter>
-                                                <Button
-                                                    size="xs"
-                                                    colorScheme="red"
-                                                    leftIcon={<FiTrash2 />}
-                                                    onClick={() =>
-                                                        excluirAnexo.mutate({
-                                                            id: props.id,
-                                                            params: {
-                                                                ...props,
-                                                                arquivo: item,
-                                                            },
-                                                        })
-                                                    }
-                                                >
-                                                    Excluir
-                                                </Button>
-                                            </PopoverFooter>
-                                        </PopoverContent>
-                                    </Popover>
-
-                                    {verificarExtensaoImagem(item).eImagem ? (
-                                        <Image
-                                            src={item}
-                                            w={32}
-                                            h={32}
-                                            cursor="pointer"
-                                            onClick={() =>
-                                                preview.current.onOpen(item)
-                                            }
+                        {JSON.parse(props.data).map((item) => (
+                            <Box pos="relative" key={item}>
+                                <Popover>
+                                    <PopoverTrigger>
+                                        <IconButton
+                                            icon={<FiTrash />}
+                                            colorScheme="red"
+                                            size="xs"
+                                            pos="absolute"
+                                            top={0}
+                                            right={0}
                                         />
-                                    ) : (
-                                        <Flex
-                                            align="center"
-                                            justify="center"
-                                            h={32}
-                                            w={32}
-                                            bg="gray.700"
-                                            cursor="pointer"
-                                            onClick={() =>
-                                                preview.current.onOpen(item)
-                                            }
-                                        >
-                                            <Text color="white" fontSize="lg">
-                                                {verificarExtensaoImagem(
-                                                    item
-                                                ).extensao?.toLocaleUpperCase()}
-                                            </Text>
-                                        </Flex>
-                                    )}
-                                </Box>
-                            ))
-                        ) : (
-                            <Box pos="relative">
-                                <IconButton
-                                    icon={<FiDelete />}
-                                    colorScheme="red"
-                                    size="xs"
-                                    pos="absolute"
-                                    top={0}
-                                    right={0}
-                                    onClick={() =>
-                                        excluirAnexo.mutate({
-                                            id: props.id,
-                                            params: {
-                                                ...props,
-                                            },
-                                        })
-                                    }
-                                />
-                                {verificarExtensaoImagem(props.data).eImagem ? (
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <PopoverArrow />
+                                        <PopoverCloseButton />
+                                        <PopoverHeader>
+                                            Confirmação!
+                                        </PopoverHeader>
+                                        <PopoverBody>
+                                            Deseja realmente excluir este
+                                            arquivo? Não será possivel reverter
+                                        </PopoverBody>
+                                        <PopoverFooter>
+                                            <Button
+                                                size="xs"
+                                                colorScheme="red"
+                                                leftIcon={<FiTrash2 />}
+                                                onClick={() =>
+                                                    excluirAnexo.mutate({
+                                                        id: props.id,
+                                                        params: {
+                                                            ...props,
+                                                            arquivo: item,
+                                                        },
+                                                    })
+                                                }
+                                            >
+                                                Excluir
+                                            </Button>
+                                        </PopoverFooter>
+                                    </PopoverContent>
+                                </Popover>
+
+                                {verificarExtensaoImagem(item).eImagem ? (
                                     <Image
-                                        src={props.data}
+                                        src={item}
                                         w={32}
                                         h={32}
                                         cursor="pointer"
                                         onClick={() =>
-                                            preview.current.onOpen(props.data)
+                                            preview.current.onOpen(item)
                                         }
                                     />
                                 ) : (
@@ -509,18 +457,18 @@ function Previews(props) {
                                         bg="gray.700"
                                         cursor="pointer"
                                         onClick={() =>
-                                            preview.current.onOpen(props.data)
+                                            preview.current.onOpen(item)
                                         }
                                     >
                                         <Text color="white" fontSize="lg">
                                             {verificarExtensaoImagem(
-                                                props.data
+                                                item
                                             ).extensao?.toLocaleUpperCase()}
                                         </Text>
                                     </Flex>
                                 )}
                             </Box>
-                        )}
+                        ))}
                     </Flex>
                 </Flex>
             )}

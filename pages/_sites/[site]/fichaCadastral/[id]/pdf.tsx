@@ -70,30 +70,35 @@ const FichaCadastral = ({
                                 </Text>
                             ) : campo.tipoCampo === "image" ? (
                                 ficha.preenchimento[campo.codigo] ? (
-                                    <Flex flexDirection="column">
-                                        <Image
-                                            w={32}
-                                            h={44}
-                                            src={
-                                                ficha.preenchimento[
-                                                    campo.codigo
-                                                ]
-                                            }
-                                            objectFit="cover"
-                                            objectPosition="center"
-                                        />
-                                        <Text fontSize="xs" mt={2}>
-                                            ou{" "}
-                                            <Link
-                                                href={
-                                                    ficha.preenchimento[
-                                                        campo.codigo
-                                                    ]
-                                                }
+                                    <Flex wrap="wrap" gap={2}>
+                                        {JSON.parse(
+                                            ficha.preenchimento[campo.codigo]
+                                        ).map((item) => (
+                                            <Flex
+                                                key={item.id}
+                                                flexDirection="column"
                                             >
-                                                clique aqui
-                                            </Link>
-                                        </Text>
+                                                <Image
+                                                    w={32}
+                                                    h={44}
+                                                    src={i}
+                                                    objectFit="cover"
+                                                    objectPosition="center"
+                                                />
+                                                <Text fontSize="xs" mt={2}>
+                                                    ou{" "}
+                                                    <Link
+                                                        href={
+                                                            ficha.preenchimento[
+                                                                campo.codigo
+                                                            ]
+                                                        }
+                                                    >
+                                                        clique aqui
+                                                    </Link>
+                                                </Text>
+                                            </Flex>
+                                        ))}
                                     </Flex>
                                 ) : null
                             ) : campo.tipoCampo === "qrcode" ? (
