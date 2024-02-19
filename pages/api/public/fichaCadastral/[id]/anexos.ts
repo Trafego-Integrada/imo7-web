@@ -70,7 +70,11 @@ handler.post(async (req, res) => {
                             codigo: i.nome,
                         },
                     });
-                    if (campo?.tipoCampo == "files") {
+                    if (
+                        campo?.tipoCampo == "files" ||
+                        campo?.tipoCampo == "file" ||
+                        campo?.tipoCampo == "image"
+                    ) {
                         let val = [];
                         const existe =
                             await prisma.fichaCadastralPreenchimento.findUnique(
@@ -142,18 +146,18 @@ handler.post(async (req, res) => {
                                         },
                                         create: {
                                             campoFichaCadastralCodigo: i.nome,
-                                            valor: [
+                                            valor: JSON.stringify([
                                                 process.env
                                                     .NEXT_PUBLIC_URL_STORAGE +
                                                     nameLocation,
-                                            ],
+                                            ]),
                                         },
                                         update: {
-                                            valor: [
+                                            valor: JSON.stringify([
                                                 process.env
                                                     .NEXT_PUBLIC_URL_STORAGE +
                                                     nameLocation,
-                                            ],
+                                            ]),
                                         },
                                     },
                                 },
