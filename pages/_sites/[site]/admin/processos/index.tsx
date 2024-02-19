@@ -56,6 +56,7 @@ import { CgMoreVerticalAlt } from "react-icons/cg";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import {
     FiDownload,
+    FiDownloadCloud,
     FiEdit,
     FiEye,
     FiLink,
@@ -492,7 +493,7 @@ const Home = ({ query }) => {
                                                         }
                                                         aria-label="Abrir"
                                                     />
-                                                    {/* <Tooltip label="Baixar todos arquivos">
+                                                    <Tooltip label="Baixar todos arquivos">
                                                         <IconButton
                                                             as={Link}
                                                             size="sm"
@@ -504,7 +505,7 @@ const Home = ({ query }) => {
                                                             variant="ghost"
                                                             passHref
                                                         />
-                                                    </Tooltip> */}
+                                                    </Tooltip>
                                                     <Center>
                                                         <Divider
                                                             h={6}
@@ -1148,7 +1149,30 @@ const Home = ({ query }) => {
                                                                                                           true
                                                                                                   )
                                                                                                       .length) *
+                                                                                                  100 >
                                                                                                   100
+                                                                                                  ? 100
+                                                                                                  : (item.preenchimento.filter(
+                                                                                                        (
+                                                                                                            i
+                                                                                                        ) =>
+                                                                                                            i.valor
+                                                                                                    )
+                                                                                                        .length /
+                                                                                                        Object.entries(
+                                                                                                            item
+                                                                                                                .modelo
+                                                                                                                .campos
+                                                                                                        ).filter(
+                                                                                                            (
+                                                                                                                i
+                                                                                                            ) =>
+                                                                                                                i[1]
+                                                                                                                    .obrigatorio ==
+                                                                                                                true
+                                                                                                        )
+                                                                                                            .length) *
+                                                                                                        100
                                                                                           ).toFixed(
                                                                                               2
                                                                                           )
@@ -1159,8 +1183,7 @@ const Home = ({ query }) => {
                                                                                           )}
 
                                                                                     %
-                                                                                    preenchida{" "}
-                                                                                    {}
+                                                                                    preenchida
                                                                                 </Text>
                                                                             </Flex>
                                                                         </Box>

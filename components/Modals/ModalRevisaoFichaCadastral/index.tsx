@@ -418,7 +418,9 @@ const ModalBase = ({}, ref) => {
                                                                             (i
                                                                                 .dependencia
                                                                                 ?.codigo &&
-                                                                                i.dependenciaValor ==
+                                                                                JSON.parse(
+                                                                                    i.dependenciaValor
+                                                                                ).includes(
                                                                                     watch(
                                                                                         `preenchimento`
                                                                                     ).find(
@@ -430,7 +432,8 @@ const ModalBase = ({}, ref) => {
                                                                                                 .dependencia
                                                                                                 ?.codigo
                                                                                     )
-                                                                                        ?.valor)))
+                                                                                        ?.valor
+                                                                                ))))
                                                                 ) {
                                                                     return true;
                                                                 } else {
@@ -637,7 +640,9 @@ const ModalBase = ({}, ref) => {
                                                                                     />
                                                                                 </Flex>
                                                                             ) : i.tipoCampo ==
-                                                                              "files" ? (
+                                                                                  "files" ||
+                                                                              i.tipoCampo ==
+                                                                                  "file" ? (
                                                                                 <Flex
                                                                                     wrap="wrap"
                                                                                     gap={

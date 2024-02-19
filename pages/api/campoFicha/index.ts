@@ -1,10 +1,10 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
-
-const handle = nextConnect();
 import { cors } from "@/middleware/cors";
 import { Prisma } from "@prisma/client";
+import nextConnect from "next-connect";
+
+const handle = nextConnect();
 handle.use(cors);
 handle.use(checkAuth);
 
@@ -107,7 +107,9 @@ handle.post(async (req, res) => {
                           },
                       }
                     : {},
-                dependenciaValor,
+                dependenciaValor: dependenciaValor
+                    ? JSON.stringify(dependenciaValor)
+                    : null,
             },
         });
         res.send(data);

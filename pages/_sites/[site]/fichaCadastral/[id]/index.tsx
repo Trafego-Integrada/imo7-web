@@ -340,10 +340,11 @@ function Previews(props) {
         <Flex
             flexDir="column"
             gap={4}
-            borderWidth={1}
+            borderWidth={props.error ? 3 : 1}
             p={4}
             rounded="lg"
             w="full"
+            borderColor={props.error ? "red" : ""}
         >
             <Text fontSize="sm" fontWeight="medium">
                 {props.nome}
@@ -523,6 +524,12 @@ function Previews(props) {
                     </Flex>
                 </Flex>
             )}
+            {props.error && (
+                <Alert status="error" rounded="lg">
+                    <AlertIcon />
+                    <AlertTitle>{props.error}</AlertTitle>
+                </Alert>
+            )}
             <ModalPreview ref={preview} />
         </Flex>
     );
@@ -575,10 +582,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                             `preenchimento.${i.dependencia?.codigo}`
                                         )) ||
                                         (i.dependencia?.codigo &&
-                                            i.dependenciaValor ==
+                                            JSON.parse(
+                                                i.dependenciaValor
+                                            ).includes(
                                                 watch(
                                                     `preenchimento.${i.dependencia?.codigo}`
-                                                ))))
+                                                )
+                                            ))))
                             ) {
                                 return true;
                             } else {
@@ -730,10 +740,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                         `preenchimento.${i.dependencia?.codigo}`
                                     )) ||
                                     (i.dependencia?.codigo &&
-                                        i.dependenciaValor ==
+                                        JSON.parse(i.dependenciaValor).includes(
                                             watch(
                                                 `preenchimento.${i.dependencia?.codigo}`
-                                            ))))
+                                            )
+                                        ))))
                         ) {
                             return true;
                         } else {
@@ -1000,10 +1011,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                         )) ||
                                                         (i.dependencia
                                                             ?.codigo &&
-                                                            i.dependenciaValor ==
+                                                            JSON.parse(
+                                                                i.dependenciaValor
+                                                            ).includes(
                                                                 watch(
                                                                     `preenchimento.${i.dependencia?.codigo}`
-                                                                ))))
+                                                                )
+                                                            ))))
                                             ) {
                                                 return true;
                                             } else {
@@ -1070,10 +1084,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                     (i
                                                                         .dependencia
                                                                         ?.codigo &&
-                                                                        i.dependenciaValor ==
+                                                                        JSON.parse(
+                                                                            i.dependenciaValor
+                                                                        ).includes(
                                                                             watch(
                                                                                 `preenchimento.${i.dependencia?.codigo}`
-                                                                            ))))
+                                                                            )
+                                                                        ))))
                                                         ) {
                                                             return true;
                                                         } else {
@@ -1141,10 +1158,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 )) ||
                                                                 (i.dependencia
                                                                     ?.codigo &&
-                                                                    i.dependenciaValor ==
+                                                                    JSON.parse(
+                                                                        i.dependenciaValor
+                                                                    ).includes(
                                                                         watch(
                                                                             `preenchimento.${i.dependencia?.codigo}`
-                                                                        ))))
+                                                                        )
+                                                                    ))))
                                                     ) {
                                                         return true;
                                                     } else {
@@ -1290,10 +1310,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                         )) ||
                                                         (i.dependencia
                                                             ?.codigo &&
-                                                            i.dependenciaValor ==
+                                                            JSON.parse(
+                                                                i.dependenciaValor
+                                                            ).includes(
                                                                 watch(
                                                                     `preenchimento.${i.dependencia?.codigo}`
-                                                                ))))
+                                                                )
+                                                            ))))
                                             ) {
                                                 return true;
                                             } else {
@@ -1344,10 +1367,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 )) ||
                                                                 (i.dependencia
                                                                     ?.codigo &&
-                                                                    i.dependenciaValor ==
+                                                                    JSON.parse(
+                                                                        i.dependenciaValor
+                                                                    ).includes(
                                                                         watch(
                                                                             `preenchimento.${i.dependencia?.codigo}`
-                                                                        ))))
+                                                                        )
+                                                                    ))))
                                                     ) {
                                                         return true;
                                                     } else {
@@ -1406,10 +1432,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                                     (i
                                                                                         .dependencia
                                                                                         ?.codigo &&
-                                                                                        i.dependenciaValor ==
+                                                                                        JSON.parse(
+                                                                                            i.dependenciaValor
+                                                                                        ).includes(
                                                                                             watch(
                                                                                                 `preenchimento.${i.dependencia?.codigo}`
-                                                                                            ))))
+                                                                                            )
+                                                                                        ))))
                                                                         ) {
                                                                             return true;
                                                                         } else {
@@ -1848,6 +1877,33 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                             ficha.id
                                                                         )
                                                                     }
+                                                                    error={
+                                                                        errors.arquivos &&
+                                                                        errors
+                                                                            .arquivos[
+                                                                            campo
+                                                                                .codigo
+                                                                        ]
+                                                                            ?.message
+                                                                            ? errors
+                                                                                  .arquivos[
+                                                                                  campo
+                                                                                      .codigo
+                                                                              ]
+                                                                                  ?.message
+                                                                            : watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            ? "Campo reprovado: " +
+                                                                              watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            : ""
+                                                                    }
                                                                 />
                                                                 {/* <FormInput
                                                                     size="sm"
@@ -1982,6 +2038,33 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                         buscar.mutate(
                                                                             ficha.id
                                                                         )
+                                                                    }
+                                                                    error={
+                                                                        errors.arquivos &&
+                                                                        errors
+                                                                            .arquivos[
+                                                                            campo
+                                                                                .codigo
+                                                                        ]
+                                                                            ?.message
+                                                                            ? errors
+                                                                                  .arquivos[
+                                                                                  campo
+                                                                                      .codigo
+                                                                              ]
+                                                                                  ?.message
+                                                                            : watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            ? "Campo reprovado: " +
+                                                                              watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            : ""
                                                                     }
                                                                 />
                                                                 {/* <FormInput
@@ -2124,6 +2207,33 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                             ficha.id
                                                                         )
                                                                     }
+                                                                    error={
+                                                                        errors.arquivos &&
+                                                                        errors
+                                                                            .arquivos[
+                                                                            campo
+                                                                                .codigo
+                                                                        ]
+                                                                            ?.message
+                                                                            ? errors
+                                                                                  .arquivos[
+                                                                                  campo
+                                                                                      .codigo
+                                                                              ]
+                                                                                  ?.message
+                                                                            : watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            ? "Campo reprovado: " +
+                                                                              watch(
+                                                                                  "analise." +
+                                                                                      campo.codigo
+                                                                              )
+                                                                                  ?.motivoReprovacao
+                                                                            : ""
+                                                                    }
                                                                 />
                                                             </Flex>
                                                         ) : (
@@ -2161,10 +2271,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                             )) ||
                                                             (i.dependencia
                                                                 ?.codigo &&
-                                                                i.dependenciaValor ==
+                                                                JSON.parse(
+                                                                    i.dependenciaValor
+                                                                ).includes(
                                                                     watch(
                                                                         `preenchimento.${i.dependencia?.codigo}`
-                                                                    ))))
+                                                                    )
+                                                                ))))
                                                 ) {
                                                     return true;
                                                 } else {
@@ -2352,10 +2465,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                             )) ||
                                                             (i.dependencia
                                                                 ?.codigo &&
-                                                                i.dependenciaValor ==
+                                                                JSON.parse(
+                                                                    i.dependenciaValor
+                                                                ).includes(
                                                                     watch(
                                                                         `preenchimento.${i.dependencia?.codigo}`
-                                                                    ))))
+                                                                    )
+                                                                ))))
                                                 ) {
                                                     return true;
                                                 } else {
@@ -2409,10 +2525,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 )) ||
                                                                 (i.dependencia
                                                                     ?.codigo &&
-                                                                    i.dependenciaValor ==
+                                                                    JSON.parse(
+                                                                        i.dependenciaValor
+                                                                    ).includes(
                                                                         watch(
                                                                             `preenchimento.${i.dependencia?.codigo}`
-                                                                        ))))
+                                                                        )
+                                                                    ))))
                                                     ) {
                                                         return true;
                                                     } else {

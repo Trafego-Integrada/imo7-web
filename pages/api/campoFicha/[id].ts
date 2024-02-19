@@ -1,9 +1,9 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
-
-const handler = nextConnect<NextApiRequest, NextApiResponse>();
 import { cors } from "@/middleware/cors";
 import { NextApiRequest, NextApiResponse } from "next";
+import nextConnect from "next-connect";
+
+const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.use(cors);
 handler.get(async (req, res) => {
     try {
@@ -71,7 +71,9 @@ handler.post(async (req, res) => {
                           },
                       }
                     : { disconnect: true },
-                dependenciaValor,
+                dependenciaValor: dependenciaValor
+                    ? JSON.stringify(dependenciaValor)
+                    : null,
             },
         });
         res.send(data);

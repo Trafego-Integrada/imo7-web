@@ -1,9 +1,9 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
+import nextConnect from "next-connect";
 
 import { cors } from "@/middleware/cors";
-import axios from "axios";
 import * as AdmZip from "adm-zip";
+import axios from "axios";
 import path, { parse } from "path";
 
 const handler = nextConnect();
@@ -30,6 +30,21 @@ handler.get(async (req, res) => {
         console.log(processo);
         if (processo?.fichas.length) {
             for await (const ficha of processo.fichas) {
+                if (ficha) {
+                    const response = await axios.get(
+                        `https://www.imo7.com.br/api/fichaCadastral/${ficha.id}/pdf`,
+                        {
+                            responseType: "arraybuffer",
+                        }
+                    );
+
+                    if (response.status === 200) {
+                        zip.addFile(
+                            `FichaCadastral-${ficha.id}.pdf`,
+                            Buffer.from(response.data)
+                        );
+                    }
+                }
                 if (ficha?.Anexo) {
                     for await (const anexo of ficha.Anexo) {
                         console.log();
@@ -65,7 +80,10 @@ handler.get(async (req, res) => {
                 let fileUrls = [];
 
                 for await (const item of data) {
-                    if (item.campo.tipoCampo == "files") {
+                    if (
+                        item.campo.tipoCampo == "files" ||
+                        item.campo.tipoCampo == "file"
+                    ) {
                         JSON.parse(item.valor).map(
                             (i) => i && fileUrls.push(i)
                         );

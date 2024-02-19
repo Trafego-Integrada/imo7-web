@@ -39,7 +39,10 @@ handler.get(async (req, res) => {
         let fileUrls = [];
 
         for await (const item of data) {
-            if (item.campo.tipoCampo == "files") {
+            if (
+                item.campo.tipoCampo == "files" ||
+                item.campo.tipoCampo == "file"
+            ) {
                 JSON.parse(item.valor).map((i) => i && fileUrls.push(i));
             } else if (item.valor) {
                 fileUrls.push(item.valor);
@@ -52,6 +55,21 @@ handler.get(async (req, res) => {
         }
 
         const zip = new AdmZip();
+        if (ficha) {
+            const response = await axios.get(
+                `https://www.imo7.com.br/api/fichaCadastral/${ficha.id}/pdf`,
+                {
+                    responseType: "arraybuffer",
+                }
+            );
+
+            if (response.status === 200) {
+                zip.addFile(
+                    `FichaCadastral-${ficha.id}.pdf`,
+                    Buffer.from(response.data)
+                );
+            }
+        }
         if (ficha?.Anexo) {
             for await (const anexo of ficha.Anexo) {
                 console.log();

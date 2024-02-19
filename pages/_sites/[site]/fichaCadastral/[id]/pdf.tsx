@@ -121,32 +121,8 @@ const FichaCadastral = ({
                                         </Text>
                                     </Flex>
                                 ) : null
-                            ) : campo.tipoCampo === "file" ? (
-                                ficha.preenchimento[campo.codigo] ? (
-                                    <Flex flexDirection="column">
-                                        <QRCode
-                                            size={75}
-                                            value={
-                                                ficha.preenchimento[
-                                                    campo.codigo
-                                                ]
-                                            }
-                                        />
-                                        <Text fontSize="xs" mt={2}>
-                                            Leia o QRCode ou{" "}
-                                            <Link
-                                                href={
-                                                    ficha.preenchimento[
-                                                        campo.codigo
-                                                    ]
-                                                }
-                                            >
-                                                clique aqui
-                                            </Link>
-                                        </Text>
-                                    </Flex>
-                                ) : null
-                            ) : campo.tipoCampo === "files" ? (
+                            ) : campo.tipoCampo === "files" ||
+                              campo.tipoCampo == "file" ? (
                                 ficha.preenchimento[campo.codigo] ? (
                                     <Flex wrap="wrap" gap={2}>
                                         {JSON.parse(
@@ -456,11 +432,14 @@ const FichaCadastral = ({
                                                         i.dependencia?.codigo
                                                     ]) ||
                                                     (i.dependencia?.codigo &&
-                                                        i.dependenciaValor ==
+                                                        JSON.parse(
+                                                            i.dependenciaValor
+                                                        ).includes(
                                                             ficha.preenchimento[
                                                                 i.dependencia
                                                                     ?.codigo
-                                                            ])))
+                                                            ]
+                                                        ))))
                                         ) {
                                             return true;
                                         } else {
