@@ -418,6 +418,7 @@ const ModalBase = ({}, ref) => {
                                                                             (i
                                                                                 .dependencia
                                                                                 ?.codigo &&
+                                                                                i.dependenciaValor &&
                                                                                 JSON.parse(
                                                                                     i.dependenciaValor
                                                                                 ).includes(
