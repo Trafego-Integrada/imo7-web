@@ -81,7 +81,7 @@ const FichaCadastral = ({
                                                 <Image
                                                     w={32}
                                                     h={44}
-                                                    src={i}
+                                                    src={item}
                                                     objectFit="cover"
                                                     objectPosition="center"
                                                 />

@@ -944,6 +944,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                 modelo?.campos[e.codigo]?.exibir
                                         ) &&
                                         i.campos.filter((i) => {
+                                            console.log(i);
                                             if (
                                                 (modelo.campos[i.codigo] &&
                                                     modelo?.campos[i.codigo]
@@ -959,6 +960,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                         )) ||
                                                         (i.dependencia
                                                             ?.codigo &&
+                                                            i.dependenciaValor &&
                                                             JSON.parse(
                                                                 i.dependenciaValor
                                                             ).includes(
@@ -1032,6 +1034,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                     (i
                                                                         .dependencia
                                                                         ?.codigo &&
+                                                                        i.dependenciaValor &&
                                                                         JSON.parse(
                                                                             i.dependenciaValor
                                                                         ).includes(
@@ -1106,6 +1109,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 )) ||
                                                                 (i.dependencia
                                                                     ?.codigo &&
+                                                                    i.dependenciaValor &&
                                                                     JSON.parse(
                                                                         i.dependenciaValor
                                                                     ).includes(
@@ -1258,6 +1262,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                         )) ||
                                                         (i.dependencia
                                                             ?.codigo &&
+                                                            i.dependenciaValor &&
                                                             JSON.parse(
                                                                 i.dependenciaValor
                                                             ).includes(
@@ -1315,6 +1320,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 )) ||
                                                                 (i.dependencia
                                                                     ?.codigo &&
+                                                                    i.dependenciaValor &&
                                                                     JSON.parse(
                                                                         i.dependenciaValor
                                                                     ).includes(
@@ -2219,6 +2225,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                             )) ||
                                                             (i.dependencia
                                                                 ?.codigo &&
+                                                                i.dependenciaValor &&
                                                                 JSON.parse(
                                                                     i.dependenciaValor
                                                                 ).includes(
@@ -2413,6 +2420,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                             )) ||
                                                             (i.dependencia
                                                                 ?.codigo &&
+                                                                i.dependenciaValor &&
                                                                 JSON.parse(
                                                                     i.dependenciaValor
                                                                 ).includes(
@@ -2473,6 +2481,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                 )) ||
                                                                 (i.dependencia
                                                                     ?.codigo &&
+                                                                    i.dependenciaValor &&
                                                                     JSON.parse(
                                                                         i.dependenciaValor
                                                                     ).includes(
