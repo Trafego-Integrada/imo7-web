@@ -437,6 +437,7 @@ const FichaCadastral = ({
                                                         i.dependencia?.codigo
                                                     ]) ||
                                                     (i.dependencia?.codigo &&
+                                                        i.dependenciaValor &&
                                                         JSON.parse(
                                                             i.dependenciaValor
                                                         ).includes(
