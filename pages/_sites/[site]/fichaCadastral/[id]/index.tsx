@@ -529,7 +529,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                         watch(
                                             `preenchimento.${i.dependencia?.codigo}`
                                         )) ||
-                                        (i.dependencia?.codigo &&
+                                        (i.dependencia?.codigo &&i.dependenciaValor&&
                                             JSON.parse(
                                                 i.dependenciaValor
                                             ).includes(
@@ -687,7 +687,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     watch(
                                         `preenchimento.${i.dependencia?.codigo}`
                                     )) ||
-                                    (i.dependencia?.codigo &&
+                                    (i.dependencia?.codigo &&i.dependenciaValor&&
                                         JSON.parse(i.dependenciaValor).includes(
                                             watch(
                                                 `preenchimento.${i.dependencia?.codigo}`
