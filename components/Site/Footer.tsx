@@ -20,6 +20,8 @@ import { BiAlarm } from "react-icons/bi";
 import { useMutation } from "react-query";
 import * as yup from "yup";
 
+import { api } from "@/services/apiClient"
+
 const schema = yup.object({
     nome: yup.string().required("Campo obrigatório"),
     email: yup.string().required("Campo obrigatório"),
@@ -31,15 +33,18 @@ export const Footer = () => {
     const form = useForm({
         resolver: yupResolver(schema),
     });
-    const contato = useMutation(imo7ApiService("contato").create, {
+    const contato = useMutation(imo7ApiService("email/contato").create, {
         onSuccess: () => {
             toast({
                 title: "Mensagem enviada com sucesso",
                 status: "success",
             });
-            form.reset({});
+            form.reset();
         },
     });
+    const formContatoOnSubmit = async (data: any) => {
+        await contato.mutateAsync(data);
+    }
     return (
         <Box bg="#F6FDFF" py={24}>
             <Container maxW="container.xl">
@@ -61,9 +66,11 @@ export const Footer = () => {
                     <GridItem
                         w="full"
                         as="form"
-                        onSubmit={form.handleSubmit(
-                            async (data) => await contato.mutateAsync(data)
-                        )}
+                        onSubmit={
+                            form.handleSubmit(
+                                async (data) => await formContatoOnSubmit(data)
+                            )
+                        }
                     >
                         <Grid
                             gridTemplateColumns={{ lg: "repeat(2,1fr)" }}
