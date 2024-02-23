@@ -6,9 +6,9 @@ import nextConnect from "next-connect";
 const handle = nextConnect();
 
 handle.use(cors);
-handle.use(checkAuth);
+//handle.use(checkAuth);
 
-handle.get(async (req, res) => {
+handle.get(checkAuth, async (req, res) => {
     const { query, contaId } = req.query;
     const imobiliarias = await prisma.imobiliaria.findMany({
         where: {
@@ -36,30 +36,8 @@ handle.get(async (req, res) => {
 });
 
 handle.post(async (req, res) => {
-    const {
-        codigo,
-        cnpj,
-        razaoSocial,
-        bairro,
-        cep,
-        cidade,
-        email,
-        endereco,
-        complemento,
-        estado,
-        ie,
-        nomeFantasia,
-        url,
-        telefone,
-        site,
-        numero,
-        contaId,
-        usuario,
-        senha,
-        confirmarSenha,
-    } = req.body;
-    const data = await prisma.imobiliaria.create({
-        data: {
+    try {
+        const {
             codigo,
             cnpj,
             razaoSocial,
@@ -76,147 +54,177 @@ handle.post(async (req, res) => {
             telefone,
             site,
             numero,
-            contaId: contaId ? Number(contaId) : 2,
-        },
-    });
-
-    const usuarioExiste = await prisma.usuario.findFirst({
-        where: {
-            OR: [
-                {
-                    email: usuario?.email,
-                },
-                {
-                    documento: usuario?.documento,
-                },
-            ],
-            imobiliariaId: data.id,
-            cargos: {
-                some: {
-                    codigo: "imobiliaria",
-                },
+            contaId,
+            usuario,
+            senha,
+            confirmarSenha,
+        } = req.body;
+        const data = await prisma.imobiliaria.create({
+            data: {
+                codigo,
+                cnpj,
+                razaoSocial,
+                bairro,
+                cep,
+                cidade,
+                email,
+                endereco,
+                complemento,
+                estado,
+                ie,
+                nomeFantasia,
+                url,
+                telefone,
+                site,
+                numero,
+                contaId: contaId ? Number(contaId) : 2,
             },
-        },
-    });
-    if (usuarioExiste) {
-        await prisma.usuario.update({
+        });
+    
+        const usuarioExiste = await prisma.usuario.findFirst({
             where: {
-                imobiliariaId_documento: {
+                OR: [
+                    {
+                        email: usuario?.email,
+                    },
+                    {
+                        documento: usuario?.documento,
+                    },
+                ],
+                imobiliariaId: data.id,
+                cargos: {
+                    some: {
+                        codigo: "imobiliaria",
+                    },
+                },
+            },
+        });
+        if (usuarioExiste) {
+            await prisma.usuario.update({
+                where: {
+                    imobiliariaId_documento: {
+                        documento: usuario.documento,
+                        imobiliariaId: data.id,
+                    },
+                },
+                data: {
+                    nome: usuario.nome,
                     documento: usuario.documento,
-                    imobiliariaId: data.id,
-                },
-            },
-            data: {
-                nome: usuario.nome,
-                documento: usuario.documento,
-                email: usuario.email,
-                senhaHash: senha ? bcrypt.hashSync(senha, 10) : "",
-                imobiliaria: {
-                    connect: {
-                        id: data.id,
+                    email: usuario.email,
+                    senhaHash: senha ? bcrypt.hashSync(senha, 10) : "",
+                    imobiliaria: {
+                        connect: {
+                            id: data.id,
+                        },
+                    },
+                    cargos: {
+                        connect: {
+                            codigo: "imobiliaria",
+                        },
+                    },
+                    modulos: {
+                        connect: [
+                            {
+                                codigo: "imobiliaria.processos",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.modelos",
+                            },
+                            {
+                                codigo: "imobiliaria.cadastros",
+                            },
+                            {
+                                codigo: "imobiliaria.configuracoes",
+                            },
+                        ],
+                    },
+                    permissoes: {
+                        connect: [
+                            {
+                                codigo: "imobiliaria.processos.visualizar",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.cadastrar",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.editar",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.excluir",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.visualizarTodos",
+                            },
+                        ],
                     },
                 },
-                cargos: {
-                    connect: {
-                        codigo: "imobiliaria",
+            });
+        } else {
+            await prisma.usuario.create({
+                data: {
+                    nome: usuario.nome,
+                    documento: usuario.documento,
+                    email: usuario.email,
+                    imobiliaria: {
+                        connect: {
+                            id: data.id,
+                        },
+                    },
+                    senhaHash: senha ? bcrypt.hashSync(senha, 10) : "",
+                    cargos: {
+                        connect: {
+                            codigo: "imobiliaria",
+                        },
+                    },
+                    modulos: {
+                        connect: [
+                            {
+                                codigo: "imobiliaria.processos",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.modelos",
+                            },
+                            {
+                                codigo: "imobiliaria.cadastros",
+                            },
+                            {
+                                codigo: "imobiliaria.configuracoes",
+                            },
+                        ],
+                    },
+                    permissoes: {
+                        connect: [
+                            {
+                                codigo: "imobiliaria.processos.visualizar",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.cadastrar",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.editar",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.excluir",
+                            },
+                            {
+                                codigo: "imobiliaria.processos.visualizarTodos",
+                            },
+                        ],
                     },
                 },
-                modulos: {
-                    connect: [
-                        {
-                            codigo: "imobiliaria.processos",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.modelos",
-                        },
-                        {
-                            codigo: "imobiliaria.cadastros",
-                        },
-                        {
-                            codigo: "imobiliaria.configuracoes",
-                        },
-                    ],
-                },
-                permissoes: {
-                    connect: [
-                        {
-                            codigo: "imobiliaria.processos.visualizar",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.cadastrar",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.editar",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.excluir",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.visualizarTodos",
-                        },
-                    ],
-                },
-            },
-        });
-    } else {
-        await prisma.usuario.create({
-            data: {
-                nome: usuario.nome,
-                documento: usuario.documento,
-                email: usuario.email,
-                imobiliaria: {
-                    connect: {
-                        id: data.id,
-                    },
-                },
-                senhaHash: senha ? bcrypt.hashSync(senha, 10) : "",
-                cargos: {
-                    connect: {
-                        codigo: "imobiliaria",
-                    },
-                },
-                modulos: {
-                    connect: [
-                        {
-                            codigo: "imobiliaria.processos",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.modelos",
-                        },
-                        {
-                            codigo: "imobiliaria.cadastros",
-                        },
-                        {
-                            codigo: "imobiliaria.configuracoes",
-                        },
-                    ],
-                },
-                permissoes: {
-                    connect: [
-                        {
-                            codigo: "imobiliaria.processos.visualizar",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.cadastrar",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.editar",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.excluir",
-                        },
-                        {
-                            codigo: "imobiliaria.processos.visualizarTodos",
-                        },
-                    ],
-                },
-            },
-        });
-    }
+            });
+        }
 
-    res.send(data);
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(500).json({
+            message: (err as Error).message
+        });
+    } finally {
+        res.end();
+    }
 });
-handle.delete(async (req, res) => {
+handle.delete(checkAuth, async (req, res) => {
     try {
         const { ids } = req.query;
         let arrayIds = JSON.parse(ids);
