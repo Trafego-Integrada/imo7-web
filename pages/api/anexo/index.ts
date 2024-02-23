@@ -90,7 +90,7 @@ handle.post(async (req, res) => {
         } = req.body;
         // const { anexos } = req.files;
 
-        console.log(req.body);
+        //console.log(req.body);
         if (anexos && Array.isArray(anexos) && anexos.length > 0) {
             for await (const foto of anexos) {
                 const extension = nome.slice(
@@ -128,7 +128,7 @@ handle.post(async (req, res) => {
                 })
                     .done()
                     .then(async (data) => {
-                        console.log(data);
+                        //console.log(data);
                         const anexo = await prisma.anexo.create({
                             data: {
                                 nome: nome,
@@ -239,7 +239,7 @@ handle.post(async (req, res) => {
                         }
                     })
                     .catch((err) => {
-                        console.log(err);
+                        //console.log(err);
                         return res.status(400).send({
                             message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
                         });
@@ -278,7 +278,7 @@ handle.post(async (req, res) => {
             })
                 .done()
                 .then(async (data) => {
-                    console.log(data);
+                    //console.log(data);
                     const anexo = await prisma.anexo.create({
                         data: {
                             nome: nome,
@@ -393,7 +393,7 @@ handle.post(async (req, res) => {
                     });
                 })
                 .catch((err) => {
-                    console.log(err);
+                    //console.log(err);
                     return res.status(400).send({
                         message: `Não conseguimos salvar o arquivo ${nome}, verifique o arquivo. Caso persista, contate o suporte.`,
                     });

@@ -145,7 +145,7 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
                 },
             },
         });
-        console.log(contrato);
+        //console.log(contrato);
         return {
             props: {
                 contrato: JSON.parse(JSON.stringify(contrato)),

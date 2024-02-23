@@ -107,7 +107,7 @@ const ModalBase = ({}, ref) => {
         listarCategoriaCampoFichas
     );
     const { data: campos } = useQuery(["listaCampos", {}], listarCampos);
-    console.log(watch());
+    //console.log(watch());
     return (
         <Modal isOpen={isOpen} onClose={onClose} placement="right" size="3xl">
             <ModalOverlay />

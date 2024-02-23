@@ -35,7 +35,7 @@ import { FiEye } from "react-icons/fi";
 import { useMutation } from "react-query";
 import "react-quill/dist/quill.snow.css";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
-    console.log(modelo);
+    //console.log(modelo);
     const [schema, setSchema] = useState({});
     const toast = useToast();
     const {
@@ -54,7 +54,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     const atualizarAnexos = useMutation(atualizarAnexosFicha);
     const onSubmit = async (data) => {
         try {
-            console.log(data);
+            //console.log(data);
             await atualizar.mutateAsync(data);
 
             const formData = new FormData();
@@ -71,7 +71,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             }
             toast({ title: "Ficha salva", status: "success" });
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             toast({ title: "Houve um problema", status: "error" });
         }
     };
@@ -80,7 +80,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         try {
             if (cep.length > 8) {
                 const res = await buscarEndereco(cep);
-                console.log(res);
+                //console.log(res);
                 let obj = {};
                 Object.entries(camposEndereco).map((item) => {
                     if (item[0] == "endereco") {

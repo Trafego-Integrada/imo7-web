@@ -27,7 +27,7 @@ handler.get(async (req, res) => {
                 Anexo: true,
             },
         });
-        console.log(processo);
+        //console.log(processo);
         if (processo?.fichas.length) {
             for await (const ficha of processo.fichas) {
                 if (ficha) {
@@ -47,14 +47,14 @@ handler.get(async (req, res) => {
                 }
                 if (ficha?.Anexo) {
                     for await (const anexo of ficha.Anexo) {
-                        console.log();
+                        //console.log();
 
                         const response = await axios.get(anexo.anexo, {
                             responseType: "arraybuffer",
                         });
 
                         const fileName = path.basename(anexo.anexo);
-                        console.log("nome", fileName);
+                        //console.log("nome", fileName);
                         if (response.status === 200) {
                             zip.addFile(
                                 `Arquvos da Ficha ${ficha?.nome}/anexos/${fileName}`,
@@ -105,12 +105,12 @@ handler.get(async (req, res) => {
                     const response = await axios.get(fileUrls[i], {
                         responseType: "arraybuffer",
                     });
-                    console.log(response.status, i);
+                    //console.log(response.status, i);
                     const parsedUrl = parse(fileUrls[i]);
-                    console.log(parsedUrl);
+                    //console.log(parsedUrl);
                     const pathname = parsedUrl.base || "";
                     const fileName = path.basename(pathname);
-                    console.log("nome", fileName);
+                    //console.log("nome", fileName);
                     if (response.status === 200) {
                         zip.addFile(
                             `Arquvos da Ficha ${ficha?.nome}/${fileName}`,
@@ -122,14 +122,14 @@ handler.get(async (req, res) => {
         }
         if (processo?.Anexo) {
             for await (const anexo of processo.Anexo) {
-                console.log();
+                //console.log();
 
                 const response = await axios.get(anexo.anexo, {
                     responseType: "arraybuffer",
                 });
 
                 const fileName = path.basename(anexo.anexo);
-                console.log("nome", fileName);
+                //console.log("nome", fileName);
                 if (response.status === 200) {
                     zip.addFile(
                         `anexos/${fileName}`,

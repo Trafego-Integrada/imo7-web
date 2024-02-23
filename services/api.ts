@@ -15,7 +15,7 @@ export function setupApiClient(ctx = null) {
     let host;
 
     if (typeof window !== "undefined") {
-        // console.log(window.location);
+        // //console.log(window.location);
         host = window.location.host;
         host = host.split(".")[0];
     }
@@ -37,10 +37,10 @@ export function setupApiClient(ctx = null) {
     });
     api.interceptors.request.use((request) => {
         let cookies = parseCookies(null);
-        // console.log(cookies)
+        // //console.log(cookies)
         let host;
         if (typeof window !== "undefined") {
-            // console.log(window.location)
+            // //console.log(window.location)
             host = window.location.host;
             host = host.split(".")[0];
         }
@@ -65,21 +65,21 @@ export function setupApiClient(ctx = null) {
         (error: AxiosError) => {
             if (error.response?.status === 401) {
                 if (error.response.data?.code === "token.expired") {
-                    // console.log('expirou')
+                    // //console.log('expirou')
                     cookies = parseCookies();
                     let host;
                     if (typeof window !== "undefined") {
                         host = window.location.host;
                         host = host.split(".")[0];
                     }
-                    // console.log(host)
+                    // //console.log(host)
                     const {
                         "imo7.refreshToken": refreshToken,
                         "imo7.token": token,
                     } = cookies;
                     const originalConfig = error.config;
                     if (!isRefreshing) {
-                        // console.log('expirou 2')
+                        // //console.log('expirou 2')
                         isRefreshing = true;
                         api.post("auth/refresh", {
                             refreshToken,

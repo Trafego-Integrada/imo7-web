@@ -40,7 +40,7 @@ const ModalBase = ({}, ref) => {
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
             if (id) {
-                console.log("Buscando dados no sistema");
+                //console.log("Buscando dados no sistema");
                 onOpen();
             } else {
                 onOpen();

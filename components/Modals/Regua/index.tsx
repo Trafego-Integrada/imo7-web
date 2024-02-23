@@ -69,7 +69,7 @@ const ModalBase = ({idRegra}, ref) => {
     onOpen: async(id = null) => {
         
             if (id) {
-                // console.log("current    ",ref.current.value);
+                // //console.log("current    ",ref.current.value);
                  await buscarRegua.mutateAsync(id)
                 
                 onOpen();

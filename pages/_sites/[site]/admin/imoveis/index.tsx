@@ -161,7 +161,7 @@ const FichasCadastrais = ({ query }) => {
         });
     };
     const [selecionados, setSelecionados] = useState([]);
-    // console.log(usuario);
+    // //console.log(usuario);
     const deleteMany = useMutation(imo7ApiService("imovel").deleteMany, {
         onSuccess: () => {
             queryClient.invalidateQueries("imoveis");

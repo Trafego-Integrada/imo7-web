@@ -87,7 +87,7 @@ export const Historicos = ({ tabela, tabelaId }) => {
                     value={descricao}
                     onChange={(e) => setDescricao(e.target.value)}
                     onKeyPress={(e) => {
-                        console.log(e);
+                        //console.log(e);
                         if (e.key == "Enter" && !eventoTratado) {
                             e.preventDefault();
                             setEventoTratado(true);

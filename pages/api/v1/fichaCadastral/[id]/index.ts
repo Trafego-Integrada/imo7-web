@@ -57,7 +57,7 @@ handler.post(async (req, res) => {
         let dataPreenchimento = {};
 
         if (preenchimento && !Array.isArray(preenchimento)) {
-            console.log(preenchimento);
+            //console.log(preenchimento);
             dataPreenchimento = {
                 preenchimento: {
                     upsert: Object.entries(preenchimento).map((item) => {

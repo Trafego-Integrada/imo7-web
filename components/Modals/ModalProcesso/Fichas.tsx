@@ -149,7 +149,7 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
         });
     };
     const [selecionados, setSelecionados] = useState([]);
-    // console.log(usuario);
+    // //console.log(usuario);
     const deleteMany = useMutation(excluirVariasFichas, {
         onSuccess: () => {
             queryClient.invalidateQueries("fichas");

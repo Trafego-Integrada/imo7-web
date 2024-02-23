@@ -20,16 +20,16 @@ import {
 } from "@chakra-ui/react";
 import "react-quill/dist/quill.snow.css";
 const FichaCadastral = ({ consulta }) => {
-    console.log(consulta);
+    //console.log(consulta);
     const totalProtestos = (protestos) => {
         let total = 0;
         if (protestos.code != 606) {
             Object.entries(protestos)?.map((i) => {
-                console.log("Item", i);
+                //console.log("Item", i);
 
                 if (i.length > 1) {
                     i[1].map((i) => {
-                        console.log("Item2", i);
+                        //console.log("Item2", i);
                         total += i.protestos?.length;
                     });
                 }
@@ -593,7 +593,7 @@ const FichaCadastral = ({ consulta }) => {
                                 Object.entries(
                                     consulta?.retorno?.cenprotProtestos
                                 )?.map((item, k) => {
-                                    console.log("Item", item[1]);
+                                    //console.log("Item", item[1]);
                                     return (
                                         <GridItem as={Grid} gap={4} key={k}>
                                             <Text>
@@ -806,7 +806,7 @@ const FichaCadastral = ({ consulta }) => {
                                 Object.entries(
                                     consulta?.retorno?.cenprotProtestos
                                 )?.map((item, k) => {
-                                    console.log("Item", item[1]);
+                                    //console.log("Item", item[1]);
                                     return (
                                         <GridItem as={Grid} gap={4} key={k}>
                                             <Text>

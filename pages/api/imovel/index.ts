@@ -313,7 +313,7 @@ handle.get(async (req, res) => {
             },
         });
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         res.status(500).send({
             success: false,
             message: error.message,
@@ -425,7 +425,7 @@ handle.delete(async (req, res) => {
     try {
         const { ids } = req.query;
         let arrayIds = JSON.parse(ids);
-        console.log(arrayIds, ids);
+        //console.log(arrayIds, ids);
         if (!arrayIds.length) {
             return res
                 .status(400)

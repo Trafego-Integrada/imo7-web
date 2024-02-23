@@ -47,7 +47,7 @@ const AbrirChamado: NextPage = () => {
                 },
             });
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
     const { data: departamentos } = useQuery(

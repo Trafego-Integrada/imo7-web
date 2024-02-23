@@ -55,7 +55,7 @@ handler.post(async (req, res) => {
     await savePhoto(validacao?.imobiliariaId, foto);
 
     let fotoUrl = await uploadPhoto(validacao?.imobiliariaId, foto);
-    console.log(fotoUrl);
+    //console.log(fotoUrl);
     if (!fotoUrl) {
         return res.status(200).send({
             status: 0,
@@ -150,7 +150,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
     })
         .done()
         .then(async (data) => {
-            console.log(data);
+            //console.log(data);
             // if (getObjectResponse.contentLength == 0) {
             //     return res.status(400).send({
             //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
@@ -160,7 +160,7 @@ const uploadPhoto = async (imobiliariaId: string, photoBase64: string) => {
             return process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation;
         })
         .catch((err) => {
-            console.log(err);
+            //console.log(err);
         });
 
     return url;

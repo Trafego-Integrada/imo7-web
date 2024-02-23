@@ -145,7 +145,7 @@ const DrawerBase = ({}, ref) => {
             }
         },
     }));
-    console.log("Dados", watch());
+    //console.log("Dados", watch());
     const { data: contas } = useQuery(["contas"], listarContas);
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">

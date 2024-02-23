@@ -112,7 +112,7 @@ const ModalBase = ({}, ref) => {
                 queryClient.invalidateQueries(["fichas"]);
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
 
@@ -127,7 +127,7 @@ const ModalBase = ({}, ref) => {
         imo7ApiService("motivoReprovacao").list,
         { refetchOnReconnect: false, refetchOnWindowFocus: false }
     );
-    console.log(motivos);
+    //console.log(motivos);
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
             reset({});
@@ -174,7 +174,7 @@ const ModalBase = ({}, ref) => {
             setConsultandoNetrin(false);
         } catch (error) {
             setConsultandoNetrin(false);
-            console.log(error);
+            //console.log(error);
             toast({
                 title: "Houve um problema",
                 description: error?.response?.data?.message,
@@ -208,11 +208,11 @@ const ModalBase = ({}, ref) => {
         let total = 0;
         if (protestos.code != 606) {
             Object.entries(protestos)?.map((i) => {
-                console.log("Item", i);
+                //console.log("Item", i);
 
                 if (i.length > 1) {
                     i[1].map((i) => {
-                        console.log("Item2", i);
+                        //console.log("Item2", i);
                         total += i.protestos?.length;
                     });
                 }
@@ -221,7 +221,7 @@ const ModalBase = ({}, ref) => {
 
         return total;
     };
-    console.log("DAdos", watch());
+    //console.log("DAdos", watch());
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />

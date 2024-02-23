@@ -2,7 +2,7 @@ import { Box, Button, Grid, GridItem, useDisclosure } from "@chakra-ui/react";
 
 export const FiltroContratos = ({ setFiltro, filtro }) => {
     const { isOpen, onToggle } = useDisclosure();
-    console.log(filtro);
+    //console.log(filtro);
     return (
         <Box bg="white" p={5}>
             <Grid gap={5}>

@@ -158,7 +158,7 @@ handle.post(async (req, res) => {
             })
                 .done()
                 .then(async (data) => {
-                    console.log(data);
+                    //console.log(data);
                     // if (getObjectResponse.contentLength == 0) {
                     //     return res.status(400).send({
                     //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
@@ -176,7 +176,7 @@ handle.post(async (req, res) => {
                     });
                 })
                 .catch((err) => {
-                    console.log(err);
+                    //console.log(err);
                     return res.status(400).send({
                         message: `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
                     });
@@ -218,7 +218,7 @@ handle.post(async (req, res) => {
             })
                 .done()
                 .then(async (data) => {
-                    console.log(data);
+                    //console.log(data);
                     // if (getObjectResponse.contentLength == 0) {
                     //     return res.status(400).send({
                     //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
@@ -236,7 +236,7 @@ handle.post(async (req, res) => {
                     });
                 })
                 .catch((err) => {
-                    console.log(err);
+                    //console.log(err);
                     return res.status(400).send({
                         message: `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
                     });

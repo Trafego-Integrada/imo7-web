@@ -51,7 +51,7 @@ export const LinhaDoTempo = ({ chamado }) => {
             toast({ title: "Chamado atualizado", status: "success" });
             queryClient.invalidateQueries(["chamados"]);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     });
     const { data: responsaveis } = useQuery(

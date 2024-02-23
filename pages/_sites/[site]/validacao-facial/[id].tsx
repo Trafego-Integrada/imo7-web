@@ -125,7 +125,7 @@ function cpfMask(v) {
 }
 
 const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
-    console.log("validacao", validacao);
+    //console.log("validacao", validacao);
     const router = useRouter();
     const [step, setStep] = useState(1);
     const [photo, setPhoto] = useState();
@@ -153,9 +153,9 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
             cpf: validacao?.cpf,
         });
 
-        // console.log("response");
-        // console.log(response);
-        // console.log(response.data.status);
+        // //console.log("response");
+        // //console.log(response);
+        // //console.log(response.data.status);
 
         let status = response.data.status;
 
@@ -176,8 +176,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
         //     // actual width & height of the camera video
         //     let stream_width = stream_settings.width;
         //     let stream_height = stream_settings.height;
-        //     console.log('Width: ' + stream_width + 'px');
-        //     console.log('Height: ' + stream_height + 'px');
+        //     //console.log('Width: ' + stream_width + 'px');
+        //     //console.log('Height: ' + stream_height + 'px');
     };
 
     const onSubmit = async (data) => {
@@ -214,8 +214,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                     model: "short",
                 },
                 // handleOnResults: (res) => {
-                // console.log(res)
-                // console.log(res.detections.length)
+                // //console.log(res)
+                // //console.log(res.detections.length)
                 // if detect 1 face
                 // if(res.detections.length == 1) {
                 // check position

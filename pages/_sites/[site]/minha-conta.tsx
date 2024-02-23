@@ -47,7 +47,7 @@ const Page = () => {
     });
     const update = useMutation(atualizarUsuario);
     const onSubmit = async (data) => {
-        console.log(data);
+        //console.log(data);
         try {
             setError(null);
             await update.mutateAsync(data);

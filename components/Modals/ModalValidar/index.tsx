@@ -114,11 +114,11 @@ const ModalBase = ({}, ref) => {
 
     const onSubmitStep1 = async (data) => {
         alert("OnSubmitStep1");
-        console.log("OnSubmitStep1");
-        console.log("isLoading = " + isLoading);
-        console.log("isSubmitting = " + isSubmitting);
-        console.log("isSubmitted = " + isSubmitted);
-        console.log("isSubmitSuccessful = " + isSubmitSuccessful);
+        //console.log("OnSubmitStep1");
+        //console.log("isLoading = " + isLoading);
+        //console.log("isSubmitting = " + isSubmitting);
+        //console.log("isSubmitted = " + isSubmitted);
+        //console.log("isSubmitSuccessful = " + isSubmitSuccessful);
         toast({ title: "Start", status: "success" });
         await timeout(2000);
         toast({ title: "End", status: "success" });
@@ -136,7 +136,7 @@ const ModalBase = ({}, ref) => {
         //         queryClient.invalidateQueries(["fichas"]);
         //     }
         // } catch (error) {
-        //     console.log(error);
+        //     //console.log(error);
         // }
 
         // setStep(2);

@@ -10,13 +10,13 @@ handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
         const { id } = req.query;
-        console.log(id);
+        //console.log(id);
         const data = await prisma.motivoReprovacaoFichaCadastral.findUnique({
             where: {
                 id,
             },
         });
-        console.log(data);
+        //console.log(data);
         return res.send(data);
     } catch (error) {
         return res.status(500).send({

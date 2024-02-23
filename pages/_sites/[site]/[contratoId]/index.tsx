@@ -33,11 +33,11 @@ const Dashbord: NextPage = ({ boletos, extratos }) => {
         ["chamados", { contratoId: router.query?.contratoId }],
         listarChamados
     );
-    console.log(
+    //console.log(
         boletos.filter((e) => {
-            console.log(
+            //console.log(
                 e.contrato.inquilinos.includes((i) => {
-                    console.log("a", i);
+                    //console.log("a", i);
                     return true;
                 })
             );

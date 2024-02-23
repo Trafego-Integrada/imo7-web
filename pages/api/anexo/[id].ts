@@ -45,7 +45,7 @@ handler.post(async (req, res) => {
             nome,
             usuariosPermitidos,
         } = req.body;
-        console.log(JSON.parse(usuariosPermitidos));
+        //console.log(JSON.parse(usuariosPermitidos));
         const { anexos } = req.files;
         const anexo = await prisma.anexo.update({
             where: {
@@ -105,7 +105,7 @@ handler.post(async (req, res) => {
             })
                 .done()
                 .then(async (data) => {
-                    console.log(data);
+                    //console.log(data);
                     // if (getObjectResponse.contentLength == 0) {
                     //     return res.status(400).send({
                     //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
@@ -210,7 +210,7 @@ handler.post(async (req, res) => {
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    //console.log(err);
                     return res.status(400).send({
                         message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
                     });
@@ -272,7 +272,7 @@ handler.delete(async (req, res) => {
             //     bucketName: bucket,
             // };
             // const getBucketResponse = await client.getBucket(getBucketRequest);
-            // console.log(
+            // //console.log(
             //     foto.anexo.replace(process.env.NEXT_PUBLIC_URL_STORAGE, "")
             // );
             // const deleteObjectRequest: os.requests.DeleteObjectRequest = {
@@ -286,7 +286,7 @@ handler.delete(async (req, res) => {
             // const putObjectResponse = await client.deleteObject(
             //     deleteObjectRequest
             // );
-            // console.log(putObjectResponse);
+            // //console.log(putObjectResponse);
             await prisma.anexo.delete({
                 where: {
                     id: Number(id),
@@ -297,7 +297,7 @@ handler.delete(async (req, res) => {
             success: true,
         });
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         res.status(500).send({
             success: false,
         });

@@ -270,14 +270,14 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
                 contratoId,
             },
         });
-        console.log(data);
+        //console.log(data);
         return {
             props: {
                 boletos: data.data.data,
             },
         };
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         return {
             props: {},
         };

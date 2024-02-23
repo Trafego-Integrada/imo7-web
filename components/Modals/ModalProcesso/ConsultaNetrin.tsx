@@ -54,7 +54,7 @@ export const ConsultasNetrin = ({
                 status: "success",
             });
         } catch (error) {
-            console.log(error?.response);
+            //console.log(error?.response);
             toast({
                 title: "Houve um problema",
                 description: error?.response?.data?.message,
@@ -89,11 +89,11 @@ export const ConsultasNetrin = ({
         let total = 0;
         if (protestos.code != 606) {
             Object.entries(protestos)?.map((i) => {
-                console.log("Item", i);
+                //console.log("Item", i);
 
                 if (i.length > 1) {
                     i[1].map((i) => {
-                        console.log("Item2", i);
+                        //console.log("Item2", i);
                         total += i.protestos?.length;
                     });
                 }

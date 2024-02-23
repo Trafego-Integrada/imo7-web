@@ -111,7 +111,7 @@ const ModalBase = ({ processoId, imovelId, responsavelId }, ref) => {
                 queryClient.invalidateQueries(["fichas"]);
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
 

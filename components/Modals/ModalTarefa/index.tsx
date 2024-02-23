@@ -100,7 +100,7 @@ const ModalBase = ({ chamadoId }, ref) => {
     });
 
     const onSubmit = async (data) => {
-        console.log(data);
+        //console.log(data);
         try {
             if (data.id) {
                 await atualizar.mutateAsync(data);
@@ -108,7 +108,7 @@ const ModalBase = ({ chamadoId }, ref) => {
                 await cadastrar.mutateAsync({ ...data, chamadoId });
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             toast({ title: "Ocorreu um erro", status: "error" });
         }
     };
@@ -144,7 +144,7 @@ const ModalBase = ({ chamadoId }, ref) => {
                 event.preventDefault();
         }
     };
-    // console.log(watch());
+    // //console.log(watch());
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="4xl">

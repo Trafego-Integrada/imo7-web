@@ -76,7 +76,7 @@ const Imobiliarias = () => {
         });
     };
     const [selecionados, setSelecionados] = useState([]);
-    // console.log(usuario);
+    // //console.log(usuario);
     const deleteMany = useMutation(imo7ApiService("imobiliaria").deleteMany, {
         onSuccess: () => {
             queryClient.invalidateQueries("imobiliarias");

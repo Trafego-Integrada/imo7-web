@@ -547,7 +547,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             ) {
                 setActiveStep(activeStep + 1);
             }
-            console.log(data);
+            //console.log(data);
             await atualizar.mutateAsync(data);
 
             // const formData = new FormData();
@@ -555,11 +555,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             //     const filesData = await Promise.all(
             //         Object.entries(data.arquivos).map(async (item) => {
             //             var files = item[1];
-            //             console.log("files", files, item[1]);
+            //             //console.log("files", files, item[1]);
 
             //             const filePromises = Array.from(files).map(
             //                 async (file) => {
-            //                     console.log(file, file.name);
+            //                     //console.log(file, file.name);
             //                     const base64String = await convertToBase64(
             //                         file
             //                     );
@@ -583,7 +583,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             //     const flattenedFilesData = filesData.flat();
 
             //     // Now you have an array of objects with nome, extensao, and base64 properties
-            //     console.log(flattenedFilesData);
+            //     //console.log(flattenedFilesData);
             //     await atualizarAnexos.mutateAsync({
             //         id: data.id,
             //         formData: {
@@ -598,7 +598,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                 position: "top-right",
             });
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             toast({
                 title: "Houve um problema",
                 description: e.response?.data?.message,
@@ -609,9 +609,9 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     };
 
     const onSubmitIgnorandoErros = async (data) => {
-        console.log("veio aqui");
+        //console.log("veio aqui");
         try {
-            console.log("veio aqui");
+            //console.log("veio aqui");
             await atualizar.mutateAsync(data);
 
             toast({
@@ -620,7 +620,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                 position: "top-right",
             });
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             toast({
                 title: "Houve um problema",
                 description: e.response?.data?.message,
@@ -634,7 +634,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         try {
             if (cep.length > 8) {
                 const res = await buscarEndereco(cep);
-                console.log(res);
+                //console.log(res);
                 let obj = {};
                 Object.entries(camposEndereco).map((item) => {
                     if (item[0] == "endereco") {
@@ -701,18 +701,18 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     }).length > 0
             ).length
         ) {
-            console.log("data", data);
+            //console.log("data", data);
             clearErrors();
             setActiveStep(activeStep + 1);
             onSubmit(watch());
             return;
         }
     };
-    console.log(errors);
+    //console.log(errors);
 
     useEffect(() => {
         if (errors) {
-            console.log(
+            //console.log(
                 campos
                     .filter(
                         (i) =>
@@ -944,7 +944,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                 modelo?.campos[e.codigo]?.exibir
                                         ) &&
                                         i.campos.filter((i) => {
-                                            console.log(i);
+                                            //console.log(i);
                                             if (
                                                 (modelo.campos[i.codigo] &&
                                                     modelo?.campos[i.codigo]
@@ -1668,7 +1668,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                                                 .target
                                                                                                 .value
                                                                                         );
-                                                                                    console.log(
+                                                                                    //console.log(
                                                                                         "cpfValido",
                                                                                         cpfValido
                                                                                     );
@@ -2880,7 +2880,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 //     const onSubmit = async (data) => {
 //         try {
-//             console.log(data);
+//             //console.log(data);
 //             await atualizar.mutateAsync(data);
 
 //             const formData = new FormData();
@@ -2888,11 +2888,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 //                 const filesData = await Promise.all(
 //                     Object.entries(data.arquivos).map(async (item) => {
 //                         var files = item[1];
-//                         console.log("files", files, item[1]);
+//                         //console.log("files", files, item[1]);
 
 //                         const filePromises = Array.from(files).map(
 //                             async (file) => {
-//                                 console.log(file, file.name);
+//                                 //console.log(file, file.name);
 //                                 const base64String = await convertToBase64(
 //                                     file
 //                                 );
@@ -2916,7 +2916,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 //                 const flattenedFilesData = filesData.flat();
 
 //                 // Now you have an array of objects with nome, extensao, and base64 properties
-//                 console.log(flattenedFilesData);
+//                 //console.log(flattenedFilesData);
 //                 await atualizarAnexos.mutateAsync({
 //                     id: data.id,
 //                     formData: {
@@ -2927,7 +2927,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 //             toast({ title: "Ficha salva", status: "success" });
 //         } catch (e) {
-//             console.log(e);
+//             //console.log(e);
 //             toast({
 //                 title: "Houve um problema",
 //                 description: e.response?.data?.message,
@@ -2940,7 +2940,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 //         try {
 //             if (cep.length > 8) {
 //                 const res = await buscarEndereco(cep);
-//                 console.log(res);
+//                 //console.log(res);
 //                 let obj = {};
 //                 Object.entries(camposEndereco).map((item) => {
 //                     if (item[0] == "endereco") {
@@ -2982,13 +2982,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 //     // called every time a file's `status` changes
 //     const handleChangeStatus = ({ meta, file }, status) => {
-//         console.log(status, meta, file);
+//         //console.log(status, meta, file);
 //     };
 
 //     // receives array of files that are done uploading when submit button is clicked
 //     const handleSubmitFiles = (files, allFiles) => {
-//         console.log("Upload");
-//         console.log(files.map((f) => f.meta));
+//         //console.log("Upload");
+//         //console.log(files.map((f) => f.meta));
 //         allFiles.forEach((f) => f.remove());
 //     };
 

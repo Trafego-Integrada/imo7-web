@@ -70,7 +70,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
             });
             setUsuario(data);
             setTimeout(() => {
-                console.log("ok");
+                //console.log("ok");
                 setFocus("password");
             }, 100);
         } catch (error) {
@@ -92,7 +92,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
         }
     };
     const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
-        console.log(data);
+        //console.log(data);
         try {
             setError(null);
             await signIn(data);

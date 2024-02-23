@@ -68,7 +68,7 @@ const Chamado: NextPage = ({ chamado }) => {
             queryClient.invalidateQueries("interacoes");
             reset({ mensagem: "" });
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
 
@@ -111,7 +111,7 @@ const Chamado: NextPage = ({ chamado }) => {
                 queryClient.invalidateQueries("interacoes");
                 reset({ mensagem: "" });
             } catch (error) {
-                console.log(error);
+                //console.log(error);
             }
         };
         const { data: interacoes } = useQuery(

@@ -30,11 +30,11 @@ handler.post(async (req, res) => {
                 )}.${extension}`;
                 // Create read stream to file
                 const stats = statSync(i[1].path);
-                console.log(stats);
+                //console.log(stats);
                 //const nodeFsBlob = new os.NodeFSBlob(i[1].path, stats.size);
                 //const objectData = await nodeFsBlob.getData();
                 const imageData = fs.readFileSync(i[1].path);
-                console.log(imageData);
+                //console.log(imageData);
                 const base64Data = imageData.toString("base64");
                 const buff = Buffer.from(base64Data, "base64");
 
@@ -58,7 +58,7 @@ handler.post(async (req, res) => {
                 })
                     .done()
                     .then(async (data) => {
-                        console.log(data);
+                        //console.log(data);
                         // if (getObjectResponse.contentLength == 0) {
                         //     return res.status(400).send({
                         //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
@@ -99,7 +99,7 @@ handler.post(async (req, res) => {
                         });
                     })
                     .catch((err) => {
-                        console.log(err);
+                        //console.log(err);
                         return res.status(400).send({
                             message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
                         });
@@ -111,7 +111,7 @@ handler.post(async (req, res) => {
 
         return res.send();
     } catch (error) {
-        console.log(error?.response);
+        //console.log(error?.response);
         return res.status(500).send({
             success: false,
             message: error.message,

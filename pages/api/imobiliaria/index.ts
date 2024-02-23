@@ -228,7 +228,7 @@ handle.delete(checkAuth, async (req, res) => {
     try {
         const { ids } = req.query;
         let arrayIds = JSON.parse(ids);
-        console.log(arrayIds, ids);
+        //console.log(arrayIds, ids);
         if (!arrayIds.length) {
             return res
                 .status(400)

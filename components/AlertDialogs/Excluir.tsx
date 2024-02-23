@@ -17,7 +17,7 @@ const AlertBase = ({ titulo, onDelete }, ref) => {
 
   useImperativeHandle(ref, () => ({
     onOpen: (idDelete) => {
-      console.log(idDelete);
+      //console.log(idDelete);
       setId(idDelete);
       onOpen();
     }

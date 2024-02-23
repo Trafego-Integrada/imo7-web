@@ -8,7 +8,7 @@ handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     try {
-        console.log(req.headers);
+        //console.log(req.headers);
         const { imobiliaria } = req.headers;
         let {
             filtro,
@@ -26,7 +26,7 @@ handle.get(async (req, res) => {
             imobiliariaId,
             status,
         } = req.query;
-        console.log(req.query);
+        //console.log(req.query);
         let filtroQuery = {};
         imobiliariaId = req.user.imobiliariaId
             ? req.user.imobiliariaId
@@ -224,9 +224,9 @@ handle.post(async (req, res) => {
                 },
             },
         });
-        console.log(contaId);
+        //console.log(contaId);
         if (!contaId && !imobiliariaId) {
-            console.log(1);
+            //console.log(1);
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {
@@ -264,7 +264,7 @@ handle.post(async (req, res) => {
                 res.send(data);
             }
         } else if (contaId) {
-            console.log(2);
+            //console.log(2);
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {
@@ -314,7 +314,7 @@ handle.post(async (req, res) => {
                 res.send(data);
             }
         } else if (imobiliariaId) {
-            console.log(3);
+            //console.log(3);
             if (usuarioExiste) {
                 const data = await prisma.usuario.update({
                     where: {

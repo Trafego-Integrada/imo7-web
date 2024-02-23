@@ -171,7 +171,7 @@ const FichasCadastrais = ({ query }) => {
         });
     };
     const [selecionados, setSelecionados] = useState([]);
-    // console.log(usuario);
+    // //console.log(usuario);
     const deleteMany = useMutation(excluirVariasFichas, {
         onSuccess: () => {
             queryClient.invalidateQueries("fichas");

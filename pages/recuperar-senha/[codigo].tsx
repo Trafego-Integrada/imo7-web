@@ -59,7 +59,7 @@ const SignIn: NextPage = () => {
                 ...data,
                 codigo: router.query.codigo,
             });
-            console.log(res);
+            //console.log(res);
             if (res.status == 200) {
                 setSucesso(true);
             }

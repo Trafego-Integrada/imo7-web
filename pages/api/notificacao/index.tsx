@@ -28,7 +28,7 @@ handle.get(async (req, res) => {
             imobiliariaId,
             status,
         } = req.query;
-        console.log("dados", req.query);
+        //console.log("dados", req.query);
         imobiliariaId = req.user.imobiliariaId
             ? req.user.imobiliariaId
             : Number(imobiliariaId);

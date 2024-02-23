@@ -372,7 +372,7 @@ const ModalBase = ({ contaId, imobiliariaId }, ref) => {
                                                                                         item.codigo
                                                                                     );
                                                                                 }
-                                                                                console.log(
+                                                                                //console.log(
                                                                                     newPerms,
                                                                                     "ok"
                                                                                 );

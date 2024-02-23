@@ -11,7 +11,7 @@ handler.use(checkAuth);
 handler.get(async (req, res) => {
     try {
         const { periodo } = req.query;
-        console.log(req.user);
+        //console.log(req.user);
         let abreviacaoPeriodo = "D";
         let valorSubstr = 1;
         let periodoSubstr = "M";

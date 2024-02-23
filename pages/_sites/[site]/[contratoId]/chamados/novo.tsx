@@ -47,7 +47,7 @@ const AbrirChamado: NextPage = () => {
                 },
             });
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
     const { data: departamentos } = useQuery(
@@ -63,7 +63,7 @@ const AbrirChamado: NextPage = () => {
             refetchOnWindowFocus: false,
         }
     );
-    console.log(watch("departamentoId"));
+    //console.log(watch("departamentoId"));
     return (
         <LayoutPainel>
             <Box

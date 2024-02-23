@@ -78,14 +78,14 @@ handler.get(async (req, res) => {
         }
         if (ficha?.Anexo) {
             for await (const anexo of ficha.Anexo) {
-                console.log();
+                //console.log();
 
                 const response = await axios.get(anexo.anexo, {
                     responseType: "arraybuffer",
                 });
 
                 const fileName = path.basename(anexo.anexo);
-                console.log("nome", fileName);
+                //console.log("nome", fileName);
                 if (response.status === 200) {
                     zip.addFile(
                         `Arquvos da Ficha ${ficha?.nome}/anexos/${fileName}`,
@@ -106,7 +106,7 @@ handler.get(async (req, res) => {
                     zip.addFile(fileName, Buffer.from(response.data));
                 }
             } catch (e) {
-                console.log(e.message);
+                //console.log(e.message);
                 console.error("Arquivo erro:", fileUrls[i]);
             }
         }

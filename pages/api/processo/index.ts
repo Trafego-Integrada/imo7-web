@@ -107,9 +107,9 @@ handle.get(async (req, res) => {
                     AND: [],
                 };
             }
-            console.log(responsavel);
+            //console.log(responsavel);
             // responsavel = JSON.parse(responsavel);
-            console.log(responsavel);
+            //console.log(responsavel);
             filtroQuery = {
                 ...filtroQuery,
                 AND: [
@@ -350,7 +350,7 @@ handle.get(async (req, res) => {
             },
         });
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         res.status(500).send({
             success: false,
             message: error.message,
