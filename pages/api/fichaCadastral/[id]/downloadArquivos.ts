@@ -95,17 +95,19 @@ handler.get(async (req, res) => {
             }
         }
         for (let i = 0; i < fileUrls.length; i++) {
-            const response = await axios.get(fileUrls[i], {
-                responseType: "arraybuffer",
-            });
-            console.log(response.status, i);
-            const parsedUrl = parse(fileUrls[i]);
-            console.log(parsedUrl);
-            const pathname = parsedUrl.base || "";
-            const fileName = path.basename(pathname);
-            console.log("nome", fileName);
-            if (response.status === 200) {
-                zip.addFile(fileName, Buffer.from(response.data));
+            try {
+                const response = await axios.get(fileUrls[i], {
+                    responseType: "arraybuffer",
+                });
+                const parsedUrl = parse(fileUrls[i]);
+                const pathname = parsedUrl.base || "";
+                const fileName = path.basename(pathname);
+                if (response.status === 200) {
+                    zip.addFile(fileName, Buffer.from(response.data));
+                }
+            } catch (e) {
+                console.log(e.message);
+                console.error("Arquivo erro:", fileUrls[i]);
             }
         }
 
