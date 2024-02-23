@@ -1112,6 +1112,12 @@ enum TipoConsultaNetrin {
     receita_cnpj
     receita_cnpJ_qsa
     receita_cpf
+    receita_federal_cnd
+    sefaz_cnd
+    cnd_trabalhista
+    receita_federal_cnpj
+    receita_federal_cnpj_qsa
+    receita_federal_cpf
 }
 
 model ConsultaNetrin {

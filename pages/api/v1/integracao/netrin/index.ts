@@ -12,6 +12,7 @@ import slug from "slug";
 
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
+import axios from "axios";
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
 handle.use(cors);
 handle.use(checkAuth);
@@ -62,7 +63,7 @@ handle.post(async (req, res) => {
                     .send({ message: "Informe um CPF válido" });
             } else {
                 requisicaoBody = {
-                    s: "processos-cpf",
+                    s: "processos_cpf",
                     cpf: removerCaracteresEspeciais(requisicao?.cpf),
                 };
             }
@@ -73,7 +74,7 @@ handle.post(async (req, res) => {
                     .send({ message: "Informe um CNPJ válido" });
             } else {
                 requisicaoBody = {
-                    s: "processos-cnpj",
+                    s: "processos_cnpj",
                     cnpj: removerCaracteresEspeciais(requisicao.cnpj),
                 };
             }
@@ -84,13 +85,13 @@ handle.post(async (req, res) => {
                     .send({ message: "Informe um CPF válido" });
             } else {
                 requisicaoBody = {
-                    s: "protestos-cenprot",
+                    s: "protestos_cenprot",
                     cpf: removerCaracteresEspeciais(requisicao.cpf),
                     "govbr-senha": "trafego10",
                     "govbr-cpf": "30156844850",
                 };
                 requisicaoBody2 = {
-                    s: "protestos-cenprot-sp",
+                    s: "protestos_cenprot_sp",
                     cpf: removerCaracteresEspeciais(requisicao.cpf),
                     "govbr-senha": "trafego10",
                     "govbr-cpf": "30156844850",
@@ -103,56 +104,55 @@ handle.post(async (req, res) => {
                     .send({ message: "Informe um CNPJ válido" });
             } else {
                 requisicaoBody = {
-                    s: "protestos-cenprot",
+                    s: "protestos_cenprot",
                     cnpj: removerCaracteresEspeciais(requisicao.cnpj),
                     "govbr-senha": "trafego10",
                     "govbr-cpf": "30156844850",
                 };
                 requisicaoBody2 = {
-                    s: "protestos-cenprot-sp",
+                    s: "protestos_cenprot_sp",
                     cnpj: removerCaracteresEspeciais(requisicao.cnpj),
                     "govbr-senha": "trafego10",
                     "govbr-cpf": "30156844850",
                 };
             }
-        } else if (tipoConsulta == "receita-federal-cnd") {
+        } else if (tipoConsulta == "receita_federal_cnd") {
             requisicaoBody = {
                 s: "receita-federal-cnd",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
             };
-        } else if (tipoConsulta == "sefaz-cnd") {
+        } else if (tipoConsulta == "sefaz_cnd") {
             requisicaoBody = {
                 s: "sefaz-cnd",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
                 uf: requisicao.uf,
             };
-        } else if (tipoConsulta == "cnd-trabalhista") {
+        } else if (tipoConsulta == "cnd_trabalhista") {
             requisicaoBody = {
-                s: "sefaz-cnd",
+                s: "cnd-trabalhista",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
             };
-        } else if (tipoConsulta == "cnd-trabalhista-mte") {
+        } else if (tipoConsulta == "cnd_trabalhista_mte") {
             requisicaoBody = {
-                s: "sefaz-cnd",
+                s: "cnd-trabalhista-mte",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
                 "govbr-senha": "trafego10",
                 "govbr-cpf": "30156844850",
             };
-        } else if (tipoConsulta == "receita-federal-cnpj") {
+        } else if (tipoConsulta == "receita_federal_cnpj") {
             requisicaoBody = {
                 s: "receita-federal-cnpj",
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
             };
-        } else if (tipoConsulta == "receita-federal-cnpj-qsa") {
+        } else if (tipoConsulta == "receita_federal_cnpj_qsa") {
             requisicaoBody = {
-                s: "receita-federal-cnpj-qsa",
+                s: "receita_federal_cnpj_qsa",
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
             };
-        } else if (tipoConsulta == "receita-federal-cpf") {
+        } else if (tipoConsulta == "receita_federal_cpf") {
             requisicaoBody = {
-                s: "receita-federal-cpf",
+                s: "receita-federal-cpf-data-nascimento",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-                "data-nascimento": requisicao.dataNascimento,
             };
         }
 
@@ -207,121 +207,254 @@ handle.post(async (req, res) => {
         const browser = await puppeteer.launch({ headless: true });
         const page = await browser.newPage();
 
-        await page.goto(
-            process.env.NODE_ENV == "production"
-                ? "https://" +
-                      data?.imobiliaria.url +
-                      ".imo7.com.br/consultas/" +
-                      data.id +
-                      "/pdf"
-                : "http://" +
-                      data?.imobiliaria.url +
-                      ".localhost:3000/consultas/" +
-                      data.id +
-                      "/pdf",
-            {
-                waitUntil: "networkidle0",
-            }
-        );
-        await page.emulateMediaType("screen");
-        const pdf = await page.pdf({
-            format: "A4",
-            margin: {
-                top: "20px",
-                right: "20px",
-                bottom: "20px",
-                left: "20px",
-            },
-        });
-
-        await browser.close();
-
-        const extension = ".pdf";
-        const nameLocation = `anexo/${slug(
-            `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`
-        )}.${extension}`;
-        // Create read stream to file
-        // const stats = statSync(anexos.path);
-        // const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
-        // const objectData = await nodeFsBlob.getData();
-        // const imageData = fs.readFileSync(anexos.path);
-        // const base64Data = imageData.toString("base64");
-
-        // const buff = Buffer.from(base64Data, "base64");
-        new Upload({
-            client: new S3Client({
-                credentials: {
-                    accessKeyId: process.env.STORAGE_KEY,
-                    secretAccessKey: process.env.STORAGE_SECRET,
-                },
-                region: process.env.STORAGE_REGION,
-                endpoint: process.env.STORAGE_ENDPOINT,
-                tls: false,
-                forcePathStyle: true,
-            }),
-            params: {
-                ACL: "public-read",
-                Bucket: process.env.STORAGE_BUCKET,
-                Key: nameLocation,
-                Body: pdf,
-            },
-        })
-            .done()
-            .then(async (data) => {
-                console.log(data);
-                // if (getObjectResponse.contentLength == 0) {
-                //     return res.status(400).send({
-                //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
-                //     });
-                // }
-                const anexo = await prisma.anexo.create({
-                    data: {
-                        nome: `${
-                            data.tipoConsulta == "processos_pf"
-                                ? `Consulta Processos Pessoa Física - CPF: ${data.requisicao?.cpf}`
-                                : data.tipoConsulta == "processos_pj"
-                                ? `Consulta Processos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
-                                : data.tipoConsulta == "protestos_pf"
-                                ? `Consulta Protestos Pessoa Física - CPF: ${data.requisicao?.cpf}`
-                                : data.tipoConsulta == "protestos_pj"
-                                ? `Consulta Protestos Pessoa Jurídica - CNPJ: ${data.requisicao?.cnpj}`
-                                : `Consultas: ${data.tipoConsulta}`
-                        }`,
-                        anexo:
-                            process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
-                        processo: processoId
-                            ? {
-                                  connect: {
-                                      id: processoId,
-                                  },
-                              }
-                            : {},
-                        fichaCadastral: fichaCadastralId
-                            ? {
-                                  connect: {
-                                      id: fichaCadastralId,
-                                  },
-                              }
-                            : {},
-                        usuario: {
-                            connect: {
-                                id: req.user.id,
-                            },
-                        },
-                    },
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-                return res.status(400).send({
-                    message: `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
-                });
+        if (tipoConsulta == "sefaz_cnd") {
+            const extension = ".pdf";
+            const nameLocation = `anexo/${slug(
+                `${moment()}${
+                    Math.random() * (999999999 - 100000000) + 100000000
+                }`
+            )}.${extension}`;
+            const response = await axios.get(
+                retornoNetrin.sefazCND.urlComprovante,
+                {
+                    responseType: "blob",
+                }
+            );
+            UploadAnexo({
+                fichaCadastralId,
+                nameLocation,
+                processoId,
+                requisicao,
+                tipoConsulta,
+                user: req.user,
+                blob: response.data,
             });
+        } else if (tipoConsulta == "receita_federal_cnd") {
+            const extension = ".pdf";
+            const nameLocation = `anexo/${slug(
+                `${moment()}${
+                    Math.random() * (999999999 - 100000000) + 100000000
+                }`
+            )}.${extension}`;
+            const response = await axios.get(
+                retornoNetrin.receitaFederalCND.urlComprovante,
+                {
+                    responseType: "blob",
+                }
+            );
+            UploadAnexo({
+                fichaCadastralId,
+                nameLocation,
+                processoId,
+                requisicao,
+                tipoConsulta,
+                user: req.user,
+                blob: response.data,
+            });
+        } else if (tipoConsulta == "cnd_trabalhista") {
+            const extension = ".pdf";
+            const nameLocation = `anexo/${slug(
+                `${moment()}${
+                    Math.random() * (999999999 - 100000000) + 100000000
+                }`
+            )}.${extension}`;
+            const response = await axios.get(
+                retornoNetrin.tribunalSuperiorTrabalhoCNDT.urlComprovante,
+                {
+                    responseType: "blob",
+                }
+            );
+            UploadAnexo({
+                fichaCadastralId,
+                nameLocation,
+                processoId,
+                requisicao,
+                tipoConsulta,
+                user: req.user,
+                blob: response.data,
+            });
+        } else if (tipoConsulta == "receita_federal_cnpj") {
+            const extension = ".pdf";
+            const nameLocation = `anexo/${slug(
+                `${moment()}${
+                    Math.random() * (999999999 - 100000000) + 100000000
+                }`
+            )}.${extension}`;
+            const response = await axios.get(
+                retornoNetrin.receitaFederal.urlComprovante,
+                {
+                    responseType: "blob",
+                }
+            );
+            UploadAnexo({
+                fichaCadastralId,
+                nameLocation,
+                processoId,
+                requisicao,
+                tipoConsulta,
+                user: req.user,
+                blob: response.data,
+            });
+        } else if (tipoConsulta == "receita_federal_cnpj_qsa") {
+            const extension = ".pdf";
+            const nameLocation = `anexo/${slug(
+                `${moment()}${
+                    Math.random() * (999999999 - 100000000) + 100000000
+                }`
+            )}.${extension}`;
+            const response = await axios.get(
+                retornoNetrin.receitaFederalQsa.urlComprovante,
+                {
+                    responseType: "blob",
+                }
+            );
+            UploadAnexo({
+                fichaCadastralId,
+                nameLocation,
+                processoId,
+                requisicao,
+                tipoConsulta,
+                user: req.user,
+                blob: response.data,
+            });
+        } else {
+            await page.goto(
+                process.env.NODE_ENV == "production"
+                    ? "https://" +
+                          data?.imobiliaria.url +
+                          ".imo7.com.br/consultas/" +
+                          data.id +
+                          "/pdf"
+                    : "http://" +
+                          data?.imobiliaria.url +
+                          ".localhost:3000/consultas/" +
+                          data.id +
+                          "/pdf",
+                {
+                    waitUntil: "networkidle0",
+                }
+            );
+            await page.emulateMediaType("screen");
+            const pdf = await page.pdf({
+                format: "A4",
+                margin: {
+                    top: "20px",
+                    right: "20px",
+                    bottom: "20px",
+                    left: "20px",
+                },
+            });
+
+            await browser.close();
+
+            const extension = ".pdf";
+            const nameLocation = `anexo/${slug(
+                `${moment()}${
+                    Math.random() * (999999999 - 100000000) + 100000000
+                }`
+            )}.${extension}`;
+            // Create read stream to file
+            // const stats = statSync(anexos.path);
+            // const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
+            // const objectData = await nodeFsBlob.getData();
+            // const imageData = fs.readFileSync(anexos.path);
+            // const base64Data = imageData.toString("base64");
+
+            // const buff = Buffer.from(base64Data, "base64");
+            UploadAnexo({
+                fichaCadastralId,
+                nameLocation,
+                processoId,
+                requisicao,
+                tipoConsulta,
+                user: req.user,
+                blob: pdf,
+            });
+        }
 
         res.send(data);
     } catch (error) {
+        console.log(error.response);
         return res.status(500).send({ message: error.message, error });
     }
 });
 
 export default handle;
+
+const UploadAnexo = ({
+    user,
+    tipoConsulta,
+    requisicao,
+    processoId,
+    fichaCadastralId,
+    nameLocation,
+    blob,
+}) => {
+    new Upload({
+        client: new S3Client({
+            credentials: {
+                accessKeyId: process.env.STORAGE_KEY,
+                secretAccessKey: process.env.STORAGE_SECRET,
+            },
+            region: process.env.STORAGE_REGION,
+            endpoint: process.env.STORAGE_ENDPOINT,
+            tls: false,
+            forcePathStyle: true,
+        }),
+        params: {
+            ACL: "public-read",
+            Bucket: process.env.STORAGE_BUCKET,
+            Key: nameLocation,
+            Body: blob,
+        },
+    })
+        .done()
+        .then(async (data) => {
+            console.log(data);
+            // if (getObjectResponse.contentLength == 0) {
+            //     return res.status(400).send({
+            //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
+            //     });
+            // }
+            const anexo = await prisma.anexo.create({
+                data: {
+                    nome: `${
+                        tipoConsulta == "processos_pf"
+                            ? `Consulta Processos Pessoa Física - CPF: ${requisicao?.cpf}`
+                            : tipoConsulta == "processos_pj"
+                            ? `Consulta Processos Pessoa Jurídica - CNPJ: ${requisicao?.cnpj}`
+                            : tipoConsulta == "protestos_pf"
+                            ? `Consulta Protestos Pessoa Física - CPF: ${requisicao?.cpf}`
+                            : tipoConsulta == "protestos_pj"
+                            ? `Consulta Protestos Pessoa Jurídica - CNPJ: ${requisicao?.cnpj}`
+                            : `Consultas: ${tipoConsulta}`
+                    }`,
+                    anexo: process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
+                    processo: processoId
+                        ? {
+                              connect: {
+                                  id: processoId,
+                              },
+                          }
+                        : {},
+                    fichaCadastral: fichaCadastralId
+                        ? {
+                              connect: {
+                                  id: fichaCadastralId,
+                              },
+                          }
+                        : {},
+                    usuario: {
+                        connect: {
+                            id: user.id,
+                        },
+                    },
+                },
+            });
+        })
+        .catch((err) => {
+            throw new Error(
+                `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`
+            );
+        });
+};

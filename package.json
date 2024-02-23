@@ -65,7 +65,7 @@
         "oci-sdk": "^2.72.0",
         "pdfjs-dist": "^3.3.122",
         "primereact": "^10.2.1",
-        "puppeteer": "^19.6.2",
+        "puppeteer": "^22.2.0",
         "qs": "^6.11.2",
         "quill-blot-formatter": "^1.0.5",
         "quill-image-drop-module": "^1.0.3",

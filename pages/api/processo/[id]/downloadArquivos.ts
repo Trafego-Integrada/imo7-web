@@ -84,9 +84,18 @@ handler.get(async (req, res) => {
                         item.campo.tipoCampo == "files" ||
                         item.campo.tipoCampo == "file"
                     ) {
-                        JSON.parse(item.valor).map(
-                            (i) => i && fileUrls.push(i)
-                        );
+                        if (
+                            item.valor &&
+                            Array.isArray(JSON.parse(item.valor)) &&
+                            JSON.parse(item.valor).length > 0
+                        ) {
+                            JSON.parse(item.valor).map(
+                                (i) => i && fileUrls.push(i)
+                            );
+                        }
+                        // JSON.parse(item.valor).map(
+                        //     (i) => i && fileUrls.push(i)
+                        // );
                     } else if (item.valor) {
                         fileUrls.push(item.valor);
                     }
