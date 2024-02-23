@@ -1,10 +1,6 @@
-import { formatoData, formatoValor, nl2br } from "@/helpers/helpers";
+import { formatoData } from "@/helpers/helpers";
 import prisma from "@/lib/prisma";
 import {
-    Alert,
-    AlertDescription,
-    AlertIcon,
-    AlertTitle,
     Badge,
     Box,
     Flex,
@@ -22,9 +18,6 @@ import {
     Thead,
     Tr,
 } from "@chakra-ui/react";
-import moment from "moment";
-import Link from "next/link";
-import QRCode from "react-qr-code";
 import "react-quill/dist/quill.snow.css";
 const FichaCadastral = ({ consulta }) => {
     console.log(consulta);
@@ -972,6 +965,94 @@ const FichaCadastral = ({ consulta }) => {
                                 })}
                         </Grid>
                     </Flex>
+                </>
+            )}
+            {consulta.tipoConsulta == "receita_federal_cpf" && (
+                <>
+                    <Box py={4}>
+                        <Heading
+                            size="md"
+                            textAlign="center"
+                            textTransform="uppercase"
+                        >
+                            Consulta de Cadastro de Pessoa Física
+                        </Heading>
+                        <Text textAlign="center" fontSize="xs" color="gray">
+                            Retorna situação do cadastro de pessoa física
+                        </Text>
+                    </Box>
+                    <Grid mb={4} gridTemplateColumns="repeat(4,1fr)">
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Data/Hora da Consulta:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {formatoData(consulta.createdAt, "DATA_HORA")}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xx-small">
+                                Documento Consultado
+                            </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.requisicao?.cpf}
+                            </Text>
+                        </GridItem>
+                        <GridItem>
+                            <Text fontSize="xs">Situação:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta.retorno?.situacaoCadastral}
+                            </Text>
+                        </GridItem>
+                    </Grid>
+                    <Grid gridTemplateColumns="repeat(4,1fr)">
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Nome:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta.retorno?.nome}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Idade:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta.retorno?.idade}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Data de Nascimento:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta.retorno?.dataNascimento}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Genero:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta.retorno?.genero}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Nome da Mãe:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta.retorno?.nomeMae}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Ano do Óbito:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta.retorno?.anoObito}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">País de Origem:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta.retorno?.paisOrigem}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Data de Inscrição:</Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta.retorno?.dataInscricao}
+                            </Text>
+                        </GridItem>
+                    </Grid>
                 </>
             )}
         </Flex>
