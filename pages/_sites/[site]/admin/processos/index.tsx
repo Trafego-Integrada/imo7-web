@@ -983,210 +983,200 @@ const Home = ({ query }) => {
                                                                 </Td>
                                                                 <Td>
                                                                     <>
-                                                                        <Box pos="relative">
-                                                                            <Tooltip
-                                                                                label={`${
-                                                                                    item.preenchimento.filter(
-                                                                                        (
-                                                                                            i
-                                                                                        ) =>
-                                                                                            i.valor !=
-                                                                                                "" &&
-                                                                                            i.valor !=
-                                                                                                null
-                                                                                    )
-                                                                                        .length
-                                                                                } de ${
-                                                                                    Object.entries(
-                                                                                        item
-                                                                                            .modelo
-                                                                                            .campos
-                                                                                    ).filter(
-                                                                                        (
-                                                                                            i
-                                                                                        ) =>
-                                                                                            i[1]
-                                                                                                .obrigatorio ==
-                                                                                            true
-                                                                                    )
-                                                                                        .length
-                                                                                } campos preenchidos`}
-                                                                            >
-                                                                                <Box>
-                                                                                    <Progress
-                                                                                        size="lg"
-                                                                                        value={
-                                                                                            item.preenchimento.filter(
-                                                                                                (
-                                                                                                    i
-                                                                                                ) =>
-                                                                                                    i.valor !=
-                                                                                                        "" &&
-                                                                                                    i.valor !=
-                                                                                                        null
-                                                                                            )
-                                                                                                .length
-                                                                                        }
-                                                                                        max={
-                                                                                            Object.entries(
-                                                                                                item
-                                                                                                    .modelo
-                                                                                                    .campos
-                                                                                            )
-                                                                                                .length >
-                                                                                            0
-                                                                                                ? Object.entries(
-                                                                                                      item
-                                                                                                          .modelo
-                                                                                                          .campos
-                                                                                                  ).filter(
-                                                                                                      (
-                                                                                                          i
-                                                                                                      ) =>
-                                                                                                          i[1]
-                                                                                                              .obrigatorio ==
-                                                                                                          true
-                                                                                                  )
-                                                                                                      .length
-                                                                                                : 100
-                                                                                        }
-                                                                                        colorScheme={
-                                                                                            item.preenchimento.filter(
-                                                                                                (
-                                                                                                    i
-                                                                                                ) =>
-                                                                                                    i.valor !=
-                                                                                                        "" &&
-                                                                                                    i.valor !=
-                                                                                                        null
-                                                                                            )
-                                                                                                .length ==
-                                                                                            Object.entries(
-                                                                                                item
-                                                                                                    .modelo
-                                                                                                    .campos
-                                                                                            ).filter(
-                                                                                                (
-                                                                                                    i
-                                                                                                ) =>
-                                                                                                    i[1]
-                                                                                                        .obrigatorio ==
-                                                                                                    true
-                                                                                            )
-                                                                                                .length
-                                                                                                ? "green"
-                                                                                                : "yellow"
-                                                                                        }
-                                                                                    />
-                                                                                </Box>
-                                                                            </Tooltip>
-                                                                            <Flex
-                                                                                pos="absolute"
-                                                                                top="0"
-                                                                                justify="center"
-                                                                                mx="auto"
-                                                                                w="full"
-                                                                            >
-                                                                                <Text
-                                                                                    textAlign="center"
-                                                                                    fontSize="xs"
-                                                                                    color={
-                                                                                        Number(
-                                                                                            (item.preenchimento.filter(
-                                                                                                (
-                                                                                                    i
-                                                                                                ) =>
-                                                                                                    i.valor
-                                                                                            )
-                                                                                                .length /
+                                                                        <Tooltip
+                                                                            label="O percentual preenchido será contabilizado apenas nos campos obrigatórios"
+                                                                            hasArrow
+                                                                        >
+                                                                            <Box pos="relative">
+                                                                                <Tooltip
+                                                                                    label={`${
+                                                                                        item.preenchimento.filter(
+                                                                                            (
+                                                                                                i
+                                                                                            ) =>
+                                                                                                i.valor !=
+                                                                                                    "" &&
+                                                                                                i.valor !=
+                                                                                                    null
+                                                                                        )
+                                                                                            .length
+                                                                                    } de ${
+                                                                                        Object.entries(
+                                                                                            item
+                                                                                                .modelo
+                                                                                                .campos
+                                                                                        ).filter(
+                                                                                            (
+                                                                                                i
+                                                                                            ) =>
+                                                                                                i[1]
+                                                                                                    .obrigatorio ==
+                                                                                                true
+                                                                                        )
+                                                                                            .length
+                                                                                    } campos preenchidos`}
+                                                                                >
+                                                                                    <Box>
+                                                                                        <Progress
+                                                                                            size="lg"
+                                                                                            value={
+                                                                                                item.preenchimento.filter(
+                                                                                                    (
+                                                                                                        i
+                                                                                                    ) =>
+                                                                                                        i.valor !=
+                                                                                                            "" &&
+                                                                                                        i.valor !=
+                                                                                                            null
+                                                                                                )
+                                                                                                    .length
+                                                                                            }
+                                                                                            max={
                                                                                                 Object.entries(
                                                                                                     item
                                                                                                         .modelo
                                                                                                         .campos
-                                                                                                ).filter(
-                                                                                                    (
-                                                                                                        i
-                                                                                                    ) =>
-                                                                                                        i[1]
-                                                                                                            .obrigatorio ==
-                                                                                                        true
                                                                                                 )
-                                                                                                    .length) *
-                                                                                                100
-                                                                                        ).toFixed(
-                                                                                            0
-                                                                                        ) ==
-                                                                                        100
-                                                                                            ? "white"
-                                                                                            : ""
-                                                                                    }
-                                                                                >
-                                                                                    {item.preenchimento.filter(
-                                                                                        (
-                                                                                            i
-                                                                                        ) =>
-                                                                                            i.valor
-                                                                                    )
-                                                                                        .length
-                                                                                        ? Number(
-                                                                                              (item.preenchimento.filter(
-                                                                                                  (
-                                                                                                      i
-                                                                                                  ) =>
-                                                                                                      i.valor
-                                                                                              )
-                                                                                                  .length /
-                                                                                                  Object.entries(
-                                                                                                      item
-                                                                                                          .modelo
-                                                                                                          .campos
-                                                                                                  ).filter(
-                                                                                                      (
-                                                                                                          i
-                                                                                                      ) =>
-                                                                                                          i[1]
-                                                                                                              .obrigatorio ==
-                                                                                                          true
-                                                                                                  )
-                                                                                                      .length) *
-                                                                                                  100 >
-                                                                                                  100
-                                                                                                  ? 100
-                                                                                                  : (item.preenchimento.filter(
+                                                                                                    .length >
+                                                                                                0
+                                                                                                    ? Object.entries(
+                                                                                                        item
+                                                                                                            .modelo
+                                                                                                            .campos
+                                                                                                    ).filter(
                                                                                                         (
                                                                                                             i
                                                                                                         ) =>
-                                                                                                            i.valor
+                                                                                                            i[1]
+                                                                                                                .obrigatorio ==
+                                                                                                            true
                                                                                                     )
-                                                                                                        .length /
-                                                                                                        Object.entries(
-                                                                                                            item
-                                                                                                                .modelo
-                                                                                                                .campos
-                                                                                                        ).filter(
+                                                                                                        .length
+                                                                                                    : 100
+                                                                                            }
+                                                                                            colorScheme={
+                                                                                                //valores preenchidos
+                                                                                                !(item.preenchimento.filter(
+                                                                                                    (i: any) => i.valor != "" && i.valor != null
+                                                                                                ).length == 
+                                                                                                //quantidade de obrigatórios
+                                                                                                Object.entries(
+                                                                                                    item.modelo.campos
+                                                                                                ).filter(
+                                                                                                    (i: Array<any>) => i[1].obrigatorio == true
+                                                                                                ).length) ? "green" : "yellow"
+                                                                                            }
+                                                                                        />
+                                                                                    </Box>
+                                                                                </Tooltip>
+                                                                                <Flex
+                                                                                    pos="absolute"
+                                                                                    top="0"
+                                                                                    justify="center"
+                                                                                    mx="auto"
+                                                                                    w="full"
+                                                                                >
+                                                                                    <Text
+                                                                                        textAlign="center"
+                                                                                        fontSize="xs"
+                                                                                        color={
+                                                                                            Number(
+                                                                                                (item.preenchimento.filter(
+                                                                                                    (
+                                                                                                        i
+                                                                                                    ) =>
+                                                                                                        i.valor
+                                                                                                )
+                                                                                                    .length /
+                                                                                                    Object.entries(
+                                                                                                        item
+                                                                                                            .modelo
+                                                                                                            .campos
+                                                                                                    ).filter(
+                                                                                                        (
+                                                                                                            i
+                                                                                                        ) =>
+                                                                                                            i[1]
+                                                                                                                .obrigatorio ==
+                                                                                                            true
+                                                                                                    )
+                                                                                                        .length) *
+                                                                                                    100
+                                                                                            ).toFixed(
+                                                                                                0
+                                                                                            ) ==
+                                                                                            100
+                                                                                                ? "white"
+                                                                                                : ""
+                                                                                        }
+                                                                                    >
+                                                                                        {item.preenchimento.filter(
+                                                                                            (
+                                                                                                i
+                                                                                            ) =>
+                                                                                                i.valor
+                                                                                        )
+                                                                                            .length
+                                                                                            ? Number(
+                                                                                                (item.preenchimento.filter(
+                                                                                                    (
+                                                                                                        i
+                                                                                                    ) =>
+                                                                                                        i.valor
+                                                                                                )
+                                                                                                    .length /
+                                                                                                    Object.entries(
+                                                                                                        item
+                                                                                                            .modelo
+                                                                                                            .campos
+                                                                                                    ).filter(
+                                                                                                        (
+                                                                                                            i
+                                                                                                        ) =>
+                                                                                                            i[1]
+                                                                                                                .obrigatorio ==
+                                                                                                            true
+                                                                                                    )
+                                                                                                        .length) *
+                                                                                                    100 >
+                                                                                                    100
+                                                                                                    ? 100
+                                                                                                    : (item.preenchimento.filter(
                                                                                                             (
                                                                                                                 i
                                                                                                             ) =>
-                                                                                                                i[1]
-                                                                                                                    .obrigatorio ==
-                                                                                                                true
+                                                                                                                i.valor
                                                                                                         )
-                                                                                                            .length) *
-                                                                                                        100
-                                                                                          ).toFixed(
-                                                                                              2
-                                                                                          )
-                                                                                        : Number(
-                                                                                              0
-                                                                                          ).toFixed(
-                                                                                              2
-                                                                                          )}
+                                                                                                            .length /
+                                                                                                            Object.entries(
+                                                                                                                item
+                                                                                                                    .modelo
+                                                                                                                    .campos
+                                                                                                            ).filter(
+                                                                                                                (
+                                                                                                                    i
+                                                                                                                ) =>
+                                                                                                                    i[1]
+                                                                                                                        .obrigatorio ==
+                                                                                                                    true
+                                                                                                            )
+                                                                                                                .length) *
+                                                                                                            100
+                                                                                            ).toFixed(
+                                                                                                2
+                                                                                            )
+                                                                                            : Number(
+                                                                                                0
+                                                                                            ).toFixed(
+                                                                                                2
+                                                                                            )}
 
-                                                                                    %
-                                                                                    preenchida
-                                                                                </Text>
-                                                                            </Flex>
-                                                                        </Box>
+                                                                                        %
+                                                                                        preenchida
+                                                                                    </Text>
+                                                                                </Flex>
+                                                                            </Box>
+                                                                        </Tooltip>
                                                                     </>
                                                                 </Td>
                                                             </Tr>
