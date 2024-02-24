@@ -708,33 +708,6 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             return;
         }
     };
-    //console.log(errors);
-
-    useEffect(() => {
-        if (errors) {
-            //console.log(
-                campos
-                    .filter(
-                        (i) =>
-                            i.campos.find(
-                                (e) => modelo?.campos[e.codigo]?.exibir
-                            ) &&
-                            i.campos.find((campo) =>
-                                errors?.preenchimento &&
-                                Object.keys(errors?.preenchimento).find(
-                                    (e) => e == campo.codigo
-                                )
-                                    ? true
-                                    : false
-                            )
-                    )
-                    .map((i) => {
-                        const index = campos.findIndex((e) => e.id == i.id);
-                        isIncompleteStep(index);
-                    })
-            );
-        }
-    }, [errors]);
     return (
         <Box
             bg="gray.100"
@@ -1668,10 +1641,6 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                                                 .target
                                                                                                 .value
                                                                                         );
-                                                                                    //console.log(
-                                                                                        "cpfValido",
-                                                                                        cpfValido
-                                                                                    );
                                                                                     if (
                                                                                         !cpfValido
                                                                                     ) {

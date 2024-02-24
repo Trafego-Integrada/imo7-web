@@ -33,18 +33,6 @@ const Dashbord: NextPage = ({ boletos, extratos }) => {
         ["chamados", { contratoId: router.query?.contratoId }],
         listarChamados
     );
-    //console.log(
-        boletos.filter((e) => {
-            //console.log(
-                e.contrato.inquilinos.includes((i) => {
-                    //console.log("a", i);
-                    return true;
-                })
-            );
-            return true;
-        }),
-        usuario
-    );
     return (
         <LayoutPainel>
             <Grid gridTemplateColumns="repeat(3,1fr)" gap={4}>

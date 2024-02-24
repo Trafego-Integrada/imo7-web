@@ -272,9 +272,6 @@ handler.delete(async (req, res) => {
             //     bucketName: bucket,
             // };
             // const getBucketResponse = await client.getBucket(getBucketRequest);
-            // //console.log(
-            //     foto.anexo.replace(process.env.NEXT_PUBLIC_URL_STORAGE, "")
-            // );
             // const deleteObjectRequest: os.requests.DeleteObjectRequest = {
             //     namespaceName: namespace,
             //     bucketName: bucket,
