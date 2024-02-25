@@ -37,8 +37,8 @@ handler.post(async (req, res) => {
                 codigoRecuperacao: recuperacao.hash,
             }),
         })
-            .then((res) => //console.log(res))
-            .catch((res) => //console.log(res));
+            //.then((res) => //console.log(res))
+            //.catch((res) => //console.log(res));
 
         return res.json();
     }
