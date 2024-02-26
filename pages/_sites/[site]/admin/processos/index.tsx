@@ -816,6 +816,40 @@ const Home = ({ query }) => {
                                                                                 passHref
                                                                             />
                                                                         </Tooltip>
+                                                                        <Tooltip label="Visualizar Ficha">
+                                                                            <IconButton
+                                                                                size="xs"
+                                                                                rounded="full"
+                                                                                colorScheme="blue"
+                                                                                variant="outline"
+                                                                                as={
+                                                                                    Link
+                                                                                }
+                                                                                icon={
+                                                                                    <FiEye />
+                                                                                }
+                                                                                href={`/fichaCadastral/${item.id}`}
+                                                                                target="_blank"
+                                                                                passHref
+                                                                            />
+                                                                        </Tooltip>
+                                                                        <Tooltip label="Baixar Todos Arquivos">
+                                                                            <IconButton
+                                                                                size="xs"
+                                                                                rounded="full"
+                                                                                colorScheme="blue"
+                                                                                variant="outline"
+                                                                                as={
+                                                                                    Link
+                                                                                }
+                                                                                icon={
+                                                                                <FiDownload />
+                                                                                }
+                                                                                href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/downloadArquivos`}
+                                                                                target="_blank"
+                                                                                passHref
+                                                                            />
+                                                                        </Tooltip>
                                                                         <Menu>
                                                                             <Tooltip label="Mais opções">
                                                                                 <MenuButton>
