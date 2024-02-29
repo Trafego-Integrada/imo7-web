@@ -1,9 +1,9 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
-const handler = nextConnect();
+import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
 import moment from "moment";
-import { checkAuth } from "@/middleware/checkAuth";
+import nextConnect from "next-connect";
+const handler = nextConnect();
 handler.use(cors);
 handler.use(checkAuth);
 handler.get(async (req, res) => {
@@ -125,6 +125,21 @@ handler.post(async (req, res) => {
                 id: id,
             },
         });
+
+        if (dadosAntigos.status != "aguardando" && status == "preenchida") {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                dataFimPreenchimento: moment().format(),
+            };
+            await prisma.historico.create({
+                data: {
+                    descricao: "iniciou preenchimento",
+                    tabela: "FichaCadastral",
+                    tabelaId: id,
+                    usuarioId: req.user.id,
+                },
+            });
+        }
 
         if (dadosAntigos.status != "aprovada" && status == "aprovada") {
             dataPreenchimento = {

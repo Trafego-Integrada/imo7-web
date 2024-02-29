@@ -1,9 +1,8 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
-const handler = nextConnect();
 import { cors } from "@/middleware/cors";
 import moment from "moment";
-import { checkAuth } from "@/middleware/checkAuth";
+import nextConnect from "next-connect";
+const handler = nextConnect();
 handler.use(cors);
 handler.get(async (req, res) => {
     try {
@@ -49,7 +48,7 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
     try {
         const { id } = req.query;
-        let { preenchimento } = req.body;
+        let { preenchimento, status } = req.body;
 
         let dataPreenchimento = {};
 
@@ -77,6 +76,42 @@ handler.post(async (req, res) => {
                     }),
                 },
             };
+        }
+
+        const dadosAntigos = await prisma.fichaCadastral.findUnique({
+            where: {
+                id: id,
+            },
+        });
+
+        // Valida se usuário iniciou preenchimento
+        if (!dadosAntigos.dataInicioPreenchimento) {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                dataInicioPreenchimento: moment().format(),
+            };
+            await prisma.historico.create({
+                data: {
+                    descricao: "iniciou preenchimento",
+                    tabela: "FichaCadastral",
+                    tabelaId: id,
+                },
+            });
+        }
+
+        // Valida se usuário
+        if (dadosAntigos.status != "aguardando" && status == "preenchida") {
+            dataPreenchimento = {
+                ...dataPreenchimento,
+                dataFimPreenchimento: moment().format(),
+            };
+            await prisma.historico.create({
+                data: {
+                    descricao: "finalizou preenchimento",
+                    tabela: "FichaCadastral",
+                    tabelaId: id,
+                },
+            });
         }
 
         const data = await prisma.fichaCadastral.update({

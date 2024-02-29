@@ -8,7 +8,6 @@ import {
     verificarExtensaoImagem,
 } from "@/helpers/helpers";
 import { buscarEndereco } from "@/lib/buscarEndereco";
-import prisma from "@/lib/prisma";
 import {
     atualizarAnexosFicha,
     atualizarFicha,
@@ -58,8 +57,7 @@ import {
     useSteps,
     useToast,
 } from "@chakra-ui/react";
-import { GetServerSideProps } from "next";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     FiAlertTriangle,
@@ -74,6 +72,7 @@ import { useMutation } from "react-query";
 import "react-quill/dist/quill.snow.css";
 
 import { ModalPreview } from "@/components/Modals/Preview";
+import { GetServerSideProps } from "next";
 import { FileUpload } from "primereact/fileupload";
 import { BiSave } from "react-icons/bi";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
@@ -507,9 +506,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     });
     const atualizar = useMutation(atualizarFicha);
     const atualizarAnexos = useMutation(atualizarAnexosFicha); // Função para converter arquivo para base64
+    console.log(watch());
+    console.error("Erros", errors);
 
     const onSubmit = async (data) => {
         try {
+            // Mapear campos e setar erros se não estiverem preenchidos
+
             if (
                 activeStep !=
                 campos.filter(
@@ -529,7 +532,8 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                         watch(
                                             `preenchimento.${i.dependencia?.codigo}`
                                         )) ||
-                                        (i.dependencia?.codigo &&i.dependenciaValor&&
+                                        (i.dependencia?.codigo &&
+                                            i.dependenciaValor &&
                                             JSON.parse(
                                                 i.dependenciaValor
                                             ).includes(
@@ -546,8 +550,9 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                 ).length
             ) {
                 setActiveStep(activeStep + 1);
+            } else {
+                data = { ...data, status: "preenchida" };
             }
-            //console.log(data);
             await atualizar.mutateAsync(data);
 
             // const formData = new FormData();
@@ -665,11 +670,43 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     };
     const { activeStep, setActiveStep, isIncompleteStep } = useSteps({
         index: 0,
-        count: campos.filter((i) =>
+        count: campos?.filter((i) =>
             i.campos.find((e) => modelo?.campos[e.codigo]?.exibir)
         ).length,
     });
-    const onError = (data) => {
+
+    const verificarPreenchimento = async () => {
+        var retorno = true;
+        await Promise.all(
+            campos.map((grupo) => {
+                grupo.campos
+                    .filter((i) =>
+                        ["image", "file", "files"].includes(i.tipoCampo)
+                    )
+                    .map((campo) => {
+                        if (
+                            modelo.campos[campo.codigo].obrigatorio &&
+                            (!watch(`preenchimento.${campo.codigo}`) ||
+                                (Array.isArray(
+                                    watch(`preenchimento.${campo.codigo}`)
+                                ) &&
+                                    watch(`preenchimento.${campo.codigo}`)
+                                        .length == 0))
+                        ) {
+                            retorno = false;
+                            setError(`preenchimento.${campo.codigo}`, {
+                                type: "custom",
+                                message: `${campo.nome} - Campo obrigatório`,
+                            });
+                        }
+                    });
+            })
+        );
+
+        return retorno;
+    };
+    const onError = async (data) => {
+        console.log("Adicionado");
         if (
             activeStep !=
             campos.filter(
@@ -687,7 +724,8 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     watch(
                                         `preenchimento.${i.dependencia?.codigo}`
                                     )) ||
-                                    (i.dependencia?.codigo &&i.dependenciaValor&&
+                                    (i.dependencia?.codigo &&
+                                        i.dependenciaValor &&
                                         JSON.parse(i.dependenciaValor).includes(
                                             watch(
                                                 `preenchimento.${i.dependencia?.codigo}`
@@ -701,12 +739,14 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     }).length > 0
             ).length
         ) {
-            //console.log("data", data);
             clearErrors();
             setActiveStep(activeStep + 1);
             onSubmit(watch());
-            return;
+        } else {
+            const checkPreenchimento = await verificarPreenchimento();
+            if (checkPreenchimento) onSubmit(watch());
         }
+        return;
     };
     return (
         <Box
@@ -1801,15 +1841,15 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                         )
                                                                     }
                                                                     error={
-                                                                        errors.arquivos &&
+                                                                        errors.preenchimento &&
                                                                         errors
-                                                                            .arquivos[
+                                                                            .preenchimento[
                                                                             campo
                                                                                 .codigo
                                                                         ]
                                                                             ?.message
                                                                             ? errors
-                                                                                  .arquivos[
+                                                                                  .preenchimento[
                                                                                   campo
                                                                                       .codigo
                                                                               ]
@@ -1963,15 +2003,15 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                         )
                                                                     }
                                                                     error={
-                                                                        errors.arquivos &&
+                                                                        errors.preenchimento &&
                                                                         errors
-                                                                            .arquivos[
+                                                                            .preenchimento[
                                                                             campo
                                                                                 .codigo
                                                                         ]
                                                                             ?.message
                                                                             ? errors
-                                                                                  .arquivos[
+                                                                                  .preenchimento[
                                                                                   campo
                                                                                       .codigo
                                                                               ]
@@ -2131,15 +2171,15 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                                         )
                                                                     }
                                                                     error={
-                                                                        errors.arquivos &&
+                                                                        errors.preenchimento &&
                                                                         errors
-                                                                            .arquivos[
+                                                                            .preenchimento[
                                                                             campo
                                                                                 .codigo
                                                                         ]
                                                                             ?.message
                                                                             ? errors
-                                                                                  .arquivos[
+                                                                                  .preenchimento[
                                                                                   campo
                                                                                       .codigo
                                                                               ]
@@ -2472,6 +2512,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                         type="submit"
                                         isLoading={isSubmitting}
                                         rightIcon={<BiSave />}
+                                        isDisabled={
+                                            Object.entries(errors).length == 0
+                                                ? false
+                                                : true
+                                        }
                                     >
                                         Salvar
                                     </Button>
@@ -2485,83 +2530,6 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
 };
 
 export default FichaCadastral;
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const { id } = ctx.query;
-    let ficha = await prisma.fichaCadastral.findUnique({
-        where: { id },
-        include: {
-            imobiliaria: true,
-            modelo: true,
-            preenchimento: {
-                include: {
-                    campo: true,
-                },
-            },
-            imovel: true,
-            Processo: true,
-        },
-    });
-    if (ficha?.deletedAt) {
-        return {
-            props: {
-                notFound: true,
-            },
-        };
-    }
-    const modelo = await prisma.modeloFichaCadastral.findUnique({
-        where: {
-            id: ficha?.modeloFichaCadastralId,
-        },
-    });
-    const campos = await prisma.categoriaCampoFichaCadastral.findMany({
-        where: {
-            campos: {
-                some: {
-                    tipoFicha: ficha?.modelo.tipo,
-                    deletedAt: null,
-                },
-            },
-            deletedAt: null,
-        },
-        orderBy: {
-            ordem: "asc",
-        },
-        include: {
-            campos: {
-                where: {
-                    tipoFicha: ficha?.modelo.tipo,
-                    deletedAt: null,
-                },
-                orderBy: {
-                    ordem: "asc",
-                },
-                include: {
-                    dependencia: true,
-                },
-            },
-        },
-    });
-    let newObj = {};
-    let newArq = {};
-    let analise = {};
-    ficha.preenchimento.map((item) => {
-        newObj[item.campoFichaCadastralCodigo] = item.valor;
-        analise[item.campoFichaCadastralCodigo] = {
-            aprovado: item.aprovado,
-            motivoReprovacao: item.motivoReprovacao,
-        };
-    });
-    ficha.preenchimento = newObj;
-    ficha.analise = analise;
-    return {
-        props: {
-            ficha: JSON.parse(JSON.stringify(ficha)),
-            modelo: JSON.parse(JSON.stringify(modelo)),
-            campos: JSON.parse(JSON.stringify(campos)),
-        },
-    };
-};
 
 // import { FormInput } from "@/components/Form/FormInput";
 // import { Layout } from "@/components/Layout/layout";
@@ -3964,79 +3932,79 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 // export default FichaCadastral;
 
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//     const { id } = ctx.query;
-//     let ficha = await prisma.fichaCadastral.findUnique({
-//         where: { id },
-//         include: {
-//             imobiliaria: true,
-//             modelo: true,
-//             preenchimento: {
-//                 include: {
-//                     campo: true,
-//                 },
-//             },
-//             imovel: true,
-//             Processo: true,
-//         },
-//     });
-//     if (ficha?.deletedAt) {
-//         return {
-//             props: {
-//                 notFound: true,
-//             },
-//         };
-//     }
-//     const modelo = await prisma.modeloFichaCadastral.findUnique({
-//         where: {
-//             id: ficha?.modeloFichaCadastralId,
-//         },
-//     });
-//     const campos = await prisma.categoriaCampoFichaCadastral.findMany({
-//         where: {
-//             campos: {
-//                 some: {
-//                     tipoFicha: ficha?.modelo.tipo,
-//                     deletedAt: null,
-//                 },
-//             },
-//             deletedAt: null,
-//         },
-//         orderBy: {
-//             ordem: "asc",
-//         },
-//         include: {
-//             campos: {
-//                 where: {
-//                     tipoFicha: ficha?.modelo.tipo,
-//                     deletedAt: null,
-//                 },
-//                 orderBy: {
-//                     ordem: "asc",
-//                 },
-//                 include: {
-//                     dependencia: true,
-//                 },
-//             },
-//         },
-//     });
-//     let newObj = {};
-//     let newArq = {};
-//     let analise = {};
-//     ficha.preenchimento.map((item) => {
-//         newObj[item.campoFichaCadastralCodigo] = item.valor;
-//         analise[item.campoFichaCadastralCodigo] = {
-//             aprovado: item.aprovado,
-//             motivoReprovacao: item.motivoReprovacao,
-//         };
-//     });
-//     ficha.preenchimento = newObj;
-//     ficha.analise = analise;
-//     return {
-//         props: {
-//             ficha: JSON.parse(JSON.stringify(ficha)),
-//             modelo: JSON.parse(JSON.stringify(modelo)),
-//             campos: JSON.parse(JSON.stringify(campos)),
-//         },
-//     };
-// };
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const { id } = ctx.query;
+    let ficha = await prisma.fichaCadastral.findUnique({
+        where: { id },
+        include: {
+            imobiliaria: true,
+            modelo: true,
+            preenchimento: {
+                include: {
+                    campo: true,
+                },
+            },
+            imovel: true,
+            Processo: true,
+        },
+    });
+    if (ficha?.deletedAt) {
+        return {
+            props: {
+                notFound: true,
+            },
+        };
+    }
+    const modelo = await prisma.modeloFichaCadastral.findUnique({
+        where: {
+            id: ficha?.modeloFichaCadastralId,
+        },
+    });
+    const campos = await prisma.categoriaCampoFichaCadastral.findMany({
+        where: {
+            campos: {
+                some: {
+                    tipoFicha: ficha?.modelo.tipo,
+                    deletedAt: null,
+                },
+            },
+            deletedAt: null,
+        },
+        orderBy: {
+            ordem: "asc",
+        },
+        include: {
+            campos: {
+                where: {
+                    tipoFicha: ficha?.modelo.tipo,
+                    deletedAt: null,
+                },
+                orderBy: {
+                    ordem: "asc",
+                },
+                include: {
+                    dependencia: true,
+                },
+            },
+        },
+    });
+    let newObj = {};
+    let newArq = {};
+    let analise = {};
+    ficha.preenchimento.map((item) => {
+        newObj[item.campoFichaCadastralCodigo] = item.valor;
+        analise[item.campoFichaCadastralCodigo] = {
+            aprovado: item.aprovado,
+            motivoReprovacao: item.motivoReprovacao,
+        };
+    });
+    ficha.preenchimento = newObj;
+    ficha.analise = analise;
+    return {
+        props: {
+            ficha: JSON.parse(JSON.stringify(ficha)),
+            modelo: JSON.parse(JSON.stringify(modelo)),
+            campos: JSON.parse(JSON.stringify(campos)),
+        },
+    };
+};
