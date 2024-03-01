@@ -1043,17 +1043,73 @@ const Home = ({ query }) => {
                                                                         </Tooltip>
                                                                     </>
                                                                 </Td>
-                                                                <Td>
+                                                                <Td w={20}>
+                                                                    { item.dataInicioPreenchimento &&
+                                                                        <Tooltip
+                                                                            label="O cliente iniciou o Cadastro"
+                                                                            hasArrow
+                                                                        >
+                                                                            <Box textAlign="center" bg="#c7ebff" color="#005989">
+                                                                                <Text>{
+                                                                                    formatoData(
+                                                                                        item.dataInicioPreenchimento,
+                                                                                        "DATA"
+                                                                                    )
+                                                                                }</Text>
+                                                                                <Text>{
+                                                                                    formatoData(
+                                                                                        item.dataInicioPreenchimento,
+                                                                                        "HORA"
+                                                                                    )
+                                                                                }</Text>
+                                                                            </Box>
+                                                                        </Tooltip>
+                                                                    }
+                                                                    </Td>
+                                                                <Td w={20}>
                                                                     <Tooltip
                                                                         label="Última atualização"
                                                                         hasArrow
                                                                     >
-                                                                        {formatoData(
-                                                                            item.updatedAt,
-                                                                            "DATA_HORA"
-                                                                        )}
+                                                                        <Box textAlign="center">
+                                                                            <Text>{
+                                                                                formatoData(
+                                                                                    item.updatedAt,
+                                                                                    "DATA"
+                                                                                )
+                                                                            }</Text>
+                                                                            <Text>{
+                                                                                formatoData(
+                                                                                    item.updatedAt,
+                                                                                    "HORA"
+                                                                                )
+                                                                            }</Text>
+                                                                        </Box>
                                                                     </Tooltip>
-                                                                </Td>
+                                                                </Td> 
+                                                                <Td w={20}>
+                                                                    { item.dataFimPreenchimento &&
+                                                                        <Tooltip
+                                                                            label="O cliente finalizou o Cadastro e enviou a ficha"
+                                                                            hasArrow
+                                                                        >
+                                                                            <Box textAlign="center" bg="#d9fbd0" color="#4d7c3d">
+                                                                                <Text>{
+                                                                                    formatoData(
+                                                                                        item.dataFimPreenchimento,
+                                                                                        "DATA"
+                                                                                    )
+                                                                                }</Text>
+                                                                                <Text>{
+                                                                                    formatoData(
+                                                                                        item.dataFimPreenchimento,
+                                                                                        "HORA"
+                                                                                    )
+                                                                                }</Text>
+                                                                            </Box>
+                                                                        </Tooltip>
+                                                                    }
+                                                                    </Td>
                                                                 <Td>
                                                                     <>
                                                                         <Tooltip

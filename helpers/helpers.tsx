@@ -5,6 +5,8 @@ export const formatoData = (data, tipo = "DATA", utc = true) => {
     switch (tipo) {
         case "DATA":
             return moment(data).utc(utc).format("DD/MM/YYYY");
+        case "HORA": 
+            return moment(data).utc(utc).format("HH:mm:ss");
         case "DATA_HORA":
             return moment(data).utc(utc).format("DD/MM/YYYY HH:mm:ss");
         default:
