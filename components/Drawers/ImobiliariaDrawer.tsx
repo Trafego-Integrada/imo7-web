@@ -202,8 +202,10 @@ const DrawerBase = ({}, ref) => {
                                             <FormInput
                                                 size="sm"
                                                 label="Nome Fantasia"
-                                                {...register("nome")}
-                                                error={errors.nome?.message}
+                                                {...register("nomeFantasia")}
+                                                error={
+                                                    errors.nomeFantasia?.message
+                                                }
                                             />
                                         </GridItem>
                                         <GridItem>
