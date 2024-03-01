@@ -685,7 +685,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     )
                     .map((campo) => {
                         if (
-                            modelo.campos[campo.codigo].obrigatorio &&
+                            modelo.campos[campo.codigo]?.obrigatorio &&
                             (!watch(`preenchimento.${campo.codigo}`) ||
                                 (Array.isArray(
                                     watch(`preenchimento.${campo.codigo}`)

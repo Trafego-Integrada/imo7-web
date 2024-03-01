@@ -53,7 +53,7 @@ handler.post(async (req, res) => {
         let dataPreenchimento = {};
 
         if (preenchimento && !Array.isArray(preenchimento)) {
-            //console.log(preenchimento);
+            //console.log(JSON.stringify(status));
             dataPreenchimento = {
                 preenchimento: {
                     upsert: Object.entries(preenchimento).map((item) => {
@@ -83,9 +83,11 @@ handler.post(async (req, res) => {
                 id: id,
             },
         });
+        console.log(JSON.stringify(dadosAntigos?.status))
 
         // Valida se usuário iniciou preenchimento
-        if (!dadosAntigos.dataInicioPreenchimento) {
+        if (!dadosAntigos?.dataInicioPreenchimento) {
+            //console.log(`!dadosAntigos?.dataInicioPreenchimento`)
             dataPreenchimento = {
                 ...dataPreenchimento,
                 dataInicioPreenchimento: moment().format(),
@@ -100,7 +102,8 @@ handler.post(async (req, res) => {
         }
 
         // Valida se usuário
-        if (dadosAntigos.status != "aguardando" && status == "preenchida") {
+        if (dadosAntigos?.status != "preenchida" && status == "preenchida") {
+            //console.log(`dadosAntigos?.status != "preenchida" && status == "preenchida"`)
             dataPreenchimento = {
                 ...dataPreenchimento,
                 dataFimPreenchimento: moment().format(),
