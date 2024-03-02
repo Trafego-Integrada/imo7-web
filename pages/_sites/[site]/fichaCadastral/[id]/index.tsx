@@ -552,6 +552,10 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                 setActiveStep(activeStep + 1);
             } else {
                 data = { ...data, status: "preenchida" };
+                toast({
+                    title: "Ficha preenchida e enviada",
+                    position: "top-right",
+                });
             }
             await atualizar.mutateAsync(data);
 
