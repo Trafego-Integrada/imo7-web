@@ -509,97 +509,9 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     console.log(watch());
     console.error("Erros", errors);
 
-    const onSubmit = async (data) => {
+    const onFormSave = async (data: any) => {
         try {
-            // Mapear campos e setar erros se não estiverem preenchidos
-
-            if (
-                activeStep !=
-                campos.filter(
-                    (i) =>
-                        i.campos.find(
-                            (e) => modelo?.campos[e.codigo]?.exibir
-                        ) &&
-                        i.campos.filter((i) => {
-                            if (
-                                (modelo.campos[i.codigo] &&
-                                    modelo?.campos[i.codigo]?.exibir &&
-                                    !i.dependencia) ||
-                                (modelo.campos[i.codigo] &&
-                                    modelo?.campos[i.codigo]?.exibir &&
-                                    ((i.dependencia?.codigo &&
-                                        !i.dependenciaValor &&
-                                        watch(
-                                            `preenchimento.${i.dependencia?.codigo}`
-                                        )) ||
-                                        (i.dependencia?.codigo &&
-                                            i.dependenciaValor &&
-                                            JSON.parse(
-                                                i.dependenciaValor
-                                            ).includes(
-                                                watch(
-                                                    `preenchimento.${i.dependencia?.codigo}`
-                                                )
-                                            ))))
-                            ) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }).length > 0
-                ).length
-            ) {
-                setActiveStep(activeStep + 1);
-            } else {
-                data = { ...data, status: "preenchida" };
-                toast({
-                    title: "Ficha preenchida e enviada",
-                    position: "top-right",
-                });
-            }
             await atualizar.mutateAsync(data);
-
-            // const formData = new FormData();
-            // if (data.arquivos && Object.entries(data.arquivos).length) {
-            //     const filesData = await Promise.all(
-            //         Object.entries(data.arquivos).map(async (item) => {
-            //             var files = item[1];
-            //             //console.log("files", files, item[1]);
-
-            //             const filePromises = Array.from(files).map(
-            //                 async (file) => {
-            //                     //console.log(file, file.name);
-            //                     const base64String = await convertToBase64(
-            //                         file
-            //                     );
-            //                     const fileExtension = getFileExtension(
-            //                         file.name
-            //                     );
-
-            //                     return {
-            //                         nome: item[0],
-            //                         extensao: fileExtension,
-            //                         base64: base64String,
-            //                     };
-            //                 }
-            //             );
-
-            //             return Promise.all(filePromises);
-            //         })
-            //     );
-
-            //     // Flatten the array
-            //     const flattenedFilesData = filesData.flat();
-
-            //     // Now you have an array of objects with nome, extensao, and base64 properties
-            //     //console.log(flattenedFilesData);
-            //     await atualizarAnexos.mutateAsync({
-            //         id: data.id,
-            //         formData: {
-            //             arquivos: flattenedFilesData,
-            //         },
-            //     });
-            // }
 
             toast({
                 title: "Ficha salva",
@@ -615,6 +527,46 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                 position: "top-right",
             });
         }
+    }
+
+    const onSubmit = async (data: any) => {
+        // Mapear campos e setar erros se não estiverem preenchidos
+
+        if (activeStep != campos.filter((i) => 
+                i.campos.find((e) => modelo?.campos[e.codigo]?.exibir) &&
+                    i.campos.filter((i) => {
+                        if ((modelo.campos[i.codigo] && modelo?.campos[i.codigo]?.exibir && 
+                                !i.dependencia) ||
+                            (modelo.campos[i.codigo] && modelo?.campos[i.codigo]?.exibir && (
+                                (i.dependencia?.codigo && !i.dependenciaValor &&
+                                    watch(`preenchimento.${i.dependencia?.codigo}`)) ||
+                                (i.dependencia?.codigo && i.dependenciaValor &&
+                                    JSON.parse(i.dependenciaValor)
+                                        .includes(watch(`preenchimento.${i.dependencia?.codigo}`)
+                                    )
+                                ))
+                            )
+                        ) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }).length > 0
+            ).length
+        ) {
+            setActiveStep(activeStep + 1);
+        } else {
+            const checkPreenchimento = await verificarPreenchimento()
+            if (checkPreenchimento) {
+                data = { ...data, status: "preenchida" };
+                toast({
+                    title: "Ficha preenchida e enviada",
+                    position: "top-right",
+                });
+            }
+        }
+        
+        await onFormSave(data);
     };
 
     const onSubmitIgnorandoErros = async (data) => {
@@ -688,6 +640,9 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                         ["image", "file", "files"].includes(i.tipoCampo)
                     )
                     .map((campo) => {
+                        console.log(JSON.stringify({
+                            campo
+                        }))
                         if (
                             modelo.campos[campo.codigo]?.obrigatorio &&
                             (!watch(`preenchimento.${campo.codigo}`) ||
@@ -695,7 +650,8 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     watch(`preenchimento.${campo.codigo}`)
                                 ) &&
                                     watch(`preenchimento.${campo.codigo}`)
-                                        .length == 0))
+                                        .length == 0)
+                            )
                         ) {
                             retorno = false;
                             setError(`preenchimento.${campo.codigo}`, {
@@ -745,10 +701,10 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         ) {
             clearErrors();
             setActiveStep(activeStep + 1);
-            onSubmit(watch());
+            await onFormSave(watch());
         } else {
             const checkPreenchimento = await verificarPreenchimento();
-            if (checkPreenchimento) onSubmit(watch());
+            if (checkPreenchimento) await onFormSave(watch());
         }
         return;
     };
