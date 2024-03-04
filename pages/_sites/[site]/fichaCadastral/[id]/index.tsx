@@ -8,6 +8,7 @@ import {
     verificarExtensaoImagem,
 } from "@/helpers/helpers";
 import { buscarEndereco } from "@/lib/buscarEndereco";
+import prisma from "@/lib/prisma";
 import {
     atualizarAnexosFicha,
     atualizarFicha,
