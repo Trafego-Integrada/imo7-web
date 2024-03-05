@@ -55,9 +55,7 @@ handler.get(async (req, res) => {
             }
         }
         if (!fileUrls || !Array.isArray(fileUrls) || fileUrls.length === 0) {
-            return res
-                .status(400)
-                .json({ error: "Invalid or empty file URLs" });
+            return res.redirect("/error");
         }
 
         const zip = new AdmZip();
@@ -119,10 +117,11 @@ handler.get(async (req, res) => {
         );
         res.send(zipBuffer);
     } catch (error) {
-        res.status(500).send({
-            success: false,
-            message: error.message,
-        });
+        console.log(JSON.stringify({
+            message: (error as Error).message
+        }));
+
+        res.redirect("/error");
     }
 });
 function extractFileNameFromUrl(url) {
