@@ -7,6 +7,7 @@ import {
     getFileExtension,
     verificarExtensaoImagem,
 } from "@/helpers/helpers";
+import { redirectToErrorPage } from '@/utils/redirectToErrorPage';
 import { buscarEndereco } from "@/lib/buscarEndereco";
 import prisma from "@/lib/prisma";
 import {
@@ -3894,78 +3895,85 @@ export default FichaCadastral;
 // export default FichaCadastral;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const { id } = ctx.query;
-    let ficha = await prisma.fichaCadastral.findUnique({
-        where: { id },
-        include: {
-            imobiliaria: true,
-            modelo: true,
-            preenchimento: {
-                include: {
-                    campo: true,
+    try {
+        const { id } = ctx.query;
+        let ficha = await prisma.fichaCadastral.findUnique({
+            where: { id },
+            include: {
+                imobiliaria: true,
+                modelo: true,
+                preenchimento: {
+                    include: {
+                        campo: true,
+                    },
+                },
+                imovel: true,
+                Processo: true,
+            },
+        });
+        if (ficha?.deletedAt) {
+            return {
+                props: {
+                    notFound: true,
+                },
+            };
+        }
+        const modelo = await prisma.modeloFichaCadastral.findUnique({
+            where: {
+                id: ficha?.modeloFichaCadastralId,
+            },
+        });
+        const campos = await prisma.categoriaCampoFichaCadastral.findMany({
+            where: {
+                campos: {
+                    some: {
+                        tipoFicha: ficha?.modelo.tipo,
+                        deletedAt: null,
+                    },
+                },
+                deletedAt: null,
+            },
+            orderBy: {
+                ordem: "asc",
+            },
+            include: {
+                campos: {
+                    where: {
+                        tipoFicha: ficha?.modelo.tipo,
+                        deletedAt: null,
+                    },
+                    orderBy: {
+                        ordem: "asc",
+                    },
+                    include: {
+                        dependencia: true,
+                    },
                 },
             },
-            imovel: true,
-            Processo: true,
-        },
-    });
-    if (ficha?.deletedAt) {
+        });
+        let newObj = {};
+        let newArq = {};
+        let analise = {};
+        ficha.preenchimento.map((item) => {
+            newObj[item.campoFichaCadastralCodigo] = item.valor;
+            analise[item.campoFichaCadastralCodigo] = {
+                aprovado: item.aprovado,
+                motivoReprovacao: item.motivoReprovacao,
+            };
+        });
+        ficha.preenchimento = newObj;
+        ficha.analise = analise;
         return {
             props: {
-                notFound: true,
+                ficha: JSON.parse(JSON.stringify(ficha)),
+                modelo: JSON.parse(JSON.stringify(modelo)),
+                campos: JSON.parse(JSON.stringify(campos)),
             },
         };
+    } catch (error) {
+        console.error("Error in getServerSideProps:", error);
+    
+        //return redirectToErrorPage(ctx)
+        ctx.res.writeHead(302, { Location: '/error' });
     }
-    const modelo = await prisma.modeloFichaCadastral.findUnique({
-        where: {
-            id: ficha?.modeloFichaCadastralId,
-        },
-    });
-    const campos = await prisma.categoriaCampoFichaCadastral.findMany({
-        where: {
-            campos: {
-                some: {
-                    tipoFicha: ficha?.modelo.tipo,
-                    deletedAt: null,
-                },
-            },
-            deletedAt: null,
-        },
-        orderBy: {
-            ordem: "asc",
-        },
-        include: {
-            campos: {
-                where: {
-                    tipoFicha: ficha?.modelo.tipo,
-                    deletedAt: null,
-                },
-                orderBy: {
-                    ordem: "asc",
-                },
-                include: {
-                    dependencia: true,
-                },
-            },
-        },
-    });
-    let newObj = {};
-    let newArq = {};
-    let analise = {};
-    ficha.preenchimento.map((item) => {
-        newObj[item.campoFichaCadastralCodigo] = item.valor;
-        analise[item.campoFichaCadastralCodigo] = {
-            aprovado: item.aprovado,
-            motivoReprovacao: item.motivoReprovacao,
-        };
-    });
-    ficha.preenchimento = newObj;
-    ficha.analise = analise;
-    return {
-        props: {
-            ficha: JSON.parse(JSON.stringify(ficha)),
-            modelo: JSON.parse(JSON.stringify(modelo)),
-            campos: JSON.parse(JSON.stringify(campos)),
-        },
-    };
 };
