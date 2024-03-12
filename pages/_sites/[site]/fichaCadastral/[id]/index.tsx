@@ -78,6 +78,7 @@ import { GetServerSideProps } from "next";
 import { FileUpload } from "primereact/fileupload";
 import { BiSave } from "react-icons/bi";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
+import { totalFields, totalRequiredFields } from "@/utils/registerFormFieldsAuxiliar";
 function validateCPF(value) {
     // Remove caracteres não numéricos
     const cleanedCPF = value.replace(/\D/g, "");
@@ -534,27 +535,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     const onSubmit = async (data: any) => {
         // Mapear campos e setar erros se não estiverem preenchidos
 
-        if (activeStep != campos.filter((i) => 
-                i.campos.find((e) => modelo?.campos[e.codigo]?.exibir) &&
-                    i.campos.filter((i) => {
-                        if ((modelo.campos[i.codigo] && modelo?.campos[i.codigo]?.exibir && 
-                                !i.dependencia) ||
-                            (modelo.campos[i.codigo] && modelo?.campos[i.codigo]?.exibir && (
-                                (i.dependencia?.codigo && !i.dependenciaValor &&
-                                    watch(`preenchimento.${i.dependencia?.codigo}`)) ||
-                                (i.dependencia?.codigo && i.dependenciaValor &&
-                                    JSON.parse(i.dependenciaValor)
-                                        .includes(watch(`preenchimento.${i.dependencia?.codigo}`)
-                                    )
-                                ))
-                            )
-                        ) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }).length > 0
-            ).length
+        if (activeStep != totalFields(campos, modelo, watch).length
         ) {
             setActiveStep(activeStep + 1);
         } else {
@@ -670,36 +651,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     const onError = async (data) => {
         console.log("Adicionado");
         if (
-            activeStep !=
-            campos.filter(
-                (i) =>
-                    i.campos.find((e) => modelo?.campos[e.codigo]?.exibir) &&
-                    i.campos.filter((i) => {
-                        if (
-                            (modelo.campos[i.codigo] &&
-                                modelo?.campos[i.codigo]?.exibir &&
-                                !i.dependencia) ||
-                            (modelo.campos[i.codigo] &&
-                                modelo?.campos[i.codigo]?.exibir &&
-                                ((i.dependencia?.codigo &&
-                                    !i.dependenciaValor &&
-                                    watch(
-                                        `preenchimento.${i.dependencia?.codigo}`
-                                    )) ||
-                                    (i.dependencia?.codigo &&
-                                        i.dependenciaValor &&
-                                        JSON.parse(i.dependenciaValor).includes(
-                                            watch(
-                                                `preenchimento.${i.dependencia?.codigo}`
-                                            )
-                                        ))))
-                        ) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }).length > 0
-            ).length
+            activeStep != totalFields(campos, modelo, watch).length
         ) {
             clearErrors();
             setActiveStep(activeStep + 1);
@@ -710,6 +662,39 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         }
         return;
     };
+    /*const totalRequiredFilled = () => {
+        return campos.filter((item) => {
+            return item.campos.find((element) => 
+                item.campos.find(
+                        (element) => modelo?.campos[element.codigo]?.exibir
+                ) &&
+                    //FLAG Elzio Lima
+                item.campos.filter((item) => {
+                    if ((modelo.campos[item.codigo] &&
+                        modelo?.campos[item.codigo]?.exibir &&
+                        !item.dependencia) ||
+                        (modelo.campos[item.codigo] &&
+                        modelo?.campos[item.codigo]?.exibir &&
+                            ((item.dependencia?.codigo &&
+                            !item.dependenciaValor &&
+                            watch(`preenchimento.${item.dependencia?.codigo}`)) ||
+                            (item.dependencia?.codigo &&
+                            item.dependenciaValor &&
+                            JSON.parse(item.dependenciaValor).includes(
+                                watch(
+                                    `preenchimento.${item.dependencia?.codigo}`
+                                )
+                            ))))
+                    ) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }).length > 0
+            )
+        }).length
+    }*/
+
     return (
         <Box
             bg="gray.100"
@@ -911,45 +896,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             orientation="vertical"
                             display={{ base: "none", lg: "flex" }}
                         >
-                            {campos
-                                .filter(
-                                    (i) =>
-                                        i.campos.find(
-                                            (e) =>
-                                                modelo?.campos[e.codigo]?.exibir
-                                        ) &&
-                                        i.campos.filter((i) => {
-                                            //console.log(i);
-                                            if (
-                                                (modelo.campos[i.codigo] &&
-                                                    modelo?.campos[i.codigo]
-                                                        ?.exibir &&
-                                                    !i.dependencia) ||
-                                                (modelo.campos[i.codigo] &&
-                                                    modelo?.campos[i.codigo]
-                                                        ?.exibir &&
-                                                    ((i.dependencia?.codigo &&
-                                                        !i.dependenciaValor &&
-                                                        watch(
-                                                            `preenchimento.${i.dependencia?.codigo}`
-                                                        )) ||
-                                                        (i.dependencia
-                                                            ?.codigo &&
-                                                            i.dependenciaValor &&
-                                                            JSON.parse(
-                                                                i.dependenciaValor
-                                                            ).includes(
-                                                                watch(
-                                                                    `preenchimento.${i.dependencia?.codigo}`
-                                                                )
-                                                            ))))
-                                            ) {
-                                                return true;
-                                            } else {
-                                                return false;
-                                            }
-                                        }).length > 0
-                                )
+                            {totalFields(campos, modelo, watch)
                                 .map((step, index) => (
                                     <Step
                                         key={index}
@@ -976,55 +923,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             <Step
                                 onClick={() =>
                                     setActiveStep(
-                                        campos.filter((i) =>
-                                            i.campos.find(
-                                                (e) =>
-                                                    i.campos.find(
-                                                        (e) =>
-                                                            modelo?.campos[
-                                                                e.codigo
-                                                            ]?.exibir
-                                                    ) &&
-                                                    i.campos.filter((i) => {
-                                                        if (
-                                                            (modelo.campos[
-                                                                i.codigo
-                                                            ] &&
-                                                                modelo?.campos[
-                                                                    i.codigo
-                                                                ]?.exibir &&
-                                                                !i.dependencia) ||
-                                                            (modelo.campos[
-                                                                i.codigo
-                                                            ] &&
-                                                                modelo?.campos[
-                                                                    i.codigo
-                                                                ]?.exibir &&
-                                                                ((i.dependencia
-                                                                    ?.codigo &&
-                                                                    !i.dependenciaValor &&
-                                                                    watch(
-                                                                        `preenchimento.${i.dependencia?.codigo}`
-                                                                    )) ||
-                                                                    (i
-                                                                        .dependencia
-                                                                        ?.codigo &&
-                                                                        i.dependenciaValor &&
-                                                                        JSON.parse(
-                                                                            i.dependenciaValor
-                                                                        ).includes(
-                                                                            watch(
-                                                                                `preenchimento.${i.dependencia?.codigo}`
-                                                                            )
-                                                                        ))))
-                                                        ) {
-                                                            return true;
-                                                        } else {
-                                                            return false;
-                                                        }
-                                                    }).length > 0
-                                            )
-                                        ).length
+                                        totalFields(campos, modelo, watch)
                                     )
                                 }
                             >
@@ -1053,52 +952,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                 variant="solid-rounded"
                             >
                                 <TabList>
-                                    {campos
-                                        .filter(
-                                            (i) =>
-                                                i.campos.find(
-                                                    (e) =>
-                                                        modelo?.campos[e.codigo]
-                                                            ?.exibir
-                                                ) &&
-                                                i.campos.filter((i) => {
-                                                    if (
-                                                        (modelo.campos[
-                                                            i.codigo
-                                                        ] &&
-                                                            modelo?.campos[
-                                                                i.codigo
-                                                            ]?.exibir &&
-                                                            !i.dependencia) ||
-                                                        (modelo.campos[
-                                                            i.codigo
-                                                        ] &&
-                                                            modelo?.campos[
-                                                                i.codigo
-                                                            ]?.exibir &&
-                                                            ((i.dependencia
-                                                                ?.codigo &&
-                                                                !i.dependenciaValor &&
-                                                                watch(
-                                                                    `preenchimento.${i.dependencia?.codigo}`
-                                                                )) ||
-                                                                (i.dependencia
-                                                                    ?.codigo &&
-                                                                    i.dependenciaValor &&
-                                                                    JSON.parse(
-                                                                        i.dependenciaValor
-                                                                    ).includes(
-                                                                        watch(
-                                                                            `preenchimento.${i.dependencia?.codigo}`
-                                                                        )
-                                                                    ))))
-                                                    ) {
-                                                        return true;
-                                                    } else {
-                                                        return false;
-                                                    }
-                                                }).length > 0
-                                        )
+                                    {totalFields(campos, modelo, watch)
                                         .map((step, index) => (
                                             <Tab
                                                 key={index}
@@ -1144,65 +998,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     <Tab
                                         onClick={() =>
                                             setActiveStep(
-                                                campos.filter((i) =>
-                                                    i.campos.find(
-                                                        (e) =>
-                                                            i.campos.find(
-                                                                (e) =>
-                                                                    modelo
-                                                                        ?.campos[
-                                                                        e.codigo
-                                                                    ]?.exibir
-                                                            ) &&
-                                                            i.campos.filter(
-                                                                (i) => {
-                                                                    if (
-                                                                        (modelo
-                                                                            .campos[
-                                                                            i
-                                                                                .codigo
-                                                                        ] &&
-                                                                            modelo
-                                                                                ?.campos[
-                                                                                i
-                                                                                    .codigo
-                                                                            ]
-                                                                                ?.exibir &&
-                                                                            !i.dependencia) ||
-                                                                        (modelo
-                                                                            .campos[
-                                                                            i
-                                                                                .codigo
-                                                                        ] &&
-                                                                            modelo
-                                                                                ?.campos[
-                                                                                i
-                                                                                    .codigo
-                                                                            ]
-                                                                                ?.exibir &&
-                                                                            ((i
-                                                                                .dependencia
-                                                                                ?.codigo &&
-                                                                                !i.dependenciaValor &&
-                                                                                watch(
-                                                                                    `preenchimento.${i.dependencia?.codigo}`
-                                                                                )) ||
-                                                                                (i
-                                                                                    .dependencia
-                                                                                    ?.codigo &&
-                                                                                    i.dependenciaValor ==
-                                                                                        watch(
-                                                                                            `preenchimento.${i.dependencia?.codigo}`
-                                                                                        ))))
-                                                                    ) {
-                                                                        return true;
-                                                                    } else {
-                                                                        return false;
-                                                                    }
-                                                                }
-                                                            ).length > 0
-                                                    )
-                                                ).length
+                                                totalFields(campos, modelo, watch)
                                             )
                                         }
                                     >
@@ -1214,44 +1010,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     </Box>
                     <Box w="full">
                         <Grid gap={4}>
-                            {campos
-                                .filter(
-                                    (i) =>
-                                        i.campos.find(
-                                            (e) =>
-                                                modelo?.campos[e.codigo]?.exibir
-                                        ) &&
-                                        i.campos.filter((i) => {
-                                            if (
-                                                (modelo.campos[i.codigo] &&
-                                                    modelo?.campos[i.codigo]
-                                                        ?.exibir &&
-                                                    !i.dependencia) ||
-                                                (modelo.campos[i.codigo] &&
-                                                    modelo?.campos[i.codigo]
-                                                        ?.exibir &&
-                                                    ((i.dependencia?.codigo &&
-                                                        !i.dependenciaValor &&
-                                                        watch(
-                                                            `preenchimento.${i.dependencia?.codigo}`
-                                                        )) ||
-                                                        (i.dependencia
-                                                            ?.codigo &&
-                                                            i.dependenciaValor &&
-                                                            JSON.parse(
-                                                                i.dependenciaValor
-                                                            ).includes(
-                                                                watch(
-                                                                    `preenchimento.${i.dependencia?.codigo}`
-                                                                )
-                                                            ))))
-                                            ) {
-                                                return true;
-                                            } else {
-                                                return false;
-                                            }
-                                        }).length > 0
-                                )
+                            {totalFields(campos, modelo, watch)
                                 .map((item, index) => (
                                     <Box
                                         key={item.id}
@@ -2172,45 +1931,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             <GridItem
                                 hidden={
                                     activeStep !=
-                                    campos.filter(
-                                        (i) =>
-                                            i.campos.find(
-                                                (e) =>
-                                                    modelo?.campos[e.codigo]
-                                                        ?.exibir
-                                            ) &&
-                                            i.campos.filter((i) => {
-                                                if (
-                                                    (modelo.campos[i.codigo] &&
-                                                        modelo?.campos[i.codigo]
-                                                            ?.exibir &&
-                                                        !i.dependencia) ||
-                                                    (modelo.campos[i.codigo] &&
-                                                        modelo?.campos[i.codigo]
-                                                            ?.exibir &&
-                                                        ((i.dependencia
-                                                            ?.codigo &&
-                                                            !i.dependenciaValor &&
-                                                            watch(
-                                                                `preenchimento.${i.dependencia?.codigo}`
-                                                            )) ||
-                                                            (i.dependencia
-                                                                ?.codigo &&
-                                                                i.dependenciaValor &&
-                                                                JSON.parse(
-                                                                    i.dependenciaValor
-                                                                ).includes(
-                                                                    watch(
-                                                                        `preenchimento.${i.dependencia?.codigo}`
-                                                                    )
-                                                                ))))
-                                                ) {
-                                                    return true;
-                                                } else {
-                                                    return false;
-                                                }
-                                            }).length > 0
-                                    ).length
+                                    totalFields(campos, modelo, watch).length
                                 }
                             >
                                 <Box
@@ -2366,47 +2087,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                 Voltar
                             </Button>
                             {activeStep !=
-                                campos.filter((i) =>
-                                    i.campos.find(
-                                        (e) =>
-                                            i.campos.find(
-                                                (e) =>
-                                                    modelo?.campos[e.codigo]
-                                                        ?.exibir
-                                            ) &&
-                                            i.campos.filter((i) => {
-                                                if (
-                                                    (modelo.campos[i.codigo] &&
-                                                        modelo?.campos[i.codigo]
-                                                            ?.exibir &&
-                                                        !i.dependencia) ||
-                                                    (modelo.campos[i.codigo] &&
-                                                        modelo?.campos[i.codigo]
-                                                            ?.exibir &&
-                                                        ((i.dependencia
-                                                            ?.codigo &&
-                                                            !i.dependenciaValor &&
-                                                            watch(
-                                                                `preenchimento.${i.dependencia?.codigo}`
-                                                            )) ||
-                                                            (i.dependencia
-                                                                ?.codigo &&
-                                                                i.dependenciaValor &&
-                                                                JSON.parse(
-                                                                    i.dependenciaValor
-                                                                ).includes(
-                                                                    watch(
-                                                                        `preenchimento.${i.dependencia?.codigo}`
-                                                                    )
-                                                                ))))
-                                                ) {
-                                                    return true;
-                                                } else {
-                                                    return false;
-                                                }
-                                            }).length > 0
-                                    )
-                                ).length && (
+                                totalFields(campos, modelo, watch).length && (
                                 <Button
                                     size="sm"
                                     colorScheme="blue"
@@ -2421,53 +2102,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             {(ficha.status == "reprovada" ||
                                 ficha.status == "aguardando") &&
                                 activeStep ==
-                                    campos.filter((i) =>
-                                        i.campos.find(
-                                            (e) =>
-                                                i.campos.find(
-                                                    (e) =>
-                                                        modelo?.campos[e.codigo]
-                                                            ?.exibir
-                                                ) &&
-                                                i.campos.filter((i) => {
-                                                    if (
-                                                        (modelo.campos[
-                                                            i.codigo
-                                                        ] &&
-                                                            modelo?.campos[
-                                                                i.codigo
-                                                            ]?.exibir &&
-                                                            !i.dependencia) ||
-                                                        (modelo.campos[
-                                                            i.codigo
-                                                        ] &&
-                                                            modelo?.campos[
-                                                                i.codigo
-                                                            ]?.exibir &&
-                                                            ((i.dependencia
-                                                                ?.codigo &&
-                                                                !i.dependenciaValor &&
-                                                                watch(
-                                                                    `preenchimento.${i.dependencia?.codigo}`
-                                                                )) ||
-                                                                (i.dependencia
-                                                                    ?.codigo &&
-                                                                    i.dependenciaValor &&
-                                                                    JSON.parse(
-                                                                        i.dependenciaValor
-                                                                    ).includes(
-                                                                        watch(
-                                                                            `preenchimento.${i.dependencia?.codigo}`
-                                                                        )
-                                                                    ))))
-                                                    ) {
-                                                        return true;
-                                                    } else {
-                                                        return false;
-                                                    }
-                                                }).length > 0
-                                        )
-                                    ).length && (
+                                    totalFields(campos, modelo, watch).length && (
                                     <Button
                                         size="sm"
                                         colorScheme="blue"
@@ -3973,7 +3608,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     } catch (error) {
         console.error("Error in getServerSideProps:", error);
     
-        //return redirectToErrorPage(ctx)
-        ctx.res.writeHead(302, { Location: '/error' });
+        return redirectToErrorPage(ctx)
+        //ctx.res.writeHead(302, { Location: '/error' });
     }
 };
