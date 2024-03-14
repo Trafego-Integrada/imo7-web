@@ -151,43 +151,45 @@ const Home = ({ query }) => {
     });
 
     const itemLengthMandatory = (item: any) => {
-        return Object.entries(item.modelo.campos)
-        .filter((i: any) => i[1].obrigatorio == true)
-        .length
-    }
+        return Object.entries(item.modelo.campos).filter(
+            (i: any) => i[1].obrigatorio == true
+        ).length;
+    };
 
     const itemLengthAll = (item: any) => {
-        return Object.entries(item.modelo.campos)
-        .length
-    }
+        return Object.entries(item.modelo.campos).length;
+    };
 
     const itemFulledLength = (item: any) => {
-        return item.preenchimento.filter((i: any) => i.valor != "" && i.valor != null)
-        .length
-    }
+        return item.preenchimento.filter(
+            (i: any) => i.valor != "" && i.valor != null
+        ).length;
+    };
 
     const itemFulledLengthMandatory = (item: any) => {
-        let countMandatory = 0
+        let countMandatory = 0;
         const mandatoryEntries = Object.entries(item.modelo.campos)
-        .filter((i: any) => i[1].obrigatorio == true)
-        .map((item: any) => {
-            return item[0]
-        })
+            .filter((i: any) => i[1].obrigatorio == true)
+            .map((item: any) => {
+                return item[0];
+            });
 
         for (const mandatoryEntry of mandatoryEntries) {
             if (
                 item.preenchimento.filter((i: any) => {
-                    return i.campoFichaCadastralCodigo == `${mandatoryEntry}` 
-                        && i.valor != "" 
-                        && i.valor != null
+                    return (
+                        i.campoFichaCadastralCodigo == `${mandatoryEntry}` &&
+                        i.valor != "" &&
+                        i.valor != null
+                    );
                 }).length
             ) {
-                countMandatory++
+                countMandatory++;
             }
         }
 
-        return countMandatory
-    }
+        return countMandatory;
+    };
 
     const onDeleteMany = () => {
         deleteMany.mutate(JSON.stringify(selecionados));
@@ -843,7 +845,7 @@ const Home = ({ query }) => {
                                                                                     Link
                                                                                 }
                                                                                 icon={
-                                                                                <FiDownload />
+                                                                                    <FiDownload />
                                                                                 }
                                                                                 href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/downloadArquivos`}
                                                                                 target="_blank"
@@ -1044,72 +1046,80 @@ const Home = ({ query }) => {
                                                                     </>
                                                                 </Td>
                                                                 <Td w={20}>
-                                                                    { item.dataInicioPreenchimento &&
+                                                                    {item.dataInicioPreenchimento && (
                                                                         <Tooltip
                                                                             label="O cliente iniciou o Cadastro"
                                                                             hasArrow
                                                                         >
-                                                                            <Box textAlign="center" bg="#c7ebff" color="#005989">
-                                                                                <Text>{
-                                                                                    formatoData(
+                                                                            <Box
+                                                                                textAlign="center"
+                                                                                bg="#c7ebff"
+                                                                                color="#005989"
+                                                                            >
+                                                                                <Text>
+                                                                                    {formatoData(
                                                                                         item.dataInicioPreenchimento,
                                                                                         "DATA"
-                                                                                    )
-                                                                                }</Text>
-                                                                                <Text>{
-                                                                                    formatoData(
+                                                                                    )}
+                                                                                </Text>
+                                                                                <Text>
+                                                                                    {formatoData(
                                                                                         item.dataInicioPreenchimento,
                                                                                         "HORA"
-                                                                                    )
-                                                                                }</Text>
+                                                                                    )}
+                                                                                </Text>
                                                                             </Box>
                                                                         </Tooltip>
-                                                                    }
-                                                                    </Td>
+                                                                    )}
+                                                                </Td>
                                                                 <Td w={20}>
                                                                     <Tooltip
                                                                         label="Última atualização"
                                                                         hasArrow
                                                                     >
                                                                         <Box textAlign="center">
-                                                                            <Text>{
-                                                                                formatoData(
+                                                                            <Text>
+                                                                                {formatoData(
                                                                                     item.updatedAt,
                                                                                     "DATA"
-                                                                                )
-                                                                            }</Text>
-                                                                            <Text>{
-                                                                                formatoData(
+                                                                                )}
+                                                                            </Text>
+                                                                            <Text>
+                                                                                {formatoData(
                                                                                     item.updatedAt,
                                                                                     "HORA"
-                                                                                )
-                                                                            }</Text>
+                                                                                )}
+                                                                            </Text>
                                                                         </Box>
                                                                     </Tooltip>
-                                                                </Td> 
+                                                                </Td>
                                                                 <Td w={20}>
-                                                                    { item.dataFimPreenchimento &&
+                                                                    {item.dataFimPreenchimento && (
                                                                         <Tooltip
                                                                             label="O cliente finalizou o Cadastro e enviou a ficha"
                                                                             hasArrow
                                                                         >
-                                                                            <Box textAlign="center" bg="#d9fbd0" color="#4d7c3d">
-                                                                                <Text>{
-                                                                                    formatoData(
+                                                                            <Box
+                                                                                textAlign="center"
+                                                                                bg="#d9fbd0"
+                                                                                color="#4d7c3d"
+                                                                            >
+                                                                                <Text>
+                                                                                    {formatoData(
                                                                                         item.dataFimPreenchimento,
                                                                                         "DATA"
-                                                                                    )
-                                                                                }</Text>
-                                                                                <Text>{
-                                                                                    formatoData(
+                                                                                    )}
+                                                                                </Text>
+                                                                                <Text>
+                                                                                    {formatoData(
                                                                                         item.dataFimPreenchimento,
                                                                                         "HORA"
-                                                                                    )
-                                                                                }</Text>
+                                                                                    )}
+                                                                                </Text>
                                                                             </Box>
                                                                         </Tooltip>
-                                                                    }
-                                                                    </Td>
+                                                                    )}
+                                                                </Td>
                                                                 <Td>
                                                                     <>
                                                                         <Tooltip
@@ -1118,26 +1128,27 @@ const Home = ({ query }) => {
                                                                         >
                                                                             <Box pos="relative">
                                                                                 <Tooltip
-                                                                                    label={`${
-                                                                                        itemFulledLengthMandatory(item)
-                                                                                    } de ${
-                                                                                        itemLengthMandatory(item)
-                                                                                    } campos preenchidos`}
+                                                                                    label={`${itemFulledLengthMandatory(
+                                                                                        item
+                                                                                    )} de ${itemLengthMandatory(
+                                                                                        item
+                                                                                    )} campos preenchidos`}
                                                                                 >
                                                                                     <Box>
                                                                                         <Progress
                                                                                             size="lg"
                                                                                             value={
-                                                                                                itemFulledLengthMandatory(item)
+                                                                                                item.porcentagemPreenchimento |
+                                                                                                0
                                                                                             }
                                                                                             max={
-                                                                                                itemLengthAll(item) > 0
-                                                                                                    ? itemLengthMandatory(item)
-                                                                                                    : 100
+                                                                                                100
                                                                                             }
                                                                                             colorScheme={
-                                                                                                itemFulledLengthMandatory(item) == itemLengthMandatory(item) 
-                                                                                                ? "green" : "yellow"
+                                                                                                item.porcentagemPreenchimento ==
+                                                                                                100
+                                                                                                    ? "green"
+                                                                                                    : "yellow"
                                                                                             }
                                                                                         />
                                                                                     </Box>
@@ -1153,17 +1164,24 @@ const Home = ({ query }) => {
                                                                                         textAlign="center"
                                                                                         fontSize="xs"
                                                                                         color={
-                                                                                                Math.floor((itemFulledLengthMandatory(item) / itemLengthMandatory(item)) * 100) == 100
+                                                                                            Math.floor(
+                                                                                                (itemFulledLengthMandatory(
+                                                                                                    item
+                                                                                                ) /
+                                                                                                    itemLengthMandatory(
+                                                                                                        item
+                                                                                                    )) *
+                                                                                                    100
+                                                                                            ) ==
+                                                                                            100
                                                                                                 ? "white"
                                                                                                 : ""
                                                                                         }
                                                                                     >
-                                                                                        {itemLengthMandatory(item)
-                                                                                            ? Number(
-                                                                                                ((itemFulledLengthMandatory(item) / itemLengthMandatory(item)) * 100)
-                                                                                            ).toFixed(2)
-                                                                                            : Number(100).toFixed(2)
+                                                                                        {
+                                                                                            item.porcentagemPreenchimento
                                                                                         }
+
                                                                                         %
                                                                                         preenchida
                                                                                     </Text>

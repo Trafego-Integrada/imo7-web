@@ -83,7 +83,7 @@ handler.post(async (req, res) => {
                 id: id,
             },
         });
-        console.log(JSON.stringify(dadosAntigos?.status))
+        console.log(JSON.stringify(dadosAntigos?.status));
 
         // Valida se usuário iniciou preenchimento
         if (!dadosAntigos?.dataInicioPreenchimento) {
@@ -117,16 +117,99 @@ handler.post(async (req, res) => {
             });
         }
 
-        const data = await prisma.fichaCadastral.update({
+        const ficha = await prisma.fichaCadastral.update({
             where: {
                 id: id,
             },
             data: {
                 ...dataPreenchimento,
             },
+            include: {
+                modelo: true,
+                preenchimento: true,
+            },
         });
 
-        res.send(data);
+        // Atualizar Porcentagem de Preenchimento
+        const campos = await prisma.campoFichaCadastral.findMany({
+            include: {
+                dependencia: true,
+            },
+        });
+        const camposObrigatorios = Object.entries(ficha.modelo.campos).filter(
+            (i) => {
+                if (
+                    i[1].obrigatorio &&
+                    campos.find((c) => c.codigo == i[0])?.dependenciaId != null
+                ) {
+                    const campoAtual = campos.find((c) => c.codigo == i[0]);
+                    const codigoCampoDependente = campos.find(
+                        (c) => c.codigo == i[0]
+                    )?.dependencia?.codigo;
+                    const preenchimentoDoCampoDependente =
+                        ficha.preenchimento.find(
+                            (i) =>
+                                i.campoFichaCadastralCodigo ==
+                                codigoCampoDependente
+                        );
+                    if (
+                        campoAtual?.dependenciaValor?.includes(
+                            preenchimentoDoCampoDependente?.valor
+                        )
+                    ) {
+                        return true;
+                    }
+
+                    //return true;
+                } else if (i[1].obrigatorio) {
+                    return true;
+                }
+                return false;
+            }
+        );
+        console.log(
+            "Campos Obrigatórios c/ base no preenchimento atual:",
+            camposObrigatorios.length
+        );
+
+        console.log(
+            "Campos Obrigatórios Preenchidos:",
+            camposObrigatorios.filter((c) => {
+                const preenchimento = ficha.preenchimento.find(
+                    (i) => i.campoFichaCadastralCodigo == c[0]
+                );
+                if (
+                    preenchimento?.valor != null &&
+                    preenchimento?.valor != ""
+                ) {
+                    return true;
+                }
+            }).length
+        );
+        const porcentagemPreenchimento =
+            (camposObrigatorios.filter((c) => {
+                const preenchimento = ficha.preenchimento.find(
+                    (i) => i.campoFichaCadastralCodigo == c[0]
+                );
+                if (
+                    preenchimento?.valor != null &&
+                    preenchimento?.valor != ""
+                ) {
+                    return true;
+                }
+            }).length /
+                18) *
+            100;
+        await prisma.fichaCadastral.update({
+            where: {
+                id: id,
+            },
+            data: {
+                porcentagemPreenchimento,
+            },
+        });
+
+        res.send(ficha);
     } catch (error) {
         res.status(500).send({
             success: false,
