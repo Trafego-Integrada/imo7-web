@@ -60,7 +60,11 @@ export const Categorias = ({
                             <AccordionIcon />
                         </AccordionButton>
                         <AccordionPanel pb={4}>
-                            <Consultas fichaId={ficha.id} />
+                            <Consultas
+                                fichaId={ficha.id}
+                                cpf="11694158659"
+                                cnpj="26931193000198"
+                            />
                             <Grid
                                 gridTemplateColumns={{
                                     base: "repeat(1,1fr)",

@@ -1,32 +1,112 @@
-import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
+import { api } from "@/services/apiClient";
+import { queryClient } from "@/services/queryClient";
+import {
+    Button,
+    Flex,
+    Grid,
+    Icon,
+    Image,
+    Text,
+    Tooltip,
+    useToast,
+} from "@chakra-ui/react";
+import { useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { ModalPreview } from "../Preview";
 
 interface TipoConsultaProps {
     tipoConsultas: string[];
     fichaId: string;
+    cpf?: string;
+    cnpj?: string;
 }
 
-export const Consultas = ({ tipoConsultas }: TipoConsultaProps) => {
+export const Consultas = ({
+    tipoConsultas,
+    fichaId,
+    cpf,
+    cnpj,
+}: TipoConsultaProps) => {
+    const toast = useToast();
+    const preview = useRef();
+    const [consultandoNetrin, setConsultandoNetrin] = useState(false);
+    const consultarNetrin = async (data) => {
+        try {
+            setConsultandoNetrin(true);
+
+            queryClient.invalidateQueries(["consultasNetrin"]);
+            toast({
+                title: "Consulta realizada com sucesso, entre na aba consultas para visualizar o documento",
+                status: "success",
+            });
+            setConsultandoNetrin(false);
+        } catch (error) {
+            setConsultandoNetrin(false);
+            //console.log(error);
+            toast({
+                title: "Houve um problema",
+                description: error?.response?.data?.message,
+                status: "warning",
+            });
+        }
+    };
+    const { data } = useQuery(
+        [
+            "consultasNetrin",
+            {
+                fichaCadastralId: fichaId,
+            },
+        ],
+        async ({ queryKey }) => {
+            try {
+                const response = await api.get("v1/integracao/netrin", {
+                    params: {
+                        ...queryKey[1],
+                    },
+                });
+
+                return response?.data;
+            } catch (error) {
+                throw Error(error.message);
+            }
+        }
+    );
+
     return (
         <Flex flexDir="column">
             <Text>Consultas Disponíveis</Text>
-            <Flex gap={2}>
+            <Grid gridTemplateColumns="repeat(6,1fr)" gap={2} overflow="auto">
                 {consultasDisponiveis.map((consulta) => (
-                    <Box
+                    <Flex
                         key={consulta.codigo}
                         rounded="lg"
                         borderWidth={1}
-                        p={4}
+                        p={2}
+                        flexDir="column"
+                        justify="space-between"
                     >
-                        <Flex>
+                        <Flex
+                            flexDir="column"
+                            gap={1}
+                            align="center"
+                            justify="center"
+                            h="full"
+                        >
                             <Image
                                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Logo_Receita_Federal_do_Brasil.svg/1200px-Logo_Receita_Federal_do_Brasil.svg.png"
-                                w={12}
-                                h={12}
+                                w={8}
+                                h={8}
                             />
-                            <Box>
-                                <Text>{consulta?.nome}</Text>
-                            </Box>
+                            <Flex align="center" h="full">
+                                <Text
+                                    fontSize="x-small"
+                                    textAlign="center"
+                                    fontWeight="bold"
+                                >
+                                    {consulta?.nome}
+                                </Text>
+                            </Flex>
                         </Flex>
                         <Button
                             leftIcon={<FiSearch />}
@@ -35,9 +115,80 @@ export const Consultas = ({ tipoConsultas }: TipoConsultaProps) => {
                         >
                             Consultar Agora
                         </Button>
-                    </Box>
+                        <Button
+                            w="full"
+                            variant="outline"
+                            size="xs"
+                            leftIcon={<Icon as={FiSearch} />}
+                            onClick={() =>
+                                consultarNetrin({
+                                    tipoConsulta: consulta.codigo,
+                                    requisicao: {
+                                        cpf,
+                                        cnpj,
+                                    },
+                                })
+                            }
+                            isLoading={consultandoNetrin}
+                        >
+                            Consultar
+                        </Button>
+                        {data?.find(
+                            (ii) =>
+                                ii.tipoConsulta == "processos_pf" &&
+                                ii.requisicao.cpf == cpf
+                        )?.retorno?.processosCPF && (
+                            <Tooltip label="Visualizar Arquivo">
+                                <Button
+                                    variant="outline"
+                                    size="xs"
+                                    leftIcon={<Icon as={FiEye} />}
+                                    onClick={() =>
+                                        preview.current.onOpen(
+                                            process.env.NODE_ENV == "production"
+                                                ? `https://www.imo7.com.br/api/v1/integracao/netrin/${
+                                                      data?.find(
+                                                          (ii) =>
+                                                              ii.tipoConsulta ==
+                                                                  "processos_pf" &&
+                                                              ii.requisicao
+                                                                  .cpf == cpf
+                                                      ).id
+                                                  }/pdf`
+                                                : `http://localhost:3000/api/v1/integracao/netrin/${
+                                                      data?.find(
+                                                          (ii) =>
+                                                              ii.tipoConsulta ==
+                                                                  "processos_pf" &&
+                                                              ii.requisicao
+                                                                  .cpf == cpf
+                                                      ).id
+                                                  }/pdf`
+                                        )
+                                    }
+                                >
+                                    {data?.find(
+                                        (ii) =>
+                                            ii.tipoConsulta == "processos_pf" &&
+                                            ii.requisicao.cpf == cpf
+                                    )?.retorno?.processosCPF?.code
+                                        ? "0"
+                                        : data?.find(
+                                              (ii) =>
+                                                  ii.tipoConsulta ==
+                                                      "processos_pf" &&
+                                                  ii.requisicao.cpf ==
+                                                     cpf
+                                          )?.retorno?.processosCPF
+                                              ?.totalProcessos}{" "}
+                                    processos encontrados
+                                </Button>
+                            </Tooltip>
+                        )}
+                    </Flex>
                 ))}
-            </Flex>
+            </Grid>
+            <ModalPreview ref={preview} />
         </Flex>
     );
 };
@@ -45,31 +196,37 @@ export const Consultas = ({ tipoConsultas }: TipoConsultaProps) => {
 const consultasDisponiveis = [
     {
         tipoConsulta: ["cpf"],
+        codigo: "receita_federal_cpf",
+        nome: "Situação Cadastral do CPF",
+    },
+    {
+        tipoConsulta: ["cpf"],
         codigo: "processos_pf",
-        nome: "Consulta Processos no TJ",
+        nome: "Processos Judiciais",
     },
     {
         tipoConsulta: ["cpf"],
         codigo: "protestos_pf",
+        nome: "Protestos",
     },
     {
         tipoConsulta: ["cpf", "cnpj"],
         codigo: "receita_federal_cnd",
+        nome: "Certidão Negativa de Débitos Federais",
     },
     {
         tipoConsulta: ["cpf", "cnpj"],
         codigo: "sefaz_cnd",
+        nome: "Certidão Negativa de Débitos Estaduais",
     },
     {
         tipoConsulta: ["cpf", "cnpj"],
         codigo: "cnd_trabalhista",
+        nome: "Certidão Negativa de Débitos Trabalhistas",
     },
     {
         tipoConsulta: ["cpf", "cnpj"],
         codigo: "cnd_trabalhista_mte",
-    },
-    {
-        tipoConsulta: ["cpf"],
-        codigo: "receita_federal_cpf",
+        nome: "Certidão Negativa de Débitos Trabalhistas do MTE",
     },
 ];
