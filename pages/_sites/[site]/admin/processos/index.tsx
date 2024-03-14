@@ -5,7 +5,7 @@ import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { Layout } from "@/components/Layout/layout";
 import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
 import { ModalProcesso } from "@/components/Modals/ModalProcesso";
-import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFichaCadastral";
+import { ModalRevisaoFichaCadastral2 } from "@/components/Modals/ModalRevisaoFichaCadastral2";
 import { ModalValidar } from "@/components/Modals/ModalValidar";
 import { Paginator2 } from "@/components/Paginator2";
 import { Filtro } from "@/components/Tabelas/TabelaPadrao/Filtro";
@@ -1128,11 +1128,11 @@ const Home = ({ query }) => {
                                                                         >
                                                                             <Box pos="relative">
                                                                                 <Tooltip
-                                                                                    label={`${itemFulledLengthMandatory(
-                                                                                        item
-                                                                                    )} de ${itemLengthMandatory(
-                                                                                        item
-                                                                                    )} campos preenchidos`}
+                                                                                // label={`${itemFulledLengthMandatory(
+                                                                                //     item
+                                                                                // )} de ${itemLengthMandatory(
+                                                                                //     item
+                                                                                // )} campos preenchidos`}
                                                                                 >
                                                                                     <Box>
                                                                                         <Progress
@@ -1163,20 +1163,20 @@ const Home = ({ query }) => {
                                                                                     <Text
                                                                                         textAlign="center"
                                                                                         fontSize="xs"
-                                                                                        color={
-                                                                                            Math.floor(
-                                                                                                (itemFulledLengthMandatory(
-                                                                                                    item
-                                                                                                ) /
-                                                                                                    itemLengthMandatory(
-                                                                                                        item
-                                                                                                    )) *
-                                                                                                    100
-                                                                                            ) ==
-                                                                                            100
-                                                                                                ? "white"
-                                                                                                : ""
-                                                                                        }
+                                                                                        // color={
+                                                                                        //     Math.floor(
+                                                                                        //         (itemFulledLengthMandatory(
+                                                                                        //             item
+                                                                                        //         ) /
+                                                                                        //             itemLengthMandatory(
+                                                                                        //                 item
+                                                                                        //             )) *
+                                                                                        //             100
+                                                                                        //     ) ==
+                                                                                        //     100
+                                                                                        //         ? "white"
+                                                                                        //         : ""
+                                                                                        // }
                                                                                     >
                                                                                         {
                                                                                             item.porcentagemPreenchimento
@@ -1391,7 +1391,7 @@ const Home = ({ query }) => {
             </Layout>
             <ModalProcesso ref={modalProcesso} />
             <ModalFichaCadastral ref={modal} />
-            <ModalRevisaoFichaCadastral ref={modalRevisar} />
+            {/* <ModalRevisaoFichaCadastral ref={modalRevisar} /> */}
             <ModalValidar ref={modalValidar} />
             <Excluir
                 ref={modalExcluir}
@@ -1403,6 +1403,7 @@ const Home = ({ query }) => {
                 titulo="Excluir processos"
                 onDelete={onDeleteMany}
             />
+            <ModalRevisaoFichaCadastral2 ref={modalRevisar} />
         </>
     );
 };

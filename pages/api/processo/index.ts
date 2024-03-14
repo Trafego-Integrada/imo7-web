@@ -305,28 +305,28 @@ handle.get(async (req, res) => {
                         deletedAt: null,
                     },
                     include: {
-                        _count: {
-                            select: {
-                                preenchimento: {
-                                    where: {
-                                        valor: {
-                                            not: null,
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                        preenchimento: {
-                            include: {
-                                campo: true,
-                                ficha: {
-                                    include: {
-                                        modelo: true,
-                                    },
-                                },
-                            },
-                        },
-                        modelo: true,
+                        // _count: {
+                        //     select: {
+                        //         preenchimento: {
+                        //             where: {
+                        //                 valor: {
+                        //                     not: null,
+                        //                 },
+                        //             },
+                        //         },
+                        //     },
+                        // },
+                        // preenchimento: {
+                        //     include: {
+                        //         campo: true,
+                        //         ficha: {
+                        //             include: {
+                        //                 modelo: true,
+                        //             },
+                        //         },
+                        //     },
+                        // },
+                        // modelo: true,
                         responsavel: true,
                     },
                 },
