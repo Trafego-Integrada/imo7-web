@@ -1138,15 +1138,15 @@ const Home = ({ query }) => {
                                                                                         <Progress
                                                                                             size="lg"
                                                                                             value={
-                                                                                                item.porcentagemPreenchimento |
+                                                                                                Number(item.porcentagemPreenchimento).toFixed(2) |
                                                                                                 0
                                                                                             }
                                                                                             max={
                                                                                                 100
                                                                                             }
                                                                                             colorScheme={
-                                                                                                item.porcentagemPreenchimento ==
-                                                                                                100
+                                                                                                Number(item.porcentagemPreenchimento).toFixed(2) ==
+                                                                                                '100.00'
                                                                                                     ? "green"
                                                                                                     : "yellow"
                                                                                             }
@@ -1179,7 +1179,7 @@ const Home = ({ query }) => {
                                                                                         }
                                                                                     >
                                                                                         {
-                                                                                            item.porcentagemPreenchimento
+                                                                                            Number(item.porcentagemPreenchimento).toFixed(2)
                                                                                         }
 
                                                                                         %
