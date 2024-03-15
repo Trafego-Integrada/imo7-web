@@ -61,7 +61,7 @@ export const Categorias = ({
                         </AccordionButton>
                         <AccordionPanel pb={4}>
                             <Consultas
-                                fichaId={ficha.id}
+                                ficha={ficha}
                                 cpf="11694158659"
                                 cnpj="26931193000198"
                             />

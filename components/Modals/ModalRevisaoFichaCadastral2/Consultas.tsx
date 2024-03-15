@@ -11,20 +11,21 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import { FiSearch } from "react-icons/fi";
+import { FiEye, FiSearch } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { ModalPreview } from "../Preview";
 
 interface TipoConsultaProps {
     tipoConsultas: string[];
-    fichaId: string;
+    ficha: any;
     cpf?: string;
     cnpj?: string;
+    uf?: string;
 }
 
 export const Consultas = ({
     tipoConsultas,
-    fichaId,
+    ficha,
     cpf,
     cnpj,
 }: TipoConsultaProps) => {
@@ -34,7 +35,11 @@ export const Consultas = ({
     const consultarNetrin = async (data) => {
         try {
             setConsultandoNetrin(true);
-
+            const response = await api.post("v1/integracao/netrin", {
+                ...data,
+                processoId: ficha.processoId,
+                fichaCadastralId: ficha.id,
+            });
             queryClient.invalidateQueries(["consultasNetrin"]);
             toast({
                 title: "Consulta realizada com sucesso, entre na aba consultas para visualizar o documento",
@@ -55,7 +60,7 @@ export const Consultas = ({
         [
             "consultasNetrin",
             {
-                fichaCadastralId: fichaId,
+                fichaCadastralId: ficha.id,
             },
         ],
         async ({ queryKey }) => {
@@ -72,7 +77,7 @@ export const Consultas = ({
             }
         }
     );
-
+    console.log("consultas netrin", data);
     return (
         <Flex flexDir="column">
             <Text>Consultas Disponíveis</Text>
@@ -133,10 +138,17 @@ export const Consultas = ({
                         >
                             Consultar
                         </Button>
+                        {JSON.stringify(
+                            data?.find(
+                                (c) =>
+                                    c.tipoConsulta == consulta.codigo &&
+                                    c.requisicao.cpf == cpf
+                            ).retorno
+                        )}
                         {data?.find(
-                            (ii) =>
-                                ii.tipoConsulta == "processos_pf" &&
-                                ii.requisicao.cpf == cpf
+                            (c) =>
+                                c.tipoConsulta == consulta.codigo &&
+                                c.requisicao.cpf == cpf
                         )?.retorno?.processosCPF && (
                             <Tooltip label="Visualizar Arquivo">
                                 <Button
@@ -177,8 +189,7 @@ export const Consultas = ({
                                               (ii) =>
                                                   ii.tipoConsulta ==
                                                       "processos_pf" &&
-                                                  ii.requisicao.cpf ==
-                                                     cpf
+                                                  ii.requisicao.cpf == cpf
                                           )?.retorno?.processosCPF
                                               ?.totalProcessos}{" "}
                                     processos encontrados
