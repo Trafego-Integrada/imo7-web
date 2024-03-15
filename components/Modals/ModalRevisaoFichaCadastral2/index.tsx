@@ -23,7 +23,6 @@ const ModalBase = ({}, ref) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [ficha, setFicha] = useState(null);
     const [modeloFicha, setModeloFicha] = useState(null);
-    const [camposFicha, setCamposFicha] = useState(null);
 
     const buscarFicha = useMutation(imo7ApiService("fichaCadastral").get, {
         onSuccess: (data) => {
@@ -36,6 +35,7 @@ const ModalBase = ({}, ref) => {
             setModeloFicha(data);
         },
     });
+
     const { data: categorias } = useQuery(
         ["categoriasFicha", { tipoFicha: modeloFicha?.tipo }],
         imo7ApiService("categoriaCampoFicha").list,
@@ -91,7 +91,7 @@ const ModalBase = ({}, ref) => {
                                         <Text as="span" color="gray">
                                             Imovel:
                                         </Text>
-                                        {`${ficha?.imovel?.codigo} -  ${ficha?.imovel?.endereco}`}
+                                        {`${ficha?.imovel?.codigo} -  ${ficha?.imovel?.endereco}, ${ficha?.imovel?.bairro}`}
                                     </Text>
                                 </Box>
                             </Flex>

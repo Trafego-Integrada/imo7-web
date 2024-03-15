@@ -77,10 +77,11 @@ export const Consultas = ({
             }
         }
     );
-    console.log("consultas netrin", data);
     return (
         <Flex flexDir="column">
-            <Text>Consultas Disponíveis</Text>
+            <Text>
+                Consultas Disponíveis | CPF {cpf} | CNPJ: {cnpj}
+            </Text>
             <Grid gridTemplateColumns="repeat(6,1fr)" gap={2} overflow="auto">
                 {consultasDisponiveis.map((consulta) => (
                     <Flex
@@ -138,18 +139,12 @@ export const Consultas = ({
                         >
                             Consultar
                         </Button>
-                        {JSON.stringify(
-                            data?.find(
-                                (c) =>
-                                    c.tipoConsulta == consulta.codigo &&
-                                    c.requisicao.cpf == cpf
-                            ).retorno
-                        )}
+
                         {data?.find(
                             (c) =>
                                 c.tipoConsulta == consulta.codigo &&
                                 c.requisicao.cpf == cpf
-                        )?.retorno?.processosCPF && (
+                        )?.retorno && (
                             <Tooltip label="Visualizar Arquivo">
                                 <Button
                                     variant="outline"
@@ -162,7 +157,7 @@ export const Consultas = ({
                                                       data?.find(
                                                           (ii) =>
                                                               ii.tipoConsulta ==
-                                                                  "processos_pf" &&
+                                                                  consulta.codigo &&
                                                               ii.requisicao
                                                                   .cpf == cpf
                                                       ).id
@@ -171,7 +166,7 @@ export const Consultas = ({
                                                       data?.find(
                                                           (ii) =>
                                                               ii.tipoConsulta ==
-                                                                  "processos_pf" &&
+                                                                  consulta.codigo &&
                                                               ii.requisicao
                                                                   .cpf == cpf
                                                       ).id
@@ -181,14 +176,15 @@ export const Consultas = ({
                                 >
                                     {data?.find(
                                         (ii) =>
-                                            ii.tipoConsulta == "processos_pf" &&
+                                            ii.tipoConsulta ==
+                                                consulta.codigo &&
                                             ii.requisicao.cpf == cpf
                                     )?.retorno?.processosCPF?.code
                                         ? "0"
                                         : data?.find(
                                               (ii) =>
                                                   ii.tipoConsulta ==
-                                                      "processos_pf" &&
+                                                      consulta.codigo &&
                                                   ii.requisicao.cpf == cpf
                                           )?.retorno?.processosCPF
                                               ?.totalProcessos}{" "}

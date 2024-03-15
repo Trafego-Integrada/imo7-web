@@ -1,4 +1,7 @@
-import { verificarExtensaoImagem } from "@/helpers/helpers";
+import {
+    removerCaracteresEspeciais,
+    verificarExtensaoImagem,
+} from "@/helpers/helpers";
 import {
     isDependencyValid2,
     isDisplayed,
@@ -62,8 +65,21 @@ export const Categorias = ({
                         <AccordionPanel pb={4}>
                             <Consultas
                                 ficha={ficha}
-                                cpf="11694158659"
-                                cnpj="26931193000198"
+                                // Preencher com os valores preenchidos na ficha
+                                cpf={removerCaracteresEspeciais(
+                                    dadosPreenchimentoCampo(
+                                        categoria.campos.find(
+                                            (c) => c.tipoCampo == "cpf"
+                                        )?.codigo
+                                    )?.valor
+                                )}
+                                cnpj={removerCaracteresEspeciais(
+                                    dadosPreenchimentoCampo(
+                                        categoria.campos.find(
+                                            (c) => c.tipoCampo == "cnpj"
+                                        )?.codigo
+                                    )?.valor
+                                )}
                             />
                             <Grid
                                 gridTemplateColumns={{

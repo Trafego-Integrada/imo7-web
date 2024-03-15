@@ -999,7 +999,10 @@ const FichaCadastral = ({ consulta }) => {
                         <GridItem>
                             <Text fontSize="xs">Situação:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.situacaoCadastral}
+                                {
+                                    consulta.retorno?.CpfBirthdate
+                                        ?.situacaoCadastral
+                                }
                             </Text>
                         </GridItem>
                     </Grid>
@@ -1007,49 +1010,49 @@ const FichaCadastral = ({ consulta }) => {
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Nome:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.nome}
+                                {consulta.retorno?.CpfBirthdate?.nome}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Idade:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.idade}
+                                {consulta.retorno?.CpfBirthdate?.idade}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Data de Nascimento:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.dataNascimento}
+                                {consulta.retorno?.CpfBirthdate?.dataNascimento}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Genero:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.genero}
+                                {consulta.retorno?.CpfBirthdate?.genero}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Nome da Mãe:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.nomeMae}
+                                {consulta.retorno?.CpfBirthdate?.nomeMae}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Ano do Óbito:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.anoObito}
+                                {consulta.retorno?.CpfBirthdate?.anoObito}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">País de Origem:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.paisOrigem}
+                                {consulta.retorno?.CpfBirthdate?.paisOrigem}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Data de Inscrição:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.dataInscricao}
+                                {consulta.retorno?.CpfBirthdate?.dataInscricao}
                             </Text>
                         </GridItem>
                     </Grid>
