@@ -61,7 +61,7 @@ export default async function RodarAtualizacao(req, res) {
                     return true;
                 }
             }).length /
-                18) *
+                camposObrigatorios.length) *
             100;
         await prisma.fichaCadastral.update({
             where: {
