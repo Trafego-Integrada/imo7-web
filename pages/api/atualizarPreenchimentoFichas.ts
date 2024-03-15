@@ -68,7 +68,7 @@ export default async function RodarAtualizacao(req, res) {
                 id: ficha.id,
             },
             data: {
-                porcentagemPreenchimento,
+                porcentagemPreenchimento: Number.isNaN(porcentagemPreenchimento) ? 0 : porcentagemPreenchimento
             },
         });
         concluidas++;
