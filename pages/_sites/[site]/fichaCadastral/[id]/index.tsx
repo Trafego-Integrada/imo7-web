@@ -961,7 +961,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             <Step
                                 onClick={() =>
                                     setActiveStep(
-                                        totalFields(campos, modelo, watch)
+                                        totalFields(campos, modelo, watch).length
                                     )
                                 }
                             >
@@ -1036,7 +1036,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     <Tab
                                         onClick={() =>
                                             setActiveStep(
-                                                totalFields(campos, modelo, watch)
+                                                totalFields(campos, modelo, watch).length
                                             )
                                         }
                                     >
