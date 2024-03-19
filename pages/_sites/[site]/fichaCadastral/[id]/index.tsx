@@ -1615,7 +1615,8 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                             <FormInput
                                                                 size="sm"
                                                                 type={
-                                                                    campo.tipoCampo
+                                                                    //campo.tipoCampo
+                                                                    "text"
                                                                 }
                                                                 label={
                                                                     campo.nome
