@@ -16,10 +16,10 @@ export const ErrorPage = () => {
         </Text>
         <List spacing={3}>
           <ListItem fontSize="md">
-            Ficha Vazia: A ficha que você está tentando acessar parece estar vazia. Isso pode ocorrer se nenhum arquivo foi enviado para preencher os dados associados à ficha. Certifique-se seu cliente fez o upload dos arquivos necessários para visualizar as informações corretamente.
+            <Text as="span" fontWeight="bold">Ficha Vazia:</Text> A ficha que você está tentando acessar parece estar vazia. Isso pode ocorrer se nenhum arquivo foi enviado para preencher os dados associados à ficha. Certifique-se seu cliente fez o upload dos arquivos necessários para visualizar as informações corretamente.
           </ListItem>
           <ListItem fontSize="md">
-            Ficha Deletada: A ficha que você está tentando acessar foi deletada do sistema. Isso pode ter sido resultado de uma ação deliberada ou de uma exclusão acidental.
+            <Text as="span" fontWeight="bold">Ficha Deletada:</Text> A ficha que você está tentando acessar foi deletada do sistema. Isso pode ter sido resultado de uma ação deliberada ou de uma exclusão acidental.
           </ListItem>
         </List>
       </Box>
