@@ -461,13 +461,19 @@ const FichasCadastrais = () => {
                                                 </Td>
                                                 <Td>{item.cpf}</Td>
                                                 <Td>
-                                                    <Image
-                                                        borderRadius="2xl"
-                                                        src={item.fotoUrl}
-                                                        width={20}
-                                                        height={20}
-                                                        objectFit="cover"
-                                                    />
+                                                    {
+                                                        item.fotoUrl ? 
+                                                            <Image
+                                                                borderRadius="2xl"
+                                                                src={item.fotoUrl}
+                                                                width={20}
+                                                                height={20}
+                                                                objectFit="cover"
+                                                            /> :
+                                                            <Text fontWeight="bold">
+                                                                Foto não enviada
+                                                            </Text>
+                                                    }
                                                 </Td>
                                                 <Td>
                                                     <Text fontWeight="bold">
