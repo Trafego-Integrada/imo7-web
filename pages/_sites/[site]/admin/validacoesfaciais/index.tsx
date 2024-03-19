@@ -82,9 +82,7 @@ const FichasCadastrais = () => {
         ],
         listarValidacoesFaciais
     );
-    console.log(JSON.stringify({
-        fichas
-    }))
+    
     return (
         <Layout>
             <Box p={4}>
@@ -547,14 +545,14 @@ const FichasCadastrais = () => {
                                                                             : "white"
                                                                     }
                                                                 >
-                                                                    {parseInt(
+                                                                    {Math.floor(
                                                                         JSON.parse(
                                                                             item.resultado
                                                                         )
                                                                             ?.biometria_face
                                                                             ?.similaridade *
                                                                             100
-                                                                    )}{" "}
+                                                                    ) || 0}{" "}
                                                                     %
                                                                 </Text>
                                                             </Flex>
