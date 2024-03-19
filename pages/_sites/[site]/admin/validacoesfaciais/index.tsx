@@ -82,7 +82,9 @@ const FichasCadastrais = () => {
         ],
         listarValidacoesFaciais
     );
-
+    console.log(JSON.stringify({
+        fichas
+    }))
     return (
         <Layout>
             <Box p={4}>
@@ -598,9 +600,9 @@ const FichasCadastrais = () => {
                                                 </Td> */}
                                                 <Td>
                                                     {formatoData(
-                                                        item.createdAt,
-                                                        "DATA_HORA"
-                                                    )}
+                                                        item.createAt,
+                                                        "DATA_HORA")
+                                                    }
                                                 </Td>
                                                 <Td>
                                                     {formatoData(
