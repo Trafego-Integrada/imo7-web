@@ -66,7 +66,6 @@ import {
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { exportToExcel } from "react-json-to-excel";
 import { useMutation, useQuery } from "react-query";
-import { api } from "@/services/apiClient";
 
 const Home = ({ query }) => {
     const { usuario } = useAuth();
@@ -842,10 +841,13 @@ const Home = ({ query }) => {
                                                                                 rounded="full"
                                                                                 colorScheme="blue"
                                                                                 variant="outline"
+                                                                                as={
+                                                                                    Link
+                                                                                }
                                                                                 icon={
                                                                                     <FiDownload />
                                                                                 }
-                                                                                onClick={() => api.get(`fichaCadastral/${item.id}/downloadArquivos`)}
+                                                                                href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/downloadArquivos`}
                                                                                 target="_blank"
                                                                                 passHref
                                                                             />

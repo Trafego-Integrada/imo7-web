@@ -5,13 +5,11 @@ import { cors } from "@/middleware/cors";
 import * as AdmZip from "adm-zip";
 import axios from "axios";
 import path, { parse } from "path";
-import { api } from "@/services/apiClient";
 
 const handler = nextConnect();
 handler.use(cors);
 
 handler.get(async (req, res) => {
-    
     try {
         const { id } = req.query;
 
@@ -62,10 +60,12 @@ handler.get(async (req, res) => {
 
         const zip = new AdmZip();
         if (ficha) {
-            console.log("HERE!")
-            const response = await api.get(`/fichaCadastral/${ficha.id}/pdf`, {
-                responseType: "arraybuffer"
-            })
+            const response = await axios.get(
+                `https://www.imo7.com.br/api/fichaCadastral/${ficha.id}/pdf`,
+                {
+                    responseType: "arraybuffer",
+                }
+            );
 
             if (response.status === 200) {
                 zip.addFile(
