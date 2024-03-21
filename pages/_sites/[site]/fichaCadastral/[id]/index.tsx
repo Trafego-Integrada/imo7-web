@@ -59,7 +59,7 @@ import {
     useSteps,
     useToast,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     FiAlertTriangle,
@@ -569,7 +569,8 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             }
         }
         
-        await onFormSave(data);
+        const finished = await onFormSave(data);
+        setSubmitAlert(true) 
     };
 
     const onSubmitIgnorandoErros = async (data) => {
@@ -709,40 +710,12 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             const checkPreenchimento = await verificarPreenchimento();
             if (checkPreenchimento) await onFormSave(watch());
         }
+
+        setSubmitAlert(false)
         return;
     };
-    /*const totalRequiredFilled = () => {
-        return campos.filter((item) => {
-            return item.campos.find((element) => 
-                item.campos.find(
-                        (element) => modelo?.campos[element.codigo]?.exibir
-                ) &&
-                    //FLAG Elzio Lima
-                item.campos.filter((item) => {
-                    if ((modelo.campos[item.codigo] &&
-                        modelo?.campos[item.codigo]?.exibir &&
-                        !item.dependencia) ||
-                        (modelo.campos[item.codigo] &&
-                        modelo?.campos[item.codigo]?.exibir &&
-                            ((item.dependencia?.codigo &&
-                            !item.dependenciaValor &&
-                            watch(`preenchimento.${item.dependencia?.codigo}`)) ||
-                            (item.dependencia?.codigo &&
-                            item.dependenciaValor &&
-                            JSON.parse(item.dependenciaValor).includes(
-                                watch(
-                                    `preenchimento.${item.dependencia?.codigo}`
-                                )
-                            ))))
-                    ) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }).length > 0
-            )
-        }).length
-    }*/
+    const [submitAlert, setSubmitAlert] = useState(false);
+    useEffect(() => {}, [submitAlert])
 
     return (
         <Box
@@ -1071,7 +1044,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                 </StepIndicator>
 
                                 <Box flexShrink="0">
-                                    <StepTitle>Resumo</StepTitle>
+                                    <StepTitle>Finalizar Envio!</StepTitle>
                                     <StepDescription>
                                         Confira os dados informados
                                     </StepDescription>
@@ -2383,6 +2356,37 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                             </>
                                                         ))}
                                                 </ul>
+                                            </AlertDescription>
+                                        </Alert>
+                                    )}
+                                    {submitAlert && !(errors as any)?.preenchimento && (
+                                        <Alert
+                                            status="success"
+                                            flexDir="column"
+                                        >
+                                            <Flex>
+                                                {" "}
+                                                <AlertIcon />
+                                                <AlertTitle>
+                                                    Ficha finalizada e enviada com sucesso!
+                                                </AlertTitle>
+                                            </Flex>
+                                            <AlertDescription>
+                                                <Text fontWeight="bold">
+                                                    Gostariamos de expressar nossa gratidão pelo envio da ficha cadastral.
+                                                </Text>
+                                                <Text fontWeight="bold">
+                                                    Recebemos o documento com sucesso e estamos ansiosos para dar continuidade ao processo.
+                                                </Text>
+                                                <Text fontWeight="bold">
+                                                    A equipe estará revisando cuidadosamente os detalhes fornecidos e entraremos em contato em breve para discutir.
+                                                </Text>
+                                                <Text fontWeight="bold">
+                                                    Por favor, fique à vontade para nos contatar caso haja alguma dúvida ou necessidade de informações adicionais.
+                                                </Text>
+                                                <Text fontWeight="bold">
+                                                    Estamos aqui para ajudar.
+                                                </Text>
                                             </AlertDescription>
                                         </Alert>
                                     )}
