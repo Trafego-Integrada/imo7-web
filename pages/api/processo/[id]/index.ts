@@ -39,7 +39,11 @@ handle.get(async (req, res) => {
                 select: {
                     Anexo: true,
                     ConsultaNetrin: true,
-                    fichas: true,
+                    fichas: {
+                        where: {
+                            deletedAt: null,
+                        },
+                    },
                 },
             },
         },
