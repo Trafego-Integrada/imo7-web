@@ -716,6 +716,9 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     };
     const [submitAlert, setSubmitAlert] = useState(false);
     useEffect(() => {}, [submitAlert])
+    useEffect(() => {}, [
+        ficha, campos, modelo
+    ])
 
     return (
         <Box
