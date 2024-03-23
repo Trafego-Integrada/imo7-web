@@ -82,7 +82,7 @@ const FichasCadastrais = () => {
         ],
         listarValidacoesFaciais
     );
-
+    
     return (
         <Layout>
             <Box p={4}>
@@ -461,13 +461,19 @@ const FichasCadastrais = () => {
                                                 </Td>
                                                 <Td>{item.cpf}</Td>
                                                 <Td>
-                                                    <Image
-                                                        borderRadius="2xl"
-                                                        src={item.fotoUrl}
-                                                        width={20}
-                                                        height={20}
-                                                        objectFit="cover"
-                                                    />
+                                                    {
+                                                        item.fotoUrl ? 
+                                                            <Image
+                                                                borderRadius="2xl"
+                                                                src={item.fotoUrl}
+                                                                width={20}
+                                                                height={20}
+                                                                objectFit="cover"
+                                                            /> :
+                                                            <Text fontWeight="bold">
+                                                                Foto não enviada
+                                                            </Text>
+                                                    }
                                                 </Td>
                                                 <Td>
                                                     <Text fontWeight="bold">
@@ -545,14 +551,14 @@ const FichasCadastrais = () => {
                                                                             : "white"
                                                                     }
                                                                 >
-                                                                    {parseInt(
+                                                                    {Math.floor(
                                                                         JSON.parse(
                                                                             item.resultado
                                                                         )
                                                                             ?.biometria_face
                                                                             ?.similaridade *
                                                                             100
-                                                                    )}{" "}
+                                                                    ) || 0}{" "}
                                                                     %
                                                                 </Text>
                                                             </Flex>
@@ -598,9 +604,9 @@ const FichasCadastrais = () => {
                                                 </Td> */}
                                                 <Td>
                                                     {formatoData(
-                                                        item.createdAt,
-                                                        "DATA_HORA"
-                                                    )}
+                                                        item.createAt,
+                                                        "DATA_HORA")
+                                                    }
                                                 </Td>
                                                 <Td>
                                                     {formatoData(

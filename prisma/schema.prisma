@@ -725,7 +725,7 @@ model FichaCadastral {
     createdAt                DateTime                        @default(now())
     updatedAt                DateTime?                       @updatedAt
     deletedAt                DateTime?
-    porcentagemPreenchimento Int                             @default(0)
+    porcentagemPreenchimento Decimal                         @default(0)
     imobiliaria              Imobiliaria                     @relation(fields: [imobiliariaId], references: [id])
     imobiliariaId            Int
     modelo                   ModeloFichaCadastral            @relation(fields: [modeloFichaCadastralId], references: [id])
