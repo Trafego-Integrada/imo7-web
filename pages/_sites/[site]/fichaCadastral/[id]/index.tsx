@@ -566,11 +566,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                     title: "Ficha preenchida e enviada",
                     position: "top-right",
                 });
+                setSubmitAlert(true) 
             }
         }
         
         const finished = await onFormSave(data);
-        setSubmitAlert(true) 
     };
 
     const onSubmitIgnorandoErros = async (data) => {
@@ -2520,7 +2520,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             ).length && (
                                     <Button
                                         size="sm"
-                                        colorScheme="blue"
+                                        colorScheme="green"
                                         type="submit"
                                         isLoading={isSubmitting}
                                         rightIcon={<BiSave />}
@@ -2530,7 +2530,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                 : true
                                         }
                                     >
-                                        Salvar
+                                        Finalizar e Enviar
                                     </Button>
                                 )}
                         </Flex>
