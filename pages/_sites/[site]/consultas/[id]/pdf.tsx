@@ -256,6 +256,21 @@ const FichaCadastral = ({ consulta }) => {
                                                 </Text>
                                             </GridItem>
                                             <GridItem
+                                                borderWidth={1}
+                                                px={2}
+                                                py={1}
+                                            >
+                                                <Text fontSize="xx-small">
+                                                    Status
+                                                </Text>
+                                                <Text
+                                                    fontWeight="bold"
+                                                    fontSize="xs"
+                                                >
+                                                    {item?.status}
+                                                </Text>
+                                            </GridItem>
+                                            <GridItem
                                                 colSpan={2}
                                                 borderWidth={1}
                                                 px={2}
