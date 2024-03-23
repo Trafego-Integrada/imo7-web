@@ -912,6 +912,14 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             <Text>{formatoValor(ficha.imovel?.valorIPTU)}</Text>
                         </GridItem>
                     )}
+                    {ficha.imovel?.valorSeguro && (
+                        <GridItem p={4} bg="white">
+                            <Text fontSize="sm" color="gray">
+                                Valor Seguro Incêndio
+                            </Text>
+                            <Text>{formatoValor(ficha.imovel?.valorSeguro)}</Text>
+                        </GridItem>
+                    )}
                 </Grid>
                 <Flex flexDir={{ base: "column", lg: "row" }}>
                     <Box w={{ base: "full", lg: "xs" }} overflow="auto">
