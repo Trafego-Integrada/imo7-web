@@ -1,21 +1,15 @@
 import { listarContratos } from "@/services/models/contrato";
 import {
     Box,
-    Button,
-    ButtonGroup,
     Flex,
     Icon,
-    InputGroup,
-    InputRightElement,
     List,
     ListItem,
-    ModalOverlay,
     Popover,
     PopoverArrow,
     PopoverBody,
     PopoverCloseButton,
     PopoverContent,
-    PopoverFooter,
     PopoverHeader,
     PopoverTrigger,
     Portal,
@@ -24,11 +18,9 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import { BsSearch } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { FormInput } from "./Form/FormInput";
-import { FormSelect } from "./Form/FormSelect";
 import { ModalContratos } from "./Modals/contratos";
 
 export const FiltroTopo = () => {

@@ -1,9 +1,9 @@
 import { signOut } from "@/contexts/AuthContext";
 import axios, { AxiosError } from "axios";
-import jwtDecode from "jwt-decode";
 import { parseCookies, setCookie } from "nookies";
 import { AuthTokenError } from "./errors/AuthTokenError";
 import QueryString from "qs";
+
 let isRefreshing = false;
 let failedRequestQueue: {
     onSuccess: (token: string) => void;
@@ -15,7 +15,6 @@ export function setupApiClient(ctx = null) {
     let host;
 
     if (typeof window !== "undefined") {
-        // //console.log(window.location);
         host = window.location.host;
         host = host.split(".")[0];
     }
@@ -35,6 +34,7 @@ export function setupApiClient(ctx = null) {
             },
         },
     });
+
     api.interceptors.request.use((request) => {
         let cookies = parseCookies(null);
         // //console.log(cookies)
@@ -153,5 +153,6 @@ export function setupApiClient(ctx = null) {
             return Promise.reject(error);
         }
     );
+
     return api;
 }

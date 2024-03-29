@@ -12,13 +12,7 @@ import {
 } from "react-icons/fa";
 import { FiTag } from "react-icons/fi";
 import { HiOutlineDocumentText } from "react-icons/hi";
-import {
-    MdCategory,
-    MdDashboard,
-    MdNewspaper,
-    MdOutlineNotificationsActive,
-    MdOutlineRule,
-} from "react-icons/md";
+import { MdCategory, MdNewspaper, MdOutlineRule } from "react-icons/md";
 import { TbForms } from "react-icons/tb";
 import { MenuItem } from "./Menuitem";
 

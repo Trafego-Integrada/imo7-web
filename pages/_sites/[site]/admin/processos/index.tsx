@@ -1138,15 +1138,23 @@ const Home = ({ query }) => {
                                                                                         <Progress
                                                                                             size="lg"
                                                                                             value={
-                                                                                                Number(item.porcentagemPreenchimento).toFixed(2) |
+                                                                                                Number(
+                                                                                                    item.porcentagemPreenchimento
+                                                                                                ).toFixed(
+                                                                                                    2
+                                                                                                ) |
                                                                                                 0
                                                                                             }
                                                                                             max={
                                                                                                 100
                                                                                             }
                                                                                             colorScheme={
-                                                                                                Number(item.porcentagemPreenchimento).toFixed(2) ==
-                                                                                                '100.00'
+                                                                                                Number(
+                                                                                                    item.porcentagemPreenchimento
+                                                                                                ).toFixed(
+                                                                                                    2
+                                                                                                ) ==
+                                                                                                "100.00"
                                                                                                     ? "green"
                                                                                                     : "yellow"
                                                                                             }
@@ -1178,9 +1186,11 @@ const Home = ({ query }) => {
                                                                                         //         : ""
                                                                                         // }
                                                                                     >
-                                                                                        {
-                                                                                            Number(item.porcentagemPreenchimento).toFixed(2)
-                                                                                        }
+                                                                                        {Number(
+                                                                                            item.porcentagemPreenchimento
+                                                                                        ).toFixed(
+                                                                                            2
+                                                                                        )}
 
                                                                                         %
                                                                                         preenchida

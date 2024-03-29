@@ -1,14 +1,4 @@
-import { signOut } from "@/contexts/AuthContext";
-import axios, { AxiosError } from "axios";
-import jwtDecode from "jwt-decode";
-import { parseCookies, setCookie } from "nookies";
-import { AuthTokenError } from "./errors/AuthTokenError";
-
-let isRefreshing = false;
-let failedRequestQueue: {
-    onSuccess: (token: string) => void;
-    onFailure: (err: AxiosError<any>) => void;
-}[] = [];
+import axios from "axios";
 
 function setupApiClient() {
     const api = axios.create({
@@ -21,13 +11,14 @@ function setupApiClient() {
 export const apiNetrin = setupApiClient();
 
 export const apiNetrinService = () => ({
-    consultaComposta: async (consulta) => {
+    consultaComposta: async (consulta: any) => {
         const { data } = await apiNetrin.get(`consulta-composta`, {
             params: {
                 token: "fd738b33-ad1d-4cda-bd47-47ffdeefad01",
                 ...consulta,
             },
         });
+
         return data;
     },
 });
