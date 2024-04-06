@@ -46,7 +46,6 @@ export const Categoria = ({ categoria, modeloFicha, ficha, buscarFicha }) => {
                 <AccordionPanel pb={4}>
                     <Consultas
                         ficha={ficha}
-                        // Preencher com os valores preenchidos na ficha
                         cpf={removerCaracteresEspeciais(
                             dadosPreenchimentoCampo(
                                 categoria.campos.find(
@@ -61,6 +60,20 @@ export const Categoria = ({ categoria, modeloFicha, ficha, buscarFicha }) => {
                                 )?.codigo
                             )?.valor
                         )}
+                        dataNascimento={removerCaracteresEspeciais(
+                            dadosPreenchimentoCampo(
+                                categoria.campos.find(
+                                    (c) => c.tipoCampo == "date"
+                                )?.codigo
+                            )?.valor
+                        )}
+                        campoFichaCadastralCodigo={
+                            dadosPreenchimentoCampo(
+                                categoria.campos.find(
+                                    (c) => c.tipoCampo == "cpf"
+                                )?.codigo
+                            )?.campoFichaCadastralCodigo
+                        }
                     />
 
                     <Grid

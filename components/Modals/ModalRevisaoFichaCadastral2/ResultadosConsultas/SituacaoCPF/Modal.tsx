@@ -1,6 +1,5 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
 import {
-    Flex,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -9,21 +8,22 @@ import {
     ModalOverlay,
     useDisclosure,
 } from "@chakra-ui/react";
-import { IConsultaEndereco } from "../../Consulta2";
-import { Endereco } from ".";
+
+import { SituacaoCPF } from ".";
+import { IConsultaCPF } from "../../Consulta2";
 
 interface ModalProps {
-    data: IConsultaEndereco[];
+    data: IConsultaCPF;
 }
 
 const ModalBase = ({}, ref: any) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
-    const [enderecos, setEnderecos] = useState<IConsultaEndereco[]>([]);
+    const [situacaoCPF, setSituacaoCPF] = useState<IConsultaCPF | null>(null);
 
     useImperativeHandle(ref, () => ({
         onOpen: (props: ModalProps) => {
-            setEnderecos(props.data);
+            setSituacaoCPF(props.data);
             onOpen();
         },
     }));
@@ -34,20 +34,16 @@ const ModalBase = ({}, ref: any) => {
 
             <ModalContent>
                 <ModalHeader>
-                    Endereços encontrados
+                    Situação atual do CPF
                     <ModalCloseButton />
                 </ModalHeader>
 
                 <ModalBody>
-                    <Flex flexDir="column" gap={4}>
-                        {enderecos.map((endereco, index) => (
-                            <Endereco key={index} data={endereco} />
-                        ))}
-                    </Flex>
+                    {situacaoCPF && <SituacaoCPF data={situacaoCPF} />}
                 </ModalBody>
             </ModalContent>
         </Modal>
     );
 };
 
-export const ModalResultadoEndereco = forwardRef(ModalBase);
+export const ModalResultadoSituacaoCPF = forwardRef(ModalBase);

@@ -1,18 +1,10 @@
-import { api } from "@/services/apiClient";
-import { apiNetrin } from "@/services/apiNetrin";
-import { queryClient } from "@/services/queryClient";
-import {
-    Button,
-    Flex,
-    Icon,
-    Image,
-    Text,
-    Tooltip,
-    useToast,
-} from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { FiEye, FiSearch } from "react-icons/fi";
+import Image from "next/image";
 import { useQuery } from "react-query";
+import { api } from "@/services/apiClient";
+import { queryClient } from "@/services/queryClient";
+import { Button, Flex, Icon, Text, Tooltip, useToast } from "@chakra-ui/react";
 
 interface TipoConsultaProps {
     ficha: any;
@@ -27,6 +19,13 @@ export const Consulta = ({ consulta, ficha, cpf, cnpj }: TipoConsultaProps) => {
     const preview = useRef();
 
     const [consultandoNetrin, setConsultandoNetrin] = useState(false);
+
+    const deveRenderizar = useMemo(() => {
+        const validaCpf = consulta.tipoConsulta.includes("cpf") && cpf;
+        const validaCnpj = consulta.tipoConsulta.includes("cnpj") && cnpj;
+
+        return validaCpf || validaCnpj;
+    }, [consulta, cpf, cnpj]);
 
     const consultarNetrin = async (data) => {
         try {
@@ -79,34 +78,36 @@ export const Consulta = ({ consulta, ficha, cpf, cnpj }: TipoConsultaProps) => {
         }
     );
 
+    if (!deveRenderizar) return null;
+
     return (
         <Flex
             key={consulta.codigo}
             rounded="lg"
             borderWidth={1}
-            p={2}
             flexDir="column"
             justify="space-between"
+            w="14rem"
         >
             <Flex
                 flexDir="column"
-                gap={1}
+                gap={3}
                 align="center"
                 justify="center"
                 h="full"
+                p={4}
             >
                 <Image
                     alt="Receita Federal"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Logo_Receita_Federal_do_Brasil.svg/1200px-Logo_Receita_Federal_do_Brasil.svg.png"
-                    w={8}
-                    h={8}
+                    src={consulta.image}
+                    style={{
+                        width: consulta.size[0],
+                        height: consulta.size[1],
+                    }}
                 />
-                <Flex align="center" h="full">
-                    <Text
-                        fontSize="x-small"
-                        textAlign="center"
-                        fontWeight="bold"
-                    >
+
+                <Flex align="center">
+                    <Text fontSize="small" textAlign="center" fontWeight="bold">
                         {consulta?.nome}
                     </Text>
                 </Flex>
@@ -116,6 +117,11 @@ export const Consulta = ({ consulta, ficha, cpf, cnpj }: TipoConsultaProps) => {
                 w="full"
                 variant="outline"
                 size="xs"
+                border={0}
+                borderTop="1px"
+                borderColor="#e1e8f0"
+                rounded={0}
+                py="1rem"
                 leftIcon={<Icon as={FiSearch} />}
                 onClick={() =>
                     consultarNetrin({
@@ -139,6 +145,11 @@ export const Consulta = ({ consulta, ficha, cpf, cnpj }: TipoConsultaProps) => {
                     <Button
                         variant="outline"
                         size="xs"
+                        border={0}
+                        borderTop="1px"
+                        borderColor="#e1e8f0"
+                        rounded={0}
+                        py="1rem"
                         leftIcon={<Icon as={FiEye} />}
                         onClick={() =>
                             preview?.current?.onOpen(
@@ -173,7 +184,7 @@ export const Consulta = ({ consulta, ficha, cpf, cnpj }: TipoConsultaProps) => {
                                       ii.tipoConsulta == consulta.codigo &&
                                       ii.requisicao.cpf == cpf
                               )?.retorno?.processosCPF?.totalProcessos}{" "}
-                        Processos encontrados
+                        Resultados
                     </Button>
                 </Tooltip>
             )}

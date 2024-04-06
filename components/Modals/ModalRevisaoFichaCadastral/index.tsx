@@ -91,11 +91,13 @@ const ModalBase = ({}, ref) => {
         reset,
         formState: { errors, isSubmitting },
     } = useForm({ resolver: yupResolver(schema) });
+
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
             reset(data);
         },
     });
+
     const cadastrar = useMutation(cadastrarFicha);
     const atualizar = useMutation(atualizarFicha);
     const onSubmit = async (data) => {
@@ -156,6 +158,7 @@ const ModalBase = ({}, ref) => {
         });
         buscar.mutate(fichaCadastralId);
     };
+
     const [consultandoNetrin, setConsultandoNetrin] = useState(false);
     const consultarNetrin = async (data) => {
         try {

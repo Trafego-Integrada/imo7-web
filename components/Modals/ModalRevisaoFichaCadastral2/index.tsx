@@ -63,9 +63,6 @@ const ModalBase = ({}, ref) => {
         },
     }));
 
-    // console.log("Ficha", ficha);
-    // console.log("Categorias", categorias);
-
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -92,7 +89,7 @@ const ModalBase = ({}, ref) => {
                             <Flex
                                 gap={4}
                                 align="center"
-                                p={4}
+                                py={4}
                                 justify="space-between"
                             >
                                 <Flex gap={4}>

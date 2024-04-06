@@ -763,6 +763,7 @@ const Home = ({ query }) => {
                                                                     <Flex
                                                                         gap={2}
                                                                         justify="center"
+                                                                        px={4}
                                                                     >
                                                                         <Tooltip label="Revisar Ficha">
                                                                             <IconButton
@@ -852,6 +853,7 @@ const Home = ({ query }) => {
                                                                                 passHref
                                                                             />
                                                                         </Tooltip>
+
                                                                         <Menu>
                                                                             <Tooltip label="Mais opções">
                                                                                 <MenuButton>
