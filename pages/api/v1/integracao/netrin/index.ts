@@ -1,5 +1,6 @@
 import { removerCaracteresEspeciais } from "@/helpers/helpers";
 import prisma from "@/lib/prisma";
+import { format, parse } from "date-fns";
 import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
 import { apiNetrinService } from "@/services/apiNetrin";
@@ -18,7 +19,6 @@ handle.use(cors);
 handle.use(checkAuth);
 handle.get(async (req, res) => {
     const { processoId, fichaCadastralId } = req.query;
-    //console.log(req.query);
 
     let filtro: Prisma.ConsultaNetrinWhereInput = {};
 
@@ -44,6 +44,7 @@ handle.get(async (req, res) => {
 
     res.send(data);
 });
+
 handle.post(async (req, res) => {
     try {
         const { tipoConsulta, requisicao, processoId, fichaCadastralId } =
@@ -149,10 +150,25 @@ handle.post(async (req, res) => {
                 s: "receita-federal-cnpj-qsa",
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
             };
-        } else if (tipoConsulta == "receita_federal_cpf") {
+        } else if (tipoConsulta == "receita_federal_cpf_data_nascimento") {
             requisicaoBody = {
                 s: "receita-federal-cpf-data-nascimento",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta == "endereco_cpf") {
+            requisicaoBody = {
+                s: "endereco-cpf",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta == "receita_federal_cpf") {
+            const formatedDate = format(
+                parse(requisicao.dataNascimento, "yyyyMMdd", new Date()),
+                "ddMMyyy"
+            );
+
+            requisicaoBody = {
+                s: "receita-federal-cpf",
+                cpf: formatedDate,
             };
         }
 
@@ -174,6 +190,7 @@ handle.post(async (req, res) => {
                 message: "Recibo não encontrado",
             });
         }
+
         const data = await prisma.consultaNetrin.create({
             data: {
                 tipoConsulta,

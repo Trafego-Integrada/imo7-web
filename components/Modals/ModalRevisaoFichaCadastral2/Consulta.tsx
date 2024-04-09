@@ -12,9 +12,16 @@ interface TipoConsultaProps {
     cpf?: string;
     cnpj?: string;
     uf?: string;
+    dataNascimento?: string;
 }
 
-export const Consulta = ({ consulta, ficha, cpf, cnpj }: TipoConsultaProps) => {
+export const Consulta = ({
+    consulta,
+    ficha,
+    cpf,
+    cnpj,
+    dataNascimento,
+}: TipoConsultaProps) => {
     const toast = useToast();
     const preview = useRef();
 
@@ -31,7 +38,7 @@ export const Consulta = ({ consulta, ficha, cpf, cnpj }: TipoConsultaProps) => {
         try {
             setConsultandoNetrin(true);
 
-            const response = await api.post("v1/integracao/netrin", {
+            await api.post("v1/integracao/netrin", {
                 ...data,
                 processoId: ficha.processoId,
                 fichaCadastralId: ficha.id,
@@ -129,6 +136,7 @@ export const Consulta = ({ consulta, ficha, cpf, cnpj }: TipoConsultaProps) => {
                         requisicao: {
                             cpf,
                             cnpj,
+                            dataNascimento,
                         },
                     })
                 }

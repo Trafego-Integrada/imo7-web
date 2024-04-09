@@ -66,6 +66,7 @@ export const Consultas = ({
                         ficha={ficha}
                         cpf={cpf}
                         cnpj={cnpj}
+                        dataNascimento={dataNascimento}
                     />
                 ))}
             </Grid>
@@ -76,6 +77,20 @@ export const Consultas = ({
 };
 
 const consultasDisponiveis = [
+    {
+        tipoConsulta: ["cpf"],
+        codigo: "endereco_cpf",
+        nome: "Endereços",
+        image: imageEndereco,
+        size: ["3.5rem", "3.5rem"],
+    },
+    {
+        tipoConsulta: ["cpf"],
+        codigo: "receita_federal_cpf",
+        nome: "Situação Cadastral do CPF",
+        image: imageRF,
+        size: ["6rem", "6rem"],
+    },
     {
         tipoConsulta: ["cpf"],
         codigo: "processos_pf",
@@ -99,19 +114,5 @@ const consultasDisponiveis2 = [
         nome: "Validação Facial",
         image: imageVF,
         size: ["4rem", "4rem"],
-    },
-    {
-        tipoConsulta: ["cpf"],
-        codigo: "endereco-cpf",
-        nome: "Endereços",
-        image: imageEndereco,
-        size: ["3.5rem", "3.5rem"],
-    },
-    {
-        tipoConsulta: ["cpf"],
-        codigo: "receita_federal_cpf",
-        nome: "Situação Cadastral do CPF",
-        image: imageRF,
-        size: ["6rem", "6rem"],
     },
 ];
