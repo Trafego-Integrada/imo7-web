@@ -3,14 +3,6 @@ export const isDisplayed = (campo: any, modelo: any) => {
     const displayedField =
         modelo && modelo.campos && modelo?.campos[codigo]?.exibir;
 
-    if (modelo && modelo.campos && modelo?.campos[codigo]?.exibir) {
-        console.log(
-            JSON.stringify({
-                codigo,
-                displayedField,
-            })
-        );
-    }
     return displayedField;
 };
 
