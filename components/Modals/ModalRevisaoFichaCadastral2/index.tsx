@@ -110,22 +110,6 @@ const ModalBase = ({}, ref) => {
                                         </Text>
                                     </Box>
                                 </Flex>
-                                <Flex gap={4}>
-                                    <Button
-                                        colorScheme="orange"
-                                        variant="outline"
-                                        size="sm"
-                                    >
-                                        Em andamento
-                                    </Button>
-                                    <Button
-                                        colorScheme="blue"
-                                        variant="solid"
-                                        size="sm"
-                                    >
-                                        Como Funciona
-                                    </Button>
-                                </Flex>
                             </Flex>
                             <Divider />
                             <Box>
