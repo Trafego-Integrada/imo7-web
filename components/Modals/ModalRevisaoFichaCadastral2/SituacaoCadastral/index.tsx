@@ -1,12 +1,25 @@
 import { Flex, Text, Link } from "@chakra-ui/react";
 
-import { IConsultaCPF } from "../../Consulta2";
-
-interface SituacaoCPFProps {
-    data: IConsultaCPF;
+export interface IConsultaSituacaoCadastral {
+    cpf: string;
+    receitaFederal: {
+        cpf: string;
+        nome: string;
+        situacaoCadastral: string;
+        digitoVerificador: string;
+        comprovante: string;
+        dataNascimento: string;
+        dataInscricao: string;
+        anoObito: string;
+        urlComprovante: string;
+    };
 }
 
-export const SituacaoCPF = ({ data }: SituacaoCPFProps) => {
+interface SituacaoCPFProps {
+    data: IConsultaSituacaoCadastral;
+}
+
+export const SituacaoCadastral = ({ data }: SituacaoCPFProps) => {
     const isRegular =
         data.receitaFederal.situacaoCadastral === "REGULAR" || false;
 

@@ -53,6 +53,7 @@ handle.post(async (req, res) => {
         let requisicaoBody = {
             ...requisicao,
         };
+
         let requisicaoBody2 = {
             ...requisicao,
         };
@@ -86,7 +87,7 @@ handle.post(async (req, res) => {
                     .send({ message: "Informe um CPF válido" });
             } else {
                 requisicaoBody = {
-                    s: "protestos-cenprot",
+                    s: "protestos-cenprot-sp",
                     cpf: removerCaracteresEspeciais(requisicao.cpf),
                     "govbr-senha": "trafego10",
                     "govbr-cpf": "30156844850",
@@ -168,7 +169,8 @@ handle.post(async (req, res) => {
 
             requisicaoBody = {
                 s: "receita-federal-cpf",
-                cpf: formatedDate,
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+                "data-nascimento": formatedDate,
             };
         }
 
@@ -176,6 +178,7 @@ handle.post(async (req, res) => {
         const retornoNetrin = await apiNetrinService().consultaComposta(
             requisicaoBody
         );
+
         if (tipoConsulta == "protestos_pf") {
             // Consulta Netrin
             const retornoNetrin2 = await apiNetrinService().consultaComposta(
@@ -183,6 +186,7 @@ handle.post(async (req, res) => {
             );
             //console.log(retornoNetrin2);
         }
+
         if (!retornoNetrin) {
             res.status(400).json({
                 success: false,

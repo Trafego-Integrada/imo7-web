@@ -46,7 +46,7 @@ import { Controller, useForm } from "react-hook-form";
 import { FiDownload, FiEye } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
-import { ModalPreview } from "../Preview";
+import { ModalPreview } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
 import { AnaliseCampo } from "./AnaliseCampo";
 
 import React, { useState } from "react";

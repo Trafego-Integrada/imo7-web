@@ -19,17 +19,14 @@ import {
     Tr,
 } from "@chakra-ui/react";
 import "react-quill/dist/quill.snow.css";
-const FichaCadastral = ({ consulta }) => {
-    //console.log(consulta);
-    const totalProtestos = (protestos) => {
+
+const FichaCadastral = ({ consulta }: any) => {
+    const totalProtestos = (protestos: any) => {
         let total = 0;
         if (protestos.code != 606) {
-            Object.entries(protestos)?.map((i) => {
-                //console.log("Item", i);
-
+            Object.entries(protestos)?.map((i: any) => {
                 if (i.length > 1) {
-                    i[1].map((i) => {
-                        //console.log("Item2", i);
+                    i[1].map((i: any) => {
                         total += i.protestos?.length;
                     });
                 }
@@ -37,11 +34,16 @@ const FichaCadastral = ({ consulta }) => {
         }
         return total;
     };
+
     return (
         <Flex minH="100vh" flexDir="column" gap={4}>
             <Flex align="center" py={0} gap={6}>
                 <Box>
-                    <Image h={70} src={consulta?.imobiliaria?.logo} />
+                    <Image
+                        h={70}
+                        src={consulta?.imobiliaria?.logo}
+                        alt="Imobiliária"
+                    />
                 </Box>
                 <Box>
                     <Text fontSize="sm">
@@ -158,7 +160,7 @@ const FichaCadastral = ({ consulta }) => {
                         </Flex>
                         <Grid gap={5}>
                             {consulta?.retorno?.processosCPF?.processos?.map(
-                                (item, k) => (
+                                (item: any, k: any) => (
                                     <GridItem key={k}>
                                         <Grid
                                             mb={4}
@@ -298,7 +300,10 @@ const FichaCadastral = ({ consulta }) => {
                                                 </Text>
                                                 <List>
                                                     {item.partes?.map(
-                                                        (parte, kp) => (
+                                                        (
+                                                            parte: any,
+                                                            kp: any
+                                                        ) => (
                                                             <ListItem key={kp}>
                                                                 <Text fontSize="xs">
                                                                     {
@@ -406,7 +411,7 @@ const FichaCadastral = ({ consulta }) => {
                         </Flex>
                         <Grid gap={5}>
                             {consulta?.retorno?.processosCPF?.processos.map(
-                                (item, k) => (
+                                (item: any, k: any) => (
                                     <GridItem key={k}>
                                         <Grid
                                             mb={4}
@@ -531,7 +536,10 @@ const FichaCadastral = ({ consulta }) => {
                                                 </Text>
                                                 <List>
                                                     {item.partes.map(
-                                                        (parte, kp) => (
+                                                        (
+                                                            parte: any,
+                                                            kp: any
+                                                        ) => (
                                                             <ListItem key={kp}>
                                                                 <Text fontSize="xs">
                                                                     {
@@ -607,15 +615,14 @@ const FichaCadastral = ({ consulta }) => {
                             {consulta?.retorno?.cenprotProtestos?.code != 606 &&
                                 Object.entries(
                                     consulta?.retorno?.cenprotProtestos
-                                )?.map((item, k) => {
-                                    //console.log("Item", item[1]);
+                                )?.map((item: any, k: any) => {
                                     return (
                                         <GridItem as={Grid} gap={4} key={k}>
                                             <Text>
                                                 Protestos no estado:{" "}
                                                 <strong>{item[0]}</strong>
                                             </Text>
-                                            {item[1].map((i, k) => (
+                                            {item[1].map((i: any, k: any) => (
                                                 <Grid
                                                     key={k}
                                                     mb={4}
@@ -820,15 +827,14 @@ const FichaCadastral = ({ consulta }) => {
                             {consulta?.retorno?.cenprotProtestos?.code != 606 &&
                                 Object.entries(
                                     consulta?.retorno?.cenprotProtestos
-                                )?.map((item, k) => {
-                                    //console.log("Item", item[1]);
+                                )?.map((item: any, k: any) => {
                                     return (
                                         <GridItem as={Grid} gap={4} key={k}>
                                             <Text>
                                                 Protestos no estado:{" "}
                                                 <strong>{item[0]}</strong>
                                             </Text>
-                                            {item[1].map((i, k) => (
+                                            {item[1].map((i: any, k: any) => (
                                                 <Grid
                                                     key={k}
                                                     mb={4}
@@ -1079,7 +1085,7 @@ const FichaCadastral = ({ consulta }) => {
 
 export default FichaCadastral;
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: any) => {
     const { id } = ctx.query;
     let consulta = await prisma.consultaNetrin.findUnique({
         where: { id },

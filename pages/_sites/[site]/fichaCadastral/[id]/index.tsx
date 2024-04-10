@@ -7,7 +7,7 @@ import {
     getFileExtension,
     verificarExtensaoImagem,
 } from "@/helpers/helpers";
-import { redirectToErrorPage } from '@/utils/redirectToErrorPage';
+import { redirectToErrorPage } from "@/utils/redirectToErrorPage";
 import { buscarEndereco } from "@/lib/buscarEndereco";
 import prisma from "@/lib/prisma";
 import {
@@ -73,12 +73,15 @@ import { MdClose } from "react-icons/md";
 import { useMutation } from "react-query";
 import "react-quill/dist/quill.snow.css";
 
-import { ModalPreview } from "@/components/Modals/Preview";
+import { ModalPreview } from "@/components/Modals/ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
 import { GetServerSideProps } from "next";
 import { FileUpload } from "primereact/fileupload";
 import { BiSave } from "react-icons/bi";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import { totalFields, totalRequiredFields } from "@/utils/registerFormFieldsAuxiliar";
+import {
+    totalFields,
+    totalRequiredFields,
+} from "@/utils/registerFormFieldsAuxiliar";
 function validateCPF(value) {
     // Remove caracteres não numéricos
     const cleanedCPF = value.replace(/\D/g, "");
@@ -530,25 +533,35 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                 position: "top-right",
             });
         }
-    }
+    };
 
     const onSubmit = async (data: any) => {
         // Mapear campos e setar erros se não estiverem preenchidos
 
-        if (activeStep != campos.filter((i) => 
-                i.campos.find((e) => modelo?.campos[e.codigo]?.exibir) &&
+        if (
+            activeStep !=
+            campos.filter(
+                (i) =>
+                    i.campos.find((e) => modelo?.campos[e.codigo]?.exibir) &&
                     i.campos.filter((i) => {
-                        if ((modelo.campos[i.codigo] && modelo?.campos[i.codigo]?.exibir && 
+                        if (
+                            (modelo.campos[i.codigo] &&
+                                modelo?.campos[i.codigo]?.exibir &&
                                 !i.dependencia) ||
-                            (modelo.campos[i.codigo] && modelo?.campos[i.codigo]?.exibir && (
-                                (i.dependencia?.codigo && !i.dependenciaValor &&
-                                    watch(`preenchimento.${i.dependencia?.codigo}`)) ||
-                                (i.dependencia?.codigo && i.dependenciaValor &&
-                                    JSON.parse(i.dependenciaValor)
-                                        .includes(watch(`preenchimento.${i.dependencia?.codigo}`)
-                                    )
-                                ))
-                            )
+                            (modelo.campos[i.codigo] &&
+                                modelo?.campos[i.codigo]?.exibir &&
+                                ((i.dependencia?.codigo &&
+                                    !i.dependenciaValor &&
+                                    watch(
+                                        `preenchimento.${i.dependencia?.codigo}`
+                                    )) ||
+                                    (i.dependencia?.codigo &&
+                                        i.dependenciaValor &&
+                                        JSON.parse(i.dependenciaValor).includes(
+                                            watch(
+                                                `preenchimento.${i.dependencia?.codigo}`
+                                            )
+                                        ))))
                         ) {
                             return true;
                         } else {
@@ -559,17 +572,17 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         ) {
             setActiveStep(activeStep + 1);
         } else {
-            const checkPreenchimento = await verificarPreenchimento()
+            const checkPreenchimento = await verificarPreenchimento();
             if (checkPreenchimento) {
                 data = { ...data, status: "preenchida" };
                 toast({
                     title: "Ficha preenchida e enviada",
                     position: "top-right",
                 });
-                setSubmitAlert(true) 
+                setSubmitAlert(true);
             }
         }
-        
+
         const finished = await onFormSave(data);
     };
 
@@ -644,9 +657,11 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                         ["image", "file", "files"].includes(i.tipoCampo)
                     )
                     .map((campo) => {
-                        console.log(JSON.stringify({
-                            campo
-                        }))
+                        console.log(
+                            JSON.stringify({
+                                campo,
+                            })
+                        );
                         if (
                             modelo.campos[campo.codigo]?.obrigatorio &&
                             (!watch(`preenchimento.${campo.codigo}`) ||
@@ -654,8 +669,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                     watch(`preenchimento.${campo.codigo}`)
                                 ) &&
                                     watch(`preenchimento.${campo.codigo}`)
-                                        .length == 0)
-                            )
+                                        .length == 0))
                         ) {
                             retorno = false;
                             setError(`preenchimento.${campo.codigo}`, {
@@ -711,14 +725,12 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             if (checkPreenchimento) await onFormSave(watch());
         }
 
-        setSubmitAlert(false)
+        setSubmitAlert(false);
         return;
     };
     const [submitAlert, setSubmitAlert] = useState(false);
-    useEffect(() => {}, [submitAlert])
-    useEffect(() => {}, [
-        ficha, campos, modelo
-    ])
+    useEffect(() => {}, [submitAlert]);
+    useEffect(() => {}, [ficha, campos, modelo]);
 
     return (
         <Box
@@ -917,7 +929,9 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             <Text fontSize="sm" color="gray">
                                 Valor Seguro Incêndio
                             </Text>
-                            <Text>{formatoValor(ficha.imovel?.valorSeguro)}</Text>
+                            <Text>
+                                {formatoValor(ficha.imovel?.valorSeguro)}
+                            </Text>
                         </GridItem>
                     )}
                 </Grid>
@@ -2370,37 +2384,56 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                             </AlertDescription>
                                         </Alert>
                                     )}
-                                    {submitAlert && !(errors as any)?.preenchimento && (
-                                        <Alert
-                                            status="success"
-                                            flexDir="column"
-                                        >
-                                            <Flex>
-                                                {" "}
-                                                <AlertIcon />
-                                                <AlertTitle>
-                                                    Ficha finalizada e enviada com sucesso!
-                                                </AlertTitle>
-                                            </Flex>
-                                            <AlertDescription>
-                                                <Text fontWeight="bold">
-                                                    Gostariamos de expressar nossa gratidão pelo envio da ficha cadastral.
-                                                </Text>
-                                                <Text fontWeight="bold">
-                                                    Recebemos o documento com sucesso e estamos ansiosos para dar continuidade ao processo.
-                                                </Text>
-                                                <Text fontWeight="bold">
-                                                    A equipe estará revisando cuidadosamente os detalhes fornecidos e entraremos em contato em breve para discutir.
-                                                </Text>
-                                                <Text fontWeight="bold">
-                                                    Por favor, fique à vontade para nos contatar caso haja alguma dúvida ou necessidade de informações adicionais.
-                                                </Text>
-                                                <Text fontWeight="bold">
-                                                    Estamos aqui para ajudar.
-                                                </Text>
-                                            </AlertDescription>
-                                        </Alert>
-                                    )}
+                                    {submitAlert &&
+                                        !(errors as any)?.preenchimento && (
+                                            <Alert
+                                                status="success"
+                                                flexDir="column"
+                                            >
+                                                <Flex>
+                                                    {" "}
+                                                    <AlertIcon />
+                                                    <AlertTitle>
+                                                        Ficha finalizada e
+                                                        enviada com sucesso!
+                                                    </AlertTitle>
+                                                </Flex>
+                                                <AlertDescription>
+                                                    <Text fontWeight="bold">
+                                                        Gostariamos de expressar
+                                                        nossa gratidão pelo
+                                                        envio da ficha
+                                                        cadastral.
+                                                    </Text>
+                                                    <Text fontWeight="bold">
+                                                        Recebemos o documento
+                                                        com sucesso e estamos
+                                                        ansiosos para dar
+                                                        continuidade ao
+                                                        processo.
+                                                    </Text>
+                                                    <Text fontWeight="bold">
+                                                        A equipe estará
+                                                        revisando cuidadosamente
+                                                        os detalhes fornecidos e
+                                                        entraremos em contato em
+                                                        breve para discutir.
+                                                    </Text>
+                                                    <Text fontWeight="bold">
+                                                        Por favor, fique à
+                                                        vontade para nos
+                                                        contatar caso haja
+                                                        alguma dúvida ou
+                                                        necessidade de
+                                                        informações adicionais.
+                                                    </Text>
+                                                    <Text fontWeight="bold">
+                                                        Estamos aqui para
+                                                        ajudar.
+                                                    </Text>
+                                                </AlertDescription>
+                                            </Alert>
+                                        )}
                                 </Flex>
                             </GridItem>
                         </Grid>
@@ -2417,46 +2450,46 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             </Button>
                             {activeStep !=
                                 campos.filter((i) =>
-                                i.campos.find(
-                                    (e) =>
-                                        i.campos.find(
-                                            (e) =>
-                                                modelo?.campos[e.codigo]
-                                                    ?.exibir
-                                        ) &&
-                                        i.campos.filter((i) => {
-                                            if (
-                                                (modelo.campos[i.codigo] &&
-                                                    modelo?.campos[i.codigo]
-                                                        ?.exibir &&
-                                                    !i.dependencia) ||
-                                                (modelo.campos[i.codigo] &&
-                                                    modelo?.campos[i.codigo]
-                                                        ?.exibir &&
-                                                    ((i.dependencia
-                                                        ?.codigo &&
-                                                        !i.dependenciaValor &&
-                                                        watch(
-                                                            `preenchimento.${i.dependencia?.codigo}`
-                                                        )) ||
-                                                        (i.dependencia
+                                    i.campos.find(
+                                        (e) =>
+                                            i.campos.find(
+                                                (e) =>
+                                                    modelo?.campos[e.codigo]
+                                                        ?.exibir
+                                            ) &&
+                                            i.campos.filter((i) => {
+                                                if (
+                                                    (modelo.campos[i.codigo] &&
+                                                        modelo?.campos[i.codigo]
+                                                            ?.exibir &&
+                                                        !i.dependencia) ||
+                                                    (modelo.campos[i.codigo] &&
+                                                        modelo?.campos[i.codigo]
+                                                            ?.exibir &&
+                                                        ((i.dependencia
                                                             ?.codigo &&
-                                                            i.dependenciaValor &&
-                                                            JSON.parse(
-                                                                i.dependenciaValor
-                                                            ).includes(
-                                                                watch(
-                                                                    `preenchimento.${i.dependencia?.codigo}`
-                                                                )
-                                                            ))))
-                                            ) {
-                                                return true;
-                                            } else {
-                                                return false;
-                                            }
-                                        }).length > 0
-                                )
-                            ).length && (
+                                                            !i.dependenciaValor &&
+                                                            watch(
+                                                                `preenchimento.${i.dependencia?.codigo}`
+                                                            )) ||
+                                                            (i.dependencia
+                                                                ?.codigo &&
+                                                                i.dependenciaValor &&
+                                                                JSON.parse(
+                                                                    i.dependenciaValor
+                                                                ).includes(
+                                                                    watch(
+                                                                        `preenchimento.${i.dependencia?.codigo}`
+                                                                    )
+                                                                ))))
+                                                ) {
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }
+                                            }).length > 0
+                                    )
+                                ).length && (
                                 <Button
                                     size="sm"
                                     colorScheme="blue"
@@ -2471,53 +2504,53 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                             {(ficha.status == "reprovada" ||
                                 ficha.status == "aguardando") &&
                                 activeStep ==
-                                campos.filter((i) =>
-                                i.campos.find(
-                                    (e) =>
+                                    campos.filter((i) =>
                                         i.campos.find(
                                             (e) =>
-                                                modelo?.campos[e.codigo]
-                                                    ?.exibir
-                                        ) &&
-                                        i.campos.filter((i) => {
-                                            if (
-                                                (modelo.campos[
-                                                    i.codigo
-                                                ] &&
-                                                    modelo?.campos[
-                                                        i.codigo
-                                                    ]?.exibir &&
-                                                    !i.dependencia) ||
-                                                (modelo.campos[
-                                                    i.codigo
-                                                ] &&
-                                                    modelo?.campos[
-                                                        i.codigo
-                                                    ]?.exibir &&
-                                                    ((i.dependencia
-                                                        ?.codigo &&
-                                                        !i.dependenciaValor &&
-                                                        watch(
-                                                            `preenchimento.${i.dependencia?.codigo}`
-                                                        )) ||
-                                                        (i.dependencia
-                                                            ?.codigo &&
-                                                            i.dependenciaValor &&
-                                                            JSON.parse(
-                                                                i.dependenciaValor
-                                                            ).includes(
+                                                i.campos.find(
+                                                    (e) =>
+                                                        modelo?.campos[e.codigo]
+                                                            ?.exibir
+                                                ) &&
+                                                i.campos.filter((i) => {
+                                                    if (
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            !i.dependencia) ||
+                                                        (modelo.campos[
+                                                            i.codigo
+                                                        ] &&
+                                                            modelo?.campos[
+                                                                i.codigo
+                                                            ]?.exibir &&
+                                                            ((i.dependencia
+                                                                ?.codigo &&
+                                                                !i.dependenciaValor &&
                                                                 watch(
                                                                     `preenchimento.${i.dependencia?.codigo}`
-                                                                )
-                                                            ))))
-                                            ) {
-                                                return true;
-                                            } else {
-                                                return false;
-                                            }
-                                        }).length > 0
-                                )
-                            ).length && (
+                                                                )) ||
+                                                                (i.dependencia
+                                                                    ?.codigo &&
+                                                                    i.dependenciaValor &&
+                                                                    JSON.parse(
+                                                                        i.dependenciaValor
+                                                                    ).includes(
+                                                                        watch(
+                                                                            `preenchimento.${i.dependencia?.codigo}`
+                                                                        )
+                                                                    ))))
+                                                    ) {
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+                                                }).length > 0
+                                        )
+                                    ).length && (
                                     <Button
                                         size="sm"
                                         colorScheme="green"
@@ -2621,8 +2654,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         };
     } catch (error) {
         console.error("Error in getServerSideProps:", error);
-    
-        return redirectToErrorPage(ctx)
+
+        return redirectToErrorPage(ctx);
         //ctx.res.writeHead(302, { Location: '/error' });
     }
 };

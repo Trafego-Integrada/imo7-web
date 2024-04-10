@@ -8,10 +8,32 @@ import {
     AccordionItem,
     AccordionPanel,
 } from "@chakra-ui/react";
-import { IConsultaEndereco } from "../../Consulta2";
+
+interface IEndereco {
+    logradouro: string;
+    numero: string;
+    bairro: string;
+    complemento: string;
+    cep: string;
+    cidade: string;
+    uf: string;
+    pais: string;
+    tipo: string;
+    prioridade: number;
+    vinculoRecente: boolean;
+    latitude: number;
+    longitude: number;
+}
+
+export interface IConsultaEndereco {
+    cpf: string;
+    enderecoCPF: {
+        endereco: IEndereco[];
+    };
+}
 
 interface EnderecoProps {
-    data: IConsultaEndereco;
+    data: IEndereco;
 }
 
 export const Endereco = ({ data }: EnderecoProps) => {

@@ -1,53 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
-import { FiEye, FiSearch, FiLink } from "react-icons/fi";
-import { format, parse } from "date-fns";
+import { FiSearch, FiLink } from "react-icons/fi";
 import Image from "next/image";
 import { Button, Flex, Icon, Text, useToast } from "@chakra-ui/react";
 import { cadastrarValidacao } from "@/services/models/validacaofacial";
 import { buscarFicha } from "@/services/models/fichaCadastral";
-import { apiNetrin } from "@/services/apiNetrin";
-import { ModalResultadoEndereco } from "./ResultadosConsultas/Endereco/Modal";
-import { ModalResultadoSituacaoCPF } from "./ResultadosConsultas/SituacaoCPF/Modal";
 
 interface TipoConsultaProps {
     consulta: any;
     cpf?: string;
-    dataNascimento?: string;
-    uf?: string;
     campoFichaCadastralCodigo?: string;
     fichaCadastralId: string;
-}
-
-export interface IConsultaEndereco {
-    logradouro: string;
-    numero: string;
-    bairro: string;
-    complemento: string;
-    cep: string;
-    cidade: string;
-    uf: string;
-    pais: string;
-    tipo: string;
-    prioridade: number;
-    vinculoRecente: boolean;
-    latitude: number;
-    longitude: number;
-}
-
-export interface IConsultaCPF {
-    cpf: string;
-    receitaFederal: {
-        cpf: string;
-        nome: string;
-        situacaoCadastral: string;
-        digitoVerificador: string;
-        comprovante: string;
-        dataNascimento: string;
-        dataInscricao: string;
-        anoObito: string;
-        urlComprovante: string;
-    };
 }
 
 export interface IValidacaoFacial {
@@ -66,21 +29,14 @@ export interface IValidacaoFacial {
     fichaCadastralPreenchimentoCampoFichaCadastralCodigo: string;
 }
 
-const token = "fd738b33-ad1d-4cda-bd47-47ffdeefad01";
-
 export const Consulta2 = ({
     consulta,
     cpf,
-    dataNascimento,
     campoFichaCadastralCodigo,
     fichaCadastralId,
 }: TipoConsultaProps) => {
     const toast = useToast();
-    const modalResultadoEndereco = useRef();
-    const modalResultadoSituacaoCPF = useRef();
 
-    const [enderecos, setEnderecos] = useState<IConsultaEndereco[]>([]);
-    const [situacaoCPF, setSituacaoCPF] = useState<IConsultaCPF | null>(null);
     const [validacaoFacial, setValidacaoFacial] =
         useState<IValidacaoFacial | null>(null);
 
@@ -112,28 +68,6 @@ export const Consulta2 = ({
             setConsultandoNetrin(true);
 
             if (cpf) {
-                if (codigo === "endereco-cpf") {
-                    const response = await apiNetrin.get(
-                        `consulta-composta?token=${token}&s=${codigo}&cpf=${cpf}`
-                    );
-
-                    if (response.data)
-                        setEnderecos(response.data.enderecoCPF.endereco);
-                }
-
-                if (codigo === "receita_federal_cpf" && dataNascimento) {
-                    const formatedDate = format(
-                        parse(dataNascimento, "yyyyMMdd", new Date()),
-                        "ddMMyyy"
-                    );
-
-                    const response = await apiNetrin.get(
-                        `consulta-composta?token=${token}&s=${codigo}&data-nascimento=${formatedDate}&cpf=${cpf}`
-                    );
-
-                    if (response.data) setSituacaoCPF(response.data);
-                }
-
                 if (codigo === "validacao-facial") {
                     if (!validacaoFacial) {
                         const result =
@@ -170,40 +104,21 @@ export const Consulta2 = ({
 
     // Retorna se o botão de resultado estará habilitado ou desabilitado
     function isDisabledButton2(codigo: string) {
-        if (codigo === "endereco-cpf") return enderecos.length === 0 || false;
-
-        if (codigo === "receita_federal_cpf")
-            return situacaoCPF === null || false;
-
         if (codigo === "validacao-facial") return !validacaoFacial;
     }
 
     // Retorna o texto do botão de resultado
     function buildTextButton2(codigo: string) {
-        if (codigo === "endereco-cpf") return "Resultados";
-        if (codigo === "receita_federal_cpf") return "Resultados";
         if (codigo === "validacao-facial") return "Copiar Link da Validação";
     }
 
     // Retorna o icone do botão de resultado
     function buildIconButton2(codigo: string) {
-        if (codigo === "endereco-cpf") return <Icon as={FiEye} />;
-        if (codigo === "receita_federal_cpf") return <Icon as={FiEye} />;
         if (codigo === "validacao-facial") return <Icon as={FiLink} />;
     }
 
     // Exibe os resultados ao clicar no botão de resultado
     function clickButton2(codigo: string) {
-        if (codigo === "endereco-cpf")
-            return modalResultadoEndereco?.current?.onOpen({
-                data: enderecos,
-            });
-
-        if (codigo === "receita_federal_cpf")
-            return modalResultadoSituacaoCPF?.current?.onOpen({
-                data: situacaoCPF,
-            });
-
         if (codigo === "validacao-facial") {
             if (validacaoFacial) {
                 navigator.clipboard.writeText(
@@ -280,12 +195,8 @@ export const Consulta2 = ({
                 isDisabled={isDisabledButton2(consulta.codigo)}
                 onClick={() => clickButton2(consulta.codigo)}
             >
-                {enderecos.length ? enderecos.length : ""}{" "}
                 {buildTextButton2(consulta.codigo)}
             </Button>
-
-            <ModalResultadoEndereco ref={modalResultadoEndereco} />
-            <ModalResultadoSituacaoCPF ref={modalResultadoSituacaoCPF} />
         </Flex>
     );
 };

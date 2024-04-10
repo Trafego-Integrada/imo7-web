@@ -1,6 +1,4 @@
 import { Flex, Grid, Text } from "@chakra-ui/react";
-import { useRef } from "react";
-import { ModalPreview } from "../Preview";
 import { Consulta } from "./Consulta";
 import { Consulta2 } from "./Consulta2";
 
@@ -27,8 +25,6 @@ export const Consultas = ({
     dataNascimento,
     campoFichaCadastralCodigo,
 }: TipoConsultaProps) => {
-    const preview = useRef();
-
     return (
         <Flex flexDir="column">
             {(cpf || cnpj) && (
@@ -46,12 +42,11 @@ export const Consultas = ({
                 py={3}
             >
                 {cpf &&
-                    consultasDisponiveis2.map((consulta) => (
+                    outrasConsultas.map((consulta) => (
                         <Consulta2
                             key={consulta.codigo}
                             consulta={consulta}
                             cpf={cpf}
-                            dataNascimento={dataNascimento}
                             campoFichaCadastralCodigo={
                                 campoFichaCadastralCodigo
                             }
@@ -59,7 +54,7 @@ export const Consultas = ({
                         />
                     ))}
 
-                {consultasDisponiveis.map((consulta) => (
+                {consultasNetrin.map((consulta) => (
                     <Consulta
                         key={consulta.codigo}
                         consulta={consulta}
@@ -70,13 +65,11 @@ export const Consultas = ({
                     />
                 ))}
             </Grid>
-
-            <ModalPreview ref={preview} />
         </Flex>
     );
 };
 
-const consultasDisponiveis = [
+const consultasNetrin = [
     {
         tipoConsulta: ["cpf"],
         codigo: "endereco_cpf",
@@ -107,7 +100,7 @@ const consultasDisponiveis = [
     },
 ];
 
-const consultasDisponiveis2 = [
+const outrasConsultas = [
     {
         tipoConsulta: ["cpf"],
         codigo: "validacao-facial",

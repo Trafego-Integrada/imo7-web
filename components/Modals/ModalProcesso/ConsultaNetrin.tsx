@@ -25,7 +25,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { FiEye, FiPrinter } from "react-icons/fi";
 import { useQuery } from "react-query";
-import { ModalPreview } from "../Preview";
+import { ModalPreview } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
 import { useRef } from "react";
 
 export const ConsultasNetrin = ({
