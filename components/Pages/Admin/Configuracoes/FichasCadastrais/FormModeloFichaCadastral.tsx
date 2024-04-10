@@ -180,41 +180,43 @@ export const FormModeloFichaCadastral = ({ id = null }) => {
                 <GridItem bg="white" p={4}>
                     <Grid gap={4}>
                         {categorias &&
-                            categorias?.data?.map((item) => (
-                                <GridItem>
-                                    <Heading size="sm">{item.nome}</Heading>
-                                    <Table size="sm">
-                                        <Thead>
-                                            <Tr>
-                                                <Th></Th>
-                                                <Th w={24}>Exibir</Th>
-                                                <Th w={24}>Obrigatório</Th>
-                                            </Tr>
-                                        </Thead>
-                                        {item?.campos.map((i, key) => (
-                                            <Tr key={i.id}>
-                                                <Td>{i.nome}</Td>
-                                                <Td>
-                                                    <Switch
-                                                        size="sm"
-                                                        {...register(
-                                                            `campos.${i.codigo}.exibir`
-                                                        )}
-                                                    />
-                                                </Td>
-                                                <Td>
-                                                    <Switch
-                                                        size="sm"
-                                                        {...register(
-                                                            `campos.${i.codigo}.obrigatorio`
-                                                        )}
-                                                    />
-                                                </Td>
-                                            </Tr>
-                                        ))}
-                                    </Table>
-                                </GridItem>
-                            ))}
+                            categorias?.data?.map(
+                                (item: any, index: number) => (
+                                    <GridItem key={index}>
+                                        <Heading size="sm">{item.nome}</Heading>
+                                        <Table size="sm">
+                                            <Thead>
+                                                <Tr>
+                                                    <Th></Th>
+                                                    <Th w={24}>Exibir</Th>
+                                                    <Th w={24}>Obrigatório</Th>
+                                                </Tr>
+                                            </Thead>
+                                            {item?.campos.map((i, key) => (
+                                                <Tr key={i.id}>
+                                                    <Td>{i.nome}</Td>
+                                                    <Td>
+                                                        <Switch
+                                                            size="sm"
+                                                            {...register(
+                                                                `campos.${i.codigo}.exibir`
+                                                            )}
+                                                        />
+                                                    </Td>
+                                                    <Td>
+                                                        <Switch
+                                                            size="sm"
+                                                            {...register(
+                                                                `campos.${i.codigo}.obrigatorio`
+                                                            )}
+                                                        />
+                                                    </Td>
+                                                </Tr>
+                                            ))}
+                                        </Table>
+                                    </GridItem>
+                                )
+                            )}
                     </Grid>
                 </GridItem>
                 <GridItem as={Grid} gap={4}>

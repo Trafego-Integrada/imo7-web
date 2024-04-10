@@ -21,7 +21,12 @@ import {
 import { AnaliseCampo } from "../ModalRevisaoFichaCadastral/AnaliseCampo";
 import { Consultas } from "./Consultas";
 
-export const Categoria = ({ categoria, modeloFicha, ficha, buscarFicha }) => {
+export const Categoria = ({
+    categoria,
+    modeloFicha,
+    ficha,
+    buscarFicha,
+}: any) => {
     const [open, setOpen] = useState(false);
 
     const dadosPreenchimentoCampo = (codigo: string) =>
@@ -49,28 +54,28 @@ export const Categoria = ({ categoria, modeloFicha, ficha, buscarFicha }) => {
                         cpf={removerCaracteresEspeciais(
                             dadosPreenchimentoCampo(
                                 categoria.campos.find(
-                                    (c) => c.tipoCampo == "cpf"
+                                    (c: any) => c.tipoCampo == "cpf"
                                 )?.codigo
                             )?.valor
                         )}
                         cnpj={removerCaracteresEspeciais(
                             dadosPreenchimentoCampo(
                                 categoria.campos.find(
-                                    (c) => c.tipoCampo == "cnpj"
+                                    (c: any) => c.tipoCampo == "cnpj"
                                 )?.codigo
                             )?.valor
                         )}
                         dataNascimento={removerCaracteresEspeciais(
                             dadosPreenchimentoCampo(
                                 categoria.campos.find(
-                                    (c) => c.tipoCampo == "date"
+                                    (c: any) => c.tipoCampo == "date"
                                 )?.codigo
                             )?.valor
                         )}
                         campoFichaCadastralCodigo={
                             dadosPreenchimentoCampo(
                                 categoria.campos.find(
-                                    (c) => c.tipoCampo == "cpf"
+                                    (c: any) => c.tipoCampo == "cpf"
                                 )?.codigo
                             )?.campoFichaCadastralCodigo
                         }
@@ -85,8 +90,8 @@ export const Categoria = ({ categoria, modeloFicha, ficha, buscarFicha }) => {
                         gap={4}
                     >
                         {categoria.campos
-                            .filter((i) => isDisplayed(i, modeloFicha))
-                            .map((campo) => (
+                            .filter((i: any) => isDisplayed(i, modeloFicha))
+                            .map((campo: any) => (
                                 <GridItem
                                     key={campo.key}
                                     colSpan={{ lg: campo.colSpan }}
@@ -131,7 +136,7 @@ export const Categoria = ({ categoria, modeloFicha, ficha, buscarFicha }) => {
                                         {ViewValor(
                                             campo,
                                             ficha.preenchimento.find(
-                                                (p) =>
+                                                (p: any) =>
                                                     p.campoFichaCadastralCodigo ==
                                                     campo.codigo
                                             )?.valor
@@ -146,16 +151,16 @@ export const Categoria = ({ categoria, modeloFicha, ficha, buscarFicha }) => {
     );
 };
 
-const ViewValor = (campo, valor) => {
+const ViewValor = (campo: any, valor: any) => {
     if (valor) {
         if (["image"].includes(campo.tipoCampo)) {
-            return JSON.parse(valor).map((i) => (
-                <Image key={i} src={i} w={32} h={32} rounded={99} />
+            return JSON.parse(valor).map((i: any) => (
+                <Image key={i} src={i} w={32} h={32} rounded={99} alt="Image" />
             ));
         } else if (["file", "files"].includes(campo.tipoCampo)) {
             return (
                 <Flex flexDir="row" gap={2} wrap="wrap">
-                    {JSON.parse(valor).map((i) => {
+                    {JSON.parse(valor).map((i: any) => {
                         if (verificarExtensaoImagem(i).eImagem) {
                             return (
                                 <Image

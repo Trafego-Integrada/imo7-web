@@ -9,8 +9,8 @@ import { queryClient } from "@/services/queryClient";
 import { ModalEndereco } from "./Endereco/Modal";
 import { ModalSituacaoCadastral } from "./SituacaoCadastral/Modal";
 import { ModalTribunalJustica } from "./TribunalJustica/Modal";
-import { ModalEmpresaRelacionada } from './EmpresaRelacionada/Modal';
-import { ModalPessoaRelacionada } from './PessoaRelacionada/Modal';
+import { ModalEmpresaRelacionada } from "./EmpresaRelacionada/Modal";
+import { ModalPessoaRelacionada } from "./PessoaRelacionada/Modal";
 
 interface TipoConsultaProps {
     ficha: any;
@@ -43,8 +43,11 @@ export const Consulta = ({
     const [consultandoNetrin, setConsultandoNetrin] = useState(false);
 
     const deveRenderizar = useMemo(() => {
-        const validaCpf = consulta.tipoConsulta.includes("cpf") && cpf;
-        const validaCnpj = consulta.tipoConsulta.includes("cnpj") && cnpj;
+        let validaCpf = false;
+        let validaCnpj = false;
+
+        if (consulta.tipoConsulta.includes("CPF")) validaCpf = !!cpf;
+        if (consulta.tipoConsulta.includes("CNPJ")) validaCnpj = !!cnpj;
 
         return validaCpf || validaCnpj;
     }, [consulta, cpf, cnpj]);
@@ -108,14 +111,16 @@ export const Consulta = ({
                     consulta?.codigo === "processos_pf"
                         ? retorno?.processosCPF?.totalProcessos
                         : consulta?.codigo === "endereco_cpf"
-                            ? retorno?.enderecoCPF?.endereco?.length
-                            : consulta?.codigo === "empresas_relacionadas_cpf"
-                                ? retorno?.empresasRelacionadasCPF?.negociosRelacionados?.length
-                                : consulta?.codigo === "pessoas_relacionadas_cnpj"
-                                    ? retorno?.pessoasRelacionadasCNPJ?.entidadesRelacionadas?.length
-                                    : consulta?.codigo === "receita_federal_cpf"
-                                        ? 1
-                                        : 0
+                        ? retorno?.enderecoCPF?.endereco?.length
+                        : consulta?.codigo === "empresas_relacionadas_cpf"
+                        ? retorno?.empresasRelacionadasCPF?.negociosRelacionados
+                              ?.length
+                        : consulta?.codigo === "pessoas_relacionadas_cnpj"
+                        ? retorno?.pessoasRelacionadasCNPJ
+                              ?.entidadesRelacionadas?.length
+                        : consulta?.codigo === "receita_federal_cpf"
+                        ? 1
+                        : 0
                 );
 
                 return response?.data;
@@ -148,14 +153,13 @@ export const Consulta = ({
         if (consulta?.codigo === "empresas_relacionadas_cpf")
             return modalEmpresaRelacionada?.current?.onOpen({
                 data: retorno,
-            })
+            });
 
         if (consulta?.codigo === "pessoas_relacionadas_cnpj")
             return modalPessoaRelacionada?.current?.onOpen({
                 data: retorno,
-            })
+            });
     }
-
 
     if (!deveRenderizar) return null;
 
@@ -192,30 +196,32 @@ export const Consulta = ({
                 </Flex>
             </Flex>
 
-            {!retorno && <Button
-                w="full"
-                variant="outline"
-                size="xs"
-                border={0}
-                borderTop="1px"
-                borderColor="#e1e8f0"
-                rounded={0}
-                py="1rem"
-                leftIcon={<Icon as={FiSearch} />}
-                onClick={() =>
-                    consultarNetrin({
-                        tipoConsulta: consulta.codigo,
-                        requisicao: {
-                            cpf,
-                            cnpj,
-                            dataNascimento,
-                        },
-                    })
-                }
-                isLoading={consultandoNetrin}
-            >
-                Consultar
-            </Button>}
+            {!retorno && (
+                <Button
+                    w="full"
+                    variant="outline"
+                    size="xs"
+                    border={0}
+                    borderTop="1px"
+                    borderColor="#e1e8f0"
+                    rounded={0}
+                    py="1rem"
+                    leftIcon={<Icon as={FiSearch} />}
+                    onClick={() =>
+                        consultarNetrin({
+                            tipoConsulta: consulta.codigo,
+                            requisicao: {
+                                cpf,
+                                cnpj,
+                                dataNascimento,
+                            },
+                        })
+                    }
+                    isLoading={consultandoNetrin}
+                >
+                    Consultar
+                </Button>
+            )}
 
             {retorno && (
                 <Tooltip label="Visualizar Arquivo">
@@ -229,11 +235,11 @@ export const Consulta = ({
                         py="1rem"
                         leftIcon={<Icon as={FiEye} />}
                         onClick={abrirResultados}
-                        background='#3283cf'
-                        textColor='white'
+                        background="#3283cf"
+                        textColor="white"
                         _hover={{
-                            bg: '#3283cf',
-                            opacity: '.8'
+                            bg: "#3283cf",
+                            opacity: ".8",
                         }}
                     >
                         {retornoCount} Resultados
