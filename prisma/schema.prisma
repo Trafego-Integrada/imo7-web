@@ -1122,6 +1122,8 @@ enum TipoConsultaNetrin {
     receita_federal_cnpj_qsa
     receita_federal_cpf
     endereco_cpf
+    empresas_relacionadas_cpf
+    pessoas_relacionadas_cnpj
 }
 
 model ConsultaNetrin {

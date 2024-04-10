@@ -35,11 +35,10 @@ export const Consultas = ({
                 </Text>
             )}
 
-            <Grid
-                gridTemplateColumns="repeat(6,1fr)"
+            <Flex
                 gap={2}
-                overflow="auto"
                 py={3}
+                flexWrap='wrap'
             >
                 {cpf &&
                     outrasConsultas.map((consulta) => (
@@ -64,7 +63,7 @@ export const Consultas = ({
                         dataNascimento={dataNascimento}
                     />
                 ))}
-            </Grid>
+            </Flex>
         </Flex>
     );
 };
@@ -75,29 +74,50 @@ const consultasNetrin = [
         codigo: "endereco_cpf",
         nome: "Endereços",
         image: imageEndereco,
-        size: ["3.5rem", "3.5rem"],
+        size: ["2rem", "2rem"],
     },
     {
         tipoConsulta: ["cpf"],
         codigo: "receita_federal_cpf",
         nome: "Situação Cadastral do CPF",
         image: imageRF,
-        size: ["6rem", "6rem"],
+        size: ["4rem", "4rem"],
     },
     {
         tipoConsulta: ["cpf"],
         codigo: "processos_pf",
         nome: "Tribunal de Justiça (território Nacional)",
         image: imageTJ,
-        size: ["4rem", "4rem"],
+        size: ["2rem", "2rem"],
     },
     {
         tipoConsulta: ["cpf"],
         codigo: "protestos_pf",
-        nome: "Protestos",
+        nome: "Protestos PF",
         image: imageCDP,
-        size: ["7rem", "7rem"],
+        size: ["4rem", "4rem"],
     },
+    {
+        tipoConsulta: ["cpj"],
+        codigo: "protestos_pj",
+        nome: "Protestos PJ",
+        image: imageCDP,
+        size: ["4rem", "4rem"],
+    },
+    {
+        tipoConsulta: ["cpf"],
+        codigo: "empresas_relacionadas_cpf",
+        nome: "Empresas Relacionadas ao CPF",
+        image: imageCDP,
+        size: ["4rem", "4rem"],
+    },
+    {
+        tipoConsulta: ["cnpj"],
+        codigo: "pessoas_relacionadas_cnpj",
+        nome: "Pessoas Relacionadas ao CNPJ",
+        image: imageCDP,
+        size: ["4rem", "4rem"],
+    }
 ];
 
 const outrasConsultas = [
@@ -106,6 +126,6 @@ const outrasConsultas = [
         codigo: "validacao-facial",
         nome: "Validação Facial",
         image: imageVF,
-        size: ["4rem", "4rem"],
+        size: ["2rem", "2rem"],
     },
 ];

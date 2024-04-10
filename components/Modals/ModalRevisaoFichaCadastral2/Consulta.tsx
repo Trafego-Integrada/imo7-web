@@ -9,6 +9,8 @@ import { queryClient } from "@/services/queryClient";
 import { ModalEndereco } from "./Endereco/Modal";
 import { ModalSituacaoCadastral } from "./SituacaoCadastral/Modal";
 import { ModalTribunalJustica } from "./TribunalJustica/Modal";
+import { ModalEmpresaRelacionada } from './EmpresaRelacionada/Modal';
+import { ModalPessoaRelacionada } from './PessoaRelacionada/Modal';
 
 interface TipoConsultaProps {
     ficha: any;
@@ -31,6 +33,8 @@ export const Consulta = ({
     const modalTribunalJustica = useRef();
     const modalEndereco = useRef();
     const modalSituacaoCadastral = useRef();
+    const modalEmpresaRelacionada = useRef();
+    const modalPessoaRelacionada = useRef();
 
     const [id, setId] = useState<string>("");
     const [retorno, setRetorno] = useState<any | null>(null);
@@ -104,10 +108,14 @@ export const Consulta = ({
                     consulta?.codigo === "processos_pf"
                         ? retorno?.processosCPF?.totalProcessos
                         : consulta?.codigo === "endereco_cpf"
-                        ? retorno?.enderecoCPF?.endereco?.length
-                        : consulta?.codigo === "receita_federal_cpf"
-                        ? 1
-                        : 0
+                            ? retorno?.enderecoCPF?.endereco?.length
+                            : consulta?.codigo === "empresas_relacionadas_cpf"
+                                ? retorno?.empresasRelacionadasCPF?.negociosRelacionados?.length
+                                : consulta?.codigo === "pessoas_relacionadas_cnpj"
+                                    ? retorno?.pessoasRelacionadasCNPJ?.entidadesRelacionadas?.length
+                                    : consulta?.codigo === "receita_federal_cpf"
+                                        ? 1
+                                        : 0
                 );
 
                 return response?.data;
@@ -136,7 +144,18 @@ export const Consulta = ({
             return modalSituacaoCadastral?.current?.onOpen({
                 data: retorno,
             });
+
+        if (consulta?.codigo === "empresas_relacionadas_cpf")
+            return modalEmpresaRelacionada?.current?.onOpen({
+                data: retorno,
+            })
+
+        if (consulta?.codigo === "pessoas_relacionadas_cnpj")
+            return modalPessoaRelacionada?.current?.onOpen({
+                data: retorno,
+            })
     }
+
 
     if (!deveRenderizar) return null;
 
@@ -147,7 +166,7 @@ export const Consulta = ({
             borderWidth={1}
             flexDir="column"
             justify="space-between"
-            w="14rem"
+            w="12rem"
         >
             <Flex
                 flexDir="column"
@@ -173,7 +192,7 @@ export const Consulta = ({
                 </Flex>
             </Flex>
 
-            <Button
+            {!retorno && <Button
                 w="full"
                 variant="outline"
                 size="xs"
@@ -196,7 +215,7 @@ export const Consulta = ({
                 isLoading={consultandoNetrin}
             >
                 Consultar
-            </Button>
+            </Button>}
 
             {retorno && (
                 <Tooltip label="Visualizar Arquivo">
@@ -210,6 +229,12 @@ export const Consulta = ({
                         py="1rem"
                         leftIcon={<Icon as={FiEye} />}
                         onClick={abrirResultados}
+                        background='#3283cf'
+                        textColor='white'
+                        _hover={{
+                            bg: '#3283cf',
+                            opacity: '.8'
+                        }}
                     >
                         {retornoCount} Resultados
                     </Button>
@@ -219,6 +244,8 @@ export const Consulta = ({
             <ModalTribunalJustica ref={modalTribunalJustica} />
             <ModalEndereco ref={modalEndereco} />
             <ModalSituacaoCadastral ref={modalSituacaoCadastral} />
+            <ModalEmpresaRelacionada ref={modalEmpresaRelacionada} />
+            <ModalPessoaRelacionada ref={modalPessoaRelacionada} />
         </Flex>
     );
 };

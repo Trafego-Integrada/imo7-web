@@ -139,7 +139,7 @@ export const Consulta2 = ({
             borderWidth={1}
             flexDir="column"
             justify="space-between"
-            w="14rem"
+            w="12rem"
         >
             <Flex
                 flexDir="column"
