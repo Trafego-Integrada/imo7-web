@@ -33,8 +33,17 @@ interface EmpresaRelacionadaProps {
     data: IEmpresaRelacionada;
 }
 
+const enumTipoDeRelacionamento = {
+    OWNERSHIP: 'PROPRIETÁRIO',
+    EMPLOYMENT: 'FUNCIONÁRIO',
+    PARTNER: 'SÓCIO',
+    LEGALREPRESENTATIVE: 'SÓCIO REPRESENTANTE'
+}
+
 export const EmpresaRelacionada = ({ data }: EmpresaRelacionadaProps) => {
     const [open, setOpen] = useState(false);
+
+    const tipoDeRelacionamento = data.tipoDeRelacionamento.replace(' ', '') as 'OWNERSHIP' | 'EMPLOYMENT' | 'PARTNER' | 'LEGALREPRESENTATIVE'
 
     return (
         <Accordion
@@ -46,7 +55,7 @@ export const EmpresaRelacionada = ({ data }: EmpresaRelacionadaProps) => {
         >
             <AccordionItem>
                 <AccordionButton onClick={() => setOpen(!open)}>
-                    {data.entidadeRelacionadaNome}
+                    {data.entidadeRelacionadaNome} ({enumTipoDeRelacionamento[tipoDeRelacionamento]})
                     <AccordionIcon />
                 </AccordionButton>
 
