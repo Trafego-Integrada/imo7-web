@@ -111,16 +111,18 @@ export const Consulta = ({
                     consulta?.codigo === "processos_pf"
                         ? retorno?.processosCPF?.totalProcessos
                         : consulta?.codigo === "endereco_cpf"
-                        ? retorno?.enderecoCPF?.endereco?.length
-                        : consulta?.codigo === "empresas_relacionadas_cpf"
-                        ? retorno?.empresasRelacionadasCPF?.negociosRelacionados
-                              ?.length
-                        : consulta?.codigo === "pessoas_relacionadas_cnpj"
-                        ? retorno?.pessoasRelacionadasCNPJ
-                              ?.entidadesRelacionadas?.length
-                        : consulta?.codigo === "receita_federal_cpf"
-                        ? 1
-                        : 0
+                            ? retorno?.enderecoCPF?.endereco?.length
+                            : consulta?.codigo === "empresas_relacionadas_cpf"
+                                ? retorno?.empresasRelacionadasCPF?.negociosRelacionados
+                                    ?.length
+                                : consulta?.codigo === "pessoas_relacionadas_cnpj"
+                                    ? retorno?.pessoasRelacionadasCNPJ
+                                        ?.entidadesRelacionadas?.length
+                                    : consulta?.codigo === "pep_kyc_cpf"
+                                        ? retorno?.pepKyc?.historyPEP?.length
+                                        : consulta?.codigo === "receita_federal_cpf"
+                                            ? 1
+                                            : 0
                 );
 
                 return response?.data;

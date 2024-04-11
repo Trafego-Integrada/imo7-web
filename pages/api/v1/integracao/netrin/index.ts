@@ -182,6 +182,11 @@ handle.post(async (req, res) => {
                 s: "pessoas-relacionadas-cnpj",
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
             };
+        } else if (tipoConsulta === "pep_kyc_cpf") {
+            requisicaoBody = {
+                s: "pep-kyc-cpf",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
         }
 
         // Consulta Netrin

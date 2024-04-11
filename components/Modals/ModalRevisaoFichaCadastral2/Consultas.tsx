@@ -183,4 +183,11 @@ const consultasNetrin = [
         image: imageCDP,
         size: ["4rem", "4rem"],
     },
+    {
+        tipoConsulta: [EnumTipoConsulta.CPF],
+        codigo: "pep_kyc_cpf",
+        nome: "KYC e Compliance",
+        image: imageCDP,
+        size: ["4rem", "4rem"],
+    },
 ];

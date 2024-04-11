@@ -1124,6 +1124,7 @@ enum TipoConsultaNetrin {
     endereco_cpf
     empresas_relacionadas_cpf
     pessoas_relacionadas_cnpj
+    pep_kyc_cpf
 }
 
 model ConsultaNetrin {
