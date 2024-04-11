@@ -187,6 +187,11 @@ handle.post(async (req, res) => {
                 s: "pep-kyc-cpf",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
             };
+        } else if (tipoConsulta === "receita_federal_cnpj_qsa") {
+            requisicaoBody = {
+                s: "receita-federal-cnpj-qsa",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
         }
 
         // Consulta Netrin

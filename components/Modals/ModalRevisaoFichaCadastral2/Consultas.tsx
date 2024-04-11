@@ -190,4 +190,11 @@ const consultasNetrin = [
         image: imageCDP,
         size: ["4rem", "4rem"],
     },
+    {
+        tipoConsulta: [EnumTipoConsulta.CNPJ],
+        codigo: "receita_federal_cnpj_qsa",
+        nome: "Receita Federal CNPJ QSA",
+        image: imageCDP,
+        size: ["4rem", "4rem"],
+    },
 ];

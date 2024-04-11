@@ -52,12 +52,12 @@ export const PessoaPoliticamenteExposta = ({ data }: PessoaPoliticamenteExpostaP
 
                 <AccordionPanel pb={4}>
                     <Flex gap={8} flexWrap="wrap">
-                        <Text>Nível: {data.level}</Text>
-                        <Text>Cargo: {data.jobTitle}</Text>
-                        <Text>Departamento: {data.department}</Text>
-                        <Text>Motivo: {data.motive}</Text>
-                        <Text>Data de início: {data.startDate}</Text>
-                        <Text>Data final: {data.endDate}</Text>
+                        <Text>Nível: <strong>{data.level}</strong></Text>
+                        <Text>Cargo: <strong>{data.jobTitle}</strong></Text>
+                        <Text>Departamento: <strong>{data.department}</strong></Text>
+                        <Text>Motivo: <strong>{data.motive}</strong></Text>
+                        <Text>Data de início: <strong>{data.startDate}</strong></Text>
+                        <Text>Data final: <strong>{data.endDate}</strong></Text>
                     </Flex>
                 </AccordionPanel>
             </AccordionItem>

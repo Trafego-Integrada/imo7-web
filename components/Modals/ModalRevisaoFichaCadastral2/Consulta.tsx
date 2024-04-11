@@ -11,6 +11,8 @@ import { ModalSituacaoCadastral } from "./SituacaoCadastral/Modal";
 import { ModalTribunalJustica } from "./TribunalJustica/Modal";
 import { ModalEmpresaRelacionada } from "./EmpresaRelacionada/Modal";
 import { ModalPessoaRelacionada } from "./PessoaRelacionada/Modal";
+import { ModalKYCCompliance } from "./KYCCompliance/Modal";
+import { ModalConfirmarConsulta } from "./KYCCompliance/ModalConfirmarConsulta";
 
 interface TipoConsultaProps {
     ficha: any;
@@ -35,6 +37,8 @@ export const Consulta = ({
     const modalSituacaoCadastral = useRef();
     const modalEmpresaRelacionada = useRef();
     const modalPessoaRelacionada = useRef();
+    const modalKYCCompliance = useRef();
+    const modalConfirmarConsulta = useRef();
 
     const [id, setId] = useState<string>("");
     const [retorno, setRetorno] = useState<any | null>(null);
@@ -120,9 +124,11 @@ export const Consulta = ({
                                         ?.entidadesRelacionadas?.length
                                     : consulta?.codigo === "pep_kyc_cpf"
                                         ? retorno?.pepKyc?.historyPEP?.length
-                                        : consulta?.codigo === "receita_federal_cpf"
-                                            ? 1
-                                            : 0
+                                        : consulta?.codigo === "receita_federal_cnpj_qsa"
+                                            ? retorno?.receitaFederalQsa?.qsa?.length
+                                            : consulta?.codigo === "receita_federal_cpf"
+                                                ? 1
+                                                : 0
                 );
 
                 return response?.data;
@@ -161,6 +167,16 @@ export const Consulta = ({
             return modalPessoaRelacionada?.current?.onOpen({
                 data: retorno,
             });
+
+        if (consulta?.codigo === "pep_kyc_cpf")
+            return modalKYCCompliance?.current?.onOpen({
+                data: retorno
+            });
+    }
+
+    function abrirConfirmarConsulta() {
+        if (consulta?.codigo === "pep_kyc_cpf")
+            return modalConfirmarConsulta?.current?.onOpen()
     }
 
     if (!deveRenderizar) return null;
@@ -209,8 +225,10 @@ export const Consulta = ({
                     rounded={0}
                     py="1rem"
                     leftIcon={<Icon as={FiSearch} />}
-                    onClick={() =>
-                        consultarNetrin({
+                    onClick={() => {
+                        if (consulta?.codigo === 'pep_kyc_cpf')
+                            abrirConfirmarConsulta()
+                        else consultarNetrin({
                             tipoConsulta: consulta.codigo,
                             requisicao: {
                                 cpf,
@@ -218,7 +236,7 @@ export const Consulta = ({
                                 dataNascimento,
                             },
                         })
-                    }
+                    }}
                     isLoading={consultandoNetrin}
                 >
                     Consultar
@@ -254,6 +272,18 @@ export const Consulta = ({
             <ModalSituacaoCadastral ref={modalSituacaoCadastral} />
             <ModalEmpresaRelacionada ref={modalEmpresaRelacionada} />
             <ModalPessoaRelacionada ref={modalPessoaRelacionada} />
+            <ModalKYCCompliance ref={modalKYCCompliance} />
+            <ModalConfirmarConsulta
+                ref={modalConfirmarConsulta}
+                consultarNetrin={() => consultarNetrin({
+                    tipoConsulta: consulta.codigo,
+                    requisicao: {
+                        cpf,
+                        cnpj,
+                        dataNascimento,
+                    },
+                })}
+            />
         </Flex>
     );
 };

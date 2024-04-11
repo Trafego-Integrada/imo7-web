@@ -24,7 +24,7 @@ interface SancoesProps {
     data: ISancoes;
 }
 
-export const PessoaPoliticamenteExposta = ({ data }: SancoesProps) => {
+export const Sancoes = ({ data }: SancoesProps) => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -37,18 +37,19 @@ export const PessoaPoliticamenteExposta = ({ data }: SancoesProps) => {
         >
             <AccordionItem>
                 <AccordionButton onClick={() => setOpen(!open)}>
-                    Pessoa Exposta Politicamente ou Possui Algum Vínculo
+                    Sanções
                     <AccordionIcon />
                 </AccordionButton>
 
                 <AccordionPanel pb={4}>
                     <Flex gap={8} flexWrap="wrap">
-                        <Text>Fonte: </Text>
-                        <Text>Tipo:</Text>
-                        <Text>:</Text>
-                        <Text>:</Text>
-                        <Text>:</Text>
-                        <Text>:</Text>
+                        <Text>Fonte: {data.source}</Text>
+                        <Text>Tipo: {data.type}</Text>
+                        <Text>Tipo de sanção padronizado: {data.standardizedSanctionType}</Text>
+                        <Text>Taxa de correspondência: {data.matchRate}</Text>
+                        <Text>Nome pontuação de exclusividade: {data.nameUniquenessScore}</Text>
+                        <Text>Data de início: {data.startDate}</Text>
+                        <Text>Data final: {data.endDate}</Text>
                     </Flex>
                 </AccordionPanel>
             </AccordionItem>
