@@ -52,7 +52,7 @@ const ModalBase = ({ }, ref: any) => {
                 </ModalHeader>
 
                 <ModalBody>
-                    <Flex>
+                    <Flex flexDirection='column'>
                         {renderDetail('Nome', data?.tribunalSuperiorTrabalhoCNDT.nome)}
                         {renderDetail('Certidão', data?.tribunalSuperiorTrabalhoCNDT.certidao)}
                         {renderDetail('Mensagem', data?.tribunalSuperiorTrabalhoCNDT.mensagem)}

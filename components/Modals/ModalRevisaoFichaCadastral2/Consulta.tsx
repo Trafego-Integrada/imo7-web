@@ -145,8 +145,8 @@ export const Consulta = ({
             "receita_federal_cnpj_qsa": () => modalReceitaFederalQSA?.current?.onOpen({ data: retorno }),
             "receita_federal_cnd_cpf": () => modalReceitaFederalCND?.current?.onOpen({ data: retorno }),
             "receita_federal_cnd_cnpj": () => modalReceitaFederalCND?.current?.onOpen({ data: retorno }),
-            "cnd-trabalhista_cpf": () => modalCNDTrabalhista?.current?.onOpen({ data: retorno }),
-            "cnd-trabalhista_cnpj": () => modalCNDTrabalhista?.current?.onOpen({ data: retorno })
+            "cnd_trabalhista_cpf": () => modalCNDTrabalhista?.current?.onOpen({ data: retorno }),
+            "cnd_trabalhista_cnpj": () => modalCNDTrabalhista?.current?.onOpen({ data: retorno })
         };
 
         const action = modais[consulta?.codigo];
@@ -174,11 +174,11 @@ export const Consulta = ({
             "pessoas_relacionadas_cnpj": () => retorno.pessoasRelacionadasCNPJ?.entidadesRelacionadas?.length ?? 0,
             "pep_kyc_cpf": () => retorno.pepKyc?.historyPEP?.length ?? 0,
             "receita_federal_cnpj_qsa": () => retorno.receitaFederalQsa?.qsa?.length ?? 0,
-            "receita_federal_cnd_cnpj": () => retorno ? 1 : 0,
-            "receita_federal_cnd_cpf": () => retorno ? 1 : 0,
-            "receita_federal_cpf": () => retorno ? 1 : 0,
-            "cnd-trabalhista_cpf": () => retorno ? 1 : 0,
-            "cnd-trabalhista_cnpj": () => retorno ? 1 : 0,
+            "receita_federal_cnd_cnpj": () => 1,
+            "receita_federal_cnd_cpf": () => 1,
+            "receita_federal_cpf": () => 1,
+            "cnd_trabalhista_cpf": () => 1,
+            "cnd_trabalhista_cnpj": () => 1,
         };
 
         return (mapeamento[codigoConsulta] || (() => 0))();
