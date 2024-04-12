@@ -20,18 +20,18 @@ interface SituacaoCPFProps {
 }
 
 export const SituacaoCadastral = ({ data }: SituacaoCPFProps) => {
-    const isRegular =
-        data.receitaFederal.situacaoCadastral === "REGULAR" || false;
+    const isRegular = data.receitaFederal.situacaoCadastral === "REGULAR";
+
+    const renderDetail = (label: string, value: any) => (
+        <Text>
+            {label}: <strong>{value}</strong>
+        </Text>
+    );
 
     return (
         <Flex gap={2} direction="column" flexWrap="wrap">
-            <Text>
-                CPF: <strong>{data.cpf}</strong>
-            </Text>
-
-            <Text>
-                Nome: <strong>{data.receitaFederal.nome}</strong>
-            </Text>
+            {renderDetail("CPF", data.cpf)}
+            {renderDetail("Nome", data.receitaFederal.nome)}
 
             <Flex gap={2} alignItems="center">
                 Situação cadastral:{" "}
@@ -47,24 +47,19 @@ export const SituacaoCadastral = ({ data }: SituacaoCPFProps) => {
                 </Text>
             </Flex>
 
-            <Text>
-                Digito verificador:{" "}
-                <strong>{data.receitaFederal.digitoVerificador}</strong>
-            </Text>
-
-            <Text>
-                Comprovante: <strong>{data.receitaFederal.comprovante}</strong>
-            </Text>
-
-            <Text>
-                Data de nascimento:{" "}
-                <strong>{data.receitaFederal.dataNascimento}</strong>
-            </Text>
-
-            <Text>
-                Data de inscrição:{" "}
-                <strong>{data.receitaFederal.dataInscricao}</strong>
-            </Text>
+            {renderDetail(
+                "Digito verificador",
+                data.receitaFederal.digitoVerificador
+            )}
+            {renderDetail("Comprovante", data.receitaFederal.comprovante)}
+            {renderDetail(
+                "Data de nascimento",
+                data.receitaFederal.dataNascimento
+            )}
+            {renderDetail(
+                "Data de inscrição",
+                data.receitaFederal.dataInscricao
+            )}
 
             {data.receitaFederal.anoObito && (
                 <Text>

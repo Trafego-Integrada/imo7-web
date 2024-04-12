@@ -1,13 +1,4 @@
-import { useState } from "react";
-import {
-    Flex,
-    Text,
-    Accordion,
-    AccordionButton,
-    AccordionIcon,
-    AccordionItem,
-    AccordionPanel,
-} from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
 export interface IPessoaPoliticamenteExposta {
     level: string;
@@ -33,34 +24,24 @@ interface PessoaPoliticamenteExpostaProps {
     data: IPessoaPoliticamenteExposta;
 }
 
-export const PessoaPoliticamenteExposta = ({ data }: PessoaPoliticamenteExpostaProps) => {
-    const [open, setOpen] = useState(false);
+export const PessoaPoliticamenteExposta = ({
+    data,
+}: PessoaPoliticamenteExpostaProps) => {
+    const renderDetail = (label: string, value: any) => (
+        <Text>
+            {label}: <strong>{value}</strong>
+        </Text>
+    );
 
     return (
-        <Accordion
-            allowToggle
-            display="flex"
-            flexDir="column"
-            gap={2}
-            onChange={() => setOpen(!open)}
-        >
-            <AccordionItem>
-                <AccordionButton onClick={() => setOpen(!open)}>
-                    Pessoa Exposta Politicamente ou Possui Algum Vínculo
-                    <AccordionIcon />
-                </AccordionButton>
-
-                <AccordionPanel pb={4}>
-                    <Flex gap={8} flexWrap="wrap">
-                        <Text>Nível: <strong>{data.level}</strong></Text>
-                        <Text>Cargo: <strong>{data.jobTitle}</strong></Text>
-                        <Text>Departamento: <strong>{data.department}</strong></Text>
-                        <Text>Motivo: <strong>{data.motive}</strong></Text>
-                        <Text>Data de início: <strong>{data.startDate}</strong></Text>
-                        <Text>Data final: <strong>{data.endDate}</strong></Text>
-                    </Flex>
-                </AccordionPanel>
-            </AccordionItem>
-        </Accordion>
+        <Flex gap={8} flexWrap="wrap">
+            {renderDetail("Nível", data.level)}
+            {renderDetail("Cargo", data.jobTitle)}
+            {renderDetail("Departamento", data.department)}
+            {renderDetail("Motivo", data.motive)}
+            {renderDetail("Data de início", data.startDate)}
+            {renderDetail("Data final", data.endDate)}
+        </Flex>
     );
 };
+

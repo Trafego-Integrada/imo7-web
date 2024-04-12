@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     Flex,
     Text,
@@ -37,18 +36,19 @@ interface EnderecoProps {
 }
 
 export const Endereco = ({ data }: EnderecoProps) => {
-    const [open, setOpen] = useState(false);
+    const renderDetail = (label: string, value: any) => (
+        <Text>
+            {label}:{" "}
+            <Text as="span" fontWeight="bold">
+                {typeof value === "boolean" ? (value ? "Sim" : "Não") : value}
+            </Text>
+        </Text>
+    );
 
     return (
-        <Accordion
-            allowToggle
-            display="flex"
-            flexDir="column"
-            gap={2}
-            onChange={() => setOpen(!open)}
-        >
+        <Accordion allowToggle display="flex" flexDir="column" gap={2}>
             <AccordionItem>
-                <AccordionButton onClick={() => setOpen(!open)}>
+                <AccordionButton>
                     {data.logradouro}, {data.numero} - {data.bairro},{" "}
                     {data.cidade} - {data.uf}
                     <AccordionIcon />
@@ -56,63 +56,19 @@ export const Endereco = ({ data }: EnderecoProps) => {
 
                 <AccordionPanel pb={4}>
                     <Flex gap={8} flexWrap="wrap">
-                        <Text>
-                            Rua:{" "}
-                            <Text fontWeight="bold">{data.logradouro}</Text>
-                        </Text>
-
-                        <Text>
-                            Número: <Text fontWeight="bold">{data.numero}</Text>
-                        </Text>
-
-                        <Text>
-                            Bairro: <Text fontWeight="bold">{data.bairro}</Text>
-                        </Text>
-
-                        <Text>
-                            Complemento:{" "}
-                            <Text fontWeight="bold">{data.complemento}</Text>
-                        </Text>
-
-                        <Text>
-                            CEP: <Text fontWeight="bold">{data.cep}</Text>
-                        </Text>
-
-                        <Text>
-                            Cidade: <Text fontWeight="bold">{data.cidade}</Text>
-                        </Text>
-
-                        <Text>
-                            UF: <Text fontWeight="bold">{data.uf}</Text>
-                        </Text>
-
-                        <Text>
-                            País: <Text fontWeight="bold">{data.pais}</Text>
-                        </Text>
-
-                        <Text>
-                            Tipo: <Text fontWeight="bold">{data.tipo}</Text>
-                        </Text>
-
-                        <Text>
-                            Prioridade:{" "}
-                            <Text fontWeight="bold">{data.prioridade}</Text>
-                        </Text>
-
-                        <Text>
-                            Vínculo recente:{" "}
-                            <Text fontWeight="bold">{data.vinculoRecente}</Text>
-                        </Text>
-
-                        <Text>
-                            Latitude:{" "}
-                            <Text fontWeight="bold">{data.latitude}</Text>
-                        </Text>
-
-                        <Text>
-                            Longitude:{" "}
-                            <Text fontWeight="bold">{data.longitude}</Text>
-                        </Text>
+                        {renderDetail("Rua", data.logradouro)}
+                        {renderDetail("Número", data.numero)}
+                        {renderDetail("Bairro", data.bairro)}
+                        {renderDetail("Complemento", data.complemento)}
+                        {renderDetail("CEP", data.cep)}
+                        {renderDetail("Cidade", data.cidade)}
+                        {renderDetail("UF", data.uf)}
+                        {renderDetail("País", data.pais)}
+                        {renderDetail("Tipo", data.tipo)}
+                        {renderDetail("Prioridade", data.prioridade)}
+                        {renderDetail("Vínculo recente", data.vinculoRecente)}
+                        {renderDetail("Latitude", data.latitude)}
+                        {renderDetail("Longitude", data.longitude)}
                     </Flex>
 
                     <Flex

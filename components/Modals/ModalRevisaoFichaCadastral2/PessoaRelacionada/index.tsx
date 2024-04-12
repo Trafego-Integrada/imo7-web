@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     Flex,
     Text,
@@ -36,78 +35,73 @@ interface PessoaRelacionadaProps {
 }
 
 export const PessoaRelacionada = ({ data }: PessoaRelacionadaProps) => {
-    const [open, setOpen] = useState(false);
-    const tipoDeRelacionamento = data.tipoDeRelacionamento === 'Employee' ? 'FUNCIONÁRIO' : data.tipoDeRelacionamento
+    const tipoDeRelacionamento =
+        data.tipoDeRelacionamento === "Employee"
+            ? "FUNCIONÁRIO"
+            : data.tipoDeRelacionamento;
+
+    const renderDetail = (label: string, value: any) => (
+        <Text>
+            {label}:{" "}
+            <Text as="span" fontWeight="bold">
+                {value}
+            </Text>
+        </Text>
+    );
 
     return (
-        <Accordion
-            allowToggle
-            display="flex"
-            flexDir="column"
-            gap={2}
-            onChange={() => setOpen(!open)}
-        >
+        <Accordion allowToggle display="flex" flexDir="column" gap={2}>
             <AccordionItem>
-                <AccordionButton onClick={() => setOpen(!open)}>
+                <AccordionButton>
                     {data.entidadeRelacionadaNome} {`(${tipoDeRelacionamento})`}
                     <AccordionIcon />
                 </AccordionButton>
 
                 <AccordionPanel pb={4}>
                     <Flex gap={8} flexWrap="wrap">
-                        <Text>
-                            Documento:{" "}
-                            <Text fontWeight="bold">{data.entidadeRelacionadaDocumento}</Text>
-                        </Text>
-
-                        <Text>
-                            Tipo de Documento: <Text fontWeight="bold">{data.entidadeRelacionadadaTipoDeDocumento}</Text>
-                        </Text>
-
-                        <Text>
-                            País: <Text fontWeight="bold">{data.entidadeRelacionadaPais}</Text>
-                        </Text>
-
-                        <Text>
-                            Nome:{" "}
-                            <Text fontWeight="bold">{data.entidadeRelacionadaNome}</Text>
-                        </Text>
-
-                        <Text>
-                            Tipo de Relacionamento: <Text fontWeight="bold">{data.tipoDeRelacionamento}</Text>
-                        </Text>
-
-                        <Text>
-                            Origem Relacionamento: <Text fontWeight="bold">{data.origemRelacionamento}</Text>
-                        </Text>
-
-                        <Text>
-                            Vínculo Relacionamento: <Text fontWeight="bold">{data.vinculoDoRelacionamento}</Text>
-                        </Text>
-
-                        <Text>
-                            Nível de Relacionamento: <Text fontWeight="bold">{data.nivelDeRelacionamento}</Text>
-                        </Text>
-
-                        <Text>
-                            Início Relacionamento: <Text fontWeight="bold">{data.dataInicioRelacionamento}</Text>
-                        </Text>
-
-                        <Text>
-                            Fim Relacionamento: <Text fontWeight="bold">{data.dataFimRelacionamento}</Text>
-                        </Text>
-
-                        <Text>
-                            Data de Criação: <Text fontWeight="bold">{data.dataCriacao}</Text>
-                        </Text>
-
-                        <Text>
-                            Ultima Atualização:{" "}
-                            <Text fontWeight="bold">{data.ultimaAtualizacao}</Text>
-                        </Text>
+                        {renderDetail(
+                            "Documento",
+                            data.entidadeRelacionadaDocumento
+                        )}
+                        {renderDetail(
+                            "Tipo de Documento",
+                            data.entidadeRelacionadadaTipoDeDocumento
+                        )}
+                        {renderDetail("País", data.entidadeRelacionadaPais)}
+                        {renderDetail("Nome", data.entidadeRelacionadaNome)}
+                        {renderDetail(
+                            "Tipo de Relacionamento",
+                            tipoDeRelacionamento
+                        )}
+                        {renderDetail(
+                            "Origem Relacionamento",
+                            data.origemRelacionamento
+                        )}
+                        {renderDetail(
+                            "Vínculo Relacionamento",
+                            data.vinculoDoRelacionamento
+                        )}
+                        {renderDetail(
+                            "Nível de Relacionamento",
+                            data.nivelDeRelacionamento
+                        )}
+                        {renderDetail(
+                            "Início Relacionamento",
+                            data.dataInicioRelacionamento
+                        )}
+                        {renderDetail(
+                            "Fim Relacionamento",
+                            data.dataFimRelacionamento
+                        )}
+                        {renderDetail("Data de Criação", data.dataCriacao)}
+                        {renderDetail(
+                            "Última Atualização",
+                            data.ultimaAtualizacao
+                        )}
                     </Flex>
                 </AccordionPanel>
             </AccordionItem>
         </Accordion>
     );
 };
+

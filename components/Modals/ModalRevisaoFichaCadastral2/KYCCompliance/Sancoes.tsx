@@ -1,13 +1,4 @@
-import { useState } from "react";
-import {
-    Flex,
-    Text,
-    Accordion,
-    AccordionButton,
-    AccordionIcon,
-    AccordionItem,
-    AccordionPanel,
-} from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
 export interface ISancoes {
     source: string;
@@ -25,34 +16,28 @@ interface SancoesProps {
 }
 
 export const Sancoes = ({ data }: SancoesProps) => {
-    const [open, setOpen] = useState(false);
+    const renderDetail = (label: string, value: any) => (
+        <Text>
+            {label}: <strong>{value}</strong>
+        </Text>
+    );
 
     return (
-        <Accordion
-            allowToggle
-            display="flex"
-            flexDir="column"
-            gap={2}
-            onChange={() => setOpen(!open)}
-        >
-            <AccordionItem>
-                <AccordionButton onClick={() => setOpen(!open)}>
-                    Sanções
-                    <AccordionIcon />
-                </AccordionButton>
-
-                <AccordionPanel pb={4}>
-                    <Flex gap={8} flexWrap="wrap">
-                        <Text>Fonte: {data.source}</Text>
-                        <Text>Tipo: {data.type}</Text>
-                        <Text>Tipo de sanção padronizado: {data.standardizedSanctionType}</Text>
-                        <Text>Taxa de correspondência: {data.matchRate}</Text>
-                        <Text>Nome pontuação de exclusividade: {data.nameUniquenessScore}</Text>
-                        <Text>Data de início: {data.startDate}</Text>
-                        <Text>Data final: {data.endDate}</Text>
-                    </Flex>
-                </AccordionPanel>
-            </AccordionItem>
-        </Accordion>
+        <Flex gap={8} flexWrap="wrap">
+            {renderDetail("Fonte", data.source)}
+            {renderDetail("Tipo", data.type)}
+            {renderDetail(
+                "Tipo de sanção padronizado",
+                data.standardizedSanctionType
+            )}
+            {renderDetail("Taxa de correspondência", data.matchRate)}
+            {renderDetail(
+                "Nome pontuação de exclusividade",
+                data.nameUniquenessScore
+            )}
+            {renderDetail("Data de início", data.startDate)}
+            {renderDetail("Data final", data.endDate)}
+        </Flex>
     );
 };
+

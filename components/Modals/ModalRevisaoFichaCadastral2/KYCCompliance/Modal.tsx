@@ -9,9 +9,18 @@ import {
     ModalOverlay,
     Text,
     useDisclosure,
+    Tabs,
+    TabList,
+    TabPanels,
+    Tab,
+    TabPanel,
 } from "@chakra-ui/react";
 
-import { PessoaPoliticamenteExposta, IPessoaPoliticamenteExposta } from "./PessoaPoliticamenteExposta";
+import {
+    PessoaPoliticamenteExposta,
+    IPessoaPoliticamenteExposta,
+} from "./PessoaPoliticamenteExposta";
+
 import { ISancoes, Sancoes } from "./Sancoes";
 
 interface IKYCCompliance {
@@ -36,7 +45,7 @@ interface ModalProps {
     data: IKYCCompliance;
 }
 
-const ModalBase = ({ }, ref: any) => {
+const ModalBase = ({}, ref: any) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     const [data, setData] = useState<IKYCCompliance>();
@@ -47,6 +56,12 @@ const ModalBase = ({ }, ref: any) => {
             onOpen();
         },
     }));
+
+    const renderDetail = (label: string, value: any) => (
+        <Text>
+            {label}: <strong>{value}</strong>
+        </Text>
+    );
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
@@ -60,53 +75,93 @@ const ModalBase = ({ }, ref: any) => {
 
                 <ModalBody>
                     <Flex flexDir="column" gap={4}>
-                        <Text>
-                            Sanções ativas:{" "}
-                            <strong>{data?.pepKyc.currentlySanctioned}</strong>
-                        </Text>
+                        {renderDetail(
+                            "Sanções ativas",
+                            data?.pepKyc.currentlySanctioned
+                        )}
+                        {renderDetail(
+                            "Sanções encontradas nos últimos 30 dias",
+                            data?.pepKyc.last30DaysSanctions
+                        )}
+                        {renderDetail(
+                            "Sanções encontradas nos últimos 90 dias",
+                            data?.pepKyc.last90DaysSanctions
+                        )}
+                        {renderDetail(
+                            "Sanções encontradas nos últimos 180 dias",
+                            data?.pepKyc.last180DaysSanctions
+                        )}
+                        {renderDetail(
+                            "Sanções encontradas nos últimos 365 dias",
+                            data?.pepKyc.last365DaysSanctions
+                        )}
+                        {renderDetail(
+                            "Pessoas expostas politicamente (PEP) ou possui algum vínculo com alguma PEP",
+                            data?.pepKyc.currentlyPEP
+                        )}
+                        {renderDetail(
+                            "Exposto politicamente no último ano",
+                            data?.pepKyc.lastYearOccurencePEP
+                        )}
+                        {renderDetail(
+                            "Exposto politicamente nos últimos 3 anos",
+                            data?.pepKyc.last3YearsOccurencePEP
+                        )}
+                        {renderDetail(
+                            "Exposto politicamente nos últimos 5 anos",
+                            data?.pepKyc.last5YearsOccurencePEP
+                        )}
+                        {renderDetail(
+                            "Exposto politicamente",
+                            data?.pepKyc.last5PlusYearsOccurencePEP
+                        )}
 
-                        <Text>
-                            Sanções encontradas nos últimos 30 dias: <strong>{data?.pepKyc.last30DaysSanctions}</strong>
-                        </Text>
+                        <Tabs colorScheme="blue" variant="enclosed">
+                            <TabList>
+                                <Tab fontWeight="bold" fontSize="sm">
+                                    Consultas de CPF
+                                </Tab>
+                                <Tab fontWeight="bold" fontSize="sm">
+                                    Consultas de CNPJ
+                                </Tab>
+                            </TabList>
 
-                        <Text>
-                            Sanções encontradas nos últimos 90 dias: <strong>{data?.pepKyc.last90DaysSanctions}</strong>
-                        </Text>
+                            <TabPanels>
+                                <TabPanel
+                                    border="1px"
+                                    borderColor="#e1e8f0"
+                                    rounded="md"
+                                    roundedTopLeft={0}
+                                >
+                                    {data?.pepKyc.historyPEP.map(
+                                        (pessoaPoliticamenteExposta, index) => (
+                                            <PessoaPoliticamenteExposta
+                                                key={index}
+                                                data={
+                                                    pessoaPoliticamenteExposta
+                                                }
+                                            />
+                                        )
+                                    )}
+                                </TabPanel>
 
-                        <Text>
-                            Sanções encontradas nos últimos 180 dias: <strong>{data?.pepKyc.last180DaysSanctions}</strong>
-                        </Text>
-
-                        <Text>
-                            Sanções encontradas nos últimos 365 dias: <strong>{data?.pepKyc.last365DaysSanctions}</strong>
-                        </Text>
-
-                        <Text>
-                            Pessoas expostas politicamente (PEP) ou possui algum vínculo com alguma PEP:{" "}
-                            <strong>{data?.pepKyc.currentlyPEP}</strong>
-                        </Text>
-
-                        <Text>
-                            Exposto politicamente no último ano: <strong>{data?.pepKyc.lastYearOccurencePEP}</strong>
-                        </Text>
-
-                        <Text>
-                            Exposto politicamente nos últimos 3 anos: <strong>{data?.pepKyc.last3YearsOccurencePEP}</strong>
-                        </Text>
-
-                        <Text>
-                            Exposto politicamente nos últimos 5 anos: <strong>{data?.pepKyc.last5YearsOccurencePEP}</strong>
-                        </Text>
-
-                        <Text>
-                            Exposto politicamente: <strong>{data?.pepKyc.last5PlusYearsOccurencePEP}</strong>
-                        </Text>
-                        {data?.pepKyc.historyPEP.map((pessoaPoliticamenteExposta, index) => (
-                            <PessoaPoliticamenteExposta key={index} data={pessoaPoliticamenteExposta} />
-                        ))}
-                        {data?.pepKyc.sanctionsHistory.map((sancoes, index) => (
-                            <Sancoes key={index} data={sancoes} />
-                        ))}
+                                <TabPanel
+                                    border="1px"
+                                    borderColor="#e1e8f0"
+                                    rounded="md"
+                                    roundedTopLeft={0}
+                                >
+                                    {data?.pepKyc.sanctionsHistory.map(
+                                        (sancoes, index) => (
+                                            <Sancoes
+                                                key={index}
+                                                data={sancoes}
+                                            />
+                                        )
+                                    )}
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
                     </Flex>
                 </ModalBody>
             </ModalContent>
@@ -115,3 +170,4 @@ const ModalBase = ({ }, ref: any) => {
 };
 
 export const ModalKYCCompliance = forwardRef(ModalBase);
+
