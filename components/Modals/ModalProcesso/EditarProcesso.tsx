@@ -104,10 +104,17 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         control,
         name: "fichas",
     });
+
     useEffect(() => {
         reset({});
         buscar.mutate(id);
     }, [id]);
+
+    const onCallbackImovel = async (imovelId) => {
+        await queryClient.invalidateQueries(["imoveis"]);
+        reset({ ...watch(), imovelId });
+    };
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />

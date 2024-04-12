@@ -25,3 +25,4 @@ export const excluirImovel = async (id) => {
     const { data } = await api.post("imovel/" + id);
     return data;
 };
+

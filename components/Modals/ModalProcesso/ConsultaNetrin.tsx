@@ -4,7 +4,6 @@ import { formatoData, tagTipoConsultaNetrin } from "@/helpers/helpers";
 import { api } from "@/services/apiClient";
 import { queryClient } from "@/services/queryClient";
 import {
-    Box,
     Button,
     Flex,
     Grid,
@@ -25,7 +24,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { FiEye, FiPrinter } from "react-icons/fi";
 import { useQuery } from "react-query";
-import { ModalPreview } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
+import { ModalTribunalJustica } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
 import { useRef } from "react";
 
 export const ConsultasNetrin = ({
@@ -87,6 +86,9 @@ export const ConsultasNetrin = ({
     );
     const totalProtestos = (protestos) => {
         let total = 0;
+
+        if (!protestos) return 0;
+
         if (protestos.code != 606) {
             Object.entries(protestos)?.map((i) => {
                 //console.log("Item", i);
@@ -320,7 +322,7 @@ export const ConsultasNetrin = ({
                     </Tbody>
                 </Table>
             </Flex>
-            <ModalPreview ref={preview} />
+            <ModalTribunalJustica ref={preview} />
         </Flex>
     );
 };

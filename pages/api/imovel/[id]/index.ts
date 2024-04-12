@@ -1,11 +1,13 @@
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
-
-const handle = nextConnect();
 import { cors } from "@/middleware/cors";
 import { checkAuth } from "@/middleware/checkAuth";
+
+const handle = nextConnect();
+
 handle.use(cors);
 handle.use(checkAuth);
+
 handle.get(async (req, res) => {
     const { id } = req.query;
     const data = await prisma.imovel.findUnique({
@@ -25,8 +27,10 @@ handle.get(async (req, res) => {
     });
     res.send(data);
 });
+
 handle.put(async (req, res) => {
     const { id } = req.query;
+
     const {
         aceitaPet,
         areaTotal,
@@ -68,6 +72,9 @@ handle.put(async (req, res) => {
         valorSeguro,
         varandas,
     } = req.body;
+
+    console.log(1123);
+
     const conta = await prisma.imovel.update({
         where: {
             id: Number(id),
@@ -81,7 +88,7 @@ handle.put(async (req, res) => {
             banheiros,
             cep,
             cidade,
-            caracteristicas,
+            caracteristicas: caracteristicas || {},
             codigo,
             complemento,
             imobiliaria: {
@@ -127,8 +134,10 @@ handle.put(async (req, res) => {
             varandas,
         },
     });
+
     res.send(conta);
 });
+
 handle.delete(async (req, res) => {
     const { id } = req.query;
     const data = await prisma.imovel.delete({
@@ -138,4 +147,5 @@ handle.delete(async (req, res) => {
     });
     res.send(data);
 });
+
 export default handle;

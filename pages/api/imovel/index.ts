@@ -6,8 +6,10 @@ import { Prisma } from "@prisma/client";
 import moment from "moment";
 
 const handle = nextConnect();
+
 handle.use(cors);
 handle.use(checkAuth);
+
 handle.get(async (req, res) => {
     try {
         let {
@@ -363,6 +365,7 @@ handle.post(async (req, res) => {
         valorSeguro,
         varandas,
     } = req.body;
+
     const conta = await prisma.imovel.create({
         data: {
             aceitaPet,
@@ -419,8 +422,10 @@ handle.post(async (req, res) => {
             varandas,
         },
     });
+
     res.send(conta);
 });
+
 handle.delete(async (req, res) => {
     try {
         const { ids } = req.query;
@@ -447,4 +452,5 @@ handle.delete(async (req, res) => {
         });
     }
 });
+
 export default handle;

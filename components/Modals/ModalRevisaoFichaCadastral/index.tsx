@@ -68,7 +68,7 @@ import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
 import { Documentos } from "../Contrato/Documentos";
 import { ConsultasNetrin } from "../ModalProcesso/ConsultaNetrin";
-import { ModalPreview } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
+import { ModalTribunalJustica } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
 import { AnaliseCampo } from "./AnaliseCampo";
 const schema = yup.object({
     status: yup.string().required("Status é obrigatório"),
@@ -1726,7 +1726,7 @@ const ModalBase = ({}, ref) => {
                     </Button>
                 </ModalFooter>
             </ModalContent>
-            <ModalPreview ref={preview} />
+            <ModalTribunalJustica ref={preview} />
         </Modal>
     );
 };

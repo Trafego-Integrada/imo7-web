@@ -28,7 +28,7 @@ import { FiDownload, FiEdit, FiEdit2, FiEye, FiTrash } from "react-icons/fi";
 import { RiAddLine } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
 import { ModalAnexo } from "./ModalAnexo";
-import { ModalPreview } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
+import { ModalTribunalJustica } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
 
 export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
     const preview = useRef();
@@ -167,7 +167,7 @@ export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
                 titulo="Excluir anexo"
                 onDelete={onDelete}
             />
-            <ModalPreview ref={preview} />
+            <ModalTribunalJustica ref={preview} />
         </Box>
     );
 };

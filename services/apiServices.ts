@@ -20,6 +20,7 @@ export const apiService = (entityName: string, apiInstance: AxiosInstance) => ({
         const response = await apiInstance.put(`${entityName}/${id}`, {
             ...data,
         });
+
         return response.data;
     },
     delete: async (id) => {
