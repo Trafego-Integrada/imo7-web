@@ -35,7 +35,24 @@ interface EnderecoProps {
     data: IEndereco;
 }
 
+enum EnumTipo {
+    WORK = "TRABALHO",
+    HOME = "RESIDENCIAL"
+}
+
+const parseTipoDeRelacionamento = (
+    tipo: string
+): keyof typeof EnumTipo => {
+    const tipoSemEspaco = tipo.replace(" ", "").toUpperCase()
+
+    return tipoSemEspaco in EnumTipo
+        ? tipoSemEspaco as keyof typeof EnumTipo
+        : "WORK"
+};
+
 export const Endereco = ({ data }: EnderecoProps) => {
+    const tipo = parseTipoDeRelacionamento(data.tipo)
+
     const renderDetail = (label: string, value: any) => (
         <Text>
             {label}:{" "}
@@ -64,7 +81,7 @@ export const Endereco = ({ data }: EnderecoProps) => {
                         {renderDetail("Cidade", data.cidade)}
                         {renderDetail("UF", data.uf)}
                         {renderDetail("País", data.pais)}
-                        {renderDetail("Tipo", data.tipo)}
+                        {renderDetail("Tipo", EnumTipo[tipo])}
                         {renderDetail("Prioridade", data.prioridade)}
                         {renderDetail("Vínculo recente", data.vinculoRecente)}
                         {renderDetail("Latitude", data.latitude)}

@@ -118,12 +118,18 @@ handle.post(async (req, res) => {
                     "govbr-cpf": "30156844850",
                 };
             }
-        } else if (tipoConsulta == "receita_federal_cnd") {
+        } else if (tipoConsulta == "receita_federal_cnd_cpf") {
             requisicaoBody = {
                 s: "receita-federal-cnd",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
             };
-        } else if (tipoConsulta == "sefaz_cnd") {
+        } else if (tipoConsulta == "receita_federal_cnd_cnpj") {
+            requisicaoBody = {
+                s: "receita-federal-cnd",
+                cnpj: removerCaracteresEspeciais(requisicao.cnpj),
+            };
+        }
+        else if (tipoConsulta == "sefaz_cnd") {
             requisicaoBody = {
                 s: "sefaz-cnd",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
@@ -191,7 +197,17 @@ handle.post(async (req, res) => {
             requisicaoBody = {
                 s: "receita-federal-cnpj-qsa",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-            };
+            }
+        } else if (tipoConsulta === "cnd_trabalhista_cnpj") {
+            requisicaoBody = {
+                s: "cnd-trabalhista",
+                cnpj: removerCaracteresEspeciais(requisicao.cnpj),
+            }
+        } else if (tipoConsulta === "cnd_trabalhista_cpf") {
+            requisicaoBody = {
+                s: "cnd-trabalhista",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            }
         }
 
         // Consulta Netrin

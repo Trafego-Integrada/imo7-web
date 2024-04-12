@@ -13,6 +13,9 @@ import { ModalEmpresaRelacionada } from "./EmpresaRelacionada/Modal";
 import { ModalPessoaRelacionada } from "./PessoaRelacionada/Modal";
 import { ModalKYCCompliance } from "./KYCCompliance/Modal";
 import { ModalConfirmarConsulta } from "./KYCCompliance/ModalConfirmarConsulta";
+import { ModalReceitaFederalQSA } from "./ReceitaFederalQSA/Modal";
+import { ModalReceitaFederalCND } from "./ReceitaFederalCND/Modal";
+import { ModalCNDTrabalhista } from "./CNDTrabalhista/Modal";
 
 interface TipoConsultaProps {
     ficha: any;
@@ -21,6 +24,15 @@ interface TipoConsultaProps {
     cnpj?: string;
     uf?: string;
     dataNascimento?: string;
+}
+
+interface Retorno {
+    processosCPF?: { totalProcessos: number };
+    enderecoCPF?: { endereco: string[] };
+    empresasRelacionadasCPF?: { negociosRelacionados: { length: number } };
+    pessoasRelacionadasCNPJ?: { entidadesRelacionadas: { length: number } };
+    pepKyc?: { historyPEP: { length: number } };
+    receitaFederalQsa?: { qsa: { length: number } };
 }
 
 export const Consulta = ({
@@ -39,6 +51,9 @@ export const Consulta = ({
     const modalPessoaRelacionada = useRef();
     const modalKYCCompliance = useRef();
     const modalConfirmarConsulta = useRef();
+    const modalReceitaFederalQSA = useRef();
+    const modalReceitaFederalCND = useRef();
+    const modalCNDTrabalhista = useRef();
 
     const [id, setId] = useState<string>("");
     const [retorno, setRetorno] = useState<any | null>(null);
@@ -95,83 +110,53 @@ export const Consulta = ({
         ],
         async ({ queryKey }: any) => {
             try {
-                const response = await api.get("v1/integracao/netrin", {
-                    params: {
-                        ...queryKey[1],
-                    },
+                const { data } = await api.get("v1/integracao/netrin", {
+                    params: { ...queryKey[1] },
                 });
 
-                const data = response?.data?.find(
-                    (ii: any) =>
-                        ii.tipoConsulta == consulta.codigo &&
-                        ii.requisicao.cpf == cpf
-                );
+                const resultado = data.find(item => item.tipoConsulta === consulta.codigo && item.requisicao.cpf === cpf);
 
-                const retorno = data?.retorno;
+                if (!resultado) {
+                    throw new Error('Nenhum dado correspondente encontrado');
+                }
 
-                setId(data.id);
+                const { id, retorno } = resultado;
+
+                setId(id);
                 setRetorno(retorno);
-                setRetornoCount(
-                    consulta?.codigo === "processos_pf"
-                        ? retorno?.processosCPF?.totalProcessos
-                        : consulta?.codigo === "endereco_cpf"
-                            ? retorno?.enderecoCPF?.endereco?.length
-                            : consulta?.codigo === "empresas_relacionadas_cpf"
-                                ? retorno?.empresasRelacionadasCPF?.negociosRelacionados
-                                    ?.length
-                                : consulta?.codigo === "pessoas_relacionadas_cnpj"
-                                    ? retorno?.pessoasRelacionadasCNPJ
-                                        ?.entidadesRelacionadas?.length
-                                    : consulta?.codigo === "pep_kyc_cpf"
-                                        ? retorno?.pepKyc?.historyPEP?.length
-                                        : consulta?.codigo === "receita_federal_cnpj_qsa"
-                                            ? retorno?.receitaFederalQsa?.qsa?.length
-                                            : consulta?.codigo === "receita_federal_cpf"
-                                                ? 1
-                                                : 0
-                );
+                setRetornoCount(calcularContagem(retorno, consulta.codigo));
 
-                return response?.data;
-            } catch (error: any) {
-                throw Error(error.message);
+                return data;
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                throw new Error('Falha ao buscar dados da API');
             }
         }
     );
 
     function abrirResultados() {
-        if (consulta.codigo === "processos_pf") {
-            if (id)
-                modalTribunalJustica?.current?.onOpen(
-                    process.env.NODE_ENV == "production"
-                        ? `https://www.imo7.com.br/api/v1/integracao/netrin/${id}/pdf`
-                        : `http://localhost:3000/api/v1/integracao/netrin/${id}/pdf`
-                );
-        }
+        const modais: Record<string, () => void> = {
+            "processos_pf": () => modalTribunalJustica?.current?.onOpen(getPdfUrl(id)),
+            "endereco_cpf": () => modalEndereco?.current?.onOpen({ data: retorno }),
+            "receita_federal_cpf": () => modalSituacaoCadastral?.current?.onOpen({ data: retorno }),
+            "empresas_relacionadas_cpf": () => modalEmpresaRelacionada?.current?.onOpen({ data: retorno }),
+            "pessoas_relacionadas_cnpj": () => modalPessoaRelacionada?.current?.onOpen({ data: retorno }),
+            "pep_kyc_cpf": () => modalKYCCompliance?.current?.onOpen({ data: retorno }),
+            "receita_federal_cnpj_qsa": () => modalReceitaFederalQSA?.current?.onOpen({ data: retorno }),
+            "receita_federal_cnd_cpf": () => modalReceitaFederalCND?.current?.onOpen({ data: retorno }),
+            "receita_federal_cnd_cnpj": () => modalReceitaFederalCND?.current?.onOpen({ data: retorno }),
+            "cnd-trabalhista_cpf": () => modalCNDTrabalhista?.current?.onOpen({ data: retorno }),
+            "cnd-trabalhista_cnpj": () => modalCNDTrabalhista?.current?.onOpen({ data: retorno })
+        };
 
-        if (consulta.codigo === "endereco_cpf")
-            return modalEndereco?.current?.onOpen({
-                data: retorno,
-            });
+        const action = modais[consulta?.codigo];
 
-        if (consulta.codigo === "receita_federal_cpf")
-            return modalSituacaoCadastral?.current?.onOpen({
-                data: retorno,
-            });
+        if (action) return action();
+    }
 
-        if (consulta?.codigo === "empresas_relacionadas_cpf")
-            return modalEmpresaRelacionada?.current?.onOpen({
-                data: retorno,
-            });
-
-        if (consulta?.codigo === "pessoas_relacionadas_cnpj")
-            return modalPessoaRelacionada?.current?.onOpen({
-                data: retorno,
-            });
-
-        if (consulta?.codigo === "pep_kyc_cpf")
-            return modalKYCCompliance?.current?.onOpen({
-                data: retorno
-            });
+    function getPdfUrl(id: string) {
+        const baseUrl = process.env.NODE_ENV === "production" ? "https://www.imo7.com.br" : "http://localhost:3000";
+        return `${baseUrl}/api/v1/integracao/netrin/${id}/pdf`;
     }
 
     function abrirConfirmarConsulta() {
@@ -180,6 +165,25 @@ export const Consulta = ({
     }
 
     if (!deveRenderizar) return null;
+
+    function calcularContagem(retorno: Retorno, codigoConsulta: string): number {
+        const mapeamento: Record<string, () => number> = {
+            "processos_pf": () => retorno.processosCPF?.totalProcessos ?? 0,
+            "endereco_cpf": () => retorno.enderecoCPF?.endereco?.length ?? 0,
+            "empresas_relacionadas_cpf": () => retorno.empresasRelacionadasCPF?.negociosRelacionados?.length ?? 0,
+            "pessoas_relacionadas_cnpj": () => retorno.pessoasRelacionadasCNPJ?.entidadesRelacionadas?.length ?? 0,
+            "pep_kyc_cpf": () => retorno.pepKyc?.historyPEP?.length ?? 0,
+            "receita_federal_cnpj_qsa": () => retorno.receitaFederalQsa?.qsa?.length ?? 0,
+            "receita_federal_cnd_cnpj": () => retorno ? 1 : 0,
+            "receita_federal_cnd_cpf": () => retorno ? 1 : 0,
+            "receita_federal_cpf": () => retorno ? 1 : 0,
+            "cnd-trabalhista_cpf": () => retorno ? 1 : 0,
+            "cnd-trabalhista_cnpj": () => retorno ? 1 : 0,
+        };
+
+        return (mapeamento[codigoConsulta] || (() => 0))();
+    }
+
 
     return (
         <Flex
@@ -284,6 +288,9 @@ export const Consulta = ({
                     },
                 })}
             />
+            <ModalReceitaFederalQSA ref={modalReceitaFederalQSA} />
+            <ModalReceitaFederalCND ref={modalReceitaFederalCND} />
+            <ModalCNDTrabalhista ref={modalCNDTrabalhista} />
         </Flex>
     );
 };

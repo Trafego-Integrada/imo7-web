@@ -7,6 +7,7 @@ import {
     AccordionItem,
     AccordionPanel,
 } from "@chakra-ui/react";
+import { formatarParaDataBR } from '../../../../utils/formatarParaDataBR'
 
 interface IEmpresaRelacionada {
     entidadeRelacionadaDocumento: string;
@@ -94,16 +95,11 @@ export const EmpresaRelacionada = ({ data }: EmpresaRelacionadaProps) => {
                         )}
                         {renderDetail(
                             "Início Relacionamento",
-                            data.dataInicioRelacionamento
+                            formatarParaDataBR(data.dataInicioRelacionamento)
                         )}
-                        {renderDetail(
-                            "Fim Relacionamento",
-                            data.dataFimRelacionamento
-                        )}
-                        {renderDetail("Data de Criação", data.dataCriacao)}
                         {renderDetail(
                             "Última Atualização",
-                            data.ultimaAtualizacao
+                            formatarParaDataBR(data.ultimaAtualizacao)
                         )}
                     </Flex>
                 </AccordionPanel>

@@ -45,7 +45,7 @@ interface ModalProps {
     data: IKYCCompliance;
 }
 
-const ModalBase = ({}, ref: any) => {
+const ModalBase = ({ }, ref: any) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     const [data, setData] = useState<IKYCCompliance>();

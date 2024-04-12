@@ -108,23 +108,24 @@ const ModalBase = (
                             </Flex>
                         </Flex>
 
-                        <Flex flexDirection="column" gap={2}>
-                            <Text fontWeight="bold">
-                                Deseja realmente realizar essa consulta?
-                            </Text>
-
-                            <Flex gap={4}>
-                                <Button
-                                    onClick={() => {
-                                        consultarNetrin();
-                                        onClose();
-                                    }}
-                                >
-                                    Sim
-                                </Button>
-
-                                <Button onClick={() => onClose()}>Não</Button>
-                            </Flex>
+                        <Flex justifyContent='center'>
+                            <Button
+                                onClick={() => {
+                                    consultarNetrin();
+                                    onClose();
+                                }}
+                                w='50%'
+                                bg='green.400'
+                                my={4}
+                                _hover={{
+                                    bg: 'green.400',
+                                    opacity: .8
+                                }}
+                                textColor='white'
+                                fontWeight={900}
+                            >
+                                Fazer Consulta
+                            </Button>
                         </Flex>
                     </Flex>
                 </ModalBody>
