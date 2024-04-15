@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
     removerCaracteresEspeciais,
     verificarExtensaoImagem,
@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { AnaliseCampo } from "../ModalRevisaoFichaCadastral/AnaliseCampo";
 import { Consultas } from "./Consultas";
+import { ModalPreviewDaImagem } from './PreviewDaImagem/Modal'
 
 export const Categoria = ({
     categoria,
@@ -28,6 +29,7 @@ export const Categoria = ({
     buscarFicha,
 }: any) => {
     const [open, setOpen] = useState(false);
+    const modalPreviewDaImagem = useRef();
 
     const dadosPreenchimentoCampo = (codigo: string) =>
         ficha.preenchimento.find(
@@ -35,123 +37,142 @@ export const Categoria = ({
         );
 
     return (
-        <Accordion
-            allowToggle
-            display="flex"
-            flexDir="column"
-            gap={2}
-            onChange={() => setOpen(!open)}
-        >
-            <AccordionItem key={categoria.id} bg="white" rounded="xl" p={4}>
-                <AccordionButton onClick={() => setOpen(!open)}>
-                    {categoria?.nome}
-                    <AccordionIcon />
-                </AccordionButton>
+        <>
+            <Accordion
+                allowToggle
+                display="flex"
+                flexDir="column"
+                gap={2}
+                onChange={() => setOpen(!open)}
+            >
+                <AccordionItem key={categoria.id} bg="white" rounded="xl" p={4}>
+                    <AccordionButton onClick={() => setOpen(!open)}>
+                        {categoria?.nome}
+                        <AccordionIcon />
+                    </AccordionButton>
 
-                <AccordionPanel pb={4}>
-                    <Consultas
-                        ficha={ficha}
-                        cpf={removerCaracteresEspeciais(
-                            dadosPreenchimentoCampo(
-                                categoria.campos.find(
-                                    (c: any) => c.tipoCampo == "cpf"
-                                )?.codigo
-                            )?.valor
-                        )}
-                        cnpj={removerCaracteresEspeciais(
-                            dadosPreenchimentoCampo(
-                                categoria.campos.find(
-                                    (c: any) => c.tipoCampo == "cnpj"
-                                )?.codigo
-                            )?.valor
-                        )}
-                        dataNascimento={removerCaracteresEspeciais(
-                            dadosPreenchimentoCampo(
-                                categoria.campos.find(
-                                    (c: any) => c.tipoCampo == "date"
-                                )?.codigo
-                            )?.valor
-                        )}
-                        campoFichaCadastralCodigo={
-                            dadosPreenchimentoCampo(
-                                categoria.campos.find(
-                                    (c: any) => c.tipoCampo == "cpf"
-                                )?.codigo
-                            )?.campoFichaCadastralCodigo
-                        }
-                    />
+                    <AccordionPanel pb={4}>
+                        <Consultas
+                            ficha={ficha}
+                            cpf={removerCaracteresEspeciais(
+                                dadosPreenchimentoCampo(
+                                    categoria.campos.find(
+                                        (c: any) => c.tipoCampo == "cpf"
+                                    )?.codigo
+                                )?.valor
+                            )}
+                            cnpj={removerCaracteresEspeciais(
+                                dadosPreenchimentoCampo(
+                                    categoria.campos.find(
+                                        (c: any) => c.tipoCampo == "cnpj"
+                                    )?.codigo
+                                )?.valor
+                            )}
+                            dataNascimento={removerCaracteresEspeciais(
+                                dadosPreenchimentoCampo(
+                                    categoria.campos.find(
+                                        (c: any) => c.tipoCampo == "date"
+                                    )?.codigo
+                                )?.valor
+                            )}
+                            campoFichaCadastralCodigo={
+                                dadosPreenchimentoCampo(
+                                    categoria.campos.find(
+                                        (c: any) => c.tipoCampo == "cpf"
+                                    )?.codigo
+                                )?.campoFichaCadastralCodigo
+                            }
+                        />
 
-                    <Grid
-                        marginTop={4}
-                        gridTemplateColumns={{
-                            base: "repeat(1,1fr)",
-                            lg: "repeat(5,1fr)",
-                        }}
-                        gap={4}
-                    >
-                        {categoria.campos
-                            .filter((i: any) => isDisplayed(i, modeloFicha))
-                            .map((campo: any) => (
-                                <GridItem
-                                    key={campo.key}
-                                    colSpan={{ lg: campo.colSpan }}
-                                >
-                                    <Flex>
-                                        <Text>{campo.nome}</Text>
-                                        {dadosPreenchimentoCampo(campo.codigo)
-                                            ?.aprovado ? (
-                                            <Tag colorScheme="green" size="sm">
-                                                Aprovado
-                                            </Tag>
-                                        ) : dadosPreenchimentoCampo(
-                                              campo.codigo
-                                          )?.motivoReprovacao ? (
-                                            <Tooltip
-                                                label={`Motivo da reprovação: ${
-                                                    dadosPreenchimentoCampo(
+                        <Grid
+                            marginTop={4}
+                            gridTemplateColumns={{
+                                base: "repeat(1,1fr)",
+                                lg: "repeat(5,1fr)",
+                            }}
+                            gap={4}
+                        >
+                            {categoria.campos
+                                .filter((i: any) => isDisplayed(i, modeloFicha))
+                                .map((campo: any) => (
+                                    <GridItem
+                                        key={campo.key}
+                                        colSpan={{ lg: campo.colSpan }}
+                                    >
+                                        <Flex>
+                                            <Text>{campo.nome}</Text>
+                                            {dadosPreenchimentoCampo(campo.codigo)
+                                                ?.aprovado ? (
+                                                <Tag colorScheme="green" size="sm">
+                                                    Aprovado
+                                                </Tag>
+                                            ) : dadosPreenchimentoCampo(
+                                                campo.codigo
+                                            )?.motivoReprovacao ? (
+                                                <Tooltip
+                                                    label={`Motivo da reprovação: ${dadosPreenchimentoCampo(
                                                         campo.codigo
                                                     )?.motivoReprovacao
-                                                }`}
-                                                bg="red"
-                                                color="white"
-                                                hasArrow
-                                            >
-                                                <Tag
-                                                    colorScheme="red"
-                                                    size="sm"
+                                                        }`}
+                                                    bg="red"
+                                                    color="white"
+                                                    hasArrow
                                                 >
-                                                    Reprovado{" "}
-                                                </Tag>
-                                            </Tooltip>
-                                        ) : (
-                                            ""
-                                        )}
-                                        <AnaliseCampo
-                                            campoCodigo={campo?.codigo}
-                                            fichaId={ficha?.id}
-                                            buscarFicha={buscarFicha}
-                                        />
-                                    </Flex>
-                                    <Text fontWeight="bold">
-                                        {ViewValor(
-                                            campo,
-                                            ficha.preenchimento.find(
-                                                (p: any) =>
-                                                    p.campoFichaCadastralCodigo ==
-                                                    campo.codigo
-                                            )?.valor
-                                        )}
-                                    </Text>
-                                </GridItem>
-                            ))}
-                    </Grid>
-                </AccordionPanel>
-            </AccordionItem>
-        </Accordion>
+                                                    <Tag
+                                                        colorScheme="red"
+                                                        size="sm"
+                                                    >
+                                                        Reprovado{" "}
+                                                    </Tag>
+                                                </Tooltip>
+                                            ) : (
+                                                ""
+                                            )}
+                                            {
+                                                ficha.preenchimento.find(
+                                                    (p: any) =>
+                                                        p.campoFichaCadastralCodigo ==
+                                                        campo.codigo
+                                                )?.valor && (
+                                                    <AnaliseCampo
+                                                        campoCodigo={campo?.codigo}
+                                                        fichaId={ficha?.id}
+                                                        buscarFicha={buscarFicha}
+                                                    />
+                                                )
+                                            }
+
+                                        </Flex>
+                                        <Text fontWeight="bold">
+                                            {ViewValor(
+                                                campo,
+                                                ficha.preenchimento.find(
+                                                    (p: any) =>
+                                                        p.campoFichaCadastralCodigo ==
+                                                        campo.codigo
+                                                )?.valor,
+                                                modalPreviewDaImagem
+                                            )}
+                                        </Text>
+                                    </GridItem>
+                                ))}
+                        </Grid>
+                    </AccordionPanel>
+                </AccordionItem>
+            </Accordion>
+            <ModalPreviewDaImagem ref={modalPreviewDaImagem} />
+        </>
+
     );
 };
 
-const ViewValor = (campo: any, valor: any) => {
+const ViewValor = (campo: any, valor: any, ref: any) => {
+    function abrirPreviewDaImagem(i: string) {
+        ref?.current?.onOpen({
+            data: i
+        })
+    }
+
     if (valor) {
         if (["image"].includes(campo.tipoCampo)) {
             return JSON.parse(valor).map((i: any) => (
@@ -160,17 +181,19 @@ const ViewValor = (campo: any, valor: any) => {
         } else if (["file", "files"].includes(campo.tipoCampo)) {
             return (
                 <Flex flexDir="row" gap={2} wrap="wrap">
-                    {JSON.parse(valor).map((i: any) => {
+                    {JSON.parse(valor).map((i: string) => {
                         if (verificarExtensaoImagem(i).eImagem) {
                             return (
-                                <Image
-                                    key={i}
-                                    src={i}
-                                    w={24}
-                                    h={24}
-                                    rounded="lg"
-                                    aria-label="Arquivo"
-                                />
+                                <Flex key={i} onClick={() => abrirPreviewDaImagem(i)}>
+                                    <Image
+                                        src={i}
+                                        w={24}
+                                        h={24}
+                                        rounded="lg"
+                                        aria-label="Arquivo"
+                                        cursor='pointer'
+                                    />
+                                </Flex>
                             );
                         } else {
                             return (

@@ -132,14 +132,21 @@ const ModalBase = ({ }, ref: any) => {
 
 
                         <Tabs colorScheme="blue" variant="enclosed">
-                            <TabList>
-                                <Tab fontWeight="bold" fontSize="sm">
-                                    Consultas de CPF
-                                </Tab>
-                                <Tab fontWeight="bold" fontSize="sm">
-                                    Consultas de CNPJ
-                                </Tab>
-                            </TabList>
+                            {
+                                (data?.pepKyc.currentlyPEP !== 'Não' && data?.pepKyc.currentlySanctioned)
+                                && (
+                                    <TabList>
+                                        <Tab fontWeight="bold" fontSize="sm">
+                                            Consultas de CPF
+                                        </Tab>
+                                        <Tab fontWeight="bold" fontSize="sm">
+                                            Consultas de CNPJ
+                                        </Tab>
+                                    </TabList>
+                                )
+                            }
+
+
 
                             <TabPanels>
                                 {

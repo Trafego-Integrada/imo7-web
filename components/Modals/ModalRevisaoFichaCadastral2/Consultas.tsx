@@ -41,7 +41,7 @@ export const Consultas = ({
     function filtrarConsultas(tipoConsulta: string) {
         return (
             <Flex gap={2} py={3} flexWrap="wrap">
-                {tipoConsulta === EnumTipoConsulta.CPF && (
+                {(tipoConsulta === EnumTipoConsulta.CPF && cpf) && (
                     <ValidacaoFacial
                         cpf={cpf}
                         fichaCadastralId={ficha.id}
@@ -49,19 +49,19 @@ export const Consultas = ({
                     />
                 )}
 
-                {consultasNetrin.map(
-                    (consulta) =>
-                        consulta.tipoConsulta.includes(tipoConsulta) && (
-                            <Consulta
-                                key={consulta.codigo}
-                                consulta={consulta}
-                                ficha={ficha}
-                                cpf={cpf}
-                                cnpj={cnpj}
-                                dataNascimento={dataNascimento}
-                            />
-                        )
-                )}
+                {consultasNetrin
+                    .filter(consulta => consulta.tipoConsulta.includes(tipoConsulta))
+                    .map(consulta => (
+                        <Consulta
+                            key={consulta.codigo}
+                            consulta={consulta}
+                            ficha={ficha}
+                            cpf={cpf}
+                            cnpj={cnpj}
+                            dataNascimento={dataNascimento}
+                        />
+                    )
+                    )}
             </Flex>
         );
     }
@@ -70,63 +70,56 @@ export const Consultas = ({
         <Flex flexDir="column">
             <Tabs colorScheme="blue" variant="enclosed">
                 <TabList>
-                    <Tab fontWeight="bold" fontSize="sm">
-                        Consultas de CPF
-                    </Tab>
-                    <Tab fontWeight="bold" fontSize="sm">
-                        Consultas de CNPJ
-                    </Tab>
-                    <Tab fontWeight="bold" fontSize="sm">
-                        Consultas de CPF e CNPJ
-                    </Tab>
+                    {
+                        cpf && (
+                            <Tab fontWeight="bold" fontSize="sm">
+                                Consultas de CPF
+                            </Tab>
+                        )
+                    }
+                    {
+                        cnpj && (
+                            <Tab fontWeight="bold" fontSize="sm">
+                                Consultas de CNPJ
+                            </Tab>
+                        )
+                    }
                 </TabList>
 
                 <TabPanels>
-                    <TabPanel
-                        border="1px"
-                        borderColor="#e1e8f0"
-                        rounded="md"
-                        roundedTopLeft={0}
-                    >
-                        {cpf && (
+                    {cpf && (
+                        <TabPanel
+                            border="1px"
+                            borderColor="#e1e8f0"
+                            rounded="md"
+                            roundedTopLeft={0}
+                        >
+
                             <Text mb={2}>
                                 CPF: <strong>{cpf}</strong>
                             </Text>
-                        )}
 
-                        {filtrarConsultas(EnumTipoConsulta.CPF)}
-                    </TabPanel>
 
-                    <TabPanel
-                        border="1px"
-                        borderColor="#e1e8f0"
-                        rounded="md"
-                        roundedTopLeft={0}
-                    >
-                        {cnpj && (
+                            {filtrarConsultas(EnumTipoConsulta.CPF)}
+                        </TabPanel>
+                    )}
+
+                    {cnpj && (
+                        <TabPanel
+                            border="1px"
+                            borderColor="#e1e8f0"
+                            rounded="md"
+                            roundedTopLeft={0}
+                        >
+
                             <Text mb={2}>
                                 CNPJ: <strong>{cnpj}</strong>
                             </Text>
-                        )}
 
-                        {filtrarConsultas(EnumTipoConsulta.CNPJ)}
-                    </TabPanel>
 
-                    <TabPanel
-                        border="1px"
-                        borderColor="#e1e8f0"
-                        rounded="md"
-                        roundedTopLeft={0}
-                    >
-                        {cpf && cnpj && (
-                            <Text mb={2}>
-                                CPF: <strong>{cpf}</strong> • CNPJ:{" "}
-                                <strong>{cnpj}</strong>
-                            </Text>
-                        )}
-
-                        {filtrarConsultas(EnumTipoConsulta.CPF_CNPJ)}
-                    </TabPanel>
+                            {filtrarConsultas(EnumTipoConsulta.CNPJ)}
+                        </TabPanel>
+                    )}
                 </TabPanels>
             </Tabs>
         </Flex>
