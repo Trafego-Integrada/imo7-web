@@ -1,3 +1,4 @@
+import { formatarParaDataBR } from "@/utils/formatarParaDataBR";
 import { Flex, Text } from "@chakra-ui/react";
 
 export interface ISancoes {
@@ -35,8 +36,8 @@ export const Sancoes = ({ data }: SancoesProps) => {
                 "Nome pontuação de exclusividade",
                 data.nameUniquenessScore
             )}
-            {renderDetail("Data de início", data.startDate)}
-            {renderDetail("Data final", data.endDate)}
+            {renderDetail("Data de início", formatarParaDataBR(data.startDate))}
+            {renderDetail("Data final", formatarParaDataBR(data.endDate))}
         </Flex>
     );
 };

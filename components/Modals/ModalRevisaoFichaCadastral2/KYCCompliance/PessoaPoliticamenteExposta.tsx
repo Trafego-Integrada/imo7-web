@@ -1,3 +1,4 @@
+import { formatarParaDataBR } from "@/utils/formatarParaDataBR";
 import { Flex, Text } from "@chakra-ui/react";
 
 export interface IPessoaPoliticamenteExposta {
@@ -39,8 +40,8 @@ export const PessoaPoliticamenteExposta = ({
             {renderDetail("Cargo", data.jobTitle)}
             {renderDetail("Departamento", data.department)}
             {renderDetail("Motivo", data.motive)}
-            {renderDetail("Data de início", data.startDate)}
-            {renderDetail("Data final", data.endDate)}
+            {renderDetail("Data de início", formatarParaDataBR(data.startDate))}
+            {renderDetail("Data final", formatarParaDataBR(data.endDate))}
         </Flex>
     );
 };

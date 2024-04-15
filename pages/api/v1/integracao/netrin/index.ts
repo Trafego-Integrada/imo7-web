@@ -140,10 +140,17 @@ handle.post(async (req, res) => {
                 s: "cnd-trabalhista",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
             };
-        } else if (tipoConsulta == "cnd_trabalhista_mte") {
+        } else if (tipoConsulta == "cnd_trabalhista_mte_cpf") {
             requisicaoBody = {
                 s: "cnd-trabalhista-mte",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
+                "govbr-senha": "trafego10",
+                "govbr-cpf": "30156844850",
+            };
+        } else if (tipoConsulta == "cnd_trabalhista_mte_cnpj") {
+            requisicaoBody = {
+                s: "cnd-trabalhista-mte",
+                cnpj: removerCaracteresEspeciais(requisicao.cnpj),
                 "govbr-senha": "trafego10",
                 "govbr-cpf": "30156844850",
             };

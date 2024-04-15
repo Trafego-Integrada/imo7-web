@@ -19,6 +19,9 @@ export const apiNetrinService = () => ({
             },
         });
 
+        console.log('DATA = ', data);
+
+
         return data;
     },
 });

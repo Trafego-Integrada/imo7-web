@@ -1111,7 +1111,6 @@ enum TipoConsultaNetrin {
     cnd_federal
     cnd_estadual
     cnd_trabalhista_tst
-    cnd_trabalhista_mte
     receita_cnpj
     receita_cnpJ_qsa
     receita_cpf

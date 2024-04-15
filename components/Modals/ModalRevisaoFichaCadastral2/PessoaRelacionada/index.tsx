@@ -1,3 +1,4 @@
+import { formatarParaDataBR } from "@/utils/formatarParaDataBR";
 import {
     Flex,
     Text,
@@ -87,16 +88,16 @@ export const PessoaRelacionada = ({ data }: PessoaRelacionadaProps) => {
                         )}
                         {renderDetail(
                             "Início Relacionamento",
-                            data.dataInicioRelacionamento
+                            formatarParaDataBR(data.dataInicioRelacionamento)
                         )}
                         {renderDetail(
                             "Fim Relacionamento",
-                            data.dataFimRelacionamento
+                            formatarParaDataBR(data.dataFimRelacionamento)
                         )}
-                        {renderDetail("Data de Criação", data.dataCriacao)}
+                        {renderDetail("Data de Criação", formatarParaDataBR(data.dataCriacao))}
                         {renderDetail(
                             "Última Atualização",
-                            data.ultimaAtualizacao
+                            formatarParaDataBR(data.ultimaAtualizacao)
                         )}
                     </Flex>
                 </AccordionPanel>
