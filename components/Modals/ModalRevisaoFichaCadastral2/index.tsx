@@ -20,7 +20,17 @@ import {
     TabPanels,
     Tabs,
     Tag,
+    GridItem,
+    ModalFooter,
+    Button,
+    useToast,
 } from "@chakra-ui/react";
+import {
+    atualizarFicha,
+    cadastrarFicha,
+} from "@/services/models/fichaCadastral";
+import { queryClient } from "@/services/queryClient";
+import { FormSelect } from "@/components/Form/FormSelect";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { Categorias } from "./Categorias";
@@ -29,6 +39,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { Documentos } from "../Contrato/Documentos";
 import { Historicos } from "@/components/Pages/Historicos";
+import { FormTextarea } from "@/components/Form/FormTextarea";
 
 const schema = yup.object({
     status: yup.string().required("Status é obrigatório"),
@@ -42,6 +53,8 @@ const schema = yup.object({
 const ModalBase = ({}, ref: any) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
+    const toast = useToast();
+
     const [ficha, setFicha] = useState(null);
     const [modeloFicha, setModeloFicha] = useState(null);
 
@@ -50,6 +63,8 @@ const ModalBase = ({}, ref: any) => {
     const {
         reset,
         watch,
+        register,
+        handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm({ resolver: yupResolver(schema) });
 
@@ -61,6 +76,29 @@ const ModalBase = ({}, ref: any) => {
             buscarModeloFicha.mutate(data.modeloFichaCadastralId);
         },
     });
+
+    const cadastrar = useMutation(cadastrarFicha);
+    const atualizar = useMutation(atualizarFicha);
+
+    const onSubmit = async (data: any) => {
+        console.log({ data });
+
+        try {
+            if (data.id) {
+                await atualizar.mutateAsync(data);
+                onClose();
+                toast({ title: "Ficha Cadastrada", status: "success" });
+                queryClient.invalidateQueries(["fichas"]);
+            } else {
+                await cadastrar.mutateAsync(data);
+                onClose();
+                toast({ title: "Ficha atualizada", status: "success" });
+                queryClient.invalidateQueries(["fichas"]);
+            }
+        } catch (error) {
+            //console.log(error);
+        }
+    };
 
     const buscarModeloFicha = useMutation(imo7ApiService("modeloFicha").get, {
         onSuccess: (data) => {
@@ -74,6 +112,12 @@ const ModalBase = ({}, ref: any) => {
         {
             enabled: !!modeloFicha?.tipo,
         }
+    );
+
+    const { data: motivos } = useQuery(
+        ["motivosReprovacao", {}],
+        imo7ApiService("motivoReprovacao").list,
+        { refetchOnReconnect: false, refetchOnWindowFocus: false }
     );
 
     // Buscar fichas do mesmo processo
@@ -118,70 +162,169 @@ const ModalBase = ({}, ref: any) => {
 
                         <TabPanels>
                             <TabPanel px={0}>
-                                {isLoading ? (
-                                    <Flex
-                                        justify="center"
-                                        align="center"
-                                        h="200px"
-                                    >
-                                        <Spinner size="xl" />
-                                    </Flex>
-                                ) : (
-                                    <Flex
-                                        flexDir="column"
-                                        gap={4}
-                                        bg="#EDF2F7"
-                                        rounded="xl"
-                                        borderWidth={1}
-                                        borderColor="gray.200 "
-                                        p={4}
-                                    >
+                                <Box
+                                    id="formRevisarFichaCadastral"
+                                    as="form"
+                                    onSubmit={handleSubmit(onSubmit)}
+                                    bg="white"
+                                    rounded="lg"
+                                >
+                                    {isLoading ? (
                                         <Flex
-                                            gap={4}
+                                            justify="center"
                                             align="center"
-                                            py={4}
-                                            justify="space-between"
+                                            h="200px"
                                         >
-                                            <Flex gap={4}>
-                                                <Avatar size="lg" />
-                                                <Box>
-                                                    <Text>{ficha?.nome}</Text>
-
-                                                    <Progress
-                                                        value={
-                                                            ficha?.porcentagemPreenchimento
-                                                        }
-                                                        max={100}
-                                                    />
-                                                    <Text>
-                                                        <Text
-                                                            as="span"
-                                                            color="gray"
-                                                        >
-                                                            Imovel:
+                                            <Spinner size="xl" />
+                                        </Flex>
+                                    ) : (
+                                        <Flex
+                                            flexDir="column"
+                                            gap={4}
+                                            bg="#EDF2F7"
+                                            rounded="xl"
+                                            borderWidth={1}
+                                            borderColor="gray.200 "
+                                            p={4}
+                                        >
+                                            <Flex
+                                                gap={4}
+                                                align="center"
+                                                py={4}
+                                                justify="space-between"
+                                            >
+                                                <Flex gap={4}>
+                                                    <Avatar size="lg" />
+                                                    <Box>
+                                                        <Text>
+                                                            {ficha?.nome}
                                                         </Text>
-                                                        {` ${ficha?.imovel?.codigo} -  ${ficha?.imovel?.endereco}, ${ficha?.imovel?.bairro}`}
-                                                    </Text>
-                                                </Box>
+
+                                                        <Progress
+                                                            value={
+                                                                ficha?.porcentagemPreenchimento
+                                                            }
+                                                            max={100}
+                                                        />
+                                                        <Text>
+                                                            <Text
+                                                                as="span"
+                                                                color="gray"
+                                                            >
+                                                                Imovel:
+                                                            </Text>
+                                                            {` ${ficha?.imovel?.codigo} -  ${ficha?.imovel?.endereco}, ${ficha?.imovel?.bairro}`}
+                                                        </Text>
+                                                    </Box>
+                                                </Flex>
+                                            </Flex>
+                                            <Divider />
+                                            <Box>
+                                                <Text fontWeight="bold">
+                                                    Todas as consultas
+                                                    Disponiveis
+                                                </Text>
+                                            </Box>
+
+                                            <Categorias
+                                                categorias={categorias?.data}
+                                                modeloFicha={modeloFicha}
+                                                ficha={ficha}
+                                                buscarFicha={buscarFicha}
+                                            />
+
+                                            <Flex
+                                                direction="column"
+                                                gap={4}
+                                                p={4}
+                                                bg="white"
+                                                rounded={10}
+                                            >
+                                                <FormSelect
+                                                    label="Status"
+                                                    placeholder="Selecione o status"
+                                                    error={
+                                                        errors.status?.message
+                                                    }
+                                                    {...register("status")}
+                                                >
+                                                    <option value="aguardando">
+                                                        Aguardando Preenchimento
+                                                    </option>
+                                                    <option value="preenchida">
+                                                        Preenchida
+                                                    </option>
+                                                    <option value="em_analise">
+                                                        Em análise
+                                                    </option>
+                                                    <option value="aprovada">
+                                                        Aprovada
+                                                    </option>
+                                                    <option value="reprovada">
+                                                        Reprovada
+                                                    </option>
+                                                    <option value="arquivada">
+                                                        Arquivada
+                                                    </option>
+                                                </FormSelect>
+
+                                                {watch("status") ==
+                                                    "reprovada" && (
+                                                    <Flex
+                                                        direction="column"
+                                                        gap={4}
+                                                    >
+                                                        <FormSelect
+                                                            label="Motivo da Reprovação"
+                                                            placeholder="Selecione o motivo"
+                                                            error={
+                                                                errors
+                                                                    .motivoReprovacaoId
+                                                                    ?.message
+                                                            }
+                                                            {...register(
+                                                                "motivoReprovacaoId"
+                                                            )}
+                                                        >
+                                                            {motivos?.data?.data?.map(
+                                                                (item: any) => (
+                                                                    <option
+                                                                        key={
+                                                                            item.id
+                                                                        }
+                                                                        value={
+                                                                            item.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            item.nome
+                                                                        }
+                                                                    </option>
+                                                                )
+                                                            )}
+                                                        </FormSelect>
+
+                                                        <FormTextarea
+                                                            label="Observações sobre a reprovação"
+                                                            placeholder="Digite o aqui as observações sobre a reprovação..."
+                                                            error={
+                                                                errors
+                                                                    .motivoReprovacao
+                                                                    ?.message
+                                                            }
+                                                            {...register(
+                                                                "motivoReprovacao"
+                                                            )}
+                                                        />
+                                                    </Flex>
+                                                )}
                                             </Flex>
                                         </Flex>
-                                        <Divider />
-                                        <Box>
-                                            <Text fontWeight="bold">
-                                                Todas as consultas Disponiveis
-                                            </Text>
-                                        </Box>
-                                        <Categorias
-                                            categorias={categorias?.data}
-                                            modeloFicha={modeloFicha}
-                                            ficha={ficha}
-                                            buscarFicha={buscarFicha}
-                                        />
-                                    </Flex>
-                                )}
+                                    )}
+                                </Box>
                             </TabPanel>
 
-                            <TabPanel>
+                            <TabPanel px={0}>
                                 <Documentos
                                     fichaCadastralId={watch("id")}
                                     contratoId={watch("contratoId")}
@@ -205,6 +348,19 @@ const ModalBase = ({}, ref: any) => {
                         </TabPanels>
                     </Tabs>
                 </ModalBody>
+
+                <ModalFooter gridGap={4}>
+                    <Button onClick={() => onClose()}>Desistir</Button>
+                    <Button
+                        colorScheme="blue"
+                        variant="solid"
+                        isLoading={isSubmitting}
+                        type="submit"
+                        form="formRevisarFichaCadastral"
+                    >
+                        Salvar
+                    </Button>
+                </ModalFooter>
             </ModalContent>
         </Modal>
     );
