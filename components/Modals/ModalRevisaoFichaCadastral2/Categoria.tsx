@@ -14,13 +14,17 @@ import {
     Grid,
     GridItem,
     Image,
+    Link,
     Tag,
     Text,
     Tooltip,
 } from "@chakra-ui/react";
 import { AnaliseCampo } from "../ModalRevisaoFichaCadastral/AnaliseCampo";
 import { Consultas } from "./Consultas";
-import { ModalPreviewDaImagem } from './PreviewDaImagem/Modal'
+import { ModalPreviewDaImagem } from './PreviewDaImagem/Modal';
+import { GrFormView } from "react-icons/gr";
+import { AiOutlineUpload } from "react-icons/ai";
+import { ModalTribunalJustica } from './TribunalJustica/Modal'
 
 export const Categoria = ({
     categoria,
@@ -30,11 +34,143 @@ export const Categoria = ({
 }: any) => {
     const [open, setOpen] = useState(false);
     const modalPreviewDaImagem = useRef();
+    const modalPreviewPDF = useRef();
 
     const dadosPreenchimentoCampo = (codigo: string) =>
         ficha.preenchimento.find(
             (p: any) => p.campoFichaCadastralCodigo == codigo
         );
+
+    const ViewValor = (campo: any, valor: any) => {
+
+        function abrirPreviewDaImagem(i: string) {
+            modalPreviewDaImagem?.current?.onOpen({
+                data: i
+            })
+        }
+
+        function abrirPreviewPDF(i: string) {
+            modalPreviewPDF?.current?.onOpen(i)
+        }
+
+        if (valor) {
+
+            if (["image"].includes(campo.tipoCampo)) {
+                return JSON.parse(valor).map((i: any) => (
+                    <Flex direction='column' key={i}>
+                        <Image
+                            key={i}
+                            src={i}
+                            w={32}
+                            h={32}
+                            rounded={99}
+                            alt="Image"
+                            onClick={() => abrirPreviewDaImagem(i)}
+                            style={{
+                                cursor: 'pointer'
+                            }}
+                        />
+                        <Flex alignItems='center' gap={2}>
+                            <GrFormView
+                                size={20}
+                                onClick={() => abrirPreviewDaImagem(i)}
+                                style={{
+                                    cursor: 'pointer'
+                                }}
+                            />
+                            <AiOutlineUpload
+                                size={20}
+                                style={{
+                                    cursor: 'pointer'
+                                }}
+                            />
+                        </Flex>
+                    </Flex>
+                ));
+            } else if (["file", "files"].includes(campo.tipoCampo)) {
+                return (
+                    <Flex flexDir="row" gap={2} wrap="wrap">
+                        {JSON.parse(valor).map((i: string) => {
+                            if (verificarExtensaoImagem(i).eImagem) {
+                                return (
+                                    <Flex direction='column' key={i}>
+                                        <Image
+                                            src={i}
+                                            w={24}
+                                            h={24}
+                                            rounded="lg"
+                                            aria-label="Arquivo"
+                                            cursor='pointer'
+                                            onClick={() => abrirPreviewDaImagem(i)}
+                                        />
+                                        <Flex alignItems='center' gap={2}>
+                                            <GrFormView
+                                                size={20}
+                                                onClick={() => abrirPreviewDaImagem(i)}
+                                                style={{
+                                                    cursor: 'pointer'
+                                                }}
+                                            />
+                                            <Link href={i}>
+                                                <AiOutlineUpload
+                                                    size={20}
+                                                    style={{
+                                                        cursor: 'pointer'
+                                                    }}
+                                                />
+                                            </Link>
+                                        </Flex>
+                                    </Flex>
+                                );
+                            } else {
+                                return (
+                                    <Flex direction='column' key={i} >
+                                        <Flex
+                                            align="center"
+                                            justify="center"
+                                            w={24}
+                                            h={24}
+                                            bg="gray.200"
+                                            rounded="lg"
+                                        >
+                                            <Text>
+                                                {verificarExtensaoImagem(i).extensao}
+                                            </Text>
+                                        </Flex>
+
+                                        <Flex alignItems='center' gap={2}>
+                                            {
+                                                verificarExtensaoImagem(i).extensao.includes('pdf') && (
+                                                    <GrFormView
+                                                        size={20}
+                                                        onClick={() => abrirPreviewPDF(i)}
+                                                        style={{
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    />
+                                                )
+                                            }
+                                            <Link href={i}>
+                                                <AiOutlineUpload
+                                                    size={20}
+                                                    style={{
+                                                        cursor: 'pointer'
+                                                    }}
+                                                />
+                                            </Link>
+                                        </Flex>
+                                    </Flex>
+
+                                );
+                            }
+                        })}
+                    </Flex>
+                );
+            } else {
+                return valor;
+            }
+        }
+    };
 
     return (
         <>
@@ -150,8 +286,7 @@ export const Categoria = ({
                                                     (p: any) =>
                                                         p.campoFichaCadastralCodigo ==
                                                         campo.codigo
-                                                )?.valor,
-                                                modalPreviewDaImagem
+                                                )?.valor
                                             )}
                                         </Text>
                                     </GridItem>
@@ -161,62 +296,10 @@ export const Categoria = ({
                 </AccordionItem>
             </Accordion>
             <ModalPreviewDaImagem ref={modalPreviewDaImagem} />
+            <ModalTribunalJustica ref={modalPreviewPDF} />
         </>
 
     );
 };
 
-const ViewValor = (campo: any, valor: any, ref: any) => {
-    function abrirPreviewDaImagem(i: string) {
-        ref?.current?.onOpen({
-            data: i
-        })
-    }
 
-    if (valor) {
-        if (["image"].includes(campo.tipoCampo)) {
-            return JSON.parse(valor).map((i: any) => (
-                <Image key={i} src={i} w={32} h={32} rounded={99} alt="Image" />
-            ));
-        } else if (["file", "files"].includes(campo.tipoCampo)) {
-            return (
-                <Flex flexDir="row" gap={2} wrap="wrap">
-                    {JSON.parse(valor).map((i: string) => {
-                        if (verificarExtensaoImagem(i).eImagem) {
-                            return (
-                                <Flex key={i} onClick={() => abrirPreviewDaImagem(i)}>
-                                    <Image
-                                        src={i}
-                                        w={24}
-                                        h={24}
-                                        rounded="lg"
-                                        aria-label="Arquivo"
-                                        cursor='pointer'
-                                    />
-                                </Flex>
-                            );
-                        } else {
-                            return (
-                                <Flex
-                                    key={i}
-                                    align="center"
-                                    justify="center"
-                                    w={24}
-                                    h={24}
-                                    bg="gray.200"
-                                    rounded="lg"
-                                >
-                                    <Text>
-                                        {verificarExtensaoImagem(i).extensao}
-                                    </Text>
-                                </Flex>
-                            );
-                        }
-                    })}
-                </Flex>
-            );
-        } else {
-            return valor;
-        }
-    }
-};
