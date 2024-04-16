@@ -33,8 +33,6 @@ const ModalBase = ({}, ref: any) => {
 
     useImperativeHandle(ref, () => ({
         onOpen: (src: string) => {
-            console.log({ src });
-
             setUrl(src);
             onOpen();
         },

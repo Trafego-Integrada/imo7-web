@@ -21,10 +21,10 @@ import {
 } from "@chakra-ui/react";
 import { AnaliseCampo } from "../ModalRevisaoFichaCadastral/AnaliseCampo";
 import { Consultas } from "./Consultas";
-import { ModalPreviewDaImagem } from './PreviewDaImagem/Modal';
+import { ModalPreviewDaImagem } from "./PreviewDaImagem/Modal";
 import { GrFormView } from "react-icons/gr";
 import { AiOutlineUpload } from "react-icons/ai";
-import { ModalTribunalJustica } from './TribunalJustica/Modal'
+import { ModalTribunalJustica } from "./TribunalJustica/Modal";
 
 export const Categoria = ({
     categoria,
@@ -42,46 +42,44 @@ export const Categoria = ({
         );
 
     const ViewValor = (campo: any, valor: any) => {
-
         function abrirPreviewDaImagem(i: string) {
             modalPreviewDaImagem?.current?.onOpen({
-                data: i
-            })
+                data: i,
+            });
         }
 
         function abrirPreviewPDF(i: string) {
-            modalPreviewPDF?.current?.onOpen(i)
+            modalPreviewPDF?.current?.onOpen(i);
         }
 
         if (valor) {
-
             if (["image"].includes(campo.tipoCampo)) {
                 return JSON.parse(valor).map((i: any) => (
-                    <Flex direction='column' key={i}>
+                    <Flex direction="column" key={i}>
                         <Image
                             key={i}
                             src={i}
                             w={32}
                             h={32}
-                            rounded={99}
+                            rounded={8}
                             alt="Image"
                             onClick={() => abrirPreviewDaImagem(i)}
                             style={{
-                                cursor: 'pointer'
+                                cursor: "pointer",
                             }}
                         />
-                        <Flex alignItems='center' gap={2}>
+                        <Flex alignItems="center" gap={2}>
                             <GrFormView
                                 size={20}
                                 onClick={() => abrirPreviewDaImagem(i)}
                                 style={{
-                                    cursor: 'pointer'
+                                    cursor: "pointer",
                                 }}
                             />
                             <AiOutlineUpload
                                 size={20}
                                 style={{
-                                    cursor: 'pointer'
+                                    cursor: "pointer",
                                 }}
                             />
                         </Flex>
@@ -93,29 +91,33 @@ export const Categoria = ({
                         {JSON.parse(valor).map((i: string) => {
                             if (verificarExtensaoImagem(i).eImagem) {
                                 return (
-                                    <Flex direction='column' key={i}>
+                                    <Flex direction="column" key={i}>
                                         <Image
                                             src={i}
                                             w={24}
                                             h={24}
                                             rounded="lg"
                                             aria-label="Arquivo"
-                                            cursor='pointer'
-                                            onClick={() => abrirPreviewDaImagem(i)}
+                                            cursor="pointer"
+                                            onClick={() =>
+                                                abrirPreviewDaImagem(i)
+                                            }
                                         />
-                                        <Flex alignItems='center' gap={2}>
+                                        <Flex alignItems="center" gap={2}>
                                             <GrFormView
                                                 size={20}
-                                                onClick={() => abrirPreviewDaImagem(i)}
+                                                onClick={() =>
+                                                    abrirPreviewDaImagem(i)
+                                                }
                                                 style={{
-                                                    cursor: 'pointer'
+                                                    cursor: "pointer",
                                                 }}
                                             />
                                             <Link href={i}>
                                                 <AiOutlineUpload
                                                     size={20}
                                                     style={{
-                                                        cursor: 'pointer'
+                                                        cursor: "pointer",
                                                     }}
                                                 />
                                             </Link>
@@ -124,7 +126,7 @@ export const Categoria = ({
                                 );
                             } else {
                                 return (
-                                    <Flex direction='column' key={i} >
+                                    <Flex direction="column" key={i}>
                                         <Flex
                                             align="center"
                                             justify="center"
@@ -134,33 +136,37 @@ export const Categoria = ({
                                             rounded="lg"
                                         >
                                             <Text>
-                                                {verificarExtensaoImagem(i).extensao}
+                                                {
+                                                    verificarExtensaoImagem(i)
+                                                        .extensao
+                                                }
                                             </Text>
                                         </Flex>
 
-                                        <Flex alignItems='center' gap={2}>
-                                            {
-                                                verificarExtensaoImagem(i).extensao.includes('pdf') && (
-                                                    <GrFormView
-                                                        size={20}
-                                                        onClick={() => abrirPreviewPDF(i)}
-                                                        style={{
-                                                            cursor: 'pointer'
-                                                        }}
-                                                    />
-                                                )
-                                            }
+                                        <Flex alignItems="center" gap={2}>
+                                            {verificarExtensaoImagem(
+                                                i
+                                            ).extensao.includes("pdf") && (
+                                                <GrFormView
+                                                    size={20}
+                                                    onClick={() =>
+                                                        abrirPreviewPDF(i)
+                                                    }
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                />
+                                            )}
                                             <Link href={i}>
                                                 <AiOutlineUpload
                                                     size={20}
                                                     style={{
-                                                        cursor: 'pointer'
+                                                        cursor: "pointer",
                                                     }}
                                                 />
                                             </Link>
                                         </Flex>
                                     </Flex>
-
                                 );
                             }
                         })}
@@ -237,19 +243,24 @@ export const Categoria = ({
                                     >
                                         <Flex>
                                             <Text>{campo.nome}</Text>
-                                            {dadosPreenchimentoCampo(campo.codigo)
-                                                ?.aprovado ? (
-                                                <Tag colorScheme="green" size="sm">
+                                            {dadosPreenchimentoCampo(
+                                                campo.codigo
+                                            )?.aprovado ? (
+                                                <Tag
+                                                    colorScheme="green"
+                                                    size="sm"
+                                                >
                                                     Aprovado
                                                 </Tag>
                                             ) : dadosPreenchimentoCampo(
-                                                campo.codigo
-                                            )?.motivoReprovacao ? (
+                                                  campo.codigo
+                                              )?.motivoReprovacao ? (
                                                 <Tooltip
-                                                    label={`Motivo da reprovação: ${dadosPreenchimentoCampo(
-                                                        campo.codigo
-                                                    )?.motivoReprovacao
-                                                        }`}
+                                                    label={`Motivo da reprovação: ${
+                                                        dadosPreenchimentoCampo(
+                                                            campo.codigo
+                                                        )?.motivoReprovacao
+                                                    }`}
                                                     bg="red"
                                                     color="white"
                                                     hasArrow
@@ -264,20 +275,17 @@ export const Categoria = ({
                                             ) : (
                                                 ""
                                             )}
-                                            {
-                                                ficha.preenchimento.find(
-                                                    (p: any) =>
-                                                        p.campoFichaCadastralCodigo ==
-                                                        campo.codigo
-                                                )?.valor && (
-                                                    <AnaliseCampo
-                                                        campoCodigo={campo?.codigo}
-                                                        fichaId={ficha?.id}
-                                                        buscarFicha={buscarFicha}
-                                                    />
-                                                )
-                                            }
-
+                                            {ficha.preenchimento.find(
+                                                (p: any) =>
+                                                    p.campoFichaCadastralCodigo ==
+                                                    campo.codigo
+                                            )?.valor && (
+                                                <AnaliseCampo
+                                                    campoCodigo={campo?.codigo}
+                                                    fichaId={ficha?.id}
+                                                    buscarFicha={buscarFicha}
+                                                />
+                                            )}
                                         </Flex>
                                         <Text fontWeight="bold">
                                             {ViewValor(
@@ -298,8 +306,5 @@ export const Categoria = ({
             <ModalPreviewDaImagem ref={modalPreviewDaImagem} />
             <ModalTribunalJustica ref={modalPreviewPDF} />
         </>
-
     );
 };
-
-
