@@ -24,6 +24,13 @@ import {
     ModalFooter,
     Button,
     useToast,
+    Menu,
+    MenuButton,
+    IconButton,
+    MenuList,
+    MenuItem,
+    Link,
+    Tooltip,
 } from "@chakra-ui/react";
 import {
     atualizarFicha,
@@ -40,6 +47,11 @@ import * as yup from "yup";
 import { Documentos } from "../Contrato/Documentos";
 import { Historicos } from "@/components/Pages/Historicos";
 import { FormTextarea } from "@/components/Form/FormTextarea";
+import { CgMoreVerticalAlt } from "react-icons/cg";
+import { FiDownload, FiEye } from "react-icons/fi";
+import { FaFileExcel, FaFilePdf } from "react-icons/fa";
+import { exportToExcel } from "react-json-to-excel";
+
 
 const schema = yup.object({
     status: yup.string().required("Status é obrigatório"),
@@ -50,7 +62,7 @@ const schema = yup.object({
     }),
 });
 
-const ModalBase = ({}, ref: any) => {
+const ModalBase = ({ }, ref: any) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     const toast = useToast();
@@ -59,6 +71,8 @@ const ModalBase = ({}, ref: any) => {
     const [modeloFicha, setModeloFicha] = useState(null);
 
     const [isLoading, setIsLoading] = useState(false);
+
+    console.log({ ficha });
 
     const {
         reset,
@@ -144,21 +158,98 @@ const ModalBase = ({}, ref: any) => {
                 </ModalHeader>
                 <ModalBody>
                     <Tabs size="sm">
-                        <TabList>
-                            {watch("id") && <Tab>Revisão</Tab>}
+                        <Flex justifyContent='space-between'>
+                            <TabList>
+                                {watch("id") && <Tab>Revisão</Tab>}
 
-                            {watch("id") && (
-                                <Tab>
-                                    Anexos{" "}
-                                    <Tag colorScheme="blue" size="sm" ml={1}>
-                                        {watch("_count.Anexo")}
-                                    </Tag>
-                                </Tab>
-                            )}
+                                {watch("id") && (
+                                    <Tab>
+                                        Anexos{" "}
+                                        <Tag colorScheme="blue" size="sm" ml={1}>
+                                            {watch("_count.Anexo")}
+                                        </Tag>
+                                    </Tab>
+                                )}
 
-                            <Tab>Histórico da FIcha</Tab>
-                            <Tab>Histórico do Processo</Tab>
-                        </TabList>
+                                <Tab>Histórico da FIcha</Tab>
+                                <Tab>Histórico do Processo</Tab>
+                            </TabList>
+                            <Flex
+                                gap={2}
+                                justify="center"
+                                px={4}
+                            >
+                                <Tooltip label="Gerar PDF">
+                                    <IconButton
+                                        size="xs"
+                                        rounded="full"
+                                        colorScheme="blue"
+                                        variant="outline"
+                                        as={
+                                            Link
+                                        }
+                                        icon={
+                                            <FaFilePdf />
+                                        }
+                                        href={`https://www.imo7.com.br/api/fichaCadastral/${ficha?.id}/pdf`}
+                                        target="_blank"
+                                        passHref
+                                    />
+                                </Tooltip>
+                                <Tooltip label="Visualizar Ficha">
+                                    <IconButton
+                                        size="xs"
+                                        rounded="full"
+                                        colorScheme="blue"
+                                        variant="outline"
+                                        as={
+                                            Link
+                                        }
+                                        icon={
+                                            <FiEye />
+                                        }
+                                        href={`/fichaCadastral/${ficha?.id}`}
+                                        target="_blank"
+                                        passHref
+                                    />
+                                </Tooltip>
+                                <Tooltip label="Baixar Todos Arquivos">
+                                    <IconButton
+                                        size="xs"
+                                        rounded="full"
+                                        colorScheme="blue"
+                                        variant="outline"
+                                        as={
+                                            Link
+                                        }
+                                        icon={
+                                            <FiDownload />
+                                        }
+                                        href={`https://www.imo7.com.br/api/fichaCadastral/${ficha?.id}/downloadArquivos`}
+                                        target="_blank"
+                                        passHref
+                                    />
+                                </Tooltip>
+                                <Tooltip label="Exportar para Excel">
+                                    <IconButton
+                                        size="xs"
+                                        rounded="full"
+                                        colorScheme="blue"
+                                        variant="outline"
+                                        icon={
+                                            <FaFileExcel />
+                                        }
+                                        onClick={() =>
+                                            exportToExcel(
+                                                ficha?.preenchimento,
+                                                "ficha-cadastral-" +
+                                                ficha?.id
+                                            )}
+                                    />
+                                </Tooltip>
+                            </Flex>
+                        </Flex>
+
 
                         <TabPanels>
                             <TabPanel px={0}>
@@ -270,54 +361,54 @@ const ModalBase = ({}, ref: any) => {
 
                                                 {watch("status") ==
                                                     "reprovada" && (
-                                                    <Flex
-                                                        direction="column"
-                                                        gap={4}
-                                                    >
-                                                        <FormSelect
-                                                            label="Motivo da Reprovação"
-                                                            placeholder="Selecione o motivo"
-                                                            error={
-                                                                errors
-                                                                    .motivoReprovacaoId
-                                                                    ?.message
-                                                            }
-                                                            {...register(
-                                                                "motivoReprovacaoId"
-                                                            )}
+                                                        <Flex
+                                                            direction="column"
+                                                            gap={4}
                                                         >
-                                                            {motivos?.data?.data?.map(
-                                                                (item: any) => (
-                                                                    <option
-                                                                        key={
-                                                                            item.id
-                                                                        }
-                                                                        value={
-                                                                            item.id
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            item.nome
-                                                                        }
-                                                                    </option>
-                                                                )
-                                                            )}
-                                                        </FormSelect>
+                                                            <FormSelect
+                                                                label="Motivo da Reprovação"
+                                                                placeholder="Selecione o motivo"
+                                                                error={
+                                                                    errors
+                                                                        .motivoReprovacaoId
+                                                                        ?.message
+                                                                }
+                                                                {...register(
+                                                                    "motivoReprovacaoId"
+                                                                )}
+                                                            >
+                                                                {motivos?.data?.data?.map(
+                                                                    (item: any) => (
+                                                                        <option
+                                                                            key={
+                                                                                item.id
+                                                                            }
+                                                                            value={
+                                                                                item.id
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                item.nome
+                                                                            }
+                                                                        </option>
+                                                                    )
+                                                                )}
+                                                            </FormSelect>
 
-                                                        <FormTextarea
-                                                            label="Observações sobre a reprovação"
-                                                            placeholder="Digite o aqui as observações sobre a reprovação..."
-                                                            error={
-                                                                errors
-                                                                    .motivoReprovacao
-                                                                    ?.message
-                                                            }
-                                                            {...register(
-                                                                "motivoReprovacao"
-                                                            )}
-                                                        />
-                                                    </Flex>
-                                                )}
+                                                            <FormTextarea
+                                                                label="Observações sobre a reprovação"
+                                                                placeholder="Digite o aqui as observações sobre a reprovação..."
+                                                                error={
+                                                                    errors
+                                                                        .motivoReprovacao
+                                                                        ?.message
+                                                                }
+                                                                {...register(
+                                                                    "motivoReprovacao"
+                                                                )}
+                                                            />
+                                                        </Flex>
+                                                    )}
                                             </Flex>
                                         </Flex>
                                     )}
@@ -347,6 +438,7 @@ const ModalBase = ({}, ref: any) => {
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
+
                 </ModalBody>
 
                 <ModalFooter gridGap={4}>

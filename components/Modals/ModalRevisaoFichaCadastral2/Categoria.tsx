@@ -23,7 +23,7 @@ import { AnaliseCampo } from "../ModalRevisaoFichaCadastral/AnaliseCampo";
 import { Consultas } from "./Consultas";
 import { ModalPreviewDaImagem } from "./PreviewDaImagem/Modal";
 import { GrFormView } from "react-icons/gr";
-import { AiOutlineUpload } from "react-icons/ai";
+import { FiDownload } from "react-icons/fi";
 import { ModalTribunalJustica } from "./TribunalJustica/Modal";
 
 export const Categoria = ({
@@ -76,12 +76,16 @@ export const Categoria = ({
                                     cursor: "pointer",
                                 }}
                             />
-                            <AiOutlineUpload
-                                size={20}
-                                style={{
-                                    cursor: "pointer",
-                                }}
-                            />
+                            <Link
+                                href={i}
+                            >
+                                <FiDownload
+                                    size={20}
+                                    style={{
+                                        cursor: "pointer",
+                                    }}
+                                />
+                            </Link>
                         </Flex>
                     </Flex>
                 ));
@@ -114,7 +118,7 @@ export const Categoria = ({
                                                 }}
                                             />
                                             <Link href={i}>
-                                                <AiOutlineUpload
+                                                <FiDownload
                                                     size={20}
                                                     style={{
                                                         cursor: "pointer",
@@ -134,6 +138,8 @@ export const Categoria = ({
                                             h={24}
                                             bg="gray.200"
                                             rounded="lg"
+                                            onClick={() => verificarExtensaoImagem(i)
+                                                .extensao.includes('pdf') && abrirPreviewPDF(i)}
                                         >
                                             <Text>
                                                 {
@@ -147,18 +153,18 @@ export const Categoria = ({
                                             {verificarExtensaoImagem(
                                                 i
                                             ).extensao.includes("pdf") && (
-                                                <GrFormView
-                                                    size={20}
-                                                    onClick={() =>
-                                                        abrirPreviewPDF(i)
-                                                    }
-                                                    style={{
-                                                        cursor: "pointer",
-                                                    }}
-                                                />
-                                            )}
+                                                    <GrFormView
+                                                        size={20}
+                                                        onClick={() =>
+                                                            abrirPreviewPDF(i)
+                                                        }
+                                                        style={{
+                                                            cursor: "pointer",
+                                                        }}
+                                                    />
+                                                )}
                                             <Link href={i}>
-                                                <AiOutlineUpload
+                                                <FiDownload
                                                     size={20}
                                                     style={{
                                                         cursor: "pointer",
@@ -253,14 +259,13 @@ export const Categoria = ({
                                                     Aprovado
                                                 </Tag>
                                             ) : dadosPreenchimentoCampo(
-                                                  campo.codigo
-                                              )?.motivoReprovacao ? (
+                                                campo.codigo
+                                            )?.motivoReprovacao ? (
                                                 <Tooltip
-                                                    label={`Motivo da reprovação: ${
-                                                        dadosPreenchimentoCampo(
-                                                            campo.codigo
-                                                        )?.motivoReprovacao
-                                                    }`}
+                                                    label={`Motivo da reprovação: ${dadosPreenchimentoCampo(
+                                                        campo.codigo
+                                                    )?.motivoReprovacao
+                                                        }`}
                                                     bg="red"
                                                     color="white"
                                                     hasArrow
@@ -280,12 +285,12 @@ export const Categoria = ({
                                                     p.campoFichaCadastralCodigo ==
                                                     campo.codigo
                                             )?.valor && (
-                                                <AnaliseCampo
-                                                    campoCodigo={campo?.codigo}
-                                                    fichaId={ficha?.id}
-                                                    buscarFicha={buscarFicha}
-                                                />
-                                            )}
+                                                    <AnaliseCampo
+                                                        campoCodigo={campo?.codigo}
+                                                        fichaId={ficha?.id}
+                                                        buscarFicha={buscarFicha}
+                                                    />
+                                                )}
                                         </Flex>
                                         <Text fontWeight="bold">
                                             {ViewValor(

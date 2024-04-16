@@ -1,5 +1,6 @@
 import { formatoData } from "@/helpers/helpers";
 import prisma from "@/lib/prisma";
+import { formatarParaDataBR } from "@/utils/formatarParaDataBR";
 import {
     Badge,
     Box,
@@ -1043,7 +1044,7 @@ const FichaCadastral = ({ consulta }: any) => {
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Data de Nascimento:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.CpfBirthdate?.dataNascimento}
+                                {formatarParaDataBR(consulta.retorno?.CpfBirthdate?.dataNascimento)}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>

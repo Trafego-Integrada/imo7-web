@@ -1,3 +1,4 @@
+import { formatarParaDataBR } from "@/utils/formatarParaDataBR";
 import { Flex, Text, Link } from "@chakra-ui/react";
 
 export interface IConsultaSituacaoCadastral {
@@ -54,7 +55,7 @@ export const SituacaoCadastral = ({ data }: SituacaoCPFProps) => {
             {renderDetail("Comprovante", data.receitaFederal.comprovante)}
             {renderDetail(
                 "Data de nascimento",
-                data.receitaFederal.dataNascimento
+                formatarParaDataBR(data.receitaFederal.dataNascimento)
             )}
             {renderDetail(
                 "Data de inscrição",
