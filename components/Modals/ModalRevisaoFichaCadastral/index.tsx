@@ -1684,6 +1684,7 @@ const ModalBase = ({}, ref) => {
                                     </Grid>
                                 </Box>
                             </TabPanel>
+
                             <TabPanel>
                                 <Documentos
                                     fichaCadastralId={watch("id")}
@@ -1698,12 +1699,14 @@ const ModalBase = ({}, ref) => {
                                     tabelaId={watch("id")}
                                 />
                             </TabPanel>
+
                             <TabPanel>
                                 <Historicos
                                     tabela="Processo"
                                     tabelaId={watch("processoId")}
                                 />
                             </TabPanel>
+
                             <TabPanel>
                                 <ConsultasNetrin
                                     fichaCadastralId={watch("id")}

@@ -10,13 +10,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import puppeteer from "puppeteer";
 import slug from "slug";
-
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import axios from "axios";
+
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
+
 handle.use(cors);
 handle.use(checkAuth);
+
 handle.get(async (req, res) => {
     const { processoId, fichaCadastralId } = req.query;
 
