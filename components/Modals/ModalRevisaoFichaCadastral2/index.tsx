@@ -20,7 +20,7 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { Categorias } from "./Categorias";
 
-const ModalBase = ({}, ref) => {
+const ModalBase = ({ }, ref) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     const [ficha, setFicha] = useState(null);
@@ -64,9 +64,9 @@ const ModalBase = ({}, ref) => {
     }));
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="6xl">
+        <Modal isOpen={isOpen} onClose={onClose} size='6xl'>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent >
                 <ModalHeader>
                     Ficha Cadastral
                     <ModalCloseButton />
