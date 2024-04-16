@@ -114,10 +114,15 @@ export const Consulta = ({
                     params: { ...queryKey[1] },
                 });
 
-                const resultado = data.find(item => item.tipoConsulta === consulta.codigo && item.requisicao.cpf === cpf);
+                const resultado = data.find(
+                    (item) =>
+                        item.tipoConsulta === consulta.codigo &&
+                        item.requisicao.cpf === cpf &&
+                        item.requisicao.cnpj === cnpj
+                );
 
                 if (!resultado) {
-                    throw new Error('Nenhum dado correspondente encontrado');
+                    throw new Error("Nenhum dado correspondente encontrado");
                 }
 
                 const { id, retorno } = resultado;
@@ -128,25 +133,36 @@ export const Consulta = ({
 
                 return data;
             } catch (error) {
-                console.error('Erro na requisição:', error);
-                throw new Error('Falha ao buscar dados da API');
+                console.error("Erro na requisição:", error);
+                throw new Error("Falha ao buscar dados da API");
             }
         }
     );
 
     function abrirResultados() {
         const modais: Record<string, () => void> = {
-            "processos_pf": () => modalTribunalJustica?.current?.onOpen(getPdfUrl(id)),
-            "endereco_cpf": () => modalEndereco?.current?.onOpen({ data: retorno }),
-            "receita_federal_cpf": () => modalSituacaoCadastral?.current?.onOpen({ data: retorno }),
-            "empresas_relacionadas_cpf": () => modalEmpresaRelacionada?.current?.onOpen({ data: retorno }),
-            "pessoas_relacionadas_cnpj": () => modalPessoaRelacionada?.current?.onOpen({ data: retorno }),
-            "pep_kyc_cpf": () => modalKYCCompliance?.current?.onOpen({ data: retorno }),
-            "receita_federal_cnpj_qsa": () => modalReceitaFederalQSA?.current?.onOpen({ data: retorno }),
-            "receita_federal_cnd_cpf": () => modalReceitaFederalCND?.current?.onOpen({ data: retorno }),
-            "receita_federal_cnd_cnpj": () => modalReceitaFederalCND?.current?.onOpen({ data: retorno }),
-            "cnd_trabalhista_cpf": () => modalCNDTrabalhista?.current?.onOpen({ data: retorno }),
-            "cnd_trabalhista_cnpj": () => modalCNDTrabalhista?.current?.onOpen({ data: retorno })
+            processos_pf: () =>
+                modalTribunalJustica?.current?.onOpen(getPdfUrl(id)),
+            endereco_cpf: () =>
+                modalEndereco?.current?.onOpen({ data: retorno }),
+            receita_federal_cpf: () =>
+                modalSituacaoCadastral?.current?.onOpen({ data: retorno }),
+            empresas_relacionadas_cpf: () =>
+                modalEmpresaRelacionada?.current?.onOpen({ data: retorno }),
+            pessoas_relacionadas_cnpj: () =>
+                modalPessoaRelacionada?.current?.onOpen({ data: retorno }),
+            pep_kyc_cpf: () =>
+                modalKYCCompliance?.current?.onOpen({ data: retorno }),
+            receita_federal_cnpj_qsa: () =>
+                modalReceitaFederalQSA?.current?.onOpen({ data: retorno }),
+            receita_federal_cnd_cpf: () =>
+                modalReceitaFederalCND?.current?.onOpen({ data: retorno }),
+            receita_federal_cnd_cnpj: () =>
+                modalReceitaFederalCND?.current?.onOpen({ data: retorno }),
+            cnd_trabalhista_cpf: () =>
+                modalCNDTrabalhista?.current?.onOpen({ data: retorno }),
+            cnd_trabalhista_cnpj: () =>
+                modalCNDTrabalhista?.current?.onOpen({ data: retorno }),
         };
 
         const action = modais[consulta?.codigo];
@@ -155,35 +171,45 @@ export const Consulta = ({
     }
 
     function getPdfUrl(id: string) {
-        const baseUrl = process.env.NODE_ENV === "production" ? "https://www.imo7.com.br" : "http://localhost:3000";
+        const baseUrl =
+            process.env.NODE_ENV === "production"
+                ? "https://www.imo7.com.br"
+                : "http://localhost:3000";
         return `${baseUrl}/api/v1/integracao/netrin/${id}/pdf`;
     }
 
     function abrirConfirmarConsulta() {
         if (consulta?.codigo === "pep_kyc_cpf")
-            return modalConfirmarConsulta?.current?.onOpen()
+            return modalConfirmarConsulta?.current?.onOpen();
     }
 
     if (!deveRenderizar) return null;
 
-    function calcularContagem(retorno: Retorno, codigoConsulta: string): number {
+    function calcularContagem(
+        retorno: Retorno,
+        codigoConsulta: string
+    ): number {
         const mapeamento: Record<string, () => number> = {
-            "processos_pf": () => retorno.processosCPF?.totalProcessos ?? 0,
-            "endereco_cpf": () => retorno.enderecoCPF?.endereco?.length ?? 0,
-            "empresas_relacionadas_cpf": () => retorno.empresasRelacionadasCPF?.negociosRelacionados?.length ?? 0,
-            "pessoas_relacionadas_cnpj": () => retorno.pessoasRelacionadasCNPJ?.entidadesRelacionadas?.length ?? 0,
-            "pep_kyc_cpf": () => retorno.pepKyc?.historyPEP?.length ?? 0,
-            "receita_federal_cnpj_qsa": () => retorno.receitaFederalQsa?.qsa?.length ?? 0,
-            "receita_federal_cnd_cnpj": () => 1,
-            "receita_federal_cnd_cpf": () => 1,
-            "receita_federal_cpf": () => 1,
-            "cnd_trabalhista_cpf": () => 1,
-            "cnd_trabalhista_cnpj": () => 1,
+            processos_pf: () => retorno.processosCPF?.totalProcessos ?? 0,
+            endereco_cpf: () => retorno.enderecoCPF?.endereco?.length ?? 0,
+            empresas_relacionadas_cpf: () =>
+                retorno.empresasRelacionadasCPF?.negociosRelacionados?.length ??
+                0,
+            pessoas_relacionadas_cnpj: () =>
+                retorno.pessoasRelacionadasCNPJ?.entidadesRelacionadas
+                    ?.length ?? 0,
+            pep_kyc_cpf: () => retorno.pepKyc?.historyPEP?.length ?? 0,
+            receita_federal_cnpj_qsa: () =>
+                retorno.receitaFederalQsa?.qsa?.length ?? 0,
+            receita_federal_cnd_cnpj: () => 1,
+            receita_federal_cnd_cpf: () => 1,
+            receita_federal_cpf: () => 1,
+            cnd_trabalhista_cpf: () => 1,
+            cnd_trabalhista_cnpj: () => 1,
         };
 
         return (mapeamento[codigoConsulta] || (() => 0))();
     }
-
 
     return (
         <Flex
@@ -230,16 +256,17 @@ export const Consulta = ({
                     py="1rem"
                     leftIcon={<Icon as={FiSearch} />}
                     onClick={() => {
-                        if (consulta?.codigo === 'pep_kyc_cpf')
-                            abrirConfirmarConsulta()
-                        else consultarNetrin({
-                            tipoConsulta: consulta.codigo,
-                            requisicao: {
-                                cpf,
-                                cnpj,
-                                dataNascimento,
-                            },
-                        })
+                        if (consulta?.codigo === "pep_kyc_cpf")
+                            abrirConfirmarConsulta();
+                        else
+                            consultarNetrin({
+                                tipoConsulta: consulta.codigo,
+                                requisicao: {
+                                    cpf,
+                                    cnpj,
+                                    dataNascimento,
+                                },
+                            });
                     }}
                     isLoading={consultandoNetrin}
                 >
@@ -279,14 +306,16 @@ export const Consulta = ({
             <ModalKYCCompliance ref={modalKYCCompliance} />
             <ModalConfirmarConsulta
                 ref={modalConfirmarConsulta}
-                consultarNetrin={() => consultarNetrin({
-                    tipoConsulta: consulta.codigo,
-                    requisicao: {
-                        cpf,
-                        cnpj,
-                        dataNascimento,
-                    },
-                })}
+                consultarNetrin={() =>
+                    consultarNetrin({
+                        tipoConsulta: consulta.codigo,
+                        requisicao: {
+                            cpf,
+                            cnpj,
+                            dataNascimento,
+                        },
+                    })
+                }
             />
             <ModalReceitaFederalQSA ref={modalReceitaFederalQSA} />
             <ModalReceitaFederalCND ref={modalReceitaFederalCND} />
