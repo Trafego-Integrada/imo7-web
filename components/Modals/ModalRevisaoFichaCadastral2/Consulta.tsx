@@ -16,6 +16,7 @@ import { ModalConfirmarConsulta } from "./KYCCompliance/ModalConfirmarConsulta";
 import { ModalReceitaFederalQSA } from "./ReceitaFederalQSA/Modal";
 import { ModalReceitaFederalCND } from "./ReceitaFederalCND/Modal";
 import { ModalCNDTrabalhista } from "./CNDTrabalhista/Modal";
+import { validarData } from "@/utils/validarData";
 
 interface TipoConsultaProps {
     ficha: any;
@@ -256,6 +257,13 @@ export const Consulta = ({
                     py="1rem"
                     leftIcon={<Icon as={FiSearch} />}
                     onClick={() => {
+                        if (consulta?.codigo === "receita_federal_cpf" && (!dataNascimento || validarData(dataNascimento))) {
+                            return toast({
+                                title: 'Data de nascimento inválida',
+                                status: 'error'
+                            })
+                        }
+
                         if (consulta?.codigo === "pep_kyc_cpf")
                             abrirConfirmarConsulta();
                         else
