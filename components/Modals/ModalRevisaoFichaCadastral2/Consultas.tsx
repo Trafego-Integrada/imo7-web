@@ -24,6 +24,11 @@ import imageCDP from "../../../assets/cartorio-de-protesto.svg";
 import imageEndereco from "../../../assets/endereco.svg";
 import imageRF from "../../../assets/receita-federal.svg";
 import imageTJ from "../../../assets/tribunal-de-justica-tj.svg";
+import imageCNDFederal from "../../../assets/cnd-federal-cpf.jpg";
+import imageCNDTrabalhista from "../../../assets/cnd-trabalhista-tst.jpg";
+import imageKYCCompliance from "../../../assets/kyc-e-compliance.jpg";
+import imageCNPJsRealacioonadoCPF from "../../../assets/cnpjs-e-socios-relacionado-a-esse-cpf.jpg";
+import imageReceitaQSA from "../../../assets/receita-federal-cnpj-qsa.jpg";
 
 const EnumTipoConsulta = {
     CPF: "CPF",
@@ -166,56 +171,56 @@ const consultasNetrin = [
         tipoConsulta: [EnumTipoConsulta.CPF],
         codigo: "empresas_relacionadas_cpf",
         nome: "CNPJ´S e Sócios relacionado a esse CPF",
-        image: imageCDP,
-        size: ["4rem", "4rem"],
+        image: imageCNPJsRealacioonadoCPF,
+        size: ["2rem", "2rem"],
     },
     {
         tipoConsulta: [EnumTipoConsulta.CNPJ],
         codigo: "pessoas_relacionadas_cnpj",
         nome: "Pessoas Relacionadas ao CNPJ",
-        image: imageCDP,
-        size: ["4rem", "4rem"],
+        image: imageCNPJsRealacioonadoCPF,
+        size: ["2rem", "2rem"],
     },
     {
         tipoConsulta: [EnumTipoConsulta.CPF],
         codigo: "pep_kyc_cpf",
         nome: "KYC e Compliance",
-        image: imageCDP,
-        size: ["4rem", "4rem"],
+        image: imageKYCCompliance,
+        size: ["2rem", "2rem"],
     },
     {
         tipoConsulta: [EnumTipoConsulta.CNPJ],
         codigo: "receita_federal_cnpj_qsa",
         nome: "Receita Federal CNPJ QSA",
-        image: imageCDP,
-        size: ["4rem", "4rem"],
+        image: imageReceitaQSA,
+        size: ["2rem", "2rem"],
     },
     {
         tipoConsulta: [EnumTipoConsulta.CNPJ],
         codigo: "receita_federal_cnd_cnpj",
         nome: "CND Federal CNPJ",
-        image: imageCDP,
-        size: ["4rem", "4rem"],
+        image: imageCNDFederal,
+        size: ["2rem", "2rem"],
     },
     {
         tipoConsulta: [EnumTipoConsulta.CPF],
         codigo: "receita_federal_cnd_cpf",
         nome: "CND Federal CPF",
-        image: imageCDP,
-        size: ["4rem", "4rem"],
+        image: imageCNDFederal,
+        size: ["2rem", "2rem"],
     },
     {
         tipoConsulta: [EnumTipoConsulta.CPF],
         codigo: "cnd_trabalhista_cpf",
         nome: "CND Trabalhista TST",
-        image: imageCDP,
-        size: ["4rem", "4rem"],
+        image: imageCNDTrabalhista,
+        size: ["2rem", "2rem"],
     },
     {
         tipoConsulta: [EnumTipoConsulta.CNPJ],
         codigo: "cnd_trabalhista_cnpj",
         nome: "CND Trabalhista TST",
-        image: imageCDP,
-        size: ["4rem", "4rem"],
+        image: imageCNDTrabalhista,
+        size: ["2rem", "2rem"],
     },
 ];

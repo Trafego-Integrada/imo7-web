@@ -66,10 +66,10 @@ const ModalBase = ({ }, ref: any) => {
                         {renderDetail('Certidao', data?.receitaFederalCND.certidao)}
                         {renderDetail('Débitos Pendentes PGFN', data?.receitaFederalCND.debitosPendentesPGFN)}
                         {renderDetail('Débitos Pendentes RFB', data?.receitaFederalCND.debitosPendentesRFB)}
-                        {renderDetail('Validade Certidao', formatarParaDataBR(data?.receitaFederalCND.validadeCertidao ?? new Date().toISOString()))}
+                        {renderDetail('Validade Certidao', data?.receitaFederalCND.validadeCertidao)}
                         {renderDetail('URL Comprovante',
-                            <Link href={data?.receitaFederalCND.urlComprovante} target="_blank" >
-                                {data?.receitaFederalCND.urlComprovante}
+                            <Link href={data?.receitaFederalCND.urlComprovante} target="_blank" textColor='blue' fontWeight={200}>
+                                Clique para baixar o comprovante
                             </Link>
                         )}
                     </Flex>

@@ -25,6 +25,8 @@ import { ModalPreviewDaImagem } from "./PreviewDaImagem/Modal";
 import { GrFormView } from "react-icons/gr";
 import { FiDownload } from "react-icons/fi";
 import { ModalTribunalJustica } from "./TribunalJustica/Modal";
+import { formatarParaDataBR } from "@/utils/formatarParaDataBR";
+import { validarData } from "@/utils/validarData";
 
 export const Categoria = ({
     categoria,
@@ -179,7 +181,7 @@ export const Categoria = ({
                     </Flex>
                 );
             } else {
-                return valor;
+                return validarData(valor) ? formatarParaDataBR(valor) : valor;
             }
         }
     };

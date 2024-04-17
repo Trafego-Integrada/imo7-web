@@ -65,6 +65,7 @@ export const Documentos = ({ contratoId, fichaCadastralId, processoId }) => {
             },
         });
     };
+
     return (
         <Box>
             <Grid display="flex" gap={3}>

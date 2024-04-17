@@ -72,8 +72,6 @@ const ModalBase = ({ }, ref: any) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    console.log({ ficha });
-
     const {
         reset,
         watch,
