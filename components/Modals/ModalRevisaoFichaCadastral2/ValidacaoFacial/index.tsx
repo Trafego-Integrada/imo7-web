@@ -73,7 +73,7 @@ export const ValidacaoFacial = ({
                         campoFichaCadastralCodigo,
                     });
 
-                    setValidacaoFacial(result.data || null);
+                    setRetorno(result.data || null);
                 }
             }
 
