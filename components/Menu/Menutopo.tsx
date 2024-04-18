@@ -37,7 +37,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
     const { usuario, signOut } = useAuth();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = React.useRef();
-    const { colorMode, toggleColorMode } = useColorMode();
+
     return (
         <>
             <Box
@@ -112,7 +112,7 @@ export const Menutopo = ({ namepage, subnamepage }) => {
                 ml={{ base: "0px" }}
                 w="100%"
                 bg="radial-gradient(274.41% 274.41% at 50% 50%, #012659 0%, rgba(0, 0, 0, 0.00) 100%), #03132B;"
-                h={12}
+                h={16}
                 alignItems="center"
             >
                 <Grid templateColumns="repeat(3, 1fr)" w="100%" p={5}>

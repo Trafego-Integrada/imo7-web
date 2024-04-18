@@ -1,14 +1,18 @@
-import prisma from "@/lib/prisma";
-import { checkAuth } from "@/middleware/checkAuth";
-import { cors } from "@/middleware/cors";
-import moment from "moment";
 import nextConnect from "next-connect";
+import moment from "moment";
+import { cors } from "@/middleware/cors";
+import { checkAuth } from "@/middleware/checkAuth";
+import prisma from "@/lib/prisma";
+
 const handler = nextConnect();
+
 handler.use(cors);
 handler.use(checkAuth);
+
 handler.get(async (req, res) => {
     try {
         const { id } = req.query;
+
         const data = await prisma.fichaCadastral.findUnique({
             where: {
                 id,
@@ -39,6 +43,7 @@ handler.get(async (req, res) => {
         });
     }
 });
+
 handler.post(async (req, res) => {
     try {
         const { id } = req.query;
@@ -264,4 +269,5 @@ handler.delete(async (req, res) => {
         });
     }
 });
+
 export default handler;

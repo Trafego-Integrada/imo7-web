@@ -1111,16 +1111,22 @@ enum TipoConsultaNetrin {
     cnd_federal
     cnd_estadual
     cnd_trabalhista_tst
-    cnd_trabalhista_mte
     receita_cnpj
     receita_cnpJ_qsa
     receita_cpf
-    receita_federal_cnd
+    receita_federal_cnd_cpf
+    receita_federal_cnd_cnpj
     sefaz_cnd
     cnd_trabalhista
     receita_federal_cnpj
     receita_federal_cnpj_qsa
     receita_federal_cpf
+    endereco_cpf
+    empresas_relacionadas_cpf
+    pessoas_relacionadas_cnpj
+    pep_kyc_cpf
+    cnd_trabalhista_cpf
+    cnd_trabalhista_cnpj
 }
 
 model ConsultaNetrin {

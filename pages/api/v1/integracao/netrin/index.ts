@@ -1,5 +1,6 @@
 import { removerCaracteresEspeciais } from "@/helpers/helpers";
 import prisma from "@/lib/prisma";
+import { format, parse } from "date-fns";
 import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
 import { apiNetrinService } from "@/services/apiNetrin";
@@ -9,16 +10,17 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import puppeteer from "puppeteer";
 import slug from "slug";
-
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import axios from "axios";
+
 const handle = nextConnect<NextApiRequest, NextApiResponse>();
+
 handle.use(cors);
 handle.use(checkAuth);
+
 handle.get(async (req, res) => {
     const { processoId, fichaCadastralId } = req.query;
-    //console.log(req.query);
 
     let filtro: Prisma.ConsultaNetrinWhereInput = {};
 
@@ -35,6 +37,7 @@ handle.get(async (req, res) => {
             fichaCadastralId,
         };
     }
+
     const data = await prisma.consultaNetrin.findMany({
         where: {
             imobiliariaId: req.user.imobiliariaId,
@@ -44,6 +47,7 @@ handle.get(async (req, res) => {
 
     res.send(data);
 });
+
 handle.post(async (req, res) => {
     try {
         const { tipoConsulta, requisicao, processoId, fichaCadastralId } =
@@ -52,6 +56,7 @@ handle.post(async (req, res) => {
         let requisicaoBody = {
             ...requisicao,
         };
+
         let requisicaoBody2 = {
             ...requisicao,
         };
@@ -85,7 +90,7 @@ handle.post(async (req, res) => {
                     .send({ message: "Informe um CPF válido" });
             } else {
                 requisicaoBody = {
-                    s: "protestos-cenprot",
+                    s: "protestos-cenprot-sp",
                     cpf: removerCaracteresEspeciais(requisicao.cpf),
                     "govbr-senha": "trafego10",
                     "govbr-cpf": "30156844850",
@@ -116,10 +121,15 @@ handle.post(async (req, res) => {
                     "govbr-cpf": "30156844850",
                 };
             }
-        } else if (tipoConsulta == "receita_federal_cnd") {
+        } else if (tipoConsulta == "receita_federal_cnd_cpf") {
             requisicaoBody = {
                 s: "receita-federal-cnd",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta == "receita_federal_cnd_cnpj") {
+            requisicaoBody = {
+                s: "receita-federal-cnd",
+                cnpj: removerCaracteresEspeciais(requisicao.cnpj),
             };
         } else if (tipoConsulta == "sefaz_cnd") {
             requisicaoBody = {
@@ -132,10 +142,17 @@ handle.post(async (req, res) => {
                 s: "cnd-trabalhista",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
             };
-        } else if (tipoConsulta == "cnd_trabalhista_mte") {
+        } else if (tipoConsulta == "cnd_trabalhista_mte_cpf") {
             requisicaoBody = {
                 s: "cnd-trabalhista-mte",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
+                "govbr-senha": "trafego10",
+                "govbr-cpf": "30156844850",
+            };
+        } else if (tipoConsulta == "cnd_trabalhista_mte_cnpj") {
+            requisicaoBody = {
+                s: "cnd-trabalhista-mte",
+                cnpj: removerCaracteresEspeciais(requisicao.cnpj),
                 "govbr-senha": "trafego10",
                 "govbr-cpf": "30156844850",
             };
@@ -149,9 +166,55 @@ handle.post(async (req, res) => {
                 s: "receita-federal-cnpj-qsa",
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
             };
-        } else if (tipoConsulta == "receita_federal_cpf") {
+        } else if (tipoConsulta == "receita_federal_cpf_data_nascimento") {
             requisicaoBody = {
                 s: "receita-federal-cpf-data-nascimento",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta == "endereco_cpf") {
+            requisicaoBody = {
+                s: "endereco-cpf",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta == "receita_federal_cpf") {
+            const formatedDate = format(
+                parse(requisicao.dataNascimento, "yyyyMMdd", new Date()),
+                "ddMMyyy"
+            );
+
+            requisicaoBody = {
+                s: "receita-federal-cpf",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+                "data-nascimento": formatedDate,
+            };
+        } else if (tipoConsulta == "empresas_relacionadas_cpf") {
+            requisicaoBody = {
+                s: "empresas-relacionadas-cpf",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta === "pessoas_relacionadas_cnpj") {
+            requisicaoBody = {
+                s: "pessoas-relacionadas-cnpj",
+                cnpj: removerCaracteresEspeciais(requisicao.cnpj),
+            };
+        } else if (tipoConsulta === "pep_kyc_cpf") {
+            requisicaoBody = {
+                s: "pep-kyc-cpf",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta === "receita_federal_cnpj_qsa") {
+            requisicaoBody = {
+                s: "receita-federal-cnpj-qsa",
+                cpf: removerCaracteresEspeciais(requisicao.cpf),
+            };
+        } else if (tipoConsulta === "cnd_trabalhista_cnpj") {
+            requisicaoBody = {
+                s: "cnd-trabalhista",
+                cnpj: removerCaracteresEspeciais(requisicao.cnpj),
+            };
+        } else if (tipoConsulta === "cnd_trabalhista_cpf") {
+            requisicaoBody = {
+                s: "cnd-trabalhista",
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
             };
         }
@@ -160,6 +223,7 @@ handle.post(async (req, res) => {
         const retornoNetrin = await apiNetrinService().consultaComposta(
             requisicaoBody
         );
+
         if (tipoConsulta == "protestos_pf") {
             // Consulta Netrin
             const retornoNetrin2 = await apiNetrinService().consultaComposta(
@@ -167,6 +231,7 @@ handle.post(async (req, res) => {
             );
             //console.log(retornoNetrin2);
         }
+
         if (!retornoNetrin) {
             res.status(400).json({
                 success: false,
@@ -174,6 +239,17 @@ handle.post(async (req, res) => {
                 message: "Recibo não encontrado",
             });
         }
+
+        if (
+            tipoConsulta === "receita_federal_cpf" &&
+            retornoNetrin?.receitaFederal?.code === 606
+        ) {
+            return res.status(401).json({
+                success: false,
+                message: "A data de nascimento está divergente com o CPF!",
+            });
+        }
+
         const data = await prisma.consultaNetrin.create({
             data: {
                 tipoConsulta,

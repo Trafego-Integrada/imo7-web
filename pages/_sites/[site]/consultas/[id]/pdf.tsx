@@ -1,5 +1,6 @@
 import { formatoData } from "@/helpers/helpers";
 import prisma from "@/lib/prisma";
+import { formatarParaDataBR } from "@/utils/formatarParaDataBR";
 import {
     Badge,
     Box,
@@ -19,17 +20,14 @@ import {
     Tr,
 } from "@chakra-ui/react";
 import "react-quill/dist/quill.snow.css";
-const FichaCadastral = ({ consulta }) => {
-    //console.log(consulta);
-    const totalProtestos = (protestos) => {
+
+const FichaCadastral = ({ consulta }: any) => {
+    const totalProtestos = (protestos: any) => {
         let total = 0;
         if (protestos.code != 606) {
-            Object.entries(protestos)?.map((i) => {
-                //console.log("Item", i);
-
+            Object.entries(protestos)?.map((i: any) => {
                 if (i.length > 1) {
-                    i[1].map((i) => {
-                        //console.log("Item2", i);
+                    i[1].map((i: any) => {
                         total += i.protestos?.length;
                     });
                 }
@@ -37,11 +35,16 @@ const FichaCadastral = ({ consulta }) => {
         }
         return total;
     };
+
     return (
         <Flex minH="100vh" flexDir="column" gap={4}>
             <Flex align="center" py={0} gap={6}>
                 <Box>
-                    <Image h={70} src={consulta?.imobiliaria?.logo} />
+                    <Image
+                        h={70}
+                        src={consulta?.imobiliaria?.logo}
+                        alt="Imobiliária"
+                    />
                 </Box>
                 <Box>
                     <Text fontSize="sm">
@@ -158,7 +161,7 @@ const FichaCadastral = ({ consulta }) => {
                         </Flex>
                         <Grid gap={5}>
                             {consulta?.retorno?.processosCPF?.processos?.map(
-                                (item, k) => (
+                                (item: any, k: any) => (
                                     <GridItem key={k}>
                                         <Grid
                                             mb={4}
@@ -298,7 +301,10 @@ const FichaCadastral = ({ consulta }) => {
                                                 </Text>
                                                 <List>
                                                     {item.partes?.map(
-                                                        (parte, kp) => (
+                                                        (
+                                                            parte: any,
+                                                            kp: any
+                                                        ) => (
                                                             <ListItem key={kp}>
                                                                 <Text fontSize="xs">
                                                                     {
@@ -406,7 +412,7 @@ const FichaCadastral = ({ consulta }) => {
                         </Flex>
                         <Grid gap={5}>
                             {consulta?.retorno?.processosCPF?.processos.map(
-                                (item, k) => (
+                                (item: any, k: any) => (
                                     <GridItem key={k}>
                                         <Grid
                                             mb={4}
@@ -531,7 +537,10 @@ const FichaCadastral = ({ consulta }) => {
                                                 </Text>
                                                 <List>
                                                     {item.partes.map(
-                                                        (parte, kp) => (
+                                                        (
+                                                            parte: any,
+                                                            kp: any
+                                                        ) => (
                                                             <ListItem key={kp}>
                                                                 <Text fontSize="xs">
                                                                     {
@@ -607,15 +616,14 @@ const FichaCadastral = ({ consulta }) => {
                             {consulta?.retorno?.cenprotProtestos?.code != 606 &&
                                 Object.entries(
                                     consulta?.retorno?.cenprotProtestos
-                                )?.map((item, k) => {
-                                    //console.log("Item", item[1]);
+                                )?.map((item: any, k: any) => {
                                     return (
                                         <GridItem as={Grid} gap={4} key={k}>
                                             <Text>
                                                 Protestos no estado:{" "}
                                                 <strong>{item[0]}</strong>
                                             </Text>
-                                            {item[1].map((i, k) => (
+                                            {item[1].map((i: any, k: any) => (
                                                 <Grid
                                                     key={k}
                                                     mb={4}
@@ -820,15 +828,14 @@ const FichaCadastral = ({ consulta }) => {
                             {consulta?.retorno?.cenprotProtestos?.code != 606 &&
                                 Object.entries(
                                     consulta?.retorno?.cenprotProtestos
-                                )?.map((item, k) => {
-                                    //console.log("Item", item[1]);
+                                )?.map((item: any, k: any) => {
                                     return (
                                         <GridItem as={Grid} gap={4} key={k}>
                                             <Text>
                                                 Protestos no estado:{" "}
                                                 <strong>{item[0]}</strong>
                                             </Text>
-                                            {item[1].map((i, k) => (
+                                            {item[1].map((i: any, k: any) => (
                                                 <Grid
                                                     key={k}
                                                     mb={4}
@@ -1014,7 +1021,10 @@ const FichaCadastral = ({ consulta }) => {
                         <GridItem>
                             <Text fontSize="xs">Situação:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.situacaoCadastral}
+                                {
+                                    consulta.retorno?.CpfBirthdate
+                                        ?.situacaoCadastral
+                                }
                             </Text>
                         </GridItem>
                     </Grid>
@@ -1022,49 +1032,49 @@ const FichaCadastral = ({ consulta }) => {
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Nome:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.nome}
+                                {consulta.retorno?.CpfBirthdate?.nome}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Idade:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.idade}
+                                {consulta.retorno?.CpfBirthdate?.idade}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Data de Nascimento:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.dataNascimento}
+                                {formatarParaDataBR(consulta.retorno?.CpfBirthdate?.dataNascimento)}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Genero:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.genero}
+                                {consulta.retorno?.CpfBirthdate?.genero}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Nome da Mãe:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.nomeMae}
+                                {consulta.retorno?.CpfBirthdate?.nomeMae}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Ano do Óbito:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.anoObito}
+                                {consulta.retorno?.CpfBirthdate?.anoObito}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">País de Origem:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.paisOrigem}
+                                {consulta.retorno?.CpfBirthdate?.paisOrigem}
                             </Text>
                         </GridItem>
                         <GridItem borderWidth={1} px={2} py={1}>
                             <Text fontSize="xs">Data de Inscrição:</Text>
                             <Text fontWeight="bold" fontSize="sm">
-                                {consulta.retorno?.dataInscricao}
+                                {consulta.retorno?.CpfBirthdate?.dataInscricao}
                             </Text>
                         </GridItem>
                     </Grid>
@@ -1076,7 +1086,7 @@ const FichaCadastral = ({ consulta }) => {
 
 export default FichaCadastral;
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: any) => {
     const { id } = ctx.query;
     let consulta = await prisma.consultaNetrin.findUnique({
         where: { id },

@@ -68,8 +68,9 @@ import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
 import { Documentos } from "../Contrato/Documentos";
 import { ConsultasNetrin } from "../ModalProcesso/ConsultaNetrin";
-import { ModalPreview } from "../Preview";
+import { ModalTribunalJustica } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
 import { AnaliseCampo } from "./AnaliseCampo";
+
 const schema = yup.object({
     status: yup.string().required("Status é obrigatório"),
     motivoReprovacaoId: yup.string().when("status", {
@@ -78,6 +79,7 @@ const schema = yup.object({
         otherwise: yup.string().nullable(), // em outros casos, o campo motivoReprovacaoId não é obrigatório
     }),
 });
+
 const ModalBase = ({}, ref) => {
     const { usuario } = useAuth();
     const preview = useRef();
@@ -91,13 +93,16 @@ const ModalBase = ({}, ref) => {
         reset,
         formState: { errors, isSubmitting },
     } = useForm({ resolver: yupResolver(schema) });
+
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
             reset(data);
         },
     });
+
     const cadastrar = useMutation(cadastrarFicha);
     const atualizar = useMutation(atualizarFicha);
+
     const onSubmit = async (data) => {
         try {
             if (data.id) {
@@ -156,7 +161,9 @@ const ModalBase = ({}, ref) => {
         });
         buscar.mutate(fichaCadastralId);
     };
+
     const [consultandoNetrin, setConsultandoNetrin] = useState(false);
+
     const consultarNetrin = async (data) => {
         try {
             setConsultandoNetrin(true);
@@ -174,7 +181,7 @@ const ModalBase = ({}, ref) => {
             setConsultandoNetrin(false);
         } catch (error) {
             setConsultandoNetrin(false);
-            //console.log(error);
+
             toast({
                 title: "Houve um problema",
                 description: error?.response?.data?.message,
@@ -182,6 +189,7 @@ const ModalBase = ({}, ref) => {
             });
         }
     };
+
     const { data } = useQuery(
         [
             "consultasNetrin",
@@ -204,6 +212,7 @@ const ModalBase = ({}, ref) => {
             }
         }
     );
+
     const totalProtestos = (protestos) => {
         let total = 0;
         if (protestos.code != 606) {
@@ -221,7 +230,7 @@ const ModalBase = ({}, ref) => {
 
         return total;
     };
-    //console.log("DAdos", watch());
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -1681,6 +1690,7 @@ const ModalBase = ({}, ref) => {
                                     </Grid>
                                 </Box>
                             </TabPanel>
+
                             <TabPanel>
                                 <Documentos
                                     fichaCadastralId={watch("id")}
@@ -1695,12 +1705,14 @@ const ModalBase = ({}, ref) => {
                                     tabelaId={watch("id")}
                                 />
                             </TabPanel>
+
                             <TabPanel>
                                 <Historicos
                                     tabela="Processo"
                                     tabelaId={watch("processoId")}
                                 />
                             </TabPanel>
+
                             <TabPanel>
                                 <ConsultasNetrin
                                     fichaCadastralId={watch("id")}
@@ -1723,7 +1735,7 @@ const ModalBase = ({}, ref) => {
                     </Button>
                 </ModalFooter>
             </ModalContent>
-            <ModalPreview ref={preview} />
+            <ModalTribunalJustica ref={preview} />
         </Modal>
     );
 };

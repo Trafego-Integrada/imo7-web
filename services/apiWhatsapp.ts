@@ -1,21 +1,19 @@
-import { signOut } from "@/contexts/AuthContext";
-import axios, { AxiosError } from "axios";
-import jwtDecode from "jwt-decode";
-import { parseCookies, setCookie } from "nookies";
-import { AuthTokenError } from "./errors/AuthTokenError";
+import axios, { AxiosError } from 'axios'
 
-let isRefreshing = false;
+let isRefreshing = false
 let failedRequestQueue: {
-    onSuccess: (token: string) => void;
-    onFailure: (err: AxiosError<any>) => void;
-}[] = [];
+    onSuccess: (token: string) => void
+    onFailure: (err: AxiosError<any>) => void
+}[] = []
+
+const PLUGZAPI_URL = process.env.PLUGZAPI_URL!
 
 function setupApiClient() {
     const api = axios.create({
-        baseURL: "https://api.plugzapi.com.br/",
-    });
+        baseURL: PLUGZAPI_URL,
+    })
 
-    return api;
+    return api
 }
 
-export const apiWhatsapp = setupApiClient();
+export const apiWhatsapp = setupApiClient()

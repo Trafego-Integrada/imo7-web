@@ -67,17 +67,16 @@ export const AnaliseCampo = ({ fichaId, campoCodigo, buscarFicha }) => {
 
             <Popover>
                 <PopoverTrigger>
-                    <IconButton
-                        size="xs"
-                        variant="ghost"
-                        colorScheme="red"
-                        icon={
-                            <Tooltip label="Reprovar">
-                                <Icon as={IoClose} />
-                            </Tooltip>
-                        }
-                        onClick={() => onOpen()}
-                    />
+                    <Tooltip label="Reprovar">
+                        <IconButton
+                            size="xs"
+                            variant="ghost"
+                            colorScheme="red"
+                            icon={<Icon as={IoClose} />}
+                            onClick={() => onOpen()}
+                        />
+                    </Tooltip>
+
                 </PopoverTrigger>
                 <PopoverContent>
                     <PopoverArrow />

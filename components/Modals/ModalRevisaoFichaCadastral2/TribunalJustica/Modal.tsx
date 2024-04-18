@@ -13,27 +13,32 @@ import {
 } from "@chakra-ui/react";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
+
 // import pdf worker as a url, see `next.config.js` and `pdf-worker.js`
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-const Base = ({}, ref) => {
+
+const ModalBase = ({}, ref: any) => {
     const [url, setUrl] = useState("");
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
 
-    function onDocumentLoadSuccess(data) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    function onDocumentLoadSuccess(data: any) {
         setNumPages(data.numPages);
         setPageNumber(1);
     }
-    const { isOpen, onOpen, onClose } = useDisclosure();
+
     useImperativeHandle(ref, () => ({
-        onOpen: (src) => {
+        onOpen: (src: string) => {
             setUrl(src);
             onOpen();
         },
     }));
-    function changePage(offset) {
+
+    function changePage(offset: number) {
         setPageNumber((prevPageNumber) => prevPageNumber + offset);
     }
 
@@ -44,6 +49,7 @@ const Base = ({}, ref) => {
     function nextPage() {
         changePage(1);
     }
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="2xl">
             <ModalOverlay />
@@ -74,7 +80,7 @@ const Base = ({}, ref) => {
                                     Próxima
                                 </Button>
                             </Flex>
-                            <Box align="center">
+                            <Box>
                                 <Document
                                     file={url}
                                     onLoadSuccess={onDocumentLoadSuccess}
@@ -85,7 +91,7 @@ const Base = ({}, ref) => {
                             </Box>
                         </div>
                     ) : (
-                        <Image src={url} />
+                        <Image src={url} alt="Image" />
                     )}
                 </ModalBody>
             </ModalContent>
@@ -93,4 +99,4 @@ const Base = ({}, ref) => {
     );
 };
 
-export const ModalPreview = forwardRef(Base);
+export const ModalTribunalJustica = forwardRef(ModalBase);

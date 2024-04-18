@@ -1,15 +1,16 @@
-import axios from "axios";
+import axios from 'axios'
 
-export const buscarEndereco = async (cep) => {
+export const buscarEndereco = async (cep: any) => {
+    const TRAFEGOINTEGRADA_API_URL = process.env.TRAFEGOINTEGRADA_API_URL!
+    const TRAFEGOINTEGRADA_API = process.env.TRAFEGOINTEGRADA_API!
+
     const { data } = await axios.get(
-        "https://trafegointegrada.api.findcep.com/v1/cep/" +
-            cep.replace("-", "") +
-            ".json",
+        `${TRAFEGOINTEGRADA_API_URL}/v1/cep/` + cep.replace('-', '') + '.json',
         {
             headers: {
-                Referer: "trafegointegrada",
+                Referer: TRAFEGOINTEGRADA_API,
             },
-        }
-    );
-    return data;
-};
+        },
+    )
+    return data
+}
