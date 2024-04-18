@@ -1,26 +1,26 @@
-import { extendTheme } from "@chakra-ui/react";
-import { createBreakpoints } from "@chakra-ui/theme-tools";
+import { extendTheme } from '@chakra-ui/react'
+import { createBreakpoints } from '@chakra-ui/theme-tools'
 
 const breakpoints = createBreakpoints({
-    sm: "320px",
-    md: "768px",
-    lg: "1024px",
-    xl: "1366px",
-});
+    sm: '320px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1366px',
+})
 
 export const theme = extendTheme({
     fonts: {
-        heading: "Montserrat, sans-serif",
-        body: "Montserrat, sans-serif",
+        heading: 'Montserrat, sans-serif',
+        body: 'Montserrat, sans-serif',
     },
     breakpoints,
     config: {
-        initialColorMode: "light",
+        initialColorMode: 'light',
         useSystemColorMode: false,
     },
     colors: {
-        bluelight: "#2F80ED",
-        graydark: "#4F4F4F",
-        graylight: "#F0F0F0",
+        bluelight: '#2F80ED',
+        graydark: '#4F4F4F',
+        graylight: '#F0F0F0',
     },
-});
+})

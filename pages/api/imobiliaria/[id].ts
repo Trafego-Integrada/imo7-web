@@ -244,8 +244,10 @@ handle.post(async (req, res) => {
         }
 
         res.send(imobiliaria);
-    } catch (error) {
-        res.status(500).send(error);
+    } catch (error: any) {
+        console.log('API IMOBILIÁRIA::LINHA 248: ', error)
+        return new Response(error?.message || error, {status: error?.status || 400})
+        //res.status(error?.status).send(error?.message || error);
     }
 });
 handle.delete(async (req, res) => {

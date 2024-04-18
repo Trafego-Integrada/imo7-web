@@ -27,6 +27,7 @@ const InputBase = (
         borderWidth,
         size,
         mask,
+        maskChar,
         ...rest
     },
     ref
@@ -44,7 +45,7 @@ const InputBase = (
                     as={mask && ReactMask}
                     size={size}
                     mask={mask}
-                    maskChar={null}
+                    maskChar={maskChar}
                     borderWidth={borderWidth}
                     {...rest}
                 />

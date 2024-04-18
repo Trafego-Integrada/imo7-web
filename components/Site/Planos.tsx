@@ -17,6 +17,7 @@ import {
     Th,
     Thead,
     Tr,
+    useBreakpointValue,
 } from "@chakra-ui/react";
 import { FiCheck } from "react-icons/fi";
 import { IoIosArrowForward } from "react-icons/io";
@@ -65,6 +66,9 @@ export const Planos = () => {
             destaque: true,
         },
     ];
+
+    const scrollTable = useBreakpointValue({ base: true, md: false });
+
     return (
         <Container id="planos" maxW="container.xl" py={12}>
             <Heading textAlign="center">
@@ -134,38 +138,41 @@ export const Planos = () => {
                     </GridItem>
                 ))}
             </Grid>
-            <Table mt={12} variant="striped" size="sm">
-                <Thead>
-                    <Tr>
-                        <Th></Th>
-                        <Th>Econômico</Th>
-                        <Th>Básico</Th>
-                        <Th>Profissional</Th>
-                        <Th>Avançado</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    <Tr>
-                        <Td>Consulta Simples Excedente Unitário</Td>
-                        <Td>R$ 1,20</Td>
-                        <Td>R$ 1,20</Td>
-                        <Td>R$ 1,20</Td>
-                        <Td>R$ 1,20</Td>
-                    </Tr>
-                    <Tr>
-                        <Td>Valor validação Facial ( Unitário )</Td>
-                        <Td>R$ 6,80</Td>
-                        <Td>R$ 6,80</Td>
-                        <Td>R$ 6,80</Td>
-                        <Td>R$ 6,80</Td>
-                    </Tr>
-                    <Tr>
-                        <Td>Espaço de armazenamento Blocos de 5GB</Td>
-                        <Td>R$ 80,00</Td> <Td>R$ 80,00</Td> <Td>R$ 80,00</Td>{" "}
-                        <Td>R$ 80,00</Td>
-                    </Tr>
-                </Tbody>
-            </Table>
+
+            <Box overflowX={scrollTable ? "scroll" : "hidden"}>
+                <Table mt={12} variant="striped" size="sm">
+                    <Thead>
+                        <Tr>
+                            <Th></Th>
+                            <Th>Econômico</Th>
+                            <Th>Básico</Th>
+                            <Th>Profissional</Th>
+                            <Th>Avançado</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        <Tr>
+                            <Td>Consulta Simples Excedente Unitário</Td>
+                            <Td>R$ 1,20</Td>
+                            <Td>R$ 1,20</Td>
+                            <Td>R$ 1,20</Td>
+                            <Td>R$ 1,20</Td>
+                        </Tr>
+                        <Tr>
+                            <Td>Valor validação Facial ( Unitário )</Td>
+                            <Td>R$ 6,80</Td>
+                            <Td>R$ 6,80</Td>
+                            <Td>R$ 6,80</Td>
+                            <Td>R$ 6,80</Td>
+                        </Tr>
+                        <Tr>
+                            <Td>Espaço de armazenamento Blocos de 5GB</Td>
+                            <Td>R$ 80,00</Td> <Td>R$ 80,00</Td>{" "}
+                            <Td>R$ 80,00</Td> <Td>R$ 80,00</Td>
+                        </Tr>
+                    </Tbody>
+                </Table>
+            </Box>
         </Container>
     );
 };

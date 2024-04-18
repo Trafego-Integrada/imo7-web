@@ -1,11 +1,15 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer'
+
+const NODEMAILER_HOST = process.env.NODEMAILER_HOST!
+const NODEMAILER_USER = process.env.NODEMAILER_USER!
+const NODEMAILER_PASSWORD = process.env.NODEMAILER_PASSWORD!
 
 export const mail = nodemailer.createTransport({
     port: 587,
-    host: "smtp.email.sa-saopaulo-1.oci.oraclecloud.com",
+    host: NODEMAILER_HOST,
     auth: {
-        user: "ocid1.user.oc1..aaaaaaaafzgzqxcl6juczsarankioq5uokgfejtpspb3sjbch2ntbsysaova@ocid1.tenancy.oc1..aaaaaaaagzw4a3rjpjyjgolo4vfmjsp2i6zjqykoz5233xdwqa7uxdkuueya.jj.com",
-        pass: "q&y6aM27iSBTz0K}vt-S",
+        user: NODEMAILER_USER,
+        pass: NODEMAILER_PASSWORD,
     },
     secure: false,
-});
+})
