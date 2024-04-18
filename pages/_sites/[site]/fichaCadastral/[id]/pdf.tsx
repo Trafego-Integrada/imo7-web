@@ -46,8 +46,8 @@ const FichaCadastral = ({
                     campo.tipoCampo === "file"
                         ? 1
                         : campo.colSpan
-                        ? campo.colSpan
-                        : 1;
+                            ? campo.colSpan
+                            : 1;
 
                 if (currentRowColSpan + colSpan <= 5) {
                     currentRow.push(
@@ -90,7 +90,7 @@ const FichaCadastral = ({
                                                     <Link
                                                         href={
                                                             ficha.preenchimento[
-                                                                campo.codigo
+                                                            campo.codigo
                                                             ]
                                                         }
                                                     >
@@ -108,7 +108,7 @@ const FichaCadastral = ({
                                             size={75}
                                             value={
                                                 ficha.preenchimento[
-                                                    campo.codigo
+                                                campo.codigo
                                                 ]
                                             }
                                         />
@@ -117,7 +117,7 @@ const FichaCadastral = ({
                                             <Link
                                                 href={
                                                     ficha.preenchimento[
-                                                        campo.codigo
+                                                    campo.codigo
                                                     ]
                                                 }
                                             >
@@ -127,7 +127,7 @@ const FichaCadastral = ({
                                     </Flex>
                                 ) : null
                             ) : campo.tipoCampo === "files" ||
-                              campo.tipoCampo == "file" ? (
+                                campo.tipoCampo == "file" ? (
                                 ficha.preenchimento[campo.codigo] ? (
                                     <Flex wrap="wrap" gap={2}>
                                         {JSON.parse(
@@ -185,7 +185,7 @@ const FichaCadastral = ({
                                             size={75}
                                             value={
                                                 ficha.preenchimento[
-                                                    campo.codigo
+                                                campo.codigo
                                                 ]
                                             }
                                         />
@@ -194,7 +194,7 @@ const FichaCadastral = ({
                                             <Link
                                                 href={
                                                     ficha.preenchimento[
-                                                        campo.codigo
+                                                    campo.codigo
                                                     ]
                                                 }
                                             >
@@ -398,14 +398,11 @@ const FichaCadastral = ({
                     </Text>
                 </GridItem>
                 <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Observações:</Text>
+                    <Text fontSize="xs">Observações: </Text>
                     <Box
                         fontWeight="bold"
                         fontSize="sm"
-                        dangerouslySetInnerHTML={{
-                            __html: nl2br(ficha?.Processo?.observacoes),
-                        }}
-                    ></Box>
+                    >{ficha?.observacoes}</Box>
                 </GridItem>
             </Grid>
             <Grid gap={5}>
@@ -434,7 +431,7 @@ const FichaCadastral = ({
                                                 ((i.dependencia?.codigo &&
                                                     !i.dependenciaValor &&
                                                     ficha.preenchimento[
-                                                        i.dependencia?.codigo
+                                                    i.dependencia?.codigo
                                                     ]) ||
                                                     (i.dependencia?.codigo &&
                                                         i.dependenciaValor &&
@@ -442,8 +439,8 @@ const FichaCadastral = ({
                                                             i.dependenciaValor
                                                         ).includes(
                                                             ficha.preenchimento[
-                                                                i.dependencia
-                                                                    ?.codigo
+                                                            i.dependencia
+                                                                ?.codigo
                                                             ]
                                                         ))))
                                         ) {
