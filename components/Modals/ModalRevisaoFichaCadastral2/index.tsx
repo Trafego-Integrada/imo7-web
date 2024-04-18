@@ -31,6 +31,7 @@ import {
     MenuItem,
     Link,
     Tooltip,
+    Textarea,
 } from "@chakra-ui/react";
 import {
     atualizarFicha,
@@ -93,8 +94,6 @@ const ModalBase = ({ }, ref: any) => {
     const atualizar = useMutation(atualizarFicha);
 
     const onSubmit = async (data: any) => {
-        console.log({ data });
-
         try {
             if (data.id) {
                 await atualizar.mutateAsync(data);
@@ -304,6 +303,11 @@ const ModalBase = ({ }, ref: any) => {
                                                             </Text>
                                                             {` ${ficha?.imovel?.codigo} -  ${ficha?.imovel?.endereco}, ${ficha?.imovel?.bairro}`}
                                                         </Text>
+
+                                                        <Flex direction='column'>
+                                                            <Text>Observações</Text>
+                                                            <Textarea disabled={true} value={ficha?.observacoes} />
+                                                        </Flex>
                                                     </Box>
                                                 </Flex>
                                             </Flex>
