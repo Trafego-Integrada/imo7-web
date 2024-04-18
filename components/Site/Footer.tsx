@@ -20,8 +20,6 @@ import { BiAlarm } from "react-icons/bi";
 import { useMutation } from "react-query";
 import * as yup from "yup";
 
-import { api } from "@/services/apiClient"
-
 const schema = yup.object({
     nome: yup.string().required("Campo obrigatório"),
     email: yup.string().required("Campo obrigatório"),
@@ -44,12 +42,19 @@ export const Footer = () => {
     });
     const formContatoOnSubmit = async (data: any) => {
         await contato.mutateAsync(data);
-    }
+    };
     return (
         <Box bg="#F6FDFF" py={24}>
             <Container maxW="container.xl">
-                <Grid gap={6} gridTemplateColumns={{ lg: "repeat(3,1fr)" }}>
-                    <GridItem w="sm">
+                <Grid
+                    gap={6}
+                    templateColumns={{
+                        base: "repeat(1, 1fr)",
+                        md: "repeat(2, 1fr)",
+                        xl: "repeat(3,1fr)",
+                    }}
+                >
+                    <GridItem>
                         <Heading
                             mb={4}
                             fontWeight="700"
@@ -66,86 +71,64 @@ export const Footer = () => {
                     <GridItem
                         w="full"
                         as="form"
-                        onSubmit={
-                            form.handleSubmit(
-                                async (data) => await formContatoOnSubmit(data)
-                            )
-                        }
+                        onSubmit={form.handleSubmit(
+                            async (data) => await formContatoOnSubmit(data)
+                        )}
                     >
-                        <Grid
-                            gridTemplateColumns={{ lg: "repeat(2,1fr)" }}
-                            gap={4}
-                        >
-                            <GridItem colSpan={{ lg: 2 }}>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        Nome
-                                    </FormLabel>
-                                    <Input
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="Digite seu nome completo"
-                                        {...form.register("nome")}
-                                    />
-                                </FormControl>
-                            </GridItem>
-                            <GridItem>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        E-mail
-                                    </FormLabel>
-                                    <Input
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="email@email.com.br"
-                                        {...form.register("email")}
-                                    />
-                                </FormControl>
-                            </GridItem>
-                            <GridItem>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        Telefone de contato
-                                    </FormLabel>
-                                    <Input
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="(99) 99999-6666"
-                                        {...form.register("telefone")}
-                                    />
-                                </FormControl>
-                            </GridItem>
-                            <GridItem colSpan={{ lg: 2 }}>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        Mensagem
-                                    </FormLabel>
-                                    <Input
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="Olá, gostaria de mais informações sobree o Imo7"
-                                        {...form.register("mensagem")}
-                                    />
-                                </FormControl>
-                            </GridItem>
-                            <GridItem colSpan={{ lg: 2 }} textAlign="center">
-                                <Button type="submit">Enviar mensagem</Button>
-                            </GridItem>
-                        </Grid>
+                        <Flex direction="column" gap={4}>
+                            <FormControl>
+                                <FormLabel color="#021531" fontWeight="bold">
+                                    Nome
+                                </FormLabel>
+                                <Input
+                                    bg="white"
+                                    borderColor="#4B4B4B"
+                                    placeholder="Digite seu nome completo"
+                                    {...form.register("nome")}
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel color="#021531" fontWeight="bold">
+                                    E-mail
+                                </FormLabel>
+                                <Input
+                                    bg="white"
+                                    borderColor="#4B4B4B"
+                                    placeholder="email@email.com.br"
+                                    {...form.register("email")}
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel color="#021531" fontWeight="bold">
+                                    Telefone de contato
+                                </FormLabel>
+                                <Input
+                                    bg="white"
+                                    borderColor="#4B4B4B"
+                                    placeholder="(99) 99999-6666"
+                                    {...form.register("telefone")}
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel color="#021531" fontWeight="bold">
+                                    Mensagem
+                                </FormLabel>
+                                <Input
+                                    bg="white"
+                                    borderColor="#4B4B4B"
+                                    placeholder="Olá, gostaria de mais informações sobree o Imo7"
+                                    {...form.register("mensagem")}
+                                />
+                            </FormControl>
+
+                            <Button type="submit">Enviar mensagem</Button>
+                        </Flex>
                     </GridItem>
-                    <GridItem w="sm">
+
+                    <GridItem>
                         <Flex mb={4} gap={2} align="center">
                             <Icon as={BiAlarm} fontSize="2xl" />
                             <Heading

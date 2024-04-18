@@ -186,26 +186,127 @@ export const Tribunal = ({ modal }) => {
                 </Container>
             </Box>
             <Box bg="radial-gradient(50% 50% at 50% 50%, #012659 0%, rgba(1, 38, 89, 0.00) 100%), #021D44;">
-                <Container maxW="container.xl" py={12}>
-                    <Text color="white">
+                <Container maxW="container.xl" pt={12}>
+                    <Text color="white" mb={4}>
                         O IMO7 é a solução completa para sua gestão imobiliária,
                         proporcionando acesso rápido e abrangente ao histórico
                         judicial em todo o Brasil, além de simplificar suas
                         operações e garantir um atendimento excepcional aos seus
                         clientes.
                     </Text>
+
                     <Flex
-                        align="center"
+                        align={{ base: "center", lg: "end" }}
                         gap={8}
                         flexDir={{ base: "column", lg: "row" }}
                         justify="space-between"
                     >
-                        <Image src="/img/IMAGEM (4).png" alt="#" />
-                        <Flex flexDir="column" gap={4} maxW="lg">
+                        <Image src="/img/IMAGEM (4).png" alt="#" w="40rem" />
+
+                        <Flex flexDir="column" gap={4} maxW="lg" py={12}>
                             <Heading color="#FFF" size="md">
                                 CONFIRA ABAIXO OS TIPOS DE CONSULTA QUE VOCÊ
                                 PODERÁ FAZER ATRAVÉS DO IMO7:
                             </Heading>
+                            <Text color="white" fontWeight="bold">
+                                CPF
+                            </Text>
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">01. Validação Facial</Text>
+                            </Flex>
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">
+                                    02. Endereços anteriores do CPF
+                                </Text>
+                            </Flex>
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">
+                                    03. Situação Cadastral do CPF
+                                </Text>
+                            </Flex>
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">
+                                    04. Processos TJ (em todos os estados)
+                                    Pessoa Física
+                                </Text>
+                            </Flex>
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">
+                                    05. Protestos em todos Cartórios ( CENPROT )
+                                </Text>
+                            </Flex>{" "}
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">
+                                    06. CNPJ´S e Sócios relacionado a esse CPF
+                                </Text>
+                            </Flex>{" "}
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">07. KYC e Compliance</Text>
+                            </Flex>{" "}
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">08. CND Federal CPF</Text>
+                            </Flex>{" "}
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">09. CND Estadual CPF</Text>
+                            </Flex>{" "}
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
+                                <Text color="#FFF">
+                                    10. CND Trabalhista TST
+                                </Text>
+                            </Flex>
+                            <Text color="white" fontWeight="bold">
+                                CNPJ
+                            </Text>
                             <Flex align="center" gap={2}>
                                 <Icon
                                     as={FiCheckCircle}
@@ -224,8 +325,7 @@ export const Tribunal = ({ modal }) => {
                                     fontSize={16}
                                 />
                                 <Text color="#FFF">
-                                    02. Processos TJ (em todos os estados)
-                                    Pessoa Física
+                                    02. Pessoas Relacionadas ao CNPJ
                                 </Text>
                             </Flex>
                             <Flex align="center" gap={2}>
@@ -235,7 +335,7 @@ export const Tribunal = ({ modal }) => {
                                     fontSize={16}
                                 />
                                 <Text color="#FFF">
-                                    03. Protestos Pessoa Física
+                                    03. Receita Federal CNPJ QSA
                                 </Text>
                             </Flex>
                             <Flex align="center" gap={2}>
@@ -244,8 +344,16 @@ export const Tribunal = ({ modal }) => {
                                     color="#77BA89"
                                     fontSize={16}
                                 />
+                                <Text color="#FFF">04. CND Federal CNPJ</Text>
+                            </Flex>
+                            <Flex align="center" gap={2}>
+                                <Icon
+                                    as={FiCheckCircle}
+                                    color="#77BA89"
+                                    fontSize={16}
+                                />
                                 <Text color="#FFF">
-                                    04. Protestos Pessoa Jurídica
+                                    05. CND Trabalhista TST
                                 </Text>
                             </Flex>
                             <Flex align="center" gap={2}>
@@ -254,59 +362,7 @@ export const Tribunal = ({ modal }) => {
                                     color="#77BA89"
                                     fontSize={16}
                                 />
-                                <Text color="#FFF">05. CND Federal</Text>
-                            </Flex>{" "}
-                            <Flex align="center" gap={2}>
-                                <Icon
-                                    as={FiCheckCircle}
-                                    color="#77BA89"
-                                    fontSize={16}
-                                />
-                                <Text color="#FFF">06. CND Estadual</Text>
-                            </Flex>{" "}
-                            <Flex align="center" gap={2}>
-                                <Icon
-                                    as={FiCheckCircle}
-                                    color="#77BA89"
-                                    fontSize={16}
-                                />
-                                <Text color="#FFF">
-                                    07. CND Trabalhista TST
-                                </Text>
-                            </Flex>{" "}
-                            <Flex align="center" gap={2}>
-                                <Icon
-                                    as={FiCheckCircle}
-                                    color="#77BA89"
-                                    fontSize={16}
-                                />
-                                <Text color="#FFF">
-                                    08. CND Trabalhista MTE
-                                </Text>
-                            </Flex>{" "}
-                            <Flex align="center" gap={2}>
-                                <Icon
-                                    as={FiCheckCircle}
-                                    color="#77BA89"
-                                    fontSize={16}
-                                />
-                                <Text color="#FFF">09. Receita CNPJ</Text>
-                            </Flex>{" "}
-                            <Flex align="center" gap={2}>
-                                <Icon
-                                    as={FiCheckCircle}
-                                    color="#77BA89"
-                                    fontSize={16}
-                                />
-                                <Text color="#FFF">10. Receita CNPJ QSA</Text>
-                            </Flex>{" "}
-                            <Flex align="center" gap={2}>
-                                <Icon
-                                    as={FiCheckCircle}
-                                    color="#77BA89"
-                                    fontSize={16}
-                                />
-                                <Text color="#FFF">11. Receita CPF</Text>
+                                <Text color="#FFF">06. CND Federal</Text>
                             </Flex>
                             <Button
                                 onClick={() => modal.current.onOpen()}
