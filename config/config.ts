@@ -1,3 +1,3 @@
 export const auth = {
-  secret: "supersecret"
-} as const;
+    secret: 'supersecret',
+} as const

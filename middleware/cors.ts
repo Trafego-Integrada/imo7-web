@@ -1,17 +1,18 @@
-import nextConnect from "next-connect";
-import NextCors from "nextjs-cors";
+import { NextApiRequest, NextApiResponse } from 'next'
+import nextConnect from 'next-connect'
+import NextCors from 'nextjs-cors'
 
-const handle = nextConnect();
+const handle = nextConnect()
 
-handle.use(async (req, res, next) => {
+handle.use(async (req: NextApiRequest, res: NextApiResponse, next) => {
     await NextCors(req, res, {
         // Options
-        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-        origin: "*",
+        methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+        origin: '*',
         optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    });
+    })
 
-    return next();
-});
+    return next()
+})
 
-export const cors = handle;
+export const cors = handle
