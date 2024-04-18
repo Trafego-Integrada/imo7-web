@@ -1,39 +1,39 @@
-import { useMemo, useRef, useState } from "react";
-import { FiEye, FiSearch } from "react-icons/fi";
-import Image from "next/image";
-import { useQuery } from "react-query";
-import { Button, Flex, Icon, Text, Tooltip, useToast } from "@chakra-ui/react";
-import { api } from "@/services/apiClient";
-import { queryClient } from "@/services/queryClient";
+import { useMemo, useRef, useState } from 'react'
+import { FiEye, FiSearch } from 'react-icons/fi'
+import Image from 'next/image'
+import { useQuery } from 'react-query'
+import { Button, Flex, Icon, Text, Tooltip, useToast } from '@chakra-ui/react'
+import { api } from '@/services/apiClient'
+import { queryClient } from '@/services/queryClient'
 
-import { ModalEndereco } from "./Endereco/Modal";
-import { ModalSituacaoCadastral } from "./SituacaoCadastral/Modal";
-import { ModalTribunalJustica } from "./TribunalJustica/Modal";
-import { ModalEmpresaRelacionada } from "./EmpresaRelacionada/Modal";
-import { ModalPessoaRelacionada } from "./PessoaRelacionada/Modal";
-import { ModalKYCCompliance } from "./KYCCompliance/Modal";
-import { ModalConfirmarConsulta } from "./KYCCompliance/ModalConfirmarConsulta";
-import { ModalReceitaFederalQSA } from "./ReceitaFederalQSA/Modal";
-import { ModalReceitaFederalCND } from "./ReceitaFederalCND/Modal";
-import { ModalCNDTrabalhista } from "./CNDTrabalhista/Modal";
-import { validarData } from "@/utils/validarData";
+import { ModalEndereco } from './Endereco/Modal'
+import { ModalSituacaoCadastral } from './SituacaoCadastral/Modal'
+import { ModalTribunalJustica } from './TribunalJustica/Modal'
+import { ModalEmpresaRelacionada } from './EmpresaRelacionada/Modal'
+import { ModalPessoaRelacionada } from './PessoaRelacionada/Modal'
+import { ModalKYCCompliance } from './KYCCompliance/Modal'
+import { ModalConfirmarConsulta } from './KYCCompliance/ModalConfirmarConsulta'
+import { ModalReceitaFederalQSA } from './ReceitaFederalQSA/Modal'
+import { ModalReceitaFederalCND } from './ReceitaFederalCND/Modal'
+import { ModalCNDTrabalhista } from './CNDTrabalhista/Modal'
+import { validarData } from '@/utils/validarData'
 
 interface TipoConsultaProps {
-    ficha: any;
-    consulta: any;
-    cpf?: string;
-    cnpj?: string;
-    uf?: string;
-    dataNascimento?: string;
+    ficha: any
+    consulta: any
+    cpf?: string
+    cnpj?: string
+    uf?: string
+    dataNascimento?: string
 }
 
 interface Retorno {
-    processosCPF?: { totalProcessos: number };
-    enderecoCPF?: { endereco: string[] };
-    empresasRelacionadasCPF?: { negociosRelacionados: { length: number } };
-    pessoasRelacionadasCNPJ?: { entidadesRelacionadas: { length: number } };
-    pepKyc?: { historyPEP: { length: number } };
-    receitaFederalQsa?: { qsa: { length: number } };
+    processosCPF?: { totalProcessos: number }
+    enderecoCPF?: { endereco: string[] }
+    empresasRelacionadasCPF?: { negociosRelacionados: { length: number } }
+    pessoasRelacionadasCNPJ?: { entidadesRelacionadas: { length: number } }
+    pepKyc?: { historyPEP: { length: number } }
+    receitaFederalQsa?: { qsa: { length: number } }
 }
 
 export const Consulta = ({
@@ -43,67 +43,69 @@ export const Consulta = ({
     cnpj,
     dataNascimento,
 }: TipoConsultaProps) => {
-    const toast = useToast();
+    const toast = useToast()
 
-    const modalTribunalJustica = useRef();
-    const modalEndereco = useRef();
-    const modalSituacaoCadastral = useRef();
-    const modalEmpresaRelacionada = useRef();
-    const modalPessoaRelacionada = useRef();
-    const modalKYCCompliance = useRef();
-    const modalConfirmarConsulta = useRef();
-    const modalReceitaFederalQSA = useRef();
-    const modalReceitaFederalCND = useRef();
-    const modalCNDTrabalhista = useRef();
+    const modalTribunalJustica = useRef()
+    const modalEndereco = useRef()
+    const modalSituacaoCadastral = useRef()
+    const modalEmpresaRelacionada = useRef()
+    const modalPessoaRelacionada = useRef()
+    const modalKYCCompliance = useRef()
+    const modalConfirmarConsulta = useRef()
+    const modalReceitaFederalQSA = useRef()
+    const modalReceitaFederalCND = useRef()
+    const modalCNDTrabalhista = useRef()
 
-    const [id, setId] = useState<string>("");
-    const [retorno, setRetorno] = useState<any | null>(null);
-    const [retornoCount, setRetornoCount] = useState(0);
+    const [id, setId] = useState<string>('')
+    const [retorno, setRetorno] = useState<any | null>(null)
+    const [retornoCount, setRetornoCount] = useState(0)
 
-    const [consultandoNetrin, setConsultandoNetrin] = useState(false);
+    const [consultandoNetrin, setConsultandoNetrin] = useState(false)
 
     const deveRenderizar = useMemo(() => {
-        let validaCpf = false;
-        let validaCnpj = false;
+        let validaCpf = false
+        let validaCnpj = false
 
-        if (consulta.tipoConsulta.includes("CPF")) validaCpf = !!cpf;
-        if (consulta.tipoConsulta.includes("CNPJ")) validaCnpj = !!cnpj;
+        if (consulta.tipoConsulta.includes('CPF')) validaCpf = !!cpf
+        if (consulta.tipoConsulta.includes('CNPJ')) validaCnpj = !!cnpj
 
-        return validaCpf || validaCnpj;
-    }, [consulta, cpf, cnpj]);
+        return validaCpf || validaCnpj
+    }, [consulta, cpf, cnpj])
 
     const consultarNetrin = async (data: any) => {
         try {
-            setConsultandoNetrin(true);
+            setConsultandoNetrin(true)
 
-            await api.post("v1/integracao/netrin", {
+            await api.post('v1/integracao/netrin', {
                 ...data,
                 processoId: ficha.processoId,
                 fichaCadastralId: ficha.id,
-            });
+            })
 
-            queryClient.invalidateQueries(["consultasNetrin"]);
+            queryClient.invalidateQueries(['consultasNetrin'])
 
             toast({
-                title: "Consulta realizada com sucesso, entre na aba consultas para visualizar o documento",
-                status: "success",
-            });
+                title: 'Consulta realizada com sucesso, entre na aba consultas para visualizar o documento',
+                status: 'success',
+            })
 
-            setConsultandoNetrin(false);
+            setConsultandoNetrin(false)
         } catch (error: any) {
-            setConsultandoNetrin(false);
+            setConsultandoNetrin(false)
+
+            console.log(error?.response?.data)
 
             toast({
-                title: "Houve um problema",
+                title: 'Houve um problema',
                 description: error?.response?.data?.message,
-                status: "warning",
-            });
+                status: 'warning',
+            })
         }
-    };
+    }
 
     useQuery(
         [
-            "consultasNetrin",
+            'consultasNetrin',
             consulta.codigo,
             {
                 fichaCadastralId: ficha.id,
@@ -111,34 +113,34 @@ export const Consulta = ({
         ],
         async ({ queryKey }: any) => {
             try {
-                const { data } = await api.get("v1/integracao/netrin", {
+                const { data } = await api.get('v1/integracao/netrin', {
                     params: { ...queryKey[1] },
-                });
+                })
 
                 const resultado = data.find(
                     (item) =>
                         item.tipoConsulta === consulta.codigo &&
                         item.requisicao.cpf === cpf &&
-                        item.requisicao.cnpj === cnpj
-                );
+                        item.requisicao.cnpj === cnpj,
+                )
 
                 if (!resultado) {
-                    throw new Error("Nenhum dado correspondente encontrado");
+                    throw new Error('Nenhum dado correspondente encontrado')
                 }
 
-                const { id, retorno } = resultado;
+                const { id, retorno } = resultado
 
-                setId(id);
-                setRetorno(retorno);
-                setRetornoCount(calcularContagem(retorno, consulta.codigo));
+                setId(id)
+                setRetorno(retorno)
+                setRetornoCount(calcularContagem(retorno, consulta.codigo))
 
-                return data;
+                return data
             } catch (error) {
-                console.error("Erro na requisição:", error);
-                throw new Error("Falha ao buscar dados da API");
+                console.error('Erro na requisição:', error)
+                throw new Error('Falha ao buscar dados da API')
             }
-        }
-    );
+        },
+    )
 
     function abrirResultados() {
         const modais: Record<string, () => void> = {
@@ -164,31 +166,33 @@ export const Consulta = ({
                 modalCNDTrabalhista?.current?.onOpen({ data: retorno }),
             cnd_trabalhista_cnpj: () =>
                 modalCNDTrabalhista?.current?.onOpen({ data: retorno }),
-        };
+        }
 
-        const action = modais[consulta?.codigo];
+        const action = modais[consulta?.codigo]
 
-        if (action) return action();
+        if (action) return action()
     }
 
     function getPdfUrl(id: string) {
+        console.log(process.env.NODE_ENV)
+
         const baseUrl =
-            process.env.NODE_ENV === "production"
-                ? "https://www.imo7.com.br"
-                : "http://localhost:3000";
-        return `${baseUrl}/api/v1/integracao/netrin/${id}/pdf`;
+            process.env.NODE_ENV === 'production'
+                ? 'https://www.imo7.com.br'
+                : 'http://localhost:3000'
+        return `${baseUrl}/api/v1/integracao/netrin/${id}/pdf`
     }
 
     function abrirConfirmarConsulta() {
-        if (consulta?.codigo === "pep_kyc_cpf")
-            return modalConfirmarConsulta?.current?.onOpen();
+        if (consulta?.codigo === 'pep_kyc_cpf')
+            return modalConfirmarConsulta?.current?.onOpen()
     }
 
-    if (!deveRenderizar) return null;
+    if (!deveRenderizar) return null
 
     function calcularContagem(
         retorno: Retorno,
-        codigoConsulta: string
+        codigoConsulta: string,
     ): number {
         const mapeamento: Record<string, () => number> = {
             processos_pf: () => retorno.processosCPF?.totalProcessos ?? 0,
@@ -207,9 +211,9 @@ export const Consulta = ({
             receita_federal_cpf: () => 1,
             cnd_trabalhista_cpf: () => 1,
             cnd_trabalhista_cnpj: () => 1,
-        };
+        }
 
-        return (mapeamento[codigoConsulta] || (() => 0))();
+        return (mapeamento[codigoConsulta] || (() => 0))()
     }
 
     return (
@@ -257,15 +261,18 @@ export const Consulta = ({
                     py="1rem"
                     leftIcon={<Icon as={FiSearch} />}
                     onClick={() => {
-                        if (consulta?.codigo === "receita_federal_cpf" && (!dataNascimento || validarData(dataNascimento))) {
+                        if (
+                            consulta?.codigo === 'receita_federal_cpf' &&
+                            (!dataNascimento || validarData(dataNascimento))
+                        ) {
                             return toast({
                                 title: 'Data de nascimento inválida',
-                                status: 'error'
+                                status: 'error',
                             })
                         }
 
-                        if (consulta?.codigo === "pep_kyc_cpf")
-                            abrirConfirmarConsulta();
+                        if (consulta?.codigo === 'pep_kyc_cpf')
+                            abrirConfirmarConsulta()
                         else
                             consultarNetrin({
                                 tipoConsulta: consulta.codigo,
@@ -274,7 +281,7 @@ export const Consulta = ({
                                     cnpj,
                                     dataNascimento,
                                 },
-                            });
+                            })
                     }}
                     isLoading={consultandoNetrin}
                 >
@@ -297,8 +304,8 @@ export const Consulta = ({
                         background="#3283cf"
                         textColor="white"
                         _hover={{
-                            bg: "#3283cf",
-                            opacity: ".8",
+                            bg: '#3283cf',
+                            opacity: '.8',
                         }}
                     >
                         {retornoCount} Resultados
@@ -329,5 +336,5 @@ export const Consulta = ({
             <ModalReceitaFederalCND ref={modalReceitaFederalCND} />
             <ModalCNDTrabalhista ref={modalCNDTrabalhista} />
         </Flex>
-    );
-};
+    )
+}

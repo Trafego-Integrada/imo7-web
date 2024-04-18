@@ -1,41 +1,41 @@
-import { removerCaracteresEspeciais } from "@/helpers/helpers";
-import prisma from "@/lib/prisma";
-import { format, parse } from "date-fns";
-import { checkAuth } from "@/middleware/checkAuth";
-import { cors } from "@/middleware/cors";
-import { apiNetrinService } from "@/services/apiNetrin";
-import { Prisma } from "@prisma/client";
-import moment from "moment";
-import { NextApiRequest, NextApiResponse } from "next";
-import nextConnect from "next-connect";
-import puppeteer from "puppeteer";
-import slug from "slug";
-import { S3Client } from "@aws-sdk/client-s3";
-import { Upload } from "@aws-sdk/lib-storage";
-import axios from "axios";
+import { removerCaracteresEspeciais } from '@/helpers/helpers'
+import prisma from '@/lib/prisma'
+import { format, parse } from 'date-fns'
+import { checkAuth } from '@/middleware/checkAuth'
+import { cors } from '@/middleware/cors'
+import { apiNetrinService } from '@/services/apiNetrin'
+import { Prisma } from '@prisma/client'
+import moment from 'moment'
+import { NextApiRequest, NextApiResponse } from 'next'
+import nextConnect from 'next-connect'
+import puppeteer from 'puppeteer'
+import slug from 'slug'
+import { S3Client } from '@aws-sdk/client-s3'
+import { Upload } from '@aws-sdk/lib-storage'
+import axios from 'axios'
 
-const handle = nextConnect<NextApiRequest, NextApiResponse>();
+const handle = nextConnect<NextApiRequest, NextApiResponse>()
 
-handle.use(cors);
-handle.use(checkAuth);
+handle.use(cors)
+handle.use(checkAuth)
 
 handle.get(async (req, res) => {
-    const { processoId, fichaCadastralId } = req.query;
+    const { processoId, fichaCadastralId } = req.query
 
-    let filtro: Prisma.ConsultaNetrinWhereInput = {};
+    let filtro: Prisma.ConsultaNetrinWhereInput = {}
 
     if (processoId) {
         filtro = {
             ...filtro,
             processoId,
-        };
+        }
     }
 
     if (fichaCadastralId) {
         filtro = {
             ...filtro,
             fichaCadastralId,
-        };
+        }
     }
 
     const data = await prisma.consultaNetrin.findMany({
@@ -43,211 +43,211 @@ handle.get(async (req, res) => {
             imobiliariaId: req.user.imobiliariaId,
             ...filtro,
         },
-    });
+    })
 
-    res.send(data);
-});
+    res.send(data)
+})
 
 handle.post(async (req, res) => {
     try {
         const { tipoConsulta, requisicao, processoId, fichaCadastralId } =
-            req.body;
+            req.body
 
         let requisicaoBody = {
             ...requisicao,
-        };
+        }
 
         let requisicaoBody2 = {
             ...requisicao,
-        };
+        }
 
-        if (tipoConsulta == "processos_pf") {
+        if (tipoConsulta == 'processos_pf') {
             if (!requisicao.cpf) {
                 return res
                     .status(400)
-                    .send({ message: "Informe um CPF válido" });
+                    .send({ message: 'Informe um CPF válido' })
             } else {
                 requisicaoBody = {
-                    s: "processos-cpf",
+                    s: 'processos-cpf',
                     cpf: removerCaracteresEspeciais(requisicao?.cpf),
-                };
+                }
             }
-        } else if (tipoConsulta == "processos_pj") {
+        } else if (tipoConsulta == 'processos_pj') {
             if (!requisicao.cnpj) {
                 return res
                     .status(400)
-                    .send({ message: "Informe um CNPJ válido" });
+                    .send({ message: 'Informe um CNPJ válido' })
             } else {
                 requisicaoBody = {
-                    s: "processos-cnpj",
+                    s: 'processos-cnpj',
                     cnpj: removerCaracteresEspeciais(requisicao.cnpj),
-                };
+                }
             }
-        } else if (tipoConsulta == "protestos_pf") {
+        } else if (tipoConsulta == 'protestos_pf') {
             if (!requisicao.cpf) {
                 return res
                     .status(400)
-                    .send({ message: "Informe um CPF válido" });
+                    .send({ message: 'Informe um CPF válido' })
             } else {
                 requisicaoBody = {
-                    s: "protestos-cenprot-sp",
+                    s: 'protestos-cenprot-sp',
                     cpf: removerCaracteresEspeciais(requisicao.cpf),
-                    "govbr-senha": "trafego10",
-                    "govbr-cpf": "30156844850",
-                };
+                    'govbr-senha': 'trafego10',
+                    'govbr-cpf': '30156844850',
+                }
                 requisicaoBody2 = {
-                    s: "protestos-cenprot-sp",
+                    s: 'protestos-cenprot-sp',
                     cpf: removerCaracteresEspeciais(requisicao.cpf),
-                    "govbr-senha": "trafego10",
-                    "govbr-cpf": "30156844850",
-                };
+                    'govbr-senha': 'trafego10',
+                    'govbr-cpf': '30156844850',
+                }
             }
-        } else if (tipoConsulta == "protestos_pj") {
+        } else if (tipoConsulta == 'protestos_pj') {
             if (!requisicao.cnpj) {
                 return res
                     .status(400)
-                    .send({ message: "Informe um CNPJ válido" });
+                    .send({ message: 'Informe um CNPJ válido' })
             } else {
                 requisicaoBody = {
-                    s: "protestos-cenprot",
+                    s: 'protestos-cenprot',
                     cnpj: removerCaracteresEspeciais(requisicao.cnpj),
-                    "govbr-senha": "trafego10",
-                    "govbr-cpf": "30156844850",
-                };
+                    'govbr-senha': 'trafego10',
+                    'govbr-cpf': '30156844850',
+                }
                 requisicaoBody2 = {
-                    s: "protestos-cenprot-sp",
+                    s: 'protestos-cenprot-sp',
                     cnpj: removerCaracteresEspeciais(requisicao.cnpj),
-                    "govbr-senha": "trafego10",
-                    "govbr-cpf": "30156844850",
-                };
+                    'govbr-senha': 'trafego10',
+                    'govbr-cpf': '30156844850',
+                }
             }
-        } else if (tipoConsulta == "receita_federal_cnd_cpf") {
+        } else if (tipoConsulta == 'receita_federal_cnd_cpf') {
             requisicaoBody = {
-                s: "receita-federal-cnd",
+                s: 'receita-federal-cnd',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-            };
-        } else if (tipoConsulta == "receita_federal_cnd_cnpj") {
+            }
+        } else if (tipoConsulta == 'receita_federal_cnd_cnpj') {
             requisicaoBody = {
-                s: "receita-federal-cnd",
+                s: 'receita-federal-cnd',
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
-            };
-        } else if (tipoConsulta == "sefaz_cnd") {
+            }
+        } else if (tipoConsulta == 'sefaz_cnd') {
             requisicaoBody = {
-                s: "sefaz-cnd",
+                s: 'sefaz-cnd',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
                 uf: requisicao.uf,
-            };
-        } else if (tipoConsulta == "cnd_trabalhista") {
+            }
+        } else if (tipoConsulta == 'cnd_trabalhista') {
             requisicaoBody = {
-                s: "cnd-trabalhista",
+                s: 'cnd-trabalhista',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-            };
-        } else if (tipoConsulta == "cnd_trabalhista_mte_cpf") {
+            }
+        } else if (tipoConsulta == 'cnd_trabalhista_mte_cpf') {
             requisicaoBody = {
-                s: "cnd-trabalhista-mte",
+                s: 'cnd-trabalhista-mte',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-                "govbr-senha": "trafego10",
-                "govbr-cpf": "30156844850",
-            };
-        } else if (tipoConsulta == "cnd_trabalhista_mte_cnpj") {
+                'govbr-senha': 'trafego10',
+                'govbr-cpf': '30156844850',
+            }
+        } else if (tipoConsulta == 'cnd_trabalhista_mte_cnpj') {
             requisicaoBody = {
-                s: "cnd-trabalhista-mte",
+                s: 'cnd-trabalhista-mte',
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
-                "govbr-senha": "trafego10",
-                "govbr-cpf": "30156844850",
-            };
-        } else if (tipoConsulta == "receita_federal_cnpj") {
+                'govbr-senha': 'trafego10',
+                'govbr-cpf': '30156844850',
+            }
+        } else if (tipoConsulta == 'receita_federal_cnpj') {
             requisicaoBody = {
-                s: "receita-federal-cnpj",
+                s: 'receita-federal-cnpj',
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
-            };
-        } else if (tipoConsulta == "receita_federal_cnpj_qsa") {
+            }
+        } else if (tipoConsulta == 'receita_federal_cnpj_qsa') {
             requisicaoBody = {
-                s: "receita-federal-cnpj-qsa",
+                s: 'receita-federal-cnpj-qsa',
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
-            };
-        } else if (tipoConsulta == "receita_federal_cpf_data_nascimento") {
+            }
+        } else if (tipoConsulta == 'receita_federal_cpf_data_nascimento') {
             requisicaoBody = {
-                s: "receita-federal-cpf-data-nascimento",
+                s: 'receita-federal-cpf-data-nascimento',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-            };
-        } else if (tipoConsulta == "endereco_cpf") {
+            }
+        } else if (tipoConsulta == 'endereco_cpf') {
             requisicaoBody = {
-                s: "endereco-cpf",
+                s: 'endereco-cpf',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-            };
-        } else if (tipoConsulta == "receita_federal_cpf") {
+            }
+        } else if (tipoConsulta == 'receita_federal_cpf') {
             const formatedDate = format(
-                parse(requisicao.dataNascimento, "yyyyMMdd", new Date()),
-                "ddMMyyy"
-            );
+                parse(requisicao.dataNascimento, 'yyyyMMdd', new Date()),
+                'ddMMyyy',
+            )
 
             requisicaoBody = {
-                s: "receita-federal-cpf",
+                s: 'receita-federal-cpf',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-                "data-nascimento": formatedDate,
-            };
-        } else if (tipoConsulta == "empresas_relacionadas_cpf") {
+                'data-nascimento': formatedDate,
+            }
+        } else if (tipoConsulta == 'empresas_relacionadas_cpf') {
             requisicaoBody = {
-                s: "empresas-relacionadas-cpf",
+                s: 'empresas-relacionadas-cpf',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-            };
-        } else if (tipoConsulta === "pessoas_relacionadas_cnpj") {
+            }
+        } else if (tipoConsulta === 'pessoas_relacionadas_cnpj') {
             requisicaoBody = {
-                s: "pessoas-relacionadas-cnpj",
+                s: 'pessoas-relacionadas-cnpj',
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
-            };
-        } else if (tipoConsulta === "pep_kyc_cpf") {
+            }
+        } else if (tipoConsulta === 'pep_kyc_cpf') {
             requisicaoBody = {
-                s: "pep-kyc-cpf",
+                s: 'pep-kyc-cpf',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-            };
-        } else if (tipoConsulta === "receita_federal_cnpj_qsa") {
+            }
+        } else if (tipoConsulta === 'receita_federal_cnpj_qsa') {
             requisicaoBody = {
-                s: "receita-federal-cnpj-qsa",
+                s: 'receita-federal-cnpj-qsa',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-            };
-        } else if (tipoConsulta === "cnd_trabalhista_cnpj") {
+            }
+        } else if (tipoConsulta === 'cnd_trabalhista_cnpj') {
             requisicaoBody = {
-                s: "cnd-trabalhista",
+                s: 'cnd-trabalhista',
                 cnpj: removerCaracteresEspeciais(requisicao.cnpj),
-            };
-        } else if (tipoConsulta === "cnd_trabalhista_cpf") {
+            }
+        } else if (tipoConsulta === 'cnd_trabalhista_cpf') {
             requisicaoBody = {
-                s: "cnd-trabalhista",
+                s: 'cnd-trabalhista',
                 cpf: removerCaracteresEspeciais(requisicao.cpf),
-            };
+            }
         }
 
         // Consulta Netrin
         const retornoNetrin = await apiNetrinService().consultaComposta(
-            requisicaoBody
-        );
+            requisicaoBody,
+        )
 
-        if (tipoConsulta == "protestos_pf") {
+        if (tipoConsulta == 'protestos_pf') {
             // Consulta Netrin
             const retornoNetrin2 = await apiNetrinService().consultaComposta(
-                requisicaoBody
-            );
+                requisicaoBody,
+            )
             //console.log(retornoNetrin2);
         }
 
         if (!retornoNetrin) {
             res.status(400).json({
                 success: false,
-                errorCode: "R01",
-                message: "Recibo não encontrado",
-            });
+                errorCode: 'R01',
+                message: 'Recibo não encontrado',
+            })
         }
 
         if (
-            tipoConsulta === "receita_federal_cpf" &&
+            tipoConsulta === 'receita_federal_cpf' &&
             retornoNetrin?.receitaFederal?.code === 606
         ) {
             return res.status(401).json({
                 success: false,
-                message: "A data de nascimento está divergente com o CPF!",
-            });
+                message: 'A data de nascimento está divergente com o CPF!',
+            })
         }
 
         const data = await prisma.consultaNetrin.create({
@@ -278,24 +278,24 @@ handle.post(async (req, res) => {
             include: {
                 imobiliaria: true,
             },
-        });
+        })
 
-        const browser = await puppeteer.launch({ headless: true });
-        const page = await browser.newPage();
+        const browser = await puppeteer.launch({ headless: true })
+        const page = await browser.newPage()
 
-        if (tipoConsulta == "sefaz_cnd") {
-            const extension = ".pdf";
+        if (tipoConsulta == 'sefaz_cnd') {
+            const extension = '.pdf'
             const nameLocation = `anexo/${slug(
                 `${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
-                }`
-            )}.${extension}`;
+                }`,
+            )}.${extension}`
             const response = await axios.get(
                 retornoNetrin.sefazCND.urlComprovante,
                 {
-                    responseType: "blob",
-                }
-            );
+                    responseType: 'blob',
+                },
+            )
             UploadAnexo({
                 fichaCadastralId,
                 nameLocation,
@@ -304,20 +304,20 @@ handle.post(async (req, res) => {
                 tipoConsulta,
                 user: req.user,
                 blob: response.data,
-            });
-        } else if (tipoConsulta == "receita_federal_cnd") {
-            const extension = ".pdf";
+            })
+        } else if (tipoConsulta == 'receita_federal_cnd') {
+            const extension = '.pdf'
             const nameLocation = `anexo/${slug(
                 `${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
-                }`
-            )}.${extension}`;
+                }`,
+            )}.${extension}`
             const response = await axios.get(
                 retornoNetrin.receitaFederalCND.urlComprovante,
                 {
-                    responseType: "blob",
-                }
-            );
+                    responseType: 'blob',
+                },
+            )
             UploadAnexo({
                 fichaCadastralId,
                 nameLocation,
@@ -326,20 +326,20 @@ handle.post(async (req, res) => {
                 tipoConsulta,
                 user: req.user,
                 blob: response.data,
-            });
-        } else if (tipoConsulta == "cnd_trabalhista") {
-            const extension = ".pdf";
+            })
+        } else if (tipoConsulta == 'cnd_trabalhista') {
+            const extension = '.pdf'
             const nameLocation = `anexo/${slug(
                 `${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
-                }`
-            )}.${extension}`;
+                }`,
+            )}.${extension}`
             const response = await axios.get(
                 retornoNetrin.tribunalSuperiorTrabalhoCNDT.urlComprovante,
                 {
-                    responseType: "blob",
-                }
-            );
+                    responseType: 'blob',
+                },
+            )
             UploadAnexo({
                 fichaCadastralId,
                 nameLocation,
@@ -348,20 +348,20 @@ handle.post(async (req, res) => {
                 tipoConsulta,
                 user: req.user,
                 blob: response.data,
-            });
-        } else if (tipoConsulta == "receita_federal_cnpj") {
-            const extension = ".pdf";
+            })
+        } else if (tipoConsulta == 'receita_federal_cnpj') {
+            const extension = '.pdf'
             const nameLocation = `anexo/${slug(
                 `${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
-                }`
-            )}.${extension}`;
+                }`,
+            )}.${extension}`
             const response = await axios.get(
                 retornoNetrin.receitaFederal.urlComprovante,
                 {
-                    responseType: "blob",
-                }
-            );
+                    responseType: 'blob',
+                },
+            )
             UploadAnexo({
                 fichaCadastralId,
                 nameLocation,
@@ -370,20 +370,20 @@ handle.post(async (req, res) => {
                 tipoConsulta,
                 user: req.user,
                 blob: response.data,
-            });
-        } else if (tipoConsulta == "receita_federal_cnpj_qsa") {
-            const extension = ".pdf";
+            })
+        } else if (tipoConsulta == 'receita_federal_cnpj_qsa') {
+            const extension = '.pdf'
             const nameLocation = `anexo/${slug(
                 `${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
-                }`
-            )}.${extension}`;
+                }`,
+            )}.${extension}`
             const response = await axios.get(
                 retornoNetrin.receitaFederalQsa.urlComprovante,
                 {
-                    responseType: "blob",
-                }
-            );
+                    responseType: 'blob',
+                },
+            )
             UploadAnexo({
                 fichaCadastralId,
                 nameLocation,
@@ -392,43 +392,43 @@ handle.post(async (req, res) => {
                 tipoConsulta,
                 user: req.user,
                 blob: response.data,
-            });
+            })
         } else {
             await page.goto(
-                process.env.NODE_ENV == "production"
-                    ? "https://" +
+                process.env.NODE_ENV == 'production'
+                    ? 'https://' +
                           data?.imobiliaria.url +
-                          ".imo7.com.br/consultas/" +
+                          '.imo7.com.br/consultas/' +
                           data.id +
-                          "/pdf"
-                    : "http://" +
+                          '/pdf'
+                    : 'http://' +
                           data?.imobiliaria.url +
-                          ".localhost:3000/consultas/" +
+                          '.localhost:3000/consultas/' +
                           data.id +
-                          "/pdf",
+                          '/pdf',
                 {
-                    waitUntil: "networkidle0",
-                }
-            );
-            await page.emulateMediaType("screen");
-            const pdf = await page.pdf({
-                format: "A4",
-                margin: {
-                    top: "20px",
-                    right: "20px",
-                    bottom: "20px",
-                    left: "20px",
+                    waitUntil: 'networkidle0',
                 },
-            });
+            )
+            await page.emulateMediaType('screen')
+            const pdf = await page.pdf({
+                format: 'A4',
+                margin: {
+                    top: '20px',
+                    right: '20px',
+                    bottom: '20px',
+                    left: '20px',
+                },
+            })
 
-            await browser.close();
+            await browser.close()
 
-            const extension = ".pdf";
+            const extension = '.pdf'
             const nameLocation = `anexo/${slug(
                 `${moment()}${
                     Math.random() * (999999999 - 100000000) + 100000000
-                }`
-            )}.${extension}`;
+                }`,
+            )}.${extension}`
             // Create read stream to file
             // const stats = statSync(anexos.path);
             // const nodeFsBlob = new os.NodeFSBlob(anexos.path, stats.size);
@@ -445,17 +445,17 @@ handle.post(async (req, res) => {
                 tipoConsulta,
                 user: req.user,
                 blob: pdf,
-            });
+            })
         }
 
-        res.send(data);
+        res.send(data)
     } catch (error) {
         //console.log(error.response);
-        return res.status(500).send({ message: error.message, error });
+        return res.status(500).send({ message: error.message, error })
     }
-});
+})
 
-export default handle;
+export default handle
 
 const UploadAnexo = ({
     user,
@@ -478,7 +478,7 @@ const UploadAnexo = ({
             forcePathStyle: true,
         }),
         params: {
-            ACL: "public-read",
+            ACL: 'public-read',
             Bucket: process.env.STORAGE_BUCKET,
             Key: nameLocation,
             Body: blob,
@@ -495,13 +495,13 @@ const UploadAnexo = ({
             const anexo = await prisma.anexo.create({
                 data: {
                     nome: `${
-                        tipoConsulta == "processos_pf"
+                        tipoConsulta == 'processos_pf'
                             ? `Consulta Processos Pessoa Física - CPF: ${requisicao?.cpf}`
-                            : tipoConsulta == "processos_pj"
+                            : tipoConsulta == 'processos_pj'
                             ? `Consulta Processos Pessoa Jurídica - CNPJ: ${requisicao?.cnpj}`
-                            : tipoConsulta == "protestos_pf"
+                            : tipoConsulta == 'protestos_pf'
                             ? `Consulta Protestos Pessoa Física - CPF: ${requisicao?.cpf}`
-                            : tipoConsulta == "protestos_pj"
+                            : tipoConsulta == 'protestos_pj'
                             ? `Consulta Protestos Pessoa Jurídica - CNPJ: ${requisicao?.cnpj}`
                             : `Consultas: ${tipoConsulta}`
                     }`,
@@ -526,11 +526,11 @@ const UploadAnexo = ({
                         },
                     },
                 },
-            });
+            })
         })
         .catch((err) => {
             throw new Error(
-                `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`
-            );
-        });
-};
+                `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
+            )
+        })
+}
