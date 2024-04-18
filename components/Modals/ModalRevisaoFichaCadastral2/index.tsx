@@ -20,18 +20,12 @@ import {
     TabPanels,
     Tabs,
     Tag,
-    GridItem,
     ModalFooter,
     Button,
     useToast,
-    Menu,
-    MenuButton,
     IconButton,
-    MenuList,
-    MenuItem,
     Link,
     Tooltip,
-    Textarea,
 } from "@chakra-ui/react";
 import {
     atualizarFicha,
@@ -61,6 +55,7 @@ const schema = yup.object({
         then: yup.string().required("Motivo da Reprovação é obrigatório"), // torna o campo motivoReprovacaoId obrigatório
         otherwise: yup.string().nullable(), // em outros casos, o campo motivoReprovacaoId não é obrigatório
     }),
+    observacoes: yup.string()
 });
 
 const ModalBase = ({ }, ref: any) => {
@@ -304,10 +299,18 @@ const ModalBase = ({ }, ref: any) => {
                                                             {` ${ficha?.imovel?.codigo} -  ${ficha?.imovel?.endereco}, ${ficha?.imovel?.bairro}`}
                                                         </Text>
 
-                                                        <Flex direction='column'>
-                                                            <Text>Observações</Text>
-                                                            <Textarea disabled={true} value={ficha?.observacoes} />
-                                                        </Flex>
+                                                        <FormTextarea
+                                                            label="Observações"
+                                                            placeholder="Digite o aqui as observações..."
+                                                            error={
+                                                                errors
+                                                                    .motivoReprovacao
+                                                                    ?.message
+                                                            }
+                                                            {...register(
+                                                                "observacoes"
+                                                            )}
+                                                        />
                                                     </Box>
                                                 </Flex>
                                             </Flex>
