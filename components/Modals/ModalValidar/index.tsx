@@ -46,7 +46,7 @@ import { Controller, useForm } from "react-hook-form";
 import { FiDownload, FiEye } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
-import { ModalPreview } from "../Preview";
+import { ModalTribunalJustica } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
 import { AnaliseCampo } from "./AnaliseCampo";
 
 import React, { useState } from "react";
@@ -114,11 +114,11 @@ const ModalBase = ({}, ref) => {
 
     const onSubmitStep1 = async (data) => {
         alert("OnSubmitStep1");
-        console.log("OnSubmitStep1");
-        console.log("isLoading = " + isLoading);
-        console.log("isSubmitting = " + isSubmitting);
-        console.log("isSubmitted = " + isSubmitted);
-        console.log("isSubmitSuccessful = " + isSubmitSuccessful);
+        //console.log("OnSubmitStep1");
+        //console.log("isLoading = " + isLoading);
+        //console.log("isSubmitting = " + isSubmitting);
+        //console.log("isSubmitted = " + isSubmitted);
+        //console.log("isSubmitSuccessful = " + isSubmitSuccessful);
         toast({ title: "Start", status: "success" });
         await timeout(2000);
         toast({ title: "End", status: "success" });
@@ -136,7 +136,7 @@ const ModalBase = ({}, ref) => {
         //         queryClient.invalidateQueries(["fichas"]);
         //     }
         // } catch (error) {
-        //     console.log(error);
+        //     //console.log(error);
         // }
 
         // setStep(2);
@@ -478,7 +478,7 @@ const ModalBase = ({}, ref) => {
                 </ModalFooter> 
                 */}
             </ModalContent>
-            <ModalPreview ref={preview} />
+            <ModalTribunalJustica ref={preview} />
         </Modal>
     );
 };

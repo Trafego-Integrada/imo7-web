@@ -66,7 +66,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
         onSuccess: (data) => setBoletos(data),
     });
     const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
-        console.log(data);
+        //console.log(data);
         try {
             await buscar.mutateAsync(data);
         } catch (error) {}

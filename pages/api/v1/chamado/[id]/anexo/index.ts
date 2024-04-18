@@ -48,25 +48,25 @@ async function upload(req: NextApiRequestWithUser, res: NextApiResponse) {
         const object = "teste/index.ts";
         const fileLocation = "./next.config.js";
 
-        console.log("Carregando namespace...");
+        //console.log("Carregando namespace...");
         const request: os.requests.GetNamespaceRequest = {};
         const response = await client.getNamespace(request);
         const namespace = response.value;
 
-        console.log("Bucket criado. Lendo bucket.");
+        //console.log("Bucket criado. Lendo bucket.");
         const getBucketRequest: os.requests.GetBucketRequest = {
             namespaceName: namespace,
             bucketName: bucket,
         };
         const getBucketResponse = await client.getBucket(getBucketRequest);
-        console.log("Bucket capturado." + getBucketResponse.bucket);
+        //console.log("Bucket capturado." + getBucketResponse.bucket);
 
         // Create read stream to file
         const stats = statSync(fileLocation);
         const nodeFsBlob = new os.NodeFSBlob(fileLocation, stats.size);
         const objectData = await nodeFsBlob.getData();
 
-        console.log("Bucket existe. Adicionando imagem ao bucket.");
+        //console.log("Bucket existe. Adicionando imagem ao bucket.");
         const putObjectRequest: os.requests.PutObjectRequest = {
             namespaceName: namespace,
             bucketName: bucket,
@@ -75,9 +75,9 @@ async function upload(req: NextApiRequestWithUser, res: NextApiResponse) {
             contentLength: stats.size,
         };
         const putObjectResponse = await client.putObject(putObjectRequest);
-        console.log("Upload realizado com sucesso" + putObjectResponse);
+        //console.log("Upload realizado com sucesso" + putObjectResponse);
 
-        console.log("Buscando arquivo");
+        //console.log("Buscando arquivo");
         const getObjectRequest: os.requests.GetObjectRequest = {
             objectName: object,
             bucketName: bucket,
@@ -85,15 +85,15 @@ async function upload(req: NextApiRequestWithUser, res: NextApiResponse) {
         };
         const getObjectResponse = await client.getObject(getObjectRequest);
 
-        console.log("Encontrado");
+        //console.log("Encontrado");
 
         const isSameStream = compareStreams(
             objectData,
             getObjectResponse.value as st.Readable
         );
-        console.log(`Upload e download realizado com sucesso? ${isSameStream}`);
+        //console.log(`Upload e download realizado com sucesso? ${isSameStream}`);
 
-        console.log("Deletar imagem");
+        //console.log("Deletar imagem");
         const deleteObjectRequest: os.requests.DeleteObjectRequest = {
             namespaceName: namespace,
             bucketName: bucket,
@@ -102,9 +102,9 @@ async function upload(req: NextApiRequestWithUser, res: NextApiResponse) {
         const deleteObjectResponse = await client.deleteObject(
             deleteObjectRequest
         );
-        console.log("Arquivo deletado com sucesso" + deleteObjectResponse);
+        //console.log("Arquivo deletado com sucesso" + deleteObjectResponse);
 
-        console.log("Tentar deletar bucket");
+        //console.log("Tentar deletar bucket");
         const deleteBucketRequest: os.requests.DeleteBucketRequest = {
             namespaceName: namespace,
             bucketName: bucket,
@@ -112,11 +112,11 @@ async function upload(req: NextApiRequestWithUser, res: NextApiResponse) {
         const deleteBucketResponse = await client.deleteBucket(
             deleteBucketRequest
         );
-        console.log("Bucket deletado com sucesso" + deleteBucketResponse);
+        //console.log("Bucket deletado com sucesso" + deleteBucketResponse);
 
         // [imobiliariaId]/[contratoId]/[chamadoId]/anexos/[ano]/[mes]/[dia]/md5()
     } catch (error) {
-        console.log("Error executing example " + error);
+        //console.log("Error executing example " + error);
     }
 }
 

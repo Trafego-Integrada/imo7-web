@@ -16,15 +16,8 @@ import {
     Flex,
     Icon,
     IconButton,
-    Table,
-    TableContainer,
     Tag,
-    Tbody,
-    Td,
     Text,
-    Th,
-    Thead,
-    Tr,
     useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -56,11 +49,13 @@ export const FichasCadastrais = () => {
         },
         initialState: { currentPage: 1, pageSize: 15 },
     });
+
     const { data, isLoading } = useQuery(["fichas", filtro], listarFichas, {
         onSuccess: (data) => {
             setTotal(data.data.total);
         },
     });
+
     const excluir = useMutation(excluirFicha);
 
     const onDelete = async (id) => {
@@ -75,6 +70,7 @@ export const FichasCadastrais = () => {
             },
         });
     };
+
     const deleteMany = useMutation(excluirVariasFichas, {
         onSuccess: () => {
             queryClient.invalidateQueries("modelosFicha");
@@ -91,6 +87,7 @@ export const FichasCadastrais = () => {
         deleteMany.mutate(JSON.stringify(selecionados));
         setSelecionados([]);
     };
+
     return (
         <Box>
             <TabelaPadrao

@@ -1,3 +1,4 @@
+import { imo7ApiService } from "@/services/apiServiceUsage";
 import {
     Box,
     Button,
@@ -10,18 +11,50 @@ import {
     Heading,
     Icon,
     Input,
-    Select,
     Text,
+    useToast,
 } from "@chakra-ui/react";
-import { FormSelect } from "../Form/FormSelect";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import { BiAlarm } from "react-icons/bi";
+import { useMutation } from "react-query";
+import * as yup from "yup";
 
+const schema = yup.object({
+    nome: yup.string().required("Campo obrigatório"),
+    email: yup.string().required("Campo obrigatório"),
+    telefone: yup.string().required("Campo obrigatório"),
+    mensagem: yup.string().required("Campo obrigatório"),
+});
 export const Footer = () => {
+    const toast = useToast();
+    const form = useForm({
+        resolver: yupResolver(schema),
+    });
+    const contato = useMutation(imo7ApiService("email/contato").create, {
+        onSuccess: () => {
+            toast({
+                title: "Mensagem enviada com sucesso",
+                status: "success",
+            });
+            form.reset();
+        },
+    });
+    const formContatoOnSubmit = async (data: any) => {
+        await contato.mutateAsync(data);
+    };
     return (
         <Box bg="#F6FDFF" py={24}>
             <Container maxW="container.xl">
-                <Grid gap={6} gridTemplateColumns={{ lg: "repeat(3,1fr)" }}>
-                    <GridItem w="sm">
+                <Grid
+                    gap={6}
+                    templateColumns={{
+                        base: "repeat(1, 1fr)",
+                        md: "repeat(2, 1fr)",
+                        xl: "repeat(3,1fr)",
+                    }}
+                >
+                    <GridItem>
                         <Heading
                             mb={4}
                             fontWeight="700"
@@ -35,92 +68,67 @@ export const Footer = () => {
                             assim que possível!
                         </Text>
                     </GridItem>
-                    <GridItem w="full">
-                        <Grid
-                            gridTemplateColumns={{ lg: "repeat(2,1fr)" }}
-                            gap={4}
-                        >
-                            <GridItem colSpan={{ lg: 2 }}>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        Motivo do contato
-                                    </FormLabel>
-                                    <Select
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="Selecione o motivo de seu contato"
-                                    ></Select>
-                                </FormControl>
-                            </GridItem>
-                            <GridItem colSpan={{ lg: 2 }}>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        Nome
-                                    </FormLabel>
-                                    <Input
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="Digite seu nome completo"
-                                    />
-                                </FormControl>
-                            </GridItem>
-                            <GridItem>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        E-mail
-                                    </FormLabel>
-                                    <Input
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="email@email.com.br"
-                                    />
-                                </FormControl>
-                            </GridItem>
-                            <GridItem>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        Telefone de contato
-                                    </FormLabel>
-                                    <Input
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="(99) 99999-6666"
-                                    />
-                                </FormControl>
-                            </GridItem>
-                            <GridItem colSpan={{ lg: 2 }}>
-                                <FormControl>
-                                    <FormLabel
-                                        color="#021531"
-                                        fontWeight="bold"
-                                    >
-                                        Mensagem
-                                    </FormLabel>
-                                    <Input
-                                        bg="white"
-                                        borderColor="#4B4B4B"
-                                        placeholder="Olá, gostaria de mais informações sobree o Imo7"
-                                    />
-                                </FormControl>
-                            </GridItem>
-                            <GridItem colSpan={{ lg: 2 }} textAlign="center">
-                                <Button>Enviar mensagem</Button>
-                            </GridItem>
-                        </Grid>
+                    <GridItem
+                        w="full"
+                        as="form"
+                        onSubmit={form.handleSubmit(
+                            async (data) => await formContatoOnSubmit(data)
+                        )}
+                    >
+                        <Flex direction="column" gap={4}>
+                            <FormControl>
+                                <FormLabel color="#021531" fontWeight="bold">
+                                    Nome
+                                </FormLabel>
+                                <Input
+                                    bg="white"
+                                    borderColor="#4B4B4B"
+                                    placeholder="Digite seu nome completo"
+                                    {...form.register("nome")}
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel color="#021531" fontWeight="bold">
+                                    E-mail
+                                </FormLabel>
+                                <Input
+                                    bg="white"
+                                    borderColor="#4B4B4B"
+                                    placeholder="email@email.com.br"
+                                    {...form.register("email")}
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel color="#021531" fontWeight="bold">
+                                    Telefone de contato
+                                </FormLabel>
+                                <Input
+                                    bg="white"
+                                    borderColor="#4B4B4B"
+                                    placeholder="(99) 99999-6666"
+                                    {...form.register("telefone")}
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel color="#021531" fontWeight="bold">
+                                    Mensagem
+                                </FormLabel>
+                                <Input
+                                    bg="white"
+                                    borderColor="#4B4B4B"
+                                    placeholder="Olá, gostaria de mais informações sobree o Imo7"
+                                    {...form.register("mensagem")}
+                                />
+                            </FormControl>
+
+                            <Button type="submit">Enviar mensagem</Button>
+                        </Flex>
                     </GridItem>
-                    <GridItem w="sm">
+
+                    <GridItem>
                         <Flex mb={4} gap={2} align="center">
                             <Icon as={BiAlarm} fontSize="2xl" />
                             <Heading

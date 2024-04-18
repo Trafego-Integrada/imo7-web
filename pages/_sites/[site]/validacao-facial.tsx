@@ -135,9 +135,9 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
             cpf: router.query.cpf,
         });
 
-        // console.log("response");
-        // console.log(response);
-        // console.log(response.data.status);
+        // //console.log("response");
+        // //console.log(response);
+        // //console.log(response.data.status);
 
         let status = response.data.status;
 
@@ -158,8 +158,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
         //     // actual width & height of the camera video
         //     let stream_width = stream_settings.width;
         //     let stream_height = stream_settings.height;
-        //     console.log('Width: ' + stream_width + 'px');
-        //     console.log('Height: ' + stream_height + 'px');
+        //     //console.log('Width: ' + stream_width + 'px');
+        //     //console.log('Height: ' + stream_height + 'px');
     };
 
     const onSubmit = async (data) => {
@@ -174,10 +174,10 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
 
             // sucesso
             if (response.data.status == 1) {
-                console.log(1);
+                //console.log(1);
                 setError(response.data.message);
             } else {
-                console.log(2);
+                //console.log(2);
                 setError(response.data.message);
             }
         } catch (error) {
@@ -197,8 +197,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
         //             model: "short",
         //         },
         //         // handleOnResults: (res) => {
-        //         // console.log(res)
-        //         // console.log(res.detections.length)
+        //         // //console.log(res)
+        //         // //console.log(res.detections.length)
         //         // if detect 1 face
         //         // if(res.detections.length == 1) {
         //         // check position

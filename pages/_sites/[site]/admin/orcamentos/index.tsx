@@ -85,7 +85,7 @@ const Configuracoes = () => {
         ["orcamentos", { filtro: query }],
         listarOrcamentos
     );
-    console.log(data);
+    //console.log(data);
     return (
         <>
             <Layout title="Orçamentos">

@@ -33,7 +33,7 @@ handler.get(async (req, res) => {
         },
     });
 
-    console.log("Registros encontrados  = " + data.length);
+    //console.log("Registros encontrados  = " + data.length);
 
     if (data.length == 0) {
         res.send({ status: 0, msg: "Sem registros" });
@@ -41,7 +41,7 @@ handler.get(async (req, res) => {
     }
 
     data.forEach(async (resData) => {
-        console.log("Registro ID = " + resData.id);
+        //console.log("Registro ID = " + resData.id);
 
         const id = resData.id;
 
@@ -67,11 +67,11 @@ handler.get(async (req, res) => {
             });
         }
 
-        // console.log("try verify")
+        // //console.log("try verify")
 
         try {
             jwt.verify(token, getKey, options, async (err, decoded) => {
-                // console.log("jwt verified")
+                // //console.log("jwt verified")
 
                 // failed
                 if (err) {
@@ -86,7 +86,7 @@ handler.get(async (req, res) => {
                     //  return res.send({status: -1, msg: "Try Again"});
                 }
 
-                // console.log("try update")
+                // //console.log("try update")
 
                 // success
                 const dataUpdate = await prisma.validacaoFacial.update({
@@ -100,8 +100,8 @@ handler.get(async (req, res) => {
                 // return res.send({status: 1});
             });
         } catch (e) {
-            console.log("Catch");
-            console.log(e);
+            //console.log("Catch");
+            //console.log(e);
         }
     });
 

@@ -6,23 +6,17 @@ import {
     Heading,
     Icon,
     Image,
-    Link,
     Text,
 } from "@chakra-ui/react";
-import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
-import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
+import { FaWhatsappSquare } from "react-icons/fa";
+import { FiCheckCircle } from "react-icons/fi";
 
 export const FichasCadastrais = ({ modal }) => {
     return (
         <Box id="solucoes" bg="#F6FDFF">
             <Container maxW="container.xl" py={12}>
                 <Flex textAlign="center" mb={4} gap={4} flexDir="column">
-                    <Heading
-                        color="#032552"
-                        fontSize="24px"
-                        fontWeight="500"
-                        my={8}
-                    >
+                    <Heading color="#032552" fontWeight="700" my={8}>
                         Fichas Cadastrais Online
                     </Heading>
                     <Text

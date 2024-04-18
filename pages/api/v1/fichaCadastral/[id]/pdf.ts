@@ -16,7 +16,7 @@ handler.get(async (req, res) => {
             imobiliaria: true,
         },
     });
-    console.log(data);
+    //console.log(data);
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     await page.goto(

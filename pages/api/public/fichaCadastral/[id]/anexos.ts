@@ -1,13 +1,10 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
 import { cors } from "@/middleware/cors";
-import { multiparty } from "@/middleware/multipart";
-import moment from "moment";
-import { statSync } from "fs";
-import slug from "slug";
-import fs from "fs";
-import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
+import moment from "moment";
+import nextConnect from "next-connect";
+import slug from "slug";
 
 const handler = nextConnect();
 handler.use(cors);
@@ -73,7 +70,11 @@ handler.post(async (req, res) => {
                             codigo: i.nome,
                         },
                     });
-                    if (campo?.tipoCampo == "files") {
+                    if (
+                        campo?.tipoCampo == "files" ||
+                        campo?.tipoCampo == "file" ||
+                        campo?.tipoCampo == "image"
+                    ) {
                         let val = [];
                         const existe =
                             await prisma.fichaCadastralPreenchimento.findUnique(
@@ -145,16 +146,18 @@ handler.post(async (req, res) => {
                                         },
                                         create: {
                                             campoFichaCadastralCodigo: i.nome,
-                                            valor:
+                                            valor: JSON.stringify([
                                                 process.env
                                                     .NEXT_PUBLIC_URL_STORAGE +
-                                                nameLocation,
+                                                    nameLocation,
+                                            ]),
                                         },
                                         update: {
-                                            valor:
+                                            valor: JSON.stringify([
                                                 process.env
                                                     .NEXT_PUBLIC_URL_STORAGE +
-                                                nameLocation,
+                                                    nameLocation,
+                                            ]),
                                         },
                                     },
                                 },

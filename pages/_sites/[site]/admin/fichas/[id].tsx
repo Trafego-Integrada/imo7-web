@@ -64,7 +64,7 @@ const Ficha = ({ ficha }) => {
                 queryClient.invalidateQueries(["fichas"]);
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
 

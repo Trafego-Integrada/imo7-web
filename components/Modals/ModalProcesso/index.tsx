@@ -3,13 +3,14 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import { EditarProcesso } from "./EditarProcesso";
 import { NovoProcesso } from "./NovoProcesso";
 
-const ModalBase = ({}, ref) => {
+const ModalBase = ({}, ref: any) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [id, setId] = useState(null);
 
     useImperativeHandle(ref, () => ({
         onOpen: async (id = null) => {
             setId(id);
+
             if (id) {
                 onOpen(id);
             } else {
@@ -17,6 +18,7 @@ const ModalBase = ({}, ref) => {
             }
         },
     }));
+
     return (
         <>
             {id ? (

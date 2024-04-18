@@ -113,7 +113,7 @@ const Cobrancas = ({ chamado }) => {
                 queryClient.invalidateQueries("interacoes");
                 reset({ mensagem: "" });
             } catch (error) {
-                console.log(error);
+                //console.log(error);
             }
         };
         const { data: interacoes } = useQuery(
@@ -133,8 +133,8 @@ const Cobrancas = ({ chamado }) => {
         );
         const upload = useMutation(anexarArquivoChamado);
         const onUpload = async (event) => {
-            console.log(event);
-            console.log("ok");
+            //console.log(event);
+            //console.log("ok");
             const formData = new FormData();
             formData.append("chamadoId", chamado.id);
             formData.append("conversaId", data.id);
@@ -488,7 +488,7 @@ export const getServerSideProps = withSSRAuth(
                 criador: true,
             },
         });
-        console.log(data);
+        //console.log(data);
         return {
             props: {
                 chamado: JSON.parse(JSON.stringify(data)),

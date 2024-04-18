@@ -1,10 +1,10 @@
-import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
-import { NextChakraLink } from "@/components/NextChakraLink";
-import { formatoValor } from "@/helpers/helpers";
-import { useAuth } from "@/hooks/useAuth";
-import prisma from "@/lib/prisma";
-import { listarChamados } from "@/services/models/chamado";
-import { withSSRAuth } from "@/utils/withSSRAuth";
+import { LayoutPainel } from '@/components/Layouts/LayoutPainel'
+import { NextChakraLink } from '@/components/NextChakraLink'
+import { formatoValor } from '@/helpers/helpers'
+import { useAuth } from '@/hooks/useAuth'
+import prisma from '@/lib/prisma'
+import { listarChamados } from '@/services/models/chamado'
+import { withSSRAuth } from '@/utils/withSSRAuth'
 import {
     Badge,
     Box,
@@ -16,35 +16,26 @@ import {
     Icon,
     IconButton,
     Text,
-} from "@chakra-ui/react";
-import moment from "moment";
-import { NextPage, InferGetServerSidePropsType } from "next";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { FaCopy, FaEye, FaGrinWink, FaPrint } from "react-icons/fa";
-import { FiEye } from "react-icons/fi";
-import { IoHelpBuoy } from "react-icons/io5";
-import { useQuery } from "react-query";
+} from '@chakra-ui/react'
+import moment from 'moment'
+import { NextPage, InferGetServerSidePropsType } from 'next'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { FaCopy, FaEye, FaGrinWink, FaPrint } from 'react-icons/fa'
+import { FiEye } from 'react-icons/fi'
+import { IoHelpBuoy } from 'react-icons/io5'
+import { useQuery } from 'react-query'
 
-const Dashbord: NextPage = ({ boletos, extratos }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const { usuario } = useAuth();
-    const router = useRouter();
+const Dashbord: NextPage = ({
+    boletos,
+    extratos,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const { usuario } = useAuth()
+    const router = useRouter()
     const { data: chamados } = useQuery(
-        ["chamados", { contratoId: router.query?.contratoId }],
-        listarChamados
-    );
-    console.log(
-        boletos?.filter((e:any) => {
-            console.log(
-                e.contrato.inquilinos.includes((i: any) => {
-                    console.log("a", i);
-                    return true;
-                })
-            );
-            return true;
-        }),
-        usuario
-    );
+        ['chamados', { contratoId: router.query?.contratoId }],
+        listarChamados,
+    )
     return (
         <LayoutPainel>
             <Grid gridTemplateColumns="repeat(3,1fr)" gap={4}>
@@ -68,12 +59,12 @@ const Dashbord: NextPage = ({ boletos, extratos }: InferGetServerSidePropsType<t
                                     align="center"
                                 >
                                     <Text fontSize="md" lineHeight="none">
-                                        Data do Depósito{" "}
+                                        Data do Depósito{' '}
                                         <Text as="span" fontWeight="bold">
                                             {extratos[0].dataDeposito &&
                                                 moment(
-                                                    extratos[0].dataDeposito
-                                                ).format("DD [de] MMMM ")}
+                                                    extratos[0].dataDeposito,
+                                                ).format('DD [de] MMMM ')}
                                         </Text>
                                     </Text>
                                 </Flex>
@@ -97,7 +88,7 @@ const Dashbord: NextPage = ({ boletos, extratos }: InferGetServerSidePropsType<t
                                     <GridItem>
                                         <Link
                                             href={{
-                                                pathname: "/extrato/[id]",
+                                                pathname: '/extrato/[id]',
                                                 query: {
                                                     id: extratos[0].id,
                                                     pdf: true,
@@ -140,7 +131,7 @@ const Dashbord: NextPage = ({ boletos, extratos }: InferGetServerSidePropsType<t
                                     <GridItem>
                                         <Link
                                             href={{
-                                                pathname: "/extrato/[id]",
+                                                pathname: '/extrato/[id]',
                                                 query: {
                                                     id: extratos[0].id,
                                                 },
@@ -205,13 +196,13 @@ const Dashbord: NextPage = ({ boletos, extratos }: InferGetServerSidePropsType<t
                 )}
                 {boletos?.filter((e: any) =>
                     e.contrato.inquilinos.filter(
-                        (i: any) => i.id == usuario?.id
+                        (i: any) => i.id == usuario?.id,
                     ).length > 0
                         ? true
-                        : false
+                        : false,
                 ).length > 0 && (
                     <>
-                        {" "}
+                        {' '}
                         {boletos?.length ? (
                             <GridItem bg="white" rounded="2xl">
                                 <Flex
@@ -229,12 +220,12 @@ const Dashbord: NextPage = ({ boletos, extratos }: InferGetServerSidePropsType<t
                                     align="center"
                                 >
                                     <Text fontSize="md" lineHeight="none">
-                                        Vence dia{" "}
+                                        Vence dia{' '}
                                         <Text as="span" fontWeight="bold">
                                             {boletos[0].data_vencimen &&
                                                 moment(
-                                                    boletos[0].data_vencimen
-                                                ).format("DD [de] MMMM ")}
+                                                    boletos[0].data_vencimen,
+                                                ).format('DD [de] MMMM ')}
                                         </Text>
                                     </Text>
                                 </Flex>
@@ -488,14 +479,14 @@ const Dashbord: NextPage = ({ boletos, extratos }: InferGetServerSidePropsType<t
                 <GridItem bg="white" rounded="2xl"></GridItem>
             </Grid>
         </LayoutPainel>
-    );
-};
+    )
+}
 
-export default Dashbord;
+export default Dashbord
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
     try {
-        const { contratoId, site } = ctx.query;
+        const { contratoId, site } = ctx.query
         const contrato = await prisma.contrato.findMany({
             where: {
                 id: Number(contratoId),
@@ -504,7 +495,7 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
                 proprietarios: true,
                 inquilinos: true,
             },
-        });
+        })
         const boletos = await prisma.boleto.findMany({
             where: {
                 contratoId: Number(contratoId),
@@ -519,7 +510,7 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
                     },
                     {
                         barcode: {
-                            not: "",
+                            not: '',
                         },
                     },
                 ],
@@ -531,7 +522,7 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
                     },
                 },
             },
-        });
+        })
         const extratos = await prisma.extrato.findMany({
             where: {
                 contratoId: Number(contratoId),
@@ -539,17 +530,17 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
                     url: site,
                 },
             },
-        });
+        })
         return {
             props: {
                 boletos: JSON.parse(JSON.stringify(boletos)),
                 extratos: JSON.parse(JSON.stringify(extratos)),
                 contrato: JSON.parse(JSON.stringify(contrato)),
             },
-        };
+        }
     } catch (error) {
         return {
             props: {},
-        };
+        }
     }
-});
+})

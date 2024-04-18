@@ -41,7 +41,7 @@ export const Historico = ({ chamadoId }) => {
             toast({ title: "Chamado atualizado", status: "success" });
             queryClient.invalidateQueries(["historicosChamado"]);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     });
     const {
@@ -60,7 +60,7 @@ export const Historico = ({ chamadoId }) => {
             getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
         }
     );
-    console.log(historicos, isFetchingNextPage, hasNextPage, status);
+    //console.log(historicos, isFetchingNextPage, hasNextPage, status);
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };

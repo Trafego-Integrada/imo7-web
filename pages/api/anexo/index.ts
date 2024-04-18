@@ -1,22 +1,16 @@
 import nextConnect from "next-connect";
-import { multiparty } from "@/middleware/multipart";
 
-import slug from "slug";
-import common, {
-    ConfigFileAuthenticationDetailsProvider,
-    Region,
-    SimpleAuthenticationDetailsProvider,
-} from "oci-common";
-import * as os from "oci-objectstorage";
-import { createReadStream, statSync } from "fs";
-import st from "stream";
-import moment from "moment";
 import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
-import fs from "fs";
+import fs, { statSync } from "fs";
+import moment from "moment";
+import * as os from "oci-objectstorage";
+import slug from "slug";
+import st from "stream";
 
-import { Upload } from "@aws-sdk/lib-storage";
+import { cors } from "@/middleware/cors";
 import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 export const config = {
     api: {
         bodyParser: {
@@ -25,7 +19,6 @@ export const config = {
     },
 };
 const handle = nextConnect();
-import { cors } from "@/middleware/cors";
 handle.use(cors);
 handle.use(checkAuth);
 // handle.use(multiparty);
@@ -97,7 +90,7 @@ handle.post(async (req, res) => {
         } = req.body;
         // const { anexos } = req.files;
 
-        console.log(req.body);
+        //console.log(req.body);
         if (anexos && Array.isArray(anexos) && anexos.length > 0) {
             for await (const foto of anexos) {
                 const extension = nome.slice(
@@ -135,7 +128,7 @@ handle.post(async (req, res) => {
                 })
                     .done()
                     .then(async (data) => {
-                        console.log(data);
+                        //console.log(data);
                         const anexo = await prisma.anexo.create({
                             data: {
                                 nome: nome,
@@ -246,7 +239,7 @@ handle.post(async (req, res) => {
                         }
                     })
                     .catch((err) => {
-                        console.log(err);
+                        //console.log(err);
                         return res.status(400).send({
                             message: `Não conseguimos salvar o arquivo ${i[0]}, verifique o arquivo. Caso persista, contate o suporte.`,
                         });
@@ -285,7 +278,7 @@ handle.post(async (req, res) => {
             })
                 .done()
                 .then(async (data) => {
-                    console.log(data);
+                    //console.log(data);
                     const anexo = await prisma.anexo.create({
                         data: {
                             nome: nome,
@@ -400,7 +393,7 @@ handle.post(async (req, res) => {
                     });
                 })
                 .catch((err) => {
-                    console.log(err);
+                    //console.log(err);
                     return res.status(400).send({
                         message: `Não conseguimos salvar o arquivo ${nome}, verifique o arquivo. Caso persista, contate o suporte.`,
                     });

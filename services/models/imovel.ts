@@ -16,18 +16,12 @@ export const cadastrarImovel = async (form: any) => {
     return data
 }
 
-export const atualizarImovel = async ({
-    id,
-    ...data
-}: {
-    id: any
-}) => {
+export const atualizarImovel = async ({ id, ...data }: { id: any }) => {
     const { data: resp } = await api.post('imovel/' + id, data)
     return resp
 }
 
-export const excluirImovel = async (id: any) => {
+export const excluirImovel = async (id) => {
     const { data } = await api.post('imovel/' + id)
     return data
 }
-

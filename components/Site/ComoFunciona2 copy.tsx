@@ -1,19 +1,12 @@
 import {
-    Box,
     Button,
     Container,
-    Flex,
     Grid,
     GridItem,
     Heading,
-    Icon,
-    Image,
-    Link,
     Text,
 } from "@chakra-ui/react";
-import { BsChat } from "react-icons/bs";
-import { FaCheckCircle, FaWhatsappSquare } from "react-icons/fa";
-import { FiCheckCircle, FiCheckSquare } from "react-icons/fi";
+import { FaWhatsappSquare } from "react-icons/fa";
 
 export const ComoFunciona3 = ({ modal }) => {
     return (
@@ -26,7 +19,7 @@ export const ComoFunciona3 = ({ modal }) => {
                 <GridItem>
                     <Heading size="xl" color="#021531" fontWeight="normal">
                         <strong> Economize tempo </strong>e deixe tudo mais
-                        <strong>fácil</strong> para a sua equipe e para o seu
+                        <strong> fácil</strong> para a sua equipe e para o seu
                         cliente. Com o IMO7, o gerenciamento de dados{" "}
                         <strong>nunca foi tão fácil!</strong>
                     </Heading>

@@ -15,7 +15,7 @@ handler.use(cors);
 handler.post(async (req, res) => {
     // const { documento, imobiliaria } = req.user;
     const { refreshToken, documento, imobiliaria } = req.body;
-    console.log(imobiliaria);
+    //console.log(imobiliaria);
     const user = await getUser({ documento, imobiliaria });
 
     if (!user) {

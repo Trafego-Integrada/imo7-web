@@ -1,10 +1,12 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
+import { cors } from "@/middleware/cors";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
-import { cors } from "@/middleware/cors";
-import { NextApiRequest, NextApiResponse } from "next";
+
 handler.use(cors);
+
 handler.get(async (req, res) => {
     try {
         const { id } = req.query;
@@ -25,6 +27,7 @@ handler.get(async (req, res) => {
         });
     }
 });
+
 handler.post(async (req, res) => {
     try {
         const { id } = req.query;
@@ -71,7 +74,9 @@ handler.post(async (req, res) => {
                           },
                       }
                     : { disconnect: true },
-                dependenciaValor,
+                dependenciaValor: dependenciaValor
+                    ? JSON.stringify(dependenciaValor)
+                    : null,
             },
         });
         res.send(data);
@@ -82,6 +87,7 @@ handler.post(async (req, res) => {
         });
     }
 });
+
 handler.delete(async (req, res) => {
     try {
         const { id } = req.query;
@@ -98,4 +104,5 @@ handler.delete(async (req, res) => {
         });
     }
 });
+
 export default handler;

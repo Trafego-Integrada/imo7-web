@@ -52,7 +52,7 @@ const SignIn: NextPage = () => {
         try {
             setError(null);
             const response = await recuperarSenha(data);
-            console.log(response);
+            //console.log(response);
             setEnviado(true);
         } catch (error) {
             setError(error.message);

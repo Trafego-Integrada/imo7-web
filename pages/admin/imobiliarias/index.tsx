@@ -18,9 +18,11 @@ import { usePagination } from '@ajna/pagination'
 import { imo7ApiService } from '@/services/apiServiceUsage'
 import { Checkbox, useToast } from '@chakra-ui/react'
 import { queryClient } from '@/services/queryClient'
-import { InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from 'next'
 
-const Imobiliarias = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Imobiliarias = (
+    props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) => {
     const toast = useToast()
     const imobiliariaDrawer: any = useRef()
     const [filter, setFilter] = useState({
@@ -73,7 +75,7 @@ const Imobiliarias = (props: InferGetServerSidePropsType<typeof getServerSidePro
         })
     }
     const [selecionados, setSelecionados] = useState([])
-    // console.log(usuario);
+    // //console.log(usuario);
     const deleteMany = useMutation(imo7ApiService('imobiliaria').deleteMany, {
         onSuccess: () => {
             queryClient.invalidateQueries('imobiliarias')

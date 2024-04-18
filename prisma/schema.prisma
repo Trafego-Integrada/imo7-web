@@ -171,6 +171,7 @@ model Imobiliaria {
     telefone     String?
     cep          String?
     endereco     String?
+    complemento  String?
     numero       String?
     bairro       String?
     cidade       String?
@@ -704,46 +705,49 @@ enum StatusFicha {
 }
 
 model FichaCadastral {
-    id                     String                          @id @default(cuid())
-    codigo                 Int?
-    descricao              String?
-    nome                   String?
-    documento              String?
-    email                  String?
-    telefone               String?
-    codigoImovel           String?
-    cepImovel              String?
-    enderecoImovel         String?
-    numeroImovel           String?
-    complementoImovel      String?
-    bairroImovel           String?
-    cidadeImovel           String?
-    estadoImovel           String?
-    status                 StatusFicha                     @default(aguardando)
-    motivoReprovacao       String?                         @db.LongText
-    createdAt              DateTime                        @default(now())
-    updatedAt              DateTime?                       @updatedAt
-    deletedAt              DateTime?
-    imobiliaria            Imobiliaria                     @relation(fields: [imobiliariaId], references: [id])
-    imobiliariaId          Int
-    modelo                 ModeloFichaCadastral            @relation(fields: [modeloFichaCadastralId], references: [id])
-    modeloFichaCadastralId String
-    preenchimento          FichaCadastralPreenchimento[]
-    responsavel            Usuario?                        @relation(fields: [responsavelId], references: [id])
-    responsavelId          Int?
-    imovel                 Imovel?                         @relation(fields: [imovelId], references: [id])
-    imovelId               Int?
-    importadaJb            Boolean?                        @default(false)
-    ValidacaoFacial        ValidacaoFacial[]
-    dataAprovacao          DateTime?
-    dataReprovacao         DateTime?
-    Processo               Processo?                       @relation(fields: [processoId], references: [id])
-    processoId             String?
-    observacoes            String?
-    Anexo                  Anexo[]
-    motivoReprovacaoFicha  MotivoReprovacaoFichaCadastral? @relation(fields: [motivoReprovacaoId], references: [id])
-    motivoReprovacaoId     String?
-    ConsultaNetrin         ConsultaNetrin[]
+    id                       String                          @id @default(cuid())
+    codigo                   Int?
+    descricao                String?
+    nome                     String?
+    documento                String?
+    email                    String?
+    telefone                 String?
+    codigoImovel             String?
+    cepImovel                String?
+    enderecoImovel           String?
+    numeroImovel             String?
+    complementoImovel        String?
+    bairroImovel             String?
+    cidadeImovel             String?
+    estadoImovel             String?
+    status                   StatusFicha                     @default(aguardando)
+    motivoReprovacao         String?                         @db.LongText
+    createdAt                DateTime                        @default(now())
+    updatedAt                DateTime?                       @updatedAt
+    deletedAt                DateTime?
+    porcentagemPreenchimento Decimal                         @default(0)
+    imobiliaria              Imobiliaria                     @relation(fields: [imobiliariaId], references: [id])
+    imobiliariaId            Int
+    modelo                   ModeloFichaCadastral            @relation(fields: [modeloFichaCadastralId], references: [id])
+    modeloFichaCadastralId   String
+    preenchimento            FichaCadastralPreenchimento[]
+    responsavel              Usuario?                        @relation(fields: [responsavelId], references: [id])
+    responsavelId            Int?
+    imovel                   Imovel?                         @relation(fields: [imovelId], references: [id])
+    imovelId                 Int?
+    importadaJb              Boolean?                        @default(false)
+    ValidacaoFacial          ValidacaoFacial[]
+    dataAprovacao            DateTime?
+    dataReprovacao           DateTime?
+    dataInicioPreenchimento  DateTime?
+    dataFimPreenchimento     DateTime?
+    Processo                 Processo?                       @relation(fields: [processoId], references: [id])
+    processoId               String?
+    observacoes              String?
+    Anexo                    Anexo[]
+    motivoReprovacaoFicha    MotivoReprovacaoFichaCadastral? @relation(fields: [motivoReprovacaoId], references: [id])
+    motivoReprovacaoId       String?
+    ConsultaNetrin           ConsultaNetrin[]
 }
 
 model MotivoReprovacaoFichaCadastral {
@@ -1107,10 +1111,22 @@ enum TipoConsultaNetrin {
     cnd_federal
     cnd_estadual
     cnd_trabalhista_tst
-    cnd_trabalhista_mte
     receita_cnpj
     receita_cnpJ_qsa
     receita_cpf
+    receita_federal_cnd_cpf
+    receita_federal_cnd_cnpj
+    sefaz_cnd
+    cnd_trabalhista
+    receita_federal_cnpj
+    receita_federal_cnpj_qsa
+    receita_federal_cpf
+    endereco_cpf
+    empresas_relacionadas_cpf
+    pessoas_relacionadas_cnpj
+    pep_kyc_cpf
+    cnd_trabalhista_cpf
+    cnd_trabalhista_cnpj
 }
 
 model ConsultaNetrin {

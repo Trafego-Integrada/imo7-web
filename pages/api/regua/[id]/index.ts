@@ -39,7 +39,7 @@ handle.get(async (req, res) => {
 handle.post(async (req, res) => {
     try {
         const { id } = req.query;
-        console.log("update", id);
+        //console.log("update", id);
         const { tipo, dias, assunto, mensagem, hora } = req.body;
         const data = await prisma.regraNotificacao.update({
             where: {
@@ -69,7 +69,7 @@ handle.post(async (req, res) => {
 handle.delete(async (req, res) => {
     //softdelete
     const { id } = req.query;
-    console.log("delete", id);
+    //console.log("delete", id);
     const data = await prisma.regraNotificacao.delete({
         where: { id: Number(id) },
     });

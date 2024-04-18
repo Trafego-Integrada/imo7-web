@@ -1,6 +1,8 @@
 import { FormInput } from "@/components/Form/FormInput";
-import { Layout } from "@/components/Layout/layout";
-import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
+import { FormSelect } from "@/components/Form/FormSelect";
+import { Head } from "@/components/Head";
+import { formatoValor } from "@/helpers/helpers";
+import { buscarEndereco } from "@/lib/buscarEndereco";
 import prisma from "@/lib/prisma";
 import {
     atualizarAnexosFicha,
@@ -16,34 +18,24 @@ import {
     Checkbox,
     Container,
     Flex,
-    FormLabel,
     Grid,
     GridItem,
     Heading,
     Icon,
     Image,
-    Radio,
-    RadioGroup,
-    Stack,
     Tag,
     Text,
     useToast,
 } from "@chakra-ui/react";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FiEye } from "react-icons/fi";
 import { useMutation } from "react-query";
-import * as yup from "yup";
 import "react-quill/dist/quill.snow.css";
-import { buscarEndereco } from "@/lib/buscarEndereco";
-import { GetServerSideProps } from "next";
-import { FormSelect } from "@/components/Form/FormSelect";
-import { formatoValor } from "@/helpers/helpers";
-import { Head } from "@/components/Head";
 const FichaCadastral = ({ ficha, campos, modelo }) => {
-    console.log(modelo);
+    //console.log(modelo);
     const [schema, setSchema] = useState({});
     const toast = useToast();
     const {
@@ -62,7 +54,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
     const atualizarAnexos = useMutation(atualizarAnexosFicha);
     const onSubmit = async (data) => {
         try {
-            console.log(data);
+            //console.log(data);
             await atualizar.mutateAsync(data);
 
             const formData = new FormData();
@@ -79,7 +71,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
             }
             toast({ title: "Ficha salva", status: "success" });
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             toast({ title: "Houve um problema", status: "error" });
         }
     };
@@ -88,7 +80,7 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
         try {
             if (cep.length > 8) {
                 const res = await buscarEndereco(cep);
-                console.log(res);
+                //console.log(res);
                 let obj = {};
                 Object.entries(camposEndereco).map((item) => {
                     if (item[0] == "endereco") {
@@ -291,10 +283,13 @@ const FichaCadastral = ({ ficha, campos, modelo }) => {
                                                         )) ||
                                                         (i.dependencia
                                                             ?.codigo &&
-                                                            i.dependenciaValor ==
+                                                            JSON.parse(
+                                                                i.dependenciaValor
+                                                            ).includes(
                                                                 watch(
                                                                     `preenchimento.${i.dependencia?.codigo}`
-                                                                ))))
+                                                                )
+                                                            ))))
                                             ) {
                                                 return true;
                                             } else {

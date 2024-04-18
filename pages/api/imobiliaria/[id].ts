@@ -1,15 +1,11 @@
 import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
-import { multiparty } from "@/middleware/multipart";
-import { statSync } from "fs";
+import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 import moment from "moment";
 import nextConnect from "next-connect";
-import * as os from "oci-objectstorage";
 import slug from "slug";
-import fs from "fs";
-import { Upload } from "@aws-sdk/lib-storage";
-import { S3Client } from "@aws-sdk/client-s3";
 const handle = nextConnect();
 
 export const config = {
@@ -22,6 +18,7 @@ export const config = {
 handle.use(cors);
 handle.use(checkAuth);
 // handle.use(multiparty);
+
 handle.get(async (req, res) => {
     const { id } = req.query;
     const imobiliarias = await prisma.imobiliaria.findUnique({
@@ -44,6 +41,7 @@ handle.post(async (req, res) => {
             cidade,
             email,
             endereco,
+            complemento,
             estado,
             ie,
             nomeFantasia,
@@ -71,6 +69,7 @@ handle.post(async (req, res) => {
             logo,
             bg,
         } = req.body;
+
         let limparLogo = {};
         let limparBg = {};
         if (removerLogo) {
@@ -96,6 +95,7 @@ handle.post(async (req, res) => {
                 cidade,
                 email,
                 endereco,
+                complemento,
                 estado,
                 ie,
                 nomeFantasia,
@@ -158,7 +158,7 @@ handle.post(async (req, res) => {
             })
                 .done()
                 .then(async (data) => {
-                    console.log(data);
+                    //console.log(data);
                     // if (getObjectResponse.contentLength == 0) {
                     //     return res.status(400).send({
                     //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
@@ -176,7 +176,7 @@ handle.post(async (req, res) => {
                     });
                 })
                 .catch((err) => {
-                    console.log(err);
+                    //console.log(err);
                     return res.status(400).send({
                         message: `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
                     });
@@ -218,7 +218,7 @@ handle.post(async (req, res) => {
             })
                 .done()
                 .then(async (data) => {
-                    console.log(data);
+                    //console.log(data);
                     // if (getObjectResponse.contentLength == 0) {
                     //     return res.status(400).send({
                     //         message: `O arquivo ${i[0]} está corrompido ou sem conteúdo. Caso persista, contate o suporte.`,
@@ -236,7 +236,7 @@ handle.post(async (req, res) => {
                     });
                 })
                 .catch((err) => {
-                    console.log(err);
+                    //console.log(err);
                     return res.status(400).send({
                         message: `Não conseguimos salvar o arquivo, verifique o arquivo. Caso persista, contate o suporte.`,
                     });

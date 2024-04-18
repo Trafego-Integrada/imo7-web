@@ -38,7 +38,7 @@ handle.get(async (req, res) => {
             chamadoId: Number(id),
         },
     });
-    console.log(data);
+    //console.log(data);
     const lastPostInResults = data[data.length - 1];
     const myCursor = lastPostInResults?.id ? lastPostInResults.id : null;
     res.send({ data, total, nextCursor: myCursor });

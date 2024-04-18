@@ -4,7 +4,6 @@ import { formatoData, tagTipoConsultaNetrin } from "@/helpers/helpers";
 import { api } from "@/services/apiClient";
 import { queryClient } from "@/services/queryClient";
 import {
-    Box,
     Button,
     Flex,
     Grid,
@@ -25,7 +24,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { FiEye, FiPrinter } from "react-icons/fi";
 import { useQuery } from "react-query";
-import { ModalPreview } from "../Preview";
+import { ModalTribunalJustica } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
 import { useRef } from "react";
 
 export const ConsultasNetrin = ({
@@ -54,7 +53,7 @@ export const ConsultasNetrin = ({
                 status: "success",
             });
         } catch (error) {
-            console.log(error?.response);
+            //console.log(error?.response);
             toast({
                 title: "Houve um problema",
                 description: error?.response?.data?.message,
@@ -87,13 +86,16 @@ export const ConsultasNetrin = ({
     );
     const totalProtestos = (protestos) => {
         let total = 0;
+
+        if (!protestos) return 0;
+
         if (protestos.code != 606) {
             Object.entries(protestos)?.map((i) => {
-                console.log("Item", i);
+                //console.log("Item", i);
 
                 if (i.length > 1) {
                     i[1].map((i) => {
-                        console.log("Item2", i);
+                        //console.log("Item2", i);
                         total += i.protestos?.length;
                     });
                 }
@@ -320,7 +322,7 @@ export const ConsultasNetrin = ({
                     </Tbody>
                 </Table>
             </Flex>
-            <ModalPreview ref={preview} />
+            <ModalTribunalJustica ref={preview} />
         </Flex>
     );
 };

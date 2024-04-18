@@ -48,7 +48,7 @@ const SignIn: NextPage = () => {
     const [error, setError] = useState(null);
     const { signIn } = useContext(AuthContext);
     const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
-        console.log(data);
+        //console.log(data);
         try {
             setError(null);
             await signIn(data);

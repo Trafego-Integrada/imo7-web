@@ -5,15 +5,12 @@ import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { Layout } from "@/components/Layout/layout";
 import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
 import { ModalProcesso } from "@/components/Modals/ModalProcesso";
-import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFichaCadastral";
+import { ModalRevisaoFichaCadastral2 } from "@/components/Modals/ModalRevisaoFichaCadastral2";
 import { ModalValidar } from "@/components/Modals/ModalValidar";
 import { Paginator2 } from "@/components/Paginator2";
 import { Filtro } from "@/components/Tabelas/TabelaPadrao/Filtro";
-import { exportToExcel } from "react-json-to-excel";
-import { TooltipAvatar } from "@/components/TooltipAvatar";
 import {
     formatoData,
-    statusFicha,
     statusFichaTag,
     statusProcesso,
     tipoFicha,
@@ -58,8 +55,6 @@ import { useRef, useState } from "react";
 import { CgMoreVerticalAlt } from "react-icons/cg";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import {
-    FiArrowLeft,
-    FiArrowRight,
     FiDownload,
     FiDownloadCloud,
     FiEdit,
@@ -68,7 +63,8 @@ import {
     FiPlus,
     FiTrash,
 } from "react-icons/fi";
-import { MdOutlineVerifiedUser, MdPageview } from "react-icons/md";
+import { MdOutlineVerifiedUser } from "react-icons/md";
+import { exportToExcel } from "react-json-to-excel";
 import { useMutation, useQuery } from "react-query";
 
 const Home = ({ query }) => {
@@ -154,6 +150,47 @@ const Home = ({ query }) => {
         },
     });
 
+    const itemLengthMandatory = (item: any) => {
+        return Object.entries(item.modelo.campos).filter(
+            (i: any) => i[1].obrigatorio == true
+        ).length;
+    };
+
+    const itemLengthAll = (item: any) => {
+        return Object.entries(item.modelo.campos).length;
+    };
+
+    const itemFulledLength = (item: any) => {
+        return item.preenchimento.filter(
+            (i: any) => i.valor != "" && i.valor != null
+        ).length;
+    };
+
+    const itemFulledLengthMandatory = (item: any) => {
+        let countMandatory = 0;
+        const mandatoryEntries = Object.entries(item.modelo.campos)
+            .filter((i: any) => i[1].obrigatorio == true)
+            .map((item: any) => {
+                return item[0];
+            });
+
+        for (const mandatoryEntry of mandatoryEntries) {
+            if (
+                item.preenchimento.filter((i: any) => {
+                    return (
+                        i.campoFichaCadastralCodigo == `${mandatoryEntry}` &&
+                        i.valor != "" &&
+                        i.valor != null
+                    );
+                }).length
+            ) {
+                countMandatory++;
+            }
+        }
+
+        return countMandatory;
+    };
+
     const onDeleteMany = () => {
         deleteMany.mutate(JSON.stringify(selecionados));
         setSelecionados([]);
@@ -224,6 +261,7 @@ const Home = ({ query }) => {
             refetchOnWindowFocus: false,
         }
     );
+
     return (
         <>
             <Layout title="Processos">
@@ -716,116 +754,52 @@ const Home = ({ query }) => {
                                             <Table size="sm">
                                                 <Tbody>
                                                     {item?.fichas?.map(
-                                                        (item) => (
-                                                            <Tr key={item.id}>
-                                                                <Td
-                                                                    p={0}
-                                                                    w={36}
+                                                        (item) => {
+                                                            return (
+                                                                <Tr
+                                                                    key={
+                                                                        item.id
+                                                                    }
                                                                 >
-                                                                    {" "}
-                                                                    <Flex
-                                                                        gap={2}
-                                                                        justify="center"
+                                                                    <Td
+                                                                        p={0}
+                                                                        w={36}
                                                                     >
-                                                                        <Tooltip label="Revisar Ficha">
-                                                                            <IconButton
-                                                                                icon={
-                                                                                    <MdOutlineVerifiedUser />
-                                                                                }
-                                                                                size="xs"
-                                                                                rounded="full"
-                                                                                colorScheme="blue"
-                                                                                variant="outline"
-                                                                                onClick={() =>
-                                                                                    modalRevisar.current.onOpen(
-                                                                                        item.id
-                                                                                    )
-                                                                                }
-                                                                            />
-                                                                        </Tooltip>
-                                                                        <Tooltip label="Copiar URL da Ficha">
-                                                                            <IconButton
-                                                                                icon={
-                                                                                    <FiLink />
-                                                                                }
-                                                                                size="xs"
-                                                                                rounded="full"
-                                                                                colorScheme="blue"
-                                                                                variant="outline"
-                                                                                onClick={() => {
-                                                                                    navigator.clipboard.writeText(
-                                                                                        `${window.location.origin}/fichaCadastral/${item.id}`
-                                                                                    );
-                                                                                    toast(
-                                                                                        {
-                                                                                            title: "URL Copiada",
-                                                                                        }
-                                                                                    );
-                                                                                }}
-                                                                            />
-                                                                        </Tooltip>
-                                                                        <Tooltip label="Gerar PDF">
-                                                                            <IconButton
-                                                                                size="xs"
-                                                                                rounded="full"
-                                                                                colorScheme="blue"
-                                                                                variant="outline"
-                                                                                as={
-                                                                                    Link
-                                                                                }
-                                                                                icon={
-                                                                                    <FaFilePdf />
-                                                                                }
-                                                                                href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
-                                                                                target="_blank"
-                                                                                passHref
-                                                                            />
-                                                                        </Tooltip>
-                                                                        <Menu>
-                                                                            <Tooltip label="Mais opções">
-                                                                                <MenuButton>
-                                                                                    <IconButton
-                                                                                        icon={
-                                                                                            <CgMoreVerticalAlt />
-                                                                                        }
-                                                                                        size="xs"
-                                                                                        rounded="full"
-                                                                                        colorScheme="blue"
-                                                                                        variant="outline"
-                                                                                    />
-                                                                                </MenuButton>
-                                                                            </Tooltip>
-                                                                            <MenuList>
-                                                                                <MenuItem
+                                                                        {" "}
+                                                                        <Flex
+                                                                            gap={
+                                                                                2
+                                                                            }
+                                                                            justify="center"
+                                                                            px={
+                                                                                4
+                                                                            }
+                                                                        >
+                                                                            <Tooltip label="Revisar Ficha">
+                                                                                <IconButton
                                                                                     icon={
                                                                                         <MdOutlineVerifiedUser />
                                                                                     }
+                                                                                    size="xs"
+                                                                                    rounded="full"
+                                                                                    colorScheme="blue"
+                                                                                    variant="outline"
                                                                                     onClick={() =>
                                                                                         modalRevisar.current.onOpen(
                                                                                             item.id
                                                                                         )
                                                                                     }
-                                                                                >
-                                                                                    Revisar
-                                                                                    Ficha
-                                                                                </MenuItem>
-                                                                                <MenuItem
-                                                                                    icon={
-                                                                                        <FiEdit />
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        modal.current.onOpen(
-                                                                                            item.id
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    Editar
-                                                                                    Ficha
-                                                                                </MenuItem>
-                                                                                <MenuItem
+                                                                                />
+                                                                            </Tooltip>
+                                                                            <Tooltip label="Copiar URL da Ficha">
+                                                                                <IconButton
                                                                                     icon={
                                                                                         <FiLink />
                                                                                     }
+                                                                                    size="xs"
+                                                                                    rounded="full"
+                                                                                    colorScheme="blue"
+                                                                                    variant="outline"
                                                                                     onClick={() => {
                                                                                         navigator.clipboard.writeText(
                                                                                             `${window.location.origin}/fichaCadastral/${item.id}`
@@ -836,57 +810,14 @@ const Home = ({ query }) => {
                                                                                             }
                                                                                         );
                                                                                     }}
-                                                                                >
-                                                                                    Copiar
-                                                                                    URL
-                                                                                    da
-                                                                                    Ficha
-                                                                                </MenuItem>
-                                                                                <MenuItem
-                                                                                    as={
-                                                                                        Link
-                                                                                    }
-                                                                                    icon={
-                                                                                        <FiEye />
-                                                                                    }
-                                                                                    href={`/fichaCadastral/${item.id}`}
-                                                                                    target="_blank"
-                                                                                >
-                                                                                    Visualizar
-                                                                                    Ficha
-                                                                                </MenuItem>{" "}
-                                                                                <MenuItem
-                                                                                    as={
-                                                                                        Link
-                                                                                    }
-                                                                                    icon={
-                                                                                        <FiDownload />
-                                                                                    }
-                                                                                    href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/downloadArquivos`}
-                                                                                    target="_blank"
-                                                                                    passHref
-                                                                                >
-                                                                                    Baixar
-                                                                                    Todos
-                                                                                    Arquivos
-                                                                                </MenuItem>
-                                                                                <MenuItem
-                                                                                    icon={
-                                                                                        <FaFileExcel />
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        exportToExcel(
-                                                                                            item.preenchimento,
-                                                                                            "ficha-cadastral-" +
-                                                                                                item.id
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    Exportar
-                                                                                    para
-                                                                                    Excel
-                                                                                </MenuItem>
-                                                                                <MenuItem
+                                                                                />
+                                                                            </Tooltip>
+                                                                            <Tooltip label="Gerar PDF">
+                                                                                <IconButton
+                                                                                    size="xs"
+                                                                                    rounded="full"
+                                                                                    colorScheme="blue"
+                                                                                    variant="outline"
                                                                                     as={
                                                                                         Link
                                                                                     }
@@ -896,230 +827,394 @@ const Home = ({ query }) => {
                                                                                     href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
                                                                                     target="_blank"
                                                                                     passHref
-                                                                                >
-                                                                                    Gerar
-                                                                                    PDF
-                                                                                </MenuItem>
-                                                                                <MenuItem
-                                                                                    icon={
-                                                                                        <FiTrash />
+                                                                                />
+                                                                            </Tooltip>
+                                                                            <Tooltip label="Visualizar Ficha">
+                                                                                <IconButton
+                                                                                    size="xs"
+                                                                                    rounded="full"
+                                                                                    colorScheme="blue"
+                                                                                    variant="outline"
+                                                                                    as={
+                                                                                        Link
                                                                                     }
-                                                                                    onClick={() => {
-                                                                                        modalExcluir.current.onOpen(
-                                                                                            item.id
-                                                                                        );
-                                                                                    }}
-                                                                                >
-                                                                                    Excluir
-                                                                                    Ficha
-                                                                                </MenuItem>
-                                                                            </MenuList>
-                                                                        </Menu>
-                                                                    </Flex>
-                                                                </Td>
-                                                                <Td w={12}>
-                                                                    {statusFichaTag(
-                                                                        item.status
-                                                                    )}
-                                                                </Td>
-                                                                <Td w={44}>
-                                                                    <>
-                                                                        <Text>
-                                                                            {
-                                                                                item
-                                                                                    .modelo
-                                                                                    ?.nome
-                                                                            }
-                                                                        </Text>
-                                                                        <Text
-                                                                            fontSize="xs"
-                                                                            color="gray"
-                                                                        >
-                                                                            {tipoFicha(
-                                                                                item
-                                                                                    .modelo
-                                                                                    ?.tipo
-                                                                            )}
-                                                                        </Text>
-                                                                    </>
-                                                                </Td>
-                                                                <Td w={32}>
-                                                                    <>
-                                                                        <Text fontWeight="bold">
-                                                                            {
-                                                                                item.nome
-                                                                            }
-                                                                        </Text>
-                                                                        <Text fontSize="xs">
-                                                                            {
-                                                                                item.descricao
-                                                                            }
-                                                                        </Text>
-                                                                    </>
-                                                                </Td>
-                                                                <Td>
-                                                                    <>
-                                                                        <Tooltip
-                                                                            label={`Responsável: ${item?.responsavel?.nome}`}
-                                                                            hasArrow
-                                                                        >
-                                                                            <Avatar
-                                                                                size="xs"
-                                                                                name={
+                                                                                    icon={
+                                                                                        <FiEye />
+                                                                                    }
+                                                                                    href={`/fichaCadastral/${item.id}`}
+                                                                                    target="_blank"
+                                                                                    passHref
+                                                                                />
+                                                                            </Tooltip>
+                                                                            <Tooltip label="Baixar Todos Arquivos">
+                                                                                <IconButton
+                                                                                    size="xs"
+                                                                                    rounded="full"
+                                                                                    colorScheme="blue"
+                                                                                    variant="outline"
+                                                                                    as={
+                                                                                        Link
+                                                                                    }
+                                                                                    icon={
+                                                                                        <FiDownload />
+                                                                                    }
+                                                                                    href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/downloadArquivos`}
+                                                                                    target="_blank"
+                                                                                    passHref
+                                                                                />
+                                                                            </Tooltip>
+
+                                                                            <Menu>
+                                                                                <Tooltip label="Mais opções">
+                                                                                    <MenuButton>
+                                                                                        <IconButton
+                                                                                            icon={
+                                                                                                <CgMoreVerticalAlt />
+                                                                                            }
+                                                                                            size="xs"
+                                                                                            rounded="full"
+                                                                                            colorScheme="blue"
+                                                                                            variant="outline"
+                                                                                        />
+                                                                                    </MenuButton>
+                                                                                </Tooltip>
+                                                                                <MenuList>
+                                                                                    <MenuItem
+                                                                                        icon={
+                                                                                            <MdOutlineVerifiedUser />
+                                                                                        }
+                                                                                        onClick={() =>
+                                                                                            modalRevisar.current.onOpen(
+                                                                                                item.id
+                                                                                            )
+                                                                                        }
+                                                                                    >
+                                                                                        Revisar
+                                                                                        Ficha
+                                                                                    </MenuItem>
+                                                                                    <MenuItem
+                                                                                        icon={
+                                                                                            <FiEdit />
+                                                                                        }
+                                                                                        onClick={() =>
+                                                                                            modal.current.onOpen(
+                                                                                                item.id
+                                                                                            )
+                                                                                        }
+                                                                                    >
+                                                                                        Editar
+                                                                                        Ficha
+                                                                                    </MenuItem>
+                                                                                    <MenuItem
+                                                                                        icon={
+                                                                                            <FiLink />
+                                                                                        }
+                                                                                        onClick={() => {
+                                                                                            navigator.clipboard.writeText(
+                                                                                                `${window.location.origin}/fichaCadastral/${item.id}`
+                                                                                            );
+                                                                                            toast(
+                                                                                                {
+                                                                                                    title: "URL Copiada",
+                                                                                                }
+                                                                                            );
+                                                                                        }}
+                                                                                    >
+                                                                                        Copiar
+                                                                                        URL
+                                                                                        da
+                                                                                        Ficha
+                                                                                    </MenuItem>
+                                                                                    <MenuItem
+                                                                                        as={
+                                                                                            Link
+                                                                                        }
+                                                                                        icon={
+                                                                                            <FiEye />
+                                                                                        }
+                                                                                        href={`/fichaCadastral/${item.id}`}
+                                                                                        target="_blank"
+                                                                                    >
+                                                                                        Visualizar
+                                                                                        Ficha
+                                                                                    </MenuItem>{" "}
+                                                                                    <MenuItem
+                                                                                        as={
+                                                                                            Link
+                                                                                        }
+                                                                                        icon={
+                                                                                            <FiDownload />
+                                                                                        }
+                                                                                        href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/downloadArquivos`}
+                                                                                        target="_blank"
+                                                                                        passHref
+                                                                                    >
+                                                                                        Baixar
+                                                                                        Todos
+                                                                                        Arquivos
+                                                                                    </MenuItem>
+                                                                                    <MenuItem
+                                                                                        icon={
+                                                                                            <FaFileExcel />
+                                                                                        }
+                                                                                        onClick={() =>
+                                                                                            exportToExcel(
+                                                                                                item.preenchimento,
+                                                                                                "ficha-cadastral-" +
+                                                                                                    item.id
+                                                                                            )
+                                                                                        }
+                                                                                    >
+                                                                                        Exportar
+                                                                                        para
+                                                                                        Excel
+                                                                                    </MenuItem>
+                                                                                    <MenuItem
+                                                                                        as={
+                                                                                            Link
+                                                                                        }
+                                                                                        icon={
+                                                                                            <FaFilePdf />
+                                                                                        }
+                                                                                        href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
+                                                                                        target="_blank"
+                                                                                        passHref
+                                                                                    >
+                                                                                        Gerar
+                                                                                        PDF
+                                                                                    </MenuItem>
+                                                                                    <MenuItem
+                                                                                        icon={
+                                                                                            <FiTrash />
+                                                                                        }
+                                                                                        onClick={() => {
+                                                                                            modalExcluir.current.onOpen(
+                                                                                                item.id
+                                                                                            );
+                                                                                        }}
+                                                                                    >
+                                                                                        Excluir
+                                                                                        Ficha
+                                                                                    </MenuItem>
+                                                                                </MenuList>
+                                                                            </Menu>
+                                                                        </Flex>
+                                                                    </Td>
+                                                                    <Td w={12}>
+                                                                        {statusFichaTag(
+                                                                            item.status
+                                                                        )}
+                                                                    </Td>
+                                                                    <Td w={44}>
+                                                                        <>
+                                                                            <Text>
+                                                                                {
                                                                                     item
-                                                                                        ?.responsavel
+                                                                                        .modelo
                                                                                         ?.nome
                                                                                 }
-                                                                            />
-                                                                        </Tooltip>
-                                                                    </>
-                                                                </Td>
-                                                                <Td>
-                                                                    <Tooltip
-                                                                        label="Última atualização"
-                                                                        hasArrow
-                                                                    >
-                                                                        {formatoData(
-                                                                            item.updatedAt,
-                                                                            "DATA_HORA"
-                                                                        )}
-                                                                    </Tooltip>
-                                                                </Td>
-                                                                <Td>
-                                                                    <>
-                                                                        <Box pos="relative">
-                                                                            <Tooltip
-                                                                                label={`${
-                                                                                    item.preenchimento.filter(
-                                                                                        (
-                                                                                            i
-                                                                                        ) =>
-                                                                                            i.valor !=
-                                                                                                "" &&
-                                                                                            i.valor !=
-                                                                                                null
-                                                                                    )
-                                                                                        .length
-                                                                                } de ${
-                                                                                    item
-                                                                                        .preenchimento
-                                                                                        .length
-                                                                                } campos preenchidos`}
+                                                                            </Text>
+                                                                            <Text
+                                                                                fontSize="xs"
+                                                                                color="gray"
                                                                             >
-                                                                                <Box>
-                                                                                    <Progress
-                                                                                        size="lg"
-                                                                                        value={
-                                                                                            item.preenchimento.filter(
-                                                                                                (
-                                                                                                    i
-                                                                                                ) =>
-                                                                                                    i.valor !=
-                                                                                                        "" &&
-                                                                                                    i.valor !=
-                                                                                                        null
-                                                                                            )
-                                                                                                .length
-                                                                                        }
-                                                                                        max={
-                                                                                            item
-                                                                                                .preenchimento
-                                                                                                .length >
-                                                                                            0
-                                                                                                ? item
-                                                                                                      .preenchimento
-                                                                                                      .length
-                                                                                                : 100
-                                                                                        }
-                                                                                        colorScheme={
-                                                                                            item.preenchimento.filter(
-                                                                                                (
-                                                                                                    i
-                                                                                                ) =>
-                                                                                                    i.valor !=
-                                                                                                        "" &&
-                                                                                                    i.valor !=
-                                                                                                        null
-                                                                                            )
-                                                                                                .length ==
-                                                                                            item
-                                                                                                .preenchimento
-                                                                                                .length
-                                                                                                ? "green"
-                                                                                                : "yellow"
-                                                                                        }
-                                                                                    />
+                                                                                {tipoFicha(
+                                                                                    item
+                                                                                        .modelo
+                                                                                        ?.tipo
+                                                                                )}
+                                                                            </Text>
+                                                                        </>
+                                                                    </Td>
+                                                                    <Td w={32}>
+                                                                        <>
+                                                                            <Text fontWeight="bold">
+                                                                                {
+                                                                                    item.nome
+                                                                                }
+                                                                            </Text>
+                                                                            <Text fontSize="xs">
+                                                                                {
+                                                                                    item.descricao
+                                                                                }
+                                                                            </Text>
+                                                                        </>
+                                                                    </Td>
+                                                                    <Td>
+                                                                        <>
+                                                                            <Tooltip
+                                                                                label={`Responsável: ${item?.responsavel?.nome}`}
+                                                                                hasArrow
+                                                                            >
+                                                                                <Avatar
+                                                                                    size="xs"
+                                                                                    name={
+                                                                                        item
+                                                                                            ?.responsavel
+                                                                                            ?.nome
+                                                                                    }
+                                                                                />
+                                                                            </Tooltip>
+                                                                        </>
+                                                                    </Td>
+                                                                    <Td w={20}>
+                                                                        {item.dataInicioPreenchimento && (
+                                                                            <Tooltip
+                                                                                label="O cliente iniciou o Cadastro"
+                                                                                hasArrow
+                                                                            >
+                                                                                <Box
+                                                                                    textAlign="center"
+                                                                                    bg="#c7ebff"
+                                                                                    color="#005989"
+                                                                                >
+                                                                                    <Text>
+                                                                                        {formatoData(
+                                                                                            item.dataInicioPreenchimento,
+                                                                                            "DATA"
+                                                                                        )}
+                                                                                    </Text>
+                                                                                    <Text>
+                                                                                        {formatoData(
+                                                                                            item.dataInicioPreenchimento,
+                                                                                            "HORA"
+                                                                                        )}
+                                                                                    </Text>
                                                                                 </Box>
                                                                             </Tooltip>
-                                                                            <Flex
-                                                                                pos="absolute"
-                                                                                top="0"
-                                                                                justify="center"
-                                                                                mx="auto"
-                                                                                w="full"
-                                                                            >
-                                                                                <Text
-                                                                                    textAlign="center"
-                                                                                    fontSize="xs"
-                                                                                    color={
-                                                                                        Number(
-                                                                                            (item.preenchimento.filter(
-                                                                                                (
-                                                                                                    i
-                                                                                                ) =>
-                                                                                                    i.valor
-                                                                                            )
-                                                                                                .length /
-                                                                                                item
-                                                                                                    .preenchimento
-                                                                                                    .length) *
-                                                                                                100
-                                                                                        ).toFixed(
-                                                                                            0
-                                                                                        ) ==
-                                                                                        100
-                                                                                            ? "white"
-                                                                                            : ""
-                                                                                    }
-                                                                                >
-                                                                                    {item.preenchimento.filter(
-                                                                                        (
-                                                                                            i
-                                                                                        ) =>
-                                                                                            i.valor
-                                                                                    )
-                                                                                        .length
-                                                                                        ? Number(
-                                                                                              (item.preenchimento.filter(
-                                                                                                  (
-                                                                                                      i
-                                                                                                  ) =>
-                                                                                                      i.valor
-                                                                                              )
-                                                                                                  .length /
-                                                                                                  item
-                                                                                                      .preenchimento
-                                                                                                      .length) *
-                                                                                                  100
-                                                                                          ).toFixed(
-                                                                                              2
-                                                                                          )
-                                                                                        : Number(
-                                                                                              0
-                                                                                          ).toFixed(
-                                                                                              2
-                                                                                          )}
-
-                                                                                    %
-                                                                                    preenchida{" "}
-                                                                                    {}
+                                                                        )}
+                                                                    </Td>
+                                                                    <Td w={20}>
+                                                                        <Tooltip
+                                                                            label="Última atualização"
+                                                                            hasArrow
+                                                                        >
+                                                                            <Box textAlign="center">
+                                                                                <Text>
+                                                                                    {formatoData(
+                                                                                        item.updatedAt,
+                                                                                        "DATA"
+                                                                                    )}
                                                                                 </Text>
-                                                                            </Flex>
-                                                                        </Box>
-                                                                    </>
-                                                                </Td>
-                                                            </Tr>
-                                                        )
+                                                                                <Text>
+                                                                                    {formatoData(
+                                                                                        item.updatedAt,
+                                                                                        "HORA"
+                                                                                    )}
+                                                                                </Text>
+                                                                            </Box>
+                                                                        </Tooltip>
+                                                                    </Td>
+                                                                    <Td w={20}>
+                                                                        {item.dataFimPreenchimento && (
+                                                                            <Tooltip
+                                                                                label="O cliente finalizou o Cadastro e enviou a ficha"
+                                                                                hasArrow
+                                                                            >
+                                                                                <Box
+                                                                                    textAlign="center"
+                                                                                    bg="#d9fbd0"
+                                                                                    color="#4d7c3d"
+                                                                                >
+                                                                                    <Text>
+                                                                                        {formatoData(
+                                                                                            item.dataFimPreenchimento,
+                                                                                            "DATA"
+                                                                                        )}
+                                                                                    </Text>
+                                                                                    <Text>
+                                                                                        {formatoData(
+                                                                                            item.dataFimPreenchimento,
+                                                                                            "HORA"
+                                                                                        )}
+                                                                                    </Text>
+                                                                                </Box>
+                                                                            </Tooltip>
+                                                                        )}
+                                                                    </Td>
+                                                                    <Td>
+                                                                        <>
+                                                                            <Tooltip
+                                                                                label="O percentual preenchido será contabilizado apenas nos campos obrigatórios"
+                                                                                hasArrow
+                                                                            >
+                                                                                <Box pos="relative">
+                                                                                    <Tooltip
+                                                                                    // label={`${itemFulledLengthMandatory(
+                                                                                    //     item
+                                                                                    // )} de ${itemLengthMandatory(
+                                                                                    //     item
+                                                                                    // )} campos preenchidos`}
+                                                                                    >
+                                                                                        <Box>
+                                                                                            <Progress
+                                                                                                size="lg"
+                                                                                                value={
+                                                                                                    Number(
+                                                                                                        item.porcentagemPreenchimento
+                                                                                                    ).toFixed(
+                                                                                                        2
+                                                                                                    ) |
+                                                                                                    0
+                                                                                                }
+                                                                                                max={
+                                                                                                    100
+                                                                                                }
+                                                                                                colorScheme={
+                                                                                                    Number(
+                                                                                                        item.porcentagemPreenchimento
+                                                                                                    ).toFixed(
+                                                                                                        2
+                                                                                                    ) ==
+                                                                                                    "100.00"
+                                                                                                        ? "green"
+                                                                                                        : "yellow"
+                                                                                                }
+                                                                                            />
+                                                                                        </Box>
+                                                                                    </Tooltip>
+                                                                                    <Flex
+                                                                                        pos="absolute"
+                                                                                        top="0"
+                                                                                        justify="center"
+                                                                                        mx="auto"
+                                                                                        w="full"
+                                                                                    >
+                                                                                        <Text
+                                                                                            textAlign="center"
+                                                                                            fontSize="xs"
+                                                                                            // color={
+                                                                                            //     Math.floor(
+                                                                                            //         (itemFulledLengthMandatory(
+                                                                                            //             item
+                                                                                            //         ) /
+                                                                                            //             itemLengthMandatory(
+                                                                                            //                 item
+                                                                                            //             )) *
+                                                                                            //             100
+                                                                                            //     ) ==
+                                                                                            //     100
+                                                                                            //         ? "white"
+                                                                                            //         : ""
+                                                                                            // }
+                                                                                        >
+                                                                                            {Number(
+                                                                                                item.porcentagemPreenchimento
+                                                                                            ).toFixed(
+                                                                                                2
+                                                                                            )}
+
+                                                                                            %
+                                                                                            preenchida
+                                                                                        </Text>
+                                                                                    </Flex>
+                                                                                </Box>
+                                                                            </Tooltip>
+                                                                        </>
+                                                                    </Td>
+                                                                </Tr>
+                                                            );
+                                                        }
                                                     )}
                                                 </Tbody>
                                             </Table>
@@ -1319,7 +1414,7 @@ const Home = ({ query }) => {
             </Layout>
             <ModalProcesso ref={modalProcesso} />
             <ModalFichaCadastral ref={modal} />
-            <ModalRevisaoFichaCadastral ref={modalRevisar} />
+            {/* <ModalRevisaoFichaCadastral ref={modalRevisar} /> */}
             <ModalValidar ref={modalValidar} />
             <Excluir
                 ref={modalExcluir}
@@ -1331,6 +1426,7 @@ const Home = ({ query }) => {
                 titulo="Excluir processos"
                 onDelete={onDeleteMany}
             />
+            <ModalRevisaoFichaCadastral2 ref={modalRevisar} />
         </>
     );
 };

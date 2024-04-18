@@ -5,6 +5,8 @@ export const formatoData = (data: any, tipo = 'DATA', utc = true) => {
     switch (tipo) {
         case 'DATA':
             return moment(data).utc(utc).format('DD/MM/YYYY')
+        case 'HORA':
+            return moment(data).utc(utc).format('HH:mm:ss')
         case 'DATA_HORA':
             return moment(data).utc(utc).format('DD/MM/YYYY HH:mm:ss')
         default:
@@ -345,8 +347,8 @@ export const arrayStatusFicha = [
         value: 'desistente',
     },
 ]
-export function removerCaracteresEspeciais(string: any) {
-    return string.replace(/[^a-zA-Z0-9]/g, '')
+export function removerCaracteresEspeciais(string) {
+    return string?.replace(/[^a-zA-Z0-9]/g, '')
 }
 export function TestaCPF(strCPF: string) {
     var Soma

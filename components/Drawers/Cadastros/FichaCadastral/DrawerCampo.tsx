@@ -1,4 +1,22 @@
+import { FormAutocomplete } from "@/components/Form/FormAutocomplete";
+import { FormInput } from "@/components/Form/FormInput";
+import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
+import { FormSelect } from "@/components/Form/FormSelect";
+import { FormTextarea } from "@/components/Form/FormTextarea";
+import { listarCampos } from "@/services/models/campo";
 import {
+    atualizarCampoFicha,
+    buscarCampoFicha,
+    cadastrarCampoFicha,
+} from "@/services/models/campoFicha";
+import { listarCategoriaCampoFichas } from "@/services/models/categoriaCampoFicha";
+import { queryClient } from "@/services/queryClient";
+import {
+    Box,
+    Button,
+    Checkbox,
+    Grid,
+    GridItem,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -6,52 +24,14 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    Flex,
-    Grid,
-    GridItem,
-    Heading,
-    Text,
     useDisclosure,
-    Button,
-    Spinner,
-    toast,
     useToast,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Tabs,
-    Box,
-    Checkbox,
 } from "@chakra-ui/react";
-import InputMask from "react-input-mask";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { forwardRef, useImperativeHandle } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
-import { show, store, update } from "@/services/models/imobiliaria";
-import { Input } from "@/components/Forms/Input";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "axios";
-import { useAuth } from "@/hooks/useAuth";
-import { FormInput } from "@/components/Form/FormInput";
-import { FormTextarea } from "@/components/Form/FormTextarea";
-import {
-    atualizarCategoriaCampoFicha,
-    buscarCategoriaCampoFicha,
-    cadastrarCategoriaCampoFicha,
-    listarCategoriaCampoFichas,
-} from "@/services/models/categoriaCampoFicha";
-import { queryClient } from "@/services/queryClient";
-import {
-    atualizarCampoFicha,
-    buscarCampoFicha,
-    cadastrarCampoFicha,
-} from "@/services/models/campoFicha";
-import { FormSelect } from "@/components/Form/FormSelect";
-import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
-import { listarCampos } from "@/services/models/campo";
-import { FormAutocomplete } from "@/components/Form/FormAutocomplete";
 
 const schema = yup.object().shape({
     nome: yup.string().required("Campo obrigatório"),
@@ -127,7 +107,7 @@ const ModalBase = ({}, ref) => {
         listarCategoriaCampoFichas
     );
     const { data: campos } = useQuery(["listaCampos", {}], listarCampos);
-    console.log(watch());
+    //console.log(watch());
     return (
         <Modal isOpen={isOpen} onClose={onClose} placement="right" size="3xl">
             <ModalOverlay />
@@ -405,28 +385,48 @@ const ModalBase = ({}, ref) => {
                                         control={control}
                                         name="dependenciaValor"
                                         render={({ field }) => (
-                                            <FormSelect
-                                                {...field}
+                                            <FormMultiSelect
                                                 size="sm"
+                                                isMulti
+                                                options={
+                                                    watch("dependencia.opcoes")
+                                                        .length > 0
+                                                        ? watch(
+                                                              "dependencia.opcoes"
+                                                          ).map((i) => ({
+                                                              label: i,
+                                                              value: i,
+                                                          }))
+                                                        : []
+                                                }
+                                                value={
+                                                    field.value
+                                                        ? watch(
+                                                              "dependencia.opcoes"
+                                                          )
+                                                              ?.filter((i) =>
+                                                                  field.value.includes(
+                                                                      i
+                                                                  )
+                                                              )
+                                                              .map((i) => ({
+                                                                  label: i,
+                                                                  value: i,
+                                                              }))
+                                                        : null
+                                                }
+                                                onChange={(e) =>
+                                                    field.onChange(
+                                                        e
+                                                            ? e.map(
+                                                                  (i) => i.value
+                                                              )
+                                                            : null
+                                                    )
+                                                }
                                                 label="Opção requerida"
                                                 placeholder="Selecione..."
-                                            >
-                                                {watch("dependencia.opcoes")
-                                                    .length > 0 ? (
-                                                    watch(
-                                                        "dependencia.opcoes"
-                                                    ).map((i) => (
-                                                        <option
-                                                            key={i}
-                                                            value={i}
-                                                        >
-                                                            {i}
-                                                        </option>
-                                                    ))
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </FormSelect>
+                                            />
                                         )}
                                     />
                                 </GridItem>

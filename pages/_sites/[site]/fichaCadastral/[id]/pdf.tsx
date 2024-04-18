@@ -70,30 +70,35 @@ const FichaCadastral = ({
                                 </Text>
                             ) : campo.tipoCampo === "image" ? (
                                 ficha.preenchimento[campo.codigo] ? (
-                                    <Flex flexDirection="column">
-                                        <Image
-                                            w={32}
-                                            h={44}
-                                            src={
-                                                ficha.preenchimento[
-                                                    campo.codigo
-                                                ]
-                                            }
-                                            objectFit="cover"
-                                            objectPosition="center"
-                                        />
-                                        <Text fontSize="xs" mt={2}>
-                                            ou{" "}
-                                            <Link
-                                                href={
-                                                    ficha.preenchimento[
-                                                        campo.codigo
-                                                    ]
-                                                }
+                                    <Flex wrap="wrap" gap={2}>
+                                        {JSON.parse(
+                                            ficha.preenchimento[campo.codigo]
+                                        ).map((item) => (
+                                            <Flex
+                                                key={item.id}
+                                                flexDirection="column"
                                             >
-                                                clique aqui
-                                            </Link>
-                                        </Text>
+                                                <Image
+                                                    w={32}
+                                                    h={44}
+                                                    src={item}
+                                                    objectFit="cover"
+                                                    objectPosition="center"
+                                                />
+                                                <Text fontSize="xs" mt={2}>
+                                                    ou{" "}
+                                                    <Link
+                                                        href={
+                                                            ficha.preenchimento[
+                                                                campo.codigo
+                                                            ]
+                                                        }
+                                                    >
+                                                        clique aqui
+                                                    </Link>
+                                                </Text>
+                                            </Flex>
+                                        ))}
                                     </Flex>
                                 ) : null
                             ) : campo.tipoCampo === "qrcode" ? (
@@ -121,32 +126,8 @@ const FichaCadastral = ({
                                         </Text>
                                     </Flex>
                                 ) : null
-                            ) : campo.tipoCampo === "file" ? (
-                                ficha.preenchimento[campo.codigo] ? (
-                                    <Flex flexDirection="column">
-                                        <QRCode
-                                            size={75}
-                                            value={
-                                                ficha.preenchimento[
-                                                    campo.codigo
-                                                ]
-                                            }
-                                        />
-                                        <Text fontSize="xs" mt={2}>
-                                            Leia o QRCode ou{" "}
-                                            <Link
-                                                href={
-                                                    ficha.preenchimento[
-                                                        campo.codigo
-                                                    ]
-                                                }
-                                            >
-                                                clique aqui
-                                            </Link>
-                                        </Text>
-                                    </Flex>
-                                ) : null
-                            ) : campo.tipoCampo === "files" ? (
+                            ) : campo.tipoCampo === "files" ||
+                              campo.tipoCampo == "file" ? (
                                 ficha.preenchimento[campo.codigo] ? (
                                     <Flex wrap="wrap" gap={2}>
                                         {JSON.parse(
@@ -456,11 +437,15 @@ const FichaCadastral = ({
                                                         i.dependencia?.codigo
                                                     ]) ||
                                                     (i.dependencia?.codigo &&
-                                                        i.dependenciaValor ==
+                                                        i.dependenciaValor &&
+                                                        JSON.parse(
+                                                            i.dependenciaValor
+                                                        ).includes(
                                                             ficha.preenchimento[
                                                                 i.dependencia
                                                                     ?.codigo
-                                                            ])))
+                                                            ]
+                                                        ))))
                                         ) {
                                             return true;
                                         } else {

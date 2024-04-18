@@ -12,7 +12,7 @@ handler.use(cors);
 
 handler.get(async (req, res) => {
 
-    console.log("Teste");
+    //console.log("Teste");
     return res.send("123");
     
 });

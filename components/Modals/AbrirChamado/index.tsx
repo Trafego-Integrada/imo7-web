@@ -83,7 +83,7 @@ const ModalBase = ({ callback }, ref) => {
             }
             queryClient.invalidateQueries(["chamados"]);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
     const { data: departamentos } = useQuery(

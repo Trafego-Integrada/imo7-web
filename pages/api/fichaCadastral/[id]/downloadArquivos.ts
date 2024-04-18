@@ -1,9 +1,9 @@
-import nextConnect from "next-connect";
 import prisma from "@/lib/prisma";
+import nextConnect from "next-connect";
 
 import { cors } from "@/middleware/cors";
-import axios from "axios";
 import * as AdmZip from "adm-zip";
+import axios from "axios";
 import path, { parse } from "path";
 
 const handler = nextConnect();
@@ -17,7 +17,11 @@ handler.get(async (req, res) => {
             where: {
                 id,
             },
+            include: {
+                Anexo: true,
+            },
         });
+
         const data = await prisma.fichaCadastralPreenchimento.findMany({
             where: {
                 fichaCadastralId: id,
@@ -35,32 +39,73 @@ handler.get(async (req, res) => {
         let fileUrls = [];
 
         for await (const item of data) {
-            if (item.campo.tipoCampo == "files") {
-                JSON.parse(item.valor).map((i) => i && fileUrls.push(i));
+            if (
+                item.campo.tipoCampo == "files" ||
+                item.campo.tipoCampo == "file"
+            ) {
+                if (
+                    item.valor &&
+                    Array.isArray(JSON.parse(item.valor)) &&
+                    JSON.parse(item.valor).length > 0
+                ) {
+                    JSON.parse(item.valor).map((i) => i && fileUrls.push(i));
+                }
             } else if (item.valor) {
                 fileUrls.push(item.valor);
             }
         }
         if (!fileUrls || !Array.isArray(fileUrls) || fileUrls.length === 0) {
-            return res
-                .status(400)
-                .json({ error: "Invalid or empty file URLs" });
+            return res.redirect("/error");
         }
 
         const zip = new AdmZip();
+        if (ficha) {
+            const response = await axios.get(
+                `https://www.imo7.com.br/api/fichaCadastral/${ficha.id}/pdf`,
+                {
+                    responseType: "arraybuffer",
+                }
+            );
 
-        for (let i = 0; i < fileUrls.length; i++) {
-            const response = await axios.get(fileUrls[i], {
-                responseType: "arraybuffer",
-            });
-            console.log(response.status, i);
-            const parsedUrl = parse(fileUrls[i]);
-            console.log(parsedUrl);
-            const pathname = parsedUrl.base || "";
-            const fileName = path.basename(pathname);
-            console.log("nome", fileName);
             if (response.status === 200) {
-                zip.addFile(fileName, Buffer.from(response.data));
+                zip.addFile(
+                    `FichaCadastral-${ficha.id}.pdf`,
+                    Buffer.from(response.data)
+                );
+            }
+        }
+        if (ficha?.Anexo) {
+            for await (const anexo of ficha.Anexo) {
+                //console.log();
+
+                const response = await axios.get(anexo.anexo, {
+                    responseType: "arraybuffer",
+                });
+
+                const fileName = path.basename(anexo.anexo);
+                //console.log("nome", fileName);
+                if (response.status === 200) {
+                    zip.addFile(
+                        `Arquvos da Ficha ${ficha?.nome}/anexos/${fileName}`,
+                        Buffer.from(response.data)
+                    );
+                }
+            }
+        }
+        for (let i = 0; i < fileUrls.length; i++) {
+            try {
+                const response = await axios.get(fileUrls[i], {
+                    responseType: "arraybuffer",
+                });
+                const parsedUrl = parse(fileUrls[i]);
+                const pathname = parsedUrl.base || "";
+                const fileName = path.basename(pathname);
+                if (response.status === 200) {
+                    zip.addFile(fileName, Buffer.from(response.data));
+                }
+            } catch (e) {
+                //console.log(e.message);
+                console.error("Arquivo erro:", fileUrls[i]);
             }
         }
 
@@ -72,10 +117,11 @@ handler.get(async (req, res) => {
         );
         res.send(zipBuffer);
     } catch (error) {
-        res.status(500).send({
-            success: false,
-            message: error.message,
-        });
+        console.log(JSON.stringify({
+            message: (error as Error).message
+        }));
+
+        res.redirect("/error");
     }
 });
 function extractFileNameFromUrl(url) {

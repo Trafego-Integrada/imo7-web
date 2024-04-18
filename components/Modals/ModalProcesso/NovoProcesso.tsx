@@ -128,6 +128,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         await queryClient.invalidateQueries(["imoveis"]);
         reset({ ...watch(), imovelId });
     };
+
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="3xl">

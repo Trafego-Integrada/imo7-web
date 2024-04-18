@@ -6,8 +6,36 @@ import moment from "moment";
 import nextConnect from "next-connect";
 
 const handle = nextConnect();
+
 handle.use(cors);
 handle.use(checkAuth);
+
+async function buscarPreenchimentos(req, res) {
+    try {
+        const { id } = req.query;
+
+        const data = await prisma.fichaCadastral.findUnique({
+            where: {
+                id,
+            },
+            select: {
+                preenchimento: {
+                    include: {
+                        campo: true,
+                        validacaoFacial: true,
+                    },
+                },
+            },
+        });
+
+        res.send(data);
+    } catch (error) {
+        res.status(500).send({
+            error,
+            message: error.message,
+        });
+    }
+}
 
 handle.get(async (req, res) => {
     try {
@@ -25,7 +53,13 @@ handle.get(async (req, res) => {
             pagina,
             linhas,
             processoId,
+            action,
         } = req.query;
+
+        if (action === "buscarPreenchimentos") {
+            return buscarPreenchimentos(req, res);
+        }
+
         let filtroQuery: Prisma.FichaCadastralWhereInput = { AND: [] };
 
         if (tipoFicha) {
@@ -270,6 +304,7 @@ handle.get(async (req, res) => {
         });
     }
 });
+
 handle.post(async (req, res) => {
     try {
         const {
@@ -407,6 +442,7 @@ handle.post(async (req, res) => {
         });
     }
 });
+
 handle.delete(async (req, res) => {
     try {
         const { ids } = req.query;
@@ -433,4 +469,5 @@ handle.delete(async (req, res) => {
         });
     }
 });
+
 export default handle;

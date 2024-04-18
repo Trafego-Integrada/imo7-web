@@ -53,7 +53,7 @@ export function Conversa({ data, chamado }) {
             queryClient.invalidateQueries("historicosChamado");
             reset({ mensagem: "" });
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
     const { data: interacoes } = useQuery(

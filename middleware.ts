@@ -62,7 +62,7 @@ export default function middleware(req: NextRequest) {
 
     // rewrite root application to `/home` folder
     // if (hostname === "localhost:3000") {
-    //   console.log(4);
+    //   //console.log(4);
     //   url.pathname = `/home${url.pathname}`;
     //   return NextResponse.rewrite(url);
     // }

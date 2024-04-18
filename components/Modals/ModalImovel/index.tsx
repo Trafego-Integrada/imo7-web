@@ -75,7 +75,6 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
     });
 
     const onSubmit = async (data) => {
-        console.log(data);
         try {
             if (data.id) {
                 await atualizar.mutateAsync(data);
@@ -83,7 +82,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                 await cadastrar.mutateAsync({ ...data, chamadoId });
             }
         } catch (error) {
-            console.log(error);
+            console.log({ error });
             toast({ title: "Ocorreu um erro", status: "error" });
         }
     };

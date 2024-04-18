@@ -1,15 +1,16 @@
-import { FormInput } from "@/components/Form/FormInput";
-import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
 import { FormSelect } from "@/components/Form/FormSelect";
 import { FormTextarea } from "@/components/Form/FormTextarea";
+import { Historicos } from "@/components/Pages/Historicos";
+import { verificarExtensaoImagem } from "@/helpers/helpers";
 import { useAuth } from "@/hooks/useAuth";
+import { api } from "@/services/apiClient";
+import { imo7ApiService } from "@/services/apiServiceUsage";
 import { listarCategoriaCampoFichas } from "@/services/models/categoriaCampoFicha";
 import {
     atualizarFicha,
     buscarFicha,
     cadastrarFicha,
 } from "@/services/models/fichaCadastral";
-import { listarFichas } from "@/services/models/modeloFicha";
 import { cadastrarValidacao } from "@/services/models/validacaofacial";
 import { queryClient } from "@/services/queryClient";
 import {
@@ -23,10 +24,6 @@ import {
     Icon,
     IconButton,
     Image,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuList,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -56,12 +53,11 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import moment from "moment";
 import Link from "next/link";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
     FiAlertCircle,
-    FiCheck,
     FiCheckCircle,
     FiDownload,
     FiEye,
@@ -70,18 +66,11 @@ import {
 } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
-import { ModalPreview } from "../Preview";
-import { AnaliseCampo } from "./AnaliseCampo";
-import { Historicos } from "@/components/Pages/Historicos";
 import { Documentos } from "../Contrato/Documentos";
-import { imo7ApiService } from "@/services/apiServiceUsage";
 import { ConsultasNetrin } from "../ModalProcesso/ConsultaNetrin";
-import { AiOutlineFileSearch } from "react-icons/ai";
-import { api } from "@/services/apiClient";
-import {
-    removerCaracteresEspeciais,
-    verificarExtensaoImagem,
-} from "@/helpers/helpers";
+import { ModalTribunalJustica } from "../ModalRevisaoFichaCadastral2/TribunalJustica/Modal";
+import { AnaliseCampo } from "./AnaliseCampo";
+
 const schema = yup.object({
     status: yup.string().required("Status é obrigatório"),
     motivoReprovacaoId: yup.string().when("status", {
@@ -90,6 +79,7 @@ const schema = yup.object({
         otherwise: yup.string().nullable(), // em outros casos, o campo motivoReprovacaoId não é obrigatório
     }),
 });
+
 const ModalBase = ({}, ref) => {
     const { usuario } = useAuth();
     const preview = useRef();
@@ -103,13 +93,16 @@ const ModalBase = ({}, ref) => {
         reset,
         formState: { errors, isSubmitting },
     } = useForm({ resolver: yupResolver(schema) });
+
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
             reset(data);
         },
     });
+
     const cadastrar = useMutation(cadastrarFicha);
     const atualizar = useMutation(atualizarFicha);
+
     const onSubmit = async (data) => {
         try {
             if (data.id) {
@@ -124,7 +117,7 @@ const ModalBase = ({}, ref) => {
                 queryClient.invalidateQueries(["fichas"]);
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
 
@@ -139,7 +132,7 @@ const ModalBase = ({}, ref) => {
         imo7ApiService("motivoReprovacao").list,
         { refetchOnReconnect: false, refetchOnWindowFocus: false }
     );
-    console.log(motivos);
+    //console.log(motivos);
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
             reset({});
@@ -168,7 +161,9 @@ const ModalBase = ({}, ref) => {
         });
         buscar.mutate(fichaCadastralId);
     };
+
     const [consultandoNetrin, setConsultandoNetrin] = useState(false);
+
     const consultarNetrin = async (data) => {
         try {
             setConsultandoNetrin(true);
@@ -186,7 +181,7 @@ const ModalBase = ({}, ref) => {
             setConsultandoNetrin(false);
         } catch (error) {
             setConsultandoNetrin(false);
-            console.log(error);
+
             toast({
                 title: "Houve um problema",
                 description: error?.response?.data?.message,
@@ -194,6 +189,7 @@ const ModalBase = ({}, ref) => {
             });
         }
     };
+
     const { data } = useQuery(
         [
             "consultasNetrin",
@@ -216,15 +212,16 @@ const ModalBase = ({}, ref) => {
             }
         }
     );
+
     const totalProtestos = (protestos) => {
         let total = 0;
         if (protestos.code != 606) {
             Object.entries(protestos)?.map((i) => {
-                console.log("Item", i);
+                //console.log("Item", i);
 
                 if (i.length > 1) {
                     i[1].map((i) => {
-                        console.log("Item2", i);
+                        //console.log("Item2", i);
                         total += i.protestos?.length;
                     });
                 }
@@ -233,7 +230,7 @@ const ModalBase = ({}, ref) => {
 
         return total;
     };
-    console.log("DAdos", watch());
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -430,7 +427,10 @@ const ModalBase = ({}, ref) => {
                                                                             (i
                                                                                 .dependencia
                                                                                 ?.codigo &&
-                                                                                i.dependenciaValor ==
+                                                                                i.dependenciaValor &&
+                                                                                JSON.parse(
+                                                                                    i.dependenciaValor
+                                                                                ).includes(
                                                                                     watch(
                                                                                         `preenchimento`
                                                                                     ).find(
@@ -442,7 +442,8 @@ const ModalBase = ({}, ref) => {
                                                                                                 .dependencia
                                                                                                 ?.codigo
                                                                                     )
-                                                                                        ?.valor)))
+                                                                                        ?.valor
+                                                                                ))))
                                                                 ) {
                                                                     return true;
                                                                 } else {
@@ -532,124 +533,11 @@ const ModalBase = ({}, ref) => {
                                                                             fontWeight="bold"
                                                                         >
                                                                             {i.tipoCampo ==
-                                                                            "image" ? (
-                                                                                <Flex>
-                                                                                    {watch(
-                                                                                        "preenchimento"
-                                                                                    )?.find(
-                                                                                        (
-                                                                                            p
-                                                                                        ) =>
-                                                                                            p.campoFichaCadastralCodigo ==
-                                                                                            i.codigo
-                                                                                    )
-                                                                                        ?.valor ? (
-                                                                                        <>
-                                                                                            <Image
-                                                                                                w={
-                                                                                                    32
-                                                                                                }
-                                                                                                h={
-                                                                                                    44
-                                                                                                }
-                                                                                                src={
-                                                                                                    watch(
-                                                                                                        "preenchimento"
-                                                                                                    )?.find(
-                                                                                                        (
-                                                                                                            p
-                                                                                                        ) =>
-                                                                                                            p.campoFichaCadastralCodigo ==
-                                                                                                            i.codigo
-                                                                                                    )
-                                                                                                        ?.valor
-                                                                                                }
-                                                                                                objectFit="cover"
-                                                                                                objectPosition="center"
-                                                                                            />
-                                                                                            <Tooltip label="Visualizar Arquivo">
-                                                                                                <IconButton
-                                                                                                    size="xs"
-                                                                                                    icon={
-                                                                                                        <Icon
-                                                                                                            as={
-                                                                                                                FiEye
-                                                                                                            }
-                                                                                                        />
-                                                                                                    }
-                                                                                                    onClick={() =>
-                                                                                                        preview.current.onOpen(
-                                                                                                            watch(
-                                                                                                                "preenchimento"
-                                                                                                            )?.find(
-                                                                                                                (
-                                                                                                                    p
-                                                                                                                ) =>
-                                                                                                                    p.campoFichaCadastralCodigo ==
-                                                                                                                    i.codigo
-                                                                                                            )
-                                                                                                                ?.valor
-                                                                                                        )
-                                                                                                    }
-                                                                                                />
-                                                                                            </Tooltip>
-                                                                                            <Tooltip label="Baixar Arquivo">
-                                                                                                <Link
-                                                                                                    href={
-                                                                                                        watch(
-                                                                                                            "preenchimento"
-                                                                                                        )?.find(
-                                                                                                            (
-                                                                                                                p
-                                                                                                            ) =>
-                                                                                                                p.campoFichaCadastralCodigo ==
-                                                                                                                i.codigo
-                                                                                                        )
-                                                                                                            ?.valor
-                                                                                                            ? watch(
-                                                                                                                  "preenchimento"
-                                                                                                              )?.find(
-                                                                                                                  (
-                                                                                                                      p
-                                                                                                                  ) =>
-                                                                                                                      p.campoFichaCadastralCodigo ==
-                                                                                                                      i.codigo
-                                                                                                              )
-                                                                                                                  ?.valor
-                                                                                                            : "#"
-                                                                                                    }
-                                                                                                    passHref
-                                                                                                >
-                                                                                                    <IconButton
-                                                                                                        size="xs"
-                                                                                                        icon={
-                                                                                                            <Icon
-                                                                                                                as={
-                                                                                                                    FiDownload
-                                                                                                                }
-                                                                                                            />
-                                                                                                        }
-                                                                                                    />
-                                                                                                </Link>
-                                                                                            </Tooltip>
-                                                                                        </>
-                                                                                    ) : (
-                                                                                        ""
-                                                                                    )}
-                                                                                    <AnaliseCampo
-                                                                                        campoCodigo={
-                                                                                            i.codigo
-                                                                                        }
-                                                                                        fichaId={watch(
-                                                                                            "id"
-                                                                                        )}
-                                                                                        buscarFicha={
-                                                                                            buscar
-                                                                                        }
-                                                                                    />
-                                                                                </Flex>
-                                                                            ) : i.tipoCampo ==
-                                                                              "files" ? (
+                                                                                "image" ||
+                                                                            i.tipoCampo ==
+                                                                                "files" ||
+                                                                            i.tipoCampo ==
+                                                                                "file" ? (
                                                                                 <Flex
                                                                                     wrap="wrap"
                                                                                     gap={
@@ -1802,6 +1690,7 @@ const ModalBase = ({}, ref) => {
                                     </Grid>
                                 </Box>
                             </TabPanel>
+
                             <TabPanel>
                                 <Documentos
                                     fichaCadastralId={watch("id")}
@@ -1816,12 +1705,14 @@ const ModalBase = ({}, ref) => {
                                     tabelaId={watch("id")}
                                 />
                             </TabPanel>
+
                             <TabPanel>
                                 <Historicos
                                     tabela="Processo"
                                     tabelaId={watch("processoId")}
                                 />
                             </TabPanel>
+
                             <TabPanel>
                                 <ConsultasNetrin
                                     fichaCadastralId={watch("id")}
@@ -1844,7 +1735,7 @@ const ModalBase = ({}, ref) => {
                     </Button>
                 </ModalFooter>
             </ModalContent>
-            <ModalPreview ref={preview} />
+            <ModalTribunalJustica ref={preview} />
         </Modal>
     );
 };

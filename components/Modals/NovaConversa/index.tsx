@@ -54,7 +54,7 @@ const ModalBase = ({ chamadoId, contratoId }, ref) => {
             onClose();
             reset({ mensagem: "" });
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
     useImperativeHandle(ref, () => ({

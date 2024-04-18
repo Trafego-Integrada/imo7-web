@@ -1,4 +1,6 @@
+import { imo7ApiService } from "@/services/apiServiceUsage";
 import { listarHistoricos } from "@/services/models/historico";
+import { queryClient } from "@/services/queryClient";
 import {
     Avatar,
     Box,
@@ -10,13 +12,10 @@ import {
     Tooltip,
 } from "@chakra-ui/react";
 import moment from "moment";
-import { useMutation, useQuery } from "react-query";
-import { FormTextarea } from "../Form/FormTextarea";
-import { FormInput } from "../Form/FormInput";
 import { useEffect, useState } from "react";
-import { imo7ApiService } from "@/services/apiServiceUsage";
-import { queryClient } from "@/services/queryClient";
 import { FiSend } from "react-icons/fi";
+import { useMutation, useQuery } from "react-query";
+import { FormInput } from "../Form/FormInput";
 
 export const Historicos = ({ tabela, tabelaId }) => {
     const { data } = useQuery(
@@ -88,7 +87,7 @@ export const Historicos = ({ tabela, tabelaId }) => {
                     value={descricao}
                     onChange={(e) => setDescricao(e.target.value)}
                     onKeyPress={(e) => {
-                        console.log(e);
+                        //console.log(e);
                         if (e.key == "Enter" && !eventoTratado) {
                             e.preventDefault();
                             setEventoTratado(true);

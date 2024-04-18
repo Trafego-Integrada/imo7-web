@@ -1,7 +1,7 @@
 import { api } from '@/services/apiClient'
 
-export const listarValidacoesFaciais = async ({ queryKey }: any) => {
-    console.log('listarValidacoesFaciais')
+export const listarValidacoesFaciais = async ({ queryKey }) => {
+    //console.log("listarValidacoesFaciais");
 
     try {
         const { data } = await api.get('validacaoFacial', {
@@ -9,8 +9,8 @@ export const listarValidacoesFaciais = async ({ queryKey }: any) => {
         })
         return data
     } catch (e) {
-        console.log('error')
-        console.log(e)
+        //console.log("error");
+        //console.log(e);
         return null
     }
 }

@@ -6,7 +6,7 @@ import puppeteer from "puppeteer";
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
 handler.get(async (req, res) => {
-    console.log(req);
+    //console.log(req);
     const { id } = req.query;
 
     const boleto = await prisma.boleto.findUnique({
