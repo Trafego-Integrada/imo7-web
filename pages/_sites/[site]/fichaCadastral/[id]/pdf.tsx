@@ -33,7 +33,7 @@ const FichaCadastral = ({
     processo,
 }) => {
     function breakText(text) {
-        return text.split('\n').map((item, index, array) => (
+        return text?.split('\n').map((item, index, array) => (
             <React.Fragment key={index}>
                 {item}
                 {index !== array.length - 1 && <br />}
@@ -56,8 +56,8 @@ const FichaCadastral = ({
                     campo.tipoCampo === 'file'
                         ? 1
                         : campo.colSpan
-                        ? campo.colSpan
-                        : 1
+                            ? campo.colSpan
+                            : 1
 
                 if (currentRowColSpan + colSpan <= 5) {
                     currentRow.push(
@@ -100,7 +100,7 @@ const FichaCadastral = ({
                                                     <Link
                                                         href={
                                                             ficha.preenchimento[
-                                                                campo.codigo
+                                                            campo.codigo
                                                             ]
                                                         }
                                                     >
@@ -118,7 +118,7 @@ const FichaCadastral = ({
                                             size={75}
                                             value={
                                                 ficha.preenchimento[
-                                                    campo.codigo
+                                                campo.codigo
                                                 ]
                                             }
                                         />
@@ -127,7 +127,7 @@ const FichaCadastral = ({
                                             <Link
                                                 href={
                                                     ficha.preenchimento[
-                                                        campo.codigo
+                                                    campo.codigo
                                                     ]
                                                 }
                                             >
@@ -137,7 +137,7 @@ const FichaCadastral = ({
                                     </Flex>
                                 ) : null
                             ) : campo.tipoCampo === 'files' ||
-                              campo.tipoCampo == 'file' ? (
+                                campo.tipoCampo == 'file' ? (
                                 ficha.preenchimento[campo.codigo] ? (
                                     <Flex wrap="wrap" gap={2}>
                                         {JSON.parse(
@@ -195,7 +195,7 @@ const FichaCadastral = ({
                                             size={75}
                                             value={
                                                 ficha.preenchimento[
-                                                    campo.codigo
+                                                campo.codigo
                                                 ]
                                             }
                                         />
@@ -204,7 +204,7 @@ const FichaCadastral = ({
                                             <Link
                                                 href={
                                                     ficha.preenchimento[
-                                                        campo.codigo
+                                                    campo.codigo
                                                     ]
                                                 }
                                             >
@@ -284,15 +284,15 @@ const FichaCadastral = ({
                         <Text as="span" fontWeight="bold">
                             Fixo:
                         </Text>{' '}
-                        {ficha.imobiliaria.telefone} •{' '}
+                        {ficha?.imobiliaria?.telefone} •{' '}
                         <Text as="span" fontWeight="bold">
                             E-mail:
                         </Text>{' '}
-                        {ficha.imobiliaria.email} •{' '}
+                        {ficha?.imobiliaria?.email} •{' '}
                         <Text as="span" fontWeight="bold">
                             Site:
                         </Text>{' '}
-                        {ficha.imobiliaria.site}
+                        {ficha?.imobiliaria?.site}
                     </Text>
                 </Box>
             </Flex>
@@ -444,7 +444,7 @@ const FichaCadastral = ({
                                                 ((i.dependencia?.codigo &&
                                                     !i.dependenciaValor &&
                                                     ficha.preenchimento[
-                                                        i.dependencia?.codigo
+                                                    i.dependencia?.codigo
                                                     ]) ||
                                                     (i.dependencia?.codigo &&
                                                         i.dependenciaValor &&
@@ -452,8 +452,8 @@ const FichaCadastral = ({
                                                             i.dependenciaValor,
                                                         ).includes(
                                                             ficha.preenchimento[
-                                                                i.dependencia
-                                                                    ?.codigo
+                                                            i.dependencia
+                                                                ?.codigo
                                                             ],
                                                         ))))
                                         ) {

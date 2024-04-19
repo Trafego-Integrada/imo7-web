@@ -57,7 +57,7 @@ const schema = yup.object({
     observacoes: yup.string(),
 })
 
-const ModalBase = ({}, ref: any) => {
+const ModalBase = ({ }, ref: any) => {
     const { isOpen, onClose, onOpen } = useDisclosure()
 
     const toast = useToast()
@@ -179,7 +179,7 @@ const ModalBase = ({}, ref: any) => {
                                         variant="outline"
                                         as={Link}
                                         icon={<FaFilePdf />}
-                                        href={`https://www.imo7.com.br/api/fichaCadastral/${ficha?.id}/pdf`}
+                                        href={`http://localhost:3000/api/v1/fichaCadastral/${ficha?.id}/pdf`}
                                         target="_blank"
                                         passHref
                                     />
@@ -354,54 +354,54 @@ const ModalBase = ({}, ref: any) => {
 
                                                 {watch('status') ==
                                                     'reprovada' && (
-                                                    <Flex
-                                                        direction="column"
-                                                        gap={4}
-                                                    >
-                                                        <FormSelect
-                                                            label="Motivo da Reprovação"
-                                                            placeholder="Selecione o motivo"
-                                                            error={
-                                                                errors
-                                                                    .motivoReprovacaoId
-                                                                    ?.message
-                                                            }
-                                                            {...register(
-                                                                'motivoReprovacaoId',
-                                                            )}
+                                                        <Flex
+                                                            direction="column"
+                                                            gap={4}
                                                         >
-                                                            {motivos?.data?.data?.map(
-                                                                (item: any) => (
-                                                                    <option
-                                                                        key={
-                                                                            item.id
-                                                                        }
-                                                                        value={
-                                                                            item.id
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            item.nome
-                                                                        }
-                                                                    </option>
-                                                                ),
-                                                            )}
-                                                        </FormSelect>
+                                                            <FormSelect
+                                                                label="Motivo da Reprovação"
+                                                                placeholder="Selecione o motivo"
+                                                                error={
+                                                                    errors
+                                                                        .motivoReprovacaoId
+                                                                        ?.message
+                                                                }
+                                                                {...register(
+                                                                    'motivoReprovacaoId',
+                                                                )}
+                                                            >
+                                                                {motivos?.data?.data?.map(
+                                                                    (item: any) => (
+                                                                        <option
+                                                                            key={
+                                                                                item.id
+                                                                            }
+                                                                            value={
+                                                                                item.id
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                item.nome
+                                                                            }
+                                                                        </option>
+                                                                    ),
+                                                                )}
+                                                            </FormSelect>
 
-                                                        <FormTextarea
-                                                            label="Observações sobre a reprovação"
-                                                            placeholder="Digite o aqui as observações sobre a reprovação..."
-                                                            error={
-                                                                errors
-                                                                    .motivoReprovacao
-                                                                    ?.message
-                                                            }
-                                                            {...register(
-                                                                'motivoReprovacao',
-                                                            )}
-                                                        />
-                                                    </Flex>
-                                                )}
+                                                            <FormTextarea
+                                                                label="Observações sobre a reprovação"
+                                                                placeholder="Digite o aqui as observações sobre a reprovação..."
+                                                                error={
+                                                                    errors
+                                                                        .motivoReprovacao
+                                                                        ?.message
+                                                                }
+                                                                {...register(
+                                                                    'motivoReprovacao',
+                                                                )}
+                                                            />
+                                                        </Flex>
+                                                    )}
                                             </Flex>
                                         </Flex>
                                     )}
