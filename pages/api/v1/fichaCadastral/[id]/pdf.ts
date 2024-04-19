@@ -20,9 +20,17 @@ handler.get(async (req, res) => {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     await page.goto(
-        "https://" +
+        process.env.NODE_ENV == "production"
+            ?
+            "https://" +
             data?.imobiliaria.url +
             ".imo7.com.br/fichaCadastral/" +
+            id +
+            "/pdf"
+            :
+            "http://" +
+            data?.imobiliaria.url +
+            ".localhost:3000/fichaCadastral/" +
             id +
             "/pdf",
         {
