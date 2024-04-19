@@ -1,4 +1,4 @@
-import { formatoData, formatoValor } from '@/helpers/helpers'
+import { formatoData, formatoValor, nl2br } from '@/helpers/helpers'
 import prisma from '@/lib/prisma'
 import {
     Alert,
@@ -399,8 +399,12 @@ const FichaCadastral = ({
                 </GridItem>
                 <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
                     <Text fontSize="xs">Observações: </Text>
-                    <Box fontWeight="bold" fontSize="sm">
-                        {ficha?.observacoes}
+                    <Box
+                        fontWeight="bold"
+                        fontSize="sm"
+                        style={{ whiteSpace: 'pre-line' }}
+                    >
+                        {nl2br(ficha?.observacoes)}
                     </Box>
                 </GridItem>
             </Grid>
