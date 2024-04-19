@@ -1116,6 +1116,7 @@ enum TipoConsultaNetrin {
     receita_cpf
     receita_federal_cnd_cpf
     receita_federal_cnd_cnpj
+    receita_federal_cnd
     sefaz_cnd
     cnd_trabalhista
     receita_federal_cnpj
