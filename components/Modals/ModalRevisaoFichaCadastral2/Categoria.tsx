@@ -181,7 +181,7 @@ export const Categoria = ({
                     </Flex>
                 );
             } else {
-                return validarData(valor) ? formatarParaDataBR(valor) : valor;
+                return campo.codigo.includes("Data") ? formatarParaDataBR(valor) : valor;
             }
         }
     };
