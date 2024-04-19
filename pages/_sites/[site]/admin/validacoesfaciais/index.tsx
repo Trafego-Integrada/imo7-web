@@ -1,22 +1,23 @@
-import { Excluir } from "@/components/AlertDialogs/Excluir";
-import { FormDateRange } from "@/components/Form/FormDateRange";
-import { FormInput } from "@/components/Form/FormInput";
-import { FormMultiSelect } from "@/components/Form/FormMultiSelect";
-import { Layout } from "@/components/Layout/layout";
-import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
-import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFichaCadastral";
-import { ModalValidar } from "@/components/Modals/ModalValidar";
+import { Excluir } from '@/components/AlertDialogs/Excluir'
+import { FormDateRange } from '@/components/Form/FormDateRange'
+import { FormInput } from '@/components/Form/FormInput'
+import { FormMultiSelect } from '@/components/Form/FormMultiSelect'
+import { Layout } from '@/components/Layout/layout'
+import { ModalFichaCadastral } from '@/components/Modals/ModalFichaCadastral'
+import { ModalRevisaoFichaCadastral } from '@/components/Modals/ModalRevisaoFichaCadastral'
+import { ModalRevisaoFichaCadastral2 } from '@/components/Modals/ModalRevisaoFichaCadastral2'
+import { ModalValidar } from '@/components/Modals/ModalValidar'
 
 import {
     arrayStatusFicha,
     formatoData,
     statusFicha,
     tipoFicha,
-} from "@/helpers/helpers";
-import { useAuth } from "@/hooks/useAuth";
-import { excluirFicha, listarFichas } from "@/services/models/fichaCadastral";
-import { listarValidacoesFaciais } from "@/services/models/validacaofacial";
-import { queryClient } from "@/services/queryClient";
+} from '@/helpers/helpers'
+import { useAuth } from '@/hooks/useAuth'
+import { excluirFicha, listarFichas } from '@/services/models/fichaCadastral'
+import { listarValidacoesFaciais } from '@/services/models/validacaofacial'
+import { queryClient } from '@/services/queryClient'
 import {
     Box,
     Button,
@@ -36,38 +37,38 @@ import {
     Tr,
     useToast,
     Image,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useRef, useState } from "react";
-import { FaFileExcel, FaFilePdf } from "react-icons/fa";
-import { FiEdit, FiEye, FiLink, FiPlus, FiTrash } from "react-icons/fi";
-import { MdOutlineVerifiedUser, MdAccessibilityNew } from "react-icons/md";
-import { exportToExcel } from "react-json-to-excel";
-import { useMutation, useQuery } from "react-query";
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useRef, useState } from 'react'
+import { FaFileExcel, FaFilePdf } from 'react-icons/fa'
+import { FiEdit, FiEye, FiLink, FiPlus, FiTrash } from 'react-icons/fi'
+import { MdOutlineVerifiedUser, MdAccessibilityNew } from 'react-icons/md'
+import { exportToExcel } from 'react-json-to-excel'
+import { useMutation, useQuery } from 'react-query'
 
 const filtroPadrao = {
-    query: "",
-    identificacao: "",
+    query: '',
+    identificacao: '',
     createdAt: [null, null],
     updatedAt: [null, null],
     status: [],
     responsaveis: [],
-};
+}
 const FichasCadastrais = () => {
-    const { usuario } = useAuth();
-    const [filtro, setFiltro] = useState(filtroPadrao);
-    const toast = useToast();
-    const router = useRouter();
-    const modal = useRef();
-    const modalExcluir = useRef();
-    const modalRevisar = useRef();
-    const modalValidar = useRef();
+    const { usuario } = useAuth()
+    const [filtro, setFiltro] = useState(filtroPadrao)
+    const toast = useToast()
+    const router = useRouter()
+    const modal = useRef()
+    const modalExcluir = useRef()
+    const modalRevisar = useRef()
+    const modalValidar = useRef()
 
     const { data: fichas } = useQuery(
         [
-            "fichas",
+            'fichas',
             {
                 ...filtro,
                 createdAt: filtro.createdAt[0]
@@ -80,9 +81,9 @@ const FichasCadastrais = () => {
                 // responsaveis: filtro.responsaveis[0] ? JSON.stringify(filtro.responsaveis) : null,
             },
         ],
-        listarValidacoesFaciais
-    );
-    
+        listarValidacoesFaciais,
+    )
+
     return (
         <Layout>
             <Box p={4}>
@@ -293,7 +294,7 @@ const FichasCadastrais = () => {
                                         fichas.data.map((item) => (
                                             <Tr key={item.id}>
                                                 <Td>
-                                                    {" "}
+                                                    {' '}
                                                     {/* <Tooltip label="Validar CPF">
                                                             <IconButton
                                                                 colorScheme="green"
@@ -314,7 +315,7 @@ const FichasCadastrais = () => {
                                                             />
                                                         </Tooltip> */}
                                                     {usuario?.permissoes?.includes(
-                                                        "imobiliaria.fichas.revisar"
+                                                        'imobiliaria.fichas.revisar',
                                                     ) && (
                                                         <Tooltip label="Revisar Ficha">
                                                             <IconButton
@@ -330,7 +331,7 @@ const FichasCadastrais = () => {
                                                                 }
                                                                 onClick={() =>
                                                                     modalRevisar.current.onOpen(
-                                                                        item.fichaCadastralId
+                                                                        item.fichaCadastralId,
                                                                     )
                                                                 }
                                                             />
@@ -461,25 +462,25 @@ const FichasCadastrais = () => {
                                                 </Td>
                                                 <Td>{item.cpf}</Td>
                                                 <Td>
-                                                    {
-                                                        item.fotoUrl ? 
-                                                            <Image
-                                                                borderRadius="2xl"
-                                                                src={item.fotoUrl}
-                                                                width={20}
-                                                                height={20}
-                                                                objectFit="cover"
-                                                            /> :
-                                                            <Text fontWeight="bold">
-                                                                Foto não enviada
-                                                            </Text>
-                                                    }
+                                                    {item.fotoUrl ? (
+                                                        <Image
+                                                            borderRadius="2xl"
+                                                            src={item.fotoUrl}
+                                                            width={20}
+                                                            height={20}
+                                                            objectFit="cover"
+                                                        />
+                                                    ) : (
+                                                        <Text fontWeight="bold">
+                                                            Foto não enviada
+                                                        </Text>
+                                                    )}
                                                 </Td>
                                                 <Td>
                                                     <Text fontWeight="bold">
                                                         {
                                                             JSON.parse(
-                                                                item.resultado
+                                                                item.resultado,
                                                             )?.token
                                                         }
                                                     </Text>
@@ -488,14 +489,14 @@ const FichasCadastrais = () => {
                                                     {item.status == 1 && (
                                                         <Box pos="relative">
                                                             <Tooltip
-                                                                label={"L1"}
+                                                                label={'L1'}
                                                             >
                                                                 <Box>
                                                                     <Progress
                                                                         size="lg"
                                                                         value={
                                                                             JSON.parse(
-                                                                                item.resultado
+                                                                                item.resultado,
                                                                             )
                                                                                 ?.biometria_face
                                                                                 ?.similaridade *
@@ -506,27 +507,27 @@ const FichasCadastrais = () => {
                                                                         }
                                                                         colorScheme={
                                                                             JSON.parse(
-                                                                                item.resultado
+                                                                                item.resultado,
                                                                             )?.biometria_face?.probabilidade.indexOf(
-                                                                                "Altíssima "
+                                                                                'Altíssima ',
                                                                             ) >=
                                                                             0
-                                                                                ? "green"
+                                                                                ? 'green'
                                                                                 : JSON.parse(
-                                                                                      item.resultado
+                                                                                      item.resultado,
                                                                                   )?.biometria_face?.probabilidade.indexOf(
-                                                                                      "Alta "
+                                                                                      'Alta ',
                                                                                   ) >=
                                                                                   0
-                                                                                ? "blue"
+                                                                                ? 'blue'
                                                                                 : JSON.parse(
-                                                                                      item.resultado
+                                                                                      item.resultado,
                                                                                   )?.biometria_face?.probabilidade.indexOf(
-                                                                                      "Baixa "
+                                                                                      'Baixa ',
                                                                                   ) >=
                                                                                   0
-                                                                                ? "orange"
-                                                                                : "red"
+                                                                                ? 'orange'
+                                                                                : 'red'
                                                                         }
                                                                     />
                                                                 </Box>
@@ -543,22 +544,22 @@ const FichasCadastrais = () => {
                                                                     fontSize="xs"
                                                                     color={
                                                                         JSON.parse(
-                                                                            item.resultado
+                                                                            item.resultado,
                                                                         )?.biometria_face?.probabilidade.indexOf(
-                                                                            "Altíssima "
+                                                                            'Altíssima ',
                                                                         ) >= 0
-                                                                            ? "white"
-                                                                            : "white"
+                                                                            ? 'white'
+                                                                            : 'white'
                                                                     }
                                                                 >
                                                                     {Math.floor(
                                                                         JSON.parse(
-                                                                            item.resultado
+                                                                            item.resultado,
                                                                         )
                                                                             ?.biometria_face
                                                                             ?.similaridade *
-                                                                            100
-                                                                    ) || 0}{" "}
+                                                                            100,
+                                                                    ) || 0}{' '}
                                                                     %
                                                                 </Text>
                                                             </Flex>
@@ -567,29 +568,29 @@ const FichasCadastrais = () => {
                                                                 fontSize="xs"
                                                                 color={
                                                                     JSON.parse(
-                                                                        item.resultado
+                                                                        item.resultado,
                                                                     )?.biometria_face?.probabilidade.indexOf(
-                                                                        "Altíssima "
+                                                                        'Altíssima ',
                                                                     ) >= 0
-                                                                        ? "green"
+                                                                        ? 'green'
                                                                         : JSON.parse(
-                                                                              item.resultado
+                                                                              item.resultado,
                                                                           )?.biometria_face?.probabilidade.indexOf(
-                                                                              "Alta "
+                                                                              'Alta ',
                                                                           ) >= 0
-                                                                        ? "blue"
+                                                                        ? 'blue'
                                                                         : JSON.parse(
-                                                                              item.resultado
+                                                                              item.resultado,
                                                                           )?.biometria_face?.probabilidade.indexOf(
-                                                                              "Baixa "
+                                                                              'Baixa ',
                                                                           ) >= 0
-                                                                        ? "orange"
-                                                                        : "red"
+                                                                        ? 'orange'
+                                                                        : 'red'
                                                                 }
                                                             >
                                                                 {
                                                                     JSON.parse(
-                                                                        item.resultado
+                                                                        item.resultado,
                                                                     )
                                                                         ?.biometria_face
                                                                         ?.probabilidade
@@ -605,30 +606,30 @@ const FichasCadastrais = () => {
                                                 <Td>
                                                     {formatoData(
                                                         item.createAt,
-                                                        "DATA_HORA")
-                                                    }
+                                                        'DATA_HORA',
+                                                    )}
                                                 </Td>
                                                 <Td>
                                                     {formatoData(
                                                         item.updatedAt,
-                                                        "DATA_HORA"
+                                                        'DATA_HORA',
                                                     )}
                                                 </Td>
                                                 <Td>
-                                                    <Text color={"blue"}>
+                                                    <Text color={'blue'}>
                                                         {item.status == 0
-                                                            ? "Aguardando"
-                                                            : ""}
+                                                            ? 'Aguardando'
+                                                            : ''}
                                                     </Text>
-                                                    <Text color={"red"}>
+                                                    <Text color={'red'}>
                                                         {item.status == -1
-                                                            ? "Falha na verificação"
-                                                            : ""}
+                                                            ? 'Falha na verificação'
+                                                            : ''}
                                                     </Text>
-                                                    <Text color={"green"}>
+                                                    <Text color={'green'}>
                                                         {item.status == 1
-                                                            ? "Sucesso na verificação"
-                                                            : ""}
+                                                            ? 'Sucesso na verificação'
+                                                            : ''}
                                                     </Text>
                                                 </Td>
                                             </Tr>
@@ -652,13 +653,13 @@ const FichasCadastrais = () => {
                 </Box>
             </Box>
 
-            <ModalRevisaoFichaCadastral ref={modalRevisar} />
+            <ModalRevisaoFichaCadastral2 ref={modalRevisar} />
             {/* <ModalFichaCadastral ref={modal} />
             <ModalRevisaoFichaCadastral ref={modalRevisar} />
             <ModalValidar ref={modalValidar} />
             <Excluir ref={modalExcluir} onDelete={onDelete} /> */}
         </Layout>
-    );
-};
+    )
+}
 
-export default FichasCadastrais;
+export default FichasCadastrais
