@@ -1,20 +1,20 @@
-import { Excluir } from "@/components/AlertDialogs/Excluir";
-import { FormInput } from "@/components/Form/FormInput";
-import { ModalFichaCadastral } from "@/components/Modals/ModalFichaCadastral";
-import { ModalRevisaoFichaCadastral } from "@/components/Modals/ModalRevisaoFichaCadastral";
-import { ModalValidar } from "@/components/Modals/ModalValidar";
+import { Excluir } from '@/components/AlertDialogs/Excluir'
+import { FormInput } from '@/components/Form/FormInput'
+import { ModalFichaCadastral } from '@/components/Modals/ModalFichaCadastral'
+import { ModalRevisaoFichaCadastral } from '@/components/Modals/ModalRevisaoFichaCadastral'
+import { ModalValidar } from '@/components/Modals/ModalValidar'
 
-import { TabelaPadrao } from "@/components/Tabelas/TabelaPadrao";
-import { formatoData, statusFicha, tipoFicha } from "@/helpers/helpers";
-import { useAuth } from "@/hooks/useAuth";
+import { TabelaPadrao } from '@/components/Tabelas/TabelaPadrao'
+import { formatoData, statusFicha, tipoFicha } from '@/helpers/helpers'
+import { useAuth } from '@/hooks/useAuth'
 import {
     excluirFicha,
     excluirVariasFichas,
     listarFichas,
-} from "@/services/models/fichaCadastral";
-import { listarUsuarios } from "@/services/models/usuario";
-import { queryClient } from "@/services/queryClient";
-import { usePagination } from "@ajna/pagination";
+} from '@/services/models/fichaCadastral'
+import { listarUsuarios } from '@/services/models/usuario'
+import { queryClient } from '@/services/queryClient'
+import { usePagination } from '@ajna/pagination'
 import {
     Box,
     Button,
@@ -30,12 +30,12 @@ import {
     Text,
     Tooltip,
     useToast,
-} from "@chakra-ui/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useRef, useState } from "react";
-import { CgMoreVerticalAlt } from "react-icons/cg";
-import { FaFileExcel, FaFilePdf } from "react-icons/fa";
+} from '@chakra-ui/react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useRef, useState } from 'react'
+import { CgMoreVerticalAlt } from 'react-icons/cg'
+import { FaFileExcel, FaFilePdf } from 'react-icons/fa'
 import {
     FiDownload,
     FiEdit,
@@ -43,21 +43,22 @@ import {
     FiLink,
     FiPlus,
     FiTrash,
-} from "react-icons/fi";
-import { MdOutlineVerifiedUser } from "react-icons/md";
-import { exportToExcel } from "react-json-to-excel";
-import { useMutation, useQuery } from "react-query";
+} from 'react-icons/fi'
+import { MdOutlineVerifiedUser } from 'react-icons/md'
+import { exportToExcel } from 'react-json-to-excel'
+import { useMutation, useQuery } from 'react-query'
+import { ModalRevisaoFichaCadastral2 } from '../ModalRevisaoFichaCadastral2'
 const filtroPadrao = {
-    query: "",
-    identificacao: "",
+    query: '',
+    identificacao: '',
     createdAt: [null, null],
     updatedAt: [null, null],
     status: [],
     responsaveis: [],
-};
+}
 export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
-    const { usuario } = useAuth();
-    const [total, setTotal] = useState();
+    const { usuario } = useAuth()
+    const [total, setTotal] = useState()
     const [filtro, setFiltro] = useState({
         ...filtroPadrao,
         dataReajuste: [null, null],
@@ -65,13 +66,13 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
         dataFim: [null, null],
         dataCriacao: [null, null],
         processoId,
-    });
-    const toast = useToast();
-    const router = useRouter();
-    const modal = useRef();
-    const modalExcluir = useRef();
-    const modalRevisar = useRef();
-    const modalValidar = useRef();
+    })
+    const toast = useToast()
+    const router = useRouter()
+    const modal = useRef()
+    const modalExcluir = useRef()
+    const modalRevisar = useRef()
+    const modalValidar = useRef()
     const {
         currentPage,
         setCurrentPage,
@@ -86,10 +87,10 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
             outer: 1,
         },
         initialState: { currentPage: 1, pageSize: 15 },
-    });
+    })
     const { data: fichas, isLoading } = useQuery(
         [
-            "fichas",
+            'fichas',
             {
                 ...filtro,
                 createdAt: filtro.createdAt[0]
@@ -109,63 +110,63 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
         listarFichas,
         {
             onSuccess: (data) => {
-                setTotal(data.total);
+                setTotal(data.total)
             },
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
-        }
-    );
+        },
+    )
     const { data: responsaveis } = useQuery(
         [
-            "listaResponsaveis",
+            'listaResponsaveis',
             {
                 imobiliariaId: usuario?.imobiliariaId,
                 contaId: usuario?.conta?.id,
-                admConta: usuario?.cargos?.includes("conta") ? true : false,
-                admImobiliaria: usuario?.cargos?.includes("imobiliaria")
+                admConta: usuario?.cargos?.includes('conta') ? true : false,
+                admImobiliaria: usuario?.cargos?.includes('imobiliaria')
                     ? true
                     : false,
-                adm: usuario?.cargos?.includes("adm") ? true : false,
+                adm: usuario?.cargos?.includes('adm') ? true : false,
             },
         ],
         listarUsuarios,
         {
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
-        }
-    );
-    const excluir = useMutation(excluirFicha);
+        },
+    )
+    const excluir = useMutation(excluirFicha)
 
     const onDelete = async (id) => {
         await excluir.mutateAsync(id, {
             onSuccess: () => {
                 toast({
-                    title: "Ficha excluida",
+                    title: 'Ficha excluida',
                     duration: 3000,
-                    status: "success",
-                });
-                queryClient.invalidateQueries(["fichas"]);
+                    status: 'success',
+                })
+                queryClient.invalidateQueries(['fichas'])
             },
-        });
-    };
-    const [selecionados, setSelecionados] = useState([]);
+        })
+    }
+    const [selecionados, setSelecionados] = useState([])
     // //console.log(usuario);
     const deleteMany = useMutation(excluirVariasFichas, {
         onSuccess: () => {
-            queryClient.invalidateQueries("fichas");
+            queryClient.invalidateQueries('fichas')
             toast({
-                title: "Sucesso",
-                description: "Fichas excluídas com sucesso",
-                status: "success",
+                title: 'Sucesso',
+                description: 'Fichas excluídas com sucesso',
+                status: 'success',
                 duration: 3000,
-            });
+            })
         },
-    });
+    })
 
     const onDeleteMany = () => {
-        deleteMany.mutate(JSON.stringify(selecionados));
-        setSelecionados([]);
-    };
+        deleteMany.mutate(JSON.stringify(selecionados))
+        setSelecionados([])
+    }
     return (
         <>
             <Box>
@@ -196,13 +197,13 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                             <Text fontSize="xs" color="gray" w="full">
                                 <Text as="span" fontWeight="bold">
                                     {fichas?.total}
-                                </Text>{" "}
+                                </Text>{' '}
                                 fichas cadastrais encontradas
                             </Text>
                         </Flex>
                         <Flex gap={2}>
                             {usuario?.permissoes?.includes(
-                                "imobiliaria.fichas.visualizarExcluidas"
+                                'imobiliaria.fichas.visualizarExcluidas',
                             ) && (
                                 <Link href="/admin/fichas/excluidas">
                                     <Button
@@ -222,14 +223,14 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                 onClick={() => {
                                     exportToExcel(
                                         fichas?.data,
-                                        "fichas-cadastrais"
-                                    );
+                                        'fichas-cadastrais',
+                                    )
                                 }}
                             >
                                 Exportar para Excel
                             </Button>
                             {usuario?.permissoes?.includes(
-                                "imobiliaria.fichas.cadastrar"
+                                'imobiliaria.fichas.cadastrar',
                             ) && (
                                 <Button
                                     size="sm"
@@ -277,7 +278,9 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                             ?.map((item) => item.id)
                                             .filter(
                                                 (item) =>
-                                                    !selecionados.includes(item)
+                                                    !selecionados.includes(
+                                                        item,
+                                                    ),
                                             ).length == 0
                                             ? true
                                             : false
@@ -286,45 +289,45 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                         setSelecionados(
                                             e.target.checked
                                                 ? JSON.parse(e.target.value)
-                                                : []
+                                                : [],
                                         )
                                     }
                                     value={JSON.stringify(
                                         fichas?.data?.data?.map(
-                                            (item) => item.id
-                                        )
+                                            (item) => item.id,
+                                        ),
                                     )}
                                 />
                             ),
                             w: 4,
                         },
                         {
-                            value: "Ações",
+                            value: 'Ações',
                             w: 12,
-                            textAlign: "center",
+                            textAlign: 'center',
                         },
                         {
-                            value: "ID",
-                            w: 12,
-                        },
-                        {
-                            value: "Tipo",
+                            value: 'ID',
                             w: 12,
                         },
                         {
-                            value: "Nome",
+                            value: 'Tipo',
                             w: 12,
                         },
                         {
-                            value: "Preenchimento",
+                            value: 'Nome',
                             w: 12,
                         },
                         {
-                            value: "Última Atualização",
+                            value: 'Preenchimento',
                             w: 12,
                         },
                         {
-                            value: "Status",
+                            value: 'Última Atualização',
+                            w: 12,
+                        },
+                        {
+                            value: 'Status',
                             w: 24,
                         },
                     ]}
@@ -335,21 +338,21 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                       value: (
                                           <Checkbox
                                               isChecked={selecionados.includes(
-                                                  item.id
+                                                  item.id,
                                               )}
                                               onChange={(e) => {
                                                   if (e.target.checked) {
                                                       setSelecionados([
                                                           ...selecionados,
                                                           item.id,
-                                                      ]);
+                                                      ])
                                                   } else {
                                                       setSelecionados(
                                                           selecionados.filter(
                                                               (i) =>
-                                                                  i !== item.id
-                                                          )
-                                                      );
+                                                                  i !== item.id,
+                                                          ),
+                                                      )
                                                   }
                                               }}
                                           />
@@ -378,7 +381,7 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                           }
                                                           onClick={() =>
                                                               modalRevisar.current.onOpen(
-                                                                  item.id
+                                                                  item.id,
                                                               )
                                                           }
                                                       >
@@ -388,7 +391,7 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                           icon={<FiEdit />}
                                                           onClick={() =>
                                                               modal.current.onOpen(
-                                                                  item.id
+                                                                  item.id,
                                                               )
                                                           }
                                                       >
@@ -398,11 +401,11 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                           icon={<FiLink />}
                                                           onClick={() => {
                                                               navigator.clipboard.writeText(
-                                                                  `${window.location.origin}/fichaCadastral/${item.id}`
-                                                              );
+                                                                  `${window.location.origin}/fichaCadastral/${item.id}`,
+                                                              )
                                                               toast({
-                                                                  title: "URL Copiada",
-                                                              });
+                                                                  title: 'URL Copiada',
+                                                              })
                                                           }}
                                                       >
                                                           Copiar URL da Ficha
@@ -429,8 +432,8 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                           onClick={() =>
                                                               exportToExcel(
                                                                   item.preenchimento,
-                                                                  "ficha-cadastral-" +
-                                                                      item.id
+                                                                  'ficha-cadastral-' +
+                                                                      item.id,
                                                               )
                                                           }
                                                       >
@@ -449,8 +452,8 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                           icon={<FiTrash />}
                                                           onClick={() => {
                                                               modalExcluir.current.onOpen(
-                                                                  item.id
-                                                              );
+                                                                  item.id,
+                                                              )
                                                           }}
                                                       >
                                                           Excluir Ficha
@@ -490,7 +493,7 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                   <Tooltip
                                                       label={`${
                                                           item.preenchimento.filter(
-                                                              (i) => i.valor
+                                                              (i) => i.valor,
                                                           ).length
                                                       } de ${
                                                           item.preenchimento
@@ -503,7 +506,7 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                               value={
                                                                   item.preenchimento.filter(
                                                                       (i) =>
-                                                                          i.valor
+                                                                          i.valor,
                                                                   ).length
                                                               }
                                                               max={
@@ -519,13 +522,13 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                               colorScheme={
                                                                   item.preenchimento.filter(
                                                                       (i) =>
-                                                                          i.valor
+                                                                          i.valor,
                                                                   ).length ==
                                                                   item
                                                                       .preenchimento
                                                                       .length
-                                                                      ? "green"
-                                                                      : "yellow"
+                                                                      ? 'green'
+                                                                      : 'yellow'
                                                               }
                                                           />
                                                       </Box>
@@ -544,33 +547,33 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                                               Number(
                                                                   (item.preenchimento.filter(
                                                                       (i) =>
-                                                                          i.valor
+                                                                          i.valor,
                                                                   ).length /
                                                                       item
                                                                           .preenchimento
                                                                           .length) *
-                                                                      100
+                                                                      100,
                                                               ).toFixed(0) ==
                                                               100
-                                                                  ? "white"
-                                                                  : ""
+                                                                  ? 'white'
+                                                                  : ''
                                                           }
                                                       >
                                                           {item.preenchimento.filter(
-                                                              (i) => i.valor
+                                                              (i) => i.valor,
                                                           ).length
                                                               ? Number(
                                                                     (item.preenchimento.filter(
                                                                         (i) =>
-                                                                            i.valor
+                                                                            i.valor,
                                                                     ).length /
                                                                         item
                                                                             .preenchimento
                                                                             .length) *
-                                                                        100
+                                                                        100,
                                                                 ).toFixed(2)
                                                               : Number(
-                                                                    0
+                                                                    0,
                                                                 ).toFixed(2)}
                                                           % preenchida {}
                                                       </Text>
@@ -584,7 +587,7 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                                           <>
                                               {formatoData(
                                                   item.updatedAt,
-                                                  "DATA_HORA"
+                                                  'DATA_HORA',
                                               )}
                                           </>
                                       ),
@@ -603,9 +606,9 @@ export const FichasCadastrais = ({ processoId, imovelId, responsavelId }) => {
                 responsavelId={responsavelId}
                 imovelId={imovelId}
             />
-            <ModalRevisaoFichaCadastral ref={modalRevisar} />
+            <ModalRevisaoFichaCadastral2 ref={modalRevisar} />
             <ModalValidar ref={modalValidar} />
             <Excluir ref={modalExcluir} onDelete={onDelete} />
         </>
-    );
-};
+    )
+}
