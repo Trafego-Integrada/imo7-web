@@ -1,4 +1,4 @@
-import { formatoData, formatoValor, nl2br } from '@/helpers/helpers'
+import { formatoData, formatoValor } from '@/helpers/helpers'
 import prisma from '@/lib/prisma'
 import {
     Alert,
@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react'
 import moment from 'moment'
 import Link from 'next/link'
+import React from 'react'
 import QRCode from 'react-qr-code'
 import 'react-quill/dist/quill.snow.css'
 const FichaCadastral = ({
@@ -31,6 +32,15 @@ const FichaCadastral = ({
     historicosProcesso,
     processo,
 }) => {
+    function breakText(text) {
+        return text.split('\n').map((item, index, array) => (
+            <React.Fragment key={index}>
+                {item}
+                {index !== array.length - 1 && <br />}
+            </React.Fragment>
+        ))
+    }
+
     const renderTable = (items) => {
         const rows = []
         let currentRow = []
@@ -404,7 +414,7 @@ const FichaCadastral = ({
                         fontSize="sm"
                         style={{ whiteSpace: 'pre-line' }}
                     >
-                        {nl2br(ficha?.observacoes)}
+                        {breakText(ficha?.observacoes)}
                     </Box>
                 </GridItem>
             </Grid>
