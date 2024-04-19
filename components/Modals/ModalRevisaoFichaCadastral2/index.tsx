@@ -179,7 +179,7 @@ const ModalBase = ({ }, ref: any) => {
                                         variant="outline"
                                         as={Link}
                                         icon={<FaFilePdf />}
-                                        href={`http://localhost:3000/api/v1/fichaCadastral/${ficha?.id}/pdf`}
+                                        href={`https://www.imo7.com.br/api/fichaCadastral/${ficha?.id}/pdf`}
                                         target="_blank"
                                         passHref
                                     />
