@@ -11,46 +11,46 @@ import {
     Stack,
     Text,
     useToast,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
-import { FormInput } from "@/components/Form/FormInput";
-import { store } from "@/services/models/imobiliaria";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { NextPage } from "next";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import ReactInputMask from "react-input-mask";
-import { useMutation } from "react-query";
-import BeatLoader from "react-spinners/BeatLoader";
-import * as yup from "yup";
+import { FormInput } from '@/components/Form/FormInput'
+import { store } from '@/services/models/imobiliaria'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { NextPage } from 'next'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import ReactInputMask from 'react-input-mask'
+import { useMutation } from 'react-query'
+import BeatLoader from 'react-spinners/BeatLoader'
+import * as yup from 'yup'
 
-import { FormSelect } from "@/components/Form/FormSelect";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { FaSignInAlt } from "react-icons/fa";
-import InputMask from "react-input-mask";
+import { FormSelect } from '@/components/Form/FormSelect'
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import { FaSignInAlt } from 'react-icons/fa'
+import InputMask from 'react-input-mask'
 interface CredentialsProps {
-    documento: string;
-    password: string;
+    documento: string
+    password: string
 }
 
 const schema = yup.object().shape({
-    razaoSocial: yup.string().required("A Razão Social é obrigatório"),
-    cnpj: yup.string().required("O CNPJ é obrigatório"),
-    email: yup.string().required("O E-mail é obrigatório"),
-    telefone: yup.string().required("O Telefone é obrigatório"),
-    url: yup.string().required("O URL é obrigatório"),
+    razaoSocial: yup.string().required('A Razão Social é obrigatório'),
+    cnpj: yup.string().required('O CNPJ é obrigatório'),
+    email: yup.string().required('O E-mail é obrigatório'),
+    telefone: yup.string().required('O Telefone é obrigatório'),
+    url: yup.string().required('O URL é obrigatório'),
     usuario: yup.object({
-        nome: yup.string().required("Campo obrigatório"),
-        documento: yup.string().required("Campo obrigatório"),
-        email: yup.string().required("Campo obrigatório"),
-        senha: yup.string().required("Campo obrigatório"),
-        confirmarSenha: yup.string().required("Campo obrigatório"),
+        nome: yup.string().required('Campo obrigatório'),
+        documento: yup.string().required('Campo obrigatório'),
+        email: yup.string().required('Campo obrigatório'),
+        senha: yup.string().required('Campo obrigatório'),
+        confirmarSenha: yup.string().required('Campo obrigatório'),
     }),
-});
+})
 const SignIn: NextPage = () => {
-    const router = useRouter();
-    const toast = useToast();
+    const router = useRouter()
+    const toast = useToast()
     const {
         register,
         handleSubmit,
@@ -59,16 +59,16 @@ const SignIn: NextPage = () => {
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
-    });
-    const [error, setError] = useState(null);
-    const cadastrar = useMutation(store);
+    })
+    const [error, setError] = useState(null)
+    const cadastrar = useMutation(store)
 
     const { mutateAsync: buscarCep, isLoading } = useMutation(
         async (cep) => {
             const { data } = await axios.get(
-                "https://viacep.com.br/ws/" + cep + "/json/"
-            );
-            return data;
+                'https://viacep.com.br/ws/' + cep + '/json/',
+            )
+            return data
         },
         {
             onSuccess: (data) => {
@@ -78,31 +78,35 @@ const SignIn: NextPage = () => {
                     bairro: data.bairro,
                     estado: data.uf,
                     cidade: data.localidade,
-                });
+                })
             },
+        },
+    )
+
+    const handleBuscarCep = (cep: any) => {
+        const cepFormated = cep.replaceAll('_', '')
+
+        if (cepFormated.length === 9) {
+            buscarCep(cepFormated)
         }
-    );
-    const handleBuscarCep = (cep) => {
-        if (cep.length === 9) {
-            buscarCep(cep);
-        }
-    };
+    }
+
     const onSubmit = async (data) => {
         await cadastrar.mutateAsync(data, {
             onSuccess: () => {
-                reset();
+                reset()
                 toast({
-                    title: "Sucesso!",
+                    title: 'Sucesso!',
                     description:
-                        "Imobiliária cadastrada com sucesso! Você será redirecionado",
-                    status: "success",
-                });
+                        'Imobiliária cadastrada com sucesso! Você será redirecionado',
+                    status: 'success',
+                })
                 setTimeout(() => {
-                    router.push(`https://${data.url}.imo7.com.br/login`);
-                }, 2000);
+                    router.push(`https://${data.url}.imo7.com.br/login`)
+                }, 2000)
             },
-        });
-    };
+        })
+    }
 
     return (
         <Stack
@@ -168,7 +172,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Razão Social"
-                                        {...register("razaoSocial")}
+                                        {...register('razaoSocial')}
                                         error={errors.razaoSocial?.message}
                                     />
                                 </GridItem>
@@ -176,7 +180,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Nome Fantasia"
-                                        {...register("nome")}
+                                        {...register('nome')}
                                         error={errors.nome?.message}
                                     />
                                 </GridItem>
@@ -187,7 +191,7 @@ const SignIn: NextPage = () => {
                                         as={ReactInputMask}
                                         mask="99.999.999/9999-99"
                                         maskChar={null}
-                                        {...register("cnpj")}
+                                        {...register('cnpj')}
                                         error={errors.cnpj?.message}
                                     />
                                 </GridItem>
@@ -195,7 +199,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Inscrição Estadual"
-                                        {...register("ie")}
+                                        {...register('ie')}
                                         error={errors.ie?.message}
                                     />
                                 </GridItem>
@@ -203,7 +207,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="E-mail para contato"
-                                        {...register("email")}
+                                        {...register('email')}
                                         error={errors.email?.message}
                                     />
                                 </GridItem>
@@ -211,7 +215,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Site"
-                                        {...register("site")}
+                                        {...register('site')}
                                         error={errors.site?.message}
                                     />
                                 </GridItem>
@@ -220,13 +224,13 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Telefone"
-                                        {...register("telefone")}
+                                        {...register('telefone')}
                                         as={InputMask}
                                         mask={
-                                            watch("telefone") &&
-                                            watch("telefone").length == 15
-                                                ? "(99) 9 9999-9999"
-                                                : "(99) 99999-9999"
+                                            watch('telefone') &&
+                                            watch('telefone').length == 15
+                                                ? '(99) 9 9999-9999'
+                                                : '(99) 99999-9999'
                                         }
                                         maskChar={null}
                                         error={errors.telefone?.message}
@@ -252,7 +256,7 @@ const SignIn: NextPage = () => {
                                         onChangeCapture={(e) =>
                                             handleBuscarCep(e.target.value)
                                         }
-                                        {...register("cep")}
+                                        {...register('cep')}
                                         error={errors.cep?.message}
                                     />
                                     {isLoading && <Spinner size="xs" />}
@@ -261,7 +265,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Endereço"
-                                        {...register("endereco")}
+                                        {...register('endereco')}
                                         error={errors.endereco?.message}
                                     />
                                 </GridItem>
@@ -269,7 +273,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Número"
-                                        {...register("numero")}
+                                        {...register('numero')}
                                         error={errors.numero?.message}
                                     />
                                 </GridItem>
@@ -277,7 +281,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Bairro"
-                                        {...register("bairro")}
+                                        {...register('bairro')}
                                         error={errors.bairro?.message}
                                     />
                                 </GridItem>
@@ -285,7 +289,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Cidade"
-                                        {...register("cidade")}
+                                        {...register('cidade')}
                                         error={errors.cidade?.message}
                                     />
                                 </GridItem>
@@ -293,7 +297,7 @@ const SignIn: NextPage = () => {
                                     <FormSelect
                                         size="sm"
                                         label="Estado"
-                                        {...register("estado")}
+                                        {...register('estado')}
                                         error={errors.estado?.message}
                                     >
                                         <option value="AC">Acre</option>
@@ -349,7 +353,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="URL"
-                                        {...register("url")}
+                                        {...register('url')}
                                         error={errors.url?.message}
                                         rightAddon=".imo7.com.br"
                                     />
@@ -363,7 +367,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="Nome"
-                                        {...register("usuario.nome")}
+                                        {...register('usuario.nome')}
                                         error={errors.usuario?.nome?.message}
                                     />
                                 </GridItem>
@@ -371,7 +375,7 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="CPF"
-                                        {...register("usuario.documento")}
+                                        {...register('usuario.documento')}
                                         error={
                                             errors.usuario?.documento?.message
                                         }
@@ -381,25 +385,25 @@ const SignIn: NextPage = () => {
                                     <FormInput
                                         size="sm"
                                         label="E-mail"
-                                        {...register("usuario.email")}
+                                        {...register('usuario.email')}
                                         error={errors.usuario?.email?.message}
                                     />
-                                </GridItem>{" "}
+                                </GridItem>{' '}
                                 <GridItem colSpan={1}>
                                     <FormInput
                                         size="sm"
                                         type="password"
                                         label="Senha"
-                                        {...register("usuario.senha")}
+                                        {...register('usuario.senha')}
                                         error={errors.usuario?.senha?.message}
                                     />
-                                </GridItem>{" "}
+                                </GridItem>{' '}
                                 <GridItem colSpan={1}>
                                     <FormInput
                                         size="sm"
                                         type="password"
                                         label="Confirmar senha"
-                                        {...register("usuario.confirmarSenha")}
+                                        {...register('usuario.confirmarSenha')}
                                         error={
                                             errors.usuario?.confirmarSenha
                                                 ?.message
@@ -433,10 +437,10 @@ const SignIn: NextPage = () => {
                 </GridItem>
             </Flex>
         </Stack>
-    );
-};
+    )
+}
 
-export default SignIn;
+export default SignIn
 
 // export const getServerSideProps = withSSRGuest<any>(async (ctx) => {
 //     return {

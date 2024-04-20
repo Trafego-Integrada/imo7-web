@@ -25,31 +25,31 @@ import {
     Th,
     Tr,
     Td,
-} from "@chakra-ui/react";
-import { forwardRef, useImperativeHandle } from "react";
-import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
+} from '@chakra-ui/react'
+import { forwardRef, useImperativeHandle } from 'react'
+import { useForm } from 'react-hook-form'
+import { useMutation, useQuery } from 'react-query'
 import {
     buscarConta,
     cadastrarConta,
     atualizarConta,
-} from "@/services/models/conta";
-import { Input } from "@/components/Forms/Input";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+} from '@/services/models/conta'
+import { Input } from '@/components/Forms/Input'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-import axios from "axios";
-import { useAuth } from "@/hooks/useAuth";
+import axios from 'axios'
+import { useAuth } from '@/hooks/useAuth'
 
 const schema = yup.object().shape({
-    codigo: yup.string().required("O Código é obrigatório"),
-    nome: yup.string().required("O Nome é obrigatório"),
-});
+    codigo: yup.string().required('O Código é obrigatório'),
+    nome: yup.string().required('O Nome é obrigatório'),
+})
 
 const ModalBase = ({}, ref) => {
-    const toast = useToast();
-    const { usuario } = useAuth();
-    const { isOpen, onClose, onOpen } = useDisclosure();
+    const toast = useToast()
+    const { usuario } = useAuth()
+    const { isOpen, onClose, onOpen } = useDisclosure()
     const {
         register,
         handleSubmit,
@@ -58,26 +58,26 @@ const ModalBase = ({}, ref) => {
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
-    });
+    })
 
-    const showData = useMutation(buscarConta);
-    const atualizar = useMutation(atualizarConta);
-    const cadastrar = useMutation(cadastrarConta);
+    const showData = useMutation(buscarConta)
+    const atualizar = useMutation(atualizarConta)
+    const cadastrar = useMutation(cadastrarConta)
 
     const onShow = async (id) => {
         await showData.mutateAsync(id, {
             onSuccess: (data) => {
-                reset(data);
+                reset(data)
             },
-        });
-    };
+        })
+    }
 
     const { mutateAsync: buscarCep, isLoading } = useMutation(
         async (cep) => {
             const { data } = await axios.get(
-                "https://viacep.com.br/ws/" + cep + "/json/"
-            );
-            return data;
+                'https://viacep.com.br/ws/' + cep + '/json/',
+            )
+            return data
         },
         {
             onSuccess: (data) => {
@@ -87,48 +87,48 @@ const ModalBase = ({}, ref) => {
                     bairro: data.bairro,
                     estado: data.uf,
                     cidade: data.localidade,
-                });
+                })
             },
-        }
-    );
+        },
+    )
 
     const onSubmit = async (data) => {
         if (data.id) {
             await atualizar.mutateAsync(data, {
                 onSuccess: () => {
-                    reset();
-                    onClose();
+                    reset()
+                    onClose()
                     toast({
-                        title: "Sucesso!",
-                        description: "Conta atualizada com sucesso!",
-                        status: "success",
-                    });
+                        title: 'Sucesso!',
+                        description: 'Conta atualizada com sucesso!',
+                        status: 'success',
+                    })
                 },
-            });
+            })
         } else {
             await cadastrar.mutateAsync(data, {
                 onSuccess: () => {
-                    reset();
-                    onClose();
+                    reset()
+                    onClose()
                     toast({
-                        title: "Sucesso!",
-                        description: "Conta cadastrada com sucesso!",
-                        status: "success",
-                    });
+                        title: 'Sucesso!',
+                        description: 'Conta cadastrada com sucesso!',
+                        status: 'success',
+                    })
                 },
-            });
+            })
         }
-    };
+    }
 
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
             if (id) {
-                onShow(id);
+                onShow(id)
             }
-            reset();
-            onOpen();
+            reset()
+            onOpen()
         },
-    }));
+    }))
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="3xl">
             <ModalOverlay />
@@ -141,7 +141,7 @@ const ModalBase = ({}, ref) => {
                     <Tabs>
                         <TabList>
                             <Tab>Dados</Tab>
-                            {watch("id") && (
+                            {watch('id') && (
                                 <>
                                     <Tab>Usuários</Tab>
                                     <Tab>Imobiliárias</Tab>
@@ -163,7 +163,7 @@ const ModalBase = ({}, ref) => {
                                             <Input
                                                 size="sm"
                                                 label="Código"
-                                                {...register("codigo")}
+                                                {...register('codigo')}
                                                 error={errors.codigo?.message}
                                             />
                                         </GridItem>
@@ -171,12 +171,12 @@ const ModalBase = ({}, ref) => {
                                             <Input
                                                 size="sm"
                                                 label="Nome"
-                                                {...register("nome")}
+                                                {...register('nome')}
                                                 error={errors.nome?.message}
                                             />
                                         </GridItem>
                                     </Grid>
-                                    {!watch("id") && (
+                                    {!watch('id') && (
                                         <>
                                             <Heading size="md" mt={4} mb={2}>
                                                 Administrador
@@ -190,7 +190,7 @@ const ModalBase = ({}, ref) => {
                                                         size="sm"
                                                         label="Nome"
                                                         {...register(
-                                                            "usuario.nome"
+                                                            'usuario.nome',
                                                         )}
                                                         error={
                                                             errors.usuario?.nome
@@ -203,7 +203,7 @@ const ModalBase = ({}, ref) => {
                                                         size="sm"
                                                         label="CPF"
                                                         {...register(
-                                                            "usuario.documento"
+                                                            'usuario.documento',
                                                         )}
                                                         error={
                                                             errors.usuario
@@ -217,7 +217,7 @@ const ModalBase = ({}, ref) => {
                                                         size="sm"
                                                         label="E-mail"
                                                         {...register(
-                                                            "usuario.email"
+                                                            'usuario.email',
                                                         )}
                                                         error={
                                                             errors.usuario
@@ -241,9 +241,9 @@ const ModalBase = ({}, ref) => {
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        {watch("usuarios") &&
-                                        watch("usuarios").length > 0 ? (
-                                            watch("usuarios").map((item) => (
+                                        {watch('usuarios') &&
+                                        watch('usuarios').length > 0 ? (
+                                            watch('usuarios').map((item) => (
                                                 <Tr key={item.id}>
                                                     <Td>{item.nome}</Td>
                                                     <Td>{item.documento}</Td>
@@ -273,9 +273,9 @@ const ModalBase = ({}, ref) => {
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        {watch("imobiliarias") &&
-                                        watch("imobiliarias").length > 0 ? (
-                                            watch("imobiliarias").map(
+                                        {watch('imobiliarias') &&
+                                        watch('imobiliarias').length > 0 ? (
+                                            watch('imobiliarias').map(
                                                 (item) => (
                                                     <Tr key={item.id}>
                                                         <Td>
@@ -284,7 +284,7 @@ const ModalBase = ({}, ref) => {
                                                         <Td>{item.cnpj}</Td>
                                                         <Td></Td>
                                                     </Tr>
-                                                )
+                                                ),
                                             )
                                         ) : (
                                             <Tr>
@@ -316,7 +316,8 @@ const ModalBase = ({}, ref) => {
                 </ModalFooter>
             </ModalContent>
         </Modal>
-    );
-};
+    )
+}
 
-export const ContaModal = forwardRef(ModalBase);
+export const ContaModal = forwardRef(ModalBase)
+
