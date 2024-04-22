@@ -408,7 +408,17 @@ const FichaCadastral = ({
                     </Text>
                 </GridItem>
                 <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Observações: </Text>
+                    <Text fontSize="xs">Observações do Processo: </Text>
+                    <Box
+                        fontWeight="bold"
+                        fontSize="sm"
+                        style={{ whiteSpace: 'pre-line' }}
+                    >
+                        {breakText(ficha?.Processo?.observacoes)}
+                    </Box>
+                </GridItem>
+                <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
+                    <Text fontSize="xs">Observações da Ficha: </Text>
                     <Box
                         fontWeight="bold"
                         fontSize="sm"
