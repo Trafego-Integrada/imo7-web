@@ -61,6 +61,7 @@ import { formatoData, formatoValor, statusTarefa } from "@/helpers/helpers";
 import moment from "moment";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { countConsultasNetrin } from "@/services/models/countConsultasNetrin";
 
 const ColumnChart = dynamic(import("@/components/Charts/ColumnChart"), {
     ssr: false,
@@ -73,6 +74,10 @@ const Home = () => {
     });
 
     const { data, isLoading } = useQuery(["dashboard", filtro], dadosDashboard);
+    const { data: count } = useQuery([], countConsultasNetrin);
+
+    console.log('Consultas: ', count);
+
 
     const options = [
         {
@@ -213,6 +218,25 @@ const Home = () => {
                             lg: "repeat(4,1fr)",
                         }}
                     >
+                        <GridItem>
+                            <Heading size="sm" color="gray" mb={2}>
+                                Consultas do mês
+                            </Heading>
+                            <Box bg="white" p={4}>
+                                <Table size="sm">
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Mês Vigente</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                            <Td>{count}</Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                            </Box>
+                        </GridItem>
                         <GridItem colSpan={{ lg: 3 }}>
                             <Heading size="sm" color="gray" mb={2}>
                                 Próximas Tarefas
