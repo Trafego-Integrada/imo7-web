@@ -69,11 +69,11 @@ const FichaCadastral = ({
                             borderColor="black"
                             borderWidth={1}
                         >
-                            <Text fontWeight="bold" fontSize="xx-small">
+                            <Text fontWeight="bold" fontSize="md">
                                 {campo.nome}
                             </Text>
                             {campo.tipoCampo === 'date' ? (
-                                <Text fontSize="xs">
+                                <Text fontSize="md">
                                     {moment(
                                         ficha.preenchimento[campo.codigo],
                                     ).format('DD/MM/YYYY')}
@@ -95,7 +95,7 @@ const FichaCadastral = ({
                                                     objectFit="cover"
                                                     objectPosition="center"
                                                 />
-                                                <Text fontSize="xs" mt={2}>
+                                                <Text fontSize="md" mt={2}>
                                                     ou{' '}
                                                     <Link
                                                         href={
@@ -122,7 +122,7 @@ const FichaCadastral = ({
                                                 ]
                                             }
                                         />
-                                        <Text fontSize="xs" mt={2}>
+                                        <Text fontSize="md" mt={2}>
                                             Leia o QRCode ou{' '}
                                             <Link
                                                 href={
@@ -149,7 +149,7 @@ const FichaCadastral = ({
                                             >
                                                 <QRCode size={75} value={i} />
                                                 <Text
-                                                    fontSize="xx-small"
+                                                    fontSize="md"
                                                     mt={2}
                                                 >
                                                     Leia o QRCode ou
@@ -163,7 +163,7 @@ const FichaCadastral = ({
                                     </Flex>
                                 ) : null
                             ) : (
-                                <Text fontSize="xs">
+                                <Text fontSize="md">
                                     {ficha?.preenchimento[campo.codigo]}
                                 </Text>
                             )}
@@ -179,11 +179,11 @@ const FichaCadastral = ({
                             p={2}
                             borderColor="black"
                         >
-                            <Text fontWeight="bold" fontSize="xx-small">
+                            <Text fontWeight="bold" fontSize="md">
                                 {campo?.nome}
                             </Text>
                             {campo?.tipoCampo === 'date' ? (
-                                <Text fontSize="xs">
+                                <Text fontSize="md">
                                     {moment(
                                         ficha?.preenchimento[campo?.codigo],
                                     ).format('DD/MM/YYYY')}
@@ -199,7 +199,7 @@ const FichaCadastral = ({
                                                 ]
                                             }
                                         />
-                                        <Text fontSize="xs" mt={2}>
+                                        <Text fontSize="md" mt={2}>
                                             Leia o QRCode ou{' '}
                                             <Link
                                                 href={
@@ -225,7 +225,7 @@ const FichaCadastral = ({
                                             >
                                                 <QRCode size={75} value={i} />
                                                 <Text
-                                                    fontSize="xx-small"
+                                                    fontSize="md"
                                                     mt={2}
                                                 >
                                                     Leia o QRCode ou
@@ -239,7 +239,7 @@ const FichaCadastral = ({
                                     </Flex>
                                 ) : null
                             ) : (
-                                <Text fontSize="xs">
+                                <Text fontSize="md">
                                     {ficha?.preenchimento[campo?.codigo]}
                                 </Text>
                             )}
@@ -266,13 +266,13 @@ const FichaCadastral = ({
                     <Image h={70} src={ficha?.imobiliaria?.logo} />
                 </Box>
                 <Box>
-                    <Text fontSize="sm">
+                    <Text fontSize="md">
                         <Text as="span" fontWeight="bold">
                             {ficha?.imobiliaria?.razaoSocial}
                         </Text>{' '}
                         • CNPJ: {ficha?.imobiliaria?.cnpj}
                     </Text>
-                    <Text fontSize="xs">
+                    <Text fontSize="md">
                         {ficha?.imobiliaria?.endereco}, nº{' '}
                         {ficha?.imobiliaria?.numero},
                         {ficha?.imobiliaria?.bairro},
@@ -280,7 +280,7 @@ const FichaCadastral = ({
                         {ficha?.imobiliaria?.estado} - CEP:{' '}
                         {ficha?.imobiliaria?.cep}
                     </Text>
-                    <Text fontSize="xs">
+                    <Text fontSize="md">
                         <Text as="span" fontWeight="bold">
                             Fixo:
                         </Text>{' '}
@@ -300,7 +300,7 @@ const FichaCadastral = ({
                 <Heading size="md" textAlign="center">
                     {modelo.nome}
                 </Heading>
-                <Text textAlign="center" fontSize="sm" color="gray">
+                <Text textAlign="center" fontSize="md" color="gray">
                     {modelo.descricao}
                 </Text>
                 {ficha.status == 'aprovada' && (
@@ -321,29 +321,29 @@ const FichaCadastral = ({
             </Box>
             <Grid mb={4} gridTemplateColumns="repeat(4,1fr)">
                 <GridItem borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xx-small">Nº Processo:</Text>
-                    <Text fontWeight="bold" fontSize="sm">
+                    <Text fontSize="md">Nº Processo:</Text>
+                    <Text fontWeight="bold" fontSize="md">
                         {' '}
                         {ficha?.Processo?.codigo}
                     </Text>
                 </GridItem>
                 <GridItem borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Responsável:</Text>
-                    <Text fontWeight="bold" fontSize="sm">
+                    <Text fontSize="md">Responsável:</Text>
+                    <Text fontWeight="bold" fontSize="md">
                         {ficha?.responsavel?.nome}
                     </Text>
                 </GridItem>
                 <GridItem borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Tipo Garantia:</Text>
-                    <Text fontWeight="bold" fontSize="sm">
+                    <Text fontSize="md">Tipo Garantia:</Text>
+                    <Text fontWeight="bold" fontSize="md">
                         {ficha?.Processo?.tipoGarantia}
                     </Text>
                 </GridItem>
                 <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
                     {ficha?.imovel ? (
                         <Box bg="white">
-                            <Text fontSize="xs">Imóvel:</Text>
-                            <Text fontWeight="bold" fontSize="sm">
+                            <Text fontSize="md">Imóvel:</Text>
+                            <Text fontWeight="bold" fontSize="md">
                                 {ficha?.imovel?.codigo} -{' '}
                                 {ficha?.imovel?.endereco}, nº
                                 {ficha?.imovel?.numero},
@@ -355,8 +355,8 @@ const FichaCadastral = ({
                         </Box>
                     ) : ficha?.codigoImovel ? (
                         <Box bg="white">
-                            <Text fontSize="xs">Imóvel:</Text>
-                            <Text fontWeight="bold" fontSize="sm">
+                            <Text fontSize="md">Imóvel:</Text>
+                            <Text fontWeight="bold" fontSize="md">
                                 {ficha?.codigoImovel} - {ficha?.enderecoImovel}{' '}
                                 nº {ficha?.numeroImovel}{' '}
                                 {ficha?.complementoImovel &&
@@ -370,8 +370,8 @@ const FichaCadastral = ({
                     )}
                 </GridItem>
                 <GridItem borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Valor Negociado:</Text>
-                    <Text fontWeight="bold" fontSize="sm">
+                    <Text fontSize="md">Valor Negociado:</Text>
+                    <Text fontWeight="bold" fontSize="md">
                         {ficha?.Processo?.campos.find((c) =>
                             Object.entries(c).find((i) => i[0] == 'valor'),
                         )?.valor &&
@@ -387,41 +387,41 @@ const FichaCadastral = ({
                     </Text>
                 </GridItem>
                 <GridItem borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Valor Condominio:</Text>
-                    <Text fontWeight="bold" fontSize="sm">
+                    <Text fontSize="md">Valor Condominio:</Text>
+                    <Text fontWeight="bold" fontSize="md">
                         {ficha?.imovel?.valorCondominio &&
                             formatoValor(ficha?.imovel?.valorCondominio)}
                     </Text>
                 </GridItem>
                 <GridItem borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Valor IPTU:</Text>
-                    <Text fontWeight="bold" fontSize="sm">
+                    <Text fontSize="md">Valor IPTU:</Text>
+                    <Text fontWeight="bold" fontSize="md">
                         {ficha?.imovel?.valorIPTU &&
                             formatoValor(ficha?.imovel?.valorIPTU)}
                     </Text>
                 </GridItem>
                 <GridItem borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Valor Seguro Incêndio:</Text>
-                    <Text fontWeight="bold" fontSize="sm">
+                    <Text fontSize="md">Valor Seguro Incêndio:</Text>
+                    <Text fontWeight="bold" fontSize="md">
                         {ficha?.imovel?.valorSeguro &&
                             formatoValor(ficha?.imovel?.valorSeguro)}
                     </Text>
                 </GridItem>
                 <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Observações do Processo: </Text>
+                    <Text fontSize="md">Observações do Processo: </Text>
                     <Box
                         fontWeight="bold"
-                        fontSize="sm"
+                        fontSize="md"
                         style={{ whiteSpace: 'pre-line' }}
                     >
                         {breakText(ficha?.Processo?.observacoes)}
                     </Box>
                 </GridItem>
                 <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
-                    <Text fontSize="xs">Observações da Ficha: </Text>
+                    <Text fontSize="md">Observações da Ficha: </Text>
                     <Box
                         fontWeight="bold"
-                        fontSize="sm"
+                        fontSize="md"
                         style={{ whiteSpace: 'pre-line' }}
                     >
                         {breakText(ficha?.observacoes)}
@@ -498,13 +498,13 @@ const FichaCadastral = ({
                                         >
                                             <Text
                                                 fontWeight="bold"
-                                                fontSize="xx-small"
+                                                fontSize="md"
                                             >
                                                 {campo.nome}
                                             </Text>
 
                                             {campo.tipoCampo == "date" ? (
-                                                <Text fontSize="xs">
+                                                <Text fontSize="md">
                                                     {moment(
                                                         ficha.preenchimento[
                                                             campo.codigo
@@ -527,7 +527,7 @@ const FichaCadastral = ({
                                                         />
 
                                                         <Text
-                                                            fontSize="xs"
+                                                            fontSize="md"
                                                             mt={2}
                                                         >
                                                             Leia o QRCode ou{" "}
@@ -546,7 +546,7 @@ const FichaCadastral = ({
                                                     </Flex>
                                                 ) : null
                                             ) : (
-                                                <Text fontSize="xs">
+                                                <Text fontSize="md">
                                                     {
                                                         ficha.preenchimento[
                                                             campo.codigo
@@ -578,7 +578,7 @@ const FichaCadastral = ({
                             <Text>{i.nome}</Text>
                             <QRCode size={75} value={i.anexo} />
 
-                            <Text fontSize="xs">
+                            <Text fontSize="md">
                                 Leia o QRCode
                                 <br />
                                 <Link href={i.anexo}>ou clique aqui</Link>
@@ -598,7 +598,7 @@ const FichaCadastral = ({
                                 <Text>{i.nome}</Text>
                                 <QRCode size={75} value={i.anexo} />
 
-                                <Text fontSize="xs">
+                                <Text fontSize="md">
                                     Leia o QRCode
                                     <br />
                                     <Link href={i.anexo}>ou clique aqui</Link>
