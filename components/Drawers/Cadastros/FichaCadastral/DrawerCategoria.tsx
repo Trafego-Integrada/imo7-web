@@ -22,39 +22,39 @@ import {
     TabPanels,
     Tabs,
     Box,
-} from "@chakra-ui/react";
-import InputMask from "react-input-mask";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
-import { show, store, update } from "@/services/models/imobiliaria";
-import { Input } from "@/components/Forms/Input";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "axios";
-import { useAuth } from "@/hooks/useAuth";
-import { getAll as getAllContas, listarContas } from "@/services/models/conta";
-import { Select } from "@/components/Forms/Select";
-import { TabelaUsuarios } from "@/components/Tabelas/Usuarios";
-import { FormInput } from "@/components/Form/FormInput";
-import { FormTextarea } from "@/components/Form/FormTextarea";
+} from '@chakra-ui/react'
+import InputMask from 'react-input-mask'
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useMutation, useQuery } from 'react-query'
+import { show, store, update } from '@/services/models/imobiliaria'
+import { Input } from '@/components/Forms/Input'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
+import { useAuth } from '@/hooks/useAuth'
+import { getAll as getAllContas, listarContas } from '@/services/models/conta'
+import { Select } from '@/components/Forms/Select'
+import { TabelaUsuarios } from '@/components/Tabelas/Usuarios'
+import { FormInput } from '@/components/Form/FormInput'
+import { FormTextarea } from '@/components/Form/FormTextarea'
 import {
     atualizarCategoriaCampoFicha,
     buscarCategoriaCampoFicha,
     cadastrarCategoriaCampoFicha,
-} from "@/services/models/categoriaCampoFicha";
-import { queryClient } from "@/services/queryClient";
+} from '@/services/models/categoriaCampoFicha'
+import { queryClient } from '@/services/queryClient'
 
 const schema = yup.object().shape({
-    nome: yup.string().required("Campo obrigatório"),
-    ordem: yup.string().required("Campo obrigatório"),
-});
+    nome: yup.string().required('Campo obrigatório'),
+    ordem: yup.string().required('Campo obrigatório'),
+})
 
 const DrawerBase = ({}, ref) => {
-    const toast = useToast();
-    const { usuario } = useAuth();
-    const { data: contas } = useQuery(["contas"], listarContas);
-    const { isOpen, onClose, onOpen } = useDisclosure();
+    const toast = useToast()
+    const { usuario } = useAuth()
+    const { data: contas } = useQuery(['contas'], listarContas)
+    const { isOpen, onClose, onOpen } = useDisclosure()
     const {
         register,
         handleSubmit,
@@ -63,26 +63,26 @@ const DrawerBase = ({}, ref) => {
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
-    });
+    })
 
-    const showData = useMutation(buscarCategoriaCampoFicha);
-    const atualizar = useMutation(atualizarCategoriaCampoFicha);
-    const cadastrar = useMutation(cadastrarCategoriaCampoFicha);
+    const showData = useMutation(buscarCategoriaCampoFicha)
+    const atualizar = useMutation(atualizarCategoriaCampoFicha)
+    const cadastrar = useMutation(cadastrarCategoriaCampoFicha)
 
     const onShow = async (id) => {
         await showData.mutateAsync(id, {
             onSuccess: (data) => {
-                reset(data);
+                reset(data)
             },
-        });
-    };
+        })
+    }
 
     const { mutateAsync: buscarCep, isLoading } = useMutation(
         async (cep) => {
             const { data } = await axios.get(
-                "https://viacep.com.br/ws/" + cep + "/json/"
-            );
-            return data;
+                'https://viacep.com.br/ws/' + cep + '/json/',
+            )
+            return data
         },
         {
             onSuccess: (data) => {
@@ -92,55 +92,57 @@ const DrawerBase = ({}, ref) => {
                     bairro: data.bairro,
                     estado: data.uf,
                     cidade: data.localidade,
-                });
+                })
             },
-        }
-    );
+        },
+    )
 
-    const handleBuscarCep = (cep) => {
-        if (cep.length === 9) {
-            buscarCep(cep);
+    const handleBuscarCep = (cep: any) => {
+        const cepFormated = cep.replaceAll('_', '')
+
+        if (cepFormated.length === 9) {
+            buscarCep(cepFormated)
         }
-    };
+    }
 
     const onSubmit = async (data) => {
         if (data.id) {
             await atualizar.mutateAsync(data, {
                 onSuccess: () => {
                     toast({
-                        title: "Sucesso!",
-                        description: "Categoria atualizada com sucesso!",
-                        status: "success",
-                    });
-                    queryClient.invalidateQueries(["categoriasCampo"]);
+                        title: 'Sucesso!',
+                        description: 'Categoria atualizada com sucesso!',
+                        status: 'success',
+                    })
+                    queryClient.invalidateQueries(['categoriasCampo'])
                 },
-            });
+            })
         } else {
             await cadastrar.mutateAsync(data, {
                 onSuccess: () => {
-                    reset();
-                    onClose();
+                    reset()
+                    onClose()
                     toast({
-                        title: "Sucesso!",
-                        description: "Categoria cadastrada com sucesso!",
-                        status: "success",
-                    });
-                    queryClient.invalidateQueries(["categoriasCampo"]);
+                        title: 'Sucesso!',
+                        description: 'Categoria cadastrada com sucesso!',
+                        status: 'success',
+                    })
+                    queryClient.invalidateQueries(['categoriasCampo'])
                 },
-            });
+            })
         }
-    };
+    }
 
     useImperativeHandle(ref, () => ({
         onOpen: (id = null) => {
-            reset({});
+            reset({})
             if (id) {
-                onShow(id);
+                onShow(id)
             }
-            reset();
-            onOpen();
+            reset()
+            onOpen()
         },
-    }));
+    }))
     return (
         <Drawer isOpen={isOpen} onClose={onClose} placement="right">
             <DrawerOverlay />
@@ -160,7 +162,7 @@ const DrawerBase = ({}, ref) => {
                                 <FormInput
                                     size="sm"
                                     label="Ordem de Exibição"
-                                    {...register("ordem")}
+                                    {...register('ordem')}
                                     error={errors.ordem?.message}
                                 />
                             </GridItem>
@@ -168,7 +170,7 @@ const DrawerBase = ({}, ref) => {
                                 <FormInput
                                     size="sm"
                                     label="Nome"
-                                    {...register("nome")}
+                                    {...register('nome')}
                                     error={errors.nome?.message}
                                 />
                             </GridItem>
@@ -176,7 +178,7 @@ const DrawerBase = ({}, ref) => {
                                 <FormTextarea
                                     size="sm"
                                     label="Descrição"
-                                    {...register("descricao")}
+                                    {...register('descricao')}
                                     error={errors.descricao?.message}
                                 />
                             </GridItem>
@@ -195,7 +197,8 @@ const DrawerBase = ({}, ref) => {
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>
-    );
-};
+    )
+}
 
-export const DrawerCategoria = forwardRef(DrawerBase);
+export const DrawerCategoria = forwardRef(DrawerBase)
+

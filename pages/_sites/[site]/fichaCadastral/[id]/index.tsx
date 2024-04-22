@@ -7,6 +7,7 @@ import {
     getFileExtension,
     verificarExtensaoImagem,
 } from '@/helpers/helpers'
+import axios from 'axios'
 import { redirectToErrorPage } from '@/utils/redirectToErrorPage'
 import { buscarEndereco } from '@/lib/buscarEndereco'
 import prisma from '@/lib/prisma'
@@ -519,7 +520,7 @@ const FichaCadastral = ({
     })
     const atualizar = useMutation(atualizarFicha)
     const atualizarAnexos = useMutation(atualizarAnexosFicha) // Função para converter arquivo para base64
-    console.log(watch())
+
     console.error('Erros', errors)
 
     const onFormSave = async (data: any) => {
@@ -615,12 +616,55 @@ const FichaCadastral = ({
         }
     }
 
+    async function buscarCep(cep: string, camposEndereco: any) {
+        const { data } = await axios.get(
+            'https://viacep.com.br/ws/' + cep + '/json/',
+        )
+
+        if (data) {
+            let obj = {}
+
+            Object.entries(camposEndereco).map((item) => {
+                if (item[0] == 'endereco') {
+                    obj[item[1].codigo] = data.logradouro
+                } else if (item[0] == 'bairro') {
+                    obj[item[1].codigo] = data.bairro
+                } else if (item[0] == 'cidade') {
+                    obj[item[1].codigo] = data.localidade
+                } else if (item[0] == 'estado') {
+                    obj[item[1].codigo] = data.uf
+                }
+            })
+
+            console.log({ obj })
+
+            reset({
+                ...watch(),
+                preenchimento: {
+                    ...watch('preenchimento'),
+                    ...obj,
+                },
+            })
+        }
+    }
+
+    const handleBuscarCep = (cep: any, camposEndereco: any) => {
+        const cepFormated = cep.replaceAll('_', '')
+
+        if (cepFormated.length === 9) {
+            buscarCep(cepFormated, camposEndereco)
+        }
+    }
+
     const buscarEnderecoPorCep = async (cep, camposEndereco) => {
         try {
-            if (cep.length > 8) {
-                const res = await buscarEndereco(cep)
-                //console.log(res);
+            const cepFormated = cep.replaceAll('_', '')
+
+            if (cepFormated.length === 9) {
+                const res = await buscarEndereco(cepFormated)
+
                 let obj = {}
+
                 Object.entries(camposEndereco).map((item) => {
                     if (item[0] == 'endereco') {
                         obj[item[1].codigo] = res.logradouro
@@ -632,6 +676,7 @@ const FichaCadastral = ({
                         obj[item[1].codigo] = res.uf
                     }
                 })
+
                 reset({
                     ...watch(),
                     preenchimento: {
@@ -648,6 +693,7 @@ const FichaCadastral = ({
             })
         }
     }
+
     const { activeStep, setActiveStep } = useSteps({
         index: 0,
         count: campos?.filter((i) =>
@@ -664,11 +710,6 @@ const FichaCadastral = ({
                         ['image', 'file', 'files'].includes(i.tipoCampo),
                     )
                     .map((campo) => {
-                        console.log(
-                            JSON.stringify({
-                                campo,
-                            }),
-                        )
                         if (
                             modelo.campos[campo.codigo]?.obrigatorio &&
                             (!watch(`preenchimento.${campo.codigo}`) ||
@@ -691,7 +732,6 @@ const FichaCadastral = ({
         return retorno
     }
     const onError = async (data) => {
-        console.log('Adicionado')
         if (
             activeStep !=
             campos.filter(
@@ -1654,7 +1694,7 @@ const FichaCadastral = ({
                                                                                 if (
                                                                                     campo.cep
                                                                                 ) {
-                                                                                    buscarEnderecoPorCep(
+                                                                                    handleBuscarCep(
                                                                                         e
                                                                                             .target
                                                                                             .value,

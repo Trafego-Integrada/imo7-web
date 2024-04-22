@@ -1,8 +1,8 @@
-import { FormInput } from "@/components/Form/FormInput";
-import { FormInputCurrency } from "@/components/Form/FormInputCurrency";
-import { useAuth } from "@/hooks/useAuth";
-import { imo7ApiService } from "@/services/apiServiceUsage";
-import { queryClient } from "@/services/queryClient";
+import { FormInput } from '@/components/Form/FormInput'
+import { FormInputCurrency } from '@/components/Form/FormInputCurrency'
+import { useAuth } from '@/hooks/useAuth'
+import { imo7ApiService } from '@/services/apiServiceUsage'
+import { queryClient } from '@/services/queryClient'
 import {
     Box,
     Button,
@@ -20,19 +20,19 @@ import {
     Spinner,
     useDisclosure,
     useToast,
-} from "@chakra-ui/react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "axios";
-import { forwardRef, useImperativeHandle, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
-import * as yup from "yup";
+} from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
+import { forwardRef, useImperativeHandle, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useMutation, useQuery } from 'react-query'
+import * as yup from 'yup'
 
-const schema = yup.object({});
+const schema = yup.object({})
 
 const ModalBase = ({ chamadoId, callback }, ref) => {
-    const toast = useToast();
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const toast = useToast()
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const {
         control,
         register,
@@ -43,66 +43,67 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
-    });
+    })
 
-    const buscar = useMutation(imo7ApiService("imovel").get, {
+    const buscar = useMutation(imo7ApiService('imovel').get, {
         onSuccess: (data) => {
             reset({
                 ...data,
-            });
-            onOpen();
+            })
+            onOpen()
         },
-    });
-    const cadastrar = useMutation(imo7ApiService("imovel").create, {
+    })
+    const cadastrar = useMutation(imo7ApiService('imovel').create, {
         onSuccess: (data) => {
-            queryClient.invalidateQueries(["imoveis"]);
-            toast({ title: "Cadastrado com sucesso", status: "success" });
-            onClose();
+            queryClient.invalidateQueries(['imoveis'])
+            toast({ title: 'Cadastrado com sucesso', status: 'success' })
+            onClose()
             if (callback) {
-                callback(data.id);
+                callback(data.id)
             }
         },
-    });
-    const atualizar = useMutation(imo7ApiService("imovel").update, {
+    })
+    const atualizar = useMutation(imo7ApiService('imovel').update, {
         onSuccess: (data) => {
-            queryClient.invalidateQueries(["imoveis"]);
-            toast({ title: "Atualizado com sucesso", status: "success" });
-            onClose();
+            queryClient.invalidateQueries(['imoveis'])
+            toast({ title: 'Atualizado com sucesso', status: 'success' })
+            onClose()
             if (callback) {
-                callback(data.id);
+                callback(data.id)
             }
         },
-    });
+    })
 
     const onSubmit = async (data) => {
         try {
             if (data.id) {
-                await atualizar.mutateAsync(data);
+                await atualizar.mutateAsync(data)
             } else {
-                await cadastrar.mutateAsync({ ...data, chamadoId });
+                await cadastrar.mutateAsync({ ...data, chamadoId })
             }
         } catch (error) {
-            console.log({ error });
-            toast({ title: "Ocorreu um erro", status: "error" });
+            console.log({ error })
+            toast({ title: 'Ocorreu um erro', status: 'error' })
         }
-    };
+    }
 
     useImperativeHandle(ref, () => ({
         onOpen: async (id = null) => {
-            reset({});
+            reset({})
             if (id) {
-                await buscar.mutateAsync(id);
+                await buscar.mutateAsync(id)
             } else {
-                onOpen();
+                onOpen()
             }
         },
-    }));
+    }))
     const { mutateAsync: buscarCep, isLoading } = useMutation(
         async (cep) => {
             const { data } = await axios.get(
-                "https://viacep.com.br/ws/" + cep + "/json/"
-            );
-            return data;
+                'https://viacep.com.br/ws/' + cep + '/json/',
+            )
+
+            return data
         },
         {
             onSuccess: (data) => {
@@ -112,16 +113,18 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                     bairro: data.bairro,
                     estado: data.uf,
                     cidade: data.localidade,
-                });
+                })
             },
-        }
-    );
+        },
+    )
 
-    const handleBuscarCep = (cep) => {
-        if (cep.length === 9) {
-            buscarCep(cep);
+    const handleBuscarCep = (cep: any) => {
+        const cepFormated = cep.replaceAll('_', '')
+
+        if (cepFormated.length === 9) {
+            buscarCep(cepFormated)
         }
-    };
+    }
 
     return (
         <>
@@ -144,7 +147,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                 <Grid
                                     gap={5}
                                     gridTemplateColumns={{
-                                        lg: "repeat(3,1fr)",
+                                        lg: 'repeat(3,1fr)',
                                     }}
                                 >
                                     <GridItem>
@@ -152,7 +155,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             size="sm"
                                             label="Código"
                                             placeholder="Código do imóveis"
-                                            {...register("codigo")}
+                                            {...register('codigo')}
                                             error={errors.codigo?.message}
                                         />
                                     </GridItem>
@@ -163,7 +166,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             rows={15}
                                             label="Tipo"
                                             placeholder="Digite o tipo"
-                                            {...register("tipo")}
+                                            {...register('tipo')}
                                             error={errors.tipo?.message}
                                         />
                                     </GridItem>
@@ -176,7 +179,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                 <Grid
                                     gap={5}
                                     gridTemplateColumns={{
-                                        lg: "repeat(4,1fr)",
+                                        lg: 'repeat(4,1fr)',
                                     }}
                                 >
                                     <GridItem>
@@ -194,7 +197,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                                     }
                                                     defaultValue={field.value}
                                                     onValueChange={(value) => {
-                                                        field.onChange(value);
+                                                        field.onChange(value)
                                                     }}
                                                 />
                                             )}
@@ -215,7 +218,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                                     }
                                                     defaultValue={field.value}
                                                     onValueChange={(value) => {
-                                                        field.onChange(value);
+                                                        field.onChange(value)
                                                     }}
                                                 />
                                             )}
@@ -236,7 +239,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                                     }
                                                     defaultValue={field.value}
                                                     onValueChange={(value) => {
-                                                        field.onChange(value);
+                                                        field.onChange(value)
                                                     }}
                                                 />
                                             )}
@@ -257,7 +260,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                                     }
                                                     defaultValue={field.value}
                                                     onValueChange={(value) => {
-                                                        field.onChange(value);
+                                                        field.onChange(value)
                                                     }}
                                                 />
                                             )}
@@ -278,7 +281,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                                     }
                                                     defaultValue={field.value}
                                                     onValueChange={(value) => {
-                                                        field.onChange(value);
+                                                        field.onChange(value)
                                                     }}
                                                 />
                                             )}
@@ -293,7 +296,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                 <Grid
                                     gap={5}
                                     gridTemplateColumns={{
-                                        lg: "repeat(4,1fr)",
+                                        lg: 'repeat(4,1fr)',
                                     }}
                                 >
                                     <GridItem
@@ -301,6 +304,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                         gridGap={2}
                                         align="center"
                                         colStart={1}
+                                        position="relative"
                                     >
                                         <Controller
                                             control={control}
@@ -308,20 +312,27 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             render={({ field }) => (
                                                 <FormInput
                                                     {...field}
-                                                    mask={"99999-999"}
+                                                    mask={'99999-999'}
                                                     label="CEP"
                                                     placeholder="CEP"
                                                     error={errors.cep?.message}
                                                     onChangeCapture={(e) =>
                                                         handleBuscarCep(
-                                                            e.target.value
+                                                            e.target.value,
                                                         )
                                                     }
                                                 />
                                             )}
                                         />
 
-                                        {isLoading && <Spinner size="xs" />}
+                                        {isLoading && (
+                                            <Spinner
+                                                position="absolute"
+                                                right={3}
+                                                top="2.9rem"
+                                                size="xs"
+                                            />
+                                        )}
                                     </GridItem>
                                     <GridItem
                                         colStart={{ lg: 1 }}
@@ -332,7 +343,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             rows={15}
                                             label="Endereço"
                                             placeholder="Digite o endereço"
-                                            {...register("endereco")}
+                                            {...register('endereco')}
                                             error={errors.endereco?.message}
                                         />
                                     </GridItem>
@@ -342,17 +353,17 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             rows={15}
                                             label="Número"
                                             placeholder="Digite o numero"
-                                            {...register("numero")}
+                                            {...register('numero')}
                                             error={errors.numero?.message}
                                         />
-                                    </GridItem>{" "}
+                                    </GridItem>{' '}
                                     <GridItem>
                                         <FormInput
                                             size="sm"
                                             rows={15}
                                             label="Complemento"
                                             placeholder="Digite o complemento"
-                                            {...register("complemento")}
+                                            {...register('complemento')}
                                             error={errors.complemento?.message}
                                         />
                                     </GridItem>
@@ -362,7 +373,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             rows={15}
                                             label="Bairro"
                                             placeholder="Digite o bairro"
-                                            {...register("bairro")}
+                                            {...register('bairro')}
                                             error={errors.bairro?.message}
                                         />
                                     </GridItem>
@@ -372,7 +383,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             rows={15}
                                             label="Cidade"
                                             placeholder="Digite a cidade"
-                                            {...register("cidade")}
+                                            {...register('cidade')}
                                             error={errors.cidade?.message}
                                         />
                                     </GridItem>
@@ -382,7 +393,7 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                                             rows={15}
                                             label="UF"
                                             placeholder="Digite o estado"
-                                            {...register("estado")}
+                                            {...register('estado')}
                                             error={errors.estado?.message}
                                         />
                                     </GridItem>
@@ -408,6 +419,6 @@ const ModalBase = ({ chamadoId, callback }, ref) => {
                 </ModalContent>
             </Modal>
         </>
-    );
-};
-export const ModalImovel = forwardRef(ModalBase);
+    )
+}
+export const ModalImovel = forwardRef(ModalBase)
