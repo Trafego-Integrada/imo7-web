@@ -76,9 +76,6 @@ const Home = () => {
     const { data, isLoading } = useQuery(["dashboard", filtro], dadosDashboard);
     const { data: count } = useQuery([], countConsultasNetrin);
 
-    console.log('Consultas: ', count);
-
-
     const options = [
         {
             label: "Últimos 7 dias",
