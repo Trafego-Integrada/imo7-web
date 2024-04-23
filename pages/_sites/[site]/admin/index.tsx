@@ -74,7 +74,7 @@ const Home = () => {
     });
 
     const { data, isLoading } = useQuery(["dashboard", filtro], dadosDashboard);
-    const { data: count } = useQuery([], countConsultasNetrin);
+    const { data: count } = useQuery('count', countConsultasNetrin);
 
     const options = [
         {
@@ -215,7 +215,7 @@ const Home = () => {
                             lg: "repeat(4,1fr)",
                         }}
                     >
-                        <GridItem>
+                        <GridItem colSpan={{ lg: 3 }}>
                             <Heading size="sm" color="gray" mb={2}>
                                 Consultas do mês
                             </Heading>

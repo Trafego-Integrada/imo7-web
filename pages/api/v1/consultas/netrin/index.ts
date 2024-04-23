@@ -1,26 +1,25 @@
 import prisma from "@/lib/prisma";
 import { format, parse } from "date-fns";
 import { checkAuth } from "@/middleware/checkAuth";
-import { cors } from "@/middleware/cors";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import nextConnect from "next-connect";
+import { NextApiRequestWithUser } from "@/types/auth";
+import { cors } from "@/middleware/cors";
 
-const handle = nextConnect<NextApiRequest, NextApiResponse>();
+const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>();
 
-handle.use(cors);
-handle.use(checkAuth);
+handler.use(cors);
+handler.use(checkAuth);
 
-handle.get(async (req, res) => {
+handler.get(async (req, res) => {
     const data = await prisma.consultaNetrin.findMany({
-        where: {
-            AND: { imobiliariaId: req.user.imobiliariaId }
-        },
+        where: { imobiliariaId: req.user.imobiliariaId },
         select: { createdAt: true }
     })
 
-    const count = data.filter(({ createdAt }) => createdAt && (format(createdAt, 'yyyy-mm') === format(new Date(), 'yyyy-mm'))).length
+    const count = data.filter(({ createdAt }) => format(createdAt, 'yyyyMM') === format(new Date(), 'yyyyMM')).length
 
     res.send(count);
 });
 
-export default handle
+export default handler
