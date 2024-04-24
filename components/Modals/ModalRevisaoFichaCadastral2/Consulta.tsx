@@ -102,25 +102,30 @@ export const Consulta = ({
     }
 
     useQuery(
-        [
-            'consultasNetrin',
-            consulta.codigo,
-            {
-                fichaCadastralId: ficha.id,
-            },
-        ],
+        ['consultasNetrin', consulta.codigo, ficha.id],
         async ({ queryKey }: any) => {
             try {
                 const { data } = await api.get('v1/integracao/netrin', {
-                    params: { ...queryKey[1] },
+                    params: { ...queryKey },
                 })
 
-                const resultado = data.find(
-                    (item) =>
-                        item.tipoConsulta === consulta.codigo &&
+                if (data.length > 0) console.log({ data })
+
+                const resultado = data.find((item) => {
+                    if (
                         item.requisicao.cpf === cpf &&
-                        item.requisicao.cnpj === cnpj,
-                )
+                        item.requisicao.cnpj === cnpj
+                    )
+                        return item
+                })
+
+                // console.log({ resultado })
+
+                // if (consulta.codigo === 'endereco_cpf' && cpf === '48092926916')
+                //     console.log({ test1: resultado })
+
+                // if (consulta.codigo === 'endereco_cpf' && cpf === '29862705817')
+                //     console.log({ test2: resultado })
 
                 if (!resultado)
                     throw new Error('Nenhum dado correspondente encontrado')
