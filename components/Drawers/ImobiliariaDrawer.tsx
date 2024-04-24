@@ -46,7 +46,7 @@ const schema = yup.object().shape({
     contaId: yup.string().required('A Conta é obrigatório'),
 })
 
-const DrawerBase = ({}, ref) => {
+const DrawerBase = ({ }, ref) => {
     const toast = useToast()
     const { usuario } = useAuth()
     const { isOpen, onClose, onOpen } = useDisclosure()
@@ -105,9 +105,7 @@ const DrawerBase = ({}, ref) => {
             await atualizar.mutateAsync(
                 {
                     id: data.id,
-                    data: {
-                        ...data,
-                    },
+                    ...data
                 },
                 {
                     onSuccess: () => {
@@ -255,7 +253,7 @@ const DrawerBase = ({}, ref) => {
                                                 as={InputMask}
                                                 mask={
                                                     watch('telefone') &&
-                                                    watch('telefone').length ==
+                                                        watch('telefone').length ==
                                                         15
                                                         ? '(99) 9 9999-9999'
                                                         : '(99) 9999-99999'
