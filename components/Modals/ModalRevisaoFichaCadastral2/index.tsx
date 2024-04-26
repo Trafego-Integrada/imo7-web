@@ -57,8 +57,9 @@ const schema = yup.object({
     observacoes: yup.string(),
 })
 
-const ModalBase = ({ }, ref: any) => {
+const ModalBase = ({}, ref: any) => {
     const { isOpen, onClose, onOpen } = useDisclosure()
+    const [mostrarAnexos, setMostrarAnexos] = useState(false)
 
     const toast = useToast()
 
@@ -139,6 +140,10 @@ const ModalBase = ({ }, ref: any) => {
         },
     }))
 
+    const handleTabsChange = (index: number) => {
+        setMostrarAnexos(index === 1)
+    }
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -148,7 +153,7 @@ const ModalBase = ({ }, ref: any) => {
                     <ModalCloseButton />
                 </ModalHeader>
                 <ModalBody>
-                    <Tabs size="sm">
+                    <Tabs size="sm" onChange={handleTabsChange}>
                         <Flex justifyContent="space-between">
                             <TabList>
                                 {watch('id') && <Tab>Revisão</Tab>}
@@ -354,54 +359,54 @@ const ModalBase = ({ }, ref: any) => {
 
                                                 {watch('status') ==
                                                     'reprovada' && (
-                                                        <Flex
-                                                            direction="column"
-                                                            gap={4}
+                                                    <Flex
+                                                        direction="column"
+                                                        gap={4}
+                                                    >
+                                                        <FormSelect
+                                                            label="Motivo da Reprovação"
+                                                            placeholder="Selecione o motivo"
+                                                            error={
+                                                                errors
+                                                                    .motivoReprovacaoId
+                                                                    ?.message
+                                                            }
+                                                            {...register(
+                                                                'motivoReprovacaoId',
+                                                            )}
                                                         >
-                                                            <FormSelect
-                                                                label="Motivo da Reprovação"
-                                                                placeholder="Selecione o motivo"
-                                                                error={
-                                                                    errors
-                                                                        .motivoReprovacaoId
-                                                                        ?.message
-                                                                }
-                                                                {...register(
-                                                                    'motivoReprovacaoId',
-                                                                )}
-                                                            >
-                                                                {motivos?.data?.data?.map(
-                                                                    (item: any) => (
-                                                                        <option
-                                                                            key={
-                                                                                item.id
-                                                                            }
-                                                                            value={
-                                                                                item.id
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                item.nome
-                                                                            }
-                                                                        </option>
-                                                                    ),
-                                                                )}
-                                                            </FormSelect>
+                                                            {motivos?.data?.data?.map(
+                                                                (item: any) => (
+                                                                    <option
+                                                                        key={
+                                                                            item.id
+                                                                        }
+                                                                        value={
+                                                                            item.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            item.nome
+                                                                        }
+                                                                    </option>
+                                                                ),
+                                                            )}
+                                                        </FormSelect>
 
-                                                            <FormTextarea
-                                                                label="Observações sobre a reprovação"
-                                                                placeholder="Digite o aqui as observações sobre a reprovação..."
-                                                                error={
-                                                                    errors
-                                                                        .motivoReprovacao
-                                                                        ?.message
-                                                                }
-                                                                {...register(
-                                                                    'motivoReprovacao',
-                                                                )}
-                                                            />
-                                                        </Flex>
-                                                    )}
+                                                        <FormTextarea
+                                                            label="Observações sobre a reprovação"
+                                                            placeholder="Digite o aqui as observações sobre a reprovação..."
+                                                            error={
+                                                                errors
+                                                                    .motivoReprovacao
+                                                                    ?.message
+                                                            }
+                                                            {...register(
+                                                                'motivoReprovacao',
+                                                            )}
+                                                        />
+                                                    </Flex>
+                                                )}
                                             </Flex>
                                         </Flex>
                                     )}
@@ -409,11 +414,13 @@ const ModalBase = ({ }, ref: any) => {
                             </TabPanel>
 
                             <TabPanel px={0}>
-                                <Documentos
-                                    fichaCadastralId={watch('id')}
-                                    contratoId={watch('contratoId')}
-                                    data={watch('anexos')}
-                                />
+                                {mostrarAnexos && (
+                                    <Documentos
+                                        fichaCadastralId={watch('id')}
+                                        contratoId={watch('contratoId')}
+                                        data={watch('anexos')}
+                                    />
+                                )}
                             </TabPanel>
 
                             <TabPanel>
