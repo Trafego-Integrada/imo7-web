@@ -82,7 +82,9 @@ export const Consulta = ({
                 fichaCadastralId: ficha.id,
             })
 
-            queryClient.invalidateQueries(['consultasNetrin'])
+            queryClient.invalidateQueries([
+                `consultasNetrin-${consulta.codigo}-${cpf}`,
+            ])
 
             toast({
                 title: 'Consulta realizada com sucesso, entre na aba consultas para visualizar o documento',
@@ -113,15 +115,11 @@ export const Consulta = ({
                     params: { ...queryKey },
                 })
 
-                const resultado = data.find((item) => {
-                    console.log({ item })
-
-                    if (
+                const resultado = data.find(
+                    (item) =>
                         item.requisicao.cpf === cpf &&
-                        item.requisicao.cnpj === cnpj
-                    )
-                        return item
-                })
+                        item.requisicao.cnpj === cnpj,
+                )
 
                 if (!resultado)
                     throw new Error('Nenhum dado correspondente encontrado')
