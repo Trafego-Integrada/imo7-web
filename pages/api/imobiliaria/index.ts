@@ -136,6 +136,9 @@ handle.post(async (req, res) => {
                             {
                                 codigo: "imobiliaria.configuracoes",
                             },
+                            {
+                                codigo: "imobiliaria.usuarios",
+                            },
                         ],
                     },
                     permissoes: {
