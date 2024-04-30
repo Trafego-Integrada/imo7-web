@@ -234,7 +234,7 @@ const Home = () => {
                                 </Table>
                             </Box>
                         </GridItem>
-                        <GridItem colSpan={{ lg: 3 }}>
+                        {/* <GridItem colSpan={{ lg: 3 }}>
                             <Heading size="sm" color="gray" mb={2}>
                                 Próximas Tarefas
                             </Heading>
@@ -331,7 +331,7 @@ const Home = () => {
                                     </Text>
                                 </Box>
                             </Flex>
-                        </GridItem>
+                        </GridItem>  */}
                         <GridItem colSpan={{ lg: 2 }}>
                             <Box>
                                 <Heading size="sm" color="gray" mb={2}>

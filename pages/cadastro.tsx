@@ -29,6 +29,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import { FaSignInAlt } from 'react-icons/fa'
 import InputMask from 'react-input-mask'
+import { removerCaracteresEspeciais } from '@/helpers/helpers'
 interface CredentialsProps {
     documento: string
     password: string
@@ -39,7 +40,6 @@ const schema = yup.object().shape({
     cnpj: yup.string().required('O CNPJ é obrigatório'),
     email: yup.string().required('O E-mail é obrigatório'),
     telefone: yup.string().required('O Telefone é obrigatório'),
-    url: yup.string().required('O URL é obrigatório'),
     usuario: yup.object({
         nome: yup.string().required('Campo obrigatório'),
         documento: yup.string().required('Campo obrigatório'),
@@ -91,8 +91,10 @@ const SignIn: NextPage = () => {
         }
     }
 
-    const onSubmit = async (data) => {
-        await cadastrar.mutateAsync(data, {
+    const onSubmit = async (data: yup.TypeOf<typeof schema>) => {
+        const url = removerCaracteresEspeciais(data.cnpj).substring(0, 4)
+
+        await cadastrar.mutateAsync({ ...data, url }, {
             onSuccess: () => {
                 reset()
                 toast({
@@ -187,12 +189,10 @@ const SignIn: NextPage = () => {
                                 <GridItem>
                                     <FormInput
                                         size="sm"
-                                        label="CNPJ"
-                                        as={ReactInputMask}
-                                        mask="99.999.999/9999-99"
-                                        maskChar={null}
+                                        label="Documento (CPF OU CNPJ)"
                                         {...register('cnpj')}
                                         error={errors.cnpj?.message}
+                                        maxLength={14}
                                     />
                                 </GridItem>
                                 <GridItem>
@@ -228,7 +228,7 @@ const SignIn: NextPage = () => {
                                         as={InputMask}
                                         mask={
                                             watch('telefone') &&
-                                            watch('telefone').length == 15
+                                                watch('telefone').length == 15
                                                 ? '(99) 9 9999-9999'
                                                 : '(99) 99999-9999'
                                         }
@@ -348,17 +348,6 @@ const SignIn: NextPage = () => {
                             <Heading size="md" mt={4} mb={2}>
                                 Acesso personalizado
                             </Heading>
-                            <Grid gridTemplateColumns="repeat(4, 1fr)" gap={4}>
-                                <GridItem colSpan={2}>
-                                    <FormInput
-                                        size="sm"
-                                        label="URL"
-                                        {...register('url')}
-                                        error={errors.url?.message}
-                                        rightAddon=".imo7.com.br"
-                                    />
-                                </GridItem>
-                            </Grid>
                             <Heading size="md" mt={4} mb={2}>
                                 Administrador
                             </Heading>
@@ -379,6 +368,7 @@ const SignIn: NextPage = () => {
                                         error={
                                             errors.usuario?.documento?.message
                                         }
+                                        maxLength={12}
                                     />
                                 </GridItem>
                                 <GridItem colSpan={1}>
