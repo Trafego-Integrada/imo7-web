@@ -11,6 +11,7 @@ import {
     GridItem,
     Heading,
     Image,
+    Link,
     List,
     ListItem,
     Table,
@@ -1472,6 +1473,370 @@ const FichaCadastral = ({ consulta }: any) => {
                             )
                         }
                     </Grid>
+                </>
+            )}
+            {consulta.tipoConsulta == 'receita_federal_cnd_cpf' && (
+                <>
+                    <Box py={4}>
+                        <Heading
+                            size="md"
+                            textAlign="center"
+                            textTransform="uppercase"
+                        >
+                            Consulta CND Federal CPF
+                        </Heading>
+                        <Text textAlign="center" fontSize="xs" color="gray">
+                            Retorna CND Federal CPF
+                        </Text>
+                    </Box>
+                    <Grid mb={4} gridTemplateColumns="repeat(4,1fr)">
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">CPF: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.cpf}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Código: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.code}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Mensagem: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.message}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Código da Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.codigoCertidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.certidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Débitos Pendentes PGFN: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.debitosPendentesPGFN}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Débitos Pendentes PFB: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.debitosPendentesRFB}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Validade Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.validadeCertidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">URL Comprovante: </Text>
+                            <Link href={consulta?.retorno?.receitaFederalCND?.urlComprovante} fontWeight="bold" fontSize="sm" textColor='blue'>
+                                Clique para baixar o comprovante
+                            </Link>
+                        </GridItem>
+                    </Grid>
+                </>
+            )}
+            {consulta.tipoConsulta == 'receita_federal_cnd_cnpj' && (
+                <>
+                    <Box py={4}>
+                        <Heading
+                            size="md"
+                            textAlign="center"
+                            textTransform="uppercase"
+                        >
+                            Consulta CND Federal CNPJ
+                        </Heading>
+                        <Text textAlign="center" fontSize="xs" color="gray">
+                            Retorna CND Federal CNPJ
+                        </Text>
+                    </Box>
+                    <Grid mb={4} gridTemplateColumns="repeat(4,1fr)">
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">CPF: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.cnpj}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Código: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.code}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Mensagem: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.message}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Código da Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.codigoCertidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.certidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Débitos Pendentes PGFN: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.debitosPendentesPGFN}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Débitos Pendentes PFB: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.debitosPendentesRFB}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Validade Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalCND?.validadeCertidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">URL Comprovante: </Text>
+                            <Link href={consulta?.retorno?.receitaFederalCND?.urlComprovante} fontWeight="bold" fontSize="sm" textColor='blue'>
+                                Clique para baixar o comprovante
+                            </Link>
+                        </GridItem>
+                    </Grid>
+                </>
+            )}
+            {consulta.tipoConsulta == 'cnd_trabalhista_cpf' && (
+                <>
+                    <Box py={4}>
+                        <Heading
+                            size="md"
+                            textAlign="center"
+                            textTransform="uppercase"
+                        >
+                            Consulta CND Trabalhista TST
+                        </Heading>
+                        <Text textAlign="center" fontSize="xs" color="gray">
+                            Retorna CND Trabalhista TST
+                        </Text>
+                    </Box>
+                    <Grid mb={4} gridTemplateColumns="repeat(4,1fr)">
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">CPF: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.cpf}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Nome: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.nome}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.certidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Mensagem: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.mensagem}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Emitiu Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.emitiuCertidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Data da Emissão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.emissaoData}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Validade: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.validade}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">URL Comprovante: </Text>
+                            <Link href={consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.urlComprovante} fontWeight="bold" fontSize="sm" textColor='blue' textDecoration='underline'>
+                                Clique para baixar o comprovante
+                            </Link>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Processos Encontrados: </Text>
+                            {
+                                consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.processos_encontrados?.map((processo, index) => (
+                                    <Text key={index} fontWeight="bold" fontSize="sm">
+                                        {processo}
+                                    </Text>
+                                ))
+                            }
+                        </GridItem>
+                    </Grid>
+
+                </>
+            )}
+            {consulta.tipoConsulta == 'cnd_trabalhista_cnpj' && (
+                <>
+                    <Box py={4}>
+                        <Heading
+                            size="md"
+                            textAlign="center"
+                            textTransform="uppercase"
+                        >
+                            Consulta CND Trabalhista TST
+                        </Heading>
+                        <Text textAlign="center" fontSize="xs" color="gray">
+                            Retorna CND Trabalhista TST
+                        </Text>
+                    </Box>
+                    <Grid mb={4} gridTemplateColumns="repeat(4,1fr)">
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">CNPJ: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.cnpj}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Nome: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.nome}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.certidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Mensagem: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.mensagem}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Emitiu Certidão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.emitiuCertidao}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Data da Emissão: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.emissaoData}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Validade: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.validade}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">URL Comprovante: </Text>
+                            <Link href={consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.urlComprovante} fontWeight="bold" fontSize="sm" textColor='blue' textDecoration='underline'>
+                                Clique para baixar o comprovante
+                            </Link>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">Processos Encontrados: </Text>
+                            {
+                                consulta?.retorno?.tribunalSuperiorTrabalhoCNDT?.processos_encontrados?.map((processo, index) => (
+                                    <Text key={index} fontWeight="bold" fontSize="sm">
+                                        {processo}
+                                    </Text>
+                                ))
+                            }
+                        </GridItem>
+                    </Grid>
+
+                </>
+            )}
+            {consulta.tipoConsulta == 'receita_federal_cnpj_qsa' && (
+                <>
+                    <Box py={4}>
+                        <Heading
+                            size="md"
+                            textAlign="center"
+                            textTransform="uppercase"
+                        >
+                            Consulta Receita Federal CNPJ QSA
+                        </Heading>
+                        <Text textAlign="center" fontSize="xs" color="gray">
+                            Retorna Receita Federal CNPJ QSA
+                        </Text>
+                    </Box>
+                    <Grid mb={4} gridTemplateColumns="repeat(4,1fr)">
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">CPF: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.cpf}
+                            </Text>
+                        </GridItem>
+                        <GridItem borderWidth={1} px={2} py={1}>
+                            <Text fontSize="xs">URL Comprovante: </Text>
+                            <Text fontWeight="bold" fontSize="sm">
+                                {consulta?.retorno?.receitaFederalQsa?.urlComprovante}
+                            </Text>
+                        </GridItem>
+                    </Grid>
+                    {
+                        consulta?.retorno?.receitaFederalQsa?.qsa?.map((qsa, index) => (
+                            <Grid key={index} mb={4} gridTemplateColumns="repeat(4,1fr)">
+                                <GridItem borderWidth={1} px={2} py={1}>
+                                    <Text fontSize="xs">Nome: </Text>
+                                    <Text fontWeight="bold" fontSize="sm">
+                                        {qsa?.nome}
+                                    </Text>
+                                </GridItem>
+                                <GridItem borderWidth={1} px={2} py={1}>
+                                    <Text fontSize="xs">Qualificação: </Text>
+                                    <Text fontWeight="bold" fontSize="sm">
+                                        {qsa?.qualificacao}
+                                    </Text>
+                                </GridItem>
+                                <GridItem borderWidth={1} px={2} py={1}>
+                                    <Text fontSize="xs">Nome Representante Legal: </Text>
+                                    <Text fontWeight="bold" fontSize="sm">
+                                        {qsa?.nomeRepresentanteLegal}
+                                    </Text>
+                                </GridItem>
+                                <GridItem borderWidth={1} px={2} py={1}>
+                                    <Text fontSize="xs">Qualificação Representante Legal: </Text>
+                                    <Text fontWeight="bold" fontSize="sm">
+                                        {qsa?.qualificacaoRepresentanteLegal}
+                                    </Text>
+                                </GridItem>
+                                <GridItem borderWidth={1} px={2} py={1}>
+                                    <Text fontSize="xs">País de Origem: </Text>
+                                    <Text fontWeight="bold" fontSize="sm">
+                                        {qsa?.paisOrigem}
+                                    </Text>
+                                </GridItem>
+                            </Grid>
+                        ))
+                    }
                 </>
             )}
         </Flex>
