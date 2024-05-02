@@ -19,6 +19,7 @@ import {
     PopoverFooter,
     PopoverHeader,
     PopoverTrigger,
+    Progress,
     Spinner,
     Stat,
     StatArrow,
@@ -75,6 +76,7 @@ const Home = () => {
 
     const { data, isLoading } = useQuery(["dashboard", filtro], dadosDashboard);
     const { data: count } = useQuery('count', countConsultasNetrin);
+    const limiteUtilizado = Number(count / data?.limiteConsultas ?? 100);
 
     const options = [
         {
@@ -224,11 +226,35 @@ const Home = () => {
                                     <Thead>
                                         <Tr>
                                             <Th>Mês Vigente</Th>
+                                            <Th>Limite</Th>
+                                            <Th>% Utilizada</Th>
                                         </Tr>
                                     </Thead>
                                     <Tbody>
                                         <Tr>
                                             <Td>{count}</Td>
+                                            <Td>{data?.limiteConsultas ?? 100}</Td>
+                                            <Td position='relative'>
+                                                <Progress
+                                                    value={limiteUtilizado}
+                                                    max={1}
+                                                    colorScheme={limiteUtilizado == 1 ? 'green' : 'yellow'}
+                                                />
+                                                <Flex
+                                                    pos="absolute"
+                                                    top="0"
+                                                    justify="center"
+                                                    mx="auto"
+                                                    w="full"
+                                                >
+                                                    <Text
+                                                        textAlign="center"
+                                                        fontSize="xs"
+                                                    >
+                                                        {Number(limiteUtilizado * 100).toFixed(2)}%
+                                                    </Text>
+                                                </Flex>
+                                            </Td>
                                         </Tr>
                                     </Tbody>
                                 </Table>
