@@ -702,12 +702,17 @@ const FichaCadastral = ({
     })
 
     const verificarPreenchimento = async () => {
+
         var retorno = true
         await Promise.all(
             campos.map((grupo) => {
                 grupo.campos
                     .map((campo) => {
                         if (
+                            campo?.dependenciaValor?.includes(watch(`preenchimento.${campo.dependencia.codigo}`))
+                            &&
+                            watch(`preenchimento.${campo.dependencia.codigo}`)
+                            &&
                             modelo.campos[campo.codigo]?.obrigatorio &&
                             (!watch(`preenchimento.${campo.codigo}`) ||
                                 (Array.isArray(
@@ -728,6 +733,7 @@ const FichaCadastral = ({
 
         return retorno
     }
+
     const onError = async (data) => {
         if (
             activeStep !=
