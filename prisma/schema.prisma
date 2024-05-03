@@ -158,25 +158,26 @@ model Token {
 }
 
 model Imobiliaria {
-    id           Int     @id @default(autoincrement())
-    codigo       String?
-    razaoSocial  String
-    nomeFantasia String?
-    cnpj         String  @unique
-    ie           String?
-    logo         String?
-    bg           String?
-    email        String?
-    site         String?
-    telefone     String?
-    cep          String?
-    endereco     String?
-    complemento  String?
-    numero       String?
-    bairro       String?
-    cidade       String?
-    estado       String?
-    url          String?
+    id              Int     @id @default(autoincrement())
+    codigo          String?
+    razaoSocial     String
+    nomeFantasia    String?
+    cnpj            String  @unique
+    ie              String?
+    logo            String?
+    bg              String?
+    email           String?
+    site            String?
+    telefone        String?
+    cep             String?
+    endereco        String?
+    complemento     String?
+    numero          String?
+    bairro          String?
+    cidade          String?
+    estado          String?
+    url             String?
+    limiteConsultas Int?    @default(100)
 
     idInstanciaWhatsapp    String?
     tokenInstanciaWhatsapp String?

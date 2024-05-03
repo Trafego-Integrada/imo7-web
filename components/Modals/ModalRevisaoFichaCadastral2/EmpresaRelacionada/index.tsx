@@ -33,7 +33,7 @@ interface EmpresaRelacionadaProps {
     data: IEmpresaRelacionada;
 }
 
-enum EnumTipoDeRelacionamento {
+export enum EnumTipoDeRelacionamento {
     OWNERSHIP = "PROPRIETÁRIO",
     EMPLOYMENT = "FUNCIONÁRIO",
     PARTNER = "SÓCIO",

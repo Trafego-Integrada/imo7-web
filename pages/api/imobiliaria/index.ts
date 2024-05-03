@@ -131,13 +131,13 @@ handle.post(async (req, res) => {
                                 codigo: "imobiliaria.processos.modelos",
                             },
                             {
-                                codigo: "imobiliaria.cadastros",
-                            },
-                            {
-                                codigo: "imobiliaria.configuracoes",
+                                codigo: "imobiliaria.imoveis",
                             },
                             {
                                 codigo: "imobiliaria.usuarios",
+                            },
+                            {
+                                codigo: "imobiliaria.configuracoes",
                             },
                         ],
                     },
@@ -188,13 +188,13 @@ handle.post(async (req, res) => {
                                 codigo: "imobiliaria.processos.modelos",
                             },
                             {
-                                codigo: "imobiliaria.cadastros",
+                                codigo: "imobiliaria.usuarios",
+                            },
+                            {
+                                codigo: "imobiliaria.imoveis",
                             },
                             {
                                 codigo: "imobiliaria.configuracoes",
-                            },
-                            {
-                                codigo: "imobiliaria.usuarios",
                             },
                         ],
                     },
