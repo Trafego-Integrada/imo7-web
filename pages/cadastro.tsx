@@ -104,7 +104,7 @@ const SignIn: NextPage = () => {
                     status: 'success',
                 })
                 setTimeout(() => {
-                    router.push(`https://${data.url}.imo7.com.br/login`)
+                    router.push(`https://${url}.imo7.com.br/login`)
                 }, 2000)
             },
         })
