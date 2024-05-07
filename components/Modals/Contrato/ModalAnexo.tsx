@@ -105,6 +105,14 @@ const ModalBase = (
         //         JSON.stringify(data.usuariosPermitidos)
         //     );
         // formData.append("anexos", file[0]);
+        if (!data.nome) {
+            toast({
+                title: "É necessário informar um nome para o anexo",
+                status: "warning",
+            })
+            return;
+        }
+
         const base64String = await convertToBase64(file[0]);
         const fileExtension = getFileExtension(file[0].name);
 
@@ -226,11 +234,11 @@ const ModalBase = (
                                             (e.contratosInquilino?.length
                                                 ? " (Inquilino)"
                                                 : e.contratosProprietario
-                                                      ?.length
-                                                ? " (Proproprietário)"
-                                                : e.contratosFiador?.length
-                                                ? " (Fiador)"
-                                                : "?")
+                                                    ?.length
+                                                    ? " (Proproprietário)"
+                                                    : e.contratosFiador?.length
+                                                        ? " (Fiador)"
+                                                        : "?")
                                         }
                                         getOptionValue={(e) => e.id}
                                         placeholder="Selecione os participantes"
