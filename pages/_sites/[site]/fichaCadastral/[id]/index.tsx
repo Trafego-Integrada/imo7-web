@@ -787,6 +787,7 @@ const FichaCadastral = ({
             bg="gray.100"
             minH="100vh"
             as="form"
+            overflow='hidden'
             onSubmit={handleSubmit(onSubmit, onError)}
         >
             <Head
