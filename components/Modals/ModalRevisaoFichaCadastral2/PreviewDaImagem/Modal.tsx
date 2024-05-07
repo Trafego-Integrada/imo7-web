@@ -16,7 +16,7 @@ interface ModalProps {
     data: string
 }
 
-const ModalBase = ({}, ref: any) => {
+const ModalBase = ({ }, ref: any) => {
     const { isOpen, onClose, onOpen } = useDisclosure()
 
     const [data, setData] = useState<string>('')
@@ -87,7 +87,7 @@ const ModalBase = ({}, ref: any) => {
         >
             <ModalOverlay />
 
-            <ModalContent maxW={modalSize.width} minH={modalSize.height}>
+            <ModalContent width='100vw' minH='100vh' overflow='auto'>
                 <ModalHeader>
                     <ModalCloseButton />
 
