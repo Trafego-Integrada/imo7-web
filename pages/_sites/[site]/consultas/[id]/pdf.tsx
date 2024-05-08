@@ -1099,8 +1099,8 @@ const FichaCadastral = ({ consulta }: any) => {
                     </Box>
                     {
                         consulta.retorno?.enderecoCPF?.endereco?.map((endereco, index) => (
-                            <>
-                                <Grid key={index} mb={4} gridTemplateColumns="repeat(4,1fr)">
+                            <Box key={index} borderColor='black' border='solid 1px'>
+                                <Grid mb={4} gridTemplateColumns="repeat(4,1fr)">
                                     <GridItem borderWidth={1} px={2} py={1}>
                                         <Text fontSize="xs">Rua:</Text>
                                         <Text fontWeight="bold" fontSize="sm">
@@ -1180,25 +1180,7 @@ const FichaCadastral = ({ consulta }: any) => {
                                         </Text>
                                     </GridItem>
                                 </Grid>
-                                <Flex
-                                    marginTop={4}
-                                    border="2px"
-                                    borderColor="blue.500"
-                                    borderStyle="solid"
-                                    borderRadius={4}
-                                >
-                                    <iframe
-                                        src={`https://www.google.com/maps?q=${endereco?.latitude},${endereco?.longitude}&hl=es;z=14&output=embed`}
-                                        width="100%"
-                                        height="500"
-                                        style={{ border: 0 }}
-                                        allowFullScreen
-                                        loading="lazy"
-                                        referrerPolicy="no-referrer-when-downgrade"
-                                    ></iframe>
-                                </Flex>
-
-                            </>
+                            </Box>
                         ))
                     }
                 </>
