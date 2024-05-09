@@ -78,7 +78,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
             await atualizar.mutateAsync({ ...data });
             queryClient.invalidateQueries(["processos"]);
             onClose();
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const { data: imoveis } = useQuery(
@@ -139,12 +139,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                 </Tag>
                             </Tab>
                             <Tab>Históricos</Tab>
-                            <Tab>
+                            {/* <Tab>
                                 Consultas{" "}
                                 <Tag colorScheme="blue" size="sm" ml={1}>
                                     {watch("_count.ConsultaNetrin")}
                                 </Tag>
-                            </Tab>
+                            </Tab> */}
                         </TabList>
                         <TabPanels>
                             <TabPanel>
@@ -227,40 +227,40 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                             </GridItem>
                                             {watch("tipoProcesso") ==
                                                 "LOCACAO" && (
-                                                <GridItem>
-                                                    <FormSelect
-                                                        size="sm"
-                                                        placeholder="Selecione..."
-                                                        label="Tipo de Garantia"
-                                                        {...register(
-                                                            "tipoGarantia"
-                                                        )}
-                                                        error={
-                                                            errors?.tipoGarantia
-                                                                ?.message
-                                                        }
-                                                    >
-                                                        <option value="NENHUMA">
-                                                            Nenhuma
-                                                        </option>
-                                                        <option value="PAGA">
-                                                            Garantia Paga
-                                                        </option>
-                                                        <option value="SEGURO">
-                                                            Seguro Fiança
-                                                        </option>
-                                                        <option value="FIADOR">
-                                                            Fiador
-                                                        </option>
-                                                        <option value="APOLICE">
-                                                            Apolice
-                                                        </option>
-                                                        <option value="CAUCAO">
-                                                            Caução
-                                                        </option>
-                                                    </FormSelect>
-                                                </GridItem>
-                                            )}
+                                                    <GridItem>
+                                                        <FormSelect
+                                                            size="sm"
+                                                            placeholder="Selecione..."
+                                                            label="Tipo de Garantia"
+                                                            {...register(
+                                                                "tipoGarantia"
+                                                            )}
+                                                            error={
+                                                                errors?.tipoGarantia
+                                                                    ?.message
+                                                            }
+                                                        >
+                                                            <option value="NENHUMA">
+                                                                Nenhuma
+                                                            </option>
+                                                            <option value="PAGA">
+                                                                Garantia Paga
+                                                            </option>
+                                                            <option value="SEGURO">
+                                                                Seguro Fiança
+                                                            </option>
+                                                            <option value="FIADOR">
+                                                                Fiador
+                                                            </option>
+                                                            <option value="APOLICE">
+                                                                Apolice
+                                                            </option>
+                                                            <option value="CAUCAO">
+                                                                Caução
+                                                            </option>
+                                                        </FormSelect>
+                                                    </GridItem>
+                                                )}
                                             <GridItem colStart={{ lg: 1 }}>
                                                 <Controller
                                                     control={control}
@@ -333,10 +333,10 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                                     "imovelId"
                                                                                 )
                                                                                     ? modalImovel.current.onOpen(
-                                                                                          watch(
-                                                                                              "imovelId"
-                                                                                          )
-                                                                                      )
+                                                                                        watch(
+                                                                                            "imovelId"
+                                                                                        )
+                                                                                    )
                                                                                     : modalImovel.current.onOpen()
                                                                             }
                                                                         />
@@ -353,10 +353,10 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                             value={
                                                                 field.value
                                                                     ? imoveis?.data?.data.find(
-                                                                          (i) =>
-                                                                              i.id ==
-                                                                              field.value
-                                                                      )
+                                                                        (i) =>
+                                                                            i.id ==
+                                                                            field.value
+                                                                    )
                                                                     : null
                                                             }
                                                             error={
@@ -395,10 +395,10 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                             value={
                                                                 field.value
                                                                     ? usuarios?.data?.data.find(
-                                                                          (i) =>
-                                                                              i.id ==
-                                                                              field.value
-                                                                      )
+                                                                        (i) =>
+                                                                            i.id ==
+                                                                            field.value
+                                                                    )
                                                                     : null
                                                             }
                                                             error={
@@ -574,9 +574,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                     tabelaId={watch("id")}
                                 />
                             </TabPanel>
-                            <TabPanel>
+                            {/* <TabPanel>
                                 <ConsultasNetrin processoId={watch("id")} />
-                            </TabPanel>
+                            </TabPanel> */}
                         </TabPanels>
                     </Tabs>
                 </ModalBody>
