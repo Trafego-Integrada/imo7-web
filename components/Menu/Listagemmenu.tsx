@@ -145,7 +145,7 @@ const menu = [
         titulo: "Cadastros",
         icon: BsFillGearFill,
         cargos: ["imobiliaria"],
-        modulos: ["imobiliaria.configuracoes"],
+        modulos: ["imobiliaria.cadastros"],
         subMenus: [
             {
                 titulo: "Pessoas",
