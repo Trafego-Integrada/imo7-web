@@ -65,8 +65,6 @@ handler.post(async (req, res) => {
 
     const PHOTO: any = await setPhoto(ACCESS_TOKEN, PIN, validacao?.cpf!, foto)
 
-    console.log('VALICAÇÃO FACIA :: LINHA 70: ', PHOTO)
-
     if (!PHOTO) {
         return res.status(400).send({ status: 0, message: PHOTO.mensagem })
     }
@@ -223,6 +221,11 @@ const setPhoto = async (
 ) => {
     photoBase64 = photoBase64.substring('data:image/jpeg;base64,'.length)
 
+    console.log({ access_token })
+    console.log({ pin })
+    console.log({ cpf })
+    console.log({ photoBase64 })
+
     const response = await axios
         .put(
             'https://gateway.apiserpro.serpro.gov.br/biovalid/v1/liveness',
@@ -241,12 +244,14 @@ const setPhoto = async (
         )
         .catch((error) => {
             console.log(
-                'VALIDAÇÃO FACIAL:: LINHA 242: ',
+                'VALIDAÇÃO FACIAL:: LINHA 249: ',
                 error?.message || error,
             )
             return error.response
         })
-    console.log('VALIDAÇÃO FACIAL:: LINHA 245: ', response.data)
+
+    console.log('VALIDAÇÃO FACIAL:: LINHA 255: ', response.data)
+
     return response.data
 }
 
