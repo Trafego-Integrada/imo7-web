@@ -44,6 +44,9 @@ handle.get(async (req, res) => {
                 ...filtroQuery,
                 imobiliariaId: req?.user?.imobiliariaId,
             },
+            orderBy: {
+                createAt: "desc"
+            }
         });
 
         const count = await prisma.validacaoFacial.count({
