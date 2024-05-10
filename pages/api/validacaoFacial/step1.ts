@@ -65,8 +65,6 @@ handler.post(async (req, res) => {
 
     const PHOTO: any = await setPhoto(ACCESS_TOKEN, PIN, validacao?.cpf!, foto)
 
-    console.log('VALICAÇÃO FACIA :: LINHA 70: ', PHOTO)
-
     if (!PHOTO) {
         return res.status(400).send({ status: 0, message: PHOTO.mensagem })
     }
