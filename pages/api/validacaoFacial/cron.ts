@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiResponse } from 'next'
 
 import { NextApiRequestWithUser } from '@/types/auth'
-import { checkAuth } from '@/middleware/checkAuth'
+
 import nextConnect from 'next-connect'
 import { cors } from '@/middleware/cors'
 
@@ -33,16 +33,12 @@ handler.get(async (req, res) => {
         },
     })
 
-    console.log('Registros encontrados  = ' + data.length)
-
     if (data.length == 0) {
-        res.send({ status: 0, msg: 'Sem registros' })
+        res.send({ status: 0, msg: 'No records' })
         return
     }
 
     data.forEach(async (resData) => {
-        //console.log("Registro ID = " + resData.id);
-
         const id = resData.id
 
         const response = await getResponse(
@@ -50,8 +46,6 @@ handler.get(async (req, res) => {
             resData.cpf,
             resData.pin,
         )
-
-        // console.log(`CPF ${resData.cpf}: ` + JSON.stringify(response))
 
         // const responseDecoded = Buffer.from(response, 'base64').toString('utf8')
 
@@ -73,21 +67,19 @@ handler.get(async (req, res) => {
             jwt.verify(token, getKey, options, async (err, decoded) => {
                 // failed
                 if (err) {
-                    const dataUpdate = await prisma.validacaoFacial.update({
+                    await prisma.validacaoFacial.update({
                         where: { id },
                         data: {
-                            resultado: JSON.stringify(err),
+                            resultado: JSON.stringify(token),
                             status: -1,
                         },
                     })
 
-                    //  return res.send({status: -1, msg: "Try Again"});
+                    return console.log(`JWT VERIFY ON ID ${id}. ERROR: ` + err)
                 }
 
-                console.log(JSON.stringify(decoded))
-
                 // success
-                const dataUpdate = await prisma.validacaoFacial.update({
+                await prisma.validacaoFacial.update({
                     where: { id },
                     data: {
                         resultado: JSON.stringify(decoded),
@@ -95,15 +87,16 @@ handler.get(async (req, res) => {
                     },
                 })
 
-                // return res.send({status: 1});
+                console.log(
+                    `The record with ID: ${id} was succefully processed`,
+                )
             })
         } catch (e) {
-            //console.log("Catch");
-            //console.log(e);
+            console.log(e)
         }
     })
 
-    res.send({ status: 1, msg: 'Finished' })
+    res.send({ status: 1, msg: 'All records were processed successfully' })
 })
 
 export default handler

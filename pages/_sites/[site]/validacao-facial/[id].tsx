@@ -2,7 +2,6 @@ import {
     Box,
     Button,
     Flex,
-    Grid,
     GridItem,
     Icon,
     Image,
@@ -10,11 +9,6 @@ import {
     Text,
     Container,
     Center,
-    Tabs,
-    TabList,
-    Tab,
-    TabPanels,
-    TabPanel,
     Stepper,
     Step,
     StepIndicator,
@@ -28,43 +22,33 @@ import {
     Alert,
     AlertIcon,
     AlertTitle,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
-import { Slide } from "react-slideshow-image";
+import { Slide } from 'react-slideshow-image'
 
-import "react-slideshow-image/dist/styles.css";
-import {
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-} from "@chakra-ui/react";
+import 'react-slideshow-image/dist/styles.css'
 
-import { FormInput } from "@/components/Form/FormInput";
-import prisma from "@/lib/prisma";
+import { FormInput } from '@/components/Form/FormInput'
+import prisma from '@/lib/prisma'
 
-import React, { useContext, useState, useEffect, useMemo } from "react";
-import { AuthContext } from "@/contexts/AuthContext";
-import { withSSRGuest } from "@/utils/withSSRGuests";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { MdFingerprint } from "react-icons/md";
-import { Input } from "@/components/Forms/Input";
-import { FaFacebook, FaGoogle, FaSignInAlt } from "react-icons/fa";
-import { CgPassword } from "react-icons/cg";
-import BeatLoader from "react-spinners/BeatLoader";
-import { NextPage } from "next";
-import { Heading } from "@chakra-ui/layout";
-import { NextChakraLink } from "@/components/NextChakraLink";
-import { api } from "@/services/apiClient";
-import { useRouter } from "next/router";
+import React, { useState, useEffect, useMemo } from 'react'
 
-import Webcam from "react-webcam";
-import { CameraOptions, useFaceDetection } from "react-use-face-detection";
-import FaceDetection from "@mediapipe/face_detection";
-import { Camera } from "@mediapipe/camera_utils";
-import { FiArrowLeft, FiArrowRight, FiCheck } from "react-icons/fi";
+import { useForm } from 'react-hook-form'
+import { MdFingerprint } from 'react-icons/md'
+
+import { FaSignInAlt } from 'react-icons/fa'
+import BeatLoader from 'react-spinners/BeatLoader'
+import { NextPage } from 'next'
+import { Heading } from '@chakra-ui/layout'
+
+import { api } from '@/services/apiClient'
+import { useRouter } from 'next/router'
+
+import Webcam from 'react-webcam'
+import { CameraOptions, useFaceDetection } from 'react-use-face-detection'
+
+import { Camera } from '@mediapipe/camera_utils'
+import { FiArrowLeft, FiArrowRight, FiCheck } from 'react-icons/fi'
 
 /*!
  *	Gerador e Validador de CPF v1.0.0
@@ -73,31 +57,31 @@ import { FiArrowLeft, FiArrowRight, FiCheck } from "react-icons/fi";
  *	Released under the MIT license
  */
 function CPF() {
-    "user_strict";
+    'user_strict'
     function r(r) {
         for (var t = null, n = 0; 9 > n; ++n)
-            t += r.toString().charAt(n) * (10 - n);
-        var i = t % 11;
-        return (i = 2 > i ? 0 : 11 - i);
+            t += r.toString().charAt(n) * (10 - n)
+        var i = t % 11
+        return (i = 2 > i ? 0 : 11 - i)
     }
     function t(r) {
         for (var t = null, n = 0; 10 > n; ++n)
-            t += r.toString().charAt(n) * (11 - n);
-        var i = t % 11;
-        return (i = 2 > i ? 0 : 11 - i);
+            t += r.toString().charAt(n) * (11 - n)
+        var i = t % 11
+        return (i = 2 > i ? 0 : 11 - i)
     }
-    var n = "CPF Inválido",
-        i = "CPF Válido";
-    (this.gera = function () {
-        for (var n = "", i = 0; 9 > i; ++i)
-            n += Math.floor(9 * Math.random()) + "";
+    var n = 'CPF Inválido',
+        i = 'CPF Válido'
+    ;(this.gera = function () {
+        for (var n = '', i = 0; 9 > i; ++i)
+            n += Math.floor(9 * Math.random()) + ''
         var o = r(n),
-            a = n + "-" + o + t(n + "" + o);
-        return a;
+            a = n + '-' + o + t(n + '' + o)
+        return a
     }),
         (this.valida = function (o) {
             for (
-                var a = o.replace(/\D/g, ""),
+                var a = o.replace(/\D/g, ''),
                     u = a.substring(0, 9),
                     f = a.substring(9, 11),
                     v = 0;
@@ -105,68 +89,68 @@ function CPF() {
                 v++
             )
                 if (
-                    "" + u + f ==
-                    "" + v + v + v + v + v + v + v + v + v + v + v
+                    '' + u + f ==
+                    '' + v + v + v + v + v + v + v + v + v + v + v
                 )
-                    return n;
+                    return n
             var c = r(u),
-                e = t(u + "" + c);
-            return f.toString() === c.toString() + e.toString() ? i : n;
-        });
+                e = t(u + '' + c)
+            return f.toString() === c.toString() + e.toString() ? i : n
+        })
 }
 
 function cpfMask(v) {
-    if (typeof v === "undefined") return;
-    v = v.replace(/\D/g, ""); //Remove tudo o que não é dígito
-    v = v.replace(/(\d{3})(\d)/, "$1.$2"); //Coloca um ponto entre o terceiro e o quarto dígitos
-    v = v.replace(/(\d{3})(\d)/, "$1.$2"); //Coloca um ponto entre o terceiro e o quarto dígitos
-    v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2"); //Coloca um hífen entre o terceiro e o quarto dígitos
-    return v;
+    if (typeof v === 'undefined') return
+    v = v.replace(/\D/g, '') //Remove tudo o que não é dígito
+    v = v.replace(/(\d{3})(\d)/, '$1.$2') //Coloca um ponto entre o terceiro e o quarto dígitos
+    v = v.replace(/(\d{3})(\d)/, '$1.$2') //Coloca um ponto entre o terceiro e o quarto dígitos
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2') //Coloca um hífen entre o terceiro e o quarto dígitos
+    return v
 }
 
 const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
     //console.log("validacao", validacao);
-    const router = useRouter();
-    const [step, setStep] = useState(1);
-    const [photo, setPhoto] = useState();
-    const [success, setSuccess] = useState(false);
-    const [windowStatus, setWindowStatus] = useState(null);
+    const router = useRouter()
+    const [step, setStep] = useState(1)
+    const [photo, setPhoto] = useState()
+    const [success, setSuccess] = useState(false)
+    const [windowStatus, setWindowStatus] = useState(null)
 
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors, isSubmitting },
-    } = useForm();
+    } = useForm()
 
-    const [isClient, setIsClient] = useState(false);
+    const [isClient, setIsClient] = useState(false)
 
     useEffect(() => {
         // check();
-        checkResolution();
-        setWindowStatus(1);
+        checkResolution()
+        setWindowStatus(1)
 
-        setIsClient(true);
-    }, []);
+        setIsClient(true)
+    }, [])
 
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null)
 
     const check = async () => {
-        const response = await api.get("validacaoFacial/check", {
+        const response = await api.get('validacaoFacial/check', {
             imobiliariaId: imobiliaria.id,
             cpf: validacao?.cpf,
-        });
+        })
 
         // //console.log("response");
         // //console.log(response);
         // //console.log(response.data.status);
 
-        let status = response.data.status;
+        let status = response.data.status
 
         // -1   = erro
         // 0    = aguardando
         // 1    = sucesso
-    };
+    }
 
     const checkResolution = async () => {
         //     let constraints = {
@@ -182,37 +166,38 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
         //     let stream_height = stream_settings.height;
         //     //console.log('Width: ' + stream_width + 'px');
         //     //console.log('Height: ' + stream_height + 'px');
-    };
+    }
 
     const onSubmit = async (data) => {
         try {
-            setError(null);
+            setError(null)
 
-            const response = await api.post("validacaoFacial/step1", {
+            // Verificar tamanho da imagem
+
+            const response = await api.post('validacaoFacial/step1', {
                 id: validacao.id,
                 cpf: validacao?.cpf,
                 foto: photo,
-            });
+            })
 
             // sucesso
             if (response.data.status == 1) {
-                setSuccess(true);
-                setError(response.data.message);
+                setSuccess(true)
+                setError(response.data.message)
             } else {
-                setError(response.data.message);
+                setError(response.data.message)
             }
         } catch (error) {
             // erro de api e execução
-
-            setError(error.message);
-            alert(error.message);
+            setError(error.message)
+            alert(error.message)
         }
-    };
+    }
 
     const { webcamRef, boundingBox, isLoading, detected, facesDetected } =
         useFaceDetection({
             faceDetectionOptions: {
-                model: "short",
+                model: 'short',
             },
             // handleOnResults: (res) => {
             // //console.log(res)
@@ -247,41 +232,45 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                 new Camera(mediaSrc, {
                     onFrame,
                 }),
-        });
+        })
 
     const capture = React.useCallback(() => {
-        const imageSrc = webcamRef.current.getScreenshot();
-        setPhoto(imageSrc);
-    }, [webcamRef]);
+        const imageSrc = webcamRef.current.getScreenshot({
+            width: 1280,
+            height: 720,
+        })
+
+        setPhoto(imageSrc)
+    }, [webcamRef])
 
     const steps = [
-        { title: "Confirmação" },
-        { title: "Instruções" },
-        { title: "Foto" },
-    ];
+        { title: 'Confirmação' },
+        { title: 'Instruções' },
+        { title: 'Foto' },
+    ]
 
     const { activeStep, setActiveStep } = useSteps({
         index: 1,
         count: steps.length,
-    });
+    })
 
     const images = useMemo(
         () => [
-            "https://www.imo7.com.br/img/image1.png",
-            "https://www.imo7.com.br/img/image2.png",
-            "https://www.imo7.com.br/img/image3.png",
-            "https://www.imo7.com.br/img/image4.png",
-            "https://www.imo7.com.br/img/image5.png",
-            "https://www.imo7.com.br/img/image6.png",
-            "https://www.imo7.com.br/img/image7.png",
-            "https://www.imo7.com.br/img/image8.png",
-            "https://www.imo7.com.br/img/image9.png",
-            "https://www.imo7.com.br/img/image10.png",
-            "https://www.imo7.com.br/img/image11.png",
-            "https://www.imo7.com.br/img/image12.png",
+            'https://www.imo7.com.br/img/image1.png',
+            'https://www.imo7.com.br/img/image2.png',
+            'https://www.imo7.com.br/img/image3.png',
+            'https://www.imo7.com.br/img/image4.png',
+            'https://www.imo7.com.br/img/image5.png',
+            'https://www.imo7.com.br/img/image6.png',
+            'https://www.imo7.com.br/img/image7.png',
+            'https://www.imo7.com.br/img/image8.png',
+            'https://www.imo7.com.br/img/image9.png',
+            'https://www.imo7.com.br/img/image10.png',
+            'https://www.imo7.com.br/img/image11.png',
+            'https://www.imo7.com.br/img/image12.png',
         ],
-        []
-    );
+        [],
+    )
 
     if (!isClient)
         return (
@@ -295,7 +284,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                     Loading...
                 </Text>
             </Flex>
-        );
+        )
 
     return (
         <>
@@ -353,6 +342,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                 </Step>
                             ))}
                         </Stepper>
+
                         {activeStep == 2 && (
                             <>
                                 <Heading size="lg" mb={4} color="gray.700">
@@ -384,6 +374,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                 </Box>
                             </>
                         )}
+
                         {activeStep == 3 && (
                             <Flex justify="center">
                                 <Box
@@ -401,7 +392,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                     >
                                         <div
                                             style={{
-                                                position: "relative",
+                                                position: 'relative',
                                             }}
                                         >
                                             {photo == null && (
@@ -412,6 +403,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                                         ref={webcamRef}
                                                         screenshotQuality={1}
                                                     />
+
                                                     {boundingBox.map(
                                                         (box, index) => (
                                                             <div
@@ -419,9 +411,9 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                                                     index + 1
                                                                 }`}
                                                                 style={{
-                                                                    border: "4px solid red",
+                                                                    border: '4px solid red',
                                                                     position:
-                                                                        "absolute",
+                                                                        'absolute',
                                                                     top: `${
                                                                         box.yCenter *
                                                                         100
@@ -441,17 +433,17 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                                                     zIndex: 1,
                                                                 }}
                                                             />
-                                                        )
+                                                        ),
                                                     )}
                                                     <div
                                                         className="camera-face-overlay"
                                                         style={{
                                                             borderColor:
-                                                                "outline",
-                                                            marginLeft: "15%",
-                                                            marginRight: "15%",
-                                                            marginTop: "0%",
-                                                            marginBottom: "0%",
+                                                                'outline',
+                                                            marginLeft: '15%',
+                                                            marginRight: '15%',
+                                                            marginTop: '0%',
+                                                            marginBottom: '0%',
                                                         }}
                                                     ></div>
                                                 </>
@@ -467,11 +459,11 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                                         className="camera-face-overlay"
                                                         style={{
                                                             borderColor:
-                                                                "outline",
-                                                            marginLeft: "15%",
-                                                            marginRight: "15%",
-                                                            marginTop: "0%",
-                                                            marginBottom: "0%",
+                                                                'outline',
+                                                            marginLeft: '15%',
+                                                            marginRight: '15%',
+                                                            marginTop: '0%',
+                                                            marginBottom: '0%',
                                                         }}
                                                     ></div>
                                                 </div>
@@ -528,6 +520,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                 </Box>
                             </Flex>
                         )}
+
                         {activeStep == 1 && (
                             <GridItem w="100%">
                                 <Box px={8} py={4} bg="white" borderRadius="lg">
@@ -572,7 +565,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                             />
                                         }
                                         placeholder="Seu CPF"
-                                        {...register("documento")}
+                                        {...register('documento')}
                                         error={errors.documento?.message}
                                         value={cpfMask(validacao?.cpf)}
                                         readOnly={true}
@@ -581,6 +574,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                 </Box>
                             </GridItem>
                         )}
+
                         {error && (
                             <Alert status="warning" my={4}>
                                 <AlertIcon />
@@ -589,6 +583,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                 </AlertTitle>
                             </Alert>
                         )}
+
                         <Flex justify="space-between" mt={12}>
                             <Button
                                 leftIcon={<FiArrowLeft />}
@@ -630,23 +625,23 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                 </Flex>
             )}
         </>
-    );
-};
-export default ValidacaoFacial;
+    )
+}
+export default ValidacaoFacial
 
 export const getServerSideProps = async (ctx) => {
-    const { site, id } = ctx.query;
+    const { site, id } = ctx.query
     const imobiliaria = await prisma.imobiliaria.findFirst({
         where: { url: site },
-    });
+    })
 
     const validacao = await prisma.validacaoFacial.findFirst({
         where: { id },
-    });
+    })
     return {
         props: {
             imobiliaria: JSON.parse(JSON.stringify(imobiliaria)),
             validacao: JSON.parse(JSON.stringify(validacao)),
         },
-    };
-};
+    }
+}
