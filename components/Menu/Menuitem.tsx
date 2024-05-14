@@ -125,7 +125,7 @@ export const MenuItem = ({ icon, title, href, subMenus }) => {
                     onClick={() => router.push(href)}
                 >
                     <Icon as={icon} fontSize={{ base: "md", md: "sm" }} />
-                    <Text fontWeight="normal" fontSize="xs">
+                    <Text textAlign='center' fontWeight="normal" fontSize="xs">
                         {title}
                     </Text>
                 </Flex>
