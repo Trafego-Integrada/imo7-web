@@ -226,6 +226,13 @@ const menu = [
         modulos: ["imobiliaria.filaEnvio"],
     },
     {
+        titulo: "Validações Faciais",
+        href: "/admin/validacoesfaciais",
+        icon: HiOutlineDocumentText,
+        cargos: ["adm"],
+        modulos: ["adm.imobiliarias"],
+    },
+    {
         titulo: "Ajuda e Treinamento",
         icon: AiFillPlayCircle,
         href: '',
