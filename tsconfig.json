@@ -1,0 +1,46 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "outDir": "dist",
+        "target": "es5",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "incremental": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/components/*": ["components/*"],
+            "@/contexts/*": ["contexts/*"],
+            "@/data/*": ["data/*"],
+            "@/layouts/*": ["layouts/*"],
+            "@/lib/*": ["lib/*"],
+            "@/styles/*": ["styles/*"],
+            "@/types": ["types/index"],
+            "@/types/*": ["types/*"],
+            "@/services/*": ["services/*"],
+            "@/helpers/*": ["helpers/*"],
+            "@/middleware/*": ["middleware/*"],
+            "@/utils/*": ["utils/*"],
+            "@/hooks/*": ["hooks/*"],
+            "@/config/*": ["config/*"]
+        }
+    },
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "next.config.js",
+        "pages/_sites/[site]/validacao-facial/[id]"
+    ],
+    "exclude": ["node_modules"]
+}
+
