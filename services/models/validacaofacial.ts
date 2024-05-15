@@ -15,6 +15,21 @@ export const listarValidacoesFaciais = async ({ queryKey }) => {
     }
 }
 
+export const listarValidacoesFaciaisAdm = async ({ queryKey }) => {
+    //console.log("listarValidacoesFaciais");
+
+    try {
+        const { data } = await api.get('validacaoFacial/adm', {
+            params: queryKey[1],
+        })
+        return data
+    } catch (e) {
+        //console.log("error");
+        //console.log(e);
+        return null
+    }
+}
+
 export const buscarValidacoesFaciais = async (id: any | string) => {
     const { data } = await api.get('validacaoFacial/' + id)
     return data
