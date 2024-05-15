@@ -81,9 +81,15 @@ export const ValidacaoFacial = ({
                     });
 
                     setRetorno(result.data || null);
+                    navigator.clipboard.writeText(
+                        `${window.location.origin}/validacao-facial/${result?.data?.id}`
+                    );
+
+                    return toast({
+                        title: "URL Copiada",
+                    });
                 }
             }
-
             setLoading(false);
         } catch (error: any) {
             setLoading(false);
@@ -142,25 +148,7 @@ export const ValidacaoFacial = ({
                     </Flex>
                 </Flex>
 
-                {!retorno && (
-                    <Button
-                        w="full"
-                        variant="outline"
-                        size="xs"
-                        border={0}
-                        borderTop="1px"
-                        borderColor="#e1e8f0"
-                        rounded={0}
-                        py="1rem"
-                        leftIcon={<Icon as={FiSearch} />}
-                        onClick={gerarValidacaoFacial}
-                        isLoading={loading}
-                    >
-                        Consultar
-                    </Button>
-                )}
-
-                {retorno?.resultado ?
+                {retorno?.resultado?.pin ?
                     (
                         <Button
                             w="full"
@@ -194,9 +182,9 @@ export const ValidacaoFacial = ({
                             rounded={0}
                             py="1rem"
                             leftIcon={<Icon as={FiLink} />}
-                            onClick={copiarLink}
+                            onClick={() => !retorno ? gerarValidacaoFacial() : copiarLink()}
                         >
-                            Copiar Link da Validação
+                            {retorno ? 'Copiar Link da Validação' : 'Gerar Validação'}
                         </Button>
                     )}
             </Flex>

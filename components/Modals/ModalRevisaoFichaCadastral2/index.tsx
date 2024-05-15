@@ -54,7 +54,7 @@ const schema = yup.object({
         then: yup.string().required('Motivo da Reprovação é obrigatório'), // torna o campo motivoReprovacaoId obrigatório
         otherwise: yup.string().nullable(), // em outros casos, o campo motivoReprovacaoId não é obrigatório
     }),
-    observacoes: yup.string().max(1500, 'É Permitido no máximo 1500 caracteres'),
+    observacoes: yup.string().max(1500, 'É Permitido no máximo 1500 caracteres').nullable(),
 })
 
 const ModalBase = ({ }, ref: any) => {

@@ -63,6 +63,7 @@ import moment from "moment";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { countConsultasNetrin } from "@/services/models/countConsultasNetrin";
+import { OpenHelp } from "@/components/OpenHelp";
 
 const ColumnChart = dynamic(import("@/components/Charts/ColumnChart"), {
     ssr: false,
@@ -151,6 +152,12 @@ const Home = () => {
         <>
             <Layout>
                 <Container maxW="container.xl" p={5}>
+                    <div style={{
+                        position: 'absolute',
+                        right: 0
+                    }}>
+                        <OpenHelp />
+                    </div>
                     {/* <Flex mb={4}>
                         <Popover placement="top-start" isOpen={isOpen}>
                             <PopoverTrigger>

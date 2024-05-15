@@ -1,4 +1,4 @@
-import { List } from "@chakra-ui/react";
+import { Button, List } from "@chakra-ui/react";
 import { useAuth } from "hooks/useAuth";
 import { isArray } from "lodash";
 import { BiSupport, BiTask } from "react-icons/bi";
@@ -15,6 +15,9 @@ import { HiOutlineDocumentText } from "react-icons/hi";
 import { MdCategory, MdNewspaper, MdOutlineRule } from "react-icons/md";
 import { TbForms } from "react-icons/tb";
 import { MenuItem } from "./Menuitem";
+import { AiFillPlayCircle } from 'react-icons/ai';
+import { useRef } from "react";
+import { ModalTreinamento } from "../Modals/ModalTreinamento";
 
 const menu = [
     {
@@ -222,15 +225,27 @@ const menu = [
         cargos: ["imobiliaria", "adm"],
         modulos: ["imobiliaria.filaEnvio"],
     },
+    {
+        titulo: "Ajuda e Treinamento",
+        icon: AiFillPlayCircle,
+        href: '',
+        cargos: [],
+        modulos: [],
+    },
 ];
 
 export const Listagemmenu = () => {
     const { usuario } = useAuth();
+    const modalTreinamento = useRef()
+
+    function abrirModalTreinamento() {
+        modalTreinamento?.current?.onOpen()
+    }
 
     return (
         <>
             <List display="flex" flexDir="column">
-                {menu.map((item) => {
+                {menu.map((item, index) => {
                     if (
                         item.cargos.length == 0 ||
                         (isArray(usuario?.cargos) &&
@@ -246,17 +261,30 @@ export const Listagemmenu = () => {
                                 }
                             }).length)
                     ) {
-                        return (
-                            <MenuItem
-                                key={item.titulo}
-                                title={item.titulo}
-                                href={item.href}
-                                icon={item.icon}
-                                subMenus={item.subMenus}
-                            />
-                        );
+                        return index === menu.length - 1
+                            ? (
+                                <div onClick={() => abrirModalTreinamento()}>
+                                    <MenuItem
+                                        key={item.titulo}
+                                        title={item.titulo}
+                                        href={item.href}
+                                        icon={item.icon}
+                                        subMenus={item.subMenus}
+                                    />
+                                </div>
+                            )
+                            : (
+                                <MenuItem
+                                    key={item.titulo}
+                                    title={item.titulo}
+                                    href={item.href}
+                                    icon={item.icon}
+                                    subMenus={item.subMenus}
+                                />
+                            );
                     }
                 })}
+                <ModalTreinamento ref={modalTreinamento} />
             </List>
         </>
     );

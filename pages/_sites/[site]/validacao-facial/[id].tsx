@@ -4,7 +4,7 @@ import {
     Flex,
     GridItem,
     Icon,
-    Image,
+    Image as ChakraImage,
     Stack,
     Text,
     Container,
@@ -133,7 +133,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
         setIsClient(true)
     }, [])
 
-    const [error, setError] = useState(null)
+    const [error, setError] = useState<string | null>('')
 
     const check = async () => {
         const response = await api.get('validacaoFacial/check', {
@@ -168,26 +168,52 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
         //     //console.log('Height: ' + stream_height + 'px');
     }
 
+    const getImageDimensions = (base64: string) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image()
+
+            img.onload = () => {
+                resolve({ width: img.width, height: img.height })
+            }
+            img.onerror = reject
+            img.src = base64
+        })
+    }
+
     const onSubmit = async (data) => {
         try {
             setError(null)
 
-            // Verificar tamanho da imagem
+            // Verificar resolução da imagem
+            // getImageDimensions(photo)
+            //     .then((dimensions) => {
+            //         if (dimensions.width >= 720 && dimensions.height >= 1280)
+            //             console.log('A resolução é adequada.')
+            //         else
+            //             setError(
+            //                 'Por favor, tire outra foto com uma câmera de melhor resolução, esta está em baixa resolução.',
+            //             )
+            //     })
+            //     .catch((err) => {
+            //         setError('Erro ao carregar a imagem:', err)
+            //     })
 
-            const response = await api.post('validacaoFacial/step1', {
-                id: validacao.id,
-                cpf: validacao?.cpf,
-                foto: photo,
-            })
+            if (!error) {
+                const response = await api.post('validacaoFacial/step1', {
+                    id: validacao.id,
+                    cpf: validacao?.cpf,
+                    foto: photo,
+                })
 
-            // sucesso
-            if (response.data.status == 1) {
-                setSuccess(true)
-                setError(response.data.message)
-            } else {
-                setError(response.data.message)
+                // sucesso
+                if (response.data.status == 1) {
+                    setSuccess(true)
+                    setError(response.data.message)
+                } else {
+                    setError(response.data.message)
+                }
             }
-        } catch (error) {
+        } catch (error: any) {
             // erro de api e execução
             setError(error.message)
             alert(error.message)
@@ -235,10 +261,12 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
         })
 
     const capture = React.useCallback(() => {
-        const imageSrc = webcamRef.current.getScreenshot({
-            width: 1280,
-            height: 720,
-        })
+        // const imageSrc = webcamRef.current.getScreenshot({
+        //     width: 720,
+        //     height: 1280,
+        // })
+
+        const imageSrc = webcamRef.current.getScreenshot()
 
         setPhoto(imageSrc)
     }, [webcamRef])
@@ -450,7 +478,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                             )}
                                             {photo != null && (
                                                 <div>
-                                                    <Image
+                                                    <ChakraImage
                                                         src={photo}
                                                         objectFit="contain"
                                                         alt="Image"
@@ -530,7 +558,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                         }}
                                     >
                                         {imobiliaria.logo ? (
-                                            <Image
+                                            <ChakraImage
                                                 h={40}
                                                 objectFit="contain"
                                                 src={imobiliaria.logo}

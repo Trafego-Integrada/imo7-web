@@ -66,6 +66,7 @@ import {
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { exportToExcel } from "react-json-to-excel";
 import { useMutation, useQuery } from "react-query";
+import { OpenHelp } from "../../../../../components/OpenHelp";
 
 const Home = ({ query }) => {
     const { usuario } = useAuth();
@@ -88,8 +89,8 @@ const Home = ({ query }) => {
             query?.status && Array.isArray(query.status)
                 ? query?.status
                 : query?.status
-                ? [query?.status]
-                : ["EM_ANDAMENTO"],
+                    ? [query?.status]
+                    : ["EM_ANDAMENTO"],
         responsavel: [],
     });
     const {
@@ -456,17 +457,20 @@ const Home = ({ query }) => {
                             {usuario?.permissoes?.includes(
                                 "imobiliaria.processos.cadastrar"
                             ) && (
-                                <Button
-                                    size="sm"
-                                    leftIcon={<FiPlus />}
-                                    colorScheme="blue"
-                                    onClick={() =>
-                                        modalProcesso.current.onOpen()
-                                    }
-                                >
-                                    Novo Processo
-                                </Button>
-                            )}
+                                    <Flex gap='4px'>
+                                        <OpenHelp />
+                                        <Button
+                                            size="sm"
+                                            leftIcon={<FiPlus />}
+                                            colorScheme="blue"
+                                            onClick={() =>
+                                                modalProcesso.current.onOpen()
+                                            }
+                                        >
+                                            Novo Processo
+                                        </Button>
+                                    </Flex>
+                                )}
                         </Flex>
                     </Flex>
 
@@ -961,7 +965,7 @@ const Home = ({ query }) => {
                                                                                             exportToExcel(
                                                                                                 item.preenchimento,
                                                                                                 "ficha-cadastral-" +
-                                                                                                    item.id
+                                                                                                item.id
                                                                                             )
                                                                                         }
                                                                                     >
@@ -1166,7 +1170,7 @@ const Home = ({ query }) => {
                                                                                                     ).toFixed(
                                                                                                         2
                                                                                                     ) ==
-                                                                                                    "100.00"
+                                                                                                        "100.00"
                                                                                                         ? "green"
                                                                                                         : "yellow"
                                                                                                 }
@@ -1183,20 +1187,20 @@ const Home = ({ query }) => {
                                                                                         <Text
                                                                                             textAlign="center"
                                                                                             fontSize="xs"
-                                                                                            // color={
-                                                                                            //     Math.floor(
-                                                                                            //         (itemFulledLengthMandatory(
-                                                                                            //             item
-                                                                                            //         ) /
-                                                                                            //             itemLengthMandatory(
-                                                                                            //                 item
-                                                                                            //             )) *
-                                                                                            //             100
-                                                                                            //     ) ==
-                                                                                            //     100
-                                                                                            //         ? "white"
-                                                                                            //         : ""
-                                                                                            // }
+                                                                                        // color={
+                                                                                        //     Math.floor(
+                                                                                        //         (itemFulledLengthMandatory(
+                                                                                        //             item
+                                                                                        //         ) /
+                                                                                        //             itemLengthMandatory(
+                                                                                        //                 item
+                                                                                        //             )) *
+                                                                                        //             100
+                                                                                        //     ) ==
+                                                                                        //     100
+                                                                                        //         ? "white"
+                                                                                        //         : ""
+                                                                                        // }
                                                                                         >
                                                                                             {Number(
                                                                                                 item.porcentagemPreenchimento
