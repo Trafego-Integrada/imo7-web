@@ -27,7 +27,7 @@ export interface IProtesto {
     valor: string
 }
 
-interface ICeprotProtestos {
+export interface ICeprotProtestos {
     SP: {
         cartorio: string,
         cidade: string,

@@ -17,7 +17,7 @@ import { ModalReceitaFederalQSA } from './ReceitaFederalQSA/Modal'
 import { ModalReceitaFederalCND } from './ReceitaFederalCND/Modal'
 import { ModalCNDTrabalhista } from './CNDTrabalhista/Modal'
 import { validarData } from '@/utils/validarData'
-import { ModalProtesto } from './ProtestosPF/Modal'
+import { IConsultaProtestos, ModalProtesto } from './ProtestosPF/Modal'
 
 interface TipoConsultaProps {
     ficha: any
@@ -190,12 +190,20 @@ export const Consulta = ({
 
     if (!deveRenderizar) return null
 
+    function quantidadeTitulos(protestos: IConsultaProtestos) {
+        let titulos = 0;
+        protestos.cenprotProtestos.SP.forEach(({ quantidadeTitulos }) => titulos += quantidadeTitulos)
+
+        return titulos
+    }
+
     function calcularContagem(
         retorno: Retorno,
         codigoConsulta: string,
     ): number {
         const mapeamento: Record<string, () => number> = {
             protestos_pf: () => retorno.cenprotProtestos?.SP?.length ?? 0,
+            protestos_pj: () => retorno.cenprotProtestos?.SP?.length ?? 0,
             processos_pf: () => retorno.processosCPF?.totalProcessos ?? 0,
             endereco_cpf: () => retorno.enderecoCPF?.endereco?.length ?? 0,
             empresas_relacionadas_cpf: () =>
@@ -309,7 +317,16 @@ export const Consulta = ({
                             opacity: '.8',
                         }}
                     >
-                        {retornoCount} Resultados
+                        <Flex direction='column'>
+                            <Text>{retornoCount} Resultados</Text>
+
+                            <Text>
+                                {
+                                    consulta?.codigo?.includes('protestos') && `${quantidadeTitulos(retorno)} Títulos`
+                                }
+                            </Text>
+                        </Flex>
+
                     </Button>
                 </Tooltip>
             )}
