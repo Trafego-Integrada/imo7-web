@@ -1,1285 +1,1286 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider          = "mysql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("DATABASE_URL")
+    provider          = "mysql"
+    url               = env("DATABASE_URL")
+    shadowDatabaseUrl = env("DATABASE_URL")
 }
 
 model Conta {
-  id           Int           @id @default(autoincrement())
-  codigo       Int?
-  nome         String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  deletedAt    DateTime?
-  tokens       ApiToken[]
-  boletos      Boleto[]
-  chamados     Chamado[]
-  contratos    Contrato[]
-  Extrato      Extrato[]
-  imobiliarias Imobiliaria[]
-  imoveis      Imovel[]
-  Recibo       Recibo[]
-  usuarios     Usuario[]
+    id           Int           @id @default(autoincrement())
+    codigo       Int?
+    nome         String?
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    deletedAt    DateTime?
+    tokens       ApiToken[]
+    boletos      Boleto[]
+    chamados     Chamado[]
+    contratos    Contrato[]
+    Extrato      Extrato[]
+    imobiliarias Imobiliaria[]
+    imoveis      Imovel[]
+    Recibo       Recibo[]
+    usuarios     Usuario[]
 }
 
 model Usuario {
-  id                    Int                      @id @default(autoincrement())
-  nome                  String?                  @db.VarChar(255)
-  email                 String?
-  documento             String
-  telefone              String?
-  celular               String?
-  profissao             String?
-  senhaHash             String?
-  cep                   String?
-  endereco              String?
-  numero                String?
-  bairro                String?
-  cidade                String?
-  estado                String?
-  createdAt             DateTime                 @default(now())
-  updatedAt             DateTime                 @updatedAt
-  deletedAt             DateTime?
-  imobiliariaId         Int?
-  contaId               Int?
-  status                Boolean                  @default(true)
-  naoEnviarWhatsapp     Boolean?                 @default(false)
-  whatsapp              String?
-  Anexo                 Anexo[]                  @relation("Usuario")
-  boletos               Boleto[]
-  chamadorCriados       Chamado[]                @relation("CriadorChamado")
-  chamadosResponsavel   Chamado[]                @relation("ResponsavelChamados")
-  conversasCriador      ConversaChamado[]        @relation("CriadorConversa")
-  Extrato               Extrato[]
-  FichaCadastral        FichaCadastral[]
-  Historico             Historico[]
-  HistoricoChamado      HistoricoChamado[]
-  interacoesChamado     InteracaoChamado[]
-  Notificacao           Notificacao[]
-  Orcamento             Orcamento[]
-  Processo              Processo[]
-  imoveis               ProprietariosOnImoveis[]
-  Recibo                Recibo[]
-  hashsRecuperacao      RecuperarSenha[]
-  Tarefa                Tarefa[]
-  tokens                Token[]
-  conta                 Conta?                   @relation(fields: [contaId], references: [id])
-  imobiliaria           Imobiliaria?             @relation(fields: [imobiliariaId], references: [id])
-  anexosPermitidos      Anexo[]                  @relation("AnexosPermitidos")
-  apiToken              ApiToken[]               @relation("ApiTokenToUsuario")
-  cargos                Cargo[]                  @relation("CargoToUsuario")
-  conversas             ConversaChamado[]        @relation("ConversaChamadoToUsuario")
-  DepartamentoChamado   DepartamentoChamado[]    @relation("DepartamentoChamadoToUsuario")
-  contratosFiador       Contrato[]               @relation("Fiadores")
-  contratosInquilino    Contrato[]               @relation("Inquilinos")
-  tarefasMembro         Tarefa[]                 @relation("MembrosTarefa")
-  modulos               Modulo[]                 @relation("ModuloToUsuario")
-  ChamadosParticipante  Chamado[]                @relation("ParticipantesChamado")
-  permissoes            Permissao[]              @relation("PermissaoToUsuario")
-  contratosProprietario Contrato[]               @relation("Proprietarios")
-  tarefasResponsavel    Tarefa[]                 @relation("ResponsaveisTarefa")
+    id                    Int                      @id @default(autoincrement())
+    nome                  String?                  @db.VarChar(255)
+    email                 String?
+    documento             String
+    telefone              String?
+    celular               String?
+    profissao             String?
+    senhaHash             String?
+    cep                   String?
+    endereco              String?
+    numero                String?
+    bairro                String?
+    cidade                String?
+    estado                String?
+    createdAt             DateTime                 @default(now())
+    updatedAt             DateTime                 @updatedAt
+    deletedAt             DateTime?
+    imobiliariaId         Int?
+    contaId               Int?
+    status                Boolean                  @default(true)
+    naoEnviarWhatsapp     Boolean?                 @default(false)
+    whatsapp              String?
+    Anexo                 Anexo[]                  @relation("Usuario")
+    boletos               Boleto[]
+    chamadorCriados       Chamado[]                @relation("CriadorChamado")
+    chamadosResponsavel   Chamado[]                @relation("ResponsavelChamados")
+    conversasCriador      ConversaChamado[]        @relation("CriadorConversa")
+    Extrato               Extrato[]
+    FichaCadastral        FichaCadastral[]
+    Historico             Historico[]
+    HistoricoChamado      HistoricoChamado[]
+    interacoesChamado     InteracaoChamado[]
+    Notificacao           Notificacao[]
+    Orcamento             Orcamento[]
+    Processo              Processo[]
+    imoveis               ProprietariosOnImoveis[]
+    Recibo                Recibo[]
+    hashsRecuperacao      RecuperarSenha[]
+    Tarefa                Tarefa[]
+    tokens                Token[]
+    conta                 Conta?                   @relation(fields: [contaId], references: [id])
+    imobiliaria           Imobiliaria?             @relation(fields: [imobiliariaId], references: [id])
+    anexosPermitidos      Anexo[]                  @relation("AnexosPermitidos")
+    apiToken              ApiToken[]               @relation("ApiTokenToUsuario")
+    cargos                Cargo[]                  @relation("CargoToUsuario")
+    conversas             ConversaChamado[]        @relation("ConversaChamadoToUsuario")
+    DepartamentoChamado   DepartamentoChamado[]    @relation("DepartamentoChamadoToUsuario")
+    contratosFiador       Contrato[]               @relation("Fiadores")
+    contratosInquilino    Contrato[]               @relation("Inquilinos")
+    tarefasMembro         Tarefa[]                 @relation("MembrosTarefa")
+    modulos               Modulo[]                 @relation("ModuloToUsuario")
+    ChamadosParticipante  Chamado[]                @relation("ParticipantesChamado")
+    permissoes            Permissao[]              @relation("PermissaoToUsuario")
+    contratosProprietario Contrato[]               @relation("Proprietarios")
+    tarefasResponsavel    Tarefa[]                 @relation("ResponsaveisTarefa")
 
-  @@unique([imobiliariaId, documento])
-  @@index([contaId], map: "Usuario_contaId_fkey")
+    @@unique([imobiliariaId, documento])
+    @@index([contaId], map: "Usuario_contaId_fkey")
 }
 
 model RecuperarSenha {
-  id        String    @id @default(uuid())
-  hash      String    @default(uuid())
-  utilizado Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  usuarioId Int
-  usuario   Usuario   @relation(fields: [usuarioId], references: [id])
+    id        String    @id @default(uuid())
+    hash      String    @default(uuid())
+    utilizado Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    usuarioId Int
+    usuario   Usuario   @relation(fields: [usuarioId], references: [id])
 
-  @@index([usuarioId], map: "RecuperarSenha_usuarioId_fkey")
+    @@index([usuarioId], map: "RecuperarSenha_usuarioId_fkey")
 }
 
 model ApiToken {
-  id        Int       @id @default(autoincrement())
-  token     String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  contaId   Int?
-  conta     Conta?    @relation(fields: [contaId], references: [id])
-  usuario   Usuario[] @relation("ApiTokenToUsuario")
+    id        Int       @id @default(autoincrement())
+    token     String    @unique
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    contaId   Int?
+    conta     Conta?    @relation(fields: [contaId], references: [id])
+    usuario   Usuario[] @relation("ApiTokenToUsuario")
 
-  @@index([contaId], map: "ApiToken_contaId_fkey")
+    @@index([contaId], map: "ApiToken_contaId_fkey")
 }
 
 model Cargo {
-  id        Int       @id @default(autoincrement())
-  nome      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  codigo    String?   @unique
-  modulos   Modulo[]
-  usuarios  Usuario[] @relation("CargoToUsuario")
+    id        Int       @id @default(autoincrement())
+    nome      String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    codigo    String?   @unique
+    modulos   Modulo[]
+    usuarios  Usuario[] @relation("CargoToUsuario")
 }
 
 model Modulo {
-  id          Int         @id @default(autoincrement())
-  codigo      String?     @unique
-  nome        String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  deletedAt   DateTime?
-  cargoCodigo String?
-  paiCodigo   String?
-  cargo       Cargo?      @relation(fields: [cargoCodigo], references: [codigo])
-  pai         Modulo?     @relation("Modulos", fields: [paiCodigo], references: [codigo])
-  modulos     Modulo[]    @relation("Modulos")
-  permissoes  Permissao[]
-  usuarios    Usuario[]   @relation("ModuloToUsuario")
+    id          Int         @id @default(autoincrement())
+    codigo      String?     @unique
+    nome        String
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    deletedAt   DateTime?
+    cargoCodigo String?
+    paiCodigo   String?
+    cargo       Cargo?      @relation(fields: [cargoCodigo], references: [codigo])
+    pai         Modulo?     @relation("Modulos", fields: [paiCodigo], references: [codigo])
+    modulos     Modulo[]    @relation("Modulos")
+    permissoes  Permissao[]
+    usuarios    Usuario[]   @relation("ModuloToUsuario")
 
-  @@index([cargoCodigo], map: "Modulo_cargoCodigo_fkey")
-  @@index([paiCodigo], map: "Modulo_paiCodigo_fkey")
+    @@index([cargoCodigo], map: "Modulo_cargoCodigo_fkey")
+    @@index([paiCodigo], map: "Modulo_paiCodigo_fkey")
 }
 
 model Permissao {
-  id           Int       @id @default(autoincrement())
-  nome         String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  deletedAt    DateTime?
-  codigo       String?   @unique
-  moduloCodigo String
-  modulo       Modulo    @relation(fields: [moduloCodigo], references: [codigo])
-  usuarios     Usuario[] @relation("PermissaoToUsuario")
+    id           Int       @id @default(autoincrement())
+    nome         String
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+    deletedAt    DateTime?
+    codigo       String?   @unique
+    moduloCodigo String
+    modulo       Modulo    @relation(fields: [moduloCodigo], references: [codigo])
+    usuarios     Usuario[] @relation("PermissaoToUsuario")
 
-  @@index([moduloCodigo], map: "Permissao_moduloCodigo_fkey")
+    @@index([moduloCodigo], map: "Permissao_moduloCodigo_fkey")
 }
 
 model Token {
-  id        Int       @id @default(autoincrement())
-  token     String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  usuarioId Int?
-  usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
+    id        Int       @id @default(autoincrement())
+    token     String    @unique
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    usuarioId Int?
+    usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
 
-  @@index([usuarioId], map: "Token_usuarioId_fkey")
+    @@index([usuarioId], map: "Token_usuarioId_fkey")
 }
 
 model Imobiliaria {
-  id                     Int                    @id @default(autoincrement())
-  codigo                 String?
-  razaoSocial            String
-  nomeFantasia           String?
-  cnpj                   String                 @unique
-  ie                     String?
-  logo                   String?
-  email                  String?
-  site                   String?
-  telefone               String?
-  cep                    String?
-  endereco               String?
-  numero                 String?
-  bairro                 String?
-  cidade                 String?
-  estado                 String?
-  url                    String?
-  createdAt              DateTime               @default(now())
-  updatedAt              DateTime               @updatedAt
-  deletedAt              DateTime?
-  contaId                Int?
-  bg                     String?
-  diasDownloadBoleto     Int?
-  emailAssuntoExtrato    String?
-  emailEnvioBoleto       String?
-  emailEnvioExtrato      String?
-  emailMensagemExtrato   String?                @db.LongText
-  enviarEmail            Boolean?
-  enviarWhatsapp         Boolean?
-  idInstanciaWhatsapp    String?
-  smtpFrom               String?
-  smtpHost               String?
-  smtpPass               String?
-  smtpPort               String?
-  smtpReplyTo            String?
-  smtpSecure             Boolean?
-  smtpUser               String?
-  tokenInstanciaWhatsapp String?
-  complemento            String?
-  limiteConsultas        Int?                   @default(100)
-  boletos                Boleto[]
-  CategoriaPessoa        CategoriaPessoa[]
-  chamados               Chamado[]
-  ConsultaNetrin         ConsultaNetrin[]
-  contratos              Contrato[]
-  departamentos          DepartamentoChamado[]
-  extratos               Extrato[]
-  fichasCadastrais       FichaCadastral[]
-  FilaEnvio              FilaEnvio[]
-  conta                  Conta?                 @relation(fields: [contaId], references: [id])
-  imoveis                Imovel[]
-  modelosFichaCadastral  ModeloFichaCadastral[]
-  Orcamento              Orcamento[]
-  Pessoa                 Pessoa[]
-  Processo               Processo[]
-  recibos                Recibo[]
-  RegraNotificacao       RegraNotificacao[]
-  reguasCobranca         ReguaCobranca[]
-  TagTarefa              TagTarefa[]
-  Tarefa                 Tarefa[]
-  usuarios               Usuario[]
-  ValidacaoFacial        ValidacaoFacial[]
+    id                     Int                    @id @default(autoincrement())
+    codigo                 String?
+    razaoSocial            String
+    nomeFantasia           String?
+    cnpj                   String                 @unique
+    ie                     String?
+    logo                   String?
+    email                  String?
+    site                   String?
+    telefone               String?
+    cep                    String?
+    endereco               String?
+    numero                 String?
+    bairro                 String?
+    cidade                 String?
+    estado                 String?
+    url                    String?
+    createdAt              DateTime               @default(now())
+    updatedAt              DateTime               @updatedAt
+    deletedAt              DateTime?
+    contaId                Int?
+    bg                     String?
+    diasDownloadBoleto     Int?
+    emailAssuntoExtrato    String?
+    emailEnvioBoleto       String?
+    emailEnvioExtrato      String?
+    emailMensagemExtrato   String?                @db.LongText
+    enviarEmail            Boolean?
+    enviarWhatsapp         Boolean?
+    idInstanciaWhatsapp    String?
+    smtpFrom               String?
+    smtpHost               String?
+    smtpPass               String?
+    smtpPort               String?
+    smtpReplyTo            String?
+    smtpSecure             Boolean?
+    smtpUser               String?
+    tokenInstanciaWhatsapp String?
+    complemento            String?
+    limiteConsultas        Int?                   @default(100)
+    limiteValidacaoFacial  Int?
+    boletos                Boleto[]
+    CategoriaPessoa        CategoriaPessoa[]
+    chamados               Chamado[]
+    ConsultaNetrin         ConsultaNetrin[]
+    contratos              Contrato[]
+    departamentos          DepartamentoChamado[]
+    extratos               Extrato[]
+    fichasCadastrais       FichaCadastral[]
+    FilaEnvio              FilaEnvio[]
+    conta                  Conta?                 @relation(fields: [contaId], references: [id])
+    imoveis                Imovel[]
+    modelosFichaCadastral  ModeloFichaCadastral[]
+    Orcamento              Orcamento[]
+    Pessoa                 Pessoa[]
+    Processo               Processo[]
+    recibos                Recibo[]
+    RegraNotificacao       RegraNotificacao[]
+    reguasCobranca         ReguaCobranca[]
+    TagTarefa              TagTarefa[]
+    Tarefa                 Tarefa[]
+    usuarios               Usuario[]
+    ValidacaoFacial        ValidacaoFacial[]
 
-  @@index([contaId], map: "Imobiliaria_contaId_fkey")
+    @@index([contaId], map: "Imobiliaria_contaId_fkey")
 }
 
 model ReguaCobranca {
-  id            String                  @id @default(uuid())
-  tipo          TipoReguaCobranca
-  tipoEnvio     TipoEnvioReguaCobranca?
-  formaEnvio    FormaEnvioReguaCobranca
-  dias          Int?
-  assunto       String?
-  conteudo      String?                 @db.LongText
-  createdAt     DateTime                @default(now())
-  updatedAt     DateTime?               @updatedAt
-  deletedAt     DateTime?
-  imobiliariaId Int?
-  filas         FilaEnvio[]
-  imobiliaria   Imobiliaria?            @relation(fields: [imobiliariaId], references: [id])
+    id            String                  @id @default(uuid())
+    tipo          TipoReguaCobranca
+    tipoEnvio     TipoEnvioReguaCobranca?
+    formaEnvio    FormaEnvioReguaCobranca
+    dias          Int?
+    assunto       String?
+    conteudo      String?                 @db.LongText
+    createdAt     DateTime                @default(now())
+    updatedAt     DateTime?               @updatedAt
+    deletedAt     DateTime?
+    imobiliariaId Int?
+    filas         FilaEnvio[]
+    imobiliaria   Imobiliaria?            @relation(fields: [imobiliariaId], references: [id])
 
-  @@index([imobiliariaId], map: "ReguaCobranca_imobiliariaId_fkey")
+    @@index([imobiliariaId], map: "ReguaCobranca_imobiliariaId_fkey")
 }
 
 model FilaEnvio {
-  id               String        @id @default(uuid())
-  previsaoEnvio    DateTime?
-  dataEnvio        DateTime?
-  nomeDestinatario String
-  destinatario     String
-  parametros       Json?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime?     @updatedAt
-  deletedAt        DateTime?
-  reguaCobrancaId  String
-  imobiliariaId    Int?
-  boletoId         Int?
-  extratoId        Int?
-  boleto           Boleto?       @relation(fields: [boletoId], references: [id])
-  extrato          Extrato?      @relation(fields: [extratoId], references: [id])
-  imobiliaria      Imobiliaria?  @relation(fields: [imobiliariaId], references: [id])
-  reguaCobranca    ReguaCobranca @relation(fields: [reguaCobrancaId], references: [id])
+    id               String        @id @default(uuid())
+    previsaoEnvio    DateTime?
+    dataEnvio        DateTime?
+    nomeDestinatario String
+    destinatario     String
+    parametros       Json?
+    createdAt        DateTime      @default(now())
+    updatedAt        DateTime?     @updatedAt
+    deletedAt        DateTime?
+    reguaCobrancaId  String
+    imobiliariaId    Int?
+    boletoId         Int?
+    extratoId        Int?
+    boleto           Boleto?       @relation(fields: [boletoId], references: [id])
+    extrato          Extrato?      @relation(fields: [extratoId], references: [id])
+    imobiliaria      Imobiliaria?  @relation(fields: [imobiliariaId], references: [id])
+    reguaCobranca    ReguaCobranca @relation(fields: [reguaCobrancaId], references: [id])
 
-  @@index([boletoId], map: "FilaEnvio_boletoId_fkey")
-  @@index([extratoId], map: "FilaEnvio_extratoId_fkey")
-  @@index([imobiliariaId], map: "FilaEnvio_imobiliariaId_fkey")
-  @@index([reguaCobrancaId], map: "FilaEnvio_reguaCobrancaId_fkey")
+    @@index([boletoId], map: "FilaEnvio_boletoId_fkey")
+    @@index([extratoId], map: "FilaEnvio_extratoId_fkey")
+    @@index([imobiliariaId], map: "FilaEnvio_imobiliariaId_fkey")
+    @@index([reguaCobrancaId], map: "FilaEnvio_reguaCobrancaId_fkey")
 }
 
 model Imovel {
-  id              Int                      @id @default(autoincrement())
-  codigo          String?
-  tipo            String?
-  descricao       String?
-  cep             String?
-  endereco        String?
-  numero          String?
-  complemento     String?
-  pontoReferencia String?
-  bairro          String?
-  cidade          String?
-  estado          String?
-  caracteristicas Json?
-  valorVenda      Decimal?
-  valorAluguel    Decimal?
-  valorCondominio Decimal?
-  numeroIptu      String?
-  numeroAgua      String?
-  numeroEnergia   String?
-  quartos         Int?
-  suites          Int?
-  varandas        Int?
-  banheiros       Int?
-  cozinhas        Int?
-  salas           Int?
-  piscinas        Int?
-  garagens        Int?
-  lavabos         Int?
-  terreno         Decimal?
-  areaUtil        Decimal?
-  areaTotal       Decimal?
-  aceitaPet       Boolean?
-  destaque        Boolean?
-  placa           Boolean?
-  mobiliado       Boolean?
-  exclusividade   Boolean?
-  autorizado      Boolean?
-  createdAt       DateTime                 @default(now())
-  updatedAt       DateTime                 @updatedAt
-  deletedAt       DateTime?
-  imobiliariaId   Int
-  contaId         Int?
-  contratoId      Int?                     @unique
-  valorIPTU       Decimal?
-  valorSeguro     Decimal?
-  FichaCadastral  FichaCadastral[]
-  conta           Conta?                   @relation(fields: [contaId], references: [id])
-  contrato        Contrato?                @relation(fields: [contratoId], references: [id])
-  imobiliaria     Imobiliaria              @relation(fields: [imobiliariaId], references: [id])
-  Processo        Processo[]
-  proprietarios   ProprietariosOnImoveis[]
-  Tarefa          Tarefa[]
+    id              Int                      @id @default(autoincrement())
+    codigo          String?
+    tipo            String?
+    descricao       String?
+    cep             String?
+    endereco        String?
+    numero          String?
+    complemento     String?
+    pontoReferencia String?
+    bairro          String?
+    cidade          String?
+    estado          String?
+    caracteristicas Json?
+    valorVenda      Decimal?
+    valorAluguel    Decimal?
+    valorCondominio Decimal?
+    numeroIptu      String?
+    numeroAgua      String?
+    numeroEnergia   String?
+    quartos         Int?
+    suites          Int?
+    varandas        Int?
+    banheiros       Int?
+    cozinhas        Int?
+    salas           Int?
+    piscinas        Int?
+    garagens        Int?
+    lavabos         Int?
+    terreno         Decimal?
+    areaUtil        Decimal?
+    areaTotal       Decimal?
+    aceitaPet       Boolean?
+    destaque        Boolean?
+    placa           Boolean?
+    mobiliado       Boolean?
+    exclusividade   Boolean?
+    autorizado      Boolean?
+    createdAt       DateTime                 @default(now())
+    updatedAt       DateTime                 @updatedAt
+    deletedAt       DateTime?
+    imobiliariaId   Int
+    contaId         Int?
+    contratoId      Int?                     @unique
+    valorIPTU       Decimal?
+    valorSeguro     Decimal?
+    FichaCadastral  FichaCadastral[]
+    conta           Conta?                   @relation(fields: [contaId], references: [id])
+    contrato        Contrato?                @relation(fields: [contratoId], references: [id])
+    imobiliaria     Imobiliaria              @relation(fields: [imobiliariaId], references: [id])
+    Processo        Processo[]
+    proprietarios   ProprietariosOnImoveis[]
+    Tarefa          Tarefa[]
 
-  @@index([contaId], map: "Imovel_contaId_fkey")
-  @@index([imobiliariaId], map: "Imovel_imobiliariaId_fkey")
+    @@index([contaId], map: "Imovel_contaId_fkey")
+    @@index([imobiliariaId], map: "Imovel_imobiliariaId_fkey")
 }
 
 model ProprietariosOnImoveis {
-  imovelId       Int
-  proprietarioId Int
-  porcentagem    Float   @default(100)
-  imovel         Imovel  @relation(fields: [imovelId], references: [id])
-  proprietario   Usuario @relation(fields: [proprietarioId], references: [id])
+    imovelId       Int
+    proprietarioId Int
+    porcentagem    Float   @default(100)
+    imovel         Imovel  @relation(fields: [imovelId], references: [id])
+    proprietario   Usuario @relation(fields: [proprietarioId], references: [id])
 
-  @@id([imovelId, proprietarioId])
-  @@index([proprietarioId], map: "ProprietariosOnImoveis_proprietarioId_fkey")
+    @@id([imovelId, proprietarioId])
+    @@index([proprietarioId], map: "ProprietariosOnImoveis_proprietarioId_fkey")
 }
 
 model Contrato {
-  id                Int           @id @default(autoincrement())
-  codigo            String
-  taxaAdm           Decimal?
-  dataInicio        DateTime      @db.Date
-  dataFim           DateTime?     @db.Date
-  valorAluguel      Decimal?
-  valorBonus        Decimal?
-  diaVencimento     Int?
-  diaRecebimento    Int?
-  diaDeposito       Int?
-  ultimaParcPaga    Int?
-  ultimoRecebimento DateTime?     @db.Date
-  ultimoBomPara     DateTime?     @db.Date
-  ultimoRepasse     DateTime?     @db.Date
-  formaRepasse      String?
-  dataReajuste      DateTime?     @db.Date
-  indiceReajuste    String?
-  responsavel       String?
-  multa             Decimal?
-  juros             Decimal?
-  formaPagamento    String?
-  observacoes       String?       @db.LongText
-  imobiliariaId     Int
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-  deletedAt         DateTime?
-  contaId           Int
-  anexos            Anexo[]
-  boletos           Boleto[]
-  chamados          Chamado[]
-  conta             Conta         @relation(fields: [contaId], references: [id])
-  imobiliaria       Imobiliaria   @relation(fields: [imobiliariaId], references: [id])
-  extratos          Extrato[]
-  imovel            Imovel?
-  Notificacao       Notificacao[]
-  Processo          Processo[]
-  Recibo            Recibo[]
-  Tarefa            Tarefa[]
-  fiadores          Usuario[]     @relation("Fiadores")
-  inquilinos        Usuario[]     @relation("Inquilinos")
-  proprietarios     Usuario[]     @relation("Proprietarios")
+    id                Int           @id @default(autoincrement())
+    codigo            String
+    taxaAdm           Decimal?
+    dataInicio        DateTime      @db.Date
+    dataFim           DateTime?     @db.Date
+    valorAluguel      Decimal?
+    valorBonus        Decimal?
+    diaVencimento     Int?
+    diaRecebimento    Int?
+    diaDeposito       Int?
+    ultimaParcPaga    Int?
+    ultimoRecebimento DateTime?     @db.Date
+    ultimoBomPara     DateTime?     @db.Date
+    ultimoRepasse     DateTime?     @db.Date
+    formaRepasse      String?
+    dataReajuste      DateTime?     @db.Date
+    indiceReajuste    String?
+    responsavel       String?
+    multa             Decimal?
+    juros             Decimal?
+    formaPagamento    String?
+    observacoes       String?       @db.LongText
+    imobiliariaId     Int
+    createdAt         DateTime      @default(now())
+    updatedAt         DateTime      @updatedAt
+    deletedAt         DateTime?
+    contaId           Int
+    anexos            Anexo[]
+    boletos           Boleto[]
+    chamados          Chamado[]
+    conta             Conta         @relation(fields: [contaId], references: [id])
+    imobiliaria       Imobiliaria   @relation(fields: [imobiliariaId], references: [id])
+    extratos          Extrato[]
+    imovel            Imovel?
+    Notificacao       Notificacao[]
+    Processo          Processo[]
+    Recibo            Recibo[]
+    Tarefa            Tarefa[]
+    fiadores          Usuario[]     @relation("Fiadores")
+    inquilinos        Usuario[]     @relation("Inquilinos")
+    proprietarios     Usuario[]     @relation("Proprietarios")
 
-  @@index([contaId], map: "Contrato_contaId_fkey")
-  @@index([imobiliariaId], map: "Contrato_imobiliariaId_fkey")
+    @@index([contaId], map: "Contrato_contaId_fkey")
+    @@index([imobiliariaId], map: "Contrato_imobiliariaId_fkey")
 }
 
 model Boleto {
-  id                    Int           @id @default(autoincrement())
-  bols_cpf_cnpj         String
-  bols_codl             String?
-  envia_email           String?
-  field_cod_banco       String?
-  local_pgto1           String?
-  local_pgto2           String?
-  data_vencimen         DateTime?     @db.Date
-  beneficiario          String?
-  ag_cod_beneficiar     String?
-  data_doc              DateTime?     @db.Date
-  num_doc2              String?
-  num_doc               String?
-  especie_doc           String?
-  aceite                String?
-  data_proces           DateTime?     @db.Date
-  nosso_numero2         String?
-  reservado             String?
-  carteira              String?
-  especie2              String?
-  qtd2                  String?
-  xvalor                String?
-  valor_doc2            String?
-  instrucoes1           String?
-  instrucoes2           String?
-  instrucoes3           String?
-  instrucoes4           String?
-  instrucoes5           String?
-  instrucoes6           String?
-  instrucoes7           String?
-  instrucoes8           String?
-  instrucoes9           String?
-  instrucoes10          String?
-  sacado2_nome          String?
-  sacado2_endereco      String?
-  sacado2_city_uf_cep   String?
-  linha_digitavel       String?
-  barcode               String?
-  desconto2             String?
-  outras_deducoes2      String?
-  mora_multa2           String?
-  outros_acrescimos2    String?
-  valorcobrado2         String?
-  nao_receber_apos      String?
-  email_sacado          String?
-  nome_razao_sacado     String?
-  endereco_sacado       String?
-  numero_sacado         String?
-  complemento_sacado    String?
-  cep_sacado            String?
-  bairro_sacado         String?
-  cidade_sacado         String?
-  telefone_sacado       String?
-  uf_sacado             String?
-  email_beneficiario    String?
-  cpf_cnpj_beneficiario String?
-  createdAt             DateTime      @default(now())
-  updatedAt             DateTime      @updatedAt
-  deletedAt             DateTime?
-  contratoId            Int
-  contaId               Int
-  imobiliariaId         Int
-  conta                 Conta         @relation(fields: [contaId], references: [id])
-  contrato              Contrato      @relation(fields: [contratoId], references: [id])
-  inquilino             Usuario       @relation(fields: [imobiliariaId, bols_cpf_cnpj], references: [imobiliariaId, documento], onDelete: NoAction, onUpdate: NoAction)
-  imobiliaria           Imobiliaria   @relation(fields: [imobiliariaId], references: [id])
-  filaEnvio             FilaEnvio[]
-  Notificacao           Notificacao[]
+    id                    Int           @id @default(autoincrement())
+    bols_cpf_cnpj         String
+    bols_codl             String?
+    envia_email           String?
+    field_cod_banco       String?
+    local_pgto1           String?
+    local_pgto2           String?
+    data_vencimen         DateTime?     @db.Date
+    beneficiario          String?
+    ag_cod_beneficiar     String?
+    data_doc              DateTime?     @db.Date
+    num_doc2              String?
+    num_doc               String?
+    especie_doc           String?
+    aceite                String?
+    data_proces           DateTime?     @db.Date
+    nosso_numero2         String?
+    reservado             String?
+    carteira              String?
+    especie2              String?
+    qtd2                  String?
+    xvalor                String?
+    valor_doc2            String?
+    instrucoes1           String?
+    instrucoes2           String?
+    instrucoes3           String?
+    instrucoes4           String?
+    instrucoes5           String?
+    instrucoes6           String?
+    instrucoes7           String?
+    instrucoes8           String?
+    instrucoes9           String?
+    instrucoes10          String?
+    sacado2_nome          String?
+    sacado2_endereco      String?
+    sacado2_city_uf_cep   String?
+    linha_digitavel       String?
+    barcode               String?
+    desconto2             String?
+    outras_deducoes2      String?
+    mora_multa2           String?
+    outros_acrescimos2    String?
+    valorcobrado2         String?
+    nao_receber_apos      String?
+    email_sacado          String?
+    nome_razao_sacado     String?
+    endereco_sacado       String?
+    numero_sacado         String?
+    complemento_sacado    String?
+    cep_sacado            String?
+    bairro_sacado         String?
+    cidade_sacado         String?
+    telefone_sacado       String?
+    uf_sacado             String?
+    email_beneficiario    String?
+    cpf_cnpj_beneficiario String?
+    createdAt             DateTime      @default(now())
+    updatedAt             DateTime      @updatedAt
+    deletedAt             DateTime?
+    contratoId            Int
+    contaId               Int
+    imobiliariaId         Int
+    conta                 Conta         @relation(fields: [contaId], references: [id])
+    contrato              Contrato      @relation(fields: [contratoId], references: [id])
+    inquilino             Usuario       @relation(fields: [imobiliariaId, bols_cpf_cnpj], references: [imobiliariaId, documento], onDelete: NoAction, onUpdate: NoAction)
+    imobiliaria           Imobiliaria   @relation(fields: [imobiliariaId], references: [id])
+    filaEnvio             FilaEnvio[]
+    Notificacao           Notificacao[]
 
-  @@index([contaId], map: "Boleto_contaId_fkey")
-  @@index([contratoId], map: "Boleto_contratoId_fkey")
-  @@index([imobiliariaId, bols_cpf_cnpj], map: "Boleto_imobiliariaId_bols_cpf_cnpj_fkey")
+    @@index([contaId], map: "Boleto_contaId_fkey")
+    @@index([contratoId], map: "Boleto_contratoId_fkey")
+    @@index([imobiliariaId, bols_cpf_cnpj], map: "Boleto_imobiliariaId_bols_cpf_cnpj_fkey")
 }
 
 model Recibo {
-  id            Int          @id @default(autoincrement())
-  parcela       Int?
-  vencimento    DateTime?    @db.Date
-  recebimento   DateTime?    @db.Date
-  pagamento     DateTime?    @db.Date
-  responsavel   String?
-  total         Decimal?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  deletedAt     DateTime?
-  contratoId    Int?
-  imobiliariaId Int?
-  inquilinoId   Int?
-  contaId       Int?
-  itens         ItemRecibo[]
-  conta         Conta?       @relation(fields: [contaId], references: [id])
-  contrato      Contrato?    @relation(fields: [contratoId], references: [id])
-  imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
-  inquilino     Usuario?     @relation(fields: [inquilinoId], references: [id])
+    id            Int          @id @default(autoincrement())
+    parcela       Int?
+    vencimento    DateTime?    @db.Date
+    recebimento   DateTime?    @db.Date
+    pagamento     DateTime?    @db.Date
+    responsavel   String?
+    total         Decimal?
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @updatedAt
+    deletedAt     DateTime?
+    contratoId    Int?
+    imobiliariaId Int?
+    inquilinoId   Int?
+    contaId       Int?
+    itens         ItemRecibo[]
+    conta         Conta?       @relation(fields: [contaId], references: [id])
+    contrato      Contrato?    @relation(fields: [contratoId], references: [id])
+    imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
+    inquilino     Usuario?     @relation(fields: [inquilinoId], references: [id])
 
-  @@index([contaId], map: "Recibo_contaId_fkey")
-  @@index([contratoId], map: "Recibo_contratoId_fkey")
-  @@index([imobiliariaId], map: "Recibo_imobiliariaId_fkey")
-  @@index([inquilinoId], map: "Recibo_inquilinoId_fkey")
+    @@index([contaId], map: "Recibo_contaId_fkey")
+    @@index([contratoId], map: "Recibo_contratoId_fkey")
+    @@index([imobiliariaId], map: "Recibo_imobiliariaId_fkey")
+    @@index([inquilinoId], map: "Recibo_inquilinoId_fkey")
 }
 
 model ItemRecibo {
-  id        Int       @id @default(autoincrement())
-  descricao String?
-  valor     Decimal?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  reciboId  Int
-  recibo    Recibo    @relation(fields: [reciboId], references: [id])
+    id        Int       @id @default(autoincrement())
+    descricao String?
+    valor     Decimal?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    reciboId  Int
+    recibo    Recibo    @relation(fields: [reciboId], references: [id])
 
-  @@index([reciboId], map: "ItemRecibo_reciboId_fkey")
+    @@index([reciboId], map: "ItemRecibo_reciboId_fkey")
 }
 
 model Extrato {
-  id            Int           @id @default(autoincrement())
-  contratoId    Int?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  deletedAt     DateTime?
-  contaId       Int?
-  dataDeposito  DateTime?     @db.Date
-  imobiliariaId Int?
-  observacao1   String?
-  observacao2   String?
-  observacao3   String?
-  observacao4   String?
-  observacao5   String?
-  parcela       Int?
-  periodo       String?
-  responsavel   String?
-  usuarioId     Int?
-  vencimento    DateTime?     @db.Date
-  conta         Conta?        @relation(fields: [contaId], references: [id])
-  contrato      Contrato?     @relation(fields: [contratoId], references: [id])
-  imobiliaria   Imobiliaria?  @relation(fields: [imobiliariaId], references: [id])
-  proprietario  Usuario?      @relation(fields: [usuarioId], references: [id])
-  filaEnvio     FilaEnvio[]
-  itens         ItemExtrato[]
+    id            Int           @id @default(autoincrement())
+    contratoId    Int?
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
+    deletedAt     DateTime?
+    contaId       Int?
+    dataDeposito  DateTime?     @db.Date
+    imobiliariaId Int?
+    observacao1   String?
+    observacao2   String?
+    observacao3   String?
+    observacao4   String?
+    observacao5   String?
+    parcela       Int?
+    periodo       String?
+    responsavel   String?
+    usuarioId     Int?
+    vencimento    DateTime?     @db.Date
+    conta         Conta?        @relation(fields: [contaId], references: [id])
+    contrato      Contrato?     @relation(fields: [contratoId], references: [id])
+    imobiliaria   Imobiliaria?  @relation(fields: [imobiliariaId], references: [id])
+    proprietario  Usuario?      @relation(fields: [usuarioId], references: [id])
+    filaEnvio     FilaEnvio[]
+    itens         ItemExtrato[]
 
-  @@index([contaId], map: "Extrato_contaId_fkey")
-  @@index([contratoId], map: "Extrato_contratoId_fkey")
-  @@index([imobiliariaId], map: "Extrato_imobiliariaId_fkey")
-  @@index([usuarioId], map: "Extrato_usuarioId_fkey")
+    @@index([contaId], map: "Extrato_contaId_fkey")
+    @@index([contratoId], map: "Extrato_contratoId_fkey")
+    @@index([imobiliariaId], map: "Extrato_imobiliariaId_fkey")
+    @@index([usuarioId], map: "Extrato_usuarioId_fkey")
 }
 
 model ItemExtrato {
-  id        Int       @id @default(autoincrement())
-  descricao String?
-  valor     Decimal?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  extratoId Int
-  extrato   Extrato   @relation(fields: [extratoId], references: [id])
+    id        Int       @id @default(autoincrement())
+    descricao String?
+    valor     Decimal?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    extratoId Int
+    extrato   Extrato   @relation(fields: [extratoId], references: [id])
 
-  @@index([extratoId], map: "ItemExtrato_extratoId_fkey")
+    @@index([extratoId], map: "ItemExtrato_extratoId_fkey")
 }
 
 model DepartamentoChamado {
-  id            Int              @id @default(autoincrement())
-  titulo        String
-  ativo         Boolean          @default(true)
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  deletedAt     DateTime?
-  imobiliariaId Int?
-  assuntos      AssuntoChamado[]
-  imobiliaria   Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
-  tarefas       Tarefa[]
-  integrantes   Usuario[]        @relation("DepartamentoChamadoToUsuario")
+    id            Int              @id @default(autoincrement())
+    titulo        String
+    ativo         Boolean          @default(true)
+    createdAt     DateTime         @default(now())
+    updatedAt     DateTime         @updatedAt
+    deletedAt     DateTime?
+    imobiliariaId Int?
+    assuntos      AssuntoChamado[]
+    imobiliaria   Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
+    tarefas       Tarefa[]
+    integrantes   Usuario[]        @relation("DepartamentoChamadoToUsuario")
 
-  @@index([imobiliariaId], map: "DepartamentoChamado_imobiliariaId_fkey")
+    @@index([imobiliariaId], map: "DepartamentoChamado_imobiliariaId_fkey")
 }
 
 model AssuntoChamado {
-  id             Int                 @id @default(autoincrement())
-  titulo         String
-  ativo          Boolean             @default(true)
-  departamentoId Int
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
-  deletedAt      DateTime?
-  departamento   DepartamentoChamado @relation(fields: [departamentoId], references: [id])
-  chamados       Chamado[]
+    id             Int                 @id @default(autoincrement())
+    titulo         String
+    ativo          Boolean             @default(true)
+    departamentoId Int
+    createdAt      DateTime            @default(now())
+    updatedAt      DateTime            @updatedAt
+    deletedAt      DateTime?
+    departamento   DepartamentoChamado @relation(fields: [departamentoId], references: [id])
+    chamados       Chamado[]
 
-  @@index([departamentoId], map: "AssuntoChamado_departamentoId_fkey")
+    @@index([departamentoId], map: "AssuntoChamado_departamentoId_fkey")
 }
 
 model Chamado {
-  id                Int                @id @default(autoincrement())
-  titulo            String
-  assuntoId         Int
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  deletedAt         DateTime?
-  contratoId        Int?
-  criadorId         Int
-  status            StatusChamado      @default(ABERTO)
-  contaId           Int
-  imobiliariaId     Int
-  responsavelId     Int?
-  bairroImovel      String?
-  cepImovel         String?
-  cidadeImovel      String?
-  codigoContrato    String?
-  complementoImovel String?
-  enderecoImovel    String?
-  numeroImovel      String?
-  estadoImovel      String?
-  codigoImovel      String?
-  anexos            Anexo[]
-  assunto           AssuntoChamado     @relation(fields: [assuntoId], references: [id])
-  conta             Conta              @relation(fields: [contaId], references: [id])
-  contrato          Contrato?          @relation(fields: [contratoId], references: [id])
-  criador           Usuario            @relation("CriadorChamado", fields: [criadorId], references: [id])
-  imobiliaria       Imobiliaria        @relation(fields: [imobiliariaId], references: [id])
-  responsavel       Usuario?           @relation("ResponsavelChamados", fields: [responsavelId], references: [id])
-  conversas         ConversaChamado[]
-  historicos        HistoricoChamado[]
-  interacoes        InteracaoChamado[]
-  Orcamento         Orcamento[]
-  Tarefa            Tarefa[]
-  participantes     Usuario[]          @relation("ParticipantesChamado")
+    id                Int                @id @default(autoincrement())
+    titulo            String
+    assuntoId         Int
+    createdAt         DateTime           @default(now())
+    updatedAt         DateTime           @updatedAt
+    deletedAt         DateTime?
+    contratoId        Int?
+    criadorId         Int
+    status            StatusChamado      @default(ABERTO)
+    contaId           Int
+    imobiliariaId     Int
+    responsavelId     Int?
+    bairroImovel      String?
+    cepImovel         String?
+    cidadeImovel      String?
+    codigoContrato    String?
+    complementoImovel String?
+    enderecoImovel    String?
+    numeroImovel      String?
+    estadoImovel      String?
+    codigoImovel      String?
+    anexos            Anexo[]
+    assunto           AssuntoChamado     @relation(fields: [assuntoId], references: [id])
+    conta             Conta              @relation(fields: [contaId], references: [id])
+    contrato          Contrato?          @relation(fields: [contratoId], references: [id])
+    criador           Usuario            @relation("CriadorChamado", fields: [criadorId], references: [id])
+    imobiliaria       Imobiliaria        @relation(fields: [imobiliariaId], references: [id])
+    responsavel       Usuario?           @relation("ResponsavelChamados", fields: [responsavelId], references: [id])
+    conversas         ConversaChamado[]
+    historicos        HistoricoChamado[]
+    interacoes        InteracaoChamado[]
+    Orcamento         Orcamento[]
+    Tarefa            Tarefa[]
+    participantes     Usuario[]          @relation("ParticipantesChamado")
 
-  @@index([assuntoId], map: "Chamado_assuntoId_fkey")
-  @@index([contaId], map: "Chamado_contaId_fkey")
-  @@index([contratoId], map: "Chamado_contratoId_fkey")
-  @@index([criadorId], map: "Chamado_criadorId_fkey")
-  @@index([imobiliariaId], map: "Chamado_imobiliariaId_fkey")
-  @@index([responsavelId], map: "Chamado_responsavelId_fkey")
+    @@index([assuntoId], map: "Chamado_assuntoId_fkey")
+    @@index([contaId], map: "Chamado_contaId_fkey")
+    @@index([contratoId], map: "Chamado_contratoId_fkey")
+    @@index([criadorId], map: "Chamado_criadorId_fkey")
+    @@index([imobiliariaId], map: "Chamado_imobiliariaId_fkey")
+    @@index([responsavelId], map: "Chamado_responsavelId_fkey")
 }
 
 model HistoricoChamado {
-  id        Int       @id @default(autoincrement())
-  descricao String?   @db.LongText
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  usuarioId Int?
-  chamadoId Int
-  chamado   Chamado   @relation(fields: [chamadoId], references: [id])
-  usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
+    id        Int       @id @default(autoincrement())
+    descricao String?   @db.LongText
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    usuarioId Int?
+    chamadoId Int
+    chamado   Chamado   @relation(fields: [chamadoId], references: [id])
+    usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
 
-  @@index([chamadoId], map: "HistoricoChamado_chamadoId_fkey")
-  @@index([usuarioId], map: "HistoricoChamado_usuarioId_fkey")
+    @@index([chamadoId], map: "HistoricoChamado_chamadoId_fkey")
+    @@index([usuarioId], map: "HistoricoChamado_usuarioId_fkey")
 }
 
 model ConversaChamado {
-  id            Int                @id @default(autoincrement())
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
-  deletedAt     DateTime?
-  chamadoId     Int
-  criadorId     Int
-  anexos        Anexo[]
-  chamado       Chamado            @relation(fields: [chamadoId], references: [id])
-  criador       Usuario            @relation("CriadorConversa", fields: [criadorId], references: [id])
-  interacoes    InteracaoChamado[]
-  participantes Usuario[]          @relation("ConversaChamadoToUsuario")
+    id            Int                @id @default(autoincrement())
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime           @updatedAt
+    deletedAt     DateTime?
+    chamadoId     Int
+    criadorId     Int
+    anexos        Anexo[]
+    chamado       Chamado            @relation(fields: [chamadoId], references: [id])
+    criador       Usuario            @relation("CriadorConversa", fields: [criadorId], references: [id])
+    interacoes    InteracaoChamado[]
+    participantes Usuario[]          @relation("ConversaChamadoToUsuario")
 
-  @@index([chamadoId], map: "ConversaChamado_chamadoId_fkey")
-  @@index([criadorId], map: "ConversaChamado_criadorId_fkey")
+    @@index([chamadoId], map: "ConversaChamado_chamadoId_fkey")
+    @@index([criadorId], map: "ConversaChamado_criadorId_fkey")
 }
 
 model InteracaoChamado {
-  id                Int              @id @default(autoincrement())
-  mensagem          String?          @db.LongText
-  chamadoId         Int
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  deletedAt         DateTime?
-  conversaChamadoId Int?
-  usuarioId         Int
-  anexos            Anexo[]
-  chamado           Chamado          @relation(fields: [chamadoId], references: [id])
-  conversa          ConversaChamado? @relation(fields: [conversaChamadoId], references: [id])
-  usuario           Usuario          @relation(fields: [usuarioId], references: [id])
+    id                Int              @id @default(autoincrement())
+    mensagem          String?          @db.LongText
+    chamadoId         Int
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+    deletedAt         DateTime?
+    conversaChamadoId Int?
+    usuarioId         Int
+    anexos            Anexo[]
+    chamado           Chamado          @relation(fields: [chamadoId], references: [id])
+    conversa          ConversaChamado? @relation(fields: [conversaChamadoId], references: [id])
+    usuario           Usuario          @relation(fields: [usuarioId], references: [id])
 
-  @@index([chamadoId], map: "InteracaoChamado_chamadoId_fkey")
-  @@index([conversaChamadoId], map: "InteracaoChamado_conversaChamadoId_fkey")
-  @@index([usuarioId], map: "InteracaoChamado_usuarioId_fkey")
+    @@index([chamadoId], map: "InteracaoChamado_chamadoId_fkey")
+    @@index([conversaChamadoId], map: "InteracaoChamado_conversaChamadoId_fkey")
+    @@index([usuarioId], map: "InteracaoChamado_usuarioId_fkey")
 }
 
 model Anexo {
-  id                 Int               @id @default(autoincrement())
-  anexo              String            @db.LongText
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  deletedAt          DateTime?
-  contratoId         Int?
-  chamadoId          Int?
-  usuarioId          Int?
-  conversaChamadoId  Int?
-  interacaoChamadoId Int?
-  nome               String?
-  fichaCadastralId   String?
-  processoId         String?
-  chamado            Chamado?          @relation(fields: [chamadoId], references: [id])
-  contrato           Contrato?         @relation(fields: [contratoId], references: [id])
-  conversa           ConversaChamado?  @relation(fields: [conversaChamadoId], references: [id])
-  fichaCadastral     FichaCadastral?   @relation(fields: [fichaCadastralId], references: [id])
-  interacao          InteracaoChamado? @relation(fields: [interacaoChamadoId], references: [id])
-  processo           Processo?         @relation(fields: [processoId], references: [id])
-  usuario            Usuario?          @relation("Usuario", fields: [usuarioId], references: [id])
-  usuariosPermitidos Usuario[]         @relation("AnexosPermitidos")
+    id                 Int               @id @default(autoincrement())
+    anexo              String            @db.LongText
+    createdAt          DateTime          @default(now())
+    updatedAt          DateTime          @updatedAt
+    deletedAt          DateTime?
+    contratoId         Int?
+    chamadoId          Int?
+    usuarioId          Int?
+    conversaChamadoId  Int?
+    interacaoChamadoId Int?
+    nome               String?
+    fichaCadastralId   String?
+    processoId         String?
+    chamado            Chamado?          @relation(fields: [chamadoId], references: [id])
+    contrato           Contrato?         @relation(fields: [contratoId], references: [id])
+    conversa           ConversaChamado?  @relation(fields: [conversaChamadoId], references: [id])
+    fichaCadastral     FichaCadastral?   @relation(fields: [fichaCadastralId], references: [id])
+    interacao          InteracaoChamado? @relation(fields: [interacaoChamadoId], references: [id])
+    processo           Processo?         @relation(fields: [processoId], references: [id])
+    usuario            Usuario?          @relation("Usuario", fields: [usuarioId], references: [id])
+    usuariosPermitidos Usuario[]         @relation("AnexosPermitidos")
 
-  @@index([chamadoId], map: "Anexo_chamadoId_fkey")
-  @@index([contratoId], map: "Anexo_contratoId_fkey")
-  @@index([conversaChamadoId], map: "Anexo_conversaChamadoId_fkey")
-  @@index([fichaCadastralId], map: "Anexo_fichaCadastralId_fkey")
-  @@index([interacaoChamadoId], map: "Anexo_interacaoChamadoId_fkey")
-  @@index([processoId], map: "Anexo_processoId_fkey")
-  @@index([usuarioId], map: "Anexo_usuarioId_fkey")
+    @@index([chamadoId], map: "Anexo_chamadoId_fkey")
+    @@index([contratoId], map: "Anexo_contratoId_fkey")
+    @@index([conversaChamadoId], map: "Anexo_conversaChamadoId_fkey")
+    @@index([fichaCadastralId], map: "Anexo_fichaCadastralId_fkey")
+    @@index([interacaoChamadoId], map: "Anexo_interacaoChamadoId_fkey")
+    @@index([processoId], map: "Anexo_processoId_fkey")
+    @@index([usuarioId], map: "Anexo_usuarioId_fkey")
 }
 
 model ModeloFichaCadastral {
-  id             String           @id @default(cuid())
-  tipo           TipoFicha
-  nome           String
-  descricao      String?          @db.LongText
-  instrucoes     String?          @db.LongText
-  observacoes    String?          @db.LongText
-  campos         Json?
-  arquivos       Json?
-  checkbox       Json?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime?        @updatedAt
-  deletedAt      DateTime?
-  imobiliariaId  Int
-  status         Boolean?         @default(true)
-  FichaCadastral FichaCadastral[]
-  imobiliaria    Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
+    id             String           @id @default(cuid())
+    tipo           TipoFicha
+    nome           String
+    descricao      String?          @db.LongText
+    instrucoes     String?          @db.LongText
+    observacoes    String?          @db.LongText
+    campos         Json?
+    arquivos       Json?
+    checkbox       Json?
+    createdAt      DateTime         @default(now())
+    updatedAt      DateTime?        @updatedAt
+    deletedAt      DateTime?
+    imobiliariaId  Int
+    status         Boolean?         @default(true)
+    FichaCadastral FichaCadastral[]
+    imobiliaria    Imobiliaria      @relation(fields: [imobiliariaId], references: [id])
 
-  @@index([imobiliariaId], map: "ModeloFichaCadastral_imobiliariaId_fkey")
+    @@index([imobiliariaId], map: "ModeloFichaCadastral_imobiliariaId_fkey")
 }
 
 model FichaCadastral {
-  id                       String                          @id @default(cuid())
-  nome                     String?
-  status                   StatusFicha                     @default(aguardando)
-  createdAt                DateTime                        @default(now())
-  updatedAt                DateTime?                       @updatedAt
-  deletedAt                DateTime?
-  imobiliariaId            Int
-  modeloFichaCadastralId   String
-  descricao                String?
-  documento                String?
-  email                    String?
-  telefone                 String?
-  motivoReprovacao         String?                         @db.LongText
-  responsavelId            Int?
-  imovelId                 Int?
-  codigoImovel             String?
-  enderecoImovel           String?
-  bairroImovel             String?
-  cepImovel                String?
-  cidadeImovel             String?
-  complementoImovel        String?
-  estadoImovel             String?
-  numeroImovel             String?
-  codigo                   Int?
-  importadaJb              Boolean?                        @default(false)
-  dataAprovacao            DateTime?
-  dataReprovacao           DateTime?
-  processoId               String?
-  observacoes              String?                         @db.VarChar(1500)
-  motivoReprovacaoId       String?
-  dataFimPreenchimento     DateTime?
-  dataInicioPreenchimento  DateTime?
-  porcentagemPreenchimento Decimal                         @default(0.000000000000000000000000000000)
-  Anexo                    Anexo[]
-  ConsultaNetrin           ConsultaNetrin[]
-  imobiliaria              Imobiliaria                     @relation(fields: [imobiliariaId], references: [id])
-  imovel                   Imovel?                         @relation(fields: [imovelId], references: [id])
-  modelo                   ModeloFichaCadastral            @relation(fields: [modeloFichaCadastralId], references: [id])
-  motivoReprovacaoFicha    MotivoReprovacaoFichaCadastral? @relation(fields: [motivoReprovacaoId], references: [id])
-  Processo                 Processo?                       @relation(fields: [processoId], references: [id])
-  responsavel              Usuario?                        @relation(fields: [responsavelId], references: [id])
-  preenchimento            FichaCadastralPreenchimento[]
-  ValidacaoFacial          ValidacaoFacial[]
+    id                       String                          @id @default(cuid())
+    nome                     String?
+    status                   StatusFicha                     @default(aguardando)
+    createdAt                DateTime                        @default(now())
+    updatedAt                DateTime?                       @updatedAt
+    deletedAt                DateTime?
+    imobiliariaId            Int
+    modeloFichaCadastralId   String
+    descricao                String?
+    documento                String?
+    email                    String?
+    telefone                 String?
+    motivoReprovacao         String?                         @db.LongText
+    responsavelId            Int?
+    imovelId                 Int?
+    codigoImovel             String?
+    enderecoImovel           String?
+    bairroImovel             String?
+    cepImovel                String?
+    cidadeImovel             String?
+    complementoImovel        String?
+    estadoImovel             String?
+    numeroImovel             String?
+    codigo                   Int?
+    importadaJb              Boolean?                        @default(false)
+    dataAprovacao            DateTime?
+    dataReprovacao           DateTime?
+    processoId               String?
+    observacoes              String?                         @db.VarChar(1500)
+    motivoReprovacaoId       String?
+    dataFimPreenchimento     DateTime?
+    dataInicioPreenchimento  DateTime?
+    porcentagemPreenchimento Decimal                         @default(0.000000000000000000000000000000)
+    Anexo                    Anexo[]
+    ConsultaNetrin           ConsultaNetrin[]
+    imobiliaria              Imobiliaria                     @relation(fields: [imobiliariaId], references: [id])
+    imovel                   Imovel?                         @relation(fields: [imovelId], references: [id])
+    modelo                   ModeloFichaCadastral            @relation(fields: [modeloFichaCadastralId], references: [id])
+    motivoReprovacaoFicha    MotivoReprovacaoFichaCadastral? @relation(fields: [motivoReprovacaoId], references: [id])
+    Processo                 Processo?                       @relation(fields: [processoId], references: [id])
+    responsavel              Usuario?                        @relation(fields: [responsavelId], references: [id])
+    preenchimento            FichaCadastralPreenchimento[]
+    ValidacaoFacial          ValidacaoFacial[]
 
-  @@index([imobiliariaId], map: "FichaCadastral_imobiliariaId_fkey")
-  @@index([imovelId], map: "FichaCadastral_imovelId_fkey")
-  @@index([modeloFichaCadastralId], map: "FichaCadastral_modeloFichaCadastralId_fkey")
-  @@index([motivoReprovacaoId], map: "FichaCadastral_motivoReprovacaoId_fkey")
-  @@index([processoId], map: "FichaCadastral_processoId_fkey")
-  @@index([responsavelId], map: "FichaCadastral_responsavelId_fkey")
+    @@index([imobiliariaId], map: "FichaCadastral_imobiliariaId_fkey")
+    @@index([imovelId], map: "FichaCadastral_imovelId_fkey")
+    @@index([modeloFichaCadastralId], map: "FichaCadastral_modeloFichaCadastralId_fkey")
+    @@index([motivoReprovacaoId], map: "FichaCadastral_motivoReprovacaoId_fkey")
+    @@index([processoId], map: "FichaCadastral_processoId_fkey")
+    @@index([responsavelId], map: "FichaCadastral_responsavelId_fkey")
 }
 
 model MotivoReprovacaoFichaCadastral {
-  id        String           @id @default(cuid())
-  nome      String?
-  createdAt DateTime         @default(now())
-  updatedAt DateTime?        @updatedAt
-  deletedAt DateTime?
-  ativo     Boolean          @default(true)
-  fichas    FichaCadastral[]
+    id        String           @id @default(cuid())
+    nome      String?
+    createdAt DateTime         @default(now())
+    updatedAt DateTime?        @updatedAt
+    deletedAt DateTime?
+    ativo     Boolean          @default(true)
+    fichas    FichaCadastral[]
 }
 
 model FichaCadastralPreenchimento {
-  fichaCadastralId          String
-  campoFichaCadastralCodigo String
-  valor                     String?             @db.LongText
-  motivoReprovacao          String?
-  aprovado                  Boolean             @default(false)
-  campo                     CampoFichaCadastral @relation(fields: [campoFichaCadastralCodigo], references: [codigo])
-  ficha                     FichaCadastral      @relation(fields: [fichaCadastralId], references: [id])
-  validacaoFacial           ValidacaoFacial[]
+    fichaCadastralId          String
+    campoFichaCadastralCodigo String
+    valor                     String?             @db.LongText
+    motivoReprovacao          String?
+    aprovado                  Boolean             @default(false)
+    campo                     CampoFichaCadastral @relation(fields: [campoFichaCadastralCodigo], references: [codigo])
+    ficha                     FichaCadastral      @relation(fields: [fichaCadastralId], references: [id])
+    validacaoFacial           ValidacaoFacial[]
 
-  @@id([fichaCadastralId, campoFichaCadastralCodigo])
-  @@index([campoFichaCadastralCodigo], map: "FichaCadastralPreenchimento_campoFichaCadastralCodigo_fkey")
+    @@id([fichaCadastralId, campoFichaCadastralCodigo])
+    @@index([campoFichaCadastralCodigo], map: "FichaCadastralPreenchimento_campoFichaCadastralCodigo_fkey")
 }
 
 model CategoriaCampoFichaCadastral {
-  id        String                @id @default(cuid())
-  nome      String?
-  descricao String?
-  createdAt DateTime              @default(now())
-  updatedAt DateTime?             @updatedAt
-  deletedAt DateTime?
-  ordem     Int?
-  campos    CampoFichaCadastral[]
+    id        String                @id @default(cuid())
+    nome      String?
+    descricao String?
+    createdAt DateTime              @default(now())
+    updatedAt DateTime?             @updatedAt
+    deletedAt DateTime?
+    ordem     Int?
+    campos    CampoFichaCadastral[]
 }
 
 model CampoFichaCadastral {
-  id                          String                        @id @default(cuid())
-  tipoFicha                   TipoFicha
-  tipoCampo                   TipoCampo
-  codigo                      String?                       @unique
-  nome                        String?
-  descricao                   String?
-  opcoes                      Json?
-  createdAt                   DateTime                      @default(now())
-  updatedAt                   DateTime?                     @updatedAt
-  deletedAt                   DateTime?
-  limite                      Int?
-  categoriaId                 String?
-  colSpan                     Int?
-  ordem                       Int?
-  camposEndereco              Json?
-  cep                         Boolean                       @default(false)
-  mask                        String?
-  dependenciaId               String?
-  dependenciaValor            String?
-  categoria                   CategoriaCampoFichaCadastral? @relation(fields: [categoriaId], references: [id])
-  dependencia                 CampoFichaCadastral?          @relation("CampoDependencia", fields: [dependenciaId], references: [id])
-  dependencias                CampoFichaCadastral[]         @relation("CampoDependencia")
-  FichaCadastralPreenchimento FichaCadastralPreenchimento[]
+    id                          String                        @id @default(cuid())
+    tipoFicha                   TipoFicha
+    tipoCampo                   TipoCampo
+    codigo                      String?                       @unique
+    nome                        String?
+    descricao                   String?
+    opcoes                      Json?
+    createdAt                   DateTime                      @default(now())
+    updatedAt                   DateTime?                     @updatedAt
+    deletedAt                   DateTime?
+    limite                      Int?
+    categoriaId                 String?
+    colSpan                     Int?
+    ordem                       Int?
+    camposEndereco              Json?
+    cep                         Boolean                       @default(false)
+    mask                        String?
+    dependenciaId               String?
+    dependenciaValor            String?
+    categoria                   CategoriaCampoFichaCadastral? @relation(fields: [categoriaId], references: [id])
+    dependencia                 CampoFichaCadastral?          @relation("CampoDependencia", fields: [dependenciaId], references: [id])
+    dependencias                CampoFichaCadastral[]         @relation("CampoDependencia")
+    FichaCadastralPreenchimento FichaCadastralPreenchimento[]
 
-  @@unique([codigo, categoriaId])
-  @@index([categoriaId], map: "CampoFichaCadastral_categoriaId_fkey")
-  @@index([dependenciaId], map: "CampoFichaCadastral_dependenciaId_fkey")
+    @@unique([codigo, categoriaId])
+    @@index([categoriaId], map: "CampoFichaCadastral_categoriaId_fkey")
+    @@index([dependenciaId], map: "CampoFichaCadastral_dependenciaId_fkey")
 }
 
 model CategoriaPessoa {
-  id            String             @id @default(cuid())
-  tipo          TipoCadastroPessoa
-  nome          String
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime?          @updatedAt
-  deletedAt     DateTime?
-  imobiliariaId Int
-  imobiliaria   Imobiliaria        @relation(fields: [imobiliariaId], references: [id])
-  Pessoa        Pessoa[]
+    id            String             @id @default(cuid())
+    tipo          TipoCadastroPessoa
+    nome          String
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime?          @updatedAt
+    deletedAt     DateTime?
+    imobiliariaId Int
+    imobiliaria   Imobiliaria        @relation(fields: [imobiliariaId], references: [id])
+    Pessoa        Pessoa[]
 
-  @@index([imobiliariaId], map: "CategoriaPessoa_imobiliariaId_fkey")
+    @@index([imobiliariaId], map: "CategoriaPessoa_imobiliariaId_fkey")
 }
 
 model Pessoa {
-  id                String              @id @default(cuid())
-  tipoCadastro      TipoCadastroPessoa?
-  razaoSocial       String?
-  documento         String?
-  telefone          String?
-  celular           String?
-  email             String?
-  cep               String?
-  estado            String?
-  cidade            String?
-  bairro            String?
-  endereco          String?
-  numero            String?
-  complemento       String?
-  observacoes       String?
-  tags              String?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime?           @updatedAt
-  deletedAt         DateTime?
-  tipoPessoa        TipoPessoa?
-  categoriaPessoaId String?
-  imobiliariaId     Int?
-  orcamento         Orcamento[]
-  categoria         CategoriaPessoa?    @relation(fields: [categoriaPessoaId], references: [id])
-  imobiliaria       Imobiliaria?        @relation(fields: [imobiliariaId], references: [id])
+    id                String              @id @default(cuid())
+    tipoCadastro      TipoCadastroPessoa?
+    razaoSocial       String?
+    documento         String?
+    telefone          String?
+    celular           String?
+    email             String?
+    cep               String?
+    estado            String?
+    cidade            String?
+    bairro            String?
+    endereco          String?
+    numero            String?
+    complemento       String?
+    observacoes       String?
+    tags              String?
+    createdAt         DateTime            @default(now())
+    updatedAt         DateTime?           @updatedAt
+    deletedAt         DateTime?
+    tipoPessoa        TipoPessoa?
+    categoriaPessoaId String?
+    imobiliariaId     Int?
+    orcamento         Orcamento[]
+    categoria         CategoriaPessoa?    @relation(fields: [categoriaPessoaId], references: [id])
+    imobiliaria       Imobiliaria?        @relation(fields: [imobiliariaId], references: [id])
 
-  @@index([categoriaPessoaId], map: "Pessoa_categoriaPessoaId_fkey")
-  @@index([imobiliariaId], map: "Pessoa_imobiliariaId_fkey")
+    @@index([categoriaPessoaId], map: "Pessoa_categoriaPessoaId_fkey")
+    @@index([imobiliariaId], map: "Pessoa_imobiliariaId_fkey")
 }
 
 model Orcamento {
-  id            String       @id @default(cuid())
-  valor         Decimal?
-  dataVisita    DateTime?
-  observacoes   String?      @db.LongText
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime?    @updatedAt
-  deletedAt     DateTime?
-  prestadorId   String?
-  chamadoId     Int?
-  solicitanteId Int
-  status        String?
-  imobiliariaId Int?
-  chamado       Chamado?     @relation(fields: [chamadoId], references: [id])
-  imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
-  prestador     Pessoa?      @relation(fields: [prestadorId], references: [id])
-  solicitante   Usuario      @relation(fields: [solicitanteId], references: [id])
+    id            String       @id @default(cuid())
+    valor         Decimal?
+    dataVisita    DateTime?
+    observacoes   String?      @db.LongText
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime?    @updatedAt
+    deletedAt     DateTime?
+    prestadorId   String?
+    chamadoId     Int?
+    solicitanteId Int
+    status        String?
+    imobiliariaId Int?
+    chamado       Chamado?     @relation(fields: [chamadoId], references: [id])
+    imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
+    prestador     Pessoa?      @relation(fields: [prestadorId], references: [id])
+    solicitante   Usuario      @relation(fields: [solicitanteId], references: [id])
 
-  @@index([chamadoId], map: "Orcamento_chamadoId_fkey")
-  @@index([imobiliariaId], map: "Orcamento_imobiliariaId_fkey")
-  @@index([prestadorId], map: "Orcamento_prestadorId_fkey")
-  @@index([solicitanteId], map: "Orcamento_solicitanteId_fkey")
+    @@index([chamadoId], map: "Orcamento_chamadoId_fkey")
+    @@index([imobiliariaId], map: "Orcamento_imobiliariaId_fkey")
+    @@index([prestadorId], map: "Orcamento_prestadorId_fkey")
+    @@index([solicitanteId], map: "Orcamento_solicitanteId_fkey")
 }
 
 model Tarefa {
-  id                    String               @id @default(cuid())
-  titulo                String?
-  descricao             String?              @db.LongText
-  dataVencimento        DateTime?
-  prioridade            PrioridadeTarefa?
-  status                String?
-  dataEntrega           DateTime?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime?            @updatedAt
-  deletedAt             DateTime?
-  departamentoChamadoId Int?
-  chamadoId             Int?
-  bairroImovel          String?
-  cepImovel             String?
-  cidadeImovel          String?
-  codigoContrato        String?
-  codigoImovel          String?
-  complementoImovel     String?
-  conclusao             String?              @db.LongText
-  criadorId             Int?
-  enderecoImovel        String?
-  estadoImovel          String?
-  imobiliariaId         Int?
-  numeroImovel          String?
-  contratoId            Int?
-  imovelId              Int?
-  chamado               Chamado?             @relation(fields: [chamadoId], references: [id])
-  contrato              Contrato?            @relation(fields: [contratoId], references: [id])
-  criador               Usuario?             @relation(fields: [criadorId], references: [id])
-  departamento          DepartamentoChamado? @relation(fields: [departamentoChamadoId], references: [id])
-  imobiliaria           Imobiliaria?         @relation(fields: [imobiliariaId], references: [id])
-  imovel                Imovel?              @relation(fields: [imovelId], references: [id])
-  membros               Usuario[]            @relation("MembrosTarefa")
-  responsaveis          Usuario[]            @relation("ResponsaveisTarefa")
-  tags                  TagTarefa[]          @relation("TagTarefaToTarefa")
+    id                    String               @id @default(cuid())
+    titulo                String?
+    descricao             String?              @db.LongText
+    dataVencimento        DateTime?
+    prioridade            PrioridadeTarefa?
+    status                String?
+    dataEntrega           DateTime?
+    createdAt             DateTime             @default(now())
+    updatedAt             DateTime?            @updatedAt
+    deletedAt             DateTime?
+    departamentoChamadoId Int?
+    chamadoId             Int?
+    bairroImovel          String?
+    cepImovel             String?
+    cidadeImovel          String?
+    codigoContrato        String?
+    codigoImovel          String?
+    complementoImovel     String?
+    conclusao             String?              @db.LongText
+    criadorId             Int?
+    enderecoImovel        String?
+    estadoImovel          String?
+    imobiliariaId         Int?
+    numeroImovel          String?
+    contratoId            Int?
+    imovelId              Int?
+    chamado               Chamado?             @relation(fields: [chamadoId], references: [id])
+    contrato              Contrato?            @relation(fields: [contratoId], references: [id])
+    criador               Usuario?             @relation(fields: [criadorId], references: [id])
+    departamento          DepartamentoChamado? @relation(fields: [departamentoChamadoId], references: [id])
+    imobiliaria           Imobiliaria?         @relation(fields: [imobiliariaId], references: [id])
+    imovel                Imovel?              @relation(fields: [imovelId], references: [id])
+    membros               Usuario[]            @relation("MembrosTarefa")
+    responsaveis          Usuario[]            @relation("ResponsaveisTarefa")
+    tags                  TagTarefa[]          @relation("TagTarefaToTarefa")
 
-  @@index([chamadoId], map: "Tarefa_chamadoId_fkey")
-  @@index([contratoId], map: "Tarefa_contratoId_fkey")
-  @@index([criadorId], map: "Tarefa_criadorId_fkey")
-  @@index([departamentoChamadoId], map: "Tarefa_departamentoChamadoId_fkey")
-  @@index([imobiliariaId], map: "Tarefa_imobiliariaId_fkey")
-  @@index([imovelId], map: "Tarefa_imovelId_fkey")
+    @@index([chamadoId], map: "Tarefa_chamadoId_fkey")
+    @@index([contratoId], map: "Tarefa_contratoId_fkey")
+    @@index([criadorId], map: "Tarefa_criadorId_fkey")
+    @@index([departamentoChamadoId], map: "Tarefa_departamentoChamadoId_fkey")
+    @@index([imobiliariaId], map: "Tarefa_imobiliariaId_fkey")
+    @@index([imovelId], map: "Tarefa_imovelId_fkey")
 }
 
 model TagTarefa {
-  id            String       @id @default(cuid())
-  nome          String
-  cor           String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime?    @updatedAt
-  deletedAt     DateTime?
-  imobiliariaId Int?
-  imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
-  tarefas       Tarefa[]     @relation("TagTarefaToTarefa")
+    id            String       @id @default(cuid())
+    nome          String
+    cor           String?
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime?    @updatedAt
+    deletedAt     DateTime?
+    imobiliariaId Int?
+    imobiliaria   Imobiliaria? @relation(fields: [imobiliariaId], references: [id])
+    tarefas       Tarefa[]     @relation("TagTarefaToTarefa")
 
-  @@index([imobiliariaId], map: "TagTarefa_imobiliariaId_fkey")
+    @@index([imobiliariaId], map: "TagTarefa_imobiliariaId_fkey")
 }
 
 model TipoEnvioNotificacao {
-  id               Int                @id @default(autoincrement())
-  descricao        String
-  status           Int?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime?          @updatedAt
-  deletedAt        DateTime?
-  notificacao      Notificacao[]
-  RegraNotificacao RegraNotificacao[]
+    id               Int                @id @default(autoincrement())
+    descricao        String
+    status           Int?
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime?          @updatedAt
+    deletedAt        DateTime?
+    notificacao      Notificacao[]
+    RegraNotificacao RegraNotificacao[]
 }
 
 model CanalMidia {
-  id               Int                @id @default(autoincrement())
-  descricao        String
-  assunto          String?
-  status           Int?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime?          @updatedAt
-  deletedAt        DateTime?
-  notificacao      Notificacao[]
-  RegraNotificacao RegraNotificacao[]
+    id               Int                @id @default(autoincrement())
+    descricao        String
+    assunto          String?
+    status           Int?
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime?          @updatedAt
+    deletedAt        DateTime?
+    notificacao      Notificacao[]
+    RegraNotificacao RegraNotificacao[]
 }
 
 model RegraNotificacao {
-  id             Int                   @id @default(autoincrement())
-  imobiliariaId  Int?
-  tipoEnvioId    Int?
-  canalMidiaId   Int?
-  diasReferencia Int?
-  assunto        String?
-  mensagem       String                @db.Text
-  horaEnvio      DateTime?             @db.Time(0)
-  createdAt      DateTime              @default(now())
-  updatedAt      DateTime?             @updatedAt
-  deletedAt      DateTime?
-  notificacao    Notificacao[]
-  canalMidia     CanalMidia?           @relation(fields: [canalMidiaId], references: [id])
-  imobiliaria    Imobiliaria?          @relation(fields: [imobiliariaId], references: [id])
-  tipoEnvio      TipoEnvioNotificacao? @relation(fields: [tipoEnvioId], references: [id])
+    id             Int                   @id @default(autoincrement())
+    imobiliariaId  Int?
+    tipoEnvioId    Int?
+    canalMidiaId   Int?
+    diasReferencia Int?
+    assunto        String?
+    mensagem       String                @db.Text
+    horaEnvio      DateTime?             @db.Time(0)
+    createdAt      DateTime              @default(now())
+    updatedAt      DateTime?             @updatedAt
+    deletedAt      DateTime?
+    notificacao    Notificacao[]
+    canalMidia     CanalMidia?           @relation(fields: [canalMidiaId], references: [id])
+    imobiliaria    Imobiliaria?          @relation(fields: [imobiliariaId], references: [id])
+    tipoEnvio      TipoEnvioNotificacao? @relation(fields: [tipoEnvioId], references: [id])
 
-  @@index([canalMidiaId], map: "RegraNotificacao_canalMidiaId_fkey")
-  @@index([imobiliariaId], map: "RegraNotificacao_imobiliariaId_fkey")
-  @@index([tipoEnvioId], map: "RegraNotificacao_tipoEnvioId_fkey")
+    @@index([canalMidiaId], map: "RegraNotificacao_canalMidiaId_fkey")
+    @@index([imobiliariaId], map: "RegraNotificacao_imobiliariaId_fkey")
+    @@index([tipoEnvioId], map: "RegraNotificacao_tipoEnvioId_fkey")
 }
 
 model Notificacao {
-  id               String                @id @default(cuid())
-  regraNotificaoId Int?
-  usuarioId        Int?
-  assunto          String?               @db.VarChar(90)
-  mensagem         String?               @db.Text
-  documento        String?               @db.LongText
-  canalMidiaId     Int?
-  tipoEnvioId      Int?
-  boletoId         Int?
-  contratoId       Int?
-  status           Int                   @default(1)
-  dataEnvio        DateTime?
-  createdAt        DateTime              @default(now())
-  updatedAt        DateTime?             @updatedAt
-  deletedAt        DateTime?
-  boleto           Boleto?               @relation(fields: [boletoId], references: [id])
-  canalMidia       CanalMidia?           @relation(fields: [canalMidiaId], references: [id])
-  contrato         Contrato?             @relation(fields: [contratoId], references: [id])
-  regraNotificao   RegraNotificacao?     @relation(fields: [regraNotificaoId], references: [id])
-  tipoEnvio        TipoEnvioNotificacao? @relation(fields: [tipoEnvioId], references: [id])
-  usuario          Usuario?              @relation(fields: [usuarioId], references: [id])
+    id               String                @id @default(cuid())
+    regraNotificaoId Int?
+    usuarioId        Int?
+    assunto          String?               @db.VarChar(90)
+    mensagem         String?               @db.Text
+    documento        String?               @db.LongText
+    canalMidiaId     Int?
+    tipoEnvioId      Int?
+    boletoId         Int?
+    contratoId       Int?
+    status           Int                   @default(1)
+    dataEnvio        DateTime?
+    createdAt        DateTime              @default(now())
+    updatedAt        DateTime?             @updatedAt
+    deletedAt        DateTime?
+    boleto           Boleto?               @relation(fields: [boletoId], references: [id])
+    canalMidia       CanalMidia?           @relation(fields: [canalMidiaId], references: [id])
+    contrato         Contrato?             @relation(fields: [contratoId], references: [id])
+    regraNotificao   RegraNotificacao?     @relation(fields: [regraNotificaoId], references: [id])
+    tipoEnvio        TipoEnvioNotificacao? @relation(fields: [tipoEnvioId], references: [id])
+    usuario          Usuario?              @relation(fields: [usuarioId], references: [id])
 
-  @@index([boletoId], map: "Notificacao_boletoId_fkey")
-  @@index([canalMidiaId], map: "Notificacao_canalMidiaId_fkey")
-  @@index([contratoId], map: "Notificacao_contratoId_fkey")
-  @@index([regraNotificaoId], map: "Notificacao_regraNotificaoId_fkey")
-  @@index([tipoEnvioId], map: "Notificacao_tipoEnvioId_fkey")
-  @@index([usuarioId], map: "Notificacao_usuarioId_fkey")
+    @@index([boletoId], map: "Notificacao_boletoId_fkey")
+    @@index([canalMidiaId], map: "Notificacao_canalMidiaId_fkey")
+    @@index([contratoId], map: "Notificacao_contratoId_fkey")
+    @@index([regraNotificaoId], map: "Notificacao_regraNotificaoId_fkey")
+    @@index([tipoEnvioId], map: "Notificacao_tipoEnvioId_fkey")
+    @@index([usuarioId], map: "Notificacao_usuarioId_fkey")
 }
 
 model ValidacaoFacial {
-  id                                                   String                       @id @default(uuid())
-  imobiliariaId                                        Int?
-  cpf                                                  String?                      @db.VarChar(11)
-  pin                                                  String?                      @db.VarChar(50)
-  resultado                                            String?                      @db.LongText
-  createAt                                             DateTime?                    @default(now())
-  updatedAt                                            DateTime?                    @updatedAt
-  deletedAt                                            DateTime?
-  status                                               Int                          @default(0)
-  fotoUrl                                              String?                      @db.LongText
-  fichaCadastralId                                     String?
-  fichaCadastralPreenchimentoFichaCadastralId          String?
-  fichaCadastralPreenchimentoCampoFichaCadastralCodigo String?
-  ficha                                                FichaCadastral?              @relation(fields: [fichaCadastralId], references: [id])
-  preenchimento                                        FichaCadastralPreenchimento? @relation(fields: [fichaCadastralPreenchimentoFichaCadastralId, fichaCadastralPreenchimentoCampoFichaCadastralCodigo], references: [fichaCadastralId, campoFichaCadastralCodigo])
-  imobiliaria                                          Imobiliaria?                 @relation(fields: [imobiliariaId], references: [id])
+    id                                                   String                       @id @default(uuid())
+    imobiliariaId                                        Int?
+    cpf                                                  String?                      @db.VarChar(11)
+    pin                                                  String?                      @db.VarChar(50)
+    resultado                                            String?                      @db.LongText
+    createAt                                             DateTime?                    @default(now())
+    updatedAt                                            DateTime?                    @updatedAt
+    deletedAt                                            DateTime?
+    status                                               Int                          @default(0)
+    fotoUrl                                              String?                      @db.LongText
+    fichaCadastralId                                     String?
+    fichaCadastralPreenchimentoFichaCadastralId          String?
+    fichaCadastralPreenchimentoCampoFichaCadastralCodigo String?
+    ficha                                                FichaCadastral?              @relation(fields: [fichaCadastralId], references: [id])
+    preenchimento                                        FichaCadastralPreenchimento? @relation(fields: [fichaCadastralPreenchimentoFichaCadastralId, fichaCadastralPreenchimentoCampoFichaCadastralCodigo], references: [fichaCadastralId, campoFichaCadastralCodigo])
+    imobiliaria                                          Imobiliaria?                 @relation(fields: [imobiliariaId], references: [id])
 
-  @@index([fichaCadastralId], map: "ValidacaoFacial_fichaCadastralId_fkey")
-  @@index([fichaCadastralPreenchimentoFichaCadastralId, fichaCadastralPreenchimentoCampoFichaCadastralCodigo], map: "ValidacaoFacial_fichaCadastralPreenchimentoFichaCadastralId_fkey")
-  @@index([imobiliariaId], map: "ValidacaoFacial_imobiliariaId_fkey")
+    @@index([fichaCadastralId], map: "ValidacaoFacial_fichaCadastralId_fkey")
+    @@index([fichaCadastralPreenchimentoFichaCadastralId, fichaCadastralPreenchimentoCampoFichaCadastralCodigo], map: "ValidacaoFacial_fichaCadastralPreenchimentoFichaCadastralId_fkey")
+    @@index([imobiliariaId], map: "ValidacaoFacial_imobiliariaId_fkey")
 }
 
 model Historico {
-  id        String    @id @default(uuid())
-  tabela    String
-  tabelaId  String?
-  usuarioId Int?
-  descricao String?
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-  deletedAt DateTime?
-  usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
+    id        String    @id @default(uuid())
+    tabela    String
+    tabelaId  String?
+    usuarioId Int?
+    descricao String?
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @updatedAt
+    deletedAt DateTime?
+    usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
 
-  @@index([usuarioId], map: "Historico_usuarioId_fkey")
+    @@index([usuarioId], map: "Historico_usuarioId_fkey")
 }
 
 model Processo {
-  id             String           @id @default(uuid())
-  tipoProcesso   TipoProcesso     @default(LOCACAO)
-  codigo         Int?
-  imovelId       Int?
-  contratoId     Int?
-  imobiliariaId  Int?
-  campos         Json?
-  observacoes    String?          @db.LongText
-  status         StatusProcesso   @default(EM_ANDAMENTO)
-  createdAt      DateTime?        @default(now())
-  updatedAt      DateTime?        @updatedAt
-  deletedAt      DateTime?
-  responsavelId  Int?
-  tipoGarantia   TipoGarantia     @default(NENHUMA)
-  Anexo          Anexo[]
-  ConsultaNetrin ConsultaNetrin[]
-  fichas         FichaCadastral[]
-  contrato       Contrato?        @relation(fields: [contratoId], references: [id])
-  imobiliaria    Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
-  imovel         Imovel?          @relation(fields: [imovelId], references: [id])
-  responsavel    Usuario?         @relation(fields: [responsavelId], references: [id])
+    id             String           @id @default(uuid())
+    tipoProcesso   TipoProcesso     @default(LOCACAO)
+    codigo         Int?
+    imovelId       Int?
+    contratoId     Int?
+    imobiliariaId  Int?
+    campos         Json?
+    observacoes    String?          @db.LongText
+    status         StatusProcesso   @default(EM_ANDAMENTO)
+    createdAt      DateTime?        @default(now())
+    updatedAt      DateTime?        @updatedAt
+    deletedAt      DateTime?
+    responsavelId  Int?
+    tipoGarantia   TipoGarantia     @default(NENHUMA)
+    Anexo          Anexo[]
+    ConsultaNetrin ConsultaNetrin[]
+    fichas         FichaCadastral[]
+    contrato       Contrato?        @relation(fields: [contratoId], references: [id])
+    imobiliaria    Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
+    imovel         Imovel?          @relation(fields: [imovelId], references: [id])
+    responsavel    Usuario?         @relation(fields: [responsavelId], references: [id])
 
-  @@index([contratoId], map: "Processo_contratoId_fkey")
-  @@index([imobiliariaId], map: "Processo_imobiliariaId_fkey")
-  @@index([imovelId], map: "Processo_imovelId_fkey")
-  @@index([responsavelId], map: "Processo_responsavelId_fkey")
+    @@index([contratoId], map: "Processo_contratoId_fkey")
+    @@index([imobiliariaId], map: "Processo_imobiliariaId_fkey")
+    @@index([imovelId], map: "Processo_imovelId_fkey")
+    @@index([responsavelId], map: "Processo_responsavelId_fkey")
 }
 
 model ConsultaNetrin {
-  id               String              @id @default(uuid())
-  tipoConsulta     TipoConsultaNetrin?
-  requisicao       Json?
-  retorno          Json?
-  createdAt        DateTime?           @default(now())
-  updatedAt        DateTime?           @updatedAt
-  deletedAt        DateTime?
-  imobiliariaId    Int
-  processoId       String?
-  fichaCadastralId String?
-  fichaCadastral   FichaCadastral?     @relation(fields: [fichaCadastralId], references: [id])
-  imobiliaria      Imobiliaria         @relation(fields: [imobiliariaId], references: [id])
-  processo         Processo?           @relation(fields: [processoId], references: [id])
+    id               String              @id @default(uuid())
+    tipoConsulta     TipoConsultaNetrin?
+    requisicao       Json?
+    retorno          Json?
+    createdAt        DateTime?           @default(now())
+    updatedAt        DateTime?           @updatedAt
+    deletedAt        DateTime?
+    imobiliariaId    Int
+    processoId       String?
+    fichaCadastralId String?
+    fichaCadastral   FichaCadastral?     @relation(fields: [fichaCadastralId], references: [id])
+    imobiliaria      Imobiliaria         @relation(fields: [imobiliariaId], references: [id])
+    processo         Processo?           @relation(fields: [processoId], references: [id])
 
-  @@index([fichaCadastralId], map: "ConsultaNetrin_fichaCadastralId_fkey")
-  @@index([imobiliariaId], map: "ConsultaNetrin_imobiliariaId_fkey")
-  @@index([processoId], map: "ConsultaNetrin_processoId_fkey")
+    @@index([fichaCadastralId], map: "ConsultaNetrin_fichaCadastralId_fkey")
+    @@index([imobiliariaId], map: "ConsultaNetrin_imobiliariaId_fkey")
+    @@index([processoId], map: "ConsultaNetrin_processoId_fkey")
 }
 
 model Contato {
-  id        String    @id @default(uuid())
-  nome      String?
-  telefone  String?
-  email     String?
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-  deletedAt DateTime?
-  mensagem  String?
+    id        String    @id @default(uuid())
+    nome      String?
+    telefone  String?
+    email     String?
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @updatedAt
+    deletedAt DateTime?
+    mensagem  String?
 }
 
 enum TipoReguaCobranca {
-  boleto
-  extrato
+    boleto
+    extrato
 }
 
 enum TipoEnvioReguaCobranca {
-  antesVencimento
-  diaVencimento
+    antesVencimento
+    diaVencimento
 }
 
 enum FormaEnvioReguaCobranca {
-  email
-  whatsapp
+    email
+    whatsapp
 }
 
 enum StatusChamado {
-  ABERTO
-  EM_ANDAMENTO
-  FINALIZADO
-  ARQUIVADO
+    ABERTO
+    EM_ANDAMENTO
+    FINALIZADO
+    ARQUIVADO
 }
 
 enum TipoFicha {
-  inquilino
-  proprietario
-  fiador
-  imovel
-  comprador
-  vendedor
-  visita
+    inquilino
+    proprietario
+    fiador
+    imovel
+    comprador
+    vendedor
+    visita
 }
 
 enum StatusFicha {
-  aguardando
-  preenchida
-  em_analise
-  aprovada
-  reprovada
-  arquivada
-  locado
-  desistente
+    aguardando
+    preenchida
+    em_analise
+    aprovada
+    reprovada
+    arquivada
+    locado
+    desistente
 }
 
 enum TipoCampo {
-  cpf
-  cnpj
-  text
-  textarea
-  select
-  number
-  multiselect
-  radio
-  checkbox
-  file
-  files
-  image
-  datetime
-  date
-  time
-  boolean
+    cpf
+    cnpj
+    text
+    textarea
+    select
+    number
+    multiselect
+    radio
+    checkbox
+    file
+    files
+    image
+    datetime
+    date
+    time
+    boolean
 }
 
 enum TipoCadastroPessoa {
-  prestador
+    prestador
 }
 
 enum TipoPessoa {
-  fisica
-  juridica
+    fisica
+    juridica
 }
 
 enum PrioridadeTarefa {
-  Baixa
-  Media
-  Alta
-  Urgente
+    Baixa
+    Media
+    Alta
+    Urgente
 }
 
 enum StatusProcesso {
-  EM_ANALISE
-  EM_ANDAMENTO
-  CANCELADO
-  ARQUIVADO
-  COMPLETO
-  APROVADO
-  REPROVADO
-  LOCADO
-  DESISTENTE
+    EM_ANALISE
+    EM_ANDAMENTO
+    CANCELADO
+    ARQUIVADO
+    COMPLETO
+    APROVADO
+    REPROVADO
+    LOCADO
+    DESISTENTE
 }
 
 enum TipoProcesso {
-  LOCACAO
-  VENDA
-  COMPRA
+    LOCACAO
+    VENDA
+    COMPRA
 }
 
 enum TipoGarantia {
-  NENHUMA
-  SEGURO
-  FIADOR
-  APOLICE
-  CAUCAO
-  PAGA
+    NENHUMA
+    SEGURO
+    FIADOR
+    APOLICE
+    CAUCAO
+    PAGA
 }
 
 enum TipoConsultaNetrin {
-  processos_pj
-  processos_pf
-  protestos_pf
-  protestos_pj
-  cnd_federal
-  cnd_estadual
-  cnd_trabalhista_tst
-  receita_cnpj
-  receita_cnpJ_qsa
-  receita_cpf
-  receita_federal_cnd_cpf
-  receita_federal_cnd_cnpj
-  receita_federal_cnd
-  sefaz_cnd
-  cnd_trabalhista
-  receita_federal_cnpj
-  receita_federal_cnpj_qsa
-  receita_federal_cpf
-  endereco_cpf
-  empresas_relacionadas_cpf
-  pessoas_relacionadas_cnpj
-  pep_kyc_cpf
-  cnd_trabalhista_cpf
-  cnd_trabalhista_cnpj
+    processos_pj
+    processos_pf
+    protestos_pf
+    protestos_pj
+    cnd_federal
+    cnd_estadual
+    cnd_trabalhista_tst
+    receita_cnpj
+    receita_cnpJ_qsa
+    receita_cpf
+    receita_federal_cnd_cpf
+    receita_federal_cnd_cnpj
+    receita_federal_cnd
+    sefaz_cnd
+    cnd_trabalhista
+    receita_federal_cnpj
+    receita_federal_cnpj_qsa
+    receita_federal_cpf
+    endereco_cpf
+    empresas_relacionadas_cpf
+    pessoas_relacionadas_cnpj
+    pep_kyc_cpf
+    cnd_trabalhista_cpf
+    cnd_trabalhista_cnpj
 }

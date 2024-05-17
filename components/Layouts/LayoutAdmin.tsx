@@ -67,6 +67,7 @@ export const LayoutAdmin = ({ children }) => {
                         <List as={VStack} flexDir="column" align="flex-start">
                             {item.itens.map((item, key) => (
                                 <ListItem
+                                    key={key}
                                     as={NextChakraLink}
                                     href={item.href}
                                     display="flex"
@@ -78,7 +79,7 @@ export const LayoutAdmin = ({ children }) => {
                                     color="gray.600"
                                     _hover={{ bg: "gray.200" }}
                                 >
-                                    <Icon as={item.icon} />
+                                    <item.icon />
                                     <Text>{item.nome}</Text>
                                 </ListItem>
                             ))}
