@@ -165,7 +165,7 @@ const ModalBase = ({ }, ref: any) => {
                                                         ))
                                                     }
                                                 </ul>
-                                                <iframe width="100%" height="315" src={`https://www.youtube.com/embed/${videoId}`} />
+                                                <iframe width="100%" height="600" src={`https://www.youtube.com/embed/${videoId}`} />
                                             </Box>
 
                                         ))
