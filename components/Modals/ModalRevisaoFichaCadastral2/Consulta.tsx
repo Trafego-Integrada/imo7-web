@@ -192,7 +192,7 @@ export const Consulta = ({
 
     function quantidadeTitulos(protestos: IConsultaProtestos) {
         let titulos = 0;
-        protestos.cenprotProtestos.SP.forEach(({ quantidadeTitulos }) => titulos += quantidadeTitulos)
+        protestos?.cenprotProtestos?.SP?.forEach(({ quantidadeTitulos }) => titulos += quantidadeTitulos)
 
         return titulos
     }
