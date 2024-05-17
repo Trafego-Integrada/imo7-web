@@ -210,7 +210,6 @@ model Imobiliaria {
     tokenInstanciaWhatsapp String?
     complemento            String?
     limiteConsultas        Int?                   @default(100)
-    limiteValidacaoFacial  Int?
     boletos                Boleto[]
     CategoriaPessoa        CategoriaPessoa[]
     chamados               Chamado[]
