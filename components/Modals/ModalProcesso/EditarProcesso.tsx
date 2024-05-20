@@ -5,7 +5,6 @@ import { FormSelect } from "@/components/Form/FormSelect";
 import { FormTextarea } from "@/components/Form/FormTextarea";
 import { useAuth } from "@/hooks/useAuth";
 import { imo7ApiService } from "@/services/apiServiceUsage";
-import { listarFichas } from "@/services/models/modeloFicha";
 import { listarUsuarios } from "@/services/models/usuario";
 import {
     Box,
@@ -46,12 +45,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Documentos } from "../Contrato/Documentos";
 import { Historicos } from "@/components/Pages/Historicos";
 import { ModalImovel } from "../ModalImovel";
-import { ConsultasNetrin } from "./ConsultaNetrin";
 
 const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
     responsavelId: yup.string().required("Campo obrigatório"),
     imovelId: yup.string().required("Campo obrigatório"),
+    inicioContrato: yup.date().nullable(),
+    prazoContrato: yup.string().max(90, 'Limite 90 caracteres').nullable(),
+    comissao: yup.string().max(45, 'Limite 45 caracteres').nullable()
 });
 export const EditarProcesso = ({ id, isOpen, onClose }) => {
     const { usuario } = useAuth();
@@ -114,7 +115,6 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         await queryClient.invalidateQueries(["imoveis"]);
         reset({ ...watch(), imovelId });
     };
-
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -401,6 +401,61 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                     )
                                                                     : null
                                                             }
+                                                            error={
+                                                                errors
+                                                                    ?.responsavelId
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem>
+                                                <Controller
+                                                    control={control}
+                                                    name="inicioContrato"
+                                                    render={({ field }) => (
+                                                        <FormInput
+                                                            type='date'
+                                                            size="sm"
+                                                            label="Início do Contrato"
+                                                            {...field}
+                                                            error={
+                                                                errors
+                                                                    ?.responsavelId
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem>
+                                                <Controller
+                                                    control={control}
+                                                    name="prazoContrato"
+                                                    render={({ field }) => (
+                                                        <FormInput
+                                                            size="sm"
+                                                            label="Prazo do Contrato"
+                                                            {...field}
+                                                            error={
+                                                                errors
+                                                                    ?.responsavelId
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem>
+                                                <Controller
+                                                    control={control}
+                                                    name="comissao"
+                                                    render={({ field }) => (
+                                                        <FormInput
+                                                            size="sm"
+                                                            label="Comissão"
+                                                            {...field}
                                                             error={
                                                                 errors
                                                                     ?.responsavelId

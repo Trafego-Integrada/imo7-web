@@ -263,6 +263,28 @@ const Home = ({ query }) => {
         }
     );
 
+    function formatDataToExcel(processo: any, fichas: any[]) {
+        const fichasToExcel = fichas?.map((ficha, index) => {
+            return {
+                campoFichaCadastralCodigo: ficha.campoFichaCadastralCodigo,
+                valor: ficha.valor,
+            }
+        })
+
+        return [
+            { campoFichaCadastralCodigo: 'fichaCadastralId', valor: fichas[0]?.fichaCadastralId },
+            ...fichasToExcel,
+            { campoFichaCadastralCodigo: 'endereco', valor: processo?.imovel?.endereco },
+            { campoFichaCadastralCodigo: 'valorAluguel', valor: processo?.imovel?.valorAluguel },
+            { campoFichaCadastralCodigo: 'responsavel', valor: processo?.responsavel?.nome },
+            { campoFichaCadastralCodigo: 'inicioContrato', valor: formatoData(processo?.inicioContrato) },
+            { campoFichaCadastralCodigo: 'prazoContrato', valor: processo?.prazoContrato },
+            { campoFichaCadastralCodigo: 'comissao', valor: processo?.comissao },
+            { campoFichaCadastralCodigo: 'aprovado', valor: fichas[0]?.aprovado },
+            { campoFichaCadastralCodigo: 'motivoReprovacao', valor: fichas[0]?.motivoReprovacao }
+        ]
+    }
+
     return (
         <>
             <Layout title="Processos">
@@ -476,9 +498,9 @@ const Home = ({ query }) => {
 
                     <Flex flexDir="column" gap={4}>
                         {data?.data?.data?.length > 0 ? (
-                            data?.data?.data?.map((item, key) => (
+                            data?.data?.data?.map((processo, key) => (
                                 <Accordion
-                                    key={item.id}
+                                    key={processo.id}
                                     defaultIndex={0}
                                     allowToggle
                                     allowMultiple
@@ -499,7 +521,7 @@ const Home = ({ query }) => {
                                                 >
                                                     <Checkbox
                                                         isChecked={selecionados.includes(
-                                                            item.id
+                                                            processo.id
                                                         )}
                                                         onChange={(e) => {
                                                             if (
@@ -508,7 +530,7 @@ const Home = ({ query }) => {
                                                                 setSelecionados(
                                                                     [
                                                                         ...selecionados,
-                                                                        item.id,
+                                                                        processo.id,
                                                                     ]
                                                                 );
                                                             } else {
@@ -516,7 +538,7 @@ const Home = ({ query }) => {
                                                                     selecionados.filter(
                                                                         (i) =>
                                                                             i !==
-                                                                            item.id
+                                                                            processo.id
                                                                     )
                                                                 );
                                                             }
@@ -534,7 +556,7 @@ const Home = ({ query }) => {
                                                         icon={<FiEye />}
                                                         onClick={() =>
                                                             modalProcesso.current.onOpen(
-                                                                item.id
+                                                                processo.id
                                                             )
                                                         }
                                                         aria-label="Abrir"
@@ -546,7 +568,7 @@ const Home = ({ query }) => {
                                                             icon={
                                                                 <FiDownloadCloud />
                                                             }
-                                                            href={`https://www.imo7.com.br/api/processo/${item.id}/downloadArquivos`}
+                                                            href={`https://www.imo7.com.br/api/processo/${processo.id}/downloadArquivos`}
                                                             target="_blank"
                                                             variant="ghost"
                                                             passHref
@@ -558,7 +580,7 @@ const Home = ({ query }) => {
                                                             orientation="vertical"
                                                         />
                                                     </Center>
-                                                    <Text>#{item?.codigo}</Text>
+                                                    <Text>#{processo?.codigo}</Text>
                                                     <Center>
                                                         <Divider
                                                             h={6}
@@ -567,7 +589,7 @@ const Home = ({ query }) => {
                                                     </Center>
                                                     <>
                                                         {statusProcesso(
-                                                            item.status
+                                                            processo.status
                                                         )}
                                                     </>
                                                     <Center>
@@ -589,32 +611,32 @@ const Home = ({ query }) => {
                                                         </Text>
                                                         <Text>
                                                             {
-                                                                item?.imovel
+                                                                processo?.imovel
                                                                     ?.codigo
                                                             }{" "}
                                                             -
                                                             {
-                                                                item?.imovel
+                                                                processo?.imovel
                                                                     ?.endereco
                                                             }
                                                             ,{" "}
                                                             {
-                                                                item?.imovel
+                                                                processo?.imovel
                                                                     ?.numero
                                                             }
                                                             ,{" "}
                                                             {
-                                                                item?.imovel
+                                                                processo?.imovel
                                                                     ?.bairro
                                                             }
                                                             ,{" "}
                                                             {
-                                                                item?.imovel
+                                                                processo?.imovel
                                                                     ?.cidade
                                                             }
                                                             /
                                                             {
-                                                                item?.imovel
+                                                                processo?.imovel
                                                                     ?.estado
                                                             }
                                                         </Text>
@@ -627,7 +649,7 @@ const Home = ({ query }) => {
                                                     </Center>
                                                     <Flex>
                                                         <AvatarGroup size="xs">
-                                                            {item.fichas?.map(
+                                                            {processo.fichas?.map(
                                                                 (f) => (
                                                                     <TooltipAvatar
                                                                         name={
@@ -647,14 +669,14 @@ const Home = ({ query }) => {
                                                     {/* <>
                                                         <Progress
                                                             height="20px"
-                                                            value={item.fichas?.reduce(
+                                                            value={processo.fichas?.reduce(
                                                                 (acc, item) =>
-                                                                    item._count
+                                                                    processo._count
                                                                         .preenchimento +
                                                                     acc,
                                                                 0
                                                             )}
-                                                            max={item.fichas?.reduce(
+                                                            max={processo.fichas?.reduce(
                                                                 (acc, item) =>
                                                                     Object.entries(
                                                                         item
@@ -677,7 +699,7 @@ const Home = ({ query }) => {
                                                                         maximumFractionDigits: 2, // Define o número máximo de casas decimais
                                                                     }
                                                                 ).format(
-                                                                    item.fichas.reduce(
+                                                                    processo.fichas.reduce(
                                                                         (
                                                                             acc,
                                                                             item
@@ -691,7 +713,7 @@ const Home = ({ query }) => {
                                                                         0
                                                                     ) == 0
                                                                         ? 0
-                                                                        : item.fichas.reduce(
+                                                                        : processo.fichas.reduce(
                                                                               (
                                                                                   acc,
                                                                                   item
@@ -704,7 +726,7 @@ const Home = ({ query }) => {
                                                                                   acc,
                                                                               0
                                                                           ) /
-                                                                              item.fichas.reduce(
+                                                                              processo.fichas.reduce(
                                                                                   (
                                                                                       acc,
                                                                                       item
@@ -745,7 +767,7 @@ const Home = ({ query }) => {
                                                     <TooltipAvatar
                                                         size="xs"
                                                         name={
-                                                            item?.responsavel
+                                                            processo?.responsavel
                                                                 ?.nome
                                                         }
                                                     />
@@ -757,7 +779,7 @@ const Home = ({ query }) => {
                                             <Divider />
                                             <Table size="sm">
                                                 <Tbody>
-                                                    {item?.fichas?.map(
+                                                    {processo?.fichas?.map(
                                                         (item) => {
                                                             return (
                                                                 <Tr
@@ -963,7 +985,7 @@ const Home = ({ query }) => {
                                                                                         }
                                                                                         onClick={() =>
                                                                                             exportToExcel(
-                                                                                                item.preenchimento,
+                                                                                                formatDataToExcel(processo, item.preenchimento),
                                                                                                 "ficha-cadastral-" +
                                                                                                 item.id
                                                                                             )

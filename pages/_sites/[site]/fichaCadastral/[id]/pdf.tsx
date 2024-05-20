@@ -339,6 +339,24 @@ const FichaCadastral = ({
                         {ficha?.Processo?.tipoGarantia}
                     </Text>
                 </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="md">Início do contrato:</Text>
+                    <Text fontWeight="bold" fontSize="md">
+                        {ficha?.Processo?.inicioContrato}
+                    </Text>
+                </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="md">Prazo do contrato:</Text>
+                    <Text fontWeight="bold" fontSize="md">
+                        {ficha?.Processo?.prazoContrato}
+                    </Text>
+                </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="md">Comissão :</Text>
+                    <Text fontWeight="bold" fontSize="md">
+                        {ficha?.Processo?.comissao}
+                    </Text>
+                </GridItem>
                 <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
                     {ficha?.imovel ? (
                         <Box bg="white">
