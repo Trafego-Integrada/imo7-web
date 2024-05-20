@@ -73,23 +73,27 @@ const ModalBase = ({ }, ref: any) => {
 
                 <ModalBody>
                     {
-                        data?.cenprotProtestos.SP.map((sp, index) => (
-                            <Box key={index}>
-                                <Text>Cartorio: {sp.cartorio}</Text>
-                                <Text>Cidade: {sp.cidade}</Text>
-                                <Text>Endereco: {sp.endereco}</Text>
-                                <Text>Detalhes: {sp.obterDetalhes}</Text>
-                                <Text>Quantidade de Títulos: {sp.quantidadeTitulos}</Text>
-                                <Text>Telefone: {sp.telefone}</Text>
-                                <Box>
-                                    {
-                                        sp.protestos.map((protesto, index) => (
-                                            <Protesto key={index} {...protesto} />
-                                        ))
-                                    }
+                        data?.cenprotProtestos?.SP
+                            ?
+                            data?.cenprotProtestos?.SP?.map((sp, index) => (
+                                <Box key={index}>
+                                    <Text>Cartorio: {sp.cartorio}</Text>
+                                    <Text>Cidade: {sp.cidade}</Text>
+                                    <Text>Endereco: {sp.endereco}</Text>
+                                    <Text>Detalhes: {sp.obterDetalhes}</Text>
+                                    <Text>Quantidade de Títulos: {sp.quantidadeTitulos}</Text>
+                                    <Text>Telefone: {sp.telefone}</Text>
+                                    <Box>
+                                        {
+                                            sp.protestos.map((protesto, index) => (
+                                                <Protesto key={index} {...protesto} />
+                                            ))
+                                        }
+                                    </Box>
                                 </Box>
-                            </Box>
-                        ))
+                            ))
+                            :
+                            <Text>Nenhum prostesto encontrado</Text>
                     }
                 </ModalBody>
             </ModalContent>
