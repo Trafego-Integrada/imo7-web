@@ -210,9 +210,6 @@ handle.post(async (req, res) => {
             requisicaoBody,
         )
 
-        console.log('RETORNO CONSULTA ', retornoNetrin.cenprotProtestos.SP);
-
-
         // if (tipoConsulta == 'protestos_pf') {
         //     // Consulta Netrin
         //     const retornoNetrin2 = await apiNetrinService().consultaComposta(
