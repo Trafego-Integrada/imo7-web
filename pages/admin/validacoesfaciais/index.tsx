@@ -125,6 +125,9 @@ const FichasCadastrais = () => {
                     </datalist>
                 </Box>
                 <Box>
+                    <Text>Foram encontrados {fichas?.total} registos</Text>
+                </Box>
+                <Box>
                     {/* <Box bg="white" p={4} mb={4}>
                         <Flex align="center" justify="space-between">
                             <Heading size="sm" mb={2}>
