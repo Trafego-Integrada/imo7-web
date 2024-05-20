@@ -342,7 +342,7 @@ const FichaCadastral = ({
                 <GridItem borderWidth={1} px={2} py={1}>
                     <Text fontSize="md">Início do contrato:</Text>
                     <Text fontWeight="bold" fontSize="md">
-                        {ficha?.Processo?.inicioContrato}
+                        {formatoData(ficha?.Processo?.inicioContrato)}
                     </Text>
                 </GridItem>
                 <GridItem borderWidth={1} px={2} py={1}>
