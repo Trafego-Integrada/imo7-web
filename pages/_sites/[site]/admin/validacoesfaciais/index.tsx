@@ -86,9 +86,6 @@ const FichasCadastrais = () => {
         ],
         listarValidacoesFaciais,
     )
-
-    console.log(fichas);
-
     return (
         <Layout>
             <Box p={4}>
