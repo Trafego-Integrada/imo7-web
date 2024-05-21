@@ -1106,6 +1106,9 @@ model Processo {
     updatedAt      DateTime?        @updatedAt
     deletedAt      DateTime?
     responsavelId  Int?
+    inicioContrato DateTime?
+    prazoContrato  String?          @db.VarChar(90)
+    comissao       String?          @db.VarChar(45)
     tipoGarantia   TipoGarantia     @default(NENHUMA)
     Anexo          Anexo[]
     ConsultaNetrin ConsultaNetrin[]
