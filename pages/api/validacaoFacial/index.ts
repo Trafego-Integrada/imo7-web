@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
 import { Prisma } from "@prisma/client";
+import moment from "moment";
 import nextConnect from "next-connect";
 
 const handle = nextConnect();
@@ -12,7 +13,7 @@ handle.use(checkAuth);
 
 handle.get(async (req, res) => {
     try {
-        let { deletedAt, campoCodigo } = req.query;
+        let { createdAt, deletedAt, campoCodigo, token } = req.query;
 
         let filtroQuery: Prisma.ValidacaoFacialWhereInput = { AND: [] };
 
@@ -36,6 +37,38 @@ handle.get(async (req, res) => {
                 fichaCadastralPreenchimentoCampoFichaCadastralCodigo: {
                     contains: campoCodigo,
                 },
+            };
+        }
+
+        if (JSON.parse(token)) {
+            filtroQuery = {
+                ...filtroQuery,
+                resultado: { contains: '"token"' }
+            };
+        }
+
+        if (createdAt) {
+            createdAt = JSON.parse(createdAt);
+            if (!filtroQuery.AND) {
+                filtroQuery = {
+                    ...filtroQuery,
+                    AND: [],
+                };
+            }
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    {
+                        createAt: {
+                            gte: createdAt[0]
+                                ? moment(createdAt[0]).startOf("d").format()
+                                : null,
+                            lte: createdAt[1]
+                                ? moment(createdAt[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
             };
         }
 

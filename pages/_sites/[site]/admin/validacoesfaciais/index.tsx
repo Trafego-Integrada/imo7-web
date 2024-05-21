@@ -37,6 +37,7 @@ import {
     Tr,
     useToast,
     Image,
+    Checkbox
 } from '@chakra-ui/react'
 
 import Link from 'next/link'
@@ -55,6 +56,7 @@ const filtroPadrao = {
     updatedAt: [null, null],
     status: [],
     responsaveis: [],
+    token: false,
 }
 const FichasCadastrais = () => {
     const { usuario } = useAuth()
@@ -77,12 +79,15 @@ const FichasCadastrais = () => {
                 updatedAt: filtro.updatedAt[0]
                     ? JSON.stringify(filtro.updatedAt)
                     : null,
+                token: JSON.stringify(filtro.token)
                 // status: filtro.status[0] ? JSON.stringify(filtro.status) : null,
                 // responsaveis: filtro.responsaveis[0] ? JSON.stringify(filtro.responsaveis) : null,
             },
         ],
         listarValidacoesFaciais,
     )
+
+    console.log(fichas);
 
     return (
         <Layout>
@@ -95,7 +100,33 @@ const FichasCadastrais = () => {
                         Acompanhe o extrato de validações faciais
                     </Text>
                 </Box>
-
+                <Box display='flex' >
+                    <FormDateRange
+                        size="sm"
+                        label="Data de Criação"
+                        startDate={filtro?.createdAt[0]}
+                        endDate={filtro?.createdAt[1]}
+                        onChange={(e) => {
+                            setFiltro({
+                                ...filtro,
+                                createdAt: e,
+                            });
+                        }}
+                    />
+                    <Flex>
+                        <label htmlFor='token'>Token</label>
+                        <Checkbox
+                            id='token'
+                            onChange={e => setFiltro({
+                                ...filtro,
+                                token: e.target.checked
+                            })}
+                        />
+                    </Flex>
+                </Box>
+                <Box>
+                    <Text>Foram encontrados {fichas?.total} resultados</Text>
+                </Box>
                 <Box>
                     {/* <Box bg="white" p={4} mb={4}>
                         <Flex align="center" justify="space-between">
@@ -317,26 +348,26 @@ const FichasCadastrais = () => {
                                                     {usuario?.permissoes?.includes(
                                                         'imobiliaria.fichas.revisar',
                                                     ) && (
-                                                        <Tooltip label="Revisar Ficha">
-                                                            <IconButton
-                                                                colorScheme="green"
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            MdOutlineVerifiedUser
-                                                                        }
-                                                                    />
-                                                                }
-                                                                onClick={() =>
-                                                                    modalRevisar.current.onOpen(
-                                                                        item.fichaCadastralId,
-                                                                    )
-                                                                }
-                                                            />
-                                                        </Tooltip>
-                                                    )}
+                                                            <Tooltip label="Revisar Ficha">
+                                                                <IconButton
+                                                                    colorScheme="green"
+                                                                    size="sm"
+                                                                    variant="ghost"
+                                                                    icon={
+                                                                        <Icon
+                                                                            as={
+                                                                                MdOutlineVerifiedUser
+                                                                            }
+                                                                        />
+                                                                    }
+                                                                    onClick={() =>
+                                                                        modalRevisar.current.onOpen(
+                                                                            item.fichaCadastralId,
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </Tooltip>
+                                                        )}
                                                     {/* {usuario?.permissoes?.includes(
                                                         "imobiliaria.fichas.editar"
                                                     ) && (
@@ -511,23 +542,23 @@ const FichasCadastrais = () => {
                                                                             )?.biometria_face?.probabilidade.indexOf(
                                                                                 'Altíssima ',
                                                                             ) >=
-                                                                            0
+                                                                                0
                                                                                 ? 'green'
                                                                                 : JSON.parse(
-                                                                                      item.resultado,
-                                                                                  )?.biometria_face?.probabilidade.indexOf(
-                                                                                      'Alta ',
-                                                                                  ) >=
-                                                                                  0
-                                                                                ? 'blue'
-                                                                                : JSON.parse(
-                                                                                      item.resultado,
-                                                                                  )?.biometria_face?.probabilidade.indexOf(
-                                                                                      'Baixa ',
-                                                                                  ) >=
-                                                                                  0
-                                                                                ? 'orange'
-                                                                                : 'red'
+                                                                                    item.resultado,
+                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                    'Alta ',
+                                                                                ) >=
+                                                                                    0
+                                                                                    ? 'blue'
+                                                                                    : JSON.parse(
+                                                                                        item.resultado,
+                                                                                    )?.biometria_face?.probabilidade.indexOf(
+                                                                                        'Baixa ',
+                                                                                    ) >=
+                                                                                        0
+                                                                                        ? 'orange'
+                                                                                        : 'red'
                                                                         }
                                                                     />
                                                                 </Box>
@@ -558,7 +589,7 @@ const FichasCadastrais = () => {
                                                                         )
                                                                             ?.biometria_face
                                                                             ?.similaridade *
-                                                                            100,
+                                                                        100,
                                                                     ) || 0}{' '}
                                                                     %
                                                                 </Text>
@@ -574,18 +605,18 @@ const FichasCadastrais = () => {
                                                                     ) >= 0
                                                                         ? 'green'
                                                                         : JSON.parse(
-                                                                              item.resultado,
-                                                                          )?.biometria_face?.probabilidade.indexOf(
-                                                                              'Alta ',
-                                                                          ) >= 0
-                                                                        ? 'blue'
-                                                                        : JSON.parse(
-                                                                              item.resultado,
-                                                                          )?.biometria_face?.probabilidade.indexOf(
-                                                                              'Baixa ',
-                                                                          ) >= 0
-                                                                        ? 'orange'
-                                                                        : 'red'
+                                                                            item.resultado,
+                                                                        )?.biometria_face?.probabilidade.indexOf(
+                                                                            'Alta ',
+                                                                        ) >= 0
+                                                                            ? 'blue'
+                                                                            : JSON.parse(
+                                                                                item.resultado,
+                                                                            )?.biometria_face?.probabilidade.indexOf(
+                                                                                'Baixa ',
+                                                                            ) >= 0
+                                                                                ? 'orange'
+                                                                                : 'red'
                                                                 }
                                                             >
                                                                 {
