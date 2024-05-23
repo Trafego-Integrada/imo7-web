@@ -233,6 +233,13 @@ const menu = [
         modulos: ["adm.imobiliarias"],
     },
     {
+        titulo: "Consultas",
+        href: "/admin/consultas",
+        icon: HiOutlineDocumentText,
+        cargos: ["adm"],
+        modulos: ["adm.imobiliarias"],
+    },
+    {
         titulo: "Ajuda e Treinamento",
         icon: AiFillPlayCircle,
         href: '',
