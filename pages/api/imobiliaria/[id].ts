@@ -68,7 +68,7 @@ handle.post(async (req, res) => {
             contaId,
             logo,
             bg,
-        } = req.body.data;
+        } = req.body;
 
         let limparLogo = {};
         let limparBg = {};

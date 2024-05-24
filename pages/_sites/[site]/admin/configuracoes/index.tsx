@@ -84,18 +84,17 @@ const Configuracoes = () => {
 
             await atualizar.mutateAsync({
                 id: data.id,
-                data: {
-                    ...data,
-                    logo: logo
-                        ? {
-                              base64: base64StringLogo,
-                              extensao: fileExtensionLogo,
-                          }
-                        : null,
-                    bg: bg
-                        ? { base64: base64StringBg, extensao: fileExtensionBg }
-                        : null,
-                },
+                ...data,
+                logo: logo
+                    ? {
+                          base64: base64StringLogo,
+                          extensao: fileExtensionLogo,
+                      }
+                    : null,
+                bg: bg
+                    ? { base64: base64StringBg, extensao: fileExtensionBg }
+                    : null,
+            
             });
             toast({
                 title: "Dados atualizados",
