@@ -62,7 +62,10 @@ const DrawerBase = ({ }, ref) => {
 
     const showData = useMutation(show, {
         onSuccess: (data) => {
-            reset(data)
+
+            if( data.codigoId === 2 )reset({...data, codigo: data.codigo ?? ' '})
+                else reset(data)
+
             onOpen()
         },
     })
@@ -148,6 +151,7 @@ const DrawerBase = ({ }, ref) => {
     }))
     //console.log("Dados", watch());
     const { data: contas } = useQuery(['contas'], listarContas)
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
