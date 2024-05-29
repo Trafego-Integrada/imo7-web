@@ -147,6 +147,13 @@ const consultasNetrin = [
         size: ['2rem', '2rem'],
     },
     {
+        tipoConsulta: [EnumTipoConsulta.CNPJ],
+        codigo: 'processos_pj',
+        nome: 'Tribunal de Justiça (território Nacional)',
+        image: imageTJ,
+        size: ['2rem', '2rem'],
+    },
+    {
         tipoConsulta: [EnumTipoConsulta.CPF],
         codigo: 'protestos_pf',
         nome: 'Protestos PF',

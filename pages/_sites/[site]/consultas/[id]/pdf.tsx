@@ -334,8 +334,8 @@ const FichaCadastral = ({ consulta }: any) => {
             )}
             {consulta.tipoConsulta == "processos_pj" && (
                 <>
-                    <Box py={4}>
-                        <Heading
+                     <Box py={4}>
+                         <Heading
                             size="md"
                             textAlign="center"
                             textTransform="uppercase"
