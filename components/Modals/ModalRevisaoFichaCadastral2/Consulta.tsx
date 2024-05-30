@@ -148,6 +148,8 @@ export const Consulta = ({
                 modalProtesto?.current?.onOpen({ data: retorno }),
             processos_pf: () =>
                 modalTribunalJustica?.current?.onOpen(getPdfUrl(id)),
+            processos_pj: () =>
+                modalTribunalJustica?.current?.onOpen(getPdfUrl(id)),
             endereco_cpf: () =>
                 modalEndereco?.current?.onOpen({ data: retorno }),
             receita_federal_cpf: () =>
@@ -205,6 +207,7 @@ export const Consulta = ({
             protestos_pf: () => retorno.cenprotProtestos?.SP?.length ?? 0,
             protestos_pj: () => retorno.cenprotProtestos?.SP?.length ?? 0,
             processos_pf: () => retorno.processosCPF?.totalProcessos ?? 0,
+            processos_pj: () => retorno.processoJudicial?.totalProcessos ?? 0,
             endereco_cpf: () => retorno.enderecoCPF?.endereco?.length ?? 0,
             empresas_relacionadas_cpf: () =>
                 retorno.empresasRelacionadasCPF?.negociosRelacionados?.length ??
