@@ -115,6 +115,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         await queryClient.invalidateQueries(["imoveis"]);
         reset({ ...watch(), imovelId });
     };
+    
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -198,6 +199,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                     </option>
                                                     <option value="DESISTENTE">
                                                         Desistente
+                                                    </option>
+                                                    <option value="reprovado_por_analise_interna">
+                                                        Reprovado por Analise Interna
+                                                    </option>
+                                                    <option value="renda_insuficiente">
+                                                        Renda Insuficiente
                                                     </option>
                                                 </FormSelect>
                                             </GridItem>
@@ -552,6 +559,25 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                         "imovelId"
                                                                     )
                                                             )?.valorCondominio
+                                                        )}
+                                                    </Text>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Text
+                                                        fontSize="xs"
+                                                        color="gray"
+                                                    >
+                                                        Valor Seguro Incêndio
+                                                    </Text>
+                                                    <Text>
+                                                        {formatoValor(
+                                                            imoveis?.data?.data?.find(
+                                                                (i) =>
+                                                                    i.id ==
+                                                                    watch(
+                                                                        "imovelId"
+                                                                    )
+                                                            )?.valorSeguro
                                                         )}
                                                     </Text>
                                                 </GridItem>

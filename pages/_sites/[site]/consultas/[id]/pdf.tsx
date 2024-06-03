@@ -556,7 +556,6 @@ const FichaCadastral = ({ consulta }: any) => {
                                                     {item?.varaJulgadora}
                                                 </Text>
                                             </GridItem>
-
                                             <GridItem
                                                 colSpan={2}
                                                 borderWidth={1}
@@ -573,7 +572,6 @@ const FichaCadastral = ({ consulta }: any) => {
                                                     {item?.status}
                                                 </Text>
                                             </GridItem>
-
                                             <GridItem
                                                 colSpan={4}
                                                 borderWidth={1}
