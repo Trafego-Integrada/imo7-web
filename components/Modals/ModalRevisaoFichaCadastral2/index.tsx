@@ -352,8 +352,11 @@ const ModalBase = ({ }, ref: any) => {
                                                     <option value="reprovada">
                                                         Reprovada
                                                     </option>
-                                                    <option value="arquivada">
-                                                        Arquivada
+                                                    <option value="reprovado_por_analise_interna">
+                                                        Reprovado por Analise Interna
+                                                    </option>
+                                                    <option value="renda_insuficiente">
+                                                        Renda Insuficiente
                                                     </option>
                                                 </FormSelect>
 

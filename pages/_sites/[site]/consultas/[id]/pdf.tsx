@@ -80,7 +80,6 @@ const FichaCadastral = ({ consulta }: any) => {
                     </Text>
                 </Box>
             </Flex>
-
             {consulta.tipoConsulta == "processos_pf" && (
                 <>
                     <Box py={4}>
@@ -170,6 +169,21 @@ const FichaCadastral = ({ consulta }: any) => {
                                             mb={4}
                                             gridTemplateColumns="repeat(4,1fr)"
                                         >
+                                            <GridItem
+                                                borderWidth={1}
+                                                px={2}
+                                                py={1}
+                                            >
+                                                <Text fontSize="xx-small">
+                                                    Data da Notificação
+                                                </Text>
+                                                <Text
+                                                    fontWeight="bold"
+                                                    fontSize="xs"
+                                                >
+                                                    {formatoData(item?.dataNotificacao)}
+                                                </Text>
+                                            </GridItem>
                                             <GridItem
                                                 borderWidth={1}
                                                 px={2}
@@ -292,7 +306,6 @@ const FichaCadastral = ({ consulta }: any) => {
                                                     {item?.varaJulgadora}
                                                 </Text>
                                             </GridItem>
-
                                             <GridItem
                                                 colSpan={4}
                                                 borderWidth={1}
@@ -414,13 +427,28 @@ const FichaCadastral = ({ consulta }: any) => {
                             </Grid>
                         </Flex>
                         <Grid gap={5}>
-                            {consulta?.retorno?.processosCPF?.processos.map(
+                            {consulta?.retorno?.processoJudicial?.processos.map(
                                 (item: any, k: any) => (
                                     <GridItem key={k}>
                                         <Grid
                                             mb={4}
                                             gridTemplateColumns="repeat(4,1fr)"
                                         >
+                                            <GridItem
+                                                borderWidth={1}
+                                                px={2}
+                                                py={1}
+                                            >
+                                                <Text fontSize="xx-small">
+                                                    Data da Notificação
+                                                </Text>
+                                                <Text
+                                                    fontWeight="bold"
+                                                    fontSize="xs"
+                                                >
+                                                    {formatoData(item?.dataNotificacao)}
+                                                </Text>
+                                            </GridItem>
                                             <GridItem
                                                 borderWidth={1}
                                                 px={2}
@@ -528,7 +556,22 @@ const FichaCadastral = ({ consulta }: any) => {
                                                     {item?.varaJulgadora}
                                                 </Text>
                                             </GridItem>
-
+                                            <GridItem
+                                                colSpan={2}
+                                                borderWidth={1}
+                                                px={2}
+                                                py={1}
+                                            >
+                                                <Text fontSize="xx-small">
+                                                    Status
+                                                </Text>
+                                                <Text
+                                                    fontWeight="bold"
+                                                    fontSize="xs"
+                                                >
+                                                    {item?.status}
+                                                </Text>
+                                            </GridItem>
                                             <GridItem
                                                 colSpan={4}
                                                 borderWidth={1}
