@@ -83,6 +83,7 @@ import {
     totalFields,
     totalRequiredFields,
 } from '@/utils/registerFormFieldsAuxiliar'
+import { RodapeFicha } from '@/components/RodapeFicha'
 function validateCPF(value) {
     // Remove caracteres não numéricos
     const cleanedCPF = value.replace(/\D/g, '')
@@ -2664,8 +2665,9 @@ const FichaCadastral = ({
                     </>)
                 }
 
-
+            
             </Container>
+            <RodapeFicha/>
         </Box>
     )
 }
