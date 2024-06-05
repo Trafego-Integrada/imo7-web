@@ -419,6 +419,7 @@ const ModalBase = ({ }, ref: any) => {
                             <TabPanel px={0}>
                                 {mostrarAnexos && (
                                     <Documentos
+                                        processoId={watch('processoId')}
                                         fichaCadastralId={watch('id')}
                                         contratoId={watch('contratoId')}
                                         data={watch('anexos')}
