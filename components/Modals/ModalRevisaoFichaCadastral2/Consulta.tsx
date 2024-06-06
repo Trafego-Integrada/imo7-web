@@ -18,6 +18,7 @@ import { ModalReceitaFederalCND } from './ReceitaFederalCND/Modal'
 import { ModalCNDTrabalhista } from './CNDTrabalhista/Modal'
 import { validarData } from '@/utils/validarData'
 import { IConsultaProtestos, ModalProtesto } from './ProtestosPF/Modal'
+import { TooltipTJ } from './TribunalJustica/TooltipTJ'
 
 interface TipoConsultaProps {
     ficha: any
@@ -228,6 +229,10 @@ export const Consulta = ({
         return (mapeamento[codigoConsulta] || (() => 0))()
     }
 
+    function isTJ(){
+        return consulta?.codigo?.includes('processos')
+    }
+
     return (
         <Flex
             key={consulta.codigo}
@@ -244,16 +249,23 @@ export const Consulta = ({
                 justify="center"
                 h="full"
                 p={4}
+                position='relative'
             >
                 <Image
                     alt="Receita Federal"
                     src={consulta.image}
                     style={{
-                        width: consulta.size[0],
-                        height: consulta.size[1],
+                    width: consulta.size[0],
+                    height: consulta.size[1],
                     }}
                 />
 
+                {
+                    isTJ()
+                        &&
+                        <TooltipTJ/>
+                }
+                
                 <Flex align="center">
                     <Text fontSize="small" textAlign="center" fontWeight="bold">
                         {consulta?.nome}
