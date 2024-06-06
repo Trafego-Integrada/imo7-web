@@ -285,7 +285,8 @@ handle.get(async (req, res) => {
                 ...filtroQuery,
                 imobiliariaId: req.user?.imobiliariaId,
             },
-            ...paginacao,
+            skip: paginacao?.skip ?? 0,
+            take: paginacao?.take ?? 20,
             include: {
                 contrato: noIncludes ? false : true,
                 FichaCadastral: noIncludes ? false : true,
