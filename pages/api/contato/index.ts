@@ -3,9 +3,11 @@ import prisma from "@/lib/prisma";
 import sgMail from "@/services/mail/sendgrid";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
+import { cors } from "@/middleware/cors";
+
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
-handle.use(cors);
+handler.use(cors);
 handler.post(async (req, res) => {
     try {
         const { nome, email, telefone, mensagem } = req.body;
