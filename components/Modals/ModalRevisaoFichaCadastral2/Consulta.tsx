@@ -260,15 +260,16 @@ export const Consulta = ({
                     }}
                 />
 
-                {
-                    isTJ()
-                        &&
-                        <TooltipTJ/>
-                }
+                
                 
                 <Flex align="center">
                     <Text fontSize="small" textAlign="center" fontWeight="bold">
-                        {consulta?.nome}
+                        {consulta?.nome} {' '}
+                        {
+                        isTJ()
+                            &&
+                            <TooltipTJ/>
+                        }
                     </Text>
                 </Flex>
             </Flex>
