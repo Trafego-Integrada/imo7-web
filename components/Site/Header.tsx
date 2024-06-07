@@ -38,8 +38,12 @@ export const Header = () => {
     });
     const contato = useMutation(imo7ApiService("contato").create, {
         onSuccess: () => {
+            toast({
+                title: 'Solicitação de demostração realizada com sucesso.',
+                status: 'success'
+            })
             window.open(
-                `https://web.whatsapp.com/send?phone=+5527992747255&text=Olá, sou ${form.watch(
+                `https://web.whatsapp.com/send?phone=5519996258095&text=Olá, sou ${form.watch(
                     "nome"
                 )},\n\n Meu e-mail é ${form.watch(
                     "email"
@@ -47,8 +51,10 @@ export const Header = () => {
                     "telefone"
                 )}\n\n Quero saber mais sobre o IMO7`
             );
+            form.reset()
         },
     });
+    
     return (
         <Box
             h={{ lg: "90vh" }}
