@@ -1,13 +1,14 @@
 import { Button, Icon, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { ReactNode } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { FaQuestion } from "react-icons/fa";
 
 export function TooltipTJ(){
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Popover >
             <PopoverTrigger >
-                <Button padding={0} size='auto' bg='transparent' _hover='transparent' position='absolute' height='100%' width='100%'></Button>
+                <Button padding={0} size='auto' bg='transparent' _hover='transparent' ><FaQuestion size={18} /></Button>
             </PopoverTrigger>
             <PopoverContent >
                 <PopoverArrow />

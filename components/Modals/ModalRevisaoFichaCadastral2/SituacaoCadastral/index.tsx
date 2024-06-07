@@ -55,7 +55,7 @@ export const SituacaoCadastral = ({ data }: SituacaoCPFProps) => {
             {renderDetail("Comprovante", data.receitaFederal.comprovante)}
             {renderDetail(
                 "Data de nascimento",
-                formatarParaDataBR(data.receitaFederal.dataNascimento)
+                data.receitaFederal.dataNascimento
             )}
             {renderDetail(
                 "Data de inscrição",
