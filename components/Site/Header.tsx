@@ -125,13 +125,13 @@ export const Header = () => {
                                     </Box>
 
                                     <Flex gap={4} flexDir="column">
-                                        <Link href="#" color="white">
+                                        <Link href="#solucoes" color="white">
                                             Soluções
                                         </Link>
                                         <Link href="#" color="white">
                                             Recursos
                                         </Link>
-                                        <Link href="#" color="white">
+                                        <Link href="#planos" color="white">
                                             Planos
                                         </Link>
                                     </Flex>
