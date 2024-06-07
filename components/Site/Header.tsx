@@ -92,6 +92,7 @@ export const Header = () => {
                             </Link>
                         </Flex>
                         <Flex>
+                            <Link target="_blank" href="https://web.whatsapp.com/send?phone=5519996258095&text=Gostaria de saber mais informações sobre o IMO7">
                             <Button
                                 colorScheme="whatsapp"
                                 rightIcon={<FaWhatsapp />}
@@ -99,6 +100,7 @@ export const Header = () => {
                             >
                                 Fale Conosco
                             </Button>
+                            </Link>
                         </Flex>
                     </Flex>
                     <IconButton
@@ -134,13 +136,15 @@ export const Header = () => {
                                         </Link>
                                     </Flex>
                                     <Flex flexDir="column">
-                                        <Button
-                                            colorScheme="whatsapp"
-                                            rightIcon={<FaWhatsapp />}
-                                            size="sm"
-                                        >
-                                            Fale Conosco
-                                        </Button>
+                                        <Link target="_blank" href="https://web.whatsapp.com/send?phone=5519996258095&text=Gostaria de saber mais informações sobre o IMO7">
+                                            <Button
+                                                colorScheme="whatsapp"
+                                                rightIcon={<FaWhatsapp />}
+                                                size="sm"
+                                            >
+                                                Fale Conosco
+                                            </Button>
+                                        </Link>
                                     </Flex>
                                 </Flex>
                             </DrawerBody>
