@@ -1,0 +1,18 @@
+import { Button, Link } from "@chakra-ui/react";
+import { FaWhatsapp } from "react-icons/fa";
+
+export function WhatsApp(){
+    return (
+        <Link 
+            position='fixed'
+            bottom={4}
+            right={4}
+            target='blank' 
+            href="https://api.whatsapp.com/send?phone=5519996258095&text=Gostaria de saber mais informações sobre o IMO7"
+        >
+            <Button backgroundColor='green' p='4px' _hover={{backgroundColor: 'green', opacity:.8}} py={4}>
+                <FaWhatsapp color="white" size={40}/>
+            </Button>
+        </Link>
+    )
+}
