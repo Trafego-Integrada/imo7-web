@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
-
+handle.use(cors);
 handler.post(async (req, res) => {
     try {
         const { nome, email, telefone, mensagem } = req.body;
