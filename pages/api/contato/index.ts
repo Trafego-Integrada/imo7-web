@@ -15,7 +15,7 @@ handler.post(async (req, res) => {
         await sgMail.send({
             from: "contato@imo7.com.br",
             // to: "ramerson@trafegointegrada.com.br,ramerson@trafegointegrada.com.br,ramersonmodesto@gmail.com",
-            to: "elzio@clientestrafego.com.br",
+            to: "ramerson@trafegointegrada.com.br",
             subject: "Contato via Site IMO7",
             html: layoutContato({ nome, email, telefone, mensagem }),
         });
