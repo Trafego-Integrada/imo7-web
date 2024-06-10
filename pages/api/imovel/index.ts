@@ -33,6 +33,16 @@ handle.get(async (req, res) => {
                 ...filtroQuery,
                 OR: [
                     {
+                        tipo: {
+                            contains: query
+                        }
+                    },
+                    {
+                        descricao: {
+                            contains: query
+                        }
+                    },
+                    {
                         codigo: {
                             contains: query,
                         },
@@ -286,7 +296,7 @@ handle.get(async (req, res) => {
                 imobiliariaId: req.user?.imobiliariaId,
             },
             skip: paginacao?.skip ?? 0,
-            take: paginacao?.take ?? 20,
+            take: paginacao?.take ?? 10,
             include: {
                 contrato: noIncludes ? false : true,
                 FichaCadastral: noIncludes ? false : true,

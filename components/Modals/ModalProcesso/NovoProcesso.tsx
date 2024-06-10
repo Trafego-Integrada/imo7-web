@@ -64,6 +64,7 @@ const schema = yup.object({
 
 export const NovoProcesso = ({ isOpen, onClose, callback }) => {
     const [filtroImovel, setFiltroImovel] = useState("");
+    const [query, setQuery] = useState('');
     const modalImovel = useRef();
     const {
         control,
@@ -89,8 +90,8 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         } catch (error) {}
     };
     const listarImoveis = useMutation(imo7ApiService("imovel").list);
-    const { data: imoveis } = useQuery(
-        ["imoveis", { noIncludes: true }],
+    let { data: imoveis } = useQuery(
+        ["imoveis", { noIncludes: true, query }],
         imo7ApiService("imovel").list,
         {
             refetchOnReconnect: false,
@@ -128,7 +129,6 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         await queryClient.invalidateQueries(["imoveis"]);
         reset({ ...watch(), imovelId });
     };
-
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="3xl">
@@ -277,10 +277,12 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                             </Tooltip>
                                                         </Box>
                                                     }
-                                                    onChange={(e) =>
+                                                    onChange={(e) =>{
+                                                        setQuery(e?.target?.value ?? '');
+                                                        
                                                         field.onChange(
                                                             e?.id ? e.id : null
-                                                        )
+                                                        )}
                                                     }
                                                     value={
                                                         field.value
