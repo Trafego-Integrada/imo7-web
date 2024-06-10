@@ -296,7 +296,7 @@ handle.get(async (req, res) => {
                 imobiliariaId: req.user?.imobiliariaId,
             },
             skip: paginacao?.skip ?? 0,
-            take: paginacao?.take ?? 10,
+            take: paginacao?.take ?? 20,
             include: {
                 contrato: noIncludes ? false : true,
                 FichaCadastral: noIncludes ? false : true,
