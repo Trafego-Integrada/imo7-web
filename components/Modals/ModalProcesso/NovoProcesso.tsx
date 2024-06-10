@@ -90,7 +90,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         } catch (error) {}
     };
     const listarImoveis = useMutation(imo7ApiService("imovel").list);
-    let { data: imoveis } = useQuery(
+    const { data: imoveis,  } = useQuery(
         ["imoveis", { noIncludes: true, query }],
         imo7ApiService("imovel").list,
         {
@@ -129,6 +129,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         await queryClient.invalidateQueries(["imoveis"]);
         reset({ ...watch(), imovelId });
     };
+    
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="3xl">
@@ -278,8 +279,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                         </Box>
                                                     }
                                                     onChange={(e) =>{
-                                                        setQuery(e?.target?.value ?? '');
-                                                        
+                                                        e?.target?.value && setQuery(e?.target?.value);
                                                         field.onChange(
                                                             e?.id ? e.id : null
                                                         )}
