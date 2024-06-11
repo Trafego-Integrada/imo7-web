@@ -7,6 +7,7 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    Text,
     useDisclosure,
 } from "@chakra-ui/react";
 
@@ -40,9 +41,13 @@ const ModalBase = ({ }, ref: any) => {
 
                 <ModalBody>
                     <Flex flexDir="column" gap={4}>
-                        {data?.empresasRelacionadasCPF.negociosRelacionados.map((empresaRelacionada, index) => (
+                        {
+                        data?.empresasRelacionadasCPF?.negociosRelacionados
+                        ?   data?.empresasRelacionadasCPF?.negociosRelacionados?.map((empresaRelacionada, index) => (
                             <EmpresaRelacionada key={index} data={empresaRelacionada} />
-                        ))}
+                        ))
+                        :   <Text>Nenhum Relacionamento Encontrado</Text>
+                        }
                     </Flex>
                 </ModalBody>
             </ModalContent>
