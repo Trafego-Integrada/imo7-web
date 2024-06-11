@@ -11,6 +11,7 @@ import { LayoutSite } from "@/components/Site/Layout";
 import { Planos } from "@/components/Site/Planos";
 import { PraQuem } from "@/components/Site/PraQuem";
 import { ValidacaoFacial } from "@/components/Site/ValidacaoFacial";
+import { WhatsApp } from "@/components/WhatsApp";
 import { NextPage } from "next";
 import { useRef } from "react";
 
@@ -29,6 +30,7 @@ const Index: NextPage = () => {
             <Clientes />
             <Planos />
             <Footer />
+            <WhatsApp/>
             <ModalContato ref={modalContato} />
         </LayoutSite>
     );

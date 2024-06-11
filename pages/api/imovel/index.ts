@@ -33,6 +33,16 @@ handle.get(async (req, res) => {
                 ...filtroQuery,
                 OR: [
                     {
+                        tipo: {
+                            contains: query
+                        }
+                    },
+                    {
+                        descricao: {
+                            contains: query
+                        }
+                    },
+                    {
                         codigo: {
                             contains: query,
                         },
