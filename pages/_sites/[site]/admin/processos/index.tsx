@@ -561,19 +561,6 @@ const Home = ({ query }) => {
                                                         }
                                                         aria-label="Abrir"
                                                     />
-                                                    <Tooltip label="Baixar todos arquivos">
-                                                        <IconButton
-                                                            as={Link}
-                                                            size="sm"
-                                                            icon={
-                                                                <FiDownloadCloud />
-                                                            }
-                                                            href={`https://www.imo7.com.br/api/processo/${processo.id}/downloadArquivos`}
-                                                            target="_blank"
-                                                            variant="ghost"
-                                                            passHref
-                                                        />
-                                                    </Tooltip>
                                                     <Center>
                                                         <Divider
                                                             h={6}
