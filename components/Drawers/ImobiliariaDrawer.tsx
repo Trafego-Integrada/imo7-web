@@ -100,12 +100,9 @@ const DrawerBase = ({ }, ref) => {
             buscarCep(cepFormated)
         }
     }
-
-    console.log(watch());
     
 
     const onSubmit = async (data) => {
-        console.log('CHEGOU AQUI');
         
         if (data.id) {
             // const formData = new FormData();
