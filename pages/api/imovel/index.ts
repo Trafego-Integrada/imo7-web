@@ -25,6 +25,7 @@ handle.get(async (req, res) => {
             codigoImovel,
             dataCriacao,
             noIncludes,
+            imovelId
         } = req.query;
 
         let filtroQuery: Prisma.ImovelWhereInput = {};
@@ -313,16 +314,27 @@ handle.get(async (req, res) => {
                 createdAt: "desc",
             },
         });
+
+        let imovel = null
+        if(imovelId && !data.find(({ id }) => id === Number(imovelId))){
+            imovel = await prisma.imovel.findUnique({
+                where: {
+                    id: Number(imovelId)
+                }
+            })
+        }
+
         const total = await prisma.imovel.count({
             where: {
                 ...filtroQuery,
                 imobiliariaId: req.user?.imobiliariaId,
             },
         });
+        
         res.send({
             data: {
-                total,
-                data,
+                total: imovel ? total + 1 : total,
+                data: imovel ? [...data, {...imovel}] : data,
             },
         });
     } catch (error) {

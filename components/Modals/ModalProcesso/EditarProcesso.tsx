@@ -32,7 +32,7 @@ import {
     Tooltip,
     useToast,
 } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
 import { MdClose, MdSave } from "react-icons/md";
@@ -45,6 +45,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Documentos } from "../Contrato/Documentos";
 import { Historicos } from "@/components/Pages/Historicos";
 import { ModalImovel } from "../ModalImovel";
+import { buscarImovel } from "@/services/models/imovel";
 
 const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
@@ -57,6 +58,7 @@ const schema = yup.object({
 export const EditarProcesso = ({ id, isOpen, onClose }) => {
     const { usuario } = useAuth();
     const toast = useToast();
+    const [query, setQuery] = useState('');
     const modalImovel = useRef();
     const {
         control,
@@ -68,6 +70,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
     } = useForm({
         resolver: yupResolver(schema),
     });
+
     const buscar = useMutation(imo7ApiService("processo").get, {
         onSuccess(data, variables, context) {
             reset({ ...data });
@@ -83,8 +86,8 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
     };
 
     const { data: imoveis } = useQuery(
-        ["imoveis", { noIncludes: true }],
-        imo7ApiService("imovel").list
+        ["imoveis", { noIncludes: true, query, imovelId: watch('imovelId') }],
+        imo7ApiService("imovel").list,
     );
     const campos = [
         {
@@ -98,6 +101,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         listarUsuarios,
         { refetchOnReconnect: false, refetchOnWindowFocus: false }
     );
+
     useEffect(() => {
         reset({});
     }, []);
@@ -350,12 +354,13 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                     </Tooltip>
                                                                 </Box>
                                                             }
-                                                            onChange={(e) =>
+                                                            onChange={(e) =>{
+                                                                e?.target?.value && setQuery(e?.target?.value);
                                                                 field.onChange(
                                                                     e?.id
                                                                         ? e.id
                                                                         : null
-                                                                )
+                                                                )}
                                                             }
                                                             value={
                                                                 field.value
