@@ -63,7 +63,7 @@ const DrawerBase = ({ }, ref) => {
     const showData = useMutation(show, {
         onSuccess: (data) => {
 
-            if( data.codigoId === 2 )reset({...data, codigo: data.codigo ?? ' '})
+            if( data.contaId === 2 )reset({...data, codigo: data.codigo ?? ' '})
                 else reset(data)
 
             onOpen()
@@ -100,8 +100,10 @@ const DrawerBase = ({ }, ref) => {
             buscarCep(cepFormated)
         }
     }
+    
 
     const onSubmit = async (data) => {
+        
         if (data.id) {
             // const formData = new FormData();
             // Object.entries(data).map((i) => formData.append(i[0], i[1]));
