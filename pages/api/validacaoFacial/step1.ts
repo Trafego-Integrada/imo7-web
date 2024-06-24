@@ -13,10 +13,11 @@ import slug from 'slug'
 
 import { S3Client } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
+import path from 'path'
 var FOLDER
 
 if (process.platform == 'linux') FOLDER = '/tmp/'
-else FOLDER = 'd:\\'
+else FOLDER = path.join(__dirname, '..')
 
 const handler = nextConnect<NextApiRequestWithUser, NextApiResponse>()
 
@@ -32,7 +33,7 @@ handler.use(cors)
 // handler.use(multiparty);
 
 handler.post(async (req, res) => {
-    const { id, cpf, foto } = req.body
+    const { id, cpf, foto, pin } = req.body
 
     const validacao = await prisma.validacaoFacial.findUnique({
         where: {
@@ -43,7 +44,7 @@ handler.post(async (req, res) => {
     const ACCESS_TOKEN = await getToken()
     console.log('VALIDAÇÃO FACIAL::LINHA 46: ', ACCESS_TOKEN)
 
-    const PIN = await getPin(ACCESS_TOKEN, cpf)
+    const PIN = pin ? pin : await getPin(ACCESS_TOKEN, cpf)
 
     if (foto === undefined || foto == '') {
         return res.status(400).send({
@@ -63,7 +64,7 @@ handler.post(async (req, res) => {
         })
     }
 
-    const PHOTO: any = await setPhoto(ACCESS_TOKEN, PIN, validacao?.cpf!, foto)
+    const PHOTO: any = await setPhoto(ACCESS_TOKEN, PIN, validacao?.cpf!, fotoUrl)
 
     if (!PHOTO) {
         return res.status(400).send({ status: 0, message: PHOTO.mensagem })
@@ -73,15 +74,30 @@ handler.post(async (req, res) => {
         let data = {
             pin: PIN,
             fotoUrl: fotoUrl,
+            resultado: JSON.stringify(PHOTO),
+            fichaCadastralId: validacao?.fichaCadastralId,
         }
 
-        const resValidacaoFacial = await prisma.validacaoFacial.update({
-            where: {
-                id: validacao?.id,
-            },
-            data: data,
-        })
+        let resValidacaoFacial = validacao;
+        if (!validacao?.pin) {
+            resValidacaoFacial = await prisma.validacaoFacial.update({
+                where: {
+                    id: validacao?.id,
+                },
+                data: {
+                    pin: PIN
+                },
+            })
+        }
+
         const id = resValidacaoFacial.id
+
+        await prisma.validacaoFacialHistorico.create({
+            data: {
+                ...data,
+                validacaoFacialId: id,
+            }
+        })
 
         if (id) {
             return res
