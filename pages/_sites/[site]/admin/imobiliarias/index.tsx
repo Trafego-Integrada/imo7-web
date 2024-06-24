@@ -59,7 +59,7 @@ const Imobiliarias = () => {
                     </Flex>
                     <Button
                         colorScheme="blue"
-                        leftIcon={<Icon as={FaPlus} />}
+                        leftIcon={<FaPlus />}
                         onClick={() => imobiliariaDrawer.current.onOpen()}
                     >
                         Adicionar imobiliária
@@ -95,7 +95,7 @@ const Imobiliarias = () => {
                                                         )
                                                     }
                                                 >
-                                                    <Icon as={FaEdit} />
+                                                    <FaEdit />
                                                 </Button>
                                             </Tooltip>
                                         </Td>

@@ -181,7 +181,7 @@ export const Categoria = ({
                     </Flex>
                 );
             } else {
-                return validarData(valor) ? formatarParaDataBR(valor) : valor;
+                return campo.tipoCampo === 'date' ? formatarParaDataBR(valor) : valor;
             }
         }
     };

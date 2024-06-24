@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 
 import { cors } from "@/middleware/cors";
 import { checkAuth } from "@/middleware/checkAuth";
+import { format } from 'date-fns';
 
 const handle = nextConnect();
 handle.use(cors);
@@ -48,7 +49,11 @@ handle.get(async (req, res) => {
             },
         },
     });
-    res.send(data);
+
+    const inicioContrato = data?.inicioContrato ? format(data?.inicioContrato, 'yyyy-MM-dd') : data?.inicioContrato
+
+    res.send({ ...data, inicioContrato });
+    // res.send(data)
 });
 handle.put(async (req, res) => {
     try {
@@ -61,7 +66,11 @@ handle.put(async (req, res) => {
             observacoes,
             responsavelId,
             status,
+            comissao,
+            prazoContrato,
+            inicioContrato
         } = req.body;
+
         const data = await prisma.processo.update({
             where: {
                 id,
@@ -72,6 +81,9 @@ handle.put(async (req, res) => {
                 campos,
                 status,
                 observacoes,
+                inicioContrato,
+                prazoContrato,
+                comissao,
                 imovel: {
                     connect: {
                         id: Number(imovelId),
@@ -84,7 +96,8 @@ handle.put(async (req, res) => {
                 },
             },
         });
-        res.send(data);
+
+        res.send({ ...data });
     } catch (error) {
         res.status(500).send({
             message: error?.message,

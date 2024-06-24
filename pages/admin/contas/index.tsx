@@ -43,7 +43,7 @@ const Contas = () => {
                     </Flex>
                     <Button
                         colorScheme="blue"
-                        leftIcon={<Icon as={FaPlus} />}
+                        leftIcon={<FaPlus />}
                         onClick={() => drawer.current.onOpen()}
                     >
                         Adicionar conta
@@ -73,7 +73,7 @@ const Contas = () => {
                                                         )
                                                     }
                                                 >
-                                                    <Icon as={FaEdit} />
+                                                    <FaEdit />
                                                 </Button>
                                             </Tooltip>
                                         </Td>

@@ -17,6 +17,8 @@ import { ModalReceitaFederalQSA } from './ReceitaFederalQSA/Modal'
 import { ModalReceitaFederalCND } from './ReceitaFederalCND/Modal'
 import { ModalCNDTrabalhista } from './CNDTrabalhista/Modal'
 import { validarData } from '@/utils/validarData'
+import { IConsultaProtestos, ModalProtesto } from './ProtestosPF/Modal'
+import { TooltipTJ } from './TribunalJustica/TooltipTJ'
 
 interface TipoConsultaProps {
     ficha: any
@@ -55,6 +57,7 @@ export const Consulta = ({
     const modalReceitaFederalQSA = useRef()
     const modalReceitaFederalCND = useRef()
     const modalCNDTrabalhista = useRef()
+    const modalProtesto = useRef()
 
     const [id, setId] = useState<string>('')
     const [retorno, setRetorno] = useState<any | null>(null)
@@ -82,7 +85,9 @@ export const Consulta = ({
                 fichaCadastralId: ficha.id,
             })
 
-            queryClient.invalidateQueries(['consultasNetrin'])
+            queryClient.invalidateQueries([
+                `consultasNetrin-${consulta.codigo}-${cpf}`,
+            ])
 
             toast({
                 title: 'Consulta realizada com sucesso, entre na aba consultas para visualizar o documento',
@@ -92,8 +97,6 @@ export const Consulta = ({
             setConsultandoNetrin(false)
         } catch (error: any) {
             setConsultandoNetrin(false)
-
-            console.log(error?.response?.data)
 
             toast({
                 title: 'Houve um problema',
@@ -105,28 +108,24 @@ export const Consulta = ({
 
     useQuery(
         [
-            'consultasNetrin',
+            `consultasNetrin-${consulta.codigo}-${cpf}`,
             consulta.codigo,
-            {
-                fichaCadastralId: ficha.id,
-            },
+            ficha.id,
         ],
         async ({ queryKey }: any) => {
             try {
                 const { data } = await api.get('v1/integracao/netrin', {
-                    params: { ...queryKey[1] },
+                    params: { ...queryKey },
                 })
 
                 const resultado = data.find(
                     (item) =>
-                        item.tipoConsulta === consulta.codigo &&
                         item.requisicao.cpf === cpf &&
                         item.requisicao.cnpj === cnpj,
                 )
 
-                if (!resultado) {
+                if (!resultado)
                     throw new Error('Nenhum dado correspondente encontrado')
-                }
 
                 const { id, retorno } = resultado
 
@@ -144,7 +143,13 @@ export const Consulta = ({
 
     function abrirResultados() {
         const modais: Record<string, () => void> = {
+            protestos_pf: () =>
+                modalProtesto?.current?.onOpen({ data: retorno }),
+            protestos_pj: () =>
+                modalProtesto?.current?.onOpen({ data: retorno }),
             processos_pf: () =>
+                modalTribunalJustica?.current?.onOpen(getPdfUrl(id)),
+            processos_pj: () =>
                 modalTribunalJustica?.current?.onOpen(getPdfUrl(id)),
             endereco_cpf: () =>
                 modalEndereco?.current?.onOpen({ data: retorno }),
@@ -174,8 +179,6 @@ export const Consulta = ({
     }
 
     function getPdfUrl(id: string) {
-        console.log(process.env.NODE_ENV)
-
         const baseUrl =
             process.env.NODE_ENV === 'production'
                 ? 'https://www.imo7.com.br'
@@ -190,12 +193,22 @@ export const Consulta = ({
 
     if (!deveRenderizar) return null
 
+    function quantidadeTitulos(protestos: IConsultaProtestos) {
+        let titulos = 0;
+        protestos?.cenprotProtestos?.SP?.forEach(({ quantidadeTitulos }) => titulos += quantidadeTitulos)
+
+        return titulos
+    }
+
     function calcularContagem(
         retorno: Retorno,
         codigoConsulta: string,
     ): number {
         const mapeamento: Record<string, () => number> = {
+            protestos_pf: () => retorno.cenprotProtestos?.SP?.length ?? 0,
+            protestos_pj: () => retorno.cenprotProtestos?.SP?.length ?? 0,
             processos_pf: () => retorno.processosCPF?.totalProcessos ?? 0,
+            processos_pj: () => retorno.processoJudicial?.totalProcessos ?? 0,
             endereco_cpf: () => retorno.enderecoCPF?.endereco?.length ?? 0,
             empresas_relacionadas_cpf: () =>
                 retorno.empresasRelacionadasCPF?.negociosRelacionados?.length ??
@@ -216,6 +229,10 @@ export const Consulta = ({
         return (mapeamento[codigoConsulta] || (() => 0))()
     }
 
+    function isTJ(){
+        return consulta?.codigo?.includes('processos')
+    }
+
     return (
         <Flex
             key={consulta.codigo}
@@ -232,19 +249,27 @@ export const Consulta = ({
                 justify="center"
                 h="full"
                 p={4}
+                position='relative'
             >
                 <Image
                     alt="Receita Federal"
                     src={consulta.image}
                     style={{
-                        width: consulta.size[0],
-                        height: consulta.size[1],
+                    width: consulta.size[0],
+                    height: consulta.size[1],
                     }}
                 />
 
+                
+                
                 <Flex align="center">
                     <Text fontSize="small" textAlign="center" fontWeight="bold">
-                        {consulta?.nome}
+                        {consulta?.nome} {' '}
+                        {
+                        isTJ()
+                            &&
+                            <TooltipTJ/>
+                        }
                     </Text>
                 </Flex>
             </Flex>
@@ -308,7 +333,16 @@ export const Consulta = ({
                             opacity: '.8',
                         }}
                     >
-                        {retornoCount} Resultados
+                        <Flex direction='column'>
+                            <Text>{retornoCount} Resultados</Text>
+
+                            <Text>
+                                {
+                                    consulta?.codigo?.includes('protestos') && `${quantidadeTitulos(retorno)} Títulos`
+                                }
+                            </Text>
+                        </Flex>
+
                     </Button>
                 </Tooltip>
             )}
@@ -335,6 +369,7 @@ export const Consulta = ({
             <ModalReceitaFederalQSA ref={modalReceitaFederalQSA} />
             <ModalReceitaFederalCND ref={modalReceitaFederalCND} />
             <ModalCNDTrabalhista ref={modalCNDTrabalhista} />
+            <ModalProtesto ref={modalProtesto} />
         </Flex>
     )
 }

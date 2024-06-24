@@ -5,13 +5,17 @@ import { cors } from "@/middleware/cors";
 import * as AdmZip from "adm-zip";
 import axios from "axios";
 import path, { parse } from "path";
+import { removerCaracteresEspeciais } from "@/helpers/helpers";
 
 const handler = nextConnect();
 handler.use(cors);
 
 handler.get(async (req, res) => {
+
     try {
         const { id } = req.query;
+
+
 
         const ficha = await prisma.fichaCadastral.findUnique({
             where: {
@@ -37,8 +41,8 @@ handler.get(async (req, res) => {
         });
 
         let fileUrls = [];
-
         for await (const item of data) {
+
             if (
                 item.campo.tipoCampo == "files" ||
                 item.campo.tipoCampo == "file"
@@ -54,7 +58,8 @@ handler.get(async (req, res) => {
                 fileUrls.push(item.valor);
             }
         }
-        if (!fileUrls || !Array.isArray(fileUrls) || fileUrls.length === 0) {
+
+        if (data.length > 0 && (!fileUrls || !Array.isArray(fileUrls) || fileUrls.length === 0)) {
             return res.redirect("/error");
         }
 
@@ -92,6 +97,7 @@ handler.get(async (req, res) => {
                 }
             }
         }
+
         for (let i = 0; i < fileUrls.length; i++) {
             try {
                 const response = await axios.get(fileUrls[i], {
@@ -104,7 +110,6 @@ handler.get(async (req, res) => {
                     zip.addFile(fileName, Buffer.from(response.data));
                 }
             } catch (e) {
-                //console.log(e.message);
                 console.error("Arquivo erro:", fileUrls[i]);
             }
         }
@@ -113,7 +118,7 @@ handler.get(async (req, res) => {
         res.setHeader("Content-Type", "application/zip");
         res.setHeader(
             "Content-Disposition",
-            `attachment; filename=arquivos-ficha-cadastral-${ficha?.nome}.zip`
+            `attachment; filename=arquivos-ficha-cadastral-${removerCaracteresEspeciais(ficha?.nome)}.zip`
         );
         res.send(zipBuffer);
     } catch (error) {

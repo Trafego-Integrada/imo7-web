@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { checkAuth } from "@/middleware/checkAuth";
 import { cors } from "@/middleware/cors";
 import { Prisma } from "@prisma/client";
+import moment from "moment";
 import nextConnect from "next-connect";
 
 const handle = nextConnect();
@@ -12,7 +13,7 @@ handle.use(checkAuth);
 
 handle.get(async (req, res) => {
     try {
-        let { deletedAt, campoCodigo } = req.query;
+        let { createdAt, deletedAt, campoCodigo, token } = req.query;
 
         let filtroQuery: Prisma.ValidacaoFacialWhereInput = { AND: [] };
 
@@ -39,11 +40,68 @@ handle.get(async (req, res) => {
             };
         }
 
+        if (JSON.parse(token)) {
+            filtroQuery = {
+                ...filtroQuery,
+                resultado: { contains: '"token"' }
+            };
+        }
+
+        if (createdAt) {
+            createdAt = JSON.parse(createdAt);
+            if (!filtroQuery.AND) {
+                filtroQuery = {
+                    ...filtroQuery,
+                    AND: [],
+                };
+            }
+            filtroQuery = {
+                ...filtroQuery,
+                AND: [
+                    {
+                        createAt: {
+                            gte: createdAt[0]
+                                ? moment(createdAt[0]).startOf("d").format()
+                                : null,
+                            lte: createdAt[1]
+                                ? moment(createdAt[1]).endOf("d").format()
+                                : null,
+                        },
+                    },
+                ],
+            };
+        }
+
         const data = await prisma.validacaoFacial.findMany({
             where: {
                 ...filtroQuery,
                 imobiliariaId: req?.user?.imobiliariaId,
             },
+            include: {
+                ValidacaoFacialHistorico: true,
+                ficha: {
+                    select: {
+                        nome: true,
+                        id: true,
+                        Processo: {
+                            select: {
+                                imovel: {
+                                    select: {
+                                        bairro: true,
+                                        endereco: true,
+                                        numero: true,
+                                        complemento: true,
+                                        estado: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }
+            },
+            orderBy: {
+                createAt: "desc"
+            }
         });
 
         const count = await prisma.validacaoFacial.count({

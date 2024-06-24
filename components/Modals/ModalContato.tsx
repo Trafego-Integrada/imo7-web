@@ -10,6 +10,7 @@ import {
     ModalHeader,
     ModalOverlay,
     useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { forwardRef, useImperativeHandle } from "react";
@@ -27,10 +28,17 @@ const ModalBase = ({}, ref) => {
     const form = useForm({
         resolver: yupResolver(schema),
     });
+    const toast = useToast()
+
     const contato = useMutation(imo7ApiService("contato").create, {
         onSuccess: () => {
+            toast({
+                title: 'Solicitação de demostração realizada com sucesso.',
+                status: 'success'
+            })
+            modal.onClose()
             window.open(
-                `https://web.whatsapp.com/send?phone=+5527992747255&text=Olá, sou ${form.watch(
+                `https://web.whatsapp.com/send?phone=+5519996258095&text=Olá, sou ${form.watch(
                     "nome"
                 )},\n\n Meu e-mail é ${form.watch(
                     "email"
@@ -38,6 +46,7 @@ const ModalBase = ({}, ref) => {
                     "telefone"
                 )}\n\n Quero saber mais sobre o IMO7`
             );
+            form.reset()
         },
     });
     useImperativeHandle(ref, () => ({

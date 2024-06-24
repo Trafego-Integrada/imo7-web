@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation } from "react-query";
 import { FiSearch, FiLink } from "react-icons/fi";
 import { Button, Flex, Icon, Text, useToast } from "@chakra-ui/react";
 import { cadastrarValidacao } from "@/services/models/validacaofacial";
 import { buscarFicha } from "@/services/models/fichaCadastral";
 import Image from "next/image";
+import { ModalResultado } from './Modal'
 
 import imageVF from "../../../../assets/validacao-facial.svg";
 
@@ -43,6 +44,8 @@ export const ValidacaoFacial = ({
 
     const cadastrarValidacaoFacial = useMutation(cadastrarValidacao);
 
+    const modal = useRef()
+
     // Chama a função de busca da validação facial assim que o componente carrega
     useEffect(() => {
         if (fichaCadastralId) buscar.mutate(fichaCadastralId);
@@ -61,6 +64,10 @@ export const ValidacaoFacial = ({
         },
     });
 
+    function abrirModal() {
+        modal?.current?.onOpen({ data: retorno })
+    }
+
     const gerarValidacaoFacial = async () => {
         try {
             setLoading(true);
@@ -74,9 +81,15 @@ export const ValidacaoFacial = ({
                     });
 
                     setRetorno(result.data || null);
+                    navigator.clipboard.writeText(
+                        `${window.location.origin}/validacao-facial/${result?.data?.id}`
+                    );
+
+                    return toast({
+                        title: "URL Copiada",
+                    });
                 }
             }
-
             setLoading(false);
         } catch (error: any) {
             setLoading(false);
@@ -103,71 +116,79 @@ export const ValidacaoFacial = ({
     }
 
     return (
-        <Flex
-            rounded="lg"
-            borderWidth={1}
-            flexDir="column"
-            justify="space-between"
-            w="12rem"
-        >
+        <>
             <Flex
+                rounded="lg"
+                borderWidth={1}
                 flexDir="column"
-                gap={3}
-                p={4}
-                align="center"
-                justify="center"
-                h="full"
+                justify="space-between"
+                w="12rem"
             >
-                <Image
-                    alt="Receita Federal"
-                    src={imageVF}
-                    style={{
-                        width: "2rem",
-                        height: "2rem",
-                    }}
-                />
+                <Flex
+                    flexDir="column"
+                    gap={3}
+                    p={4}
+                    align="center"
+                    justify="center"
+                    h="full"
+                >
+                    <Image
+                        alt="Receita Federal"
+                        src={imageVF}
+                        style={{
+                            width: "2rem",
+                            height: "2rem",
+                        }}
+                    />
 
-                <Flex align="center">
-                    <Text fontSize="small" textAlign="center" fontWeight="bold">
-                        Validação Facial
-                    </Text>
+                    <Flex align="center">
+                        <Text fontSize="small" textAlign="center" fontWeight="bold">
+                            Validação Facial
+                        </Text>
+                    </Flex>
                 </Flex>
+
+                {retorno?.resultado?.pin ?
+                    (
+                        <Button
+                            w="full"
+                            variant="outline"
+                            size="xs"
+                            border={0}
+                            borderTop="1px"
+                            borderColor="#e1e8f0"
+                            rounded={0}
+                            py="1rem"
+                            background="#3283cf"
+                            textColor="white"
+                            _hover={{
+                                bg: '#3283cf',
+                                opacity: '.8',
+                            }}
+                            onClick={() => abrirModal()}
+                            isLoading={loading}
+                        >
+                            Resultado
+                        </Button>
+                    )
+                    : (
+                        <Button
+                            w="full"
+                            variant="outline"
+                            size="xs"
+                            border={0}
+                            borderTop="1px"
+                            borderColor="#e1e8f0"
+                            rounded={0}
+                            py="1rem"
+                            leftIcon={<Icon as={FiLink} />}
+                            onClick={() => !retorno ? gerarValidacaoFacial() : copiarLink()}
+                        >
+                            {retorno ? 'Copiar Link da Validação' : 'Gerar Validação'}
+                        </Button>
+                    )}
             </Flex>
-
-            {!retorno && (
-                <Button
-                    w="full"
-                    variant="outline"
-                    size="xs"
-                    border={0}
-                    borderTop="1px"
-                    borderColor="#e1e8f0"
-                    rounded={0}
-                    py="1rem"
-                    leftIcon={<Icon as={FiSearch} />}
-                    onClick={gerarValidacaoFacial}
-                    isLoading={loading}
-                >
-                    Consultar
-                </Button>
-            )}
-
-            {retorno && (
-                <Button
-                    w="full"
-                    variant="outline"
-                    size="xs"
-                    border={0}
-                    borderTop="1px"
-                    borderColor="#e1e8f0"
-                    rounded={0}
-                    py="1rem"
-                    leftIcon={<Icon as={FiLink} />}
-                    onClick={copiarLink}
-                >
-                    Copiar Link da Validação
-                </Button>
-            )}
-        </Flex>
+            <ModalResultado ref={modal} />
+        </>
     );
 };

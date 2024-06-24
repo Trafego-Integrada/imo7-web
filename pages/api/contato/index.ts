@@ -3,9 +3,11 @@ import prisma from "@/lib/prisma";
 import sgMail from "@/services/mail/sendgrid";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
+import { cors } from "@/middleware/cors";
+
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
-
+handler.use(cors);
 handler.post(async (req, res) => {
     try {
         const { nome, email, telefone, mensagem } = req.body;
@@ -15,7 +17,7 @@ handler.post(async (req, res) => {
         await sgMail.send({
             from: "contato@imo7.com.br",
             // to: "ramerson@trafegointegrada.com.br,ramerson@trafegointegrada.com.br,ramersonmodesto@gmail.com",
-            to: "elzio@clientestrafego.com.br",
+            to: "ramerson@trafegointegrada.com.br",
             subject: "Contato via Site IMO7",
             html: layoutContato({ nome, email, telefone, mensagem }),
         });

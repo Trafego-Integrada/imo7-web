@@ -19,6 +19,7 @@ import {
     PopoverFooter,
     PopoverHeader,
     PopoverTrigger,
+    Progress,
     Spinner,
     Stat,
     StatArrow,
@@ -61,6 +62,8 @@ import { formatoData, formatoValor, statusTarefa } from "@/helpers/helpers";
 import moment from "moment";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { countConsultasNetrin } from "@/services/models/countConsultasNetrin";
+import { OpenHelp } from "@/components/OpenHelp";
 
 const ColumnChart = dynamic(import("@/components/Charts/ColumnChart"), {
     ssr: false,
@@ -73,6 +76,8 @@ const Home = () => {
     });
 
     const { data, isLoading } = useQuery(["dashboard", filtro], dadosDashboard);
+    const { data: count } = useQuery('count', countConsultasNetrin);
+    const limiteUtilizado = Number(count / data?.limiteConsultas ?? 100);
 
     const options = [
         {
@@ -147,6 +152,12 @@ const Home = () => {
         <>
             <Layout>
                 <Container maxW="container.xl" p={5}>
+                    <div style={{
+                        position: 'absolute',
+                        right: 0
+                    }}>
+                        <OpenHelp />
+                    </div>
                     {/* <Flex mb={4}>
                         <Popover placement="top-start" isOpen={isOpen}>
                             <PopoverTrigger>
@@ -214,6 +225,49 @@ const Home = () => {
                         }}
                     >
                         <GridItem colSpan={{ lg: 3 }}>
+                            <Heading size="sm" color="gray" mb={2}>
+                                Consultas do mês
+                            </Heading>
+                            <Box bg="white" p={4}>
+                                <Table size="sm">
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Mês Vigente</Th>
+                                            <Th>Limite</Th>
+                                            <Th>% Utilizada</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                            <Td>{count}</Td>
+                                            <Td>{data?.limiteConsultas ?? 100}</Td>
+                                            <Td position='relative'>
+                                                <Progress
+                                                    value={limiteUtilizado}
+                                                    max={1}
+                                                    colorScheme={limiteUtilizado == 1 ? 'green' : 'yellow'}
+                                                />
+                                                <Flex
+                                                    pos="absolute"
+                                                    top="0"
+                                                    justify="center"
+                                                    mx="auto"
+                                                    w="full"
+                                                >
+                                                    <Text
+                                                        textAlign="center"
+                                                        fontSize="xs"
+                                                    >
+                                                        {Number(limiteUtilizado * 100).toFixed(2)}%
+                                                    </Text>
+                                                </Flex>
+                                            </Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                            </Box>
+                        </GridItem>
+                        {/* <GridItem colSpan={{ lg: 3 }}>
                             <Heading size="sm" color="gray" mb={2}>
                                 Próximas Tarefas
                             </Heading>
@@ -310,7 +364,7 @@ const Home = () => {
                                     </Text>
                                 </Box>
                             </Flex>
-                        </GridItem>
+                        </GridItem>  */}
                         <GridItem colSpan={{ lg: 2 }}>
                             <Box>
                                 <Heading size="sm" color="gray" mb={2}>

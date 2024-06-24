@@ -80,7 +80,7 @@ handle.post(async (req, res) => {
                 contaId: contaId ? Number(contaId) : 2,
             },
         });
-    
+
         const usuarioExiste = await prisma.usuario.findFirst({
             where: {
                 OR: [
@@ -111,7 +111,7 @@ handle.post(async (req, res) => {
                     nome: usuario.nome,
                     documento: usuario.documento,
                     email: usuario.email,
-                    senhaHash: senha ? bcrypt.hashSync(senha, 10) : "",
+                    senhaHash: usuario.senha ? bcrypt.hashSync(usuario.senha, 10) : "",
                     imobiliaria: {
                         connect: {
                             id: data.id,
@@ -131,7 +131,10 @@ handle.post(async (req, res) => {
                                 codigo: "imobiliaria.processos.modelos",
                             },
                             {
-                                codigo: "imobiliaria.cadastros",
+                                codigo: "imobiliaria.imoveis",
+                            },
+                            {
+                                codigo: "imobiliaria.usuarios",
                             },
                             {
                                 codigo: "imobiliaria.configuracoes",
@@ -170,7 +173,7 @@ handle.post(async (req, res) => {
                             id: data.id,
                         },
                     },
-                    senhaHash: senha ? bcrypt.hashSync(senha, 10) : "",
+                    senhaHash: usuario.senha ? bcrypt.hashSync(usuario.senha, 10) : "",
                     cargos: {
                         connect: {
                             codigo: "imobiliaria",
@@ -185,7 +188,10 @@ handle.post(async (req, res) => {
                                 codigo: "imobiliaria.processos.modelos",
                             },
                             {
-                                codigo: "imobiliaria.cadastros",
+                                codigo: "imobiliaria.usuarios",
+                            },
+                            {
+                                codigo: "imobiliaria.imoveis",
                             },
                             {
                                 codigo: "imobiliaria.configuracoes",

@@ -5,7 +5,6 @@ import { FormSelect } from "@/components/Form/FormSelect";
 import { FormTextarea } from "@/components/Form/FormTextarea";
 import { useAuth } from "@/hooks/useAuth";
 import { imo7ApiService } from "@/services/apiServiceUsage";
-import { listarFichas } from "@/services/models/modeloFicha";
 import { listarUsuarios } from "@/services/models/usuario";
 import {
     Box,
@@ -33,7 +32,7 @@ import {
     Tooltip,
     useToast,
 } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
 import { MdClose, MdSave } from "react-icons/md";
@@ -46,16 +45,20 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Documentos } from "../Contrato/Documentos";
 import { Historicos } from "@/components/Pages/Historicos";
 import { ModalImovel } from "../ModalImovel";
-import { ConsultasNetrin } from "./ConsultaNetrin";
+import { buscarImovel } from "@/services/models/imovel";
 
 const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
     responsavelId: yup.string().required("Campo obrigatório"),
     imovelId: yup.string().required("Campo obrigatório"),
+    inicioContrato: yup.date().nullable(),
+    prazoContrato: yup.string().max(90, 'Limite 90 caracteres').nullable(),
+    comissao: yup.string().max(45, 'Limite 45 caracteres').nullable()
 });
 export const EditarProcesso = ({ id, isOpen, onClose }) => {
     const { usuario } = useAuth();
     const toast = useToast();
+    const [query, setQuery] = useState('');
     const modalImovel = useRef();
     const {
         control,
@@ -67,6 +70,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
     } = useForm({
         resolver: yupResolver(schema),
     });
+
     const buscar = useMutation(imo7ApiService("processo").get, {
         onSuccess(data, variables, context) {
             reset({ ...data });
@@ -78,12 +82,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
             await atualizar.mutateAsync({ ...data });
             queryClient.invalidateQueries(["processos"]);
             onClose();
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const { data: imoveis } = useQuery(
-        ["imoveis", { noIncludes: true }],
-        imo7ApiService("imovel").list
+        ["imoveis", { noIncludes: true, query, imovelId: watch('imovelId') }],
+        imo7ApiService("imovel").list,
     );
     const campos = [
         {
@@ -97,6 +101,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         listarUsuarios,
         { refetchOnReconnect: false, refetchOnWindowFocus: false }
     );
+
     useEffect(() => {
         reset({});
     }, []);
@@ -114,7 +119,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         await queryClient.invalidateQueries(["imoveis"]);
         reset({ ...watch(), imovelId });
     };
-
+    
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -139,12 +144,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                 </Tag>
                             </Tab>
                             <Tab>Históricos</Tab>
-                            <Tab>
+                            {/* <Tab>
                                 Consultas{" "}
                                 <Tag colorScheme="blue" size="sm" ml={1}>
                                     {watch("_count.ConsultaNetrin")}
                                 </Tag>
-                            </Tab>
+                            </Tab> */}
                         </TabList>
                         <TabPanels>
                             <TabPanel>
@@ -199,6 +204,12 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                     <option value="DESISTENTE">
                                                         Desistente
                                                     </option>
+                                                    <option value="reprovado_por_analise_interna">
+                                                        Reprovado por Analise Interna
+                                                    </option>
+                                                    <option value="renda_insuficiente">
+                                                        Renda Insuficiente
+                                                    </option>
                                                 </FormSelect>
                                             </GridItem>
                                             <GridItem colStart={{ lg: 1 }}>
@@ -227,40 +238,40 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                             </GridItem>
                                             {watch("tipoProcesso") ==
                                                 "LOCACAO" && (
-                                                <GridItem>
-                                                    <FormSelect
-                                                        size="sm"
-                                                        placeholder="Selecione..."
-                                                        label="Tipo de Garantia"
-                                                        {...register(
-                                                            "tipoGarantia"
-                                                        )}
-                                                        error={
-                                                            errors?.tipoGarantia
-                                                                ?.message
-                                                        }
-                                                    >
-                                                        <option value="NENHUMA">
-                                                            Nenhuma
-                                                        </option>
-                                                        <option value="PAGA">
-                                                            Garantia Paga
-                                                        </option>
-                                                        <option value="SEGURO">
-                                                            Seguro Fiança
-                                                        </option>
-                                                        <option value="FIADOR">
-                                                            Fiador
-                                                        </option>
-                                                        <option value="APOLICE">
-                                                            Apolice
-                                                        </option>
-                                                        <option value="CAUCAO">
-                                                            Caução
-                                                        </option>
-                                                    </FormSelect>
-                                                </GridItem>
-                                            )}
+                                                    <GridItem>
+                                                        <FormSelect
+                                                            size="sm"
+                                                            placeholder="Selecione..."
+                                                            label="Tipo de Garantia"
+                                                            {...register(
+                                                                "tipoGarantia"
+                                                            )}
+                                                            error={
+                                                                errors?.tipoGarantia
+                                                                    ?.message
+                                                            }
+                                                        >
+                                                            <option value="NENHUMA">
+                                                                Nenhuma
+                                                            </option>
+                                                            <option value="PAGA">
+                                                                Garantia Paga
+                                                            </option>
+                                                            <option value="SEGURO">
+                                                                Seguro Fiança
+                                                            </option>
+                                                            <option value="FIADOR">
+                                                                Fiador
+                                                            </option>
+                                                            <option value="APOLICE">
+                                                                Apolice
+                                                            </option>
+                                                            <option value="CAUCAO">
+                                                                Caução
+                                                            </option>
+                                                        </FormSelect>
+                                                    </GridItem>
+                                                )}
                                             <GridItem colStart={{ lg: 1 }}>
                                                 <Controller
                                                     control={control}
@@ -333,30 +344,31 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                                     "imovelId"
                                                                                 )
                                                                                     ? modalImovel.current.onOpen(
-                                                                                          watch(
-                                                                                              "imovelId"
-                                                                                          )
-                                                                                      )
+                                                                                        watch(
+                                                                                            "imovelId"
+                                                                                        )
+                                                                                    )
                                                                                     : modalImovel.current.onOpen()
                                                                             }
                                                                         />
                                                                     </Tooltip>
                                                                 </Box>
                                                             }
-                                                            onChange={(e) =>
+                                                            onChange={(e) =>{
+                                                                e?.target?.value && setQuery(e?.target?.value);
                                                                 field.onChange(
                                                                     e?.id
                                                                         ? e.id
                                                                         : null
-                                                                )
+                                                                )}
                                                             }
                                                             value={
                                                                 field.value
                                                                     ? imoveis?.data?.data.find(
-                                                                          (i) =>
-                                                                              i.id ==
-                                                                              field.value
-                                                                      )
+                                                                        (i) =>
+                                                                            i.id ==
+                                                                            field.value
+                                                                    )
                                                                     : null
                                                             }
                                                             error={
@@ -395,12 +407,67 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                             value={
                                                                 field.value
                                                                     ? usuarios?.data?.data.find(
-                                                                          (i) =>
-                                                                              i.id ==
-                                                                              field.value
-                                                                      )
+                                                                        (i) =>
+                                                                            i.id ==
+                                                                            field.value
+                                                                    )
                                                                     : null
                                                             }
+                                                            error={
+                                                                errors
+                                                                    ?.responsavelId
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem>
+                                                <Controller
+                                                    control={control}
+                                                    name="inicioContrato"
+                                                    render={({ field }) => (
+                                                        <FormInput
+                                                            type='date'
+                                                            size="sm"
+                                                            label="Início do Contrato"
+                                                            {...field}
+                                                            error={
+                                                                errors
+                                                                    ?.responsavelId
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem>
+                                                <Controller
+                                                    control={control}
+                                                    name="prazoContrato"
+                                                    render={({ field }) => (
+                                                        <FormInput
+                                                            size="sm"
+                                                            label="Prazo do Contrato"
+                                                            {...field}
+                                                            error={
+                                                                errors
+                                                                    ?.responsavelId
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    )}
+                                                />
+                                            </GridItem>
+                                            <GridItem>
+                                                <Controller
+                                                    control={control}
+                                                    name="comissao"
+                                                    render={({ field }) => (
+                                                        <FormInput
+                                                            size="sm"
+                                                            label="Comissão"
+                                                            {...field}
                                                             error={
                                                                 errors
                                                                     ?.responsavelId
@@ -500,6 +567,25 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                         )}
                                                     </Text>
                                                 </GridItem>
+                                                <GridItem>
+                                                    <Text
+                                                        fontSize="xs"
+                                                        color="gray"
+                                                    >
+                                                        Valor Seguro Incêndio
+                                                    </Text>
+                                                    <Text>
+                                                        {formatoValor(
+                                                            imoveis?.data?.data?.find(
+                                                                (i) =>
+                                                                    i.id ==
+                                                                    watch(
+                                                                        "imovelId"
+                                                                    )
+                                                            )?.valorSeguro
+                                                        )}
+                                                    </Text>
+                                                </GridItem>
                                             </Grid>
                                         </Box>
                                     )}
@@ -574,9 +660,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                     tabelaId={watch("id")}
                                 />
                             </TabPanel>
-                            <TabPanel>
+                            {/* <TabPanel>
                                 <ConsultasNetrin processoId={watch("id")} />
-                            </TabPanel>
+                            </TabPanel> */}
                         </TabPanels>
                     </Tabs>
                 </ModalBody>

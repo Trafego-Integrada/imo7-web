@@ -28,8 +28,9 @@ export const Planos = () => {
             plano: "Econômico",
             valor: 99,
             itens: [
-                "20 Processos Cadastrais",
+                "15 Processos Cadastrais",
                 "30 Consultas Simples",
+                "45 Fichas Cadastrais",
                 "2 Usuários",
                 "1 GB de Armazenamento",
             ],
@@ -40,6 +41,7 @@ export const Planos = () => {
             itens: [
                 "40 Processos Cadastrais",
                 "60 Consultas Simples",
+                "100 Fichas Cadastrais",
                 "3 Usuários",
                 "2 GB de Armazenamento",
             ],
@@ -50,6 +52,7 @@ export const Planos = () => {
             itens: [
                 "60 Processos Cadastrais",
                 "100 Consultas Simples",
+                "160 Fichas Cadastrais",
                 "5 Usuários",
                 "3 GB de Armazenamento",
             ],
@@ -58,8 +61,9 @@ export const Planos = () => {
             plano: "Avançado",
             valor: 259,
             itens: [
-                "80 Processos Cadastrais",
-                "120 Consultas Simples",
+                "90 Processos Cadastrais",
+                "180 Consultas Simples",
+                "220 Fichas Cadastrais",
                 "10 Usuários",
                 "4 GB de Armazenamento",
             ],

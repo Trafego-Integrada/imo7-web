@@ -267,6 +267,7 @@ handler.get(async (req, res) => {
             contratosReajuste,
             contratosInicio,
             contratosFim,
+            limiteConsultas: req.user.imobiliaria.limiteConsultas
         });
     } catch (error) {
         return res.status(500).send({

@@ -20,28 +20,14 @@ handle.use(cors)
 handle.use(checkAuth)
 
 handle.get(async (req, res) => {
-    const { processoId, fichaCadastralId } = req.query
-
-    let filtro: Prisma.ConsultaNetrinWhereInput = {}
-
-    if (processoId) {
-        filtro = {
-            ...filtro,
-            processoId,
-        }
-    }
-
-    if (fichaCadastralId) {
-        filtro = {
-            ...filtro,
-            fichaCadastralId,
-        }
-    }
+    const tipoConsulta = req.query[1]
+    const fichaCadastralId = req.query[2]
 
     const data = await prisma.consultaNetrin.findMany({
         where: {
             imobiliariaId: req.user.imobiliariaId,
-            ...filtro,
+            fichaCadastralId,
+            tipoConsulta,
         },
     })
 
@@ -90,7 +76,7 @@ handle.post(async (req, res) => {
                     .send({ message: 'Informe um CPF válido' })
             } else {
                 requisicaoBody = {
-                    s: 'protestos-cenprot-sp',
+                    s: 'protestos-cenprot',
                     cpf: removerCaracteresEspeciais(requisicao.cpf),
                     'govbr-senha': 'trafego10',
                     'govbr-cpf': '30156844850',
@@ -224,13 +210,13 @@ handle.post(async (req, res) => {
             requisicaoBody,
         )
 
-        if (tipoConsulta == 'protestos_pf') {
-            // Consulta Netrin
-            const retornoNetrin2 = await apiNetrinService().consultaComposta(
-                requisicaoBody,
-            )
-            //console.log(retornoNetrin2);
-        }
+        // if (tipoConsulta == 'protestos_pf') {
+        //     // Consulta Netrin
+        //     const retornoNetrin2 = await apiNetrinService().consultaComposta(
+        //         requisicaoBody,
+        //     )
+        //     //console.log(retornoNetrin2);
+        // }
 
         if (!retornoNetrin) {
             res.status(400).json({
@@ -262,17 +248,17 @@ handle.post(async (req, res) => {
                 },
                 processo: processoId
                     ? {
-                          connect: {
-                              id: processoId,
-                          },
-                      }
+                        connect: {
+                            id: processoId,
+                        },
+                    }
                     : {},
                 fichaCadastral: fichaCadastralId
                     ? {
-                          connect: {
-                              id: fichaCadastralId,
-                          },
-                      }
+                        connect: {
+                            id: fichaCadastralId,
+                        },
+                    }
                     : {},
             },
             include: {
@@ -286,8 +272,7 @@ handle.post(async (req, res) => {
         if (tipoConsulta == 'sefaz_cnd') {
             const extension = '.pdf'
             const nameLocation = `anexo/${slug(
-                `${moment()}${
-                    Math.random() * (999999999 - 100000000) + 100000000
+                `${moment()}${Math.random() * (999999999 - 100000000) + 100000000
                 }`,
             )}.${extension}`
             const response = await axios.get(
@@ -308,8 +293,7 @@ handle.post(async (req, res) => {
         } else if (tipoConsulta == 'receita_federal_cnd') {
             const extension = '.pdf'
             const nameLocation = `anexo/${slug(
-                `${moment()}${
-                    Math.random() * (999999999 - 100000000) + 100000000
+                `${moment()}${Math.random() * (999999999 - 100000000) + 100000000
                 }`,
             )}.${extension}`
             const response = await axios.get(
@@ -330,8 +314,7 @@ handle.post(async (req, res) => {
         } else if (tipoConsulta == 'cnd_trabalhista') {
             const extension = '.pdf'
             const nameLocation = `anexo/${slug(
-                `${moment()}${
-                    Math.random() * (999999999 - 100000000) + 100000000
+                `${moment()}${Math.random() * (999999999 - 100000000) + 100000000
                 }`,
             )}.${extension}`
             const response = await axios.get(
@@ -352,8 +335,7 @@ handle.post(async (req, res) => {
         } else if (tipoConsulta == 'receita_federal_cnpj') {
             const extension = '.pdf'
             const nameLocation = `anexo/${slug(
-                `${moment()}${
-                    Math.random() * (999999999 - 100000000) + 100000000
+                `${moment()}${Math.random() * (999999999 - 100000000) + 100000000
                 }`,
             )}.${extension}`
             const response = await axios.get(
@@ -374,8 +356,7 @@ handle.post(async (req, res) => {
         } else if (tipoConsulta == 'receita_federal_cnpj_qsa') {
             const extension = '.pdf'
             const nameLocation = `anexo/${slug(
-                `${moment()}${
-                    Math.random() * (999999999 - 100000000) + 100000000
+                `${moment()}${Math.random() * (999999999 - 100000000) + 100000000
                 }`,
             )}.${extension}`
             const response = await axios.get(
@@ -397,15 +378,15 @@ handle.post(async (req, res) => {
             await page.goto(
                 process.env.NODE_ENV == 'production'
                     ? 'https://' +
-                          data?.imobiliaria.url +
-                          '.imo7.com.br/consultas/' +
-                          data.id +
-                          '/pdf'
+                    data?.imobiliaria.url +
+                    '.imo7.com.br/consultas/' +
+                    data.id +
+                    '/pdf'
                     : 'http://' +
-                          data?.imobiliaria.url +
-                          '.localhost:3000/consultas/' +
-                          data.id +
-                          '/pdf',
+                    data?.imobiliaria.url +
+                    '.localhost:3000/consultas/' +
+                    data.id +
+                    '/pdf',
                 {
                     waitUntil: 'networkidle0',
                 },
@@ -425,8 +406,7 @@ handle.post(async (req, res) => {
 
             const extension = '.pdf'
             const nameLocation = `anexo/${slug(
-                `${moment()}${
-                    Math.random() * (999999999 - 100000000) + 100000000
+                `${moment()}${Math.random() * (999999999 - 100000000) + 100000000
                 }`,
             )}.${extension}`
             // Create read stream to file
@@ -494,31 +474,30 @@ const UploadAnexo = ({
             // }
             const anexo = await prisma.anexo.create({
                 data: {
-                    nome: `${
-                        tipoConsulta == 'processos_pf'
-                            ? `Consulta Processos Pessoa Física - CPF: ${requisicao?.cpf}`
-                            : tipoConsulta == 'processos_pj'
+                    nome: `${tipoConsulta == 'processos_pf'
+                        ? `Consulta Processos Pessoa Física - CPF: ${requisicao?.cpf}`
+                        : tipoConsulta == 'processos_pj'
                             ? `Consulta Processos Pessoa Jurídica - CNPJ: ${requisicao?.cnpj}`
                             : tipoConsulta == 'protestos_pf'
-                            ? `Consulta Protestos Pessoa Física - CPF: ${requisicao?.cpf}`
-                            : tipoConsulta == 'protestos_pj'
-                            ? `Consulta Protestos Pessoa Jurídica - CNPJ: ${requisicao?.cnpj}`
-                            : `Consultas: ${tipoConsulta}`
-                    }`,
+                                ? `Consulta Protestos Pessoa Física - CPF: ${requisicao?.cpf}`
+                                : tipoConsulta == 'protestos_pj'
+                                    ? `Consulta Protestos Pessoa Jurídica - CNPJ: ${requisicao?.cnpj}`
+                                    : `Consultas: ${tipoConsulta}`
+                        }`,
                     anexo: process.env.NEXT_PUBLIC_URL_STORAGE + nameLocation,
                     processo: processoId
                         ? {
-                              connect: {
-                                  id: processoId,
-                              },
-                          }
+                            connect: {
+                                id: processoId,
+                            },
+                        }
                         : {},
                     fichaCadastral: fichaCadastralId
                         ? {
-                              connect: {
-                                  id: fichaCadastralId,
-                              },
-                          }
+                            connect: {
+                                id: fichaCadastralId,
+                            },
+                        }
                         : {},
                     usuario: {
                         connect: {

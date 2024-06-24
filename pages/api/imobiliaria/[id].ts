@@ -127,8 +127,7 @@ handle.post(async (req, res) => {
 
         if (logo && logo.base64) {
             const nameLocation = `logos/${slug(
-                `${moment()}${
-                    Math.random() * (999999999 - 100000000) + 100000000
+                `${moment()}${Math.random() * (999999999 - 100000000) + 100000000
                 }`
             )}.${logo.extensao}`;
             // Create read stream to file
@@ -187,8 +186,7 @@ handle.post(async (req, res) => {
             //     (Math.max(0, bg.name.lastIndexOf(".")) || Infinity) + 1
             // );
             const nameLocation = `bgs/${slug(
-                `${moment()}${
-                    Math.random() * (999999999 - 100000000) + 100000000
+                `${moment()}${Math.random() * (999999999 - 100000000) + 100000000
                 }`
             )}.${bg.extensao}`;
             // Create read stream to file
@@ -246,7 +244,7 @@ handle.post(async (req, res) => {
         res.send(imobiliaria);
     } catch (error: any) {
         console.log('API IMOBILIÁRIA::LINHA 248: ', error)
-        return new Response(error?.message || error, {status: error?.status || 400})
+        return new Response(error?.message || error, { status: error?.status || 400 })
         //res.status(error?.status).send(error?.message || error);
     }
 });

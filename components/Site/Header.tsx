@@ -38,8 +38,12 @@ export const Header = () => {
     });
     const contato = useMutation(imo7ApiService("contato").create, {
         onSuccess: () => {
+            toast({
+                title: 'Solicitação de demostração realizada com sucesso.',
+                status: 'success'
+            })
             window.open(
-                `https://web.whatsapp.com/send?phone=+5527992747255&text=Olá, sou ${form.watch(
+                `https://web.whatsapp.com/send?phone=5519996258095&text=Olá, sou ${form.watch(
                     "nome"
                 )},\n\n Meu e-mail é ${form.watch(
                     "email"
@@ -47,8 +51,10 @@ export const Header = () => {
                     "telefone"
                 )}\n\n Quero saber mais sobre o IMO7`
             );
+            form.reset()
         },
     });
+    
     return (
         <Box
             h={{ lg: "90vh" }}
@@ -86,6 +92,7 @@ export const Header = () => {
                             </Link>
                         </Flex>
                         <Flex>
+                            <Link target="_blank" href="https://web.whatsapp.com/send?phone=5519996258095&text=Gostaria de saber mais informações sobre o IMO7">
                             <Button
                                 colorScheme="whatsapp"
                                 rightIcon={<FaWhatsapp />}
@@ -93,6 +100,7 @@ export const Header = () => {
                             >
                                 Fale Conosco
                             </Button>
+                            </Link>
                         </Flex>
                     </Flex>
                     <IconButton
@@ -117,24 +125,26 @@ export const Header = () => {
                                     </Box>
 
                                     <Flex gap={4} flexDir="column">
-                                        <Link href="#" color="white">
+                                        <Link href="#solucoes" color="white">
                                             Soluções
                                         </Link>
                                         <Link href="#" color="white">
                                             Recursos
                                         </Link>
-                                        <Link href="#" color="white">
+                                        <Link href="#planos" color="white">
                                             Planos
                                         </Link>
                                     </Flex>
                                     <Flex flexDir="column">
-                                        <Button
-                                            colorScheme="whatsapp"
-                                            rightIcon={<FaWhatsapp />}
-                                            size="sm"
-                                        >
-                                            Fale Conosco
-                                        </Button>
+                                        <Link target="_blank" href="https://web.whatsapp.com/send?phone=5519996258095&text=Gostaria de saber mais informações sobre o IMO7">
+                                            <Button
+                                                colorScheme="whatsapp"
+                                                rightIcon={<FaWhatsapp />}
+                                                size="sm"
+                                            >
+                                                Fale Conosco
+                                            </Button>
+                                        </Link>
                                     </Flex>
                                 </Flex>
                             </DrawerBody>
