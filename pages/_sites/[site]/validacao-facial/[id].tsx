@@ -72,31 +72,31 @@ function CPF() {
     }
     var n = 'CPF Inválido',
         i = 'CPF Válido'
-    ;(this.gera = function () {
-        for (var n = '', i = 0; 9 > i; ++i)
-            n += Math.floor(9 * Math.random()) + ''
-        var o = r(n),
-            a = n + '-' + o + t(n + '' + o)
-        return a
-    }),
-        (this.valida = function (o) {
-            for (
-                var a = o.replace(/\D/g, ''),
+        ; (this.gera = function () {
+            for (var n = '', i = 0; 9 > i; ++i)
+                n += Math.floor(9 * Math.random()) + ''
+            var o = r(n),
+                a = n + '-' + o + t(n + '' + o)
+            return a
+        }),
+            (this.valida = function (o) {
+                for (
+                    var a = o.replace(/\D/g, ''),
                     u = a.substring(0, 9),
                     f = a.substring(9, 11),
                     v = 0;
-                10 > v;
-                v++
-            )
-                if (
-                    '' + u + f ==
-                    '' + v + v + v + v + v + v + v + v + v + v + v
+                    10 > v;
+                    v++
                 )
-                    return n
-            var c = r(u),
-                e = t(u + '' + c)
-            return f.toString() === c.toString() + e.toString() ? i : n
-        })
+                    if (
+                        '' + u + f ==
+                        '' + v + v + v + v + v + v + v + v + v + v + v
+                    )
+                        return n
+                var c = r(u),
+                    e = t(u + '' + c)
+                return f.toString() === c.toString() + e.toString() ? i : n
+            })
 }
 
 function cpfMask(v) {
@@ -203,6 +203,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                     id: validacao.id,
                     cpf: validacao?.cpf,
                     foto: photo,
+                    pin: validacao?.pin ?? false
                 })
 
                 // sucesso
@@ -314,9 +315,10 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
             </Flex>
         )
 
+
     return (
         <>
-            {success || validacao?.fotoUrl ? (
+            {(JSON.parse(validacao?.resultado)?.token) ? (
                 <Stack>
                     <Container
                         as={Flex}
@@ -348,6 +350,15 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                         flexDir="column"
                         py={24}
                     >
+                        {
+                            JSON.parse(validacao.resultado)?.codigo
+                            && (
+                                <Box>
+                                    <Text>código: {JSON.parse(validacao.resultado)?.codigo}</Text>
+                                    <Text>mensagem: {JSON.parse(validacao.resultado)?.mensagem}</Text>
+                                </Box>
+                            )
+                        }
                         <Stepper index={activeStep} mb={12} overflow="auto">
                             {steps.map((step, index) => (
                                 <Step key={index}>
@@ -435,29 +446,24 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
                                                     {boundingBox.map(
                                                         (box, index) => (
                                                             <div
-                                                                key={`${
-                                                                    index + 1
-                                                                }`}
+                                                                key={`${index + 1
+                                                                    }`}
                                                                 style={{
                                                                     border: '4px solid red',
                                                                     position:
                                                                         'absolute',
-                                                                    top: `${
-                                                                        box.yCenter *
+                                                                    top: `${box.yCenter *
                                                                         100
-                                                                    }%`,
-                                                                    left: `${
-                                                                        box.xCenter *
+                                                                        }%`,
+                                                                    left: `${box.xCenter *
                                                                         100
-                                                                    }%`,
-                                                                    width: `${
-                                                                        box.width *
+                                                                        }%`,
+                                                                    width: `${box.width *
                                                                         100
-                                                                    }%`,
-                                                                    height: `${
-                                                                        box.height *
+                                                                        }%`,
+                                                                    height: `${box.height *
                                                                         100
-                                                                    }%`,
+                                                                        }%`,
                                                                     zIndex: 1,
                                                                 }}
                                                             />

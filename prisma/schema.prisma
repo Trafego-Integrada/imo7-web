@@ -777,6 +777,7 @@ model FichaCadastral {
     responsavel              Usuario?                        @relation(fields: [responsavelId], references: [id])
     preenchimento            FichaCadastralPreenchimento[]
     ValidacaoFacial          ValidacaoFacial[]
+    ValidacaoFacialHistorico ValidacaoFacialHistorico[]
 
     @@index([imobiliariaId], map: "FichaCadastral_imobiliariaId_fkey")
     @@index([imovelId], map: "FichaCadastral_imovelId_fkey")
@@ -1072,6 +1073,7 @@ model ValidacaoFacial {
     ficha                                                FichaCadastral?              @relation(fields: [fichaCadastralId], references: [id])
     preenchimento                                        FichaCadastralPreenchimento? @relation(fields: [fichaCadastralPreenchimentoFichaCadastralId, fichaCadastralPreenchimentoCampoFichaCadastralCodigo], references: [fichaCadastralId, campoFichaCadastralCodigo])
     imobiliaria                                          Imobiliaria?                 @relation(fields: [imobiliariaId], references: [id])
+    ValidacaoFacialHistorico                             ValidacaoFacialHistorico[]
 
     @@index([fichaCadastralId], map: "ValidacaoFacial_fichaCadastralId_fkey")
     @@index([fichaCadastralPreenchimentoFichaCadastralId, fichaCadastralPreenchimentoCampoFichaCadastralCodigo], map: "ValidacaoFacial_fichaCadastralPreenchimentoFichaCadastralId_fkey")
@@ -1285,4 +1287,18 @@ enum TipoConsultaNetrin {
     pep_kyc_cpf
     cnd_trabalhista_cpf
     cnd_trabalhista_cnpj
+}
+
+model ValidacaoFacialHistorico {
+    id                Int             @id @default(autoincrement())
+    validacaoFacialId String
+    vallidacaoFacial  ValidacaoFacial @relation(fields: [validacaoFacialId], references: [id])
+    fichaCadastralId  String
+    fichaCadastral    FichaCadastral  @relation(fields: [fichaCadastralId], references: [id])
+    pin               String
+    resultado         String
+    fotoUrl           String
+
+    createdAt DateTime  @default(now())
+    deletedAt DateTime?
 }

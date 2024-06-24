@@ -77,6 +77,28 @@ handle.get(async (req, res) => {
                 ...filtroQuery,
                 imobiliariaId: req?.user?.imobiliariaId,
             },
+            include: {
+                ValidacaoFacialHistorico: true,
+                ficha: {
+                    select: {
+                        nome: true,
+                        id: true,
+                        Processo: {
+                            select: {
+                                imovel: {
+                                    select: {
+                                        bairro: true,
+                                        endereco: true,
+                                        numero: true,
+                                        complemento: true,
+                                        estado: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }
+            },
             orderBy: {
                 createAt: "desc"
             }
