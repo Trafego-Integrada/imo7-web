@@ -34,10 +34,7 @@ handler.use(cors)
 
 handler.post(async (req, res) => {
     const { id, cpf, foto, pin } = req.body
-
-    console.log({ pin });
     
-
     const validacao = await prisma.validacaoFacial.findUnique({
         where: {
             id,
@@ -47,9 +44,6 @@ handler.post(async (req, res) => {
     const ACCESS_TOKEN = await getToken()
 
     const PIN = pin ? pin : await getPin(ACCESS_TOKEN, cpf)
-
-    console.log({ PIN });
-    
 
     if (foto === undefined || foto == '') {
         return res.status(400).send({

@@ -43,8 +43,6 @@ handler.get(async (req, res) => {
         },
     })
 
-    console.log(data);
-
     if (data.length == 0) {
         res.send({ status: 0, msg: 'No records' })
         return
@@ -79,10 +77,18 @@ handler.get(async (req, res) => {
             jwt.verify(token, getKey, options, async (err, decoded) => {
                 // failed
                 if (err) {
+                    await prisma.validacaoFacial.update({
+                        where: { id: data.validacaoFacialId },
+                        data: {
+                            resultado: JSON.stringify(err),
+                            status: -1,
+                        },
+                    })
+
                     await prisma.validacaoFacialHistorico.update({
                         where: { id },
                         data: {
-                            resultado: JSON.stringify(token),
+                            resultado: JSON.stringify(err),
                             status: -1,
                         },
                     })
@@ -91,6 +97,14 @@ handler.get(async (req, res) => {
                 }
 
                 // success
+                await prisma.validacaoFacial.update({
+                    where: { id: data.validacaoFacialId },
+                    data: {
+                        resultado: JSON.stringify(decoded),
+                        status: 1,
+                    },
+                })
+
                 await prisma.validacaoFacialHistorico.update({
                     where: { id },
                     data: {
