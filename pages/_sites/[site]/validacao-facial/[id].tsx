@@ -108,18 +108,12 @@ function cpfMask(v) {
     return v
 }
 
-const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
-    //console.log("validacao", validacao);
-    const router = useRouter()
-    const [step, setStep] = useState(1)
-    const [photo, setPhoto] = useState()
-    const [success, setSuccess] = useState(false)
-    const [windowStatus, setWindowStatus] = useState(null)
+const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
+    const [photo, setPhoto] = useState(null)
 
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors, isSubmitting },
     } = useForm()
 
@@ -128,7 +122,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
     useEffect(() => {
         // check();
         checkResolution()
-        setWindowStatus(1)
 
         setIsClient(true)
     }, [])
@@ -140,10 +133,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
             imobiliariaId: imobiliaria.id,
             cpf: validacao?.cpf,
         })
-
-        // //console.log("response");
-        // //console.log(response);
-        // //console.log(response.data.status);
 
         let status = response.data.status
 
@@ -208,7 +197,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }) => {
 
                 // sucesso
                 if (response.data.status == 1) {
-                    setSuccess(true)
                     setError(response.data.message)
                 } else {
                     setError(response.data.message)

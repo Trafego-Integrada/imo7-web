@@ -93,6 +93,12 @@ const FichasCadastrais = () => {
         listarValidacoesFaciais,
     )
 
+    function getResultText(resultado: any) {
+        const parsedResult = JSON.parse(resultado)
+
+        if (resultado.mensagem) return resultado.mensagem;
+    }
+
     return (
         <Layout>
             <Box p={4}>
@@ -427,7 +433,7 @@ const FichasCadastrais = () => {
                                                 </Thead>
                                                 <Tbody>
                                                     {
-                                                        item?.ValidacaoFacialHistorico?.map(({ createdAt, id, pin, resultado, fotoUrl }) => {
+                                                        item?.ValidacaoFacialHistorico?.map(({ createdAt, id, pin, resultado, fotoUrl, status }) => {
                                                             return (
                                                                 <Tr key={id}>
                                                                     <Td>
@@ -445,9 +451,11 @@ const FichasCadastrais = () => {
                                                                             </Text>
                                                                         )}
                                                                     </Td>
+                                                                    {/* Pin */}
                                                                     <Td>{pin}</Td>
-                                                                    <Td>
-                                                                        {item.status == 1 && (
+                                                                    {/* Similaridade */}
+                                                                    <Td> 
+                                                                        {status == 1 && (
                                                                             <Box pos="relative">
                                                                                 <Tooltip
                                                                                     label={'L1'}
@@ -456,33 +464,30 @@ const FichasCadastrais = () => {
                                                                                         <Progress
                                                                                             size="lg"
                                                                                             value={
-                                                                                                JSON.parse(
-                                                                                                    item.resultado,
-                                                                                                )
+                                                                                                JSON.parse(resultado)
                                                                                                     ?.biometria_face
-                                                                                                    ?.similaridade *
-                                                                                                100
+                                                                                                    ?.similaridade * 100
                                                                                             }
                                                                                             max={
                                                                                                 100
                                                                                             }
                                                                                             colorScheme={
                                                                                                 JSON.parse(
-                                                                                                    item.resultado,
+                                                                                                    resultado,
                                                                                                 )?.biometria_face?.probabilidade.indexOf(
                                                                                                     'Altíssima ',
                                                                                                 ) >=
                                                                                                     0
                                                                                                     ? 'green'
                                                                                                     : JSON.parse(
-                                                                                                        item.resultado,
+                                                                                                        resultado,
                                                                                                     )?.biometria_face?.probabilidade.indexOf(
                                                                                                         'Alta ',
                                                                                                     ) >=
                                                                                                         0
                                                                                                         ? 'blue'
                                                                                                         : JSON.parse(
-                                                                                                            item.resultado,
+                                                                                                            resultado,
                                                                                                         )?.biometria_face?.probabilidade.indexOf(
                                                                                                             'Baixa ',
                                                                                                         ) >=
@@ -505,7 +510,7 @@ const FichasCadastrais = () => {
                                                                                         fontSize="xs"
                                                                                         color={
                                                                                             JSON.parse(
-                                                                                                item.resultado,
+                                                                                                resultado,
                                                                                             )?.biometria_face?.probabilidade.indexOf(
                                                                                                 'Altíssima ',
                                                                                             ) >= 0
@@ -515,7 +520,7 @@ const FichasCadastrais = () => {
                                                                                     >
                                                                                         {Math.floor(
                                                                                             JSON.parse(
-                                                                                                item.resultado,
+                                                                                                resultado,
                                                                                             )
                                                                                                 ?.biometria_face
                                                                                                 ?.similaridade *
@@ -560,9 +565,11 @@ const FichasCadastrais = () => {
                                                                             </Box>
                                                                         )}
                                                                     </Td>
+                                                                    {/* Data de criação */}
                                                                     <Td>
                                                                         {formatoData(createdAt, 'DATA_HORA')}
                                                                     </Td>
+                                                                    {/* Status */}
                                                                     <Td>
                                                                         <Text color={'blue'}>
                                                                             {status == 0

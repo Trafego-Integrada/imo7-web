@@ -82,6 +82,7 @@ model Usuario {
     permissoes            Permissao[]              @relation("PermissaoToUsuario")
     contratosProprietario Contrato[]               @relation("Proprietarios")
     tarefasResponsavel    Tarefa[]                 @relation("ResponsaveisTarefa")
+    UsuarioPermissao      UsuarioPermissao[]
 
     @@unique([imobiliariaId, documento])
     @@index([contaId], map: "Usuario_contaId_fkey")
@@ -144,15 +145,16 @@ model Modulo {
 }
 
 model Permissao {
-    id           Int       @id @default(autoincrement())
-    nome         String
-    createdAt    DateTime  @default(now())
-    updatedAt    DateTime  @updatedAt
-    deletedAt    DateTime?
-    codigo       String?   @unique
-    moduloCodigo String
-    modulo       Modulo    @relation(fields: [moduloCodigo], references: [codigo])
-    usuarios     Usuario[] @relation("PermissaoToUsuario")
+    id               Int                @id @default(autoincrement())
+    nome             String
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt
+    deletedAt        DateTime?
+    codigo           String?            @unique
+    moduloCodigo     String
+    modulo           Modulo             @relation(fields: [moduloCodigo], references: [codigo])
+    usuarios         Usuario[]          @relation("PermissaoToUsuario")
+    UsuarioPermissao UsuarioPermissao[]
 
     @@index([moduloCodigo], map: "Permissao_moduloCodigo_fkey")
 }
@@ -1295,10 +1297,41 @@ model ValidacaoFacialHistorico {
     vallidacaoFacial  ValidacaoFacial @relation(fields: [validacaoFacialId], references: [id])
     fichaCadastralId  String
     fichaCadastral    FichaCadastral  @relation(fields: [fichaCadastralId], references: [id])
+    cpf               String          @db.VarChar(11)
     pin               String
-    resultado         String
+    resultado         String?         @db.LongText
     fotoUrl           String
+    status            Int             @default(0)
 
     createdAt DateTime  @default(now())
     deletedAt DateTime?
+}
+
+model EtapaProcesso {
+    id                       Int                        @id @default(autoincrement())
+    codigo                   StatusProcesso             @unique
+    deletedAt                DateTime?
+    permissaoToEtapaProcesso PermissaoToEtapaProcesso[]
+}
+
+model UsuarioPermissao {
+    usuarioId                Int
+    usuario                  Usuario                    @relation(fields: [usuarioId], references: [id])
+    permissaoId              Int
+    permissao                Permissao                  @relation(fields: [permissaoId], references: [id])
+    deletedAt                DateTime?
+    permissaoToEtapaProcesso PermissaoToEtapaProcesso[]
+
+    @@unique([usuarioId, permissaoId])
+}
+
+model PermissaoToEtapaProcesso {
+    id                          Int               @id @default(autoincrement())
+    codigo                      String            @unique
+    deletedAt                   DateTime?
+    EtapaProcesso               EtapaProcesso?    @relation(fields: [etapaProcessoId], references: [id])
+    etapaProcessoId             Int?
+    UsuarioPermissao            UsuarioPermissao? @relation(fields: [usuarioPermissaoUsuarioId, usuarioPermissaoPermissaoId], references: [usuarioId, permissaoId])
+    usuarioPermissaoUsuarioId   Int?
+    usuarioPermissaoPermissaoId Int?
 }
