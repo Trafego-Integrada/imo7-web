@@ -314,7 +314,6 @@ const FichasCadastrais = () => {
                     </Flex> */}
 
                     <Box bg="white" mt={4} p={4}>
-
                         {fichas?.data?.length > 0 ? (
 
                             fichas.data.map((item) => (
@@ -338,11 +337,10 @@ const FichasCadastrais = () => {
                                                                     rounded="full"
                                                                     colorScheme="blue"
                                                                     variant="outline"
-                                                                    onClick={() =>
-                                                                        modalRevisar.current.onOpen(
-                                                                            item.ficha.id
-                                                                        )
-                                                                    }
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        modalRevisar.current.onOpen(item.ficha.id)
+                                                                    }}
                                                                 />
                                                             </Tooltip>
                                                             <Tooltip label="Copiar URL da Validação">
@@ -354,7 +352,8 @@ const FichasCadastrais = () => {
                                                                     rounded="full"
                                                                     colorScheme="blue"
                                                                     variant="outline"
-                                                                    onClick={() => {
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
                                                                         navigator.clipboard.writeText(
                                                                             `${window.location.origin}/validacao-facial/${item.id}`
                                                                         );
