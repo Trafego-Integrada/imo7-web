@@ -110,6 +110,7 @@ function cpfMask(v: any) {
 
 const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
     const [photo, setPhoto] = useState(null)
+    const [status, setStatus] = useState(0)
 
     const {
         register,
@@ -197,6 +198,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
 
                 // sucesso
                 if (response.data.status == 1) {
+                    setStatus(response.data.status)
                     setError(response.data.message)
                 } else {
                     setError(response.data.message)
@@ -305,7 +307,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
 
     return (
         <>
-            {(JSON.parse(validacao?.resultado)?.token) ? (
+            {validacao.resultado && (JSON.parse(validacao?.resultado)?.token) || status == 1 ? (
                 <Stack>
                     <Container
                         as={Flex}
@@ -335,17 +337,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
                         minH="100vh"
                         justify="center"
                         flexDir="column"
-                        py={24}
-                    >
-                        {
-                            JSON.parse(validacao.resultado)?.codigo
-                            && (
-                                <Box>
-                                    <Text>código: {JSON.parse(validacao.resultado)?.codigo}</Text>
-                                    <Text>mensagem: {JSON.parse(validacao.resultado)?.mensagem}</Text>
-                                </Box>
-                            )
-                        }
+                        py={4}
+                    >   
                         <Stepper index={activeStep} mb={12} overflow="auto">
                             {steps.map((step, index) => (
                                 <Step key={index}>
@@ -649,6 +642,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
         </>
     )
 }
+
 export default ValidacaoFacial
 
 export const getServerSideProps = async (ctx) => {
