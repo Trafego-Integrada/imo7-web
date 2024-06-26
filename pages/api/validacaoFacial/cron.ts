@@ -75,19 +75,13 @@ handler.get(async (req, res) => {
         }
 
         try {
-            console.log({
-                token, 
-                getKey, 
-                options
-            });
-
             jwt.verify(token, getKey, options, async (err, decoded) => {
                 // failed
                 if (err) {
                     await prisma.validacaoFacial.update({
                         where: { id: data.validacaoFacialId },
                         data: {
-                            resultado: JSON.stringify(err),
+                            resultado: JSON.stringify(token),
                             status: -1,
                         },
                     })
@@ -95,7 +89,7 @@ handler.get(async (req, res) => {
                     await prisma.validacaoFacialHistorico.update({
                         where: { id },
                         data: {
-                            resultado: JSON.stringify(err),
+                            resultado: JSON.stringify(token),
                             status: -1,
                         },
                     })
