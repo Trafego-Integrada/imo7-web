@@ -35,6 +35,9 @@ handler.use(cors)
 handler.post(async (req, res) => {
     const { id, cpf, foto, pin } = req.body
 
+    console.log({ pin });
+    
+
     const validacao = await prisma.validacaoFacial.findUnique({
         where: {
             id,
@@ -42,9 +45,11 @@ handler.post(async (req, res) => {
     })
 
     const ACCESS_TOKEN = await getToken()
-    console.log('VALIDAÇÃO FACIAL::LINHA 46: ', ACCESS_TOKEN)
 
     const PIN = pin ? pin : await getPin(ACCESS_TOKEN, cpf)
+
+    console.log({ PIN });
+    
 
     if (foto === undefined || foto == '') {
         return res.status(400).send({
@@ -53,10 +58,11 @@ handler.post(async (req, res) => {
         })
     }
 
-    await savePhoto(validacao?.imobiliariaId!, foto)
-
+    
+    await savePhoto(foto)
+    
     let fotoUrl = await uploadPhoto(validacao?.imobiliariaId, foto)
-    //console.log(fotoUrl);
+
     if (!fotoUrl) {
         return res.status(400).send({
             status: 0,
@@ -64,7 +70,7 @@ handler.post(async (req, res) => {
         })
     }
 
-    const PHOTO: any = await setPhoto(ACCESS_TOKEN, PIN, validacao?.cpf!, fotoUrl)
+    const PHOTO: any = await setPhoto(ACCESS_TOKEN, PIN, validacao?.cpf!, foto)
 
     if (!PHOTO) {
         return res.status(400).send({ status: 0, message: PHOTO.mensagem })
@@ -74,8 +80,9 @@ handler.post(async (req, res) => {
         let data = {
             pin: PIN,
             fotoUrl: fotoUrl,
-            resultado: JSON.stringify(PHOTO),
+            // resultado: JSON.stringify(PHOTO),
             fichaCadastralId: validacao?.fichaCadastralId,
+            cpf
         }
 
         let resValidacaoFacial = validacao;
@@ -116,7 +123,7 @@ handler.post(async (req, res) => {
     }
 })
 
-const savePhoto = async (imobiliariaId: number, photoBase64: any) => {
+const savePhoto = async (photoBase64: any) => {
     const extension = 'jpg'
 
     const path = FOLDER + new Date().getTime() + '.' + extension
@@ -124,12 +131,15 @@ const savePhoto = async (imobiliariaId: number, photoBase64: any) => {
     let base64Image = photoBase64.split(';base64,').pop()
 
     let buff = Buffer.from(base64Image, 'base64')
-    let result = fs.writeFileSync(path, buff, 'base64')
+    
+    fs.writeFileSync(path, buff, 'base64')
 }
 
 const uploadPhoto = async (imobiliariaId: number, photoBase64: any) => {
     const extension = 'jpg'
+
     //const nameLocation = randomBytes(16).toString("hex");
+    
     const nameLocation = `imobiliarias/${imobiliariaId}/validacaoFacial/${slug(
         `${moment()}${Math.random() * (999999999 - 100000000) + 100000000}`,
     )}.${extension}`
@@ -139,7 +149,8 @@ const uploadPhoto = async (imobiliariaId: number, photoBase64: any) => {
     let base64Image = photoBase64.split(';base64,').pop()
 
     let buff = Buffer.from(base64Image!, 'base64')
-    let result = fs.writeFileSync(path, buff, {
+
+    fs.writeFileSync(path, buff, {
         encoding: 'base64',
     })
 
@@ -221,7 +232,7 @@ const getPin = async (access_token: string, cpf: string) => {
                 },
             },
         )
-        console.log('VALIDAÇÃO FACIAL::LINHA 210: ', resPin.data)
+
         return resPin.data
     } catch (e: any) {
         console.log('VALIDAÇÃO FACIAL::LINHA 213: ', e?.message || e)
@@ -236,11 +247,6 @@ const setPhoto = async (
     photoBase64: string,
 ) => {
     photoBase64 = photoBase64.substring('data:image/jpeg;base64,'.length)
-
-    console.log({ access_token })
-    console.log({ pin })
-    console.log({ cpf })
-    console.log({ photoBase64 })
 
     const response = await axios
         .put(
@@ -260,13 +266,11 @@ const setPhoto = async (
         )
         .catch((error) => {
             console.log(
-                'VALIDAÇÃO FACIAL:: LINHA 249: ',
-                error?.message || error,
+                'VALIDAÇÃO FACIAL:: LINHA 279: ',
+                error?.response.data.mensagem || error,
             )
             return error.response
         })
-
-    console.log('VALIDAÇÃO FACIAL:: LINHA 255: ', response.data)
 
     return response.data
 }

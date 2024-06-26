@@ -19,32 +19,44 @@ handler.use(cors)
 handler.get(async (req, res) => {
     const ACCESS_TOKEN = await getToken()
 
-    const data = await prisma.validacaoFacial.findMany({
-        take: 5,
+    // const data = await prisma.validacaoFacial.findMany({
+    //     take: 5,
+    //     where: {
+    //         status: 0,
+    //         fotoUrl: {
+    //             not: null,
+    //         },
+    //         resultado: null,
+    //     },
+    //     orderBy: {
+    //         updatedAt: 'asc',
+    //     },
+    // })
+
+    const data = await prisma.validacaoFacialHistorico.findMany({
         where: {
             status: 0,
-            fotoUrl: {
-                not: null,
-            },
             resultado: null,
         },
         orderBy: {
-            updatedAt: 'asc',
+            createdAt: 'asc',
         },
     })
+
+    console.log(data);
 
     if (data.length == 0) {
         res.send({ status: 0, msg: 'No records' })
         return
     }
 
-    data.forEach(async (resData) => {
-        const id = resData.id
+    data.forEach(async (data) => {
+        const id = data.id
 
         const response = await getResponse(
             ACCESS_TOKEN,
-            resData.cpf,
-            resData.pin,
+            data.cpf,
+            data.pin,
         )
 
         // const responseDecoded = Buffer.from(response, 'base64').toString('utf8')
@@ -67,7 +79,7 @@ handler.get(async (req, res) => {
             jwt.verify(token, getKey, options, async (err, decoded) => {
                 // failed
                 if (err) {
-                    await prisma.validacaoFacial.update({
+                    await prisma.validacaoFacialHistorico.update({
                         where: { id },
                         data: {
                             resultado: JSON.stringify(token),
@@ -79,7 +91,7 @@ handler.get(async (req, res) => {
                 }
 
                 // success
-                await prisma.validacaoFacial.update({
+                await prisma.validacaoFacialHistorico.update({
                     where: { id },
                     data: {
                         resultado: JSON.stringify(decoded),
