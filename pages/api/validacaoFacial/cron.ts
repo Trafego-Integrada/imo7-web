@@ -44,6 +44,7 @@ handler.get(async (req, res) => {
     })
 
     if (data.length == 0) {
+        console.log("Cron executado (No records)");
         res.send({ status: 0, msg: 'No records' })
         return
     }
@@ -74,6 +75,12 @@ handler.get(async (req, res) => {
         }
 
         try {
+            console.log({
+                token, 
+                getKey, 
+                options
+            });
+
             jwt.verify(token, getKey, options, async (err, decoded) => {
                 // failed
                 if (err) {
@@ -122,6 +129,7 @@ handler.get(async (req, res) => {
         }
     })
 
+    console.log("Cron executado (All records were processed successfully)");
     res.send({ status: 1, msg: 'All records were processed successfully' })
 })
 
