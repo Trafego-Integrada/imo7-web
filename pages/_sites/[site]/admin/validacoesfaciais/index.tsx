@@ -7,6 +7,7 @@ import { ModalFichaCadastral } from '@/components/Modals/ModalFichaCadastral'
 import { ModalRevisaoFichaCadastral } from '@/components/Modals/ModalRevisaoFichaCadastral'
 import { ModalRevisaoFichaCadastral2 } from '@/components/Modals/ModalRevisaoFichaCadastral2'
 import { ModalValidar } from '@/components/Modals/ModalValidar'
+import { BotaoAbrirModalCadastroValidacaoFacial } from '@/components/Modals/ValidacaoFacial/BotaoAbrirModalCadastroValidacaoFacial'
 
 import {
     arrayStatusFicha,
@@ -62,7 +63,6 @@ const filtroPadrao = {
     updatedAt: [null, null],
     status: [],
     responsaveis: [],
-    token: false,
 }
 const FichasCadastrais = () => {
     const { usuario } = useAuth()
@@ -85,7 +85,6 @@ const FichasCadastrais = () => {
                 updatedAt: filtro.updatedAt[0]
                     ? JSON.stringify(filtro.updatedAt)
                     : null,
-                token: JSON.stringify(filtro.token)
                 // status: filtro.status[0] ? JSON.stringify(filtro.status) : null,
                 // responsaveis: filtro.responsaveis[0] ? JSON.stringify(filtro.responsaveis) : null,
             },
@@ -123,19 +122,10 @@ const FichasCadastrais = () => {
                             });
                         }}
                     />
-                    <Flex>
-                        <label htmlFor='token'>Token</label>
-                        <Checkbox
-                            id='token'
-                            onChange={e => setFiltro({
-                                ...filtro,
-                                token: e.target.checked
-                            })}
-                        />
-                    </Flex>
                 </Box>
-                <Box>
+                <Box display='flex' justifyContent='space-between'>
                     <Text>Foram encontrados {fichas?.total} resultados</Text>
+                    <BotaoAbrirModalCadastroValidacaoFacial />
                 </Box>
                 <Box>
                     {/* <Box bg="white" p={4} mb={4}>
@@ -328,21 +318,26 @@ const FichasCadastrais = () => {
                                                 <Flex w='100%' alignItems='center' gap={4}>
                                                     <Box>
                                                         <Flex gap={4}>
-                                                            <Tooltip label='Revisar Ficha'>
-                                                                <IconButton
-                                                                    icon={
-                                                                        <MdOutlineVerifiedUser />
-                                                                    }
-                                                                    size="xs"
-                                                                    rounded="full"
-                                                                    colorScheme="blue"
-                                                                    variant="outline"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation()
-                                                                        modalRevisar.current.onOpen(item.ficha.id)
-                                                                    }}
-                                                                />
-                                                            </Tooltip>
+                                                            {
+                                                                item.ficha
+                                                                    ? (
+                                                                        <Tooltip label='Revisar Ficha'>
+                                                                            <IconButton
+                                                                                icon={
+                                                                                    <MdOutlineVerifiedUser />
+                                                                                }
+                                                                                size="xs"
+                                                                                rounded="full"
+                                                                                colorScheme="blue"
+                                                                                variant="outline"
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation()
+                                                                                    modalRevisar.current.onOpen(item.ficha.id)
+                                                                                }}
+                                                                            />
+                                                                        </Tooltip>
+                                                                    ) : null
+                                                            }
                                                             <Tooltip label="Copiar URL da Validação">
                                                                 <IconButton
                                                                     icon={
@@ -369,7 +364,7 @@ const FichasCadastrais = () => {
                                                     </Box>
                                                     <Divider orientation='vertical' h={6} />
                                                     <Box>
-                                                        <Text>{item.ficha.nome}</Text>
+                                                        <Text>{item?.nome ?? item?.ficha?.nome}</Text>
                                                         <Text>CPF: {item.cpf}</Text>
                                                     </Box>
                                                     <Divider orientation='vertical' h={6} />
@@ -381,26 +376,36 @@ const FichasCadastrais = () => {
                                                         >Imóvel</Text>
                                                         <Text>
                                                             {
+                                                                item?.imovel?.endereco
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.endereco
                                                             }
                                                             ,{" "}
                                                             {
+                                                                item?.imovel?.numero
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.numero
                                                             }
                                                             ,{" "}
                                                             {
+                                                                item?.imovel?.bairro
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.bairro
                                                             }
                                                             ,{" "}
                                                             {
+                                                                item?.imovel?.cidade
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.cidade
                                                             }
                                                             /
                                                             {
+                                                                item?.imovel?.estado
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.estado
                                                             }
@@ -453,7 +458,7 @@ const FichasCadastrais = () => {
                                                                     {/* Pin */}
                                                                     <Td>{pin}</Td>
                                                                     {/* Similaridade */}
-                                                                    <Td> 
+                                                                    <Td>
                                                                         {status == 1 && (
                                                                             <Box pos="relative">
                                                                                 <Tooltip
