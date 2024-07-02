@@ -63,7 +63,6 @@ const filtroPadrao = {
     updatedAt: [null, null],
     status: [],
     responsaveis: [],
-    token: false,
 }
 const FichasCadastrais = () => {
     const { usuario } = useAuth()
@@ -86,7 +85,6 @@ const FichasCadastrais = () => {
                 updatedAt: filtro.updatedAt[0]
                     ? JSON.stringify(filtro.updatedAt)
                     : null,
-                token: JSON.stringify(filtro.token)
                 // status: filtro.status[0] ? JSON.stringify(filtro.status) : null,
                 // responsaveis: filtro.responsaveis[0] ? JSON.stringify(filtro.responsaveis) : null,
             },
@@ -124,16 +122,6 @@ const FichasCadastrais = () => {
                             });
                         }}
                     />
-                    <Flex>
-                        <label htmlFor='token'>Token</label>
-                        <Checkbox
-                            id='token'
-                            onChange={e => setFiltro({
-                                ...filtro,
-                                token: e.target.checked
-                            })}
-                        />
-                    </Flex>
                 </Box>
                 <Box display='flex' justifyContent='space-between'>
                     <Text>Foram encontrados {fichas?.total} resultados</Text>
@@ -330,21 +318,26 @@ const FichasCadastrais = () => {
                                                 <Flex w='100%' alignItems='center' gap={4}>
                                                     <Box>
                                                         <Flex gap={4}>
-                                                            <Tooltip label='Revisar Ficha'>
-                                                                <IconButton
-                                                                    icon={
-                                                                        <MdOutlineVerifiedUser />
-                                                                    }
-                                                                    size="xs"
-                                                                    rounded="full"
-                                                                    colorScheme="blue"
-                                                                    variant="outline"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation()
-                                                                        modalRevisar.current.onOpen(item.ficha.id)
-                                                                    }}
-                                                                />
-                                                            </Tooltip>
+                                                            {
+                                                                item.ficha
+                                                                    ? (
+                                                                        <Tooltip label='Revisar Ficha'>
+                                                                            <IconButton
+                                                                                icon={
+                                                                                    <MdOutlineVerifiedUser />
+                                                                                }
+                                                                                size="xs"
+                                                                                rounded="full"
+                                                                                colorScheme="blue"
+                                                                                variant="outline"
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation()
+                                                                                    modalRevisar.current.onOpen(item.ficha.id)
+                                                                                }}
+                                                                            />
+                                                                        </Tooltip>
+                                                                    ) : null
+                                                            }
                                                             <Tooltip label="Copiar URL da Validação">
                                                                 <IconButton
                                                                     icon={

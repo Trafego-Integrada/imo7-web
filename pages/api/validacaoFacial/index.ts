@@ -40,7 +40,7 @@ handle.get(async (req, res) => {
             };
         }
 
-        if (JSON.parse(token)) {
+        if (token) {
             filtroQuery = {
                 ...filtroQuery,
                 resultado: { contains: '"token"' }

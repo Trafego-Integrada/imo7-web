@@ -12,6 +12,7 @@ export function BotaoAbrirModalCadastroValidacaoFacial() {
     return (
         <>
             <Button
+                colorScheme="blue"
                 onClick={() => abrirModalCadastroValidacaoFacial()}
             >
                 Nova Validação Facial

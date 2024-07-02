@@ -64,6 +64,7 @@ const schema = yup.object({
 });
 
 const ModalBase = ({ }, ref) => {
+    const [query, setQuery] = useState<string | null>(null)
     const { isOpen, onClose, onOpen } = useDisclosure();
     const toast = useToast()
     const {
@@ -76,6 +77,7 @@ const ModalBase = ({ }, ref) => {
             isSubmitting,
             errors
         },
+        control,
         watch
     } = useForm({
         resolver: yupResolver(schema)
@@ -92,14 +94,19 @@ const ModalBase = ({ }, ref) => {
                 estado: string,
             }[]
         }
-    }>(['imoveis'], listarImoveis)
+    }>(['imoveis', { query }], listarImoveis)
     const modalImovel = useRef()
 
     const cadastrarValidacaoFacial = useMutation(cadastrarValidacao)
 
-    const onSubmit = async ({ imovel, cpf, nome }: any) => {
+    const onSubmit = async ({ imovelId, cpf, nome }: any) => {
         try {
-            const imovelId = imovel?.split(',')?.[0] ?? null
+            if (!validateCPF(cpf)) {
+                return toast({
+                    title: 'Cpf inválido',
+                    status: 'error'
+                })
+            }
 
             const result = await cadastrarValidacaoFacial.mutateAsync({
                 imovelId,
@@ -128,6 +135,7 @@ const ModalBase = ({ }, ref) => {
 
     const onCallbackImovel = async (imovelId) => {
         await queryClient.invalidateQueries(["imoveis"]);
+
         reset({ ...watch(), imovelId });
     };
 
@@ -173,60 +181,114 @@ const ModalBase = ({ }, ref) => {
                             />
 
 
-                            <FormInput
-                                label='Imóvel'
-                                {...register('imovel')}
-                                list='imoveis'
-                                rightAddon={
-                                    <Box p={0}>
-                                        <Tooltip
-                                            label={
-                                                watch(
-                                                    "imovel"
-                                                )
-                                                    ? "Editar imóvel"
-                                                    : "Cadastrar Imóvel"
-                                            }
-                                        >
-                                            <IconButton
-                                                rounded="none"
-                                                colorScheme="blue"
-                                                size="sm"
-                                                icon={
-                                                    watch(
-                                                        "imovel"
-                                                    ) ? (
-                                                        <FiEdit />
-                                                    ) : (
-                                                        <FiPlus />
-                                                    )
-                                                }
-                                                onClick={() =>
-                                                    watch(
-                                                        "imovel"
-                                                    )
-                                                        ? modalImovel.current.onOpen(
-                                                            watch(
-                                                                "imovel"
-                                                            )?.split(',')?.[0]
+                            <Controller
+                                control={control}
+                                name="imovelId"
+                                render={({ field }) => (
+                                    <FormMultiSelect
+                                        size="sm"
+                                        label="Imóvel"
+                                        options={
+                                            data?.data
+                                                ?.data
+                                        }
+                                        isClearable
+                                        formatOptionLabel={(
+                                            i
+                                        ) => (
+                                            <Box>
+                                                <Text>
+                                                    <Text
+                                                        fontSize="xs"
+                                                        as="span"
+                                                        fontWeight="bold"
+                                                    >
+                                                        Código:
+                                                    </Text>{" "}
+                                                    {
+                                                        i.codigo
+                                                    }
+                                                    <Text
+                                                        as="span"
+                                                        fontSize="xs"
+                                                    >{` - ${i.endereco}, ${i.bairro},${i.cidade}`}</Text>
+                                                </Text>
+                                            </Box>
+                                        )}
+                                        getOptionLabel={(
+                                            i
+                                        ) =>
+                                            `Codigo: ${i.codigo} -  ${i.endereco}, ${i.bairro},${i.cidade}`
+                                        }
+                                        getOptionValue={(
+                                            i
+                                        ) => i.id}
+                                        rightAddon={
+                                            <Box p={0}>
+                                                <Tooltip
+                                                    label={
+                                                        watch(
+                                                            "imovelId"
                                                         )
-                                                        : modalImovel.current.onOpen()
-                                                }
-                                            />
-                                        </Tooltip>
-                                    </Box>
-                                }
+                                                            ? "Editar imóvel"
+                                                            : "Cadastrar Imóvel"
+                                                    }
+                                                >
+                                                    <IconButton
+                                                        rounded="none"
+                                                        colorScheme="blue"
+                                                        size="sm"
+                                                        icon={
+                                                            watch(
+                                                                "imovelId"
+                                                            ) ? (
+                                                                <FiEdit />
+                                                            ) : (
+                                                                <FiPlus />
+                                                            )
+                                                        }
+                                                        onClick={() =>
+                                                            watch(
+                                                                "imovelId"
+                                                            )
+                                                                ? modalImovel.current.onOpen(
+                                                                    watch(
+                                                                        "imovelId"
+                                                                    )
+                                                                )
+                                                                : modalImovel.current.onOpen()
+                                                        }
+                                                    />
+                                                </Tooltip>
+                                            </Box>
+                                        }
+                                        onChange={(e) => {
+                                            e?.target?.value && setQuery(e?.target?.value);
+                                            field.onChange(
+                                                e?.id
+                                                    ? e.id
+                                                    : null
+                                            )
+                                        }
+                                        }
+                                        value={
+                                            field.value
+                                                ? data?.data?.data.find(
+                                                    (i) =>
+                                                        i.id ==
+                                                        field.value
+                                                )
+                                                : null
+                                        }
+                                        error={
+                                            errors?.imovelId
+                                                ?.message
+                                        }
+                                    />
+                                )}
                             />
 
-                            <datalist id='imoveis'>
-                                {
-                                    data?.data.data.map(({ id, bairro, cidade, endereco, estado, numero }) => (
-                                        <option key={id} value={`${id},${endereco},${numero},${bairro},${cidade}/${estado}`} />
-                                    ))
-                                }
-                            </datalist>
-
-                            <Button mt={4} isLoading={isSubmitting} type='submit'>
+                            <Button colorScheme="blue" mt={4} isLoading={isSubmitting} type='submit'>
                                 Cadastrar
                             </Button>
                         </form>
