@@ -7,6 +7,7 @@ import { ModalFichaCadastral } from '@/components/Modals/ModalFichaCadastral'
 import { ModalRevisaoFichaCadastral } from '@/components/Modals/ModalRevisaoFichaCadastral'
 import { ModalRevisaoFichaCadastral2 } from '@/components/Modals/ModalRevisaoFichaCadastral2'
 import { ModalValidar } from '@/components/Modals/ModalValidar'
+import { BotaoAbrirModalCadastroValidacaoFacial } from '@/components/Modals/ValidacaoFacial/BotaoAbrirModalCadastroValidacaoFacial'
 
 import {
     arrayStatusFicha,
@@ -134,8 +135,9 @@ const FichasCadastrais = () => {
                         />
                     </Flex>
                 </Box>
-                <Box>
+                <Box display='flex' justifyContent='space-between'>
                     <Text>Foram encontrados {fichas?.total} resultados</Text>
+                    <BotaoAbrirModalCadastroValidacaoFacial />
                 </Box>
                 <Box>
                     {/* <Box bg="white" p={4} mb={4}>
@@ -369,7 +371,7 @@ const FichasCadastrais = () => {
                                                     </Box>
                                                     <Divider orientation='vertical' h={6} />
                                                     <Box>
-                                                        <Text>{item.ficha.nome}</Text>
+                                                        <Text>{item?.nome ?? item?.ficha?.nome}</Text>
                                                         <Text>CPF: {item.cpf}</Text>
                                                     </Box>
                                                     <Divider orientation='vertical' h={6} />
@@ -381,26 +383,36 @@ const FichasCadastrais = () => {
                                                         >Imóvel</Text>
                                                         <Text>
                                                             {
+                                                                item?.imovel?.endereco
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.endereco
                                                             }
                                                             ,{" "}
                                                             {
+                                                                item?.imovel?.numero
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.numero
                                                             }
                                                             ,{" "}
                                                             {
+                                                                item?.imovel?.bairro
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.bairro
                                                             }
                                                             ,{" "}
                                                             {
+                                                                item?.imovel?.cidade
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.cidade
                                                             }
                                                             /
                                                             {
+                                                                item?.imovel?.estado
+                                                                ??
                                                                 item?.ficha?.Processo?.imovel
                                                                     ?.estado
                                                             }
@@ -453,7 +465,7 @@ const FichasCadastrais = () => {
                                                                     {/* Pin */}
                                                                     <Td>{pin}</Td>
                                                                     {/* Similaridade */}
-                                                                    <Td> 
+                                                                    <Td>
                                                                         {status == 1 && (
                                                                             <Box pos="relative">
                                                                                 <Tooltip

@@ -13,6 +13,8 @@ interface TipoConsultaProps {
     cpf?: string;
     campoFichaCadastralCodigo?: string;
     fichaCadastralId: string;
+    imovelId: number | null;
+    nome: string | null;
 }
 
 export interface IValidacaoFacial {
@@ -35,6 +37,8 @@ export const ValidacaoFacial = ({
     cpf,
     campoFichaCadastralCodigo,
     fichaCadastralId,
+    imovelId,
+    nome
 }: TipoConsultaProps) => {
     const toast = useToast();
 
@@ -78,6 +82,8 @@ export const ValidacaoFacial = ({
                         fichaCadastralId,
                         cpf,
                         campoFichaCadastralCodigo,
+                        imovelId,
+                        nome
                     });
 
                     setRetorno(result.data || null);

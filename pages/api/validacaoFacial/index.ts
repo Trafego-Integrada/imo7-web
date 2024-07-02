@@ -79,6 +79,15 @@ handle.get(async (req, res) => {
             },
             include: {
                 ValidacaoFacialHistorico: true,
+                imovel: {
+                    select: {
+                        bairro: true,
+                        endereco: true,
+                        numero: true,
+                        complemento: true,
+                        estado: true
+                    }
+                },
                 ficha: {
                     select: {
                         nome: true,
@@ -122,11 +131,12 @@ handle.get(async (req, res) => {
 
 handle.post(async (req, res) => {
     try {
-        const { fichaCadastralId, cpf, campoFichaCadastralCodigo } = req.body;
+        const { fichaCadastralId, cpf, campoFichaCadastralCodigo, nome, imovelId } = req.body;
 
-        const data = await prisma.validacaoFacial.create({
-            data: {
-                cpf: removerCaracteresEspeciais(cpf),
+        let input: Prisma.ValidacaoFacialCreateInput = {}
+
+        if (campoFichaCadastralCodigo && fichaCadastralId) {
+            input = {
                 preenchimento: {
                     connect: {
                         fichaCadastralId_campoFichaCadastralCodigo: {
@@ -135,11 +145,36 @@ handle.post(async (req, res) => {
                         },
                     },
                 },
+            }
+        }
+
+        if (fichaCadastralId) {
+            input = {
+                ...input,
                 ficha: {
                     connect: {
                         id: fichaCadastralId,
                     },
                 },
+            }
+        }
+
+        if (imovelId) {
+            input = {
+                ...input,
+                imovel: {
+                    connect: {
+                        id: Number(imovelId)
+                    }
+                }
+            }
+        }
+
+        const data = await prisma.validacaoFacial.create({
+            data: {
+                cpf: removerCaracteresEspeciais(cpf),
+                nome,
+                ...input,
                 imobiliaria: {
                     connect: {
                         id: req.user.imobiliariaId,

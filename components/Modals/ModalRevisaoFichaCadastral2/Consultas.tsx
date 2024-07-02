@@ -43,6 +43,7 @@ export const Consultas = ({
     dataNascimento,
     campoFichaCadastralCodigo,
 }: TipoConsultaProps) => {
+
     function filtrarConsultas(tipoConsulta: string) {
         return (
             <Flex gap={2} py={3} flexWrap="wrap">
@@ -51,6 +52,8 @@ export const Consultas = ({
                         cpf={cpf}
                         fichaCadastralId={ficha.id}
                         campoFichaCadastralCodigo={campoFichaCadastralCodigo}
+                        imovelId={ficha?.imovelId}
+                        nome={ficha?.nome}
                     />
                 )}
 
