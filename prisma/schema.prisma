@@ -1297,8 +1297,8 @@ model ValidacaoFacialHistorico {
     id                Int             @id @default(autoincrement())
     validacaoFacialId String
     vallidacaoFacial  ValidacaoFacial @relation(fields: [validacaoFacialId], references: [id])
-    fichaCadastralId  String
-    fichaCadastral    FichaCadastral  @relation(fields: [fichaCadastralId], references: [id])
+    fichaCadastralId  String?
+    fichaCadastral    FichaCadastral? @relation(fields: [fichaCadastralId], references: [id])
     cpf               String          @db.VarChar(11)
     pin               String
     resultado         String?         @db.LongText
