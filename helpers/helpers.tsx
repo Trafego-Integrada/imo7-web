@@ -152,6 +152,18 @@ export const statusFicha = (status: any) => {
                     Desistente
                 </Tag>
             )
+        case 'reprovado_por_analise_interna':
+            return (
+                <Tag colorScheme="red" size="sm">
+                    Reprovado por Análise Interna
+                </Tag>
+            )
+        case 'renda_insuficiente':
+            return (
+                <Tag colorScheme="red" size="sm">
+                    Renda Insuficiente
+                </Tag>
+            )
     }
 }
 export const statusFichaTag = (status: any) => {
@@ -202,6 +214,18 @@ export const statusFichaTag = (status: any) => {
             return (
                 <Tooltip label="Desistente">
                     <Tag colorScheme="gray" size="sm" rounded="full"></Tag>
+                </Tooltip>
+            )
+        case 'reprovado_por_analise_interna':
+            return (
+                <Tooltip label="Reprovado por Análise Interna">
+                    <Tag colorScheme="red" size="sm" rounded="full"></Tag>
+                </Tooltip>
+            )
+        case 'renda_insuficiente':
+            return (
+                <Tooltip label="Renda Insuficiente">
+                    <Tag colorScheme="red" size="sm" rounded="full"></Tag>
                 </Tooltip>
             )
     }
