@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import {
     Flex,
     Modal,
@@ -11,6 +11,8 @@ import {
     Image as Img,
     Button,
 } from '@chakra-ui/react'
+import { usePrint } from '@/hooks/usePrint'
+import { FaPrint } from 'react-icons/fa'
 
 interface ModalProps {
     data: string
@@ -28,6 +30,9 @@ const ModalBase = ({ }, ref: any) => {
         width: 'auto',
         height: 'auto',
     })
+    const contentPrint = useRef()
+
+    const { handlePrint } = usePrint()
 
     function handleRotate() {
         setRotate((prev) => prev + 90)
@@ -94,7 +99,8 @@ const ModalBase = ({ }, ref: any) => {
                     <Flex
                         position="fixed"
                         bottom={10}
-                        left="50%"
+                        justifyContent='center'
+                        w='100%'
                         zIndex={999}
                         gap={4}
                     >
@@ -143,6 +149,16 @@ const ModalBase = ({ }, ref: any) => {
                             LIMPAR
                         </Button>
                         <Button
+                            onClick={() => handlePrint(contentPrint, 'Imprimir')}
+                            bg='red.500'
+                            _hover={{
+                                bg: 'red.500',
+                            }}
+                            color='white'
+                        >
+                            <FaPrint /> IMPRIMIR
+                        </Button>
+                        <Button
                             onClick={onClose}
                             bg="black"
                             color="white"
@@ -161,6 +177,7 @@ const ModalBase = ({ }, ref: any) => {
                     justifyContent="center"
                     alignItems="center"
                     minH="calc(100vh)"
+                    ref={contentPrint}
                 >
                     <Img
                         alt="Preview"

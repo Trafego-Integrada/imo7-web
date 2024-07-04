@@ -114,6 +114,8 @@ const ModalBase = ({ }, ref) => {
                 cpf
             })
 
+            await queryClient.invalidateQueries(['fichas'])
+
             navigator.clipboard.writeText(
                 `${window.location.origin}/validacao-facial/${result?.data?.id}`
             );
