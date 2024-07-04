@@ -95,11 +95,13 @@ const ModalBase = ({ }, ref: any) => {
                 onClose()
                 toast({ title: 'Ficha Cadastrada', status: 'success' })
                 queryClient.invalidateQueries(['fichas'])
+                queryClient.invalidateQueries(['processos'])
             } else {
                 await cadastrar.mutateAsync(data)
                 onClose()
                 toast({ title: 'Ficha atualizada', status: 'success' })
                 queryClient.invalidateQueries(['fichas'])
+                queryClient.invalidateQueries(['processos'])
             }
         } catch (error) {
             //console.log(error);
