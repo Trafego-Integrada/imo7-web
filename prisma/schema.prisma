@@ -1202,6 +1202,8 @@ enum StatusFicha {
     arquivada
     locado
     desistente
+    reprovado_por_analise_interna
+    renda_insuficiente
 }
 
 enum TipoCampo {
