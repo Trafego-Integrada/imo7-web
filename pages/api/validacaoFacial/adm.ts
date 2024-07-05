@@ -12,7 +12,7 @@ handle.use(checkAuth);
 
 handle.get(async (req, res) => {
     try {
-        let { deletedAt, createdAt, nomeImobiliaria } = req.query;
+        let { deletedAt, createdAt, nomeImobiliaria, token } = req.query;
 
         let filtroQuery: Prisma.ValidacaoFacialWhereInput = { AND: [] };
 
@@ -34,6 +34,15 @@ handle.get(async (req, res) => {
             filtroQuery = {
                 ...filtroQuery,
                 imobiliaria: { nomeFantasia: { contains: nomeImobiliaria } }
+            };
+        }
+
+        if (token === 'true') {
+            filtroQuery = {
+                ...filtroQuery,
+                pin: {
+                    not: null
+                }
             };
         }
 
@@ -109,13 +118,20 @@ handle.get(async (req, res) => {
             }
         });
 
+        const imobiliarias = await prisma.imobiliaria.findMany({
+            select: {
+                id: true,
+                razaoSocial: true
+            }
+        })
+
         const count = await prisma.validacaoFacial.count({
             where: {
                 ...filtroQuery,
             },
         });
 
-        res.send({ data, total: count });
+        res.send({ data, total: count, imobiliarias });
     } catch (error) {
         res.status(500).send({
             success: false,

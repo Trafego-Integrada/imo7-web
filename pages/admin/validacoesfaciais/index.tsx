@@ -45,6 +45,7 @@ import {
     Image,
     GridItem,
     Divider,
+    Checkbox,
 } from '@chakra-ui/react'
 
 import Link from 'next/link'
@@ -64,7 +65,8 @@ const filtroPadrao = {
     updatedAt: [null, null],
     status: [],
     responsaveis: [],
-    nomeImobiliaria: ''
+    nomeImobiliaria: '',
+    token: null
 }
 const FichasCadastrais = () => {
     const { usuario } = useAuth()
@@ -112,6 +114,34 @@ const FichasCadastrais = () => {
                                 createdAt: e,
                             });
                         }}
+                    />
+                    <FormInput
+                        size="sm"
+                        label="Nome da Imobiliária"
+                        value={filtro.nomeImobiliaria}
+                        onChange={(e) => {
+                            setFiltro({
+                                ...filtro,
+                                nomeImobiliaria: e.target.value,
+                            });
+                        }}
+                        list='imobiliarias'
+                    />
+
+                    <datalist id='imobiliarias' >
+                        {
+                            fichas?.imobiliarias?.map(({ id, razaoSocial }) => (
+                                <option key={id} value={razaoSocial} />
+                            ))
+                        }
+                    </datalist>
+
+                    <Text>Token</Text>
+                    <Checkbox
+                        onChange={e => setFiltro({
+                            ...filtro,
+                            token: e.target.checked
+                        })}
                     />
                 </Box>
                 <Box display='flex' justifyContent='space-between'>
