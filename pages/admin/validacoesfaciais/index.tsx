@@ -37,8 +37,14 @@ import {
     Tooltip,
     Tr,
     useToast,
+    Accordion,
+    AccordionItem,
+    AccordionIcon,
+    AccordionButton,
+    AccordionPanel,
     Image,
     GridItem,
+    Divider,
 } from '@chakra-ui/react'
 
 import Link from 'next/link'
@@ -82,6 +88,7 @@ const FichasCadastrais = () => {
         ],
         listarValidacoesFaciaisAdm,
     )
+
     return (
         <Layout>
             <Box p={4}>
@@ -106,26 +113,9 @@ const FichasCadastrais = () => {
                             });
                         }}
                     />
-                    <FormInput
-                        size="sm"
-                        label="Nome da Imobiliária"
-                        placeholder="digite o nome da imobiliária..."
-                        onChange={(e) =>
-                            setFiltro({
-                                ...filtro,
-                                nomeImobiliaria: e.target.value,
-                            })
-                        }
-                        list='imobiliarias'
-                    />
-                    <datalist id='imobiliarias'>
-                        {fichas?.imobiliarias?.map(({ id, nomeFantasia }) => (
-                            <option key={id} value={nomeFantasia}>{nomeFantasia}</option>
-                        ))}
-                    </datalist>
                 </Box>
-                <Box>
-                    <Text>Foram encontrados {fichas?.total} registos</Text>
+                <Box display='flex' justifyContent='space-between'>
+                    <Text>Foram encontrados {fichas?.total} resultados</Text>
                 </Box>
                 <Box>
                     {/* <Box bg="white" p={4} mb={4}>
@@ -304,382 +294,325 @@ const FichasCadastrais = () => {
                     </Flex> */}
 
                     <Box bg="white" mt={4} p={4}>
-                        <TableContainer>
-                            <Table size="sm">
-                                <Thead>
-                                    <Tr>
-                                        <Th>Imobiliaria</Th>
-                                        {/* <Th w={44}>Tipo</Th> */}
-                                        <Th>CPF</Th>
-                                        <Th>FOTO</Th>
-                                        <Th>TOKEN</Th>
-                                        <Th>SIMILARIDADE</Th>
-                                        {/* <Th w={44}>Responsável</Th> */}
-                                        <Th>Criado em</Th>
-                                        <Th>Última atualização</Th>
-                                        <Th>Status</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {fichas?.data?.length > 0 ? (
-                                        fichas.data.map((item) => (
-                                            <Tr key={item.id}>
-                                                <Td>
-                                                    {item.imobiliaria.nomeFantasia}
-                                                    {/* <Tooltip label="Validar CPF">
-                                                            <IconButton
-                                                                colorScheme="green"
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            MdAccessibilityNew
-                                                                        }
-                                                                    />
-                                                                }
-                                                                onClick={() =>
-                                                                    modalValidar.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            />
-                                                        </Tooltip> */}
-                                                    {usuario?.permissoes?.includes(
-                                                        'imobiliaria.fichas.revisar',
-                                                    ) && (
-                                                            <Tooltip label="Revisar Ficha">
-                                                                <IconButton
-                                                                    colorScheme="green"
-                                                                    size="sm"
-                                                                    variant="ghost"
-                                                                    icon={
-                                                                        <Icon
-                                                                            as={
-                                                                                MdOutlineVerifiedUser
-                                                                            }
-                                                                        />
-                                                                    }
-                                                                    onClick={() =>
-                                                                        modalRevisar.current.onOpen(
-                                                                            item.fichaCadastralId,
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </Tooltip>
-                                                        )}
-                                                    {/* {usuario?.permissoes?.includes(
-                                                        "imobiliaria.fichas.editar"
-                                                    ) && (
-                                                        <Tooltip label="Editar Ficha">
-                                                            <IconButton
-                                                                colorScheme="blue"
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiEdit
-                                                                        }
-                                                                    />
-                                                                }
-                                                                onClick={() =>
-                                                                    modal.current.onOpen(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                            />
-                                                        </Tooltip>
-                                                    )} */}
-                                                    {/* <Tooltip label="Copiar URL da Ficha">
-                                                        <IconButton
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={FiLink}
-                                                                />
-                                                            }
-                                                            onClick={() => {
-                                                                navigator.clipboard.writeText(
-                                                                    `${window.location.origin}/fichaCadastral/${item.id}`
-                                                                );
-                                                                toast({
-                                                                    title: "URL Copiada",
-                                                                });
-                                                            }}
-                                                        />
-                                                    </Tooltip> */}
-                                                    {/* <Tooltip label="Visualizar Ficha">
-                                                        <Link
-                                                            href={`/fichaCadastral/${item.id}`}
-                                                            target="_blank"
-                                                        >
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiEye
-                                                                        }
-                                                                    />
-                                                                }
-                                                            />
-                                                        </Link>
-                                                    </Tooltip> */}
-                                                    {/* <Tooltip label="Exportar para Excel">
-                                                        <IconButton
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            icon={
-                                                                <Icon
-                                                                    as={
-                                                                        FaFileExcel
-                                                                    }
-                                                                />
-                                                            }
-                                                            onClick={() =>
-                                                                exportToExcel(
-                                                                    item.preenchimento,
-                                                                    "ficha-cadastral-" +
-                                                                        item.id
-                                                                )
-                                                            }
-                                                        />
-                                                    </Tooltip> */}
-                                                    {/* <Tooltip label="Gerar PDF">
-                                                        <Link
-                                                            href={`https://www.imo7.com.br/api/fichaCadastral/${item.id}/pdf`}
-                                                            target="_blank"
-                                                            passHref
-                                                        >
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FaFilePdf
-                                                                        }
-                                                                    />
-                                                                }
-                                                            />
-                                                        </Link>
-                                                    </Tooltip> */}
-                                                    {/* {usuario?.permissoes?.includes(
-                                                        "imobiliaria.fichas.excluir"
-                                                    ) && (
-                                                        <Tooltip label="Excluir Ficha">
-                                                            <IconButton
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                icon={
-                                                                    <Icon
-                                                                        as={
-                                                                            FiTrash
-                                                                        }
-                                                                    />
-                                                                }
-                                                                colorScheme="red"
-                                                                onClick={() => {
-                                                                    modalExcluir.current.onOpen(
-                                                                        item.id
-                                                                    );
-                                                                }}
-                                                            />
-                                                        </Tooltip>
-                                                    )} */}
-                                                </Td>
-                                                <Td>{item.cpf}</Td>
-                                                <Td>
-                                                    {item.fotoUrl ? (
-                                                        <Image
-                                                            borderRadius="2xl"
-                                                            src={item.fotoUrl}
-                                                            width={20}
-                                                            height={20}
-                                                            objectFit="cover"
-                                                        />
-                                                    ) : (
-                                                        <Text fontWeight="bold">
-                                                            Foto não enviada
-                                                        </Text>
-                                                    )}
-                                                </Td>
-                                                <Td>
-                                                    <Text fontWeight="bold">
-                                                        {
-                                                            JSON.parse(
-                                                                item.resultado,
-                                                            )?.token
-                                                        }
-                                                    </Text>
-                                                </Td>
-                                                <Td>
-                                                    {item.status == 1 && (
-                                                        <Box pos="relative">
-                                                            <Tooltip
-                                                                label={'L1'}
-                                                            >
-                                                                <Box>
-                                                                    <Progress
-                                                                        size="lg"
-                                                                        value={
-                                                                            JSON.parse(
-                                                                                item.resultado,
-                                                                            )
-                                                                                ?.biometria_face
-                                                                                ?.similaridade *
-                                                                            100
-                                                                        }
-                                                                        max={
-                                                                            100
-                                                                        }
-                                                                        colorScheme={
-                                                                            JSON.parse(
-                                                                                item.resultado,
-                                                                            )?.biometria_face?.probabilidade.indexOf(
-                                                                                'Altíssima ',
-                                                                            ) >=
-                                                                                0
-                                                                                ? 'green'
-                                                                                : JSON.parse(
-                                                                                    item.resultado,
-                                                                                )?.biometria_face?.probabilidade.indexOf(
-                                                                                    'Alta ',
-                                                                                ) >=
-                                                                                    0
-                                                                                    ? 'blue'
-                                                                                    : JSON.parse(
-                                                                                        item.resultado,
-                                                                                    )?.biometria_face?.probabilidade.indexOf(
-                                                                                        'Baixa ',
-                                                                                    ) >=
-                                                                                        0
-                                                                                        ? 'orange'
-                                                                                        : 'red'
-                                                                        }
-                                                                    />
-                                                                </Box>
-                                                            </Tooltip>
-                                                            <Flex
-                                                                pos="absolute"
-                                                                top="0"
-                                                                justify="center"
-                                                                mx="auto"
-                                                                w="full"
-                                                            >
-                                                                <Text
-                                                                    textAlign="center"
-                                                                    fontSize="xs"
-                                                                    color={
-                                                                        JSON.parse(
-                                                                            item.resultado,
-                                                                        )?.biometria_face?.probabilidade.indexOf(
-                                                                            'Altíssima ',
-                                                                        ) >= 0
-                                                                            ? 'white'
-                                                                            : 'white'
-                                                                    }
-                                                                >
-                                                                    {Math.floor(
-                                                                        JSON.parse(
-                                                                            item.resultado,
-                                                                        )
-                                                                            ?.biometria_face
-                                                                            ?.similaridade *
-                                                                        100,
-                                                                    ) || 0}{' '}
-                                                                    %
-                                                                </Text>
-                                                            </Flex>
-                                                            <Text
-                                                                textAlign="center"
-                                                                fontSize="xs"
-                                                                color={
-                                                                    JSON.parse(
-                                                                        item.resultado,
-                                                                    )?.biometria_face?.probabilidade.indexOf(
-                                                                        'Altíssima ',
-                                                                    ) >= 0
-                                                                        ? 'green'
-                                                                        : JSON.parse(
-                                                                            item.resultado,
-                                                                        )?.biometria_face?.probabilidade.indexOf(
-                                                                            'Alta ',
-                                                                        ) >= 0
-                                                                            ? 'blue'
-                                                                            : JSON.parse(
-                                                                                item.resultado,
-                                                                            )?.biometria_face?.probabilidade.indexOf(
-                                                                                'Baixa ',
-                                                                            ) >= 0
-                                                                                ? 'orange'
-                                                                                : 'red'
-                                                                }
-                                                            >
-                                                                {
-                                                                    JSON.parse(
-                                                                        item.resultado,
-                                                                    )
-                                                                        ?.biometria_face
-                                                                        ?.probabilidade
-                                                                }
-                                                            </Text>
-                                                        </Box>
-                                                    )}
-                                                </Td>
+                        {fichas?.data?.length > 0 ? (
 
-                                                {/* <Td>
-                                                    {item.responsavel?.nome}
-                                                </Td> */}
-                                                <Td>
-                                                    {formatoData(
-                                                        item.createAt,
-                                                        'DATA_HORA',
-                                                    )}
-                                                </Td>
-                                                <Td>
-                                                    {formatoData(
-                                                        item.updatedAt,
-                                                        'DATA_HORA',
-                                                    )}
-                                                </Td>
-                                                <Td>
-                                                    <Text color={'blue'}>
-                                                        {item.status == 0
-                                                            ? 'Aguardando'
-                                                            : ''}
-                                                    </Text>
-                                                    <Text color={'red'}>
-                                                        {item.status == -1
-                                                            ? 'Falha na verificação'
-                                                            : ''}
-                                                    </Text>
-                                                    <Text color={'green'}>
-                                                        {item.status == 1
-                                                            ? 'Sucesso na verificação'
-                                                            : ''}
-                                                    </Text>
-                                                </Td>
-                                            </Tr>
-                                        ))
-                                    ) : (
-                                        <Tr>
-                                            <Td
-                                                colSpan={8}
-                                                textAlign="center"
-                                                color="gray"
-                                            >
-                                                <br />
-                                                Não encontramos registros
-                                            </Td>
-                                        </Tr>
-                                    )}
-                                </Tbody>
-                            </Table>
-                        </TableContainer>
+                            fichas.data.map((item) => (
+                                <Accordion
+                                    key={item.id}
+                                    allowToggle
+                                    defaultIndex={0}
+                                >
+                                    <AccordionItem>
+                                        <Heading>
+                                            <AccordionButton>
+                                                <Flex w='100%' alignItems='center' gap={4}>
+                                                    <Box>
+                                                        <Flex gap={4}>
+                                                            {
+                                                                item.ficha
+                                                                    ? (
+                                                                        <Tooltip label='Revisar Ficha'>
+                                                                            <IconButton
+                                                                                icon={
+                                                                                    <MdOutlineVerifiedUser />
+                                                                                }
+                                                                                size="xs"
+                                                                                rounded="full"
+                                                                                colorScheme="blue"
+                                                                                variant="outline"
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation()
+                                                                                    modalRevisar.current.onOpen(item.ficha.id)
+                                                                                }}
+                                                                            />
+                                                                        </Tooltip>
+                                                                    ) : null
+                                                            }
+                                                            <Tooltip label="Copiar URL da Validação">
+                                                                <IconButton
+                                                                    icon={
+                                                                        <FiLink />
+                                                                    }
+                                                                    size="xs"
+                                                                    rounded="full"
+                                                                    colorScheme="blue"
+                                                                    variant="outline"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        navigator.clipboard.writeText(
+                                                                            `${window.location.origin}/validacao-facial/${item.id}`
+                                                                        );
+                                                                        toast(
+                                                                            {
+                                                                                title: "URL Copiada",
+                                                                            }
+                                                                        );
+                                                                    }}
+                                                                />
+                                                            </Tooltip>
+                                                        </Flex>
+                                                    </Box>
+                                                    <Divider orientation='vertical' h={6} />
+                                                    <Box>
+                                                        <Text
+                                                            fontSize="xs"
+                                                            fontWeight="bold"
+                                                            color="gray"
+                                                        >Imobiliária</Text>
+                                                        <Text>
+                                                            {
+                                                                item?.imobiliaria?.razaoSocial
+                                                            }
+                                                        </Text>
+                                                    </Box>
+                                                    <Divider orientation='vertical' h={6} />
+                                                    <Box>
+                                                        <Text>{item?.nome ?? item?.ficha?.nome}</Text>
+                                                        <Text>CPF: {item.cpf}</Text>
+                                                    </Box>
+                                                    <Divider orientation='vertical' h={6} />
+                                                    <Box>
+                                                        <Text
+                                                            fontSize="xs"
+                                                            fontWeight="bold"
+                                                            color="gray"
+                                                        >Imóvel</Text>
+                                                        <Text>
+                                                            {
+                                                                item?.imovel?.endereco
+                                                                ??
+                                                                item?.ficha?.Processo?.imovel
+                                                                    ?.endereco
+                                                            }
+                                                            ,{" "}
+                                                            {
+                                                                item?.imovel?.numero
+                                                                ??
+                                                                item?.ficha?.Processo?.imovel
+                                                                    ?.numero
+                                                            }
+                                                            ,{" "}
+                                                            {
+                                                                item?.imovel?.bairro
+                                                                ??
+                                                                item?.ficha?.Processo?.imovel
+                                                                    ?.bairro
+                                                            }
+                                                            ,{" "}
+                                                            {
+                                                                item?.imovel?.cidade
+                                                                ??
+                                                                item?.ficha?.Processo?.imovel
+                                                                    ?.cidade
+                                                            }
+                                                            /
+                                                            {
+                                                                item?.imovel?.estado
+                                                                ??
+                                                                item?.ficha?.Processo?.imovel
+                                                                    ?.estado
+                                                            }
+                                                        </Text>
+                                                    </Box>
+                                                    <Divider orientation='vertical' h={6} />
+                                                    <Box>
+                                                        <Text fontSize="xs"
+                                                            fontWeight="bold"
+                                                            color="gray"
+                                                        >Validação Facial</Text>
+                                                        <Text>Data de Criação: {formatoData(item.createAt, 'DATA_HORA')}</Text>
+                                                    </Box>
+                                                </Flex>
+
+                                                <AccordionIcon />
+                                            </AccordionButton>
+                                        </Heading>
+                                        <AccordionPanel>
+                                            <Table>
+                                                <Thead>
+                                                    <Tr>
+                                                        <Th>Imagem</Th>
+                                                        <Th>PIN</Th>
+                                                        <Th>Similaridade</Th>
+                                                        <Th>Data de criação</Th>
+                                                        <Th>Status</Th>
+                                                    </Tr>
+                                                </Thead>
+                                                <Tbody>
+                                                    {
+                                                        item?.ValidacaoFacialHistorico?.map(({ createdAt, id, pin, resultado, fotoUrl, status }) => {
+                                                            return (
+                                                                <Tr key={id}>
+                                                                    <Td>
+                                                                        {fotoUrl ? (
+                                                                            <Image
+                                                                                borderRadius="2xl"
+                                                                                src={fotoUrl}
+                                                                                width={20}
+                                                                                height={20}
+                                                                                objectFit="cover"
+                                                                            />
+                                                                        ) : (
+                                                                            <Text fontWeight="bold">
+                                                                                Foto não enviada
+                                                                            </Text>
+                                                                        )}
+                                                                    </Td>
+                                                                    {/* Pin */}
+                                                                    <Td>{pin}</Td>
+                                                                    {/* Similaridade */}
+                                                                    <Td>
+                                                                        {status == 1 && (
+                                                                            <Box pos="relative">
+                                                                                <Tooltip
+                                                                                    label={'L1'}
+                                                                                >
+                                                                                    <Box>
+                                                                                        <Progress
+                                                                                            size="lg"
+                                                                                            value={
+                                                                                                JSON.parse(resultado)
+                                                                                                    ?.biometria_face
+                                                                                                    ?.similaridade * 100
+                                                                                            }
+                                                                                            max={
+                                                                                                100
+                                                                                            }
+                                                                                            colorScheme={
+                                                                                                JSON.parse(
+                                                                                                    resultado,
+                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                    'Altíssima ',
+                                                                                                ) >=
+                                                                                                    0
+                                                                                                    ? 'green'
+                                                                                                    : JSON.parse(
+                                                                                                        resultado,
+                                                                                                    )?.biometria_face?.probabilidade.indexOf(
+                                                                                                        'Alta ',
+                                                                                                    ) >=
+                                                                                                        0
+                                                                                                        ? 'blue'
+                                                                                                        : JSON.parse(
+                                                                                                            resultado,
+                                                                                                        )?.biometria_face?.probabilidade.indexOf(
+                                                                                                            'Baixa ',
+                                                                                                        ) >=
+                                                                                                            0
+                                                                                                            ? 'orange'
+                                                                                                            : 'red'
+                                                                                            }
+                                                                                        />
+                                                                                    </Box>
+                                                                                </Tooltip>
+                                                                                <Flex
+                                                                                    pos="absolute"
+                                                                                    top="0"
+                                                                                    justify="center"
+                                                                                    mx="auto"
+                                                                                    w="full"
+                                                                                >
+                                                                                    <Text
+                                                                                        textAlign="center"
+                                                                                        fontSize="xs"
+                                                                                        color={
+                                                                                            JSON.parse(
+                                                                                                resultado,
+                                                                                            )?.biometria_face?.probabilidade.indexOf(
+                                                                                                'Altíssima ',
+                                                                                            ) >= 0
+                                                                                                ? 'white'
+                                                                                                : 'white'
+                                                                                        }
+                                                                                    >
+                                                                                        {Math.floor(
+                                                                                            JSON.parse(
+                                                                                                resultado,
+                                                                                            )
+                                                                                                ?.biometria_face
+                                                                                                ?.similaridade *
+                                                                                            100,
+                                                                                        ) || 0}{' '}
+                                                                                        %
+                                                                                    </Text>
+                                                                                </Flex>
+                                                                                <Text
+                                                                                    textAlign="center"
+                                                                                    fontSize="xs"
+                                                                                    color={
+                                                                                        JSON.parse(
+                                                                                            resultado,
+                                                                                        )?.biometria_face?.probabilidade.indexOf(
+                                                                                            'Altíssima ',
+                                                                                        ) >= 0
+                                                                                            ? 'green'
+                                                                                            : JSON.parse(
+                                                                                                resultado,
+                                                                                            )?.biometria_face?.probabilidade.indexOf(
+                                                                                                'Alta ',
+                                                                                            ) >= 0
+                                                                                                ? 'blue'
+                                                                                                : JSON.parse(
+                                                                                                    resultado,
+                                                                                                )?.biometria_face?.probabilidade.indexOf(
+                                                                                                    'Baixa ',
+                                                                                                ) >= 0
+                                                                                                    ? 'orange'
+                                                                                                    : 'red'
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        JSON.parse(
+                                                                                            resultado,
+                                                                                        )
+                                                                                            ?.biometria_face
+                                                                                            ?.probabilidade
+                                                                                    }
+                                                                                </Text>
+                                                                            </Box>
+                                                                        )}
+                                                                    </Td>
+                                                                    {/* Data de criação */}
+                                                                    <Td>
+                                                                        {formatoData(createdAt, 'DATA_HORA')}
+                                                                    </Td>
+                                                                    {/* Status */}
+                                                                    <Td>
+                                                                        <Text color={'blue'}>
+                                                                            {status == 0
+                                                                                ? JSON.parse(resultado)?.mensagem ?? 'Aguardando'
+                                                                                : ''}
+                                                                        </Text>
+                                                                        <Text color={'red'}>
+                                                                            {status == -1
+                                                                                ? JSON.parse(resultado)?.mensagem ?? 'Falha na verificação'
+                                                                                : ''}
+                                                                        </Text>
+                                                                        <Text color={'green'}>
+                                                                            {status == 1
+                                                                                ? JSON.parse(resultado)?.mensagem ?? 'Sucesso na verificação'
+                                                                                : ''}
+                                                                        </Text>
+                                                                    </Td>
+                                                                </Tr>
+                                                            )
+                                                        })
+                                                    }
+                                                </Tbody>
+                                            </Table>
+                                        </AccordionPanel>
+                                    </AccordionItem>
+                                </Accordion>
+                            )
+                            )
+                        ) : (<Text>
+                            <br />
+                            Não encontramos registros
+                        </Text>
+                        )}
+
+
+
                     </Box>
                 </Box>
             </Box>
@@ -689,7 +622,7 @@ const FichasCadastrais = () => {
             <ModalRevisaoFichaCadastral ref={modalRevisar} />
             <ModalValidar ref={modalValidar} />
             <Excluir ref={modalExcluir} onDelete={onDelete} /> */}
-        </Layout>
+        </Layout >
     )
 }
 
