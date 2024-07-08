@@ -14,7 +14,7 @@ handle.get(async (req, res) => {
     try {
         let { deletedAt, createdAt, nomeImobiliaria } = req.query;
 
-        let filtroValidacaoFacial: Prisma.ValidacaoFacialWhereInput = { AND: [] };
+        let filtroValidacaoFacial: Prisma.ValidacaoFacialWhereInput = { AND: [], pin: { not: null } };
         let filtroImobiliaria: Prisma.ImobiliariaWhereInput = {}
 
         if (deletedAt) {
