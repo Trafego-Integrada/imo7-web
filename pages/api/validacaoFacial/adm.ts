@@ -12,7 +12,7 @@ handle.use(checkAuth);
 
 handle.get(async (req, res) => {
     try {
-        let { deletedAt, createdAt, nomeImobiliaria } = req.query;
+        let { deletedAt, createdAt, nomeImobiliaria, token } = req.query;
 
         let filtroQuery: Prisma.ValidacaoFacialWhereInput = { AND: [] };
 
@@ -34,6 +34,15 @@ handle.get(async (req, res) => {
             filtroQuery = {
                 ...filtroQuery,
                 imobiliaria: { nomeFantasia: { contains: nomeImobiliaria } }
+            };
+        }
+
+        if (token === 'true') {
+            filtroQuery = {
+                ...filtroQuery,
+                pin: {
+                    not: null
+                }
             };
         }
 
@@ -66,37 +75,61 @@ handle.get(async (req, res) => {
             where: {
                 ...filtroQuery,
             },
-            select: {
-                cpf: true,
-                createAt: true,
-                deletedAt: true,
-                ficha: true,
-                fichaCadastralId: true,
-                fichaCadastralPreenchimentoCampoFichaCadastralCodigo: true,
-                fichaCadastralPreenchimentoFichaCadastralId: true,
-                fotoUrl: true,
-                id: true,
-                imobiliaria: true,
-                imobiliariaId: true,
-                pin: true,
-                preenchimento: true,
-                resultado: true,
-                status: true,
+            include: {
+                ValidacaoFacialHistorico: true,
+                imovel: {
+                    select: {
+                        bairro: true,
+                        endereco: true,
+                        numero: true,
+                        complemento: true,
+                        estado: true
+                    }
+                },
+                imobiliaria: {
+                    select: {
+                        razaoSocial: true,
+                    }
+                },
+                ficha: {
+                    select: {
+                        nome: true,
+                        id: true,
+                        Processo: {
+                            select: {
+                                imovel: {
+                                    select: {
+                                        bairro: true,
+                                        endereco: true,
+                                        numero: true,
+                                        complemento: true,
+                                        estado: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }
             },
             orderBy: {
-                createAt: "desc"
+                imobiliaria: {
+                    razaoSocial: 'asc'
+                }
             }
         });
+
+        const imobiliarias = await prisma.imobiliaria.findMany({
+            select: {
+                id: true,
+                razaoSocial: true
+            }
+        })
 
         const count = await prisma.validacaoFacial.count({
             where: {
                 ...filtroQuery,
             },
         });
-
-        const imobiliarias = await prisma.imobiliaria.findMany({
-            select: { nomeFantasia: true, id: true }
-        })
 
         res.send({ data, total: count, imobiliarias });
     } catch (error) {

@@ -15,6 +15,19 @@ export const listarValidacoesFaciais = async ({ queryKey }) => {
     }
 }
 
+export const listarValidacoesFaciaisSintetico = async ({ queryKey }) => {
+    try {
+        const { data } = await api.get('validacaoFacial/sintetico', {
+            params: queryKey[1],
+        })
+        return data
+    } catch (e) {
+        //console.log("error");
+        //console.log(e);
+        return null
+    }
+}
+
 export const listarValidacoesFaciaisAdm = async ({ queryKey }) => {
     //console.log("listarValidacoesFaciais");
 

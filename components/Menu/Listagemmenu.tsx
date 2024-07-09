@@ -227,10 +227,26 @@ const menu = [
     },
     {
         titulo: "Validações Faciais",
-        href: "/admin/validacoesfaciais",
         icon: HiOutlineDocumentText,
+        href: '/admin/validacoesfaciais',
         cargos: ["adm"],
         modulos: ["adm.imobiliarias"],
+        subMenus: [
+            {
+                titulo: "Analitica",
+                icon: HiOutlineDocumentText,
+                href: '/admin/validacoesfaciais',
+                cargos: ["adm"],
+                modulos: ["adm.imobiliarias"],
+            },
+            {
+                titulo: "Sintética",
+                icon: HiOutlineDocumentText,
+                href: '/admin/validacoesfaciais-sintetica',
+                cargos: ["adm"],
+                modulos: ["adm.imobiliarias"],
+            }
+        ]
     },
     {
         titulo: "Consultas",
