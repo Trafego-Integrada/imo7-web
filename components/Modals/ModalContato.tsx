@@ -23,7 +23,7 @@ const schema = yup.object({
     email: yup.string().required(),
     telefone: yup.string().required(),
 });
-const ModalBase = ({}, ref) => {
+const ModalBase = ({ }, ref) => {
     const modal = useDisclosure();
     const form = useForm({
         resolver: yupResolver(schema),
@@ -38,7 +38,7 @@ const ModalBase = ({}, ref) => {
             })
             modal.onClose()
             window.open(
-                `https://web.whatsapp.com/send?phone=+5519996258095&text=Olá, sou ${form.watch(
+                `https://web.whatsapp.com/send?phone=+5519997538567&text=Olá, sou ${form.watch(
                     "nome"
                 )},\n\n Meu e-mail é ${form.watch(
                     "email"
