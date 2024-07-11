@@ -49,6 +49,7 @@ import { CameraOptions, useFaceDetection } from 'react-use-face-detection'
 
 import { Camera } from '@mediapipe/camera_utils'
 import { FiArrowLeft, FiArrowRight, FiCheck } from 'react-icons/fi'
+import { Countdown } from '@/components/Countdown'
 
 /*!
  *	Gerador e Validador de CPF v1.0.0
@@ -110,7 +111,9 @@ function cpfMask(v: any) {
 
 const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
     const [photo, setPhoto] = useState(null)
-    const [status, setStatus] = useState(0)
+    const [status, setStatus] = useState(validacao?.status ?? 0)
+    const [count, setCount] = useState(0)
+    const [success, setSuccess] = useState(validacao?.status === 1)
 
     const {
         register,
@@ -200,6 +203,13 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
                 if (response.data.status == 1) {
                     setStatus(response.data.status)
                     setError(response.data.message)
+                    setCount(180)
+                    setTimeout(() => {
+                        const { id } = validacao
+                        api.get(`validacaoFacial/${id}`)
+                            .then(result => setSuccess(result.data?.status === 1))
+                    }, 180 * 1000)
+
                 } else {
                     setError(response.data.message)
                 }
@@ -307,7 +317,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
 
     return (
         <>
-            {validacao.resultado && (JSON.parse(validacao?.resultado)?.token) || status == 1 ? (
+            {validacao.resultado && (JSON.parse(validacao?.resultado)?.token) || (status == 1 && count === 0 && success) ? (
                 <Stack>
                     <Container
                         as={Flex}
@@ -338,7 +348,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
                         justify="center"
                         flexDir="column"
                         py={4}
-                    >   
+                    >
                         <Stepper index={activeStep} mb={12} overflow="auto">
                             {steps.map((step, index) => (
                                 <Step key={index}>
@@ -511,7 +521,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
                                             </Button>
                                         )}
 
-                                        {photo != null && (
+                                        {photo != null && count === 0 && (
                                             <Button
                                                 type="button"
                                                 borderRadius={0}
@@ -530,6 +540,17 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
                                                 Refazer Foto
                                             </Button>
                                         )}
+
+                                        {
+                                            photo !== null && count > 0 && (
+                                                (
+                                                    <Countdown
+                                                        setCount={setCount}
+                                                        count={count}
+                                                    />
+                                                )
+                                            )
+                                        }
                                     </Center>
                                     <br />
                                 </Box>
