@@ -369,6 +369,7 @@ handle.post(async (req, res) => {
             fichas,
             observacoes,
             responsavelId,
+            condicoesGerais
         } = req.body;
         const ultimoProcesso = await prisma.processo.findFirst({
             where: {
@@ -383,6 +384,7 @@ handle.post(async (req, res) => {
                 codigo: ultimoProcesso ? ultimoProcesso?.codigo + 1 : 1,
                 tipoProcesso,
                 tipoGarantia: tipoGarantia ? tipoGarantia : "NENHUMA",
+                condicoesGerais,
                 campos,
                 status: "EM_ANDAMENTO",
                 fichas: {

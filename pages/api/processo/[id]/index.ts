@@ -68,7 +68,8 @@ handle.put(async (req, res) => {
             status,
             comissao,
             prazoContrato,
-            inicioContrato
+            inicioContrato,
+            condicoesGerais
         } = req.body;
 
         const data = await prisma.processo.update({
@@ -78,6 +79,7 @@ handle.put(async (req, res) => {
             data: {
                 tipoProcesso,
                 tipoGarantia: tipoGarantia ? tipoGarantia : "NENHUMA",
+                condicoesGerais,
                 campos,
                 status,
                 observacoes,

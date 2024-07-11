@@ -51,6 +51,7 @@ const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
     responsavelId: yup.string().required("Campo obrigatório"),
     imovelId: yup.string().required("Campo obrigatório"),
+    condicoesGerais: yup.string(),
     inicioContrato: yup.date().nullable(),
     prazoContrato: yup.string().max(90, 'Limite 90 caracteres').nullable(),
     comissao: yup.string().max(45, 'Limite 45 caracteres').nullable()
@@ -119,7 +120,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         await queryClient.invalidateQueries(["imoveis"]);
         reset({ ...watch(), imovelId });
     };
-    
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
             <ModalOverlay />
@@ -354,13 +355,14 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                     </Tooltip>
                                                                 </Box>
                                                             }
-                                                            onChange={(e) =>{
+                                                            onChange={(e) => {
                                                                 e?.target?.value && setQuery(e?.target?.value);
                                                                 field.onChange(
                                                                     e?.id
                                                                         ? e.id
                                                                         : null
-                                                                )}
+                                                                )
+                                                            }
                                                             }
                                                             value={
                                                                 field.value
@@ -623,6 +625,11 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                                 }
                                                             />
                                                         )}
+                                                    />
+                                                    <FormInput
+                                                        size='sm'
+                                                        label='Codições Gerais'
+                                                        {...register('condicoesGerais')}
                                                     />
                                                 </GridItem>
                                             ))}

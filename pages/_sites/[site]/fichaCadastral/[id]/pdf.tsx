@@ -352,9 +352,15 @@ const FichaCadastral = ({
                     </Text>
                 </GridItem>
                 <GridItem borderWidth={1} px={2} py={1}>
-                    <Text fontSize="md">Comissão :</Text>
+                    <Text fontSize="md">Comissão:</Text>
                     <Text fontWeight="bold" fontSize="md">
                         {ficha?.Processo?.comissao}
+                    </Text>
+                </GridItem>
+                <GridItem borderWidth={1} px={2} py={1}>
+                    <Text fontSize="md">Condições Gerais:</Text>
+                    <Text fontWeight="bold" fontSize="md">
+                        {ficha?.Processo?.condicoesGerais}
                     </Text>
                 </GridItem>
                 <GridItem colSpan={4} borderWidth={1} px={2} py={1}>
