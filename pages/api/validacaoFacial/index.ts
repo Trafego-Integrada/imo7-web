@@ -13,7 +13,7 @@ handle.use(checkAuth);
 
 handle.get(async (req, res) => {
     try {
-        let { createdAt, deletedAt, campoCodigo, token } = req.query;
+        let { createdAt, deletedAt, campoCodigo, token, codigo, endereco } = req.query;
 
         let filtroQuery: Prisma.ValidacaoFacialWhereInput = { AND: [] };
 
@@ -47,6 +47,28 @@ handle.get(async (req, res) => {
             };
         }
 
+        if (codigo) {
+            filtroQuery = {
+                ...filtroQuery,
+                imovel: {
+                    codigo: {
+                        contains: codigo
+                    }
+                }
+            }
+        }
+
+        if (endereco) {
+            filtroQuery = {
+                ...filtroQuery,
+                imovel: {
+                    endereco: {
+                        contains: endereco
+                    }
+                }
+            }
+        }
+
         if (createdAt) {
             createdAt = JSON.parse(createdAt);
             if (!filtroQuery.AND) {
@@ -72,6 +94,8 @@ handle.get(async (req, res) => {
             };
         }
 
+
+
         const data = await prisma.validacaoFacial.findMany({
             where: {
                 ...filtroQuery,
@@ -81,6 +105,7 @@ handle.get(async (req, res) => {
                 ValidacaoFacialHistorico: true,
                 imovel: {
                     select: {
+                        codigo: true,
                         bairro: true,
                         endereco: true,
                         numero: true,
@@ -96,6 +121,7 @@ handle.get(async (req, res) => {
                             select: {
                                 imovel: {
                                     select: {
+                                        codigo: true,
                                         bairro: true,
                                         endereco: true,
                                         numero: true,

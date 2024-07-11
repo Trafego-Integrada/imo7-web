@@ -63,6 +63,8 @@ const filtroPadrao = {
     updatedAt: [null, null],
     status: [],
     responsaveis: [],
+    codigo: '',
+    endereco: '',
 }
 const FichasCadastrais = () => {
     const { usuario } = useAuth()
@@ -109,23 +111,45 @@ const FichasCadastrais = () => {
                         Acompanhe o extrato de validações faciais
                     </Text>
                 </Box>
-                <Box display='flex' >
-                    <FormDateRange
-                        size="sm"
-                        label="Data de Criação"
-                        startDate={filtro?.createdAt[0]}
-                        endDate={filtro?.createdAt[1]}
-                        onChange={(e) => {
-                            setFiltro({
-                                ...filtro,
-                                createdAt: e,
-                            });
-                        }}
-                    />
-                </Box>
-                <Box display='flex' justifyContent='space-between'>
-                    <Text>Foram encontrados {fichas?.total} resultados</Text>
-                    <BotaoAbrirModalCadastroValidacaoFacial />
+                <Box display='flex' flexDirection='column' gap={2} >
+                    <Box display='flex' gap={2} >
+                        <FormDateRange
+                            size="sm"
+                            label="Data de Criação"
+                            startDate={filtro?.createdAt[0]}
+                            endDate={filtro?.createdAt[1]}
+                            onChange={(e) => {
+                                setFiltro({
+                                    ...filtro,
+                                    createdAt: e,
+                                });
+                            }}
+                        />
+                        <FormInput
+                            size='sm'
+                            label='Código do imóvel'
+                            onChange={e => {
+                                setFiltro({
+                                    ...filtro,
+                                    codigo: e.target.value
+                                })
+                            }}
+                        />
+                        <FormInput
+                            size='sm'
+                            label='Endereço do imóvel'
+                            onChange={e => {
+                                setFiltro({
+                                    ...filtro,
+                                    endereco: e.target.value
+                                })
+                            }}
+                        />
+                    </Box>
+                    <Box display='flex' justifyContent='space-between'>
+                        <Text>Foram encontrados {fichas?.total} resultados</Text>
+                        <BotaoAbrirModalCadastroValidacaoFacial />
+                    </Box>
                 </Box>
                 <Box>
                     {/* <Box bg="white" p={4} mb={4}>
@@ -375,6 +399,13 @@ const FichasCadastrais = () => {
                                                             color="gray"
                                                         >Imóvel</Text>
                                                         <Text>
+                                                            {
+                                                                item?.imovel?.codigo
+                                                                ??
+                                                                item?.ficha?.Processo?.imovel
+                                                                    ?.codigo
+                                                            }
+                                                            ,{""}
                                                             {
                                                                 item?.imovel?.endereco
                                                                 ??
