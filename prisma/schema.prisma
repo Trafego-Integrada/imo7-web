@@ -1099,30 +1099,31 @@ model Historico {
 }
 
 model Processo {
-    id             String           @id @default(uuid())
-    tipoProcesso   TipoProcesso     @default(LOCACAO)
-    codigo         Int?
-    imovelId       Int?
-    contratoId     Int?
-    imobiliariaId  Int?
-    campos         Json?
-    observacoes    String?          @db.LongText
-    status         StatusProcesso   @default(EM_ANDAMENTO)
-    createdAt      DateTime?        @default(now())
-    updatedAt      DateTime?        @updatedAt
-    deletedAt      DateTime?
-    responsavelId  Int?
-    inicioContrato DateTime?
-    prazoContrato  String?          @db.VarChar(90)
-    comissao       String?          @db.VarChar(45)
-    tipoGarantia   TipoGarantia     @default(NENHUMA)
-    Anexo          Anexo[]
-    ConsultaNetrin ConsultaNetrin[]
-    fichas         FichaCadastral[]
-    contrato       Contrato?        @relation(fields: [contratoId], references: [id])
-    imobiliaria    Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
-    imovel         Imovel?          @relation(fields: [imovelId], references: [id])
-    responsavel    Usuario?         @relation(fields: [responsavelId], references: [id])
+    id              String           @id @default(uuid())
+    tipoProcesso    TipoProcesso     @default(LOCACAO)
+    condicoesGerais String?
+    codigo          Int?
+    imovelId        Int?
+    contratoId      Int?
+    imobiliariaId   Int?
+    campos          Json?
+    observacoes     String?          @db.LongText
+    status          StatusProcesso   @default(EM_ANDAMENTO)
+    createdAt       DateTime?        @default(now())
+    updatedAt       DateTime?        @updatedAt
+    deletedAt       DateTime?
+    responsavelId   Int?
+    inicioContrato  DateTime?
+    prazoContrato   String?          @db.VarChar(90)
+    comissao        String?          @db.VarChar(45)
+    tipoGarantia    TipoGarantia     @default(NENHUMA)
+    Anexo           Anexo[]
+    ConsultaNetrin  ConsultaNetrin[]
+    fichas          FichaCadastral[]
+    contrato        Contrato?        @relation(fields: [contratoId], references: [id])
+    imobiliaria     Imobiliaria?     @relation(fields: [imobiliariaId], references: [id])
+    imovel          Imovel?          @relation(fields: [imovelId], references: [id])
+    responsavel     Usuario?         @relation(fields: [responsavelId], references: [id])
 
     @@index([contratoId], map: "Processo_contratoId_fkey")
     @@index([imobiliariaId], map: "Processo_imobiliariaId_fkey")

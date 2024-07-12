@@ -45,6 +45,7 @@ const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
     responsavelId: yup.string().required("Campo obrigatório"),
     imovelId: yup.string().required("Campo obrigatório"),
+    condicoesGerais: yup.string(),
     tipoGarantia: yup.string().when("tipoProcesso", {
         is: (v) => v === "LOCACAO",
         then: yup.string().required("Campo obrigatório"),
@@ -87,10 +88,10 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
             });
             queryClient.invalidateQueries(["processos"]);
             onClose();
-        } catch (error) {}
+        } catch (error) { }
     };
     const listarImoveis = useMutation(imo7ApiService("imovel").list);
-    const { data: imoveis,  } = useQuery(
+    const { data: imoveis, } = useQuery(
         ["imoveis", { noIncludes: true, query }],
         imo7ApiService("imovel").list,
         {
@@ -129,7 +130,7 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
         await queryClient.invalidateQueries(["imoveis"]);
         reset({ ...watch(), imovelId });
     };
-    
+
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="3xl">
@@ -268,29 +269,30 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                                             "imovelId"
                                                                         )
                                                                             ? modalImovel.current.onOpen(
-                                                                                  watch(
-                                                                                      "imovelId"
-                                                                                  )
-                                                                              )
+                                                                                watch(
+                                                                                    "imovelId"
+                                                                                )
+                                                                            )
                                                                             : modalImovel.current.onOpen()
                                                                     }
                                                                 />
                                                             </Tooltip>
                                                         </Box>
                                                     }
-                                                    onChange={(e) =>{
+                                                    onChange={(e) => {
                                                         e?.target?.value && setQuery(e?.target?.value);
                                                         field.onChange(
                                                             e?.id ? e.id : null
-                                                        )}
+                                                        )
+                                                    }
                                                     }
                                                     value={
                                                         field.value
                                                             ? imoveis?.data?.data.find(
-                                                                  (i) =>
-                                                                      i.id ==
-                                                                      field.value
-                                                              )
+                                                                (i) =>
+                                                                    i.id ==
+                                                                    field.value
+                                                            )
                                                             : null
                                                     }
                                                     error={
@@ -324,10 +326,10 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                                     value={
                                                         field.value
                                                             ? usuarios?.data?.data.find(
-                                                                  (i) =>
-                                                                      i.id ==
-                                                                      field.value
-                                                              )
+                                                                (i) =>
+                                                                    i.id ==
+                                                                    field.value
+                                                            )
                                                             : null
                                                     }
                                                     error={
@@ -440,6 +442,11 @@ export const NovoProcesso = ({ isOpen, onClose, callback }) => {
                                             />
                                         </GridItem>
                                     ))}
+                                    <FormInput
+                                        size='sm'
+                                        label='Codições Gerais'
+                                        {...register('condicoesGerais')}
+                                    />
                                 </Grid>
                             </Box>
                             <Box>
