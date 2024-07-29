@@ -11,7 +11,7 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react'
-import { forwardRef, useImperativeHandle, useState } from 'react'
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 
 // import pdf worker as a url, see `next.config.js` and `pdf-worker.js`
@@ -19,7 +19,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 import 'react-pdf/dist/esm/Page/TextLayer.css'
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css'
 
-const ModalBase = ({}, ref: any) => {
+const ModalBase = ({ }, ref: any) => {
     const [url, setUrl] = useState('')
     const [numPages, setNumPages] = useState(1)
     const [pageNumber, setPageNumber] = useState(1)
@@ -85,15 +85,24 @@ const ModalBase = ({}, ref: any) => {
                                 >
                                     Próxima
                                 </Button>
+                                <a
+                                    href={`https://docs.google.com/viewerng/viewer?url=${url}`}
+                                    target='_blank' rel="noreferrer"
+                                >
+                                    <Button size='sm'>Imprimir</Button>
+                                </a>
                             </Flex>
 
-                            <Flex alignItems="center" justifyContent="center">
+                            <Flex
+                                alignItems="center"
+                                justifyContent="center"
+                            >
                                 <Document
                                     file={url}
                                     onLoadSuccess={onDocumentLoadSuccess}
                                     loading="Carregando..."
                                 >
-                                    <Page pageNumber={pageNumber} width={900} />
+                                    <Page pageNumber={1} width={900} />
                                 </Document>
                             </Flex>
                         </Flex>
