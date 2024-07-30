@@ -102,7 +102,7 @@ const ModalBase = ({ }, ref: any) => {
                                     onLoadSuccess={onDocumentLoadSuccess}
                                     loading="Carregando..."
                                 >
-                                    <Page pageNumber={1} width={900} />
+                                    <Page pageNumber={pageNumber} width={900} />
                                 </Document>
                             </Flex>
                         </Flex>
