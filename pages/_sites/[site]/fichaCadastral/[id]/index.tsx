@@ -59,6 +59,7 @@ import {
     Tooltip,
     useSteps,
     useToast,
+    useMediaQuery
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -514,6 +515,7 @@ const FichaCadastral = ({
             ...ficha,
         },
     })
+    const [isLargerThan600] = useMediaQuery('(max-width: 600px)')
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
             reset(data)
@@ -1811,6 +1813,11 @@ const FichaCadastral = ({
                                                                     'time' ? (
                                                                     <FormInput
                                                                         size="sm"
+                                                                        css={{
+                                                                            '::-webkit-calendar-picker-indicator': {
+                                                                                display: isLargerThan600 ? 'none' : 'block',
+                                                                            },
+                                                                        }}
                                                                         type={
                                                                             campo.tipoCampo
                                                                         }
@@ -2665,9 +2672,9 @@ const FichaCadastral = ({
                     </>)
                 }
 
-            
+
             </Container>
-            <RodapeFicha/>
+            <RodapeFicha />
         </Box>
     )
 }
