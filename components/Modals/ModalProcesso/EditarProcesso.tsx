@@ -270,6 +270,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                             <option value="CAUCAO">
                                                                 Caução
                                                             </option>
+                                                            <option value="CREDPAGO">
+                                                                CredPago
+                                                            </option>
                                                         </FormSelect>
                                                     </GridItem>
                                                 )}
