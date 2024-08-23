@@ -997,6 +997,18 @@ const FichaCadastral = ({
                                     </Text>
                                 </GridItem>
                             )}
+                            {
+                                ficha.Processo?.condicoesGerais && (
+                                    <GridItem p={4} bg="white">
+                                        <Text fontSize="sm" color="gray">
+                                            Condições Gerais
+                                        </Text>
+                                        <Text w='max-content'>
+                                            {ficha.Processo.condicoesGerais}
+                                        </Text>
+                                    </GridItem>
+                                )
+                            }
                         </Grid>
                         <Flex flexDir={{ base: 'column', lg: 'row' }}>
                             <Box w={{ base: 'full', lg: 'xs' }} overflow="auto">

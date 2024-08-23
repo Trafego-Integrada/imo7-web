@@ -46,6 +46,7 @@ import { Documentos } from "../Contrato/Documentos";
 import { Historicos } from "@/components/Pages/Historicos";
 import { ModalImovel } from "../ModalImovel";
 import { buscarImovel } from "@/services/models/imovel";
+import { TooltipCondicoesGerais } from "./TooltipCondicoesGerais";
 
 const schema = yup.object({
     tipoProcesso: yup.string().required("Campo obrigatório"),
@@ -120,6 +121,9 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
         await queryClient.invalidateQueries(["imoveis"]);
         reset({ ...watch(), imovelId });
     };
+
+    console.log('CAMPOS:::', campos);
+
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="6xl">
@@ -631,7 +635,7 @@ export const EditarProcesso = ({ id, isOpen, onClose }) => {
                                                     />
                                                     <FormInput
                                                         size='sm'
-                                                        label='Codições Gerais'
+                                                        label={<Flex alignItems='center' gap={2}><Text>Condições Gerais</Text> <TooltipCondicoesGerais /></Flex>}
                                                         {...register('condicoesGerais')}
                                                     />
                                                 </GridItem>
