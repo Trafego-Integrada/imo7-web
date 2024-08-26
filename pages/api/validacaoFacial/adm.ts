@@ -33,7 +33,12 @@ handle.get(async (req, res) => {
         if (nomeImobiliaria) {
             filtroQuery = {
                 ...filtroQuery,
-                imobiliaria: { nomeFantasia: { contains: nomeImobiliaria } }
+                imobiliaria: {
+                    OR: [
+                        { razaoSocial: { contains: nomeImobiliaria } },
+                        { nomeFantasia: { contains: nomeImobiliaria } }
+                    ]
+                }
             };
         }
 
