@@ -103,7 +103,7 @@ handler.post(async (req, res) => {
         if (id) {
             return res
                 .status(201)
-                .send({ status: 1, message: 'Validação enviada com sucesso.' })
+                .send({ status: 1, message: 'Validação enviada com sucesso.', pin: PIN })
         }
 
         return res
