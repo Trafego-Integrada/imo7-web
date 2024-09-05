@@ -115,7 +115,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
     const [status, setStatus] = useState(validacao?.status ?? 0)
     const [count, setCount] = useState(0)
     const [success, setSuccess] = useState(validacao?.status === 1)
-    const { clearLocalStorage, getLocalStorage, setLocalStorage } = useLocalStorage()
+    const [pin, setPin] = useState<string | undefined>(validacao?.pin)
 
     const {
         register,
@@ -177,14 +177,6 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
 
     const onSubmit = async (data) => {
         try {
-            if (validacao?.pin && getLocalStorage({ name: validacao?.id })) {
-                clearLocalStorage({ name: validacao?.id })
-            }
-
-            if (getLocalStorage({ name: validacao?.id }) && !validacao?.pin) {
-                return null
-            }
-
             setError(null)
 
             // Verificar resolução da imagem
@@ -202,23 +194,16 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
             //     })
 
             if (!error) {
-                if (!validacao?.pin) {
-                    setLocalStorage({ name: validacao?.id, value: 'true' })
-                }
-
                 const response = await api.post('validacaoFacial/step1', {
                     id: validacao.id,
                     cpf: validacao?.cpf,
                     foto: photo,
-                    pin: validacao?.pin ?? false
+                    pin: pin ?? false
                 })
-
-                if (getLocalStorage({ name: validacao?.id })) {
-                    clearLocalStorage({ name: validacao?.id })
-                }
 
                 // sucesso
                 if (response.data.status == 1) {
+                    setPin(response.data.pin)
                     setStatus(response.data.status)
                     setError(response.data.message)
                     setCount(180)
