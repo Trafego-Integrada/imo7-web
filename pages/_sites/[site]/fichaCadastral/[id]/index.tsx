@@ -825,6 +825,14 @@ const FichaCadastral = ({
     const [submitAlert, setSubmitAlert] = useState(false)
     useEffect(() => { }, [submitAlert])
     useEffect(() => { }, [ficha, campos, modelo])
+    useEffect(() => {
+        if (isLargerThan600) {
+            if (watch('preenchimento.ProprietarioDataNascimento').includes('-')) {
+                const [year, month, day] = watch('preenchimento.ProprietarioDataNascimento').split('-')
+                setValue('preenchimento.ProprietarioDataNascimento', day + '/' + month + '/' + year)
+            }
+        }
+    }, [isLargerThan600])
 
     return (
         <Box
