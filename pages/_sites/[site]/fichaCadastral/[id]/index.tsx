@@ -505,6 +505,7 @@ const FichaCadastral = ({
         control,
         reset,
         watch,
+        setValue,
         register,
         handleSubmit,
         formState: { isSubmitting, errors },
@@ -547,7 +548,27 @@ const FichaCadastral = ({
     }
 
     const onSubmit = async (data: any) => {
-        // Mapear campos e setar erros se não estiverem preenchidos
+        let ProprietarioDataNascimento
+
+        if (isLargerThan600) {
+            const date = watch('preenchimento').ProprietarioDataNascimento.replaceAll('/', '')
+
+            const match = date?.match(/^\d{8}$/)
+
+            if (match) {
+                ProprietarioDataNascimento = date.slice(4, 8) + '-' + date.slice(2, 4) + '-' + date.slice(0, 2)
+            } else {
+                setError('preenchimento.ProprietarioDataNascimento', {
+                    type: 'custom',
+                    message: 'Campo obrigatório'
+                })
+
+                return;
+            }
+
+        } else ProprietarioDataNascimento = watch('preenchimento.ProprietarioDataNascimento')
+
+        //Mapear campos e setar erros se não estiverem preenchidos
 
         if (
             activeStep !=
@@ -585,7 +606,7 @@ const FichaCadastral = ({
         } else {
             const checkPreenchimento = await verificarPreenchimento()
             if (checkPreenchimento) {
-                data = { ...data, status: 'preenchida' }
+                data = { ...data, preenchimento: { ...data.preenchimento, ProprietarioDataNascimento }, status: 'preenchida' }
                 toast({
                     title: 'Ficha preenchida e enviada',
                     position: 'top-right',
@@ -594,7 +615,7 @@ const FichaCadastral = ({
             }
         }
 
-        const finished = await onFormSave(data)
+        const finished = await onFormSave({ ...data, preenchimento: { ...data.preenchimento, ProprietarioDataNascimento } })
     }
 
     const onSubmitIgnorandoErros = async (data) => {
@@ -738,6 +759,26 @@ const FichaCadastral = ({
     }
 
     const onError = async (data) => {
+        let ProprietarioDataNascimento
+
+        if (isLargerThan600) {
+            const date = watch('preenchimento').ProprietarioDataNascimento.replaceAll('/', '')
+
+            const match = date?.match(/^\d{8}$/)
+
+            if (match) {
+                ProprietarioDataNascimento = date.slice(4, 8) + '-' + date.slice(2, 4) + '-' + date.slice(0, 2)
+            } else {
+                setError('preenchimento.ProprietarioDataNascimento', {
+                    type: 'custom',
+                    message: 'Campo obrigatório'
+                })
+
+                return;
+            }
+
+        } else ProprietarioDataNascimento = watch('preenchimento.ProprietarioDataNascimento')
+
         if (
             activeStep !=
             campos.filter(
@@ -772,10 +813,10 @@ const FichaCadastral = ({
         ) {
             clearErrors()
             setActiveStep(activeStep + 1)
-            await onFormSave(watch())
+            await onFormSave({ ...watch(), preenchimento: { ...watch('preenchimento'), ProprietarioDataNascimento } })
         } else {
             const checkPreenchimento = await verificarPreenchimento()
-            if (checkPreenchimento) await onFormSave(watch())
+            if (checkPreenchimento) await onFormSave({ ...watch(), preenchimento: { ...watch('preenchimento'), ProprietarioDataNascimento } })
         }
 
         setSubmitAlert(false)
@@ -1831,7 +1872,7 @@ const FichaCadastral = ({
                                                                             },
                                                                         }}
                                                                         type={
-                                                                            campo.tipoCampo
+                                                                            isLargerThan600 ? 'text' : campo.tipoCampo
                                                                         }
                                                                         label={
                                                                             campo.nome
@@ -1853,6 +1894,49 @@ const FichaCadastral = ({
                                                                                 },
                                                                             },
                                                                         )}
+                                                                        onChange={(e) => {
+                                                                            const value = e.target.value.replaceAll('/', '')
+
+                                                                            if (!isLargerThan600) {
+                                                                                setValue('preenchimento.' +
+                                                                                    campo.codigo, value)
+                                                                                return;
+                                                                            }
+
+                                                                            const numbers = value.match(/\d+/g)
+
+                                                                            if (!numbers) {
+                                                                                setValue('preenchimento.' +
+                                                                                    campo.codigo, 'dd/mm/aaaa')
+                                                                                return
+                                                                            }
+
+                                                                            const regexDay = /3[01]|0[1-9]|[1-2][0-9]|\d/
+                                                                            const regexMonth = /1[0-2]|0[1-9]|\d/
+
+                                                                            let date
+
+                                                                            if (numbers[0].length <= 2) {
+                                                                                const day = parseInt(numbers[0], 10) > 31 ? '31' : numbers[0].match(regexDay)
+                                                                                date = day
+                                                                            } else if (numbers[0].length <= 4) {
+                                                                                const day = parseInt(numbers[0].slice(0, 2), 10) > 31 ? '31' : numbers[0].slice(0, 2).match(regexDay)
+                                                                                const month = parseInt(numbers[0].slice(2, 4), 10) > 12 ? '12' : numbers[0].slice(2, 4).match(regexMonth)
+
+                                                                                date = day + '/' + month
+                                                                            } else {
+                                                                                const day = parseInt(numbers[0].slice(0, 2), 10) > 31 ? '31' : numbers[0].slice(0, 2).match(regexDay)
+                                                                                const month = parseInt(numbers[0].slice(2, 4), 10) > 12 ? '12' : numbers[0].slice(2, 4).match(regexMonth)
+                                                                                const year = numbers[0].slice(4, 8)
+
+                                                                                date = day + '/' + month + '/' + year
+                                                                            }
+
+
+
+                                                                            setValue('preenchimento.' +
+                                                                                campo.codigo, date)
+                                                                        }}
                                                                         borderColor={
                                                                             watch(
                                                                                 'analise.' +
