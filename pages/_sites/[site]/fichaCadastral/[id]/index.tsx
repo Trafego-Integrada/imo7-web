@@ -507,8 +507,6 @@ const FichaCadastral = ({
     modelo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const toast = useToast()
-
-    console.log({ficha});
     
     const {
         control,
@@ -528,6 +526,9 @@ const FichaCadastral = ({
 
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
+            console.log({data});
+            console.log(watch())
+            
             setValue("anexos", data.anexos)
         },
     })
