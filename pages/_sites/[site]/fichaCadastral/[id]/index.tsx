@@ -406,6 +406,7 @@ function Previews(props) {
                     iconOnly: true,
                 }}
             />
+
             {props.data && (
                 <Flex flexDir="column" gap={1}>
                     <Text fontSize="sm">Arquivos anexados</Text>
@@ -510,14 +511,13 @@ const FichaCadastral = ({
 
     console.log({ficha});
     
-    
     const {
         control,
         reset,
         watch,
         register,
         handleSubmit,
-        setValue,
+        getValues,
         formState: { isSubmitting, errors },
         clearErrors,
         setError,
@@ -529,12 +529,19 @@ const FichaCadastral = ({
 
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
-            console.log({data});
-            console.log(watch())
-            
-            setValue("anexos", data.anexos)
+          const current = getValues()
+      
+          const novoData = { ...data }
+      
+          novoData.preenchimento = {
+            ...data.preenchimento,
+            InquilinoArquivosCopiaDocumentosMutiplos:
+              current?.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos || null
+          }
+      
+          reset(novoData)
         },
-    })
+      })
 
     // const buscar = useMutation(buscarFicha, {
     //     onSuccess: (data) => {
