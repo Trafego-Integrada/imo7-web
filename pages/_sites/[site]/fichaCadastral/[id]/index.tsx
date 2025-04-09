@@ -508,8 +508,6 @@ const FichaCadastral = ({
     modelo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const toast = useToast()
-
-    console.log({ficha});
     
     const {
         control,
@@ -517,7 +515,7 @@ const FichaCadastral = ({
         watch,
         register,
         handleSubmit,
-        getValues,
+        setValue,
         formState: { isSubmitting, errors },
         clearErrors,
         setError,
@@ -529,35 +527,18 @@ const FichaCadastral = ({
 
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
-          const current = getValues()
-      
-          const anexosAtuais = current.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos
-          const anexosDoServidor = data.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos
-      
-          // Garante que o campo venha como array válido
-          const anexosValidos = Array.isArray(anexosAtuais)
-            ? anexosAtuais
-            : typeof anexosAtuais === 'string'
-            ? JSON.parse(anexosAtuais || '[]')
-            : []
-      
-          const anexosServidorValidos = typeof anexosDoServidor === 'string'
-            ? JSON.parse(anexosDoServidor || '[]')
-            : []
-      
-          const anexosMesclados = [...new Set([...anexosServidorValidos, ...anexosValidos])]
-      
-          const novoData = {
-            ...data,
-            preenchimento: {
-              ...data.preenchimento,
-              InquilinoArquivosCopiaDocumentosMutiplos: JSON.stringify(anexosMesclados),
-            },
-          }
-      
-          reset(novoData)
+            const anexos = data.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos
+        
+            // Garante que o campo seja um array JSON válido
+            const anexosArray = typeof anexos === 'string' ? JSON.parse(anexos || '[]') : []
+        
+            setValue(
+            'preenchimento.InquilinoArquivosCopiaDocumentosMutiplos',
+            JSON.stringify(anexosArray)
+            )
         },
-      })      
+    })
+      
 
     // const buscar = useMutation(buscarFicha, {
     //     onSuccess: (data) => {
