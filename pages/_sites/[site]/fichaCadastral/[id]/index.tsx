@@ -514,7 +514,6 @@ const FichaCadastral = ({
         watch,
         register,
         handleSubmit,
-        setValue,
         formState: { isSubmitting, errors },
         clearErrors,
         setError,
@@ -524,19 +523,8 @@ const FichaCadastral = ({
         },
     })
 
-    // const buscar = useMutation(buscarFicha, {
-    //     onSuccess: (data) => {
-    //         console.log({data});
-    //         console.log(watch())
-            
-    //         setValue("anexos", data.anexos)
-    //     },
-    // })
-
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
-            console.log({data});
-            
             reset(data)
         },
     })
