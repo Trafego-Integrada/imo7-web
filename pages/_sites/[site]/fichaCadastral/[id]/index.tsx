@@ -531,17 +531,33 @@ const FichaCadastral = ({
         onSuccess: (data) => {
           const current = getValues()
       
-          const novoData = { ...data }
+          const anexosAtuais = current.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos
+          const anexosDoServidor = data.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos
       
-          novoData.preenchimento = {
-            ...data.preenchimento,
-            InquilinoArquivosCopiaDocumentosMutiplos:
-              current?.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos || null
+          // Garante que o campo venha como array válido
+          const anexosValidos = Array.isArray(anexosAtuais)
+            ? anexosAtuais
+            : typeof anexosAtuais === 'string'
+            ? JSON.parse(anexosAtuais || '[]')
+            : []
+      
+          const anexosServidorValidos = typeof anexosDoServidor === 'string'
+            ? JSON.parse(anexosDoServidor || '[]')
+            : []
+      
+          const anexosMesclados = [...new Set([...anexosServidorValidos, ...anexosValidos])]
+      
+          const novoData = {
+            ...data,
+            preenchimento: {
+              ...data.preenchimento,
+              InquilinoArquivosCopiaDocumentosMutiplos: JSON.stringify(anexosMesclados),
+            },
           }
       
           reset(novoData)
         },
-      })
+      })      
 
     // const buscar = useMutation(buscarFicha, {
     //     onSuccess: (data) => {
