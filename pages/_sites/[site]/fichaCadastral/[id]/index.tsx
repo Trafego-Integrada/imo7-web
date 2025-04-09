@@ -485,12 +485,14 @@ function Previews(props) {
                     </Flex>
                 </Flex>
             )}
+
             {props.error && (
                 <Alert status="error" rounded="lg">
                     <AlertIcon />
                     <AlertTitle>{props.error}</AlertTitle>
                 </Alert>
             )}
+
             <ModalTribunalJustica ref={preview} />
         </Flex>
     )
@@ -502,12 +504,14 @@ const FichaCadastral = ({
     modelo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const toast = useToast()
+
     const {
         control,
         reset,
         watch,
         register,
         handleSubmit,
+        setValue,
         formState: { isSubmitting, errors },
         clearErrors,
         setError,
@@ -516,11 +520,19 @@ const FichaCadastral = ({
             ...ficha,
         },
     })
+
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
-            reset(data)
+            setValue("anexos", data.anexos)
         },
     })
+
+    // const buscar = useMutation(buscarFicha, {
+    //     onSuccess: (data) => {
+    //         reset(data)
+    //     },
+    // })
+
     const atualizar = useMutation(atualizarFicha)
     const atualizarAnexos = useMutation(atualizarAnexosFicha) // Função para converter arquivo para base64
     console.log(watch())
@@ -651,6 +663,7 @@ const FichaCadastral = ({
             })
         }
     }
+
     const { activeStep, setActiveStep } = useSteps({
         index: 0,
         count: campos?.filter((i) =>
@@ -693,6 +706,7 @@ const FichaCadastral = ({
 
         return retorno
     }
+
     const onError = async (data) => {
         console.log('Adicionado')
         if (
@@ -738,6 +752,7 @@ const FichaCadastral = ({
         setSubmitAlert(false)
         return
     }
+
     const [submitAlert, setSubmitAlert] = useState(false)
     useEffect(() => {}, [submitAlert])
     useEffect(() => {}, [ficha, campos, modelo])
@@ -747,7 +762,6 @@ const FichaCadastral = ({
             bg="gray.100"
             minH="100vh"
             as="form"
-            id="form"
             onSubmit={handleSubmit(onSubmit, onError)}
         >
             <Head
@@ -1757,7 +1771,6 @@ const FichaCadastral = ({
                                                           campo.tipoCampo ==
                                                               'time' ? (
                                                             <FormInput
-                                                                onBlur={() => document.getElementById('form')?.requestSubmit()}
                                                                 size="sm"
                                                                 type={
                                                                     campo.tipoCampo
