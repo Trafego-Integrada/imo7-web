@@ -524,20 +524,22 @@ const FichaCadastral = ({
         },
     })
 
+    // const buscar = useMutation(buscarFicha, {
+    //     onSuccess: (data) => {
+    //         console.log({data});
+    //         console.log(watch())
+            
+    //         setValue("anexos", data.anexos)
+    //     },
+    // })
+
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
             console.log({data});
-            console.log(watch())
             
-            setValue("anexos", data.anexos)
+            reset(data)
         },
     })
-
-    // const buscar = useMutation(buscarFicha, {
-    //     onSuccess: (data) => {
-    //         reset(data)
-    //     },
-    // })
 
     const atualizar = useMutation(atualizarFicha)
     const atualizarAnexos = useMutation(atualizarAnexosFicha) // Função para converter arquivo para base64
