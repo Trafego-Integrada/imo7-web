@@ -507,6 +507,9 @@ const FichaCadastral = ({
     modelo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const toast = useToast()
+
+    console.log({ficha});
+    
     
     const {
         control,
