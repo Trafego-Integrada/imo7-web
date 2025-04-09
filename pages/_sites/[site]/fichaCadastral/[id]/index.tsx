@@ -255,30 +255,31 @@ function Previews(props) {
 
     const atualizarAnexos = useMutation(atualizarAnexosFicha, {
         onSuccess: () => {
-            //console.log('LINHA 261: FICHA CADASTRAL: REFRESH ANEXAR')
             props.buscar()
         },
     })
+
     const excluirAnexo = useMutation(excluirAnexoFicha, {
         onSuccess: () => {
-            //console.log('LINHA 261: FICHA CADASTRAL: REFRESH EXCLUIR')
             toast({
                 title: 'Arquivo excluído com sucesso',
                 position: 'top-right',
             })
+
             props.buscar()
-            //window.location.reload()
         },
     })
+
     const customBase64Uploader = async (event: any) => {
-        // convert file to base64 encoded
         if (event.options?.props?.multiple) {
             const files = event.files
+            
             toast({
                 title: 'Upload sendo realizado, aguarde...',
                 position: 'top-right',
                 status: 'info',
             })
+
             for await (const item of files) {
                 const base64String = await convertToBase64(item)
                 const fileExtension = getFileExtension(item.name)
@@ -310,6 +311,7 @@ function Previews(props) {
                     },
                 )
             }
+
             setTimeout(() => {
                 props.buscar()
             }, 1000)
@@ -343,6 +345,7 @@ function Previews(props) {
                 },
             )
         }
+
         setTimeout(() => {
             props.buscar()
         }, 1000)
@@ -505,6 +508,8 @@ const FichaCadastral = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const toast = useToast()
 
+    console.log({ficha});
+    
     const {
         control,
         reset,
@@ -535,8 +540,6 @@ const FichaCadastral = ({
 
     const atualizar = useMutation(atualizarFicha)
     const atualizarAnexos = useMutation(atualizarAnexosFicha) // Função para converter arquivo para base64
-    console.log(watch())
-    console.error('Erros', errors)
 
     const onFormSave = async (data: any) => {
         try {
@@ -548,7 +551,6 @@ const FichaCadastral = ({
                 position: 'top-right',
             })
         } catch (e) {
-            //console.log(e);
             toast({
                 title: 'Houve um problema',
                 description: e.response?.data?.message,
