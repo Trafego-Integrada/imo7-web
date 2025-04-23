@@ -528,27 +528,24 @@ const FichaCadastral = ({
     console.log(ficha);
 
 
-    const buscar = useMutation(buscarFicha, {
-        onSuccess: (data) => {
-            const anexos = data.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos
-
-            console.log('passou');
-
-
-            const anexosArray = typeof anexos === 'string' ? JSON.parse(anexos || '[]') : []
-
-            setValue(
-                'preenchimento.InquilinoArquivosCopiaDocumentosMutiplos',
-                JSON.stringify(anexosArray)
-            )
-        },
-    })
-
     // const buscar = useMutation(buscarFicha, {
     //     onSuccess: (data) => {
-    //         reset(data)
+    //         const anexos = data.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos
+
+    //         const anexosArray = typeof anexos === 'string' ? JSON.parse(anexos || '[]') : []
+
+    //         setValue(
+    //             'preenchimento.InquilinoArquivosCopiaDocumentosMutiplos',
+    //             JSON.stringify(anexosArray)
+    //         )
     //     },
     // })
+
+    const buscar = useMutation(buscarFicha, {
+        onSuccess: (data) => {
+            reset(data)
+        },
+    })
 
     const atualizar = useMutation(atualizarFicha)
     const atualizarAnexos = useMutation(atualizarAnexosFicha) // Função para converter arquivo para base64
