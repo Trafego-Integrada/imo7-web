@@ -525,17 +525,6 @@ const FichaCadastral = ({
         },
     })
 
-    const buscar = useMutation(buscarFicha, {
-        onSuccess: (data) => {
-            const preenchimentos = data.preenchimento
-
-            setValue(
-                'preenchimento',
-                JSON.stringify(preenchimentos)
-            )
-        },
-    })
-
     // const buscar = useMutation(buscarFicha, {
     //     onSuccess: (data) => {
     //         const anexos = data.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos
@@ -549,11 +538,11 @@ const FichaCadastral = ({
     //     },
     // })
 
-    // const buscar = useMutation(buscarFicha, {
-    //     onSuccess: (data) => {
-    //         reset(data)
-    //     },
-    // })
+    const buscar = useMutation(buscarFicha, {
+        onSuccess: (data) => {
+            reset(data)
+        },
+    })
 
     const atualizar = useMutation(atualizarFicha)
     const atualizarAnexos = useMutation(atualizarAnexosFicha) // Função para converter arquivo para base64
