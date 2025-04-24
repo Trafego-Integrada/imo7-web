@@ -526,22 +526,8 @@ const FichaCadastral = ({
 
     const buscarArquivos = useMutation(buscarFicha, {
         onSuccess: (data) => {
-            console.log(data);
-
             const arquivosAtualizados = Object.entries(data.preenchimento)
-                .filter(([_, value]) => {
-                    if (value === null) return true;
-                    if (typeof value === 'string') {
-                        if (value.includes('http')) return true;
-                        try {
-                            const parsed = JSON.parse(value);
-                            return Array.isArray(parsed) && parsed.every((v) => typeof v === 'string' && v.includes('http'));
-                        } catch {
-                            return false
-                        }
-                    }
-                    return false
-                })
+                .filter(([key]) => key.toLowerCase().includes('arquivos'))
                 .reduce((acc, [key, value]) => {
                     acc[key] = value;
                     return acc;
@@ -550,9 +536,9 @@ const FichaCadastral = ({
             setValue('preenchimento', (prev) => ({
                 ...prev,
                 ...arquivosAtualizados,
-            }))
+            }));
         },
-    })
+    });
 
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
