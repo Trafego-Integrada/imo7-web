@@ -527,7 +527,12 @@ const FichaCadastral = ({
     const buscarArquivos = useMutation(buscarFicha, {
         onSuccess: (data) => {
             const arquivosAtualizados = Object.entries(data.preenchimento)
-                .filter(([key]) => key.toLowerCase().includes('arquivos'))
+                .filter(([_, value]) => {
+                    if (typeof value === 'string' && value.includes('objectstorage.sa-saopaulo-1.oraclecloud.com')) {
+                        return true;
+                    }
+                    return false;
+                })
                 .reduce((acc, [key, value]) => {
                     acc[key] = value;
                     return acc;
@@ -539,6 +544,7 @@ const FichaCadastral = ({
             }));
         },
     });
+
 
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
