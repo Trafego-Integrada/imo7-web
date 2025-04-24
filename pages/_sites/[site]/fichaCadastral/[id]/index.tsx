@@ -530,7 +530,7 @@ const FichaCadastral = ({
         onSuccess: (data) => {
             setValue(
                 'preenchimento',
-                data.preenchimento
+                JSON.stringify(data.preenchimento)
             )
         },
     })
