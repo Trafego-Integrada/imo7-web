@@ -255,7 +255,7 @@ function Previews(props) {
 
     const atualizarAnexos = useMutation(atualizarAnexosFicha, {
         onSuccess: () => {
-            props.buscarArquivos()
+            props.buscar()
         },
     })
 
@@ -266,7 +266,7 @@ function Previews(props) {
                 position: 'top-right',
             })
 
-            props.buscarArquivos()
+            props.buscar()
         },
     })
 
@@ -305,7 +305,7 @@ function Previews(props) {
                                 position: 'top-right',
                                 status: 'success',
                             })
-                            props.buscarArquivos()
+                            props.buscar()
                             event.options.clear()
                         },
                     },
@@ -313,7 +313,7 @@ function Previews(props) {
             }
 
             setTimeout(() => {
-                props.buscarArquivos()
+                props.buscar()
             }, 1000)
         } else {
             const file = event.files[0]
@@ -347,7 +347,7 @@ function Previews(props) {
         }
 
         setTimeout(() => {
-            props.buscarArquivos()
+            props.buscar()
         }, 1000)
     }
 
@@ -537,16 +537,6 @@ const FichaCadastral = ({
     //         )
     //     },
     // })
-
-    const buscarArquivos = useMutation(buscarFicha, {
-        onSuccess: (data) => {
-            const data2 = {}
-
-            data2.preenchimento = {}
-
-            reset(data2)
-        },
-    })
 
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
