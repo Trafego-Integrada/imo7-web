@@ -528,22 +528,17 @@ const FichaCadastral = ({
         onSuccess: (data) => {
             const arquivosAtualizados = Object.entries(data.preenchimento)
                 .filter(([_, value]) => {
-                    if (typeof value === 'string' && value.includes('objectstorage.sa-saopaulo-1.oraclecloud.com')) {
-                        return true;
-                    }
-                    return false;
-                })
-                .reduce((acc, [key, value]) => {
-                    acc[key] = value;
-                    return acc;
-                }, {} as Record<string, any>);
+                    return (
+                        typeof value === 'string' &&
+                        value.includes('objectstorage.sa-saopaulo-1.oraclecloud.com')
+                    );
+                });
 
             arquivosAtualizados.forEach(([key, value]) => {
                 setValue(`preenchimento.${key}`, value);
             });
         },
-    });
-
+    })
 
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
