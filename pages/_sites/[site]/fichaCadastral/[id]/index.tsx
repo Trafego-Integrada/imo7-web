@@ -515,6 +515,7 @@ const FichaCadastral = ({
         register,
         handleSubmit,
         setValue,
+        getValues,
         formState: { isSubmitting, errors },
         clearErrors,
         setError,
@@ -523,10 +524,11 @@ const FichaCadastral = ({
             ...ficha,
         },
     })
-
     const buscarArquivos = useMutation(buscarFicha, {
         onSuccess: (data) => {
-            const arquivosAtualizados = Object.entries(data.preenchimento)
+            const preenchimentoAtual = getValues('preenchimento') || {};
+
+            const camposAtualizados = Object.entries(data.preenchimento)
                 .filter(([_, value]) => {
                     return (
                         typeof value === 'string' &&
@@ -534,11 +536,25 @@ const FichaCadastral = ({
                     );
                 });
 
-            arquivosAtualizados.forEach(([key, value]) => {
+            const camposAtualizadosKeys = camposAtualizados.map(([key]) => key);
+
+            camposAtualizados.forEach(([key, value]) => {
                 setValue(`preenchimento.${key}`, value);
             });
+
+            Object.entries(preenchimentoAtual).forEach(([key, value]) => {
+                const eraArquivo =
+                    typeof value === 'string' &&
+                    value.includes('objectstorage.sa-saopaulo-1.oraclecloud.com');
+
+                const naoVeioMais = !camposAtualizadosKeys.includes(key);
+
+                if (eraArquivo && naoVeioMais) {
+                    setValue(`preenchimento.${key}`, null)
+                }
+            });
         },
-    })
+    });
 
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
