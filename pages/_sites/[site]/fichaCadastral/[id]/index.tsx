@@ -528,7 +528,29 @@ const FichaCadastral = ({
         onSuccess: (data) => {
             console.log(data);
 
-            setValue('preenchimento', data.preenchimento)
+            const arquivosAtualizados = Object.entries(data.preenchimento)
+                .filter(([_, value]) => {
+                    if (value === null) return true;
+                    if (typeof value === 'string') {
+                        if (value.includes('http')) return true;
+                        try {
+                            const parsed = JSON.parse(value);
+                            return Array.isArray(parsed) && parsed.every((v) => typeof v === 'string' && v.includes('http'));
+                        } catch {
+                            return false
+                        }
+                    }
+                    return false
+                })
+                .reduce((acc, [key, value]) => {
+                    acc[key] = value;
+                    return acc;
+                }, {} as Record<string, any>);
+
+            setValue('preenchimento', (prev) => ({
+                ...prev,
+                ...arquivosAtualizados,
+            }))
         },
     })
 
