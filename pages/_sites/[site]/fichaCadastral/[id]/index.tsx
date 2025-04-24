@@ -127,6 +127,7 @@ function validateCPF(value) {
 function Previews(props) {
     const preview = useRef()
     const buscar = useMutation(buscarFicha)
+    const buscarArquivos = useMutation(buscarFicha)
     const toast = useToast(null)
     const [totalSize, setTotalSize] = useState(0)
     const fileUploadRef = useRef(null)
@@ -255,7 +256,7 @@ function Previews(props) {
 
     const atualizarAnexos = useMutation(atualizarAnexosFicha, {
         onSuccess: () => {
-            props.buscar()
+            props.buscarArquivos()
         },
     })
 
@@ -266,7 +267,7 @@ function Previews(props) {
                 position: 'top-right',
             })
 
-            props.buscar()
+            props.buscarArquivos()
         },
     })
 
@@ -305,7 +306,7 @@ function Previews(props) {
                                 position: 'top-right',
                                 status: 'success',
                             })
-                            props.buscar()
+                            props.buscarArquivos()
                             event.options.clear()
                         },
                     },
@@ -313,7 +314,7 @@ function Previews(props) {
             }
 
             setTimeout(() => {
-                props.buscar()
+                props.buscarArquivos()
             }, 1000)
         } else {
             const file = event.files[0]
@@ -347,7 +348,7 @@ function Previews(props) {
         }
 
         setTimeout(() => {
-            props.buscar()
+            props.buscarArquivos()
         }, 1000)
     }
 
@@ -525,18 +526,14 @@ const FichaCadastral = ({
         },
     })
 
-    // const buscar = useMutation(buscarFicha, {
-    //     onSuccess: (data) => {
-    //         const anexos = data.preenchimento?.InquilinoArquivosCopiaDocumentosMutiplos
-
-    //         const anexosArray = typeof anexos === 'string' ? JSON.parse(anexos || '[]') : []
-
-    //         setValue(
-    //             'preenchimento.InquilinoArquivosCopiaDocumentosMutiplos',
-    //             JSON.stringify(anexosArray)
-    //         )
-    //     },
-    // })
+    const buscarArquivos = useMutation(buscarFicha, {
+        onSuccess: (data) => {
+            setValue(
+                'preenchimento',
+                data.preenchimento
+            )
+        },
+    })
 
     const buscar = useMutation(buscarFicha, {
         onSuccess: (data) => {
@@ -1863,11 +1860,8 @@ const FichaCadastral = ({
                                                                         'preenchimento.' +
                                                                         campo.codigo,
                                                                     )}
-                                                                    buscar={() =>
-                                                                        buscar.mutate(
-                                                                            ficha.id,
-                                                                        )
-                                                                    }
+                                                                    buscar={() => buscar.mutate(ficha.id)}
+                                                                    buscarArquivos={() => buscarArquivos.mutate(ficha.id)}
                                                                     error={
                                                                         errors.preenchimento &&
                                                                             errors
