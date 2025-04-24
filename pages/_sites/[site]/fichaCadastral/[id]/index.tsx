@@ -528,10 +528,7 @@ const FichaCadastral = ({
 
     const buscarArquivos = useMutation(buscarFicha, {
         onSuccess: (data) => {
-            setValue(
-                'preenchimento',
-                JSON.stringify(data.preenchimento)
-            )
+            console.log(data);
         },
     })
 
