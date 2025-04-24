@@ -126,8 +126,6 @@ function validateCPF(value) {
 
 function Previews(props) {
     const preview = useRef()
-    const buscar = useMutation(buscarFicha)
-    const buscarArquivos = useMutation(buscarFicha)
     const toast = useToast(null)
     const [totalSize, setTotalSize] = useState(0)
     const fileUploadRef = useRef(null)
@@ -528,7 +526,7 @@ const FichaCadastral = ({
 
     const buscarArquivos = useMutation(buscarFicha, {
         onSuccess: (data) => {
-            console.log(data);
+            setValue('preenchimento', data.preenchimento)
         },
     })
 
@@ -2021,6 +2019,7 @@ const FichaCadastral = ({
                                                                             ficha.id,
                                                                         )
                                                                     }
+                                                                    buscarArquivos={() => buscarArquivos.mutate(ficha.id)}
                                                                     error={
                                                                         errors.preenchimento &&
                                                                             errors
@@ -2189,6 +2188,7 @@ const FichaCadastral = ({
                                                                             ficha.id,
                                                                         )
                                                                     }
+                                                                    buscarArquivos={() => buscarArquivos.mutate(ficha.id)}
                                                                     error={
                                                                         errors.preenchimento &&
                                                                             errors
