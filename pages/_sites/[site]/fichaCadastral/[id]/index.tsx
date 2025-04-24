@@ -538,12 +538,9 @@ const FichaCadastral = ({
                     return acc;
                 }, {} as Record<string, any>);
 
-            console.log(arquivosAtualizados);
-
-            setValue('preenchimento', (prev) => ({
-                ...prev,
-                ...arquivosAtualizados,
-            }));
+            arquivosAtualizados.forEach(([key, value]) => {
+                setValue(`preenchimento.${key}`, value);
+            });
         },
     });
 
