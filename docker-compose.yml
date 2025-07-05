@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+    imo7-web:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        deploy:
+            replicas: 2
+            update_config:
+                parallelism: 1
+                order: start-first
+                failure_action: rollback
+            restart_policy:
+                condition: on-failure
+            labels:
+                traefik.enable: 'true'
+                traefik.http.routers.imo7-web.service: 'imo7-web'
+                traefik.http.services.imo7-web.loadbalancer.server.port: 3000
+                traefik.http.routers.imo7-web.rule: 'Host(`imosetefichas.com.br`)'
+                traefik.http.routers.imo7-web.tls.certresolver: 'le'
+                traefik.http.routers.imo7-web.entrypoints: 'websecure'
+                traefik.http.routers.imo7-web.tls: 'true'
+        ports:
+            - '3000:3000'
+        networks:
+            - public
+
+networks:
+    public:
+        name: traefik_public
+        external: true

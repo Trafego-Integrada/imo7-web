@@ -1,0 +1,40 @@
+name: Build and Push Docker Image
+
+on:
+    push:
+        tags:
+            - 'v*.*.*'
+        branches:
+            - main
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+
+        steps:
+            # Step 1: Checkout the repository
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            # Step 2: Set up Docker Buildx (for advanced builds)
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+
+            # Step 3: Log in to Docker Hub or GitHub Container Registry (GHCR)
+            - name: Log in to Docker Hub
+              uses: docker/login-action@v2
+              with:
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_PASSWORD }}
+
+            # Step 4: Build the Docker image
+            - name: Build Docker image
+              run: |
+                  docker build -t gabrielferreira94/imo7-web:${{ github.ref_name }} .
+                  docker tag gabrielferreira94/imo7-web:${{ github.ref_name }} gabrielferreira94/imo7-web:latest
+
+            # Step 5: Push the Docker image to Docker Hub
+            - name: Push Docker image
+              run: |
+                  docker push gabrielferreira94/imo7-web:${{ github.ref_name }}
+                  docker push gabrielferreira94/imo7-web:latest
