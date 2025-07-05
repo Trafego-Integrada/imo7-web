@@ -2,39 +2,36 @@ import {
     Box,
     Button,
     Flex,
-    Grid,
     GridItem,
     Icon,
     Image,
     Stack,
     Text,
-    VStack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
-import { useContext, useState } from "react";
-import { AuthContext } from "@/contexts/AuthContext";
-import { withSSRGuest } from "@/utils/withSSRGuests";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { MdFingerprint } from "react-icons/md";
-import { Input } from "@/components/Forms/Input";
-import { FaFacebook, FaGoogle, FaSignInAlt } from "react-icons/fa";
-import { CgPassword } from "react-icons/cg";
-import BeatLoader from "react-spinners/BeatLoader";
-import { NextPage } from "next";
-import { Heading } from "@chakra-ui/layout";
-import { NextChakraLink } from "@/components/NextChakraLink";
+import { Input } from '@/components/Forms/Input'
+import { NextChakraLink } from '@/components/NextChakraLink'
+import { AuthContext } from '@/contexts/AuthContext'
+import { withSSRGuest } from '@/utils/withSSRGuests'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { NextPage } from 'next'
+import { useContext, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { CgPassword } from 'react-icons/cg'
+import { FaSignInAlt } from 'react-icons/fa'
+import { MdFingerprint } from 'react-icons/md'
+import BeatLoader from 'react-spinners/BeatLoader'
+import * as yup from 'yup'
 
 interface CredentialsProps {
-    documento: string;
-    password: string;
+    documento: string
+    password: string
 }
 
 const schema = yup.object().shape({
-    documento: yup.string().required("O CPF é obrigatório"),
-    password: yup.string().required("A senha é obrigatória"),
-});
+    documento: yup.string().required('O CPF é obrigatório'),
+    password: yup.string().required('A senha é obrigatória'),
+})
 
 const SignIn: NextPage = () => {
     const {
@@ -44,18 +41,18 @@ const SignIn: NextPage = () => {
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
-    });
-    const [error, setError] = useState(null);
-    const { signIn } = useContext(AuthContext);
+    })
+    const [error, setError] = useState(null)
+    const { signIn } = useContext(AuthContext)
     const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
         //console.log(data);
         try {
-            setError(null);
-            await signIn(data);
+            setError(null)
+            await signIn(data)
         } catch (error) {
-            setError(error.message);
+            setError(error.message)
         }
-    };
+    }
     return (
         <Stack
             bg="gray.50"
@@ -122,7 +119,7 @@ const SignIn: NextPage = () => {
                                     <Icon as={MdFingerprint} w={6} h={6} />
                                 }
                                 placeholder="Seu CPF"
-                                {...register("documento")}
+                                {...register('documento')}
                                 error={errors.documento?.message}
                                 color="white"
                             />
@@ -132,7 +129,7 @@ const SignIn: NextPage = () => {
                                 size="sm"
                                 leftIcon={<Icon as={CgPassword} w={6} h={6} />}
                                 placeholder="Sua senha"
-                                {...register("password")}
+                                {...register('password')}
                                 error={errors.password?.message}
                                 color="white"
                             />
@@ -156,13 +153,13 @@ const SignIn: NextPage = () => {
                 </GridItem>
             </Flex>
         </Stack>
-    );
-};
+    )
+}
 
-export default SignIn;
+export default SignIn
 
 export const getServerSideProps = withSSRGuest<any>(async (ctx) => {
     return {
         props: {},
-    };
-});
+    }
+})

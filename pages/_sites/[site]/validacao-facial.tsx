@@ -1,54 +1,31 @@
 import {
     Box,
     Button,
+    Center,
+    Container,
     Flex,
     Grid,
     GridItem,
+    Heading,
     Icon,
     Image,
     Stack,
     Text,
-    VStack,
-    Container,
-    Card,
-    CardBody,
-    CardFooter,
-    Divider,
-    ButtonGroup,
-    Center,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
-import {
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-} from "@chakra-ui/react";
+import { FormInput } from '@/components/Form/FormInput'
+import prisma from '@/lib/prisma'
 
-import { FormInput } from "@/components/Form/FormInput";
-import prisma from "@/lib/prisma";
+import { api } from '@/services/apiClient'
+import { NextPage } from 'next'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { FaSignInAlt } from 'react-icons/fa'
+import { MdFingerprint } from 'react-icons/md'
+import BeatLoader from 'react-spinners/BeatLoader'
 
-import React, { useContext, useState, useEffect, useRef } from "react";
-import { AuthContext } from "@/contexts/AuthContext";
-import { withSSRGuest } from "@/utils/withSSRGuests";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { MdFingerprint } from "react-icons/md";
-import { Input } from "@/components/Forms/Input";
-import { FaFacebook, FaGoogle, FaSignInAlt } from "react-icons/fa";
-import { CgPassword } from "react-icons/cg";
-import BeatLoader from "react-spinners/BeatLoader";
-import { NextPage } from "next";
-import { Heading } from "@chakra-ui/layout";
-import { NextChakraLink } from "@/components/NextChakraLink";
-import { api } from "@/services/apiClient";
-import { useRouter } from "next/router";
-
-import Webcam from "react-webcam";
-import { CameraOptions, useFaceDetection } from "react-use-face-detection";
-import FaceDetection from "@mediapipe/face_detection";
-import { Camera } from "@mediapipe/camera_utils";
+import Webcam from 'react-webcam'
 
 /*!
  *	Gerador e Validador de CPF v1.0.0
@@ -57,31 +34,31 @@ import { Camera } from "@mediapipe/camera_utils";
  *	Released under the MIT license
  */
 function CPF() {
-    "user_strict";
+    'user_strict'
     function r(r) {
         for (var t = null, n = 0; 9 > n; ++n)
-            t += r.toString().charAt(n) * (10 - n);
-        var i = t % 11;
-        return (i = 2 > i ? 0 : 11 - i);
+            t += r.toString().charAt(n) * (10 - n)
+        var i = t % 11
+        return (i = 2 > i ? 0 : 11 - i)
     }
     function t(r) {
         for (var t = null, n = 0; 10 > n; ++n)
-            t += r.toString().charAt(n) * (11 - n);
-        var i = t % 11;
-        return (i = 2 > i ? 0 : 11 - i);
+            t += r.toString().charAt(n) * (11 - n)
+        var i = t % 11
+        return (i = 2 > i ? 0 : 11 - i)
     }
-    var n = "CPF Inválido",
-        i = "CPF Válido";
-    (this.gera = function () {
-        for (var n = "", i = 0; 9 > i; ++i)
-            n += Math.floor(9 * Math.random()) + "";
+    var n = 'CPF Inválido',
+        i = 'CPF Válido'
+    ;(this.gera = function () {
+        for (var n = '', i = 0; 9 > i; ++i)
+            n += Math.floor(9 * Math.random()) + ''
         var o = r(n),
-            a = n + "-" + o + t(n + "" + o);
-        return a;
+            a = n + '-' + o + t(n + '' + o)
+        return a
     }),
         (this.valida = function (o) {
             for (
-                var a = o.replace(/\D/g, ""),
+                var a = o.replace(/\D/g, ''),
                     u = a.substring(0, 9),
                     f = a.substring(9, 11),
                     v = 0;
@@ -89,62 +66,62 @@ function CPF() {
                 v++
             )
                 if (
-                    "" + u + f ==
-                    "" + v + v + v + v + v + v + v + v + v + v + v
+                    '' + u + f ==
+                    '' + v + v + v + v + v + v + v + v + v + v + v
                 )
-                    return n;
+                    return n
             var c = r(u),
-                e = t(u + "" + c);
-            return f.toString() === c.toString() + e.toString() ? i : n;
-        });
+                e = t(u + '' + c)
+            return f.toString() === c.toString() + e.toString() ? i : n
+        })
 }
 
 function cpfMask(v) {
-    if (typeof v === "undefined") return;
-    v = v.replace(/\D/g, ""); //Remove tudo o que não é dígito
-    v = v.replace(/(\d{3})(\d)/, "$1.$2"); //Coloca um ponto entre o terceiro e o quarto dígitos
-    v = v.replace(/(\d{3})(\d)/, "$1.$2"); //Coloca um ponto entre o terceiro e o quarto dígitos
-    v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2"); //Coloca um hífen entre o terceiro e o quarto dígitos
-    return v;
+    if (typeof v === 'undefined') return
+    v = v.replace(/\D/g, '') //Remove tudo o que não é dígito
+    v = v.replace(/(\d{3})(\d)/, '$1.$2') //Coloca um ponto entre o terceiro e o quarto dígitos
+    v = v.replace(/(\d{3})(\d)/, '$1.$2') //Coloca um ponto entre o terceiro e o quarto dígitos
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2') //Coloca um hífen entre o terceiro e o quarto dígitos
+    return v
 }
 
 const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
-    const router = useRouter();
+    const router = useRouter()
 
-    const [photo, setPhoto] = useState();
-    const [windowStatus, setWindowStatus] = useState(null);
+    const [photo, setPhoto] = useState()
+    const [windowStatus, setWindowStatus] = useState(null)
 
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors, isSubmitting },
-    } = useForm();
+    } = useForm()
 
     useEffect(() => {
         // check();
-        checkResolution();
-        setWindowStatus(1);
-    }, []);
+        checkResolution()
+        setWindowStatus(1)
+    }, [])
 
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null)
 
     const check = async () => {
-        const response = await api.get("validacaoFacial/check", {
+        const response = await api.get('validacaoFacial/check', {
             imobiliariaId: imobiliaria.id,
             cpf: router.query.cpf,
-        });
+        })
 
         // //console.log("response");
         // //console.log(response);
         // //console.log(response.data.status);
 
-        let status = response.data.status;
+        let status = response.data.status
 
         // -1   = erro
         // 0    = aguardando
         // 1    = sucesso
-    };
+    }
 
     const checkResolution = async () => {
         //     let constraints = {
@@ -160,36 +137,36 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
         //     let stream_height = stream_settings.height;
         //     //console.log('Width: ' + stream_width + 'px');
         //     //console.log('Height: ' + stream_height + 'px');
-    };
+    }
 
     const onSubmit = async (data) => {
         try {
-            setError(null);
+            setError(null)
 
-            const response = await api.post("validacaoFacial/step1", {
+            const response = await api.post('validacaoFacial/step1', {
                 imobiliariaId: imobiliaria.id,
                 cpf: router.query.cpf,
                 foto: photo,
-            });
+            })
 
             // sucesso
             if (response.data.status == 1) {
                 //console.log(1);
-                setError(response.data.message);
+                setError(response.data.message)
             } else {
                 //console.log(2);
-                setError(response.data.message);
+                setError(response.data.message)
             }
         } catch (error) {
             // erro de api e execução
 
-            setError(error.message);
-            alert(error.message);
+            setError(error.message)
+            alert(error.message)
         }
-    };
+    }
 
-    if (typeof window === "undefined") {
-        return <div>Loading...</div>;
+    if (typeof window === 'undefined') {
+        return <div>Loading...</div>
     } else {
         // const { webcamRef, boundingBox, isLoading, detected, facesDetected } =
         //     useFaceDetection({
@@ -230,15 +207,15 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
         //                 onFrame,
         //             }),
         //     });
-        const webcamRef = Reactl.useRef(null);
+        const webcamRef = Reactl.useRef(null)
         const capture = React.useCallback(() => {
-            const imageSrc = webcamRef.current.getScreenshot();
-            setPhoto(imageSrc);
-        }, [webcamRef]);
+            const imageSrc = webcamRef.current.getScreenshot()
+            setPhoto(imageSrc)
+        }, [webcamRef])
 
         if (
-            router.query["cpf"] === undefined ||
-            new CPF().valida(router.query.cpf) == "CPF Inválido"
+            router.query['cpf'] === undefined ||
+            new CPF().valida(router.query.cpf) == 'CPF Inválido'
         ) {
             return (
                 <Stack
@@ -254,7 +231,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                         </Center>
                     </Container>
                 </Stack>
-            );
+            )
         }
 
         // if(1) {
@@ -283,10 +260,10 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                     <Center minW="calc(100vh)" minH="calc(100vh)">
                         <Grid
                             templateColumns={{
-                                base: "repeat(1, 1fr)",
-                                sm: "repeat(1, 1fr)",
-                                md: "repeat(2, 1fr)",
-                                lg: "repeat(2, 1fr)",
+                                base: 'repeat(1, 1fr)',
+                                sm: 'repeat(1, 1fr)',
+                                md: 'repeat(2, 1fr)',
+                                lg: 'repeat(2, 1fr)',
                             }}
                             gap={6}
                         >
@@ -309,7 +286,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                     height: {
                                         min: 720,
                                     },
-                                    facingMode: "user",
+                                    facingMode: 'user',
                                 }}
                             />
                             <GridItem w="100%">
@@ -327,7 +304,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                         borderWidth="1px"
                                         borderRadius="lg"
                                     >
-                                        <div style={{ position: "relative" }}>
+                                        <div style={{ position: 'relative' }}>
                                             {photo == null && (
                                                 <>
                                                     <Webcam
@@ -349,7 +326,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                             height: {
                                                                 min: 720,
                                                             },
-                                                            facingMode: "user",
+                                                            facingMode: 'user',
                                                         }}
                                                     />
                                                     {boundingBox.map(
@@ -359,9 +336,9 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                                     index + 1
                                                                 }`}
                                                                 style={{
-                                                                    border: "4px solid red",
+                                                                    border: '4px solid red',
                                                                     position:
-                                                                        "absolute",
+                                                                        'absolute',
                                                                     top: `${
                                                                         box.yCenter *
                                                                         100
@@ -381,17 +358,17 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                                     zIndex: 1,
                                                                 }}
                                                             />
-                                                        )
+                                                        ),
                                                     )}
                                                     <div
                                                         className="camera-face-overlay"
                                                         style={{
                                                             borderColor:
-                                                                "outline",
-                                                            marginLeft: "15%",
-                                                            marginRight: "15%",
-                                                            marginTop: "0%",
-                                                            marginBottom: "0%",
+                                                                'outline',
+                                                            marginLeft: '15%',
+                                                            marginRight: '15%',
+                                                            marginTop: '0%',
+                                                            marginBottom: '0%',
                                                         }}
                                                     ></div>
                                                 </>
@@ -403,11 +380,11 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                                         className="camera-face-overlay"
                                                         style={{
                                                             borderColor:
-                                                                "outline",
-                                                            marginLeft: "15%",
-                                                            marginRight: "15%",
-                                                            marginTop: "0%",
-                                                            marginBottom: "0%",
+                                                                'outline',
+                                                            marginLeft: '15%',
+                                                            marginRight: '15%',
+                                                            marginTop: '0%',
+                                                            marginBottom: '0%',
                                                         }}
                                                     ></div>
                                                 </div>
@@ -521,7 +498,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                                             />
                                         }
                                         placeholder="Seu CPF"
-                                        {...register("documento")}
+                                        {...register('documento')}
                                         error={errors.documento?.message}
                                         value={cpfMask(router.query.cpf)}
                                         readOnly={true}
@@ -559,15 +536,15 @@ const ValidacaoFacial: NextPage = ({ imobiliaria }) => {
                     </Center>
                 </Container>
             </Stack>
-        );
+        )
     }
-};
-export default ValidacaoFacial;
+}
+export default ValidacaoFacial
 
 export const getServerSideProps = async (ctx) => {
-    const { site } = ctx.query;
+    const { site } = ctx.query
     const imobiliaria = await prisma.imobiliaria.findFirst({
         where: { url: site },
-    });
-    return { props: { imobiliaria: JSON.parse(JSON.stringify(imobiliaria)) } };
-};
+    })
+    return { props: { imobiliaria: JSON.parse(JSON.stringify(imobiliaria)) } }
+}

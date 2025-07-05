@@ -1,52 +1,49 @@
-import { Avatar } from "@chakra-ui/avatar";
-import Icon from "@chakra-ui/icon";
-import { Box, Flex, List, ListItem, Text, VStack } from "@chakra-ui/layout";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
-import { FaUsers } from "react-icons/fa";
-import { MdAccountCircle, MdBusiness, MdDashboard } from "react-icons/md";
-import { useAuth } from "@/hooks/useAuth";
-import { NextChakraLink } from "@/components/NextChakraLink";
+import { NextChakraLink } from '@/components/NextChakraLink'
+import { useAuth } from '@/hooks/useAuth'
+import { Box, Flex, List, ListItem, Text, VStack } from '@chakra-ui/react'
+import { FaUsers } from 'react-icons/fa'
+import { MdAccountCircle, MdBusiness, MdDashboard } from 'react-icons/md'
 
 export const LayoutAdmin = ({ children }) => {
-    const { usuario } = useAuth();
+    const { usuario } = useAuth()
 
     const menu = [
         {
-            titulo: "Geral",
+            titulo: 'Geral',
             itens: [
                 {
-                    nome: "Dashboard",
+                    nome: 'Dashboard',
                     icon: MdDashboard,
-                    href: "/painel/admin",
+                    href: '/painel/admin',
                 },
             ],
         },
         {
-            titulo: "Gestão",
+            titulo: 'Gestão',
             itens: [
                 {
-                    nome: "Imobiliárias",
+                    nome: 'Imobiliárias',
                     icon: MdBusiness,
-                    href: "/painel/admin/imobiliarias",
+                    href: '/painel/admin/imobiliarias',
                 },
                 {
-                    nome: "Contas",
+                    nome: 'Contas',
                     icon: MdAccountCircle,
-                    href: "/painel/admin/contas",
+                    href: '/painel/admin/contas',
                 },
             ],
         },
         {
-            titulo: "Sistema",
+            titulo: 'Sistema',
             itens: [
                 {
-                    nome: "Usuários",
+                    nome: 'Usuários',
                     icon: FaUsers,
-                    href: "/painel/admin/usuarios",
+                    href: '/painel/admin/usuarios',
                 },
             ],
         },
-    ];
+    ]
     return (
         <Flex h="100vh">
             <Box as="aside" w={64} bg="gray.100">
@@ -77,7 +74,7 @@ export const LayoutAdmin = ({ children }) => {
                                     py={2}
                                     px={4}
                                     color="gray.600"
-                                    _hover={{ bg: "gray.200" }}
+                                    _hover={{ bg: 'gray.200' }}
                                 >
                                     <item.icon />
                                     <Text>{item.nome}</Text>
@@ -92,5 +89,5 @@ export const LayoutAdmin = ({ children }) => {
                 {children}
             </Box>
         </Flex>
-    );
-};
+    )
+}

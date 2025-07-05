@@ -1,12 +1,8 @@
-import { Avatar } from "@chakra-ui/avatar";
-import { Box, Flex, Text } from "@chakra-ui/layout";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
-import { Spinner } from "@chakra-ui/react";
-import { useAuth } from "@/hooks/useAuth";
-import { NextChakraLink } from "./NextChakraLink";
+import { useAuth } from '@/hooks/useAuth'
+import { Box, Flex, Spinner, Text } from '@chakra-ui/react'
 
 export const Header = ({ title, isFetching, children }) => {
-    const { usuario } = useAuth();
+    const { usuario } = useAuth()
     return (
         <Flex>
             <Flex w="full" h={12} justify="space-between" align="center" px={4}>
@@ -26,5 +22,5 @@ export const Header = ({ title, isFetching, children }) => {
                 </Box>
             </Flex>
         </Flex>
-    );
-};
+    )
+}

@@ -1,27 +1,28 @@
 import {
-    Box,
-    Button,
-    Flex,
-    GridItem,
-    Icon,
-    Image as ChakraImage,
-    Stack,
-    Text,
-    Container,
-    Center,
-    Stepper,
-    Step,
-    StepIndicator,
-    StepIcon,
-    StepNumber,
-    StepTitle,
-    StepDescription,
-    StepSeparator,
-    StepStatus,
-    useSteps,
     Alert,
     AlertIcon,
     AlertTitle,
+    Box,
+    Button,
+    Center,
+    Image as ChakraImage,
+    Container,
+    Flex,
+    GridItem,
+    Heading,
+    Icon,
+    Stack,
+    Step,
+    StepDescription,
+    StepIcon,
+    StepIndicator,
+    StepNumber,
+    Stepper,
+    StepSeparator,
+    StepStatus,
+    StepTitle,
+    Text,
+    useSteps,
 } from '@chakra-ui/react'
 
 import { Slide } from 'react-slideshow-image'
@@ -31,26 +32,23 @@ import 'react-slideshow-image/dist/styles.css'
 import { FormInput } from '@/components/Form/FormInput'
 import prisma from '@/lib/prisma'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { useForm } from 'react-hook-form'
 import { MdFingerprint } from 'react-icons/md'
 
+import { NextPage } from 'next'
 import { FaSignInAlt } from 'react-icons/fa'
 import BeatLoader from 'react-spinners/BeatLoader'
-import { NextPage } from 'next'
-import { Heading } from '@chakra-ui/layout'
 
 import { api } from '@/services/apiClient'
-import { useRouter } from 'next/router'
 
-import Webcam from 'react-webcam'
 import { CameraOptions, useFaceDetection } from 'react-use-face-detection'
+import Webcam from 'react-webcam'
 
+import { Countdown } from '@/components/Countdown'
 import { Camera } from '@mediapipe/camera_utils'
 import { FiArrowLeft, FiArrowRight, FiCheck } from 'react-icons/fi'
-import { Countdown } from '@/components/Countdown'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
 
 /*!
  *	Gerador e Validador de CPF v1.0.0
@@ -198,7 +196,7 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
                     id: validacao.id,
                     cpf: validacao?.cpf,
                     foto: photo,
-                    pin: pin ?? false
+                    pin: pin ?? false,
                 })
 
                 // sucesso
@@ -209,10 +207,10 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
                     setCount(180)
                     setTimeout(() => {
                         const { id } = validacao
-                        api.get(`validacaoFacial/${id}`)
-                            .then(result => setSuccess(result.data?.status === 1))
+                        api.get(`validacaoFacial/${id}`).then((result) =>
+                            setSuccess(result.data?.status === 1),
+                        )
                     }, 180 * 1000)
-
                 } else {
                     setError(response.data.message)
                 }
@@ -320,7 +318,8 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
 
     return (
         <>
-            {validacao.resultado && (JSON.parse(validacao?.resultado)?.token) || (status == 1 && count === 0 && success) ? (
+            {(validacao.resultado && JSON.parse(validacao?.resultado)?.token) ||
+            (status == 1 && count === 0 && success) ? (
                 <Stack>
                     <Container
                         as={Flex}
@@ -439,24 +438,29 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
                                                     {boundingBox.map(
                                                         (box, index) => (
                                                             <div
-                                                                key={`${index + 1
-                                                                    }`}
+                                                                key={`${
+                                                                    index + 1
+                                                                }`}
                                                                 style={{
                                                                     border: '4px solid red',
                                                                     position:
                                                                         'absolute',
-                                                                    top: `${box.yCenter *
+                                                                    top: `${
+                                                                        box.yCenter *
                                                                         100
-                                                                        }%`,
-                                                                    left: `${box.xCenter *
+                                                                    }%`,
+                                                                    left: `${
+                                                                        box.xCenter *
                                                                         100
-                                                                        }%`,
-                                                                    width: `${box.width *
+                                                                    }%`,
+                                                                    width: `${
+                                                                        box.width *
                                                                         100
-                                                                        }%`,
-                                                                    height: `${box.height *
+                                                                    }%`,
+                                                                    height: `${
+                                                                        box.height *
                                                                         100
-                                                                        }%`,
+                                                                    }%`,
                                                                     zIndex: 1,
                                                                 }}
                                                             />
@@ -544,16 +548,12 @@ const ValidacaoFacial: NextPage = ({ imobiliaria, validacao }: any) => {
                                             </Button>
                                         )}
 
-                                        {
-                                            photo !== null && count > 0 && (
-                                                (
-                                                    <Countdown
-                                                        setCount={setCount}
-                                                        count={count}
-                                                    />
-                                                )
-                                            )
-                                        }
+                                        {photo !== null && count > 0 && (
+                                            <Countdown
+                                                setCount={setCount}
+                                                count={count}
+                                            />
+                                        )}
                                     </Center>
                                     <br />
                                 </Box>

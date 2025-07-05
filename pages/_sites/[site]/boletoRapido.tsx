@@ -8,48 +8,40 @@ import {
     Flex,
     Grid,
     GridItem,
+    Heading,
     Icon,
     Image,
-    Input,
-    Stack,
     Text,
     VStack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
-import { FormInput } from "@/components/Form/FormInput";
-import { NextChakraLink } from "@/components/NextChakraLink";
-import { AuthContext } from "@/contexts/AuthContext";
-import prisma from "@/lib/prisma";
-import { api } from "@/services/apiClient";
-import { withSSRGuest } from "@/utils/withSSRGuests";
-import { Heading } from "@chakra-ui/layout";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { NextPage } from "next";
-import { useContext, useEffect, useRef, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { CgPassword } from "react-icons/cg";
-import { FaPrint, FaSignInAlt } from "react-icons/fa";
-import { FiArrowLeft, FiMail, FiPaperclip, FiPhone } from "react-icons/fi";
-import { MdFingerprint } from "react-icons/md";
-import BeatLoader from "react-spinners/BeatLoader";
-import * as yup from "yup";
-import { BiBarcode, BiPrinter } from "react-icons/bi";
-import { useMutation } from "react-query";
-import { buscarBoletoRapido } from "@/services/models/boleto";
-import { formatoData, formatoValor } from "@/helpers/helpers";
-import { useRouter } from "next/router";
+import { FormInput } from '@/components/Form/FormInput'
+import { NextChakraLink } from '@/components/NextChakraLink'
+import { formatoData, formatoValor } from '@/helpers/helpers'
+import prisma from '@/lib/prisma'
+import { buscarBoletoRapido } from '@/services/models/boleto'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { NextPage } from 'next'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { FaPrint, FaSignInAlt } from 'react-icons/fa'
+import { MdFingerprint } from 'react-icons/md'
+import { useMutation } from 'react-query'
+import BeatLoader from 'react-spinners/BeatLoader'
+import * as yup from 'yup'
 interface CredentialsProps {
-    documento: string;
-    password: string;
+    documento: string
+    password: string
 }
 
 const schema = yup.object().shape({
-    documento: yup.string().required("O CPF é obrigatório"),
-});
+    documento: yup.string().required('O CPF é obrigatório'),
+})
 
 const SignIn: NextPage = ({ imobiliaria }) => {
-    const router = useRouter();
-    const [boletos, setBoletos] = useState(null);
+    const router = useRouter()
+    const [boletos, setBoletos] = useState(null)
     const {
         watch,
         register,
@@ -59,21 +51,21 @@ const SignIn: NextPage = ({ imobiliaria }) => {
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
-        mode: "onTouched",
-    });
+        mode: 'onTouched',
+    })
 
     const buscar = useMutation(buscarBoletoRapido, {
         onSuccess: (data) => setBoletos(data),
-    });
+    })
     const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
         //console.log(data);
         try {
-            await buscar.mutateAsync(data);
+            await buscar.mutateAsync(data)
         } catch (error) {}
-    };
+    }
     useEffect(() => {
-        setFocus("documento");
-    }, []);
+        setFocus('documento')
+    }, [])
 
     return (
         <Box bg="gray.100" w="100vw" h="100vh">
@@ -81,8 +73,8 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                 <Grid
                     gap={4}
                     gridTemplateColumns={{
-                        base: "repeat(1,1fr)",
-                        lg: "repeat(3,1fr)",
+                        base: 'repeat(1,1fr)',
+                        lg: 'repeat(3,1fr)',
                     }}
                 >
                     <GridItem>
@@ -127,7 +119,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                     <Icon as={MdFingerprint} w={6} h={6} />
                                 }
                                 placeholder="Seu CPF"
-                                {...register("documento")}
+                                {...register('documento')}
                                 error={errors.documento?.message}
                             />
                             <Button
@@ -150,12 +142,12 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                         <Heading color="gray.600" mb={6}>
                                             <Text as="span" fontWeight="normal">
                                                 Fatura de
-                                            </Text>{" "}
-                                            {Intl.DateTimeFormat("pt-BR", {
-                                                month: "long",
-                                                year: "numeric",
+                                            </Text>{' '}
+                                            {Intl.DateTimeFormat('pt-BR', {
+                                                month: 'long',
+                                                year: 'numeric',
                                             }).format(
-                                                new Date(boleto.data_vencimen)
+                                                new Date(boleto.data_vencimen),
                                             )}
                                         </Heading>
                                         <Heading size="2xl" mb={2}>
@@ -178,7 +170,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                     >
                                         <NextChakraLink
                                             href={{
-                                                pathname: "/boleto/[id]",
+                                                pathname: '/boleto/[id]',
                                                 query: {
                                                     id: boleto.id,
                                                 },
@@ -216,7 +208,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                         </NextChakraLink>
                                         <NextChakraLink
                                             href={{
-                                                pathname: "/boleto/[id]",
+                                                pathname: '/boleto/[id]',
                                                 query: {
                                                     id: boleto.id,
                                                     pdf: true,
@@ -269,19 +261,19 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                 </Grid>
             </Container>
         </Box>
-    );
-};
+    )
+}
 
-export default SignIn;
+export default SignIn
 
 export const getServerSideProps = async (ctx) => {
-    const { site } = ctx.query;
+    const { site } = ctx.query
     const imobiliaria = await prisma.imobiliaria.findFirst({
         where: {
             url: site,
         },
-    });
+    })
     return {
         props: { imobiliaria: JSON.parse(JSON.stringify(imobiliaria)) },
-    };
-};
+    }
+}

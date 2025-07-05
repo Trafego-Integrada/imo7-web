@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
     imo7-web:
-        build:
-            context: .
-            dockerfile: Dockerfile
+        image: gabrielferreira94/imo7-web:latest
         deploy:
             replicas: 2
             update_config:

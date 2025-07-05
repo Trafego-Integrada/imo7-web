@@ -5,49 +5,47 @@ import {
     Flex,
     Grid,
     GridItem,
+    Heading,
     Icon,
     Image,
-    Input,
-    Stack,
     Text,
     useToast,
     VStack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
-import { FormInput } from "@/components/Form/FormInput";
-import { NextChakraLink } from "@/components/NextChakraLink";
-import { AuthContext } from "@/contexts/AuthContext";
-import prisma from "@/lib/prisma";
-import { api } from "@/services/apiClient";
-import { withSSRGuest } from "@/utils/withSSRGuests";
-import { Heading } from "@chakra-ui/layout";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { NextPage } from "next";
-import { useContext, useEffect, useRef, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { CgPassword } from "react-icons/cg";
-import { FaSignInAlt } from "react-icons/fa";
-import { FiArrowLeft, FiMail, FiPaperclip, FiPhone } from "react-icons/fi";
-import { MdFingerprint } from "react-icons/md";
-import BeatLoader from "react-spinners/BeatLoader";
-import * as yup from "yup";
-import { BiBarcode } from "react-icons/bi";
+import { FormInput } from '@/components/Form/FormInput'
+import { NextChakraLink } from '@/components/NextChakraLink'
+import { AuthContext } from '@/contexts/AuthContext'
+import prisma from '@/lib/prisma'
+import { api } from '@/services/apiClient'
+import { withSSRGuest } from '@/utils/withSSRGuests'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { NextPage } from 'next'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { BiBarcode } from 'react-icons/bi'
+import { CgPassword } from 'react-icons/cg'
+import { FaSignInAlt } from 'react-icons/fa'
+import { FiArrowLeft, FiMail, FiPaperclip, FiPhone } from 'react-icons/fi'
+import { MdFingerprint } from 'react-icons/md'
+import BeatLoader from 'react-spinners/BeatLoader'
+import * as yup from 'yup'
 interface CredentialsProps {
-    documento: string;
-    password: string;
+    documento: string
+    password: string
 }
 
 const schema = yup.object().shape({
-    documento: yup.string().required("O CPF é obrigatório"),
-    password: yup.string().required("A senha é obrigatória"),
-});
+    documento: yup.string().required('O CPF é obrigatório'),
+    password: yup.string().required('A senha é obrigatória'),
+})
 
 const SignIn: NextPage = ({ imobiliaria }) => {
-    const toast = useToast();
-    const inputSenha = useRef(null);
-    const [usuario, setUsuario] = useState(null);
-    const [usuarioExiste, setUsuarioExiste] = useState(false);
-    const [atualizarCadastro, setAtualizarCadastro] = useState(false);
+    const toast = useToast()
+    const inputSenha = useRef(null)
+    const [usuario, setUsuario] = useState(null)
+    const [usuarioExiste, setUsuarioExiste] = useState(false)
+    const [atualizarCadastro, setAtualizarCadastro] = useState(false)
     const {
         watch,
         register,
@@ -57,57 +55,57 @@ const SignIn: NextPage = ({ imobiliaria }) => {
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(schema),
-        mode: "onTouched",
-    });
-    const [error, setError] = useState(null);
-    const { signIn } = useContext(AuthContext);
+        mode: 'onTouched',
+    })
+    const [error, setError] = useState(null)
+    const { signIn } = useContext(AuthContext)
     const verificar = async () => {
         try {
-            const { data } = await api.get("auth/sessions", {
+            const { data } = await api.get('auth/sessions', {
                 params: {
-                    documento: watch("documento"),
+                    documento: watch('documento'),
                 },
-            });
-            setUsuario(data);
+            })
+            setUsuario(data)
             setTimeout(() => {
                 //console.log("ok");
-                setFocus("password");
-            }, 100);
+                setFocus('password')
+            }, 100)
         } catch (error) {
             toast({
-                title: "Erro ao fazer login",
+                title: 'Erro ao fazer login',
                 description: error.response?.data?.message,
-                status: "error",
+                status: 'error',
                 duration: 9000,
-            });
+            })
         }
-    };
+    }
     const atualizar = async () => {
         try {
-            setError(null);
-            const { data } = await api.post("auth/update", watch());
-            setUsuario(data);
+            setError(null)
+            const { data } = await api.post('auth/update', watch())
+            setUsuario(data)
         } catch (error) {
-            setError(error.response?.data?.message);
+            setError(error.response?.data?.message)
         }
-    };
+    }
     const onSubmit: SubmitHandler<CredentialsProps> = async (data) => {
         //console.log(data);
         try {
-            setError(null);
-            await signIn(data);
+            setError(null)
+            await signIn(data)
         } catch (error) {
-            setError(error.message);
+            setError(error.message)
         }
-    };
+    }
     useEffect(() => {
-        setFocus("documento");
-    }, []);
+        setFocus('documento')
+    }, [])
 
     return (
         <Box
             bg="gray.100"
-            bgImage={imobiliaria?.bg ? imobiliaria?.bg : ""}
+            bgImage={imobiliaria?.bg ? imobiliaria?.bg : ''}
             backgroundPosition="center"
             bgSize="cover"
             bgRepeat="no-repeat"
@@ -115,7 +113,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
             h="100vh"
         >
             <Container maxW="container.lg" as={Flex} h="full" align="center">
-                <Grid templateColumns={{ lg: "repeat(3, 1fr)" }} gap={4}>
+                <Grid templateColumns={{ lg: 'repeat(3, 1fr)' }} gap={4}>
                     <GridItem colSpan={{ lg: 1 }}>
                         <VStack
                             bg="white"
@@ -183,7 +181,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                     <Icon as={MdFingerprint} w={6} h={6} />
                                 }
                                 placeholder="Seu CPF"
-                                {...register("documento")}
+                                {...register('documento')}
                                 error={errors.documento?.message}
                                 isDisabled={usuario ? true : false}
                             />
@@ -194,7 +192,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                         <Icon as={CgPassword} w={6} h={6} />
                                     }
                                     placeholder="Digite a senha"
-                                    {...register("password")}
+                                    {...register('password')}
                                     error={errors.password?.message}
                                 />
                             ) : usuario && usuario.atualizar ? (
@@ -208,7 +206,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                             />
                                         }
                                         placeholder="Informeu o número do seu contrato"
-                                        {...register("contrato")}
+                                        {...register('contrato')}
                                         error={errors.contrato?.message}
                                     />
                                     <FormInput
@@ -216,7 +214,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                             <Icon as={FiMail} w={6} h={6} />
                                         }
                                         placeholder="Informeu um e-mail válido"
-                                        {...register("email")}
+                                        {...register('email')}
                                         error={errors.email?.message}
                                     />
                                     <FormInput
@@ -225,7 +223,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                             <Icon as={FiPhone} w={6} h={6} />
                                         }
                                         placeholder="Informeu seu celular"
-                                        {...register("celular")}
+                                        {...register('celular')}
                                         error={errors.celular?.message}
                                     />
                                     <FormInput
@@ -234,7 +232,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                             <Icon as={CgPassword} w={6} h={6} />
                                         }
                                         placeholder="Crie uma senha"
-                                        {...register("password")}
+                                        {...register('password')}
                                         error={errors.password?.message}
                                     />
                                     <FormInput
@@ -243,7 +241,7 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                             <Icon as={CgPassword} w={6} h={6} />
                                         }
                                         placeholder="Repita a senha"
-                                        {...register("confirmPassword")}
+                                        {...register('confirmPassword')}
                                         error={errors.confirmPassword?.message}
                                     />
                                 </>
@@ -260,8 +258,8 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                         <BeatLoader size={8} color="white" />
                                     }
                                     onClick={(e) => {
-                                        e.preventDefault();
-                                        verificar();
+                                        e.preventDefault()
+                                        verificar()
                                     }}
                                 >
                                     Continuar
@@ -280,8 +278,8 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                                             />
                                         }
                                         onClick={(e) => {
-                                            e.preventDefault();
-                                            atualizar();
+                                            e.preventDefault()
+                                            atualizar()
                                         }}
                                     >
                                         Atualizar
@@ -343,13 +341,13 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                         </Heading>
                         <Grid
                             gridTemplateColumns={{
-                                base: "repeat(2,1fr)",
-                                lg: "repeat(3,1fr)",
+                                base: 'repeat(2,1fr)',
+                                lg: 'repeat(3,1fr)',
                             }}
                             gap={4}
                         >
                             <NextChakraLink
-                                href={{ pathname: "/boletoRapido" }}
+                                href={{ pathname: '/boletoRapido' }}
                                 target="_blank"
                             >
                                 <GridItem
@@ -377,19 +375,19 @@ const SignIn: NextPage = ({ imobiliaria }) => {
                 </Grid>
             </Container>
         </Box>
-    );
-};
+    )
+}
 
-export default SignIn;
+export default SignIn
 
 export const getServerSideProps = withSSRGuest<any>(async (ctx) => {
-    const { site } = ctx.query;
+    const { site } = ctx.query
     const imobiliaria = await prisma.imobiliaria.findFirst({
         where: {
             url: site,
         },
-    });
+    })
     return {
         props: { imobiliaria: JSON.parse(JSON.stringify(imobiliaria)) },
-    };
-});
+    }
+})

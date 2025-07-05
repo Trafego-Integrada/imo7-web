@@ -6,7 +6,6 @@ import prisma from '@/lib/prisma'
 import { listarChamados } from '@/services/models/chamado'
 import { withSSRAuth } from '@/utils/withSSRAuth'
 import {
-    Badge,
     Box,
     Button,
     Flex,
@@ -18,7 +17,7 @@ import {
     Text,
 } from '@chakra-ui/react'
 import moment from 'moment'
-import { NextPage, InferGetServerSidePropsType } from 'next'
+import { InferGetServerSidePropsType, NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FaCopy, FaEye, FaGrinWink, FaPrint } from 'react-icons/fa'

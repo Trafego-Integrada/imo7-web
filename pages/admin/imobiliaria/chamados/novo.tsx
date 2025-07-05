@@ -1,11 +1,9 @@
-import { withSSRAuth } from "@/utils/withSSRAuth";
-import { Button } from "@chakra-ui/button";
-import { Box, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/layout";
-import { Textarea } from "@chakra-ui/textarea";
-import { NextPage } from "next";
-import { Input } from "@/components/Forms/Input";
-import { Select } from "@/components/Forms/Select";
-import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
+import { Input } from '@/components/Forms/Input'
+import { Select } from '@/components/Forms/Select'
+import { LayoutPainel } from '@/components/Layouts/LayoutPainel'
+import { withSSRAuth } from '@/utils/withSSRAuth'
+import { Box, Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
+import { NextPage } from 'next'
 
 const AbrirChamado: NextPage = () => {
     return (
@@ -17,7 +15,7 @@ const AbrirChamado: NextPage = () => {
                     </Heading>
                     <Text
                         my={2}
-                        maxW={"2xl"}
+                        maxW={'2xl'}
                         textAlign="center"
                         color="gray.500"
                         fontSize="xs"
@@ -47,15 +45,15 @@ const AbrirChamado: NextPage = () => {
                 </Flex>
             </Box>
         </LayoutPainel>
-    );
-};
+    )
+}
 
-export default AbrirChamado;
+export default AbrirChamado
 export const getServerSideProps = withSSRAuth(
     async (ctx) => {
         return {
             props: {},
-        };
+        }
     },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);
+    { cargos: ['imobiliaria', 'adm', 'conta'] },
+)

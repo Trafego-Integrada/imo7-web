@@ -1,33 +1,32 @@
-import { Avatar } from "@chakra-ui/avatar";
-import { Button } from "@chakra-ui/button";
+import { NextChakraLink } from '@/components/NextChakraLink'
+import { useAuth } from '@/hooks/useAuth'
+import { listarContratos } from '@/services/models/contrato'
 import {
-    Badge,
+    Avatar,
     Box,
     Container,
     Flex,
-    Grid,
-    GridItem,
     Heading,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
     Stack,
     Text,
-} from "@chakra-ui/layout";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
-import { useRouter } from "next/router";
-import { useQuery } from "react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { listarContratos } from "@/services/models/contrato";
-import { NextChakraLink } from "@/components/NextChakraLink";
+} from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import { useQuery } from 'react-query'
 
 export const LayoutPainel = ({ children }) => {
-    const router = useRouter();
-    const { usuario, signOut } = useAuth();
+    const router = useRouter()
+    const { usuario, signOut } = useAuth()
     const { data: contratos } = useQuery(
         [
-            "meusContratos",
+            'meusContratos',
             { proprietarioId: usuario?.id, inquilinoId: usuario?.id },
         ],
-        listarContratos
-    );
+        listarContratos,
+    )
     return (
         <Box bg="gray.100" minH="100vh">
             <Stack as="aside" bg="blue.600">
@@ -40,27 +39,27 @@ export const LayoutPainel = ({ children }) => {
                 >
                     <Menu>
                         <MenuButton color="white">
-                            {router.route.includes("[contratoId]") ? (
+                            {router.route.includes('[contratoId]') ? (
                                 <>
                                     {`${
                                         contratos?.data.data.find(
                                             (i) =>
                                                 i.id ==
-                                                Number(router.query.contratoId)
+                                                Number(router.query.contratoId),
                                         ).codigo
                                     } - ${
                                         contratos?.data.data.find(
                                             (i) =>
                                                 i.id ==
-                                                Number(router.query.contratoId)
+                                                Number(router.query.contratoId),
                                         ).imovel?.endereco
                                     }`}
                                 </>
                             ) : (
                                 <>
                                     {contratos && contratos.data?.data?.length
-                                        ? "Selecione um contrato"
-                                        : "Você não possui contratos ativos"}
+                                        ? 'Selecione um contrato'
+                                        : 'Você não possui contratos ativos'}
                                 </>
                             )}
                         </MenuButton>
@@ -73,7 +72,7 @@ export const LayoutPainel = ({ children }) => {
                                         href={`/${item.id}`}
                                     >
                                         <MenuItem>
-                                            {item.codigo} -{" "}
+                                            {item.codigo} -{' '}
                                             {item.imovel?.endereco}
                                         </MenuItem>
                                     </NextChakraLink>
@@ -110,9 +109,9 @@ export const LayoutPainel = ({ children }) => {
                         <MenuList>
                             {usuario.cargos?.find(
                                 (i) =>
-                                    i == "adm" ||
-                                    i == "conta" ||
-                                    i == "imobiliaria"
+                                    i == 'adm' ||
+                                    i == 'conta' ||
+                                    i == 'imobiliaria',
                             ) && (
                                 <MenuItem as={NextChakraLink} href="/admin">
                                     Painel Administrativo
@@ -138,85 +137,85 @@ export const LayoutPainel = ({ children }) => {
                         <NextChakraLink
                             href="/"
                             fontWeight={
-                                router.asPath == "/" ? "bold" : "normal"
+                                router.asPath == '/' ? 'bold' : 'normal'
                             }
                             letterSpacing="wider"
-                            _hover={{ fontWeight: "bold" }}
+                            _hover={{ fontWeight: 'bold' }}
                         >
                             Home
                         </NextChakraLink>
                         {router.query.contratoId &&
-                            router.query.contratoId != "undefined" &&
+                            router.query.contratoId != 'undefined' &&
                             contratos?.data?.data?.find((c) =>
                                 c.inquilinos?.find((p) => p.id == usuario?.id)
                                     ? true
-                                    : false
+                                    : false,
                             ) && (
                                 <NextChakraLink
                                     href={`/${router.query.contratoId}/faturas`}
                                     fontWeight={
                                         router.asPath ==
                                         `/${router.query.contratoId}/faturas`
-                                            ? "bold"
-                                            : "normal"
+                                            ? 'bold'
+                                            : 'normal'
                                     }
                                     letterSpacing="wider"
-                                    _hover={{ fontWeight: "bold" }}
+                                    _hover={{ fontWeight: 'bold' }}
                                 >
                                     Faturas
                                 </NextChakraLink>
                             )}
                         {router.query.contratoId &&
-                            router.query.contratoId != "undefined" &&
+                            router.query.contratoId != 'undefined' &&
                             contratos?.data?.data?.find((c) =>
                                 c.proprietarios?.find(
-                                    (p) => p.id == usuario?.id
+                                    (p) => p.id == usuario?.id,
                                 )
                                     ? true
-                                    : false
+                                    : false,
                             ) && (
                                 <NextChakraLink
                                     href={`/${router.query.contratoId}/extratos`}
                                     fontWeight={
                                         router.asPath ==
                                         `/${router.query.contratoId}/extratos`
-                                            ? "bold"
-                                            : "normal"
+                                            ? 'bold'
+                                            : 'normal'
                                     }
                                     letterSpacing="wider"
-                                    _hover={{ fontWeight: "bold" }}
+                                    _hover={{ fontWeight: 'bold' }}
                                 >
                                     Extratos
                                 </NextChakraLink>
                             )}
                         {router.query.contratoId &&
-                            router.query.contratoId != "undefined" && (
+                            router.query.contratoId != 'undefined' && (
                                 <NextChakraLink
                                     href={`/${router.query.contratoId}/chamados`}
                                     fontWeight={
                                         router.asPath ==
                                         `/${router.query.contratoId}/chamados`
-                                            ? "bold"
-                                            : "normal"
+                                            ? 'bold'
+                                            : 'normal'
                                     }
                                     letterSpacing="wider"
-                                    _hover={{ fontWeight: "bold" }}
+                                    _hover={{ fontWeight: 'bold' }}
                                 >
                                     Chamados
                                 </NextChakraLink>
                             )}
                         {router.query.contratoId &&
-                            router.query.contratoId != "undefined" && (
+                            router.query.contratoId != 'undefined' && (
                                 <NextChakraLink
                                     href={`/${router.query.contratoId}/meu-contrato`}
                                     fontWeight={
                                         router.asPath ==
                                         `/${router.query.contratoId}/meu-contrato`
-                                            ? "bold"
-                                            : "normal"
+                                            ? 'bold'
+                                            : 'normal'
                                     }
                                     letterSpacing="wider"
-                                    _hover={{ fontWeight: "bold" }}
+                                    _hover={{ fontWeight: 'bold' }}
                                 >
                                     Meu Contrato
                                 </NextChakraLink>
@@ -230,5 +229,5 @@ export const LayoutPainel = ({ children }) => {
                 </Container>
             </Stack>
         </Box>
-    );
-};
+    )
+}

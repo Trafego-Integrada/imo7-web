@@ -1,68 +1,73 @@
-import { FormTextarea } from "@/components/Form/FormTextarea";
-import { Button } from "@chakra-ui/button";
-import { Box, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/layout";
-import { Textarea } from "@chakra-ui/textarea";
-import { NextPage } from "next";
-import { Input } from "@/components/Forms/Input";
-import { Select } from "@/components/Forms/Select";
-import { LayoutPainel } from "@/components/Layouts/LayoutPainel";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation, useQuery } from "react-query";
-import { cadastrarChamado } from "@/services/models/chamado";
-import { listarDepartamentos } from "@/services/models/departamento";
-import { listarAssuntos } from "@/services/models/assunto";
-import { watch } from "fs";
-import { useRouter } from "next/router";
+import { FormTextarea } from '@/components/Form/FormTextarea'
+import { Input } from '@/components/Forms/Input'
+import { Select } from '@/components/Forms/Select'
+import { LayoutPainel } from '@/components/Layouts/LayoutPainel'
+import { listarAssuntos } from '@/services/models/assunto'
+import { cadastrarChamado } from '@/services/models/chamado'
+import { listarDepartamentos } from '@/services/models/departamento'
+import {
+    Box,
+    Button,
+    Flex,
+    Grid,
+    GridItem,
+    Heading,
+    Text,
+} from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { NextPage } from 'next'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+import { useMutation, useQuery } from 'react-query'
+import * as yup from 'yup'
 const schema = yup.object({
-    departamentoId: yup.string().required("Campo Obrigatório"),
-    assuntoId: yup.string().required("Campo Obrigatório"),
-    titulo: yup.string().required("Campo Obrigatório"),
-    mensagem: yup.string().required("Campo Obrigatório"),
-});
+    departamentoId: yup.string().required('Campo Obrigatório'),
+    assuntoId: yup.string().required('Campo Obrigatório'),
+    titulo: yup.string().required('Campo Obrigatório'),
+    mensagem: yup.string().required('Campo Obrigatório'),
+})
 
 const AbrirChamado: NextPage = () => {
-    const router = useRouter();
+    const router = useRouter()
     const {
         register,
         control,
         watch,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm({ resolver: yupResolver(schema) });
+    } = useForm({ resolver: yupResolver(schema) })
 
-    const cadastrar = useMutation(cadastrarChamado);
+    const cadastrar = useMutation(cadastrarChamado)
     const onSubmit = async (data) => {
         try {
             const response = await cadastrar.mutateAsync({
                 ...data,
                 contratoId: router.query.contratoId,
-            });
+            })
             router.replace({
                 pathname: `/[contratoId]/chamados/[id]`,
                 query: {
                     contratoId: router.query?.contratoId,
                     id: response.id,
                 },
-            });
+            })
         } catch (error) {
             //console.log(error);
         }
-    };
+    }
     const { data: departamentos } = useQuery(
-        ["departamentos"],
-        listarDepartamentos
-    );
+        ['departamentos'],
+        listarDepartamentos,
+    )
     const { data: assuntos } = useQuery(
-        ["assuntos", { departamentoId: watch("departamentoId") }],
+        ['assuntos', { departamentoId: watch('departamentoId') }],
         listarAssuntos,
         {
-            enabled: !!watch("departamentoId"),
+            enabled: !!watch('departamentoId'),
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
-        }
-    );
+        },
+    )
     //console.log(watch("departamentoId"));
     return (
         <LayoutPainel>
@@ -79,7 +84,7 @@ const AbrirChamado: NextPage = () => {
                     </Heading>
                     <Text
                         my={2}
-                        maxW={"2xl"}
+                        maxW={'2xl'}
                         textAlign="center"
                         color="gray.500"
                         fontSize="xs"
@@ -95,7 +100,7 @@ const AbrirChamado: NextPage = () => {
                         <Select
                             placeholder="Departamento"
                             error={errors.departamentoId?.message}
-                            {...register("departamentoId")}
+                            {...register('departamentoId')}
                         >
                             {departamentos?.data?.data?.map((item) => (
                                 <option key={item.id} value={item.id}>
@@ -108,8 +113,8 @@ const AbrirChamado: NextPage = () => {
                         <Select
                             placeholder="Assunto"
                             error={errors.assuntoId?.message}
-                            {...register("assuntoId")}
-                            isDisabled={watch("departamentoId") ? false : true}
+                            {...register('assuntoId')}
+                            isDisabled={watch('departamentoId') ? false : true}
                         >
                             {assuntos?.data?.data?.map((item) => (
                                 <option key={item.id} value={item.id}>
@@ -122,14 +127,14 @@ const AbrirChamado: NextPage = () => {
                         <Input
                             placeholder="Titulo"
                             error={errors.titulo?.message}
-                            {...register("titulo")}
+                            {...register('titulo')}
                         />
                     </GridItem>
                     <GridItem colSpan={2}>
                         <FormTextarea
                             placeholder="Mensagem"
                             error={errors.mensagem?.message}
-                            {...register("mensagem")}
+                            {...register('mensagem')}
                         />
                     </GridItem>
                 </Grid>
@@ -145,7 +150,7 @@ const AbrirChamado: NextPage = () => {
                 </Flex>
             </Box>
         </LayoutPainel>
-    );
-};
+    )
+}
 
-export default AbrirChamado;
+export default AbrirChamado

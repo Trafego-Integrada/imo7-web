@@ -1,24 +1,28 @@
-import { Button } from '@chakra-ui/button'
-import Icon from '@chakra-ui/icon'
-import { Box, Container, Flex } from '@chakra-ui/layout'
+import {
+    Box,
+    Button,
+    Checkbox,
+    Container,
+    Flex,
+    Tooltip,
+    useToast,
+} from '@chakra-ui/react'
 
-import { Tooltip } from '@chakra-ui/tooltip'
-import { useRef, useState } from 'react'
-import { FaEdit, FaPlus } from 'react-icons/fa'
-import { useMutation, useQuery } from 'react-query'
 import { ImobiliariaDrawer } from '@/components/Drawers/ImobiliariaDrawer'
+import { FormInput } from '@/components/Form/FormInput'
 import { Header } from '@/components/Header'
-import { getAll as getAllImobiliarias } from '@/services/models/imobiliaria'
-import { withSSRAuth } from '@/utils/withSSRAuth'
 import { Layout } from '@/components/Layout/layout'
 import { TabelaPadrao } from '@/components/Tabelas/TabelaPadrao'
-import { FormInput } from '@/components/Form/FormInput'
-import { FiSearch, FiTrash } from 'react-icons/fi'
-import { usePagination } from '@ajna/pagination'
 import { imo7ApiService } from '@/services/apiServiceUsage'
-import { Checkbox, useToast } from '@chakra-ui/react'
+import { getAll as getAllImobiliarias } from '@/services/models/imobiliaria'
 import { queryClient } from '@/services/queryClient'
+import { withSSRAuth } from '@/utils/withSSRAuth'
+import { usePagination } from '@ajna/pagination'
 import { InferGetServerSidePropsType } from 'next'
+import { useRef, useState } from 'react'
+import { FaEdit, FaPlus } from 'react-icons/fa'
+import { FiSearch, FiTrash } from 'react-icons/fi'
+import { useMutation, useQuery } from 'react-query'
 
 const Imobiliarias = (
     props: InferGetServerSidePropsType<typeof getServerSideProps>,

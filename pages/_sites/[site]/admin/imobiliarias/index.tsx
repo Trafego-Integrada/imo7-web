@@ -1,32 +1,39 @@
-import { Button } from "@chakra-ui/button";
-import Icon from "@chakra-ui/icon";
-import { Box, Container, Flex } from "@chakra-ui/layout";
+import {
+    Box,
+    Button,
+    Container,
+    Flex,
+    Table,
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tooltip,
+    Tr,
+} from '@chakra-ui/react'
 
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
-import { Tooltip } from "@chakra-ui/tooltip";
-import { useRef, useState } from "react";
-import { FaEdit, FaPlus } from "react-icons/fa";
-import { useQuery } from "react-query";
-import { ImobiliariaDrawer } from "@/components/Drawers/ImobiliariaDrawer";
-import { Input } from "@/components/Forms/Input";
-import { Select } from "@/components/Forms/Select";
-import { Header } from "@/components/Header";
-import { listarContas } from "@/services/models/conta";
-import { getAll as getAllImobiliarias } from "@/services/models/imobiliaria";
-import { withSSRAuth } from "@/utils/withSSRAuth";
-import { Layout } from "@/components/Layout/layout";
+import { ImobiliariaDrawer } from '@/components/Drawers/ImobiliariaDrawer'
+import { Input } from '@/components/Forms/Input'
+import { Header } from '@/components/Header'
+import { Layout } from '@/components/Layout/layout'
+import { listarContas } from '@/services/models/conta'
+import { getAll as getAllImobiliarias } from '@/services/models/imobiliaria'
+import { withSSRAuth } from '@/utils/withSSRAuth'
+import { useRef, useState } from 'react'
+import { FaEdit, FaPlus } from 'react-icons/fa'
+import { useQuery } from 'react-query'
 
 const Imobiliarias = () => {
-    const imobiliariaDrawer = useRef();
+    const imobiliariaDrawer = useRef()
     const [filter, setFilter] = useState({
-        query: "",
+        query: '',
         contaId: null,
-    });
-    const { data: contas } = useQuery(["contas"], listarContas);
+    })
+    const { data: contas } = useQuery(['contas'], listarContas)
     const { data: imobiliarias, isFetching } = useQuery(
-        ["imobiliarias", filter],
-        getAllImobiliarias
-    );
+        ['imobiliarias', filter],
+        getAllImobiliarias,
+    )
     return (
         <Layout>
             <Header title="Imobiliarias" isFetching={isFetching}></Header>
@@ -91,7 +98,7 @@ const Imobiliarias = () => {
                                                     size="xs"
                                                     onClick={() =>
                                                         imobiliariaDrawer.current.onOpen(
-                                                            item.id
+                                                            item.id,
                                                         )
                                                     }
                                                 >
@@ -114,15 +121,15 @@ const Imobiliarias = () => {
             </Container>
             <ImobiliariaDrawer ref={imobiliariaDrawer} />
         </Layout>
-    );
-};
+    )
+}
 
-export default Imobiliarias;
+export default Imobiliarias
 export const getServerSideProps = withSSRAuth(
     async (ctx) => {
         return {
             props: {},
-        };
+        }
     },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);
+    { cargos: ['imobiliaria', 'adm', 'conta'] },
+)

@@ -1,31 +1,37 @@
-import { Button } from "@chakra-ui/button";
-import Icon from "@chakra-ui/icon";
-import { Box, Container, Flex } from "@chakra-ui/layout";
+import {
+    Box,
+    Button,
+    Container,
+    Flex,
+    Table,
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tooltip,
+    Tr,
+} from '@chakra-ui/react'
 
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
-import { Tooltip } from "@chakra-ui/tooltip";
-import { useRef, useState } from "react";
-import { FaEdit, FaPlus } from "react-icons/fa";
-import { useQuery } from "react-query";
-import { ImobiliariaDrawer } from "@/components/Drawers/ImobiliariaDrawer";
-import { Input } from "@/components/Forms/Input";
-import { Select } from "@/components/Forms/Select";
-import { Header } from "@/components/Header";
-import { listarContas } from "@/services/models/conta";
-import { withSSRAuth } from "@/utils/withSSRAuth";
-import { Layout } from "@/components/Layout/layout";
-import { ContaModal } from "@/components/Modals/ContaModal";
+import { Input } from '@/components/Forms/Input'
+import { Header } from '@/components/Header'
+import { Layout } from '@/components/Layout/layout'
+import { ContaModal } from '@/components/Modals/ContaModal'
+import { listarContas } from '@/services/models/conta'
+import { withSSRAuth } from '@/utils/withSSRAuth'
+import { useRef, useState } from 'react'
+import { FaEdit, FaPlus } from 'react-icons/fa'
+import { useQuery } from 'react-query'
 
 const Contas = () => {
-    const drawer = useRef();
+    const drawer = useRef()
     const [filter, setFilter] = useState({
-        query: "",
+        query: '',
         contaId: null,
-    });
+    })
     const { data: contas, isFetching } = useQuery(
-        ["contas", filter],
-        listarContas
-    );
+        ['contas', filter],
+        listarContas,
+    )
     return (
         <Layout>
             <Header title="Contas" isFetching={isFetching}></Header>
@@ -69,7 +75,7 @@ const Contas = () => {
                                                     size="xs"
                                                     onClick={() =>
                                                         drawer.current.onOpen(
-                                                            item.id
+                                                            item.id,
                                                         )
                                                     }
                                                 >
@@ -92,15 +98,15 @@ const Contas = () => {
             </Container>
             <ContaModal ref={drawer} />
         </Layout>
-    );
-};
+    )
+}
 
-export default Contas;
+export default Contas
 export const getServerSideProps = withSSRAuth(
     async (ctx) => {
         return {
             props: {},
-        };
+        }
     },
-    { cargos: ["imobiliaria", "adm", "conta"] }
-);
+    { cargos: ['imobiliaria', 'adm', 'conta'] },
+)
