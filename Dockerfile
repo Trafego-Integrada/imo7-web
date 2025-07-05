@@ -13,8 +13,6 @@ RUN yarn install
 # Copiar o restante do código da aplicação
 COPY . .
 
-RUN yarn codegen
-
 # Compilar a aplicação Next.js
 RUN yarn build
 
