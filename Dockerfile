@@ -5,7 +5,7 @@ FROM node:20
 WORKDIR /app
 
 # Copiar arquivos de dependência
-COPY package.json yarn.lock ./
+COPY package.json ./
 
 # Instalar dependências com cache otimizado
 RUN yarn install --frozen-lockfile
