@@ -1,23 +1,26 @@
-# Utilizar uma imagem base do Node.js
+# Utilizar imagem base
 FROM node:20
 
-# Definir o diretório de trabalho na imagem Docker
+# Diretório de trabalho
 WORKDIR /app
 
-# Copiar os arquivos package.json e yarn.lock
-COPY package.json ./
+# Copiar arquivos de dependência
+COPY package.json yarn.lock ./
 
-# Instalar as dependências usando Yarn
-RUN yarn install
+# Instalar dependências com cache otimizado
+RUN yarn install --frozen-lockfile
 
-# Copiar o restante do código da aplicação
+# Copiar todo o código
 COPY . .
 
-# Compilar a aplicação Next.js
+# Copiar variáveis de ambiente, se necessário
+# COPY .env.production .env
+
+# Compilar Next.js
 RUN yarn build
 
-# Expor a porta que o Next.js irá rodar
+# Expor a porta padrão do Next.js
 EXPOSE 3000
 
-# Comando para iniciar a aplicação
+# Comando de inicialização
 CMD ["yarn", "start"]
