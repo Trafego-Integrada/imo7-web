@@ -15,11 +15,13 @@ services:
                 traefik.enable: 'true'
                 traefik.http.routers.imo7-web.service: 'imo7-web'
                 traefik.http.services.imo7-web.loadbalancer.server.port: 3000
-                traefik.http.routers.imo7-web.rule: 'HostRegexp(`{subdomain:[a-z0-9-]+}.imosetefichas.com.br`) || Host(`imosetefichas.com.br`) || Host(`www.imosetefichas.com.br`)'
+                traefik.http.routers.imo7-web.rule: 'HostRegexp(`{subdomain:[a-z0-9-]+}.imosetefichas.com.br`) || Host(`imosetefichas.com.br`) || Host(`www.imosetefichas.com.br`) || HostRegexp(`{subdomain:[a-z0-9-]+}.imo7.com.br`) || Host(`imo7.com.br`) || Host(`www.imo7.com.br`)'
                 traefik.http.routers.imo7-web.entrypoints: 'websecure'
                 traefik.http.routers.imo7-web.tls.certresolver: 'le'
                 traefik.http.routers.imo7-web.tls.domains[0].main: 'imosetefichas.com.br'
                 traefik.http.routers.imo7-web.tls.domains[0].sans: '*.imosetefichas.com.br'
+                traefik.http.routers.imo7-web.tls.domains[1].main: 'imo7.com.br'
+                traefik.http.routers.imo7-web.tls.domains[1].sans: '*.imo7.com.br'
         networks:
             - traefik_public
         restart: unless-stopped
