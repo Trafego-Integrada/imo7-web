@@ -1,13 +1,13 @@
-import prisma from "@/lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
-import nextConnect from "next-connect";
-import puppeteer from "puppeteer";
+import prisma from '@/lib/prisma'
+import { NextApiRequest, NextApiResponse } from 'next'
+import nextConnect from 'next-connect'
+import puppeteer from 'puppeteer'
 
-const handler = nextConnect<NextApiRequest, NextApiResponse>();
+const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler.get(async (req, res) => {
     //console.log(req);
-    const { id } = req.query;
+    const { id } = req.query
 
     const extrato = await prisma.extrato.findUnique({
         where: {
@@ -16,22 +16,33 @@ handler.get(async (req, res) => {
         include: {
             imobiliaria: true,
         },
-    });
-    const browser = await puppeteer.launch({ headless: true });
-    const page = await browser.newPage();
+    })
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu',
+        ],
+    })
+    const page = await browser.newPage()
     await page.goto(
-        "https://" + extrato?.imobiliaria.url + ".imo7.com.br/extrato/" + id,
+        'https://' + extrato?.imobiliaria.url + '.imo7.com.br/extrato/' + id,
         {
-            waitUntil: "networkidle0",
-        }
-    );
-    const pdf = await page.pdf({ format: "A4" });
+            waitUntil: 'networkidle0',
+        },
+    )
+    const pdf = await page.pdf({ format: 'A4' })
 
-    await browser.close();
+    await browser.close()
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Length", pdf.length);
-    res.send(pdf);
-});
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('Content-Length', pdf.length)
+    res.send(pdf)
+})
 
-export default handler;
+export default handler

@@ -1,13 +1,13 @@
-import prisma from "@/lib/prisma";
-import { cors } from "@/middleware/cors";
-import { NextApiRequest, NextApiResponse } from "next";
-import nextConnect from "next-connect";
-import puppeteer from "puppeteer";
+import prisma from '@/lib/prisma'
+import { cors } from '@/middleware/cors'
+import { NextApiRequest, NextApiResponse } from 'next'
+import nextConnect from 'next-connect'
+import puppeteer from 'puppeteer'
 
-const handler = nextConnect<NextApiRequest, NextApiResponse>();
-handler.use(cors);
+const handler = nextConnect<NextApiRequest, NextApiResponse>()
+handler.use(cors)
 handler.get(async (req, res) => {
-    const { id } = req.query;
+    const { id } = req.query
 
     const data = await prisma.consultaNetrin.findUnique({
         where: {
@@ -16,37 +16,48 @@ handler.get(async (req, res) => {
         include: {
             imobiliaria: true,
         },
-    });
-    const browser = await puppeteer.launch({ headless: true });
-    const page = await browser.newPage();
+    })
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu',
+        ],
+    })
+    const page = await browser.newPage()
 
     await page.goto(
-        process.env.NODE_ENV == "production"
-            ? "https://" +
+        process.env.NODE_ENV == 'production'
+            ? 'https://' +
                   data?.imobiliaria.url +
-                  ".imo7.com.br/consultas/" +
+                  '.imo7.com.br/consultas/' +
                   id +
-                  "/pdf"
-            : "http://" +
+                  '/pdf'
+            : 'http://' +
                   data?.imobiliaria.url +
-                  ".localhost:3000/consultas/" +
+                  '.localhost:3000/consultas/' +
                   id +
-                  "/pdf",
+                  '/pdf',
         {
-            waitUntil: "networkidle0",
-        }
-    );
-    await page.emulateMediaType("screen");
+            waitUntil: 'networkidle0',
+        },
+    )
+    await page.emulateMediaType('screen')
     const pdf = await page.pdf({
-        format: "A4",
-        margin: { top: "20px", right: "20px", bottom: "20px", left: "20px" },
-    });
+        format: 'A4',
+        margin: { top: '20px', right: '20px', bottom: '20px', left: '20px' },
+    })
 
-    await browser.close();
+    await browser.close()
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Length", pdf.length);
-    res.send(pdf);
-});
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('Content-Length', pdf.length)
+    res.send(pdf)
+})
 
-export default handler;
+export default handler
